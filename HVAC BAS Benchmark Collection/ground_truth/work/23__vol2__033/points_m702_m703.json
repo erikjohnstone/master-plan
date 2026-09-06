@@ -1,0 +1,645 @@
+{
+  "document_id": "23__vol2__033",
+  "module_role": "Complete typed M7.02/M7.03 VAV, exhaust-fan, pump and suspended-unit-heater point matrices.",
+  "tables": [
+    {
+      "id": "M701-AHU-6",
+      "page": 70,
+      "sheet": "M7.01",
+      "title_as_printed": "AIR HANDLING UNIT POINTS LIST",
+      "columns": "point_name|AI|AO|BI|BO|AV|BV|SCHED|TREND|ALARM|SHOW_ON_GRAPHIC",
+      "x_edges": [
+        1980,
+        2390,
+        2420,
+        2455,
+        2485,
+        2520,
+        2555,
+        2588,
+        2645,
+        2705,
+        2760,
+        2830
+      ],
+      "y_ranges": [
+        [
+          164.0,
+          184.0
+        ],
+        [
+          186.5,
+          206.5
+        ],
+        [
+          209.0,
+          229.0
+        ],
+        [
+          231.5,
+          251.5
+        ],
+        [
+          254.0,
+          274.0
+        ],
+        [
+          276.5,
+          296.5
+        ],
+        [
+          299.0,
+          319.0
+        ],
+        [
+          321.5,
+          341.5
+        ],
+        [
+          344.0,
+          364.0
+        ],
+        [
+          366.5,
+          386.5
+        ],
+        [
+          389.0,
+          409.0
+        ],
+        [
+          411.5,
+          431.5
+        ],
+        [
+          434.0,
+          454.0
+        ],
+        [
+          456.5,
+          476.5
+        ],
+        [
+          479.0,
+          499.0
+        ],
+        [
+          501.5,
+          521.5
+        ],
+        [
+          524.0,
+          544.0
+        ],
+        [
+          546.5,
+          566.5
+        ],
+        [
+          569.0,
+          589.0
+        ],
+        [
+          591.5,
+          611.5
+        ],
+        [
+          614.0,
+          634.0
+        ],
+        [
+          636.5,
+          656.5
+        ],
+        [
+          659.0,
+          679.0
+        ],
+        [
+          681.5,
+          701.5
+        ],
+        [
+          704.0,
+          724.0
+        ],
+        [
+          726.5,
+          746.5
+        ],
+        [
+          749.0,
+          769.0
+        ],
+        [
+          771.5,
+          791.5
+        ],
+        [
+          794.0,
+          814.0
+        ],
+        [
+          816.5,
+          836.5
+        ],
+        [
+          839.0,
+          859.0
+        ],
+        [
+          861.5,
+          881.5
+        ],
+        [
+          884.0,
+          904.0
+        ],
+        [
+          906.5,
+          926.5
+        ],
+        [
+          929.0,
+          949.0
+        ],
+        [
+          951.5,
+          971.5
+        ],
+        [
+          974.0,
+          994.0
+        ],
+        [
+          996.5,
+          1016.5
+        ],
+        [
+          1019.0,
+          1039.0
+        ],
+        [
+          1041.5,
+          1061.5
+        ],
+        [
+          1064.0,
+          1084.0
+        ],
+        [
+          1086.5,
+          1106.5
+        ],
+        [
+          1109.0,
+          1129.0
+        ],
+        [
+          1131.5,
+          1151.5
+        ],
+        [
+          1154.0,
+          1174.0
+        ],
+        [
+          1176.5,
+          1196.5
+        ],
+        [
+          1199.0,
+          1219.0
+        ],
+        [
+          1221.5,
+          1241.5
+        ]
+      ],
+      "rows": [
+        "VFD START / STOP||||X|||X|X||X",
+        "VFD FAN STATUS|||X|||||X|X|X",
+        "VFD FAULT / FAILURE|||X|||X||X|X|X",
+        "SUPPLY FAN VFD SPEED||X||||||||",
+        "VFD HOA STATUS||||||X||X||X",
+        "DUCT HIGH PRESSURE SAFETY, SPS-2|||X|||||X|X|X",
+        "DOWNDUCT STATIC PRESSURE SENSOR, SPS-1|X||X|||||||",
+        "SUPPLY DUCT SMOKE DETECTOR, STATUS (DSD-1)|||X|||||X|X|X",
+        "RETURN FAN POINTS LIST||||||||||",
+        "VFD START / STOP||||X|||X|X||X",
+        "VFD FAN STATUS|||X|||||X|X|X",
+        "VFD FAULT / FAILURE|||X|||X||X|X|X",
+        "RETURN FAN VFD SPEED||X||||||||",
+        "VFD HOA STATUS||||||X||X||X",
+        "SUPPLY AIR TEMPERATURE CONTROL||||||||||",
+        "FREEZE PROTECTION, FZ|||X|||||||",
+        "SUPPLY AIR TEMPERATURE, T-1|X|||||||X|X|X",
+        "SUPPLY AIR TEMPERATURE SET POINT|||||X|||X||X",
+        "LOW TEMPERATURE DETECTION, T-4|X|||||||X|X|X",
+        "DAMPER CONTROL||||||||||",
+        "MIXED AIR TEMPERATURE, T-3|X|||||||X|X|X",
+        "OUTSIDE AIR DAMPER POSITION, D-1|X|||||||X||X",
+        "OUTSIDE AIR DAMPER OPEN/CLOSE, D-1||X||||||X||X",
+        "OUTSIDE AIR FLOW SET POINT, D-1|||||X|||X||X",
+        "RETURN AIR DAMPER POSITION, D-2|X|||||||X||X",
+        "RETURN AIR DAMPER OPEN/CLOSE, D-2||X||||||X||X",
+        "RETURN AIR FLOW SET POINT, D-2|||||X|||X||X",
+        "RELIEF AIR DAMPER POSITION, D-3|X|||||||X||X",
+        "RELIEF AIR DAMPER OPEN/CLOSE, D-3||X||||||X||X",
+        "RELIEF AIR FLOW SET POINT, D-3|||||X|||X||X",
+        "MISCELLANEOUS POINTS||||||||||",
+        "RETURN AIR TEMPERATURE, T-2|X|||||||X|X|X",
+        "RETURN AIR HUMIDITY, H-1|X|||||||X||X",
+        "SUPPLY AIR HUMIDITY, H-2|X|||||||X||X",
+        "HUMIDIFIER||X||||||X||X",
+        "HUMIDIFIER ENABLE||||X||||||X",
+        "OUTSIDE AIR FLOW MEASURING STATION|X|||||||X||X",
+        "BUILDING STATIC PRESSURE|X|||||||X|X|X",
+        "FILTER DIFFERENTIAL PRESSURE (MERV-8)|||X|||||X|X|X",
+        "FILTER DIFFERENTIAL PRESSURE (MERV-11)|||X|||||X|X|X",
+        "FILTER DIFFERENTIAL PRESSURE (MERV-15)|||X|||||X|X|X",
+        "FILTER DIFFERENTIAL PRESSURE ALARM SET POINT|||||X|||X||X",
+        "OUTSIDE AIR DEW POINT TEMPERATURE, T-5 (NETWORK)|X||||X|||X||X",
+        "OUTSIDE AIR HUMIDITY SENSOR, H-3 (NETWORK)|X|||||||X||X",
+        "HEAT PUMP WATER SUPPLY TEMPERATURE, T-6|X|||||||X|X|X",
+        "HEAT PUMP WATER RETURN TEMPERATURE, T-7|X|||||||X|X|X",
+        "HEAT PUMP STATUS|||X|||||||",
+        "HEAT PUMP COMPRESSOR CONTROL||||X||||||"
+      ],
+      "source_row_semantics": "Literal printed point-function row and printed hardware/software flags. This source matrix is not expanded into a final field-device, controller/card, terminal, wiring, network-object or physical-installation count."
+    },
+    {
+      "id": "M702-SUPPLY-VAV-TERMINAL-UNIT",
+      "page": 71,
+      "sheet": "M7.02",
+      "title_as_printed": "SUPPLY VAV TERMINAL UNIT POINTS LIST",
+      "columns": "point_name|AI|AO|BI|BO|AV|BV|SCHED|TREND|ALARM|SHOW_ON_GRAPHIC",
+      "x_edges": [
+        1000,
+        1290,
+        1320,
+        1355,
+        1390,
+        1430,
+        1465,
+        1500,
+        1535,
+        1570,
+        1610,
+        1660
+      ],
+      "y_ranges": [
+        [
+          642,
+          660
+        ],
+        [
+          660,
+          678
+        ],
+        [
+          678,
+          696
+        ],
+        [
+          696,
+          714
+        ],
+        [
+          714,
+          732
+        ],
+        [
+          732,
+          750
+        ],
+        [
+          750,
+          768
+        ],
+        [
+          768,
+          786
+        ],
+        [
+          786,
+          804
+        ],
+        [
+          804,
+          822
+        ],
+        [
+          822,
+          840
+        ],
+        [
+          840,
+          858
+        ],
+        [
+          858,
+          876
+        ],
+        [
+          876,
+          894
+        ],
+        [
+          894,
+          912
+        ],
+        [
+          912,
+          930
+        ],
+        [
+          930,
+          948
+        ]
+      ],
+      "rows": [
+        "DISCHARGE AIR TEMPERATURE|X|||||||X||X",
+        "ZONE SETPOINT ADJUST|X|||||||||X",
+        "AIRFLOW|X|||||||X||X",
+        "ZONE TEMPERATURE|X|||||||X||X",
+        "HOT WATER REHEAT VALVE||X||||||||X",
+        "HOT WATER CONVECTOR VALVE||X||||||||",
+        "ZONE DAMPER||X||||||X||X",
+        "ZONE OVERIDE|||X|||||X||X",
+        "AIRFLOW SETPOINT|||||X|||X||X",
+        "COOLING/HEATING SETPOINT|||||X|||X||X",
+        "DISCHARGE AIR TEMPERATURE HEATING LIMIT|||||X|||||",
+        "HEATING/COOLING MODE||||||X||X||",
+        "SCHEDULE OCCUPANCY|||||||X|||",
+        "HIGH DISCHARGE AIR TEMPERATURE|||||||||X|",
+        "HIGH ZONE TEMPERATURE|||||||||X|",
+        "LOW DISCHARGE AIR TEMPERATURE|||||||||X|",
+        "LOW ZONE TEMPERATURE|||||||||X|"
+      ],
+      "source_row_semantics": "Literal printed point-function row and printed hardware/software flags. This source matrix is not expanded into a final field-device, controller/card, terminal, wiring, network-object or physical-installation count."
+    },
+    {
+      "id": "M702-EXHAUST-FAN",
+      "page": 71,
+      "sheet": "M7.02",
+      "title_as_printed": "EXHAUST FAN POINTS LIST",
+      "columns": "point_name|AI|AO|BI|BO|AV|BV|SCHED|TREND|ALARM|SHOW_ON_GRAPHIC",
+      "x_edges": [
+        2070,
+        2260,
+        2290,
+        2330,
+        2360,
+        2400,
+        2435,
+        2470,
+        2525,
+        2585,
+        2665,
+        2740
+      ],
+      "y_ranges": [
+        [
+          779.0,
+          793.0
+        ],
+        [
+          793.6,
+          807.6
+        ],
+        [
+          808.2,
+          822.2
+        ],
+        [
+          822.8,
+          836.8
+        ],
+        [
+          837.4,
+          851.4
+        ],
+        [
+          852.0,
+          866.0
+        ]
+      ],
+      "rows": [
+        "FAN STATUS|||X|||||X||X",
+        "FAN START/STOP||||X||||X||X",
+        "SCHEDULE|||||||X|||",
+        "FAN FAILURE|||||||||X|",
+        "FAN IN HAND|||||||||X|",
+        "FAN RUN TIME EXCEEDED|||||||||X|"
+      ],
+      "source_row_semantics": "Literal printed point-function row and printed hardware/software flags. This source matrix is not expanded into a final field-device, controller/card, terminal, wiring, network-object or physical-installation count."
+    },
+    {
+      "id": "M702-GEOTHERMAL-HEAT-PUMP-WATER-PUMPS",
+      "page": 71,
+      "sheet": "M7.02",
+      "title_as_printed": "PUMP CONTROL POINTS",
+      "columns": "point_name|AI|AO|BI|BO|AV|BV|SCHED|TREND|ALARM|SHOW_ON_GRAPHIC",
+      "x_edges": [
+        450,
+        725,
+        750,
+        790,
+        820,
+        855,
+        890,
+        920,
+        970,
+        1010,
+        1055,
+        1100
+      ],
+      "y_ranges": [
+        [
+          1471.0,
+          1489.0
+        ],
+        [
+          1489.05,
+          1507.05
+        ],
+        [
+          1507.1,
+          1525.1
+        ],
+        [
+          1525.15,
+          1543.15
+        ],
+        [
+          1543.2,
+          1561.2
+        ],
+        [
+          1561.25,
+          1579.25
+        ],
+        [
+          1579.3,
+          1597.3
+        ],
+        [
+          1597.35,
+          1615.35
+        ],
+        [
+          1615.4,
+          1633.4
+        ],
+        [
+          1633.45,
+          1651.45
+        ],
+        [
+          1651.5,
+          1669.5
+        ],
+        [
+          1669.55,
+          1687.55
+        ],
+        [
+          1687.6,
+          1705.6
+        ],
+        [
+          1705.65,
+          1723.65
+        ],
+        [
+          1723.7,
+          1741.7
+        ],
+        [
+          1741.75,
+          1759.75
+        ],
+        [
+          1759.8,
+          1777.8
+        ],
+        [
+          1777.85,
+          1795.85
+        ]
+      ],
+      "rows": [
+        "PUMP-12 STATUS|||X|||||X||X",
+        "PUMP-13 STATUS|||X|||||X||X",
+        "PUMP-12 START/STOP||||X||||X||X",
+        "PUMP-13 START/STOP||||X||||X||X",
+        "PUMP-12 LEAD/STANDBY|||X|||||||X",
+        "PUMP-13 LEAD/STANDBY|||X|||||||X",
+        "PUMP-12 VFD FAULT|||X|||||X||X",
+        "PUMP-12 VFD SPEED||X||||||X||X",
+        "PUMP-13 VFD FAULT|||X|||||X||X",
+        "PUMP-13 VFD SPEED||X||||||X||X",
+        "DIFFERENTIAL PRESSURE SETPOINT|X||||X|||X||X",
+        "ALARM||||||||||",
+        "PUMP-12 FAILURE|||||||||X|",
+        "PUMP-13 FAILURE|||||||||X|",
+        "PUMP-12 VFD FAULT|||||||||X|",
+        "PUMP-13 VFD FAULT|||||||||X|",
+        "HIGH DIFFERENTIAL PRESSURE|||||||||X|",
+        "LOW DIFFERENTIAL PRESSURE|||||||||X|"
+      ],
+      "source_row_semantics": "Literal printed point-function row and printed hardware/software flags. This source matrix is not expanded into a final field-device, controller/card, terminal, wiring, network-object or physical-installation count."
+    },
+    {
+      "id": "M703-SUSPENDED-UNIT-HEATER",
+      "page": 72,
+      "sheet": "M7.03",
+      "title_as_printed": "SUSPENDED UNIT HEATER POINTS LIST",
+      "columns": "point_name|AI|AO|BI|BO|AV|BV|SCHED|TREND|ALARM|SHOW_ON_GRAPHIC",
+      "x_edges": [
+        2080,
+        2270,
+        2300,
+        2340,
+        2370,
+        2405,
+        2440,
+        2470,
+        2535,
+        2595,
+        2655,
+        2710
+      ],
+      "y_ranges": [
+        [
+          1414.0,
+          1433.0
+        ],
+        [
+          1433.1,
+          1452.1
+        ],
+        [
+          1452.2,
+          1471.2
+        ],
+        [
+          1471.3,
+          1490.3
+        ],
+        [
+          1490.4,
+          1509.4
+        ],
+        [
+          1509.5,
+          1528.5
+        ],
+        [
+          1528.6,
+          1547.6
+        ],
+        [
+          1547.7,
+          1566.7
+        ],
+        [
+          1566.8,
+          1585.8
+        ],
+        [
+          1585.9,
+          1604.9
+        ],
+        [
+          1605.0,
+          1624.0
+        ]
+      ],
+      "rows": [
+        "DISCHARGE AIR TEMP|X|||||||X||X",
+        "ZONE SETPOINT ADJUST|X|||||||||X",
+        "ZONE TEMP|X|||||||X||X",
+        "HEATING VALVE||X||||||X||X",
+        "FAN HIGH SPEED||||X||||X||X",
+        "FAN LOW SPEED||||X||||X||X",
+        "HEATING SETPOINT|||||X|||X||X",
+        "SCHEDULE|||||||X|||",
+        "HIGH DISCHARGE AIR TEMP|||||||||X|",
+        "LOW DISCHARGE AIR TEMP|||||||||X|",
+        "LOW ZONE TEMP|||||||||X|"
+      ],
+      "source_row_semantics": "Literal printed point-function row and printed hardware/software flags. This source matrix is not expanded into a final field-device, controller/card, terminal, wiring, network-object or physical-installation count."
+    }
+  ],
+  "normalization": {
+    "AI": "AI",
+    "AO": "AO",
+    "BI": "BI",
+    "BO": "BO",
+    "AV": "AV",
+    "BV": "BV"
+  },
+  "assertions": []
+}

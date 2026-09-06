@@ -1,0 +1,4092 @@
+{
+  "document_id": "04__vol2__062",
+  "source_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "annotation_sha256": "1e97aa9f84b67f3f54842efc331f080855664a05ac81e5a11ba9f8c258bddd7d",
+  "tables": 2,
+  "rows": 10,
+  "cell_assertions": 118,
+  "text_assertions": 2,
+  "checks": [
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 1,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        1087,
+        255,
+        1123
+      ],
+      "expected": "CV-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-1",
+          "word_ids": [
+            1497
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-1",
+          "word_ids": [
+            1700
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 1,
+      "column": "hot_water_coil",
+      "page": 13,
+      "bbox": [
+        255,
+        1087,
+        320,
+        1123
+      ],
+      "expected": "HC-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-1",
+          "word_ids": [
+            1498
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-1",
+          "word_ids": [
+            891
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 1,
+      "column": "area_served",
+      "page": 13,
+      "bbox": [
+        320,
+        1087,
+        470,
+        1123
+      ],
+      "expected": "RESIDENCY LAB 131 / SAV-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RESIDENCY LAB 131 / SAV-1",
+          "word_ids": [
+            1499,
+            1500,
+            1501,
+            1502,
+            1503
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RESIDENCY LAB 131 / SAV-1",
+          "word_ids": [
+            893,
+            894,
+            895,
+            896,
+            897
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 1,
+      "column": "valve_type",
+      "page": 13,
+      "bbox": [
+        470,
+        1087,
+        600,
+        1123
+      ],
+      "expected": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            1504,
+            1505,
+            1506,
+            1507,
+            1508,
+            1509,
+            1510,
+            1511,
+            1512
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            898,
+            899,
+            900,
+            901,
+            902,
+            903,
+            904,
+            905,
+            906
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 1,
+      "column": "operation",
+      "page": 13,
+      "bbox": [
+        600,
+        1087,
+        680,
+        1123
+      ],
+      "expected": "2-WAY MODULATING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            1513,
+            1514
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            907,
+            908
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 1,
+      "column": "fluid",
+      "page": 13,
+      "bbox": [
+        680,
+        1087,
+        750,
+        1123
+      ],
+      "expected": "35% PROPYLENE GLYCOL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            1515,
+            1516,
+            1517
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            909,
+            910,
+            911
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 1,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        750,
+        1087,
+        795,
+        1123
+      ],
+      "expected": "9.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.0",
+          "word_ids": [
+            1518
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.0",
+          "word_ids": [
+            912
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 1,
+      "column": "flow_range_gpm",
+      "page": 13,
+      "bbox": [
+        795,
+        1087,
+        840,
+        1123
+      ],
+      "expected": "6.0 TO 42.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6.0 TO 42.0",
+          "word_ids": [
+            1519,
+            1520,
+            1521
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6.0 TO 42.0",
+          "word_ids": [
+            913,
+            914,
+            915
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 1,
+      "column": "pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        840,
+        1087,
+        890,
+        1123
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1522
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            948
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 1,
+      "column": "maximum_pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        890,
+        1087,
+        930,
+        1123
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1523
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            978
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 1,
+      "column": "size_in",
+      "page": 13,
+      "bbox": [
+        930,
+        1087,
+        995,
+        1123
+      ],
+      "expected": "1-1/4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-1/4\"",
+          "word_ids": [
+            1524
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-1/4\"",
+          "word_ids": [
+            950
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        995,
+        1087,
+        1165,
+        1123
+      ],
+      "expected": "BELL & GOSSETT ULTRA SETTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            1525,
+            1526,
+            1527,
+            1528,
+            1529
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            951,
+            952,
+            953,
+            954,
+            955
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 1,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1165,
+        1087,
+        1250,
+        1123
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            1530,
+            1531,
+            1532,
+            1533,
+            1534,
+            1535,
+            1536,
+            1537,
+            1538
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            1676,
+            1677,
+            1678,
+            1679,
+            1680,
+            1681,
+            1682,
+            1683,
+            1684
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 2,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        1127,
+        255,
+        1163
+      ],
+      "expected": "CV-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-2",
+          "word_ids": [
+            1539
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-2",
+          "word_ids": [
+            890
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 2,
+      "column": "hot_water_coil",
+      "page": 13,
+      "bbox": [
+        255,
+        1127,
+        320,
+        1163
+      ],
+      "expected": "HC-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-2",
+          "word_ids": [
+            1540
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-2",
+          "word_ids": [
+            892
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 2,
+      "column": "area_served",
+      "page": 13,
+      "bbox": [
+        320,
+        1127,
+        470,
+        1163
+      ],
+      "expected": "SOIL/AGGREGATE 126 / SAV-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SOIL/AGGREGATE 126 / SAV-2",
+          "word_ids": [
+            1541,
+            1542,
+            1543,
+            1544
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SOIL/AGGREGATE 126 / SAV-2",
+          "word_ids": [
+            916,
+            917,
+            918,
+            919
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 2,
+      "column": "valve_type",
+      "page": 13,
+      "bbox": [
+        470,
+        1127,
+        600,
+        1163
+      ],
+      "expected": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            1545,
+            1546,
+            1547,
+            1548,
+            1549,
+            1550,
+            1551,
+            1552,
+            1553
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            920,
+            921,
+            922,
+            923,
+            924,
+            925,
+            926,
+            927,
+            928
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 2,
+      "column": "operation",
+      "page": 13,
+      "bbox": [
+        600,
+        1127,
+        680,
+        1163
+      ],
+      "expected": "2-WAY MODULATING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            1554,
+            1555
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            929,
+            930
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 2,
+      "column": "fluid",
+      "page": 13,
+      "bbox": [
+        680,
+        1127,
+        750,
+        1163
+      ],
+      "expected": "35% PROPYLENE GLYCOL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            1556,
+            1557,
+            1558
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            931,
+            932,
+            933
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 2,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        750,
+        1127,
+        795,
+        1163
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            1559
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            934
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 2,
+      "column": "flow_range_gpm",
+      "page": 13,
+      "bbox": [
+        795,
+        1127,
+        840,
+        1163
+      ],
+      "expected": "0.97 TO 5.85",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.97 TO 5.85",
+          "word_ids": [
+            1560,
+            1561,
+            1562
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.97 TO 5.85",
+          "word_ids": [
+            935,
+            936,
+            937
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 2,
+      "column": "pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        840,
+        1127,
+        890,
+        1163
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1563
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            949
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 2,
+      "column": "maximum_pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        890,
+        1127,
+        930,
+        1163
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1564
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            982
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 2,
+      "column": "size_in",
+      "page": 13,
+      "bbox": [
+        930,
+        1127,
+        995,
+        1163
+      ],
+      "expected": "3/4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            1565
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            956
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        995,
+        1127,
+        1165,
+        1163
+      ],
+      "expected": "BELL & GOSSETT ULTRA SETTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            1566,
+            1567,
+            1568,
+            1569,
+            1570
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            957,
+            958,
+            959,
+            960,
+            961
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 2,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1165,
+        1127,
+        1250,
+        1163
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            1571,
+            1572,
+            1573,
+            1574,
+            1575,
+            1576,
+            1577,
+            1578,
+            1579
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            983,
+            984,
+            985,
+            986,
+            987,
+            988,
+            989,
+            990,
+            991
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 3,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        1167,
+        255,
+        1203
+      ],
+      "expected": "CV-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-3",
+          "word_ids": [
+            1580
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-3",
+          "word_ids": [
+            992
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 3,
+      "column": "hot_water_coil",
+      "page": 13,
+      "bbox": [
+        255,
+        1167,
+        320,
+        1203
+      ],
+      "expected": "HC-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-3",
+          "word_ids": [
+            1581
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-3",
+          "word_ids": [
+            993
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 3,
+      "column": "area_served",
+      "page": 13,
+      "bbox": [
+        320,
+        1167,
+        470,
+        1203
+      ],
+      "expected": "ASPHALT LAB 124 / SAV-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ASPHALT LAB 124 / SAV-3",
+          "word_ids": [
+            1582,
+            1583,
+            1584,
+            1585,
+            1586
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ASPHALT LAB 124 / SAV-3",
+          "word_ids": [
+            994,
+            995,
+            996,
+            997,
+            998
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 3,
+      "column": "valve_type",
+      "page": 13,
+      "bbox": [
+        470,
+        1167,
+        600,
+        1203
+      ],
+      "expected": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            1587,
+            1588,
+            1589,
+            1590,
+            1591,
+            1592,
+            1593,
+            1594,
+            1595
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            999,
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 3,
+      "column": "operation",
+      "page": 13,
+      "bbox": [
+        600,
+        1167,
+        680,
+        1203
+      ],
+      "expected": "2-WAY MODULATING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            1596,
+            1597
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            938,
+            939
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 3,
+      "column": "fluid",
+      "page": 13,
+      "bbox": [
+        680,
+        1167,
+        750,
+        1203
+      ],
+      "expected": "35% PROPYLENE GLYCOL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            1598,
+            1599,
+            1600
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            940,
+            941,
+            942
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 3,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        750,
+        1167,
+        795,
+        1203
+      ],
+      "expected": "9.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.0",
+          "word_ids": [
+            1601
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.0",
+          "word_ids": [
+            943
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 3,
+      "column": "flow_range_gpm",
+      "page": 13,
+      "bbox": [
+        795,
+        1167,
+        840,
+        1203
+      ],
+      "expected": "6.0 TO 42.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6.0 TO 42.0",
+          "word_ids": [
+            1602,
+            1603,
+            1604
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6.0 TO 42.0",
+          "word_ids": [
+            944,
+            945,
+            946
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 3,
+      "column": "pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        840,
+        1167,
+        890,
+        1203
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1605
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            947
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 3,
+      "column": "maximum_pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        890,
+        1167,
+        930,
+        1203
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1606
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            962
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 3,
+      "column": "size_in",
+      "page": 13,
+      "bbox": [
+        930,
+        1167,
+        995,
+        1203
+      ],
+      "expected": "1-1/4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-1/4\"",
+          "word_ids": [
+            1607
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-1/4\"",
+          "word_ids": [
+            963
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 3,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        995,
+        1167,
+        1165,
+        1203
+      ],
+      "expected": "BELL & GOSSETT ULTRA SETTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            1608,
+            1609,
+            1610,
+            1611,
+            1612
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            964,
+            965,
+            966,
+            967,
+            968
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 3,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1165,
+        1167,
+        1250,
+        1203
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            1613,
+            1614,
+            1615,
+            1616,
+            1617,
+            1618,
+            1619,
+            1620,
+            1621
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            969,
+            970,
+            971,
+            972,
+            973,
+            974,
+            975,
+            976,
+            977
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 4,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        1206,
+        255,
+        1242
+      ],
+      "expected": "CV-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-4",
+          "word_ids": [
+            1622
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-4",
+          "word_ids": [
+            1008
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 4,
+      "column": "hot_water_coil",
+      "page": 13,
+      "bbox": [
+        255,
+        1206,
+        320,
+        1242
+      ],
+      "expected": "HC-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-4",
+          "word_ids": [
+            1623
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-4",
+          "word_ids": [
+            1009
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 4,
+      "column": "area_served",
+      "page": 13,
+      "bbox": [
+        320,
+        1206,
+        470,
+        1242
+      ],
+      "expected": "D-1 LAB 123 / SAV-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-1 LAB 123 / SAV-4",
+          "word_ids": [
+            1624,
+            1625,
+            1626,
+            1627,
+            1628
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-1 LAB 123 / SAV-4",
+          "word_ids": [
+            1010,
+            1011,
+            1012,
+            1013,
+            1014
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 4,
+      "column": "valve_type",
+      "page": 13,
+      "bbox": [
+        470,
+        1206,
+        600,
+        1242
+      ],
+      "expected": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            1629,
+            1630,
+            1631,
+            1632,
+            1633,
+            1634,
+            1635,
+            1636,
+            1637
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            1015,
+            1016,
+            1017,
+            1018,
+            1019,
+            1020,
+            1021,
+            1022,
+            1023
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 4,
+      "column": "operation",
+      "page": 13,
+      "bbox": [
+        600,
+        1206,
+        680,
+        1242
+      ],
+      "expected": "2-WAY MODULATING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            1638,
+            1639
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            1024,
+            1025
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 4,
+      "column": "fluid",
+      "page": 13,
+      "bbox": [
+        680,
+        1206,
+        750,
+        1242
+      ],
+      "expected": "35% PROPYLENE GLYCOL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            1640,
+            1641,
+            1642
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            1026,
+            1027,
+            1028
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 4,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        750,
+        1206,
+        795,
+        1242
+      ],
+      "expected": "5.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.2",
+          "word_ids": [
+            1643
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.2",
+          "word_ids": [
+            1029
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 4,
+      "column": "flow_range_gpm",
+      "page": 13,
+      "bbox": [
+        795,
+        1206,
+        840,
+        1242
+      ],
+      "expected": "2.64 TO 15.89",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.64 TO 15.89",
+          "word_ids": [
+            1644,
+            1645,
+            1646
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.64 TO 15.89",
+          "word_ids": [
+            1030,
+            1031,
+            1032
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 4,
+      "column": "pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        840,
+        1206,
+        890,
+        1242
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1647
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1033
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 4,
+      "column": "maximum_pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        890,
+        1206,
+        930,
+        1242
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1648
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1034
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 4,
+      "column": "size_in",
+      "page": 13,
+      "bbox": [
+        930,
+        1206,
+        995,
+        1242
+      ],
+      "expected": "1\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1\"",
+          "word_ids": [
+            1649
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1\"",
+          "word_ids": [
+            1035
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 4,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        995,
+        1206,
+        1165,
+        1242
+      ],
+      "expected": "BELL & GOSSETT ULTRA SETTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            1650,
+            1651,
+            1652,
+            1653,
+            1654
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            1036,
+            1037,
+            1038,
+            1039,
+            1040
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 4,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1165,
+        1206,
+        1250,
+        1242
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            1655,
+            1656,
+            1657,
+            1658,
+            1659,
+            1660,
+            1661,
+            1662,
+            1663
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            1041,
+            1042,
+            1043,
+            1044,
+            1045,
+            1046,
+            1047,
+            1048,
+            1049
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 5,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        1246,
+        255,
+        1282
+      ],
+      "expected": "CV-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-5",
+          "word_ids": [
+            1664
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-5",
+          "word_ids": [
+            1050
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 5,
+      "column": "hot_water_coil",
+      "page": 13,
+      "bbox": [
+        255,
+        1246,
+        320,
+        1282
+      ],
+      "expected": "HC-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-5",
+          "word_ids": [
+            1665
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-5",
+          "word_ids": [
+            1051
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 5,
+      "column": "area_served",
+      "page": 13,
+      "bbox": [
+        320,
+        1246,
+        470,
+        1282
+      ],
+      "expected": "CONCRETE 119 / SAV-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONCRETE 119 / SAV-5",
+          "word_ids": [
+            1666,
+            1667,
+            1668,
+            1669
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONCRETE 119 / SAV-5",
+          "word_ids": [
+            1052,
+            1053,
+            1054,
+            1055
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 5,
+      "column": "valve_type",
+      "page": 13,
+      "bbox": [
+        470,
+        1246,
+        600,
+        1282
+      ],
+      "expected": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            1670,
+            1671,
+            1672,
+            1673,
+            1674,
+            1675,
+            1676,
+            1677,
+            1678
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            1056,
+            1057,
+            1058,
+            1059,
+            1060,
+            1061,
+            1062,
+            1063,
+            1064
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 5,
+      "column": "operation",
+      "page": 13,
+      "bbox": [
+        600,
+        1246,
+        680,
+        1282
+      ],
+      "expected": "2-WAY MODULATING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            1679,
+            1680
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            1065,
+            1066
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 5,
+      "column": "fluid",
+      "page": 13,
+      "bbox": [
+        680,
+        1246,
+        750,
+        1282
+      ],
+      "expected": "35% PROPYLENE GLYCOL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            1681,
+            1682,
+            1683
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            1067,
+            1068,
+            1069
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 5,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        750,
+        1246,
+        795,
+        1282
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            1684
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            1070
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 5,
+      "column": "flow_range_gpm",
+      "page": 13,
+      "bbox": [
+        795,
+        1246,
+        840,
+        1282
+      ],
+      "expected": "0.44 TO 2.53",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.44 TO 2.53",
+          "word_ids": [
+            1685,
+            1686,
+            1687
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.44 TO 2.53",
+          "word_ids": [
+            1071,
+            1072,
+            1073
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 5,
+      "column": "pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        840,
+        1246,
+        890,
+        1282
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1688
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1074
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 5,
+      "column": "maximum_pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        890,
+        1246,
+        930,
+        1282
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1689
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1075
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 5,
+      "column": "size_in",
+      "page": 13,
+      "bbox": [
+        930,
+        1246,
+        995,
+        1282
+      ],
+      "expected": "3/4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            1690
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            1076
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 5,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        995,
+        1246,
+        1165,
+        1282
+      ],
+      "expected": "BELL & GOSSETT ULTRA SETTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            1691,
+            1692,
+            1693,
+            1694,
+            1695
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            1077,
+            1078,
+            1079,
+            1080,
+            1081
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 5,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1165,
+        1246,
+        1250,
+        1282
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            1696,
+            1697,
+            1698,
+            1699,
+            1700,
+            1701,
+            1702,
+            1703,
+            1704
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            1082,
+            1083,
+            1084,
+            1085,
+            1086,
+            1087,
+            1088,
+            1089,
+            1090
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 6,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        1285,
+        255,
+        1321
+      ],
+      "expected": "CV-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-6",
+          "word_ids": [
+            1705
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-6",
+          "word_ids": [
+            1130
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 6,
+      "column": "hot_water_coil",
+      "page": 13,
+      "bbox": [
+        255,
+        1285,
+        320,
+        1321
+      ],
+      "expected": "HC-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-6",
+          "word_ids": [
+            1706
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-6",
+          "word_ids": [
+            1131
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 6,
+      "column": "area_served",
+      "page": 13,
+      "bbox": [
+        320,
+        1285,
+        470,
+        1321
+      ],
+      "expected": "MATERIAL LAB 118 / SV-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MATERIAL LAB 118 / SV-6",
+          "word_ids": [
+            1707,
+            1708,
+            1709,
+            1710,
+            1711
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MATERIAL LAB 118 / SV-6",
+          "word_ids": [
+            1091,
+            1092,
+            1093,
+            1094,
+            1095
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 6,
+      "column": "valve_type",
+      "page": 13,
+      "bbox": [
+        470,
+        1285,
+        600,
+        1321
+      ],
+      "expected": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            1712,
+            1713,
+            1714,
+            1715,
+            1716,
+            1717,
+            1718,
+            1719,
+            1720
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            1096,
+            1097,
+            1098,
+            1099,
+            1100,
+            1101,
+            1102,
+            1103,
+            1104
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 6,
+      "column": "operation",
+      "page": 13,
+      "bbox": [
+        600,
+        1285,
+        680,
+        1321
+      ],
+      "expected": "2-WAY MODULATING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            1721,
+            1722
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            1105,
+            1106
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 6,
+      "column": "fluid",
+      "page": 13,
+      "bbox": [
+        680,
+        1285,
+        750,
+        1321
+      ],
+      "expected": "35% PROPYLENE GLYCOL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            1723,
+            1724,
+            1725
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            1107,
+            1108,
+            1109
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 6,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        750,
+        1285,
+        795,
+        1321
+      ],
+      "expected": "2.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.7",
+          "word_ids": [
+            1726
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.7",
+          "word_ids": [
+            1110
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 6,
+      "column": "flow_range_gpm",
+      "page": 13,
+      "bbox": [
+        795,
+        1285,
+        840,
+        1321
+      ],
+      "expected": "0.44 TO 2.53",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.44 TO 2.53",
+          "word_ids": [
+            1727,
+            1728,
+            1729
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.44 TO 2.53",
+          "word_ids": [
+            1111,
+            1112,
+            1113
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 6,
+      "column": "pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        840,
+        1285,
+        890,
+        1321
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1730
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1114
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 6,
+      "column": "maximum_pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        890,
+        1285,
+        930,
+        1321
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1731
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1132
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 6,
+      "column": "size_in",
+      "page": 13,
+      "bbox": [
+        930,
+        1285,
+        995,
+        1321
+      ],
+      "expected": "3/4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            1732
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            1115
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 6,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        995,
+        1285,
+        1165,
+        1321
+      ],
+      "expected": "BELL & GOSSETT ULTRA SETTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            1733,
+            1734,
+            1735,
+            1736,
+            1737
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            1116,
+            1117,
+            1118,
+            1119,
+            1120
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 6,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1165,
+        1285,
+        1250,
+        1321
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            1738,
+            1739,
+            1740,
+            1741,
+            1742,
+            1743,
+            1744,
+            1745,
+            1746
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            1121,
+            1122,
+            1123,
+            1124,
+            1125,
+            1126,
+            1127,
+            1128,
+            1129
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 7,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        1325,
+        255,
+        1361
+      ],
+      "expected": "CV-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-7",
+          "word_ids": [
+            1747
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-7",
+          "word_ids": [
+            1133
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 7,
+      "column": "hot_water_coil",
+      "page": 13,
+      "bbox": [
+        255,
+        1325,
+        320,
+        1361
+      ],
+      "expected": "HC-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-7",
+          "word_ids": [
+            1748
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-7",
+          "word_ids": [
+            1134
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 7,
+      "column": "area_served",
+      "page": 13,
+      "bbox": [
+        320,
+        1325,
+        470,
+        1361
+      ],
+      "expected": "ASPHALT LAB 117 / SV-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ASPHALT LAB 117 / SV-7",
+          "word_ids": [
+            1749,
+            1750,
+            1751,
+            1752,
+            1753
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ASPHALT LAB 117 / SV-7",
+          "word_ids": [
+            1135,
+            1136,
+            1137,
+            1138,
+            1139
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 7,
+      "column": "valve_type",
+      "page": 13,
+      "bbox": [
+        470,
+        1325,
+        600,
+        1361
+      ],
+      "expected": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            1754,
+            1755,
+            1756,
+            1757,
+            1758,
+            1759,
+            1760,
+            1761,
+            1762
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            1140,
+            1141,
+            1142,
+            1143,
+            1144,
+            1145,
+            1146,
+            1147,
+            1148
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 7,
+      "column": "operation",
+      "page": 13,
+      "bbox": [
+        600,
+        1325,
+        680,
+        1361
+      ],
+      "expected": "2-WAY MODULATING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            1763,
+            1764
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            1149,
+            1150
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 7,
+      "column": "fluid",
+      "page": 13,
+      "bbox": [
+        680,
+        1325,
+        750,
+        1361
+      ],
+      "expected": "35% PROPYLENE GLYCOL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            1765,
+            1766,
+            1767
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            1151,
+            1152,
+            1153
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 7,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        750,
+        1325,
+        795,
+        1361
+      ],
+      "expected": "9.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.0",
+          "word_ids": [
+            1768
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.0",
+          "word_ids": [
+            1154
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 7,
+      "column": "flow_range_gpm",
+      "page": 13,
+      "bbox": [
+        795,
+        1325,
+        840,
+        1361
+      ],
+      "expected": "0.44 TO 2.53",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.44 TO 2.53",
+          "word_ids": [
+            1769,
+            1770,
+            1771
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.44 TO 2.53",
+          "word_ids": [
+            1155,
+            1156,
+            1157
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 7,
+      "column": "pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        840,
+        1325,
+        890,
+        1361
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1772
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1158
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 7,
+      "column": "maximum_pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        890,
+        1325,
+        930,
+        1361
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1773
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1159
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 7,
+      "column": "size_in",
+      "page": 13,
+      "bbox": [
+        930,
+        1325,
+        995,
+        1361
+      ],
+      "expected": "3/4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            1774
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            1160
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 7,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        995,
+        1325,
+        1165,
+        1361
+      ],
+      "expected": "BELL & GOSSETT ULTRA SETTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            1775,
+            1776,
+            1777,
+            1778,
+            1779
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            1161,
+            1162,
+            1163,
+            1164,
+            1165
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 7,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1165,
+        1325,
+        1250,
+        1361
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            1780,
+            1781,
+            1782,
+            1783,
+            1784,
+            1785,
+            1786,
+            1787,
+            1788
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            1166,
+            1167,
+            1168,
+            1169,
+            1170,
+            1171,
+            1172,
+            1173,
+            1174
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 8,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        1365,
+        255,
+        1401
+      ],
+      "expected": "CV-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-8",
+          "word_ids": [
+            1789
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-8",
+          "word_ids": [
+            1175
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 8,
+      "column": "hot_water_coil",
+      "page": 13,
+      "bbox": [
+        255,
+        1365,
+        320,
+        1401
+      ],
+      "expected": "HC-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-8",
+          "word_ids": [
+            1790
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-8",
+          "word_ids": [
+            1176
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 8,
+      "column": "area_served",
+      "page": 13,
+      "bbox": [
+        320,
+        1365,
+        470,
+        1401
+      ],
+      "expected": "RESIDENCY NOISE ROOM 130 / SAV-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RESIDENCY NOISE ROOM 130 / SAV-8",
+          "word_ids": [
+            1791,
+            1792,
+            1793,
+            1794,
+            1795,
+            1796
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RESIDENCY NOISE ROOM 130 / SAV-8",
+          "word_ids": [
+            1177,
+            1178,
+            1179,
+            1180,
+            1181,
+            1182
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 8,
+      "column": "valve_type",
+      "page": 13,
+      "bbox": [
+        470,
+        1365,
+        600,
+        1401
+      ],
+      "expected": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            1797,
+            1798,
+            1799,
+            1800,
+            1801,
+            1802,
+            1803,
+            1804,
+            1805
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            1183,
+            1184,
+            1185,
+            1186,
+            1187,
+            1188,
+            1189,
+            1190,
+            1191
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 8,
+      "column": "operation",
+      "page": 13,
+      "bbox": [
+        600,
+        1365,
+        680,
+        1401
+      ],
+      "expected": "2-WAY MODULATING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            1806,
+            1807
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            1192,
+            1193
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 8,
+      "column": "fluid",
+      "page": 13,
+      "bbox": [
+        680,
+        1365,
+        750,
+        1401
+      ],
+      "expected": "35% PROPYLENE GLYCOL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            1808,
+            1809,
+            1810
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            1194,
+            1195,
+            1196
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 8,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        750,
+        1365,
+        795,
+        1401
+      ],
+      "expected": "2.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.3",
+          "word_ids": [
+            1811
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.3",
+          "word_ids": [
+            1197
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 8,
+      "column": "flow_range_gpm",
+      "page": 13,
+      "bbox": [
+        795,
+        1365,
+        840,
+        1401
+      ],
+      "expected": "0.44 TO 2.53",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.44 TO 2.53",
+          "word_ids": [
+            1812,
+            1813,
+            1814
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.44 TO 2.53",
+          "word_ids": [
+            1198,
+            1199,
+            1200
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 8,
+      "column": "pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        840,
+        1365,
+        890,
+        1401
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1815
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1201
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 8,
+      "column": "maximum_pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        890,
+        1365,
+        930,
+        1401
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1816
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1202
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 8,
+      "column": "size_in",
+      "page": 13,
+      "bbox": [
+        930,
+        1365,
+        995,
+        1401
+      ],
+      "expected": "3/4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            1817
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            1203
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 8,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        995,
+        1365,
+        1165,
+        1401
+      ],
+      "expected": "BELL & GOSSETT ULTRA SETTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            1818,
+            1819,
+            1820,
+            1821,
+            1822
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            1204,
+            1205,
+            1206,
+            1207,
+            1208
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 8,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1165,
+        1365,
+        1250,
+        1401
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            1823,
+            1824,
+            1825,
+            1826,
+            1827,
+            1828,
+            1829,
+            1830,
+            1831
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            1209,
+            1210,
+            1211,
+            1212,
+            1213,
+            1214,
+            1215,
+            1216,
+            1217
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 9,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        1405,
+        255,
+        1437
+      ],
+      "expected": "CV-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-9",
+          "word_ids": [
+            1832
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-9",
+          "word_ids": [
+            1218
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 9,
+      "column": "hot_water_coil",
+      "page": 13,
+      "bbox": [
+        255,
+        1405,
+        320,
+        1437
+      ],
+      "expected": "HC-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-9",
+          "word_ids": [
+            1833
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-9",
+          "word_ids": [
+            1219
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 9,
+      "column": "area_served",
+      "page": 13,
+      "bbox": [
+        320,
+        1405,
+        470,
+        1437
+      ],
+      "expected": "GENERAL LAB 125 / SAV-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GENERAL LAB 125 / SAV-9",
+          "word_ids": [
+            1834,
+            1835,
+            1836,
+            1837,
+            1838
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GENERAL LAB 125 / SAV-9",
+          "word_ids": [
+            1220,
+            1221,
+            1222,
+            1223,
+            1224
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 9,
+      "column": "valve_type",
+      "page": 13,
+      "bbox": [
+        470,
+        1405,
+        600,
+        1437
+      ],
+      "expected": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            1839,
+            1840,
+            1841,
+            1842,
+            1843,
+            1844,
+            1845,
+            1846,
+            1847
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRESSURE INDEPENDENT FIELD ADJUSTABLE CONTROL VALVE W/ 100% AUTHORITY",
+          "word_ids": [
+            1225,
+            1226,
+            1227,
+            1228,
+            1229,
+            1230,
+            1231,
+            1232,
+            1233
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 9,
+      "column": "operation",
+      "page": 13,
+      "bbox": [
+        600,
+        1405,
+        680,
+        1437
+      ],
+      "expected": "2-WAY MODULATING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            1848,
+            1849
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY MODULATING",
+          "word_ids": [
+            1234,
+            1235
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 9,
+      "column": "fluid",
+      "page": 13,
+      "bbox": [
+        680,
+        1405,
+        750,
+        1437
+      ],
+      "expected": "35% PROPYLENE GLYCOL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            1850,
+            1851,
+            1852
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "35% PROPYLENE GLYCOL",
+          "word_ids": [
+            1236,
+            1237,
+            1238
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 9,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        750,
+        1405,
+        795,
+        1437
+      ],
+      "expected": "4.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4.4",
+          "word_ids": [
+            1853
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4.4",
+          "word_ids": [
+            1239
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 9,
+      "column": "flow_range_gpm",
+      "page": 13,
+      "bbox": [
+        795,
+        1405,
+        840,
+        1437
+      ],
+      "expected": "2.64 TO 15.89",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.64 TO 15.89",
+          "word_ids": [
+            1854,
+            1855,
+            1856
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.64 TO 15.89",
+          "word_ids": [
+            1240,
+            1241,
+            1242
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 9,
+      "column": "pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        840,
+        1405,
+        890,
+        1437
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1857
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1243
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 9,
+      "column": "maximum_pressure_drop_psi",
+      "page": 13,
+      "bbox": [
+        890,
+        1405,
+        930,
+        1437
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1858
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1244
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 9,
+      "column": "size_in",
+      "page": 13,
+      "bbox": [
+        930,
+        1405,
+        995,
+        1437
+      ],
+      "expected": "1\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1\"",
+          "word_ids": [
+            1859
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1\"",
+          "word_ids": [
+            1245
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 9,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        995,
+        1405,
+        1165,
+        1437
+      ],
+      "expected": "BELL & GOSSETT ULTRA SETTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            1860,
+            1861,
+            1862,
+            1863,
+            1864
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BELL & GOSSETT ULTRA SETTER",
+          "word_ids": [
+            1246,
+            1247,
+            1248,
+            1249,
+            1250
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "row": 9,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1165,
+        1405,
+        1250,
+        1437
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            1865,
+            1866,
+            1867,
+            1868,
+            1869,
+            1870,
+            1871,
+            1872,
+            1873
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            1251,
+            1252,
+            1253,
+            1254,
+            1255,
+            1256,
+            1257,
+            1258,
+            1259
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-BYPASS-CONTROL-VALVE",
+      "row": 1,
+      "column": "literal_source_row",
+      "page": 13,
+      "bbox": [
+        1300,
+        1438,
+        2415,
+        1471
+      ],
+      "expected": "PRESSURE 2-WAY REFER TO THE CONTROL BCV-1 HEATING WATER SYSTEM 100% WATER 25 19-110 2.7 5.0 2.0 B&G ULTRA SETTER 1 , 2 , 3 INDEPENDENT MODULATING SCHEMATICS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRESSURE 2-WAY REFER TO THE CONTROL BCV-1 HEATING WATER SYSTEM 100% WATER 25 19-110 2.7 5.0 2.0 B&G ULTRA SETTER 1 , 2 , 3 INDEPENDENT MODULATING SCHEMATICS",
+          "word_ids": [
+            2002,
+            2004,
+            2013,
+            2014,
+            2015,
+            2016,
+            1998,
+            1999,
+            2000,
+            2001,
+            2006,
+            2007,
+            2008,
+            2009,
+            2010,
+            2011,
+            2012,
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025,
+            2003,
+            2005,
+            2017
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRESSURE 2-WAY REFER TO THE CONTROL BCV-1 HEATING WATER SYSTEM 100% WATER 25 19-110 2.7 5.0 2.0 B&G ULTRA SETTER 1 , 2 , 3 INDEPENDENT MODULATING SCHEMATICS",
+          "word_ids": [
+            1615,
+            1617,
+            1634,
+            1635,
+            1636,
+            1637,
+            1877,
+            1612,
+            1613,
+            1614,
+            1931,
+            1932,
+            1933,
+            1934,
+            1935,
+            1936,
+            1633,
+            1937,
+            1938,
+            1939,
+            1949,
+            1950,
+            1951,
+            1952,
+            1953,
+            1616,
+            1618,
+            1638
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-reheat-control-valve-title",
+      "page": 13,
+      "bbox": [
+        380,
+        970,
+        1020,
+        1020
+      ],
+      "expected": "CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS)",
+          "word_ids": [
+            1464,
+            1465,
+            1466,
+            1467,
+            1468,
+            1469,
+            1470
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONTROL VALVE SCHEDULE (HOT WATER REHEAT COILS)",
+          "word_ids": [
+            1757,
+            1758,
+            1759,
+            1760,
+            1761,
+            1762,
+            1763
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-bypass-control-valve-title",
+      "page": 13,
+      "bbox": [
+        1450,
+        1355,
+        2320,
+        1410
+      ],
+      "expected": "BYPASS CONTROL VALVE SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BYPASS CONTROL VALVE SCHEDULE",
+          "word_ids": [
+            1971,
+            1972,
+            1973,
+            1974
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BYPASS CONTROL VALVE SCHEDULE",
+          "word_ids": [
+            1603,
+            1604,
+            1605,
+            1606
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "rank04-m51-control-valve-tables",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

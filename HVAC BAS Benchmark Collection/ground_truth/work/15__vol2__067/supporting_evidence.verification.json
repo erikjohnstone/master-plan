@@ -1,0 +1,205 @@
+{
+  "document_id": "15__vol2__067",
+  "source_sha256": "254931f1c37ac5afb3b9ad70d21ae7c2001c2f645c29ca8d92c4aefdc294fa1d",
+  "annotation_sha256": "7de21ff81833c41a63e4cdaef982b49b1714bdc160eac6d6cebce416030dc28b",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 3,
+  "checks": [
+    {
+      "assertion": "m63-points-list-contractor-scope",
+      "page": 6,
+      "bbox": [
+        2527,
+        1725,
+        2965,
+        1770
+      ],
+      "expected": "POINTS LIST, PLC AND IO HARDWARE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3) ASSOCIATED WEBCTRL SCREEN & LOGIC TO BE DEMO'D. 4) I&C CONTRACTOR TO INTEGRATE PLC SYSTEM INCLUDING: SEQUENCE OF OPERATIONS, CONTROLS DRAWINGS INCLUDING CONTROLS P&ID, POINTS LIST, PLC AND IO HARDWARE. EXCEPTION: IGNITION SCADA DEVELOPMENT WILL BE IN-HOUSE BY SLAC SCADA ENGINEER.",
+          "word_ids": [
+            1042,
+            1043,
+            1044,
+            1045,
+            1046,
+            1047,
+            1048,
+            1049,
+            1050,
+            1051,
+            1052,
+            1053,
+            1054,
+            1055,
+            1056,
+            1057,
+            1058,
+            1059,
+            1060,
+            1061,
+            1062,
+            1063,
+            1064,
+            1065,
+            1066,
+            1067,
+            1068,
+            1069,
+            1070,
+            1071,
+            1072,
+            1073,
+            1074,
+            1075,
+            1076,
+            1077,
+            1078,
+            1079,
+            1080,
+            1081,
+            1082,
+            1083
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3) ASSOCIATED WEBCTRL SCREEN & LOGIC TO BE DEMO'D. 4) I&C CONTRACTOR TO INTEGRATE PLC SYSTEM INCLUDING: SEQUENCE OF OPERATIONS, CONTROLS DRAWINGS INCLUDING CONTROLS P&ID, POINTS LIST, PLC AND IO HARDWARE. EXCEPTION: IGNITION SCADA DEVELOPMENT WILL BE IN-HOUSE BY SLAC SCADA ENGINEER.",
+          "word_ids": [
+            887,
+            888,
+            889,
+            890,
+            891,
+            892,
+            893,
+            894,
+            895,
+            896,
+            897,
+            898,
+            899,
+            900,
+            901,
+            902,
+            903,
+            904,
+            905,
+            906,
+            907,
+            908,
+            909,
+            910,
+            911,
+            912,
+            913,
+            914,
+            915,
+            916,
+            917,
+            918,
+            919,
+            920,
+            921,
+            922,
+            923,
+            924,
+            925,
+            926,
+            927,
+            928
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m70-pump-n-plus-one",
+      "page": 8,
+      "bbox": [
+        180,
+        260,
+        800,
+        280
+      ],
+      "expected": "(1) N+1 PUMPS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTES: (1) N+1 PUMPS.",
+          "word_ids": [
+            597,
+            598,
+            599,
+            600
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTES: (1) N+1 PUMPS.",
+          "word_ids": [
+            27,
+            1036,
+            1037,
+            1038
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m70-flow-demand-title",
+      "page": 8,
+      "bbox": [
+        2500,
+        2240,
+        2800,
+        2300
+      ],
+      "expected": "NEH PCW FLOW DEMAND",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 NEH PCW FLOW DEMAND M7.0 NTS",
+          "word_ids": [
+            2140,
+            2141,
+            2142,
+            2143,
+            2144,
+            2139,
+            2138
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 NEH PCW FLOW DEMAND NTS M7.0",
+          "word_ids": [
+            2100,
+            2096,
+            2097,
+            2098,
+            2099,
+            2102,
+            2101
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "supporting-source-limitations",
+      "actual": 5,
+      "expected": 5,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

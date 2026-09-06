@@ -1,0 +1,47 @@
+{
+  "document_id": "15__vol2__067",
+  "module_role": "Literal typed I/O callouts visibly printed on the new NEH PCW skid P&ID, M6.3. These are diagram callouts, not a contractor-produced points list or an installed PLC terminal schedule.",
+  "source_sheet": "M6.3",
+  "source_page": 6,
+  "tables": [],
+  "diagram_callouts": [
+    {"id": "M63-AI-CHWR-FLOW", "type": "AI", "point_name": "CHWR FLOW", "device_symbol": "FM", "status": "(N)", "scope": "heat-exchanger/CHW return branch"},
+    {"id": "M63-AI-CHWR-TEMP", "type": "AI", "point_name": "CHWR TEMP", "device_symbol": "TIT", "status": "(N)", "scope": "heat-exchanger/CHW return branch"},
+    {"id": "M63-AI-PCWR-TEMP", "type": "AI", "point_name": "PCWR TEMP", "device_symbol": "TIT", "status": "(N)", "scope": "PCW return at heat exchanger"},
+    {"id": "M63-AI-PCWR-PRESSURE", "type": "AI", "point_name": "PCWR PRESSURE", "device_symbol": "PIT", "status": "(N)", "scope": "PCW return at heat exchanger"},
+    {"id": "M63-AO-TCV-MODULATION", "type": "AO", "point_name": "TCV MODULATION", "device_symbol": "MAV", "status": "(N)", "scope": "chilled-water control valve at heat exchanger", "qualification": "No valve tag, Cv, actuator make/model, signal range, or fail position is printed in this supplied set."},
+    {"id": "M63-AI-CHWS-TEMP", "type": "AI", "point_name": "CHWS TEMP", "device_symbol": "TIT", "status": "(N)", "scope": "CHW supply to heat exchanger"},
+    {"id": "M63-AI-PCW-DP", "type": "AI", "point_name": "PCW DP", "device_symbol": "DPIT", "status": "(N)", "scope": "PCW differential-pressure control feedback"},
+    {"id": "M63-AI-PCWS-PRESSURE-HX", "type": "AI", "point_name": "PCWS PRESSURE", "device_symbol": "PIT", "status": "(N)", "scope": "PCW supply at heat exchanger"},
+    {"id": "M63-AI-PCWS-TEMP", "type": "AI", "point_name": "PCWS TEMP", "device_symbol": "TIT", "status": "(N)", "scope": "PCW supply downstream of air separator"},
+    {"id": "M63-AI-PCWS-PRESSURE-AS", "type": "AI", "point_name": "PCWS PRESSURE", "device_symbol": "PIT", "status": "(N)", "scope": "PCW supply at air-separator branch"},
+    {"id": "M63-AI-MAKEUP-FLOW", "type": "AI", "point_name": "MAKEUP FLOW", "device_symbol": "FM", "status": "(N)", "scope": "makeup-water line"},
+    {"id": "M63-AO-MAKEUP-ACTUATOR", "type": "AO", "point_name": "MAKEUP ACTUATOR", "device_symbol": "solenoid/actuator line", "status": "(N)", "scope": "makeup-water line", "qualification": "The sequence calls the makeup-water solenoid valve normally open; the drawing does not publish a valve tag, actuator model, signal range or fail position."},
+    {"id": "M63-AI-PCW-PUMP-1001-DP", "type": "AI", "point_name": "PCW PUMP DP", "device_symbol": "DPIT", "status": "(N)", "scope": "B950A-PCWP-1001"},
+    {"id": "M63-DI-PCW-PUMP-1001-ALARM", "type": "DI", "point_name": "ALARM", "device_symbol": "pump/VFD interface", "status": "(N)", "scope": "B950A-PCWP-1001"},
+    {"id": "M63-AO-PCW-PUMP-1001-VFD-SPEED", "type": "AO", "point_name": "VFD SPEED", "device_symbol": "pump/VFD interface", "status": "(N)", "scope": "B950A-PCWP-1001"},
+    {"id": "M63-DO-PCW-PUMP-1001-START-STOP", "type": "DO", "point_name": "START/STOP", "device_symbol": "pump/VFD interface", "status": "(N)", "scope": "B950A-PCWP-1001"},
+    {"id": "M63-AI-PCW-PUMP-1001-CURRENT", "type": "AI", "point_name": "CURRENT", "device_symbol": "pump/VFD interface", "status": "(N)", "scope": "B950A-PCWP-1001"},
+    {"id": "M63-AI-PCW-PUMP-1002-DP", "type": "AI", "point_name": "PCW PUMP DP", "device_symbol": "DPIT", "status": "(N)", "scope": "B950A-PCWP-1002"},
+    {"id": "M63-DI-PCW-PUMP-1002-ALARM", "type": "DI", "point_name": "ALARM", "device_symbol": "pump/VFD interface", "status": "(N)", "scope": "B950A-PCWP-1002"},
+    {"id": "M63-AO-PCW-PUMP-1002-VFD-SPEED", "type": "AO", "point_name": "VFD SPEED", "device_symbol": "pump/VFD interface", "status": "(N)", "scope": "B950A-PCWP-1002"},
+    {"id": "M63-DO-PCW-PUMP-1002-START-STOP", "type": "DO", "point_name": "START/STOP", "device_symbol": "pump/VFD interface", "status": "(N)", "scope": "B950A-PCWP-1002"},
+    {"id": "M63-AI-PCW-PUMP-1002-CURRENT", "type": "AI", "point_name": "CURRENT", "device_symbol": "pump/VFD interface", "status": "(N)", "scope": "B950A-PCWP-1002"},
+    {"id": "M63-AI-PCW-FILTER-DP", "type": "AI", "point_name": "PCW FILTER DP", "device_symbol": "DPIT", "status": "(N)", "scope": "B950A-WF-1001 water filter"}
+  ],
+  "point_summary": {"AI": 15, "DI": 2, "AO": 4, "DO": 2, "diagram_callouts_total": 23},
+  "source_boundary": "M6.3 labels the I/O at the skid/diagram level. It does not supply a standalone points-list table, controller I/O card schedule, terminal numbers, signal ranges, wiring methods or a point-to-controller ownership matrix. These 20 callouts must not be treated as a verified installed PLC-terminal total.",
+  "assertions": [
+    {"id": "m63-makeup-io", "page": 6, "bbox": [1560,1210,1960,1255], "expected": "MAKEUP FLOW MAKEUP ACTUATOR AI AO", "mode": "contains"},
+    {"id": "m63-pump-1001-io", "page": 6, "bbox": [1200,1988,1380,2080], "expected": "DI ALARM AO VFD SPEED DO START/STOP AI CURRENT", "mode": "contains"},
+    {"id": "m63-pump-1002-io", "page": 6, "bbox": [1200,2095,1380,2180], "expected": "DI ALARM AO VFD SPEED DO START/STOP AI CURRENT", "mode": "contains"},
+    {"id": "m63-modbus-ignition", "page": 6, "bbox": [1440,1992,1590,2050], "expected": "CAT6 ETHERNET FOR MODBUS TCP TO IGNITION SCADA", "mode": "contains"},
+    {"id": "m63-tcv-output", "page": 6, "bbox": [290,1495,410,1525], "expected": "TCV MODULATION AO", "mode": "contains"},
+    {"id": "m63-chw-temp-flow", "page": 6, "bbox": [375,1460,610,1530], "expected": "CHWR FLOW CHWR TEMP AI AI", "mode": "contains"},
+    {"id": "m63-pcw-temp-pressure", "page": 6, "bbox": [820,1460,1185,1525], "expected": "PCWR TEMP PCWR PRESSURE (N) AI AI", "mode": "contains"},
+    {"id": "m63-filter-dp", "page": 6, "bbox": [1830,1860,1965,1905], "expected": "PCW FILTER DP AI", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "m63-typed-diagram-callouts", "records_path": ["diagram_callouts"], "expected": 23, "unique_key": "id"}
+  ]
+}

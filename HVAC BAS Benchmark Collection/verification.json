@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "stats": {
+    "logical_sets_screened": 113,
+    "physical_pdfs_screened": 190,
+    "pages_screened": 4799,
+    "selected_pdfs": 30,
+    "selected_pages": 1489,
+    "states": 17,
+    "tiers": {
+      "Core": 20,
+      "Specialist": 8,
+      "Vector-outline challenge": 2
+    },
+    "rejoined_sets": 7,
+    "source_parts_in_selected_sets": 53,
+    "selected_bytes": 551119404,
+    "preview_pixel_comparisons": 60,
+    "matrix_sets": 17,
+    "sequence_sets": 26,
+    "damper_schedule_sets": 6
+  },
+  "checks": [
+    "30 unique selected sets",
+    "all selected source pages retained",
+    "single-file copies match source SHA256",
+    "all rejoined pages match normalized text, dimensions, vector and image operation counts",
+    "60 preview renderings pixel-identical to source",
+    "read-time warnings match original sources on all pages of all rejoined sets"
+  ],
+  "limitations": [
+    "Human visual review is limited to recorded key pages, not every page.",
+    "No PDF digital signature validation or takeoff ground-truth validation performed.",
+    "Bookmark/source-part navigation was added to rejoined sets; page artwork was preserved."
+  ],
+  "source_warnings_present": true,
+  "source_warning_audit": "source_parser_warnings.json"
+}

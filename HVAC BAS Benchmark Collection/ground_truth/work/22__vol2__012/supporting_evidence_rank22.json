@@ -1,0 +1,92 @@
+{
+  "document_id": "22__vol2__012",
+  "module_role": "Explicit source limits, omitted-scope disclosure and standalone-schedule-title checks.",
+  "tables": [],
+  "source_limitations": [
+    "All 29 pages have retained full-page visual review. M601's complete 24-row equipment schedule corpus, M701's complete 101-row DDC hardwired-I/O matrix, and source-bounded sequence/integration material are retained; other plans, details and one-lines remain reviewed context rather than inferred inventory.",
+    "M701's formal point matrix includes additional integration, GUI application, alarming and operational flags. This record preserves its 101 rows and the published DI/DO/AI/AO cells without reclassifying other flags as hardwired physical I/O.",
+    "The supplied set does not publish a controller-address list, controller/card/terminal assignment, BACnet object list, router/media design, wiring/termination schedule, final network topology, physical point ownership, or a final installed field-device count.",
+    "No standalone Control Valve Schedule or Damper Actuator Schedule title appears in this full source set. Diagram symbols and sequence references are not converted to valve, damper, actuator or device quantities.",
+    "Stated plan scales are local to individual plan views. No global scale, graphic-scale measurement, length, area or derived takeoff quantity is asserted."
+  ],
+  "text_absence_assertions": [
+    {
+      "id": "no-control-valve-schedule",
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "covers_all_source_pages": true,
+      "patterns": [
+        "CONTROL\\\\s+VALVE\\\\s+SCHEDULE"
+      ],
+      "visual_review_qualification": "Native text plus full-page visual review support only the limited absence of this standalone title."
+    },
+    {
+      "id": "no-damper-actuator-schedule",
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "covers_all_source_pages": true,
+      "patterns": [
+        "DAMPER\\\\s+ACTUATOR\\\\s+SCHEDULE"
+      ],
+      "visual_review_qualification": "Native text plus full-page visual review support only the limited absence of this standalone title."
+    }
+  ]
+}

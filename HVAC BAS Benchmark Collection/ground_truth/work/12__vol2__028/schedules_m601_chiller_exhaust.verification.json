@@ -1,0 +1,1902 @@
+{
+  "document_id": "12__vol2__028",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "annotation_sha256": "68f86d7a3dce7127c3fe2a1c1b6402bff701a757c8d4dbe6f95e5d112b447869",
+  "tables": 2,
+  "rows": 4,
+  "cell_assertions": 62,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "mark",
+      "page": 9,
+      "bbox": [
+        125,
+        1228,
+        180,
+        1250
+      ],
+      "expected": "CH-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-1",
+          "word_ids": [
+            145
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-1",
+          "word_ids": [
+            1421
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "type",
+      "page": 9,
+      "bbox": [
+        180,
+        1228,
+        310,
+        1250
+      ],
+      "expected": "AIR-COOLED SCROLL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIR-COOLED SCROLL",
+          "word_ids": [
+            146,
+            147
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIR-COOLED SCROLL",
+          "word_ids": [
+            1422,
+            1423
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "nominal_size_tons",
+      "page": 9,
+      "bbox": [
+        310,
+        1228,
+        360,
+        1250
+      ],
+      "expected": "40.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "40.7",
+          "word_ids": [
+            148
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "40.7",
+          "word_ids": [
+            1424
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "volts_ph_hz",
+      "page": 9,
+      "bbox": [
+        360,
+        1228,
+        425,
+        1250
+      ],
+      "expected": "208/3/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208/3/60",
+          "word_ids": [
+            149
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208/3/60",
+          "word_ids": [
+            1498
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "mca_a",
+      "page": 9,
+      "bbox": [
+        425,
+        1228,
+        470,
+        1250
+      ],
+      "expected": "184.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "184.5",
+          "word_ids": [
+            150
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "184.5",
+          "word_ids": [
+            1499
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "mfs_a",
+      "page": 9,
+      "bbox": [
+        470,
+        1228,
+        505,
+        1250
+      ],
+      "expected": "200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            151
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            1500
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "iplv_eer",
+      "page": 9,
+      "bbox": [
+        505,
+        1228,
+        545,
+        1250
+      ],
+      "expected": "17.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "17.3",
+          "word_ids": [
+            152
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "17.3",
+          "word_ids": [
+            1508
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "fouling_factor_hr_sq_ft_f_btu",
+      "page": 9,
+      "bbox": [
+        545,
+        1228,
+        645,
+        1250
+      ],
+      "expected": "0.0001",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.0001",
+          "word_ids": [
+            153
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.0001",
+          "word_ids": [
+            1509
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "evaporator_ewt_f",
+      "page": 9,
+      "bbox": [
+        645,
+        1228,
+        680,
+        1250
+      ],
+      "expected": "56",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "56",
+          "word_ids": [
+            154
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "56",
+          "word_ids": [
+            1529
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "evaporator_lwt_f",
+      "page": 9,
+      "bbox": [
+        680,
+        1228,
+        710,
+        1250
+      ],
+      "expected": "44",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "44",
+          "word_ids": [
+            155
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "44",
+          "word_ids": [
+            1524
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "evaporator_wpd_ft_wg",
+      "page": 9,
+      "bbox": [
+        710,
+        1228,
+        755,
+        1250
+      ],
+      "expected": "10.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.3",
+          "word_ids": [
+            156
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.3",
+          "word_ids": [
+            1530
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "evaporator_gpm",
+      "page": 9,
+      "bbox": [
+        755,
+        1228,
+        795,
+        1250
+      ],
+      "expected": "78.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "78.5",
+          "word_ids": [
+            157
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "78.5",
+          "word_ids": [
+            1531
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "condenser_ambient_air_temp_f",
+      "page": 9,
+      "bbox": [
+        795,
+        1228,
+        850,
+        1250
+      ],
+      "expected": "101.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "101.5",
+          "word_ids": [
+            158
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "101.5",
+          "word_ids": [
+            1538
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "condenser_number_of_fans",
+      "page": 9,
+      "bbox": [
+        850,
+        1228,
+        900,
+        1250
+      ],
+      "expected": "4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            159
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            1539
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "length_in",
+      "page": 9,
+      "bbox": [
+        900,
+        1228,
+        940,
+        1250
+      ],
+      "expected": "94.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "94.3",
+          "word_ids": [
+            160
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "94.3",
+          "word_ids": [
+            1525
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "width_in",
+      "page": 9,
+      "bbox": [
+        940,
+        1228,
+        985,
+        1250
+      ],
+      "expected": "88",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "88",
+          "word_ids": [
+            161
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "88",
+          "word_ids": [
+            1526
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "height_in",
+      "page": 9,
+      "bbox": [
+        985,
+        1228,
+        1035,
+        1250
+      ],
+      "expected": "100.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100.2",
+          "word_ids": [
+            162
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100.2",
+          "word_ids": [
+            1527
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "weight_lbs",
+      "page": 9,
+      "bbox": [
+        1035,
+        1228,
+        1085,
+        1250
+      ],
+      "expected": "4,173",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4,173",
+          "word_ids": [
+            163
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4,173",
+          "word_ids": [
+            1528
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 9,
+      "bbox": [
+        1085,
+        1228,
+        1200,
+        1250
+      ],
+      "expected": "DAIKIN/AGZ040E",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAIKIN / AGZ040E",
+          "word_ids": [
+            164,
+            165,
+            166
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAIKIN / AGZ040E",
+          "word_ids": [
+            1553,
+            1554,
+            1555
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "notes",
+      "page": 9,
+      "bbox": [
+        1200,
+        1228,
+        1260,
+        1250
+      ],
+      "expected": "1,2,3,4,5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5",
+          "word_ids": [
+            167
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5",
+          "word_ids": [
+            1556
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "header": "AIR-COOLED CHILLER SCHEDULE",
+      "page": 9,
+      "bbox": [
+        125,
+        1148,
+        400,
+        1178
+      ],
+      "engine": "mupdf",
+      "actual": "AIR-COOLED CHILLER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "header": "AIR-COOLED CHILLER SCHEDULE",
+      "page": 9,
+      "bbox": [
+        125,
+        1148,
+        400,
+        1178
+      ],
+      "engine": "poppler",
+      "actual": "AIR-COOLED CHILLER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 1,
+      "column": "mark",
+      "page": 9,
+      "bbox": [
+        1285,
+        1225,
+        1335,
+        1243
+      ],
+      "expected": "EF-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-1",
+          "word_ids": [
+            621
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-1",
+          "word_ids": [
+            1557
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 1,
+      "column": "cfm",
+      "page": 9,
+      "bbox": [
+        1335,
+        1225,
+        1380,
+        1243
+      ],
+      "expected": "620",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "620",
+          "word_ids": [
+            622
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "620",
+          "word_ids": [
+            1570
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 1,
+      "column": "external_static_pressure_in_wg",
+      "page": 9,
+      "bbox": [
+        1380,
+        1225,
+        1425,
+        1243
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            623
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1573
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 1,
+      "column": "hp",
+      "page": 9,
+      "bbox": [
+        1425,
+        1225,
+        1460,
+        1243
+      ],
+      "expected": "1/6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/6",
+          "word_ids": [
+            624
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/6",
+          "word_ids": [
+            1576
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 1,
+      "column": "rpm",
+      "page": 9,
+      "bbox": [
+        1460,
+        1225,
+        1505,
+        1243
+      ],
+      "expected": "1,725",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,725",
+          "word_ids": [
+            625
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,725",
+          "word_ids": [
+            1579
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 1,
+      "column": "volt_ph",
+      "page": 9,
+      "bbox": [
+        1505,
+        1225,
+        1565,
+        1243
+      ],
+      "expected": "115/1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115/1",
+          "word_ids": [
+            626
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115/1",
+          "word_ids": [
+            1582
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 1,
+      "column": "nema_size",
+      "page": 9,
+      "bbox": [
+        1565,
+        1225,
+        1625,
+        1243
+      ],
+      "expected": "00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "00",
+          "word_ids": [
+            627
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "00",
+          "word_ids": [
+            1585
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 1,
+      "column": "max_sones",
+      "page": 9,
+      "bbox": [
+        1625,
+        1225,
+        1680,
+        1243
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            628
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            1593
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 9,
+      "bbox": [
+        1680,
+        1225,
+        1835,
+        1243
+      ],
+      "expected": "GREENHECK/SQ-95-VG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GREENHECK / SQ-95-VG",
+          "word_ids": [
+            629,
+            630,
+            631
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GREENHECK / SQ-95-VG",
+          "word_ids": [
+            1596,
+            1597,
+            1598
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 1,
+      "column": "length_in",
+      "page": 9,
+      "bbox": [
+        1835,
+        1225,
+        1890,
+        1243
+      ],
+      "expected": "15.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15.0",
+          "word_ids": [
+            632
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15.0",
+          "word_ids": [
+            1705
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 1,
+      "column": "width_in",
+      "page": 9,
+      "bbox": [
+        1890,
+        1225,
+        1945,
+        1243
+      ],
+      "expected": "19.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "19.0",
+          "word_ids": [
+            633
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "19.0",
+          "word_ids": [
+            1708
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 1,
+      "column": "height_in",
+      "page": 9,
+      "bbox": [
+        1945,
+        1225,
+        2005,
+        1243
+      ],
+      "expected": "15.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15.0",
+          "word_ids": [
+            634
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15.0",
+          "word_ids": [
+            1711
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 1,
+      "column": "weight_lbs",
+      "page": 9,
+      "bbox": [
+        2005,
+        1225,
+        2070,
+        1243
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            635
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            1714
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 1,
+      "column": "notes",
+      "page": 9,
+      "bbox": [
+        2070,
+        1225,
+        2150,
+        1243
+      ],
+      "expected": "1,2,3,4,5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5",
+          "word_ids": [
+            636
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5",
+          "word_ids": [
+            1718
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 2,
+      "column": "mark",
+      "page": 9,
+      "bbox": [
+        1285,
+        1243,
+        1335,
+        1258
+      ],
+      "expected": "EF-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-2",
+          "word_ids": [
+            605
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-2",
+          "word_ids": [
+            1558
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 2,
+      "column": "cfm",
+      "page": 9,
+      "bbox": [
+        1335,
+        1243,
+        1380,
+        1258
+      ],
+      "expected": "920",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "920",
+          "word_ids": [
+            606
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "920",
+          "word_ids": [
+            1571
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 2,
+      "column": "external_static_pressure_in_wg",
+      "page": 9,
+      "bbox": [
+        1380,
+        1243,
+        1425,
+        1258
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            607
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1574
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 2,
+      "column": "hp",
+      "page": 9,
+      "bbox": [
+        1425,
+        1243,
+        1460,
+        1258
+      ],
+      "expected": "3/4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            608
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            1577
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 2,
+      "column": "rpm",
+      "page": 9,
+      "bbox": [
+        1460,
+        1243,
+        1505,
+        1258
+      ],
+      "expected": "2,200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,200",
+          "word_ids": [
+            609
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,200",
+          "word_ids": [
+            1580
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 2,
+      "column": "volt_ph",
+      "page": 9,
+      "bbox": [
+        1505,
+        1243,
+        1565,
+        1258
+      ],
+      "expected": "115/1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115/1",
+          "word_ids": [
+            610
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115/1",
+          "word_ids": [
+            1583
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 2,
+      "column": "nema_size",
+      "page": 9,
+      "bbox": [
+        1565,
+        1243,
+        1625,
+        1258
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            611
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            1586
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 2,
+      "column": "max_sones",
+      "page": 9,
+      "bbox": [
+        1625,
+        1243,
+        1680,
+        1258
+      ],
+      "expected": "17",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "17",
+          "word_ids": [
+            612
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "17",
+          "word_ids": [
+            1594
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 9,
+      "bbox": [
+        1680,
+        1243,
+        1835,
+        1258
+      ],
+      "expected": "GREENHECK/SQ-99-VG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GREENHECK / SQ-99-VG",
+          "word_ids": [
+            613,
+            614,
+            615
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GREENHECK / SQ-99-VG",
+          "word_ids": [
+            1599,
+            1600,
+            1601
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 2,
+      "column": "length_in",
+      "page": 9,
+      "bbox": [
+        1835,
+        1243,
+        1890,
+        1258
+      ],
+      "expected": "15.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15.0",
+          "word_ids": [
+            616
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15.0",
+          "word_ids": [
+            1706
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 2,
+      "column": "width_in",
+      "page": 9,
+      "bbox": [
+        1890,
+        1243,
+        1945,
+        1258
+      ],
+      "expected": "24.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24.0",
+          "word_ids": [
+            617
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24.0",
+          "word_ids": [
+            1709
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 2,
+      "column": "height_in",
+      "page": 9,
+      "bbox": [
+        1945,
+        1243,
+        2005,
+        1258
+      ],
+      "expected": "15.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15.0",
+          "word_ids": [
+            618
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15.0",
+          "word_ids": [
+            1712
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 2,
+      "column": "weight_lbs",
+      "page": 9,
+      "bbox": [
+        2005,
+        1243,
+        2070,
+        1258
+      ],
+      "expected": "58",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "58",
+          "word_ids": [
+            619
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "58",
+          "word_ids": [
+            1715
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 2,
+      "column": "notes",
+      "page": 9,
+      "bbox": [
+        2070,
+        1243,
+        2150,
+        1258
+      ],
+      "expected": "1,2,3,4,5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5",
+          "word_ids": [
+            620
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5",
+          "word_ids": [
+            1719
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 3,
+      "column": "mark",
+      "page": 9,
+      "bbox": [
+        1285,
+        1258,
+        1335,
+        1273
+      ],
+      "expected": "EF-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-3",
+          "word_ids": [
+            589
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-3",
+          "word_ids": [
+            1559
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 3,
+      "column": "cfm",
+      "page": 9,
+      "bbox": [
+        1335,
+        1258,
+        1380,
+        1273
+      ],
+      "expected": "645",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "645",
+          "word_ids": [
+            590
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "645",
+          "word_ids": [
+            1572
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 3,
+      "column": "external_static_pressure_in_wg",
+      "page": 9,
+      "bbox": [
+        1380,
+        1258,
+        1425,
+        1273
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            591
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1575
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 3,
+      "column": "hp",
+      "page": 9,
+      "bbox": [
+        1425,
+        1258,
+        1460,
+        1273
+      ],
+      "expected": "1/6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/6",
+          "word_ids": [
+            592
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/6",
+          "word_ids": [
+            1578
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 3,
+      "column": "rpm",
+      "page": 9,
+      "bbox": [
+        1460,
+        1258,
+        1505,
+        1273
+      ],
+      "expected": "1725",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1725",
+          "word_ids": [
+            593
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1725",
+          "word_ids": [
+            1581
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 3,
+      "column": "volt_ph",
+      "page": 9,
+      "bbox": [
+        1505,
+        1258,
+        1565,
+        1273
+      ],
+      "expected": "115/1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115/1",
+          "word_ids": [
+            594
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115/1",
+          "word_ids": [
+            1584
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 3,
+      "column": "nema_size",
+      "page": 9,
+      "bbox": [
+        1565,
+        1258,
+        1625,
+        1273
+      ],
+      "expected": "00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "00",
+          "word_ids": [
+            595
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "00",
+          "word_ids": [
+            1587
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 3,
+      "column": "max_sones",
+      "page": 9,
+      "bbox": [
+        1625,
+        1258,
+        1680,
+        1273
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            596
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            1595
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 3,
+      "column": "manufacturer_model",
+      "page": 9,
+      "bbox": [
+        1680,
+        1258,
+        1835,
+        1273
+      ],
+      "expected": "GREENHECK/SQ-95-VG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GREENHECK / SQ-95-VG",
+          "word_ids": [
+            597,
+            598,
+            599
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GREENHECK / SQ-95-VG",
+          "word_ids": [
+            1602,
+            1603,
+            1604
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 3,
+      "column": "length_in",
+      "page": 9,
+      "bbox": [
+        1835,
+        1258,
+        1890,
+        1273
+      ],
+      "expected": "15.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15.0",
+          "word_ids": [
+            600
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15.0",
+          "word_ids": [
+            1707
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 3,
+      "column": "width_in",
+      "page": 9,
+      "bbox": [
+        1890,
+        1258,
+        1945,
+        1273
+      ],
+      "expected": "19.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "19.0",
+          "word_ids": [
+            601
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "19.0",
+          "word_ids": [
+            1710
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 3,
+      "column": "height_in",
+      "page": 9,
+      "bbox": [
+        1945,
+        1258,
+        2005,
+        1273
+      ],
+      "expected": "15.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15.0",
+          "word_ids": [
+            602
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15.0",
+          "word_ids": [
+            1713
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 3,
+      "column": "weight_lbs",
+      "page": 9,
+      "bbox": [
+        2005,
+        1258,
+        2070,
+        1273
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            603
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            1716
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "row": 3,
+      "column": "notes",
+      "page": 9,
+      "bbox": [
+        2070,
+        1258,
+        2150,
+        1273
+      ],
+      "expected": "1,2,3,4,5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5",
+          "word_ids": [
+            604
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5",
+          "word_ids": [
+            1720
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "header": "EXHAUST FAN SCHEDULE",
+      "page": 9,
+      "bbox": [
+        1285,
+        1148,
+        1500,
+        1178
+      ],
+      "engine": "mupdf",
+      "actual": "EXHAUST FAN SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-EXHAUST-FAN",
+      "header": "EXHAUST FAN SCHEDULE",
+      "page": 9,
+      "bbox": [
+        1285,
+        1148,
+        1500,
+        1178
+      ],
+      "engine": "poppler",
+      "actual": "EXHAUST FAN SCHEDULE",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m601-chiller-row-count",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "id": "m601-exhaust-fan-row-count",
+      "actual": 3,
+      "expected": 3,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

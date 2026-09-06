@@ -1,0 +1,262 @@
+{
+  "id": "12__vol2__028",
+  "record_sha256": "662856b2a60c7c20ac0ed9803993178e42e653c9a7917d4ffa89523b80717fc4",
+  "checked_utc": "2026-09-05T09:08:16.153035+00:00",
+  "errors": [],
+  "modules": {
+    "metadata": {
+      "components": [
+        {
+          "annotation_sha256": "e81ab3b65a0d618f6c7aab8316798491026199ac0733df8280909b9c2dfe0f04",
+          "cell_assertions": 0,
+          "text_assertions": 54,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 54,
+      "pass": true
+    },
+    "schedules": {
+      "components": [
+        {
+          "annotation_sha256": "641b3222eccd6f98955a0e8754e862f4ef7d21f11949cb62cd3b2a68081ebb65",
+          "cell_assertions": 278,
+          "text_assertions": 0,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "84ff30cd4148dd74c20a7f34959a65fec391e85e04503bfcdfc26b07ee4c23c5",
+          "cell_assertions": 690,
+          "text_assertions": 0,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "581a0ef2e2e6a7160ed3c150565e82ba7fe7e57b3ae07760813f54c64873835e",
+          "cell_assertions": 96,
+          "text_assertions": 0,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "bbcfd6e1e217ead6f261f95e5dd0fda6102cee9bab86fbfe1706b2f0e6fd6c2d",
+          "cell_assertions": 29,
+          "text_assertions": 0,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "68f86d7a3dce7127c3fe2a1c1b6402bff701a757c8d4dbe6f95e5d112b447869",
+          "cell_assertions": 62,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 1155,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "points": {
+      "components": [
+        {
+          "annotation_sha256": "d3f51d60a412ef77aaec2aee119920272df2fce2c98718020cdfe8b941802428",
+          "cell_assertions": 112,
+          "text_assertions": 0,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "7259f4aeabc509b22fafe95fc784b8a124adbcb05821fac310227913072438f7",
+          "cell_assertions": 468,
+          "text_assertions": 0,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "7f9ebacf27185b49e1c331cdb8fd0843b077e0e1158c19659ce438979983388b",
+          "cell_assertions": 175,
+          "text_assertions": 1,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "83e25102e90f6e7ffcfa714c6da6299d8ae753c4bf45c1545e0dd92286368fc8",
+          "cell_assertions": 238,
+          "text_assertions": 1,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "9825999c5caebdd4a534c4154256873525f5d6493328040d0306059d9a41fff5",
+          "cell_assertions": 190,
+          "text_assertions": 0,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "997f077d968e9bb2cc45a016e3caa06f4decf2102a40caf415a0aa4c113f218e",
+          "cell_assertions": 231,
+          "text_assertions": 0,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "0d01227d0c871536591c0f638a6793c38136f449548a41e6992feedf66c962fc",
+          "cell_assertions": 189,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 1603,
+      "text_assertions": 2,
+      "pass": true
+    },
+    "controls_context": {
+      "components": [
+        {
+          "annotation_sha256": "ae7f47c5b17c2c96570a6d9ae223ef3e655c07d3262ffad6c210105474ab3c50",
+          "cell_assertions": 0,
+          "text_assertions": 16,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "935436e1b9d69c5ba68d0fa8d761b91942563035dcde0ba46ef41eb580e654ae",
+          "cell_assertions": 0,
+          "text_assertions": 8,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "f3de1a2782be4b52c500a8839a51f1f85592d6b7f9f993c3a0071e691a9f1776",
+          "cell_assertions": 0,
+          "text_assertions": 8,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "9f52c00fb451d0b84f2a0bceb993fb64cc8b2c8e037c311159d7f608c64d2da2",
+          "cell_assertions": 0,
+          "text_assertions": 30,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "39ef81e7c420202f6f34cf4281cd160a81d74ce88d392c65108ed4287ceca817",
+          "cell_assertions": 0,
+          "text_assertions": 21,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "100998e7d8cd4e86fcee80e8a4a43ae6bacf603cd7cfc87c672410696c280a59",
+          "cell_assertions": 0,
+          "text_assertions": 21,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "a2fb0e1df29c03df38cc2c38d1b7eb40356c689d920fe77f13a2fa59691c1abb",
+          "cell_assertions": 0,
+          "text_assertions": 14,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 118,
+      "pass": true
+    },
+    "sensors": {
+      "components": [
+        {
+          "annotation_sha256": "554679c5d4afa289c27c75f42aa8c86a8b144a79733a72ec8c0de6e219ba7bd8",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "reference_tables": {
+      "components": [
+        {
+          "annotation_sha256": "897ca66d6481943a7bb47a6c24b8b7a32572ad884d12852624941482d22a0817",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "equipment_reconciliation": {
+      "components": [
+        {
+          "annotation_sha256": "fe1b6be917837dd7fb7bce851f2939f1e02b13381b4d3feae007e6461cfae3ea",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "point_applications": {
+      "components": [
+        {
+          "annotation_sha256": "1551c3f58d9b6f95d5dd60f688824bec9582ae3e071f32ab20ccb0aca27654bd",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "supporting_evidence": {
+      "components": [
+        {
+          "annotation_sha256": "cfd6d9f1b196d9fb92662c302169e310afb8d3983b66aeacc48fccd40ecbae87",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    }
+  },
+  "source_files_sha256": {
+    "work/12__vol2__028/document_manifest.json": "9dfcbc22e58a67852fc6b91418bc9569959e23dd0f58113639b3dae12bb54cb0",
+    "work/12__vol2__028/metadata.json": "e81ab3b65a0d618f6c7aab8316798491026199ac0733df8280909b9c2dfe0f04",
+    "work/12__vol2__028/schedules_m505_silencer_esp.json": "641b3222eccd6f98955a0e8754e862f4ef7d21f11949cb62cd3b2a68081ebb65",
+    "work/12__vol2__028/schedules_m601_fcu.json": "84ff30cd4148dd74c20a7f34959a65fec391e85e04503bfcdfc26b07ee4c23c5",
+    "work/12__vol2__028/schedules_m601_doas.json": "581a0ef2e2e6a7160ed3c150565e82ba7fe7e57b3ae07760813f54c64873835e",
+    "work/12__vol2__028/schedules_m601_boiler_unit_heater.json": "bbcfd6e1e217ead6f261f95e5dd0fda6102cee9bab86fbfe1706b2f0e6fd6c2d",
+    "work/12__vol2__028/schedules_m601_chiller_exhaust.json": "68f86d7a3dce7127c3fe2a1c1b6402bff701a757c8d4dbe6f95e5d112b447869",
+    "work/12__vol2__028/points_m506_airside_templates.json": "d3f51d60a412ef77aaec2aee119920272df2fce2c98718020cdfe8b941802428",
+    "work/12__vol2__028/points_m506_meter_global_templates.json": "7259f4aeabc509b22fafe95fc784b8a124adbcb05821fac310227913072438f7",
+    "work/12__vol2__028/points_m507_chw_template.json": "7f9ebacf27185b49e1c331cdb8fd0843b077e0e1158c19659ce438979983388b",
+    "work/12__vol2__028/points_m508_hhw_template.json": "83e25102e90f6e7ffcfa714c6da6299d8ae753c4bf45c1545e0dd92286368fc8",
+    "work/12__vol2__028/points_m510_fcu_template.json": "9825999c5caebdd4a534c4154256873525f5d6493328040d0306059d9a41fff5",
+    "work/12__vol2__028/points_m511_doas3_vav_templates.json": "997f077d968e9bb2cc45a016e3caa06f4decf2102a40caf415a0aa4c113f218e",
+    "work/12__vol2__028/points_m512_doas12_template.json": "0d01227d0c871536591c0f638a6793c38136f449548a41e6992feedf66c962fc",
+    "work/12__vol2__028/controls_context_m506.json": "ae7f47c5b17c2c96570a6d9ae223ef3e655c07d3262ffad6c210105474ab3c50",
+    "work/12__vol2__028/controls_context_m507.json": "935436e1b9d69c5ba68d0fa8d761b91942563035dcde0ba46ef41eb580e654ae",
+    "work/12__vol2__028/controls_context_m508.json": "f3de1a2782be4b52c500a8839a51f1f85592d6b7f9f993c3a0071e691a9f1776",
+    "work/12__vol2__028/controls_context_m509_hydronic.json": "9f52c00fb451d0b84f2a0bceb993fb64cc8b2c8e037c311159d7f608c64d2da2",
+    "work/12__vol2__028/controls_context_m510.json": "39ef81e7c420202f6f34cf4281cd160a81d74ce88d392c65108ed4287ceca817",
+    "work/12__vol2__028/controls_context_m511.json": "100998e7d8cd4e86fcee80e8a4a43ae6bacf603cd7cfc87c672410696c280a59",
+    "work/12__vol2__028/controls_context_m512.json": "a2fb0e1df29c03df38cc2c38d1b7eb40356c689d920fe77f13a2fa59691c1abb",
+    "work/12__vol2__028/sensors.json": "554679c5d4afa289c27c75f42aa8c86a8b144a79733a72ec8c0de6e219ba7bd8",
+    "work/12__vol2__028/reference_tables.json": "897ca66d6481943a7bb47a6c24b8b7a32572ad884d12852624941482d22a0817",
+    "work/12__vol2__028/equipment_reconciliation.json": "fe1b6be917837dd7fb7bce851f2939f1e02b13381b4d3feae007e6461cfae3ea",
+    "work/12__vol2__028/point_applications.json": "1551c3f58d9b6f95d5dd60f688824bec9582ae3e071f32ab20ccb0aca27654bd",
+    "work/12__vol2__028/supporting_evidence.json": "cfd6d9f1b196d9fb92662c302169e310afb8d3983b66aeacc48fccd40ecbae87",
+    "reviews/12__vol2__028/p1-p1-full-poppler.png": "b2c05f3d566adede5ab61adcb8c227c17bedc5064acbe22a5099a26b6d5d51a6",
+    "reviews/12__vol2__028/p2-p2-full-poppler.png": "f4afb581636ad685f825e87630906fca702a08e8c8c1d211761ec054b4f98a57",
+    "reviews/12__vol2__028/p3-p3-full-poppler.png": "b3c90b71b3eddd868e50ca7514d51f20b26eb0a6e527332bd42c8f1c9a1973b9",
+    "reviews/12__vol2__028/p4-p4-full-poppler.png": "57e253f606ebfa5a9c17526c7b7b3c9c69caf0a38eecbf8d3b85ad71a4ad1aa8",
+    "reviews/12__vol2__028/p5-p5-full-poppler.png": "882a5f20fe2e3e7ad7a8ea5c457053cb57d55c4f710604db4968e9b5db6e644b",
+    "reviews/12__vol2__028/p6-p6-full-poppler.png": "8dd27b7c16e5a03e705181122272fd5a540793dde50f189adf6fb57bf0445642",
+    "reviews/12__vol2__028/p7-p7-full-poppler.png": "a1ea0716b1b5d6801597ee9ec59628792d25fe1a2bb8bf04deb5de9270385c24",
+    "reviews/12__vol2__028/p8-p8-full-poppler.png": "9f701def6a203184d0218e9b6c6bd96a19c57aa47aa96d76ebc75c15ac015380",
+    "reviews/12__vol2__028/p9-p9-full-poppler.png": "87225272c4108a5521b2dcb9305b6c22db8bddc7ee1923280ba0e39fc423dce0"
+  },
+  "scope": "Rechecks every embedded authored module against MuPDF and Poppler, exact bundle/source identity, authored page/requirement coverage and review-file integrity. Visual interpretation and completeness are coordinator audit assertions, not automatic parser proof.",
+  "bounded_assertions": 2932,
+  "independent_engine_checks": 5864,
+  "pass": true
+}

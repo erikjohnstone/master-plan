@@ -1,0 +1,156 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All printed entries in the combined MTRACON/ATCT chilled-water system point list on MI720 (source PDF page 60): 30 analog inputs, 8 analog outputs, 15 binary inputs and 10 binary outputs. This records controller points and printed flags, not inferred field-device counts.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [60],
+    "render": "reviews/01__vol2__001/p60-p60-controls-poppler.png",
+    "dpi": 180,
+    "finding": "The MI720 combined MTRACON/ATCT chilled-water schematic and complete right-hand point-list panel were visually reviewed at 180 DPI. Point tags, descriptions, alarm flags and trend flags are retained as printed."
+  },
+  "tables": [
+    {
+      "id": "MTRACON-ATCT-CHW-AI",
+      "page": 60,
+      "sheet": "MI720",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT CHW SYSTEM POINT LIST - ANALOG INPUT",
+      "classification": "Analog input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1750, 1810, 2080, 2130, 2220],
+      "y_ranges": [[297, 323], [323, 340], [340, 357], [357, 374], [374, 391], [391, 408], [408, 425], [425, 442], [442, 459], [459, 476], [476, 493], [493, 510], [510, 527], [527, 544], [544, 561], [561, 579], [579, 596], [596, 613], [613, 630], [630, 647], [647, 664], [664, 681], [681, 698], [698, 715], [715, 732], [732, 749], [749, 766], [766, 783], [783, 800], [800, 825]],
+      "rows": [
+        "AI01|MTRACON CHW SUPPLY TEMPERATURE|Yes|Yes",
+        "AI02|TOWER CHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI03|TOWER CHW RETURN TEMPERATURE|Yes|Yes",
+        "AI04|MTRACON CHW RETURN TEMPERATURE|Yes|Yes",
+        "AI05|MTRACON CHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI06|TOWER SECONDARY CHW FLOWRATE|No|Yes",
+        "AI07|TOWER CHW SUPPLY TEMPERATURE|Yes|Yes",
+        "AI08|MTRACON SECONDARY CHW FLOWRATE|No|Yes",
+        "AI09|PCHWP-MT2 SPEED (FEEDBACK)|No|Yes",
+        "AI10|CH-MT2 CHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI11|CH-MT2 FLOW|Yes|Yes",
+        "AI12|CH-MT2 CHW SUPPLY TEMPERATURE|Yes|Yes",
+        "AI13|PCHWP-A1 SPEED (FEEDBACK)|No|Yes",
+        "AI14|CH-MT1 CHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI15|CH-MT1 FLOW|Yes|Yes",
+        "AI16|CH-MT1 CHW SUPPLY TEMPERATURE|Yes|Yes",
+        "AI17|SCHWP-T1 SPEED (FEEDBACK)|No|Yes",
+        "AI18|SCHWP-M2 SPEED (FEEDBACK)|No|Yes",
+        "AI19|SCHWP-M1 SPEED (FEEDBACK)|No|Yes",
+        "AI20|ATCT CHW BYPASS POSITION (FEEDBACK)|No|Yes",
+        "AI21|MTRACON CHW BYPASS POSITION (FEEDBACK)|No|Yes",
+        "AI22|CH-MT2 CHW RETURN TEMPERATURE|Yes|Yes",
+        "AI23|CH-MT1 CHW RETURN TEMPERATURE|Yes|Yes",
+        "AI24|SCHWP-T2 SPEED (FEEDBACK)|No|Yes",
+        "AI25|PCHWP-MT2 DIFFERENTIAL PRESSURE|No|Yes",
+        "AI26|PCHWP-MT1 DIFFERENTIAL PRESSURE|No|Yes",
+        "AI27|SCHWP-T2 DIFFERENTIAL PRESSURE|No|Yes",
+        "AI28|SCHWP-T1 DIFFERENTIAL PRESSURE|No|Yes",
+        "AI29|SCHWP-M2 DIFFERENTIAL PRESSURE|No|Yes",
+        "AI30|SCHWP-M1 DIFFERENTIAL PRESSURE|No|Yes"
+      ],
+      "header_evidence": [
+        {"bbox": [1820, 227, 2130, 262], "expected": "MTRACON ATCT CHW SYSTEM POINT LIST"},
+        {"bbox": [1750, 262, 2220, 289], "expected": "MARK DESCRIPTION ALARM TREND"},
+        {"bbox": [1745, 280, 1840, 297], "expected": "ANALOG INPUT"}
+      ]
+    },
+    {
+      "id": "MTRACON-ATCT-CHW-AO",
+      "page": 60,
+      "sheet": "MI720",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT CHW SYSTEM POINT LIST - ANALOG OUTPUT",
+      "classification": "Analog output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1750, 1810, 2080, 2130, 2220],
+      "y_edges": [849, 872, 889, 906, 923, 940, 957, 974, 992],
+      "rows": [
+        "AO01|PCHWP-MT1 SPEED CONTROL|No|Yes",
+        "AO02|SCHWP-T2 SPEED CONTROL|No|Yes",
+        "AO03|SCHWP-M2 SPEED CONTROL|No|Yes",
+        "AO04|SCHWP-M1 SPEED CONTROL|No|Yes",
+        "AO05|SCHWP-T1 SPEED CONTROL|No|Yes",
+        "AO06|PCHWP-MT2 SPEED CONTROL|No|Yes",
+        "AO07|ATCT CHW BYPASS VALVE CONTROL|No|No",
+        "AO08|MTRACON CHW BYPASS VALVE CONTROL|No|No"
+      ],
+      "header_evidence": [
+        {"bbox": [1745, 823, 1840, 849], "expected": "ANALOG OUTPUT"}
+      ]
+    },
+    {
+      "id": "MTRACON-ATCT-CHW-BI",
+      "page": 60,
+      "sheet": "MI720",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT CHW SYSTEM POINT LIST - BINARY INPUT",
+      "classification": "Binary input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1750, 1810, 2080, 2130, 2220],
+      "y_edges": [1022, 1044, 1062, 1079, 1096, 1113, 1130, 1148, 1165, 1182, 1199, 1216, 1233, 1251, 1268, 1285],
+      "rows": [
+        "BI01|CV-CHW-MT1 POSITION (FEEDBACK)|Yes|No",
+        "BI02|CV-CHW-MT2 POSITION (FEEDBACK)|Yes|No",
+        "BI03|PCHWP-A1 VFD STATUS|No|Yes",
+        "BI04|PCHWP-A1 VFD ALARM|Yes|No",
+        "BI06|PCHWP-A1 VFD STATUS|No|Yes",
+        "BI07|PCHWP-A1 VFD ALARM|Yes|No",
+        "BI08|SCHWP-T2 VFD ALARM|Yes|No",
+        "BI09|SCHWP-T2 VFD STATUS|No|Yes",
+        "BI10|SCHWP-T1 VFD STATUS|No|Yes",
+        "BI11|SCHWP-T1 VFD ALARM|Yes|No",
+        "BI12|SCHWP-M2 VFD STATUS|No|Yes",
+        "BI13|SCHWP-M2 VFD ALARM|Yes|No",
+        "BI14|SCHWP-M1 VFD STATUS|No|Yes",
+        "BI15|SCHWP-M1 VFD ALARM|Yes|No",
+        "BI16|AIR OPS/MTRACON CHILLER PLANT DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {"bbox": [1745, 996, 1840, 1022], "expected": "BINARY INPUT"}
+      ]
+    },
+    {
+      "id": "MTRACON-ATCT-CHW-BO",
+      "page": 60,
+      "sheet": "MI720",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT CHW SYSTEM POINT LIST - BINARY OUTPUT",
+      "classification": "Binary output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1750, 1810, 2080, 2130, 2220],
+      "y_edges": [1315, 1337, 1354, 1371, 1388, 1405, 1423, 1440, 1457, 1474, 1492],
+      "rows": [
+        "BO01|SCHWP-T1 START/STOP|No|No",
+        "BO02|CH-MT2 CHILLER CONTROL|No|No",
+        "BO03|CH-MT1 CHILLER CONTROL|No|No",
+        "BO04|CV-CHW-MT2 VALVE CONTROL|No|No",
+        "BO05|CV-CHW-MT1 VALVE CONTROL|No|No",
+        "BO06|SCHWP-M2 START/STOP|No|No",
+        "BO07|SCHWP-M1 START/STOP|No|No",
+        "BO08|SCHWP-T2 START/STOP|No|No",
+        "BO09|PCHWP-MT1 START/STOP|No|No",
+        "BO10|PCHWP-MT2 START/STOP|No|No"
+      ],
+      "header_evidence": [
+        {"bbox": [1745, 1289, 1840, 1315], "expected": "BINARY OUTPUT"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "mtracon-atct-chw-ai-count", "records_path": ["tables", 0, "rows"], "expected": 30},
+    {"id": "mtracon-atct-chw-ao-count", "records_path": ["tables", 1, "rows"], "expected": 8},
+    {"id": "mtracon-atct-chw-bi-count", "records_path": ["tables", 2, "rows"], "expected": 15},
+    {"id": "mtracon-atct-chw-bo-count", "records_path": ["tables", 3, "rows"], "expected": 10}
+  ],
+  "source_conflicts": [
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "finding": "The printed binary-input marks skip BI05 and repeat the literal PCHWP-A1 VFD STATUS/ALARM descriptions for BI03/BI04 and BI06/BI07. The sequence gap and repeated source text are retained rather than normalized."
+    }
+  ],
+  "remaining_work": "Capture the remaining system point lists, control diagrams, sequences, DDC-network relationships and plan-level field-device reconciliation."
+}

@@ -1,0 +1,859 @@
+{
+  "document_id": "02__vol2__015",
+  "source_sha256": "7ac5b4d6d97b5416f7d04a2a3abd303513ac9f19cec5930d0b9aa3bcd550da97",
+  "annotation_sha256": "64e45938b4aa56b3550279886b72b02152725c50f4b792c56af70fcf4cb3fa06",
+  "tables": 1,
+  "rows": 1,
+  "cell_assertions": 28,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "indoor_mark",
+      "page": 9,
+      "bbox": [
+        99,
+        671.5,
+        142.2,
+        688.8
+      ],
+      "expected": "DSS-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DSS-4",
+          "word_ids": [
+            421
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DSS-4",
+          "word_ids": [
+            159
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "type",
+      "page": 9,
+      "bbox": [
+        142.2,
+        671.5,
+        232.9,
+        688.8
+      ],
+      "expected": "WALL-MOUNTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WALL-MOUNTED",
+          "word_ids": [
+            422
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WALL-MOUNTED",
+          "word_ids": [
+            160
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "location",
+      "page": 9,
+      "bbox": [
+        232.9,
+        671.5,
+        317.3,
+        688.8
+      ],
+      "expected": "GUARD BOOTH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GUARD BOOTH",
+          "word_ids": [
+            423,
+            424
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GUARD BOOTH",
+          "word_ids": [
+            161,
+            162
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "refrigerant",
+      "page": 9,
+      "bbox": [
+        317.3,
+        671.5,
+        400.9,
+        688.8
+      ],
+      "expected": "R-410A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R-410A",
+          "word_ids": [
+            425
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R-410A",
+          "word_ids": [
+            168
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "airflow_CFM",
+      "page": 9,
+      "bbox": [
+        400.9,
+        671.5,
+        503.3,
+        688.8
+      ],
+      "expected": "370",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "370",
+          "word_ids": [
+            426
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "370",
+          "word_ids": [
+            178
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "fan_W",
+      "page": 9,
+      "bbox": [
+        503.3,
+        671.5,
+        593,
+        688.8
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            427
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            179
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "total_cooling_MBH",
+      "page": 9,
+      "bbox": [
+        593,
+        671.5,
+        680.4,
+        688.8
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            428
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            193
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "sensible_cooling_MBH",
+      "page": 9,
+      "bbox": [
+        680.4,
+        671.5,
+        766.3,
+        688.8
+      ],
+      "expected": "9.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.6",
+          "word_ids": [
+            429
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.6",
+          "word_ids": [
+            194
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "EAT_DB_F",
+      "page": 9,
+      "bbox": [
+        766.3,
+        671.5,
+        829.6,
+        688.8
+      ],
+      "expected": "78",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "78",
+          "word_ids": [
+            430
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "78",
+          "word_ids": [
+            195
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "EAT_WB_F",
+      "page": 9,
+      "bbox": [
+        829.6,
+        671.5,
+        892,
+        688.8
+      ],
+      "expected": "65",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "65",
+          "word_ids": [
+            431
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "65",
+          "word_ids": [
+            196
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "min_SEER",
+      "page": 9,
+      "bbox": [
+        892,
+        671.5,
+        994.7,
+        688.8
+      ],
+      "expected": "20.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20.8",
+          "word_ids": [
+            432
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20.8",
+          "word_ids": [
+            200
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "heat_at_47F_MBH",
+      "page": 9,
+      "bbox": [
+        994.7,
+        671.5,
+        1104.1,
+        688.8
+      ],
+      "expected": "18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            433
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            225
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "heat_at_17F_MBH",
+      "page": 9,
+      "bbox": [
+        1104.1,
+        671.5,
+        1207.4,
+        688.8
+      ],
+      "expected": "11.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11.1",
+          "word_ids": [
+            434
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11.1",
+          "word_ids": [
+            226
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "heat_EAT_DB_F",
+      "page": 9,
+      "bbox": [
+        1207.4,
+        671.5,
+        1251.8,
+        688.8
+      ],
+      "expected": "68",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "68",
+          "word_ids": [
+            435
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "68",
+          "word_ids": [
+            227
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "indoor_FLA",
+      "page": 9,
+      "bbox": [
+        1251.8,
+        671.5,
+        1287.7,
+        688.8
+      ],
+      "expected": "0.33",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.33",
+          "word_ids": [
+            436
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.33",
+          "word_ids": [
+            228
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "indoor_MCA",
+      "page": 9,
+      "bbox": [
+        1287.7,
+        671.5,
+        1324.8,
+        688.8
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            437
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            229
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "indoor_V",
+      "page": 9,
+      "bbox": [
+        1324.8,
+        671.5,
+        1373.8,
+        688.8
+      ],
+      "expected": "208/230",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208/230",
+          "word_ids": [
+            438
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208/230",
+          "word_ids": [
+            230
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "indoor_phase",
+      "page": 9,
+      "bbox": [
+        1373.8,
+        671.5,
+        1400.3,
+        688.8
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            439
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            231
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "indoor_Hz",
+      "page": 9,
+      "bbox": [
+        1400.3,
+        671.5,
+        1428.7,
+        688.8
+      ],
+      "expected": "60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            440
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            232
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "outdoor_mark",
+      "page": 9,
+      "bbox": [
+        1428.7,
+        671.5,
+        1478.3,
+        688.8
+      ],
+      "expected": "CU-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CU-4",
+          "word_ids": [
+            441
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CU-4",
+          "word_ids": [
+            241
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "outdoor_location",
+      "page": 9,
+      "bbox": [
+        1478.3,
+        671.5,
+        1538.3,
+        688.8
+      ],
+      "expected": "OUTSIDE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE",
+          "word_ids": [
+            442
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE",
+          "word_ids": [
+            242
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "outdoor_FLA",
+      "page": 9,
+      "bbox": [
+        1538.3,
+        671.5,
+        1576.7,
+        688.8
+      ],
+      "expected": "7.83",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "7.83",
+          "word_ids": [
+            443
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "7.83",
+          "word_ids": [
+            243
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "outdoor_MCA",
+      "page": 9,
+      "bbox": [
+        1576.7,
+        671.5,
+        1614.6,
+        688.8
+      ],
+      "expected": "11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            444
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            245
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "outdoor_MOCP",
+      "page": 9,
+      "bbox": [
+        1614.6,
+        671.5,
+        1654.4,
+        688.8
+      ],
+      "expected": "28",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "28",
+          "word_ids": [
+            445
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "28",
+          "word_ids": [
+            252
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "outdoor_V",
+      "page": 9,
+      "bbox": [
+        1654.4,
+        671.5,
+        1700.4,
+        688.8
+      ],
+      "expected": "208/230",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208/230",
+          "word_ids": [
+            446
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208/230",
+          "word_ids": [
+            253
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "outdoor_phase",
+      "page": 9,
+      "bbox": [
+        1700.4,
+        671.5,
+        1725.4,
+        688.8
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            447
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            254
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "outdoor_Hz",
+      "page": 9,
+      "bbox": [
+        1725.4,
+        671.5,
+        1752.8,
+        688.8
+      ],
+      "expected": "60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            448
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            255
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "row": 1,
+      "column": "notes",
+      "page": 9,
+      "bbox": [
+        1752.8,
+        671.5,
+        1801.3,
+        688.8
+      ],
+      "expected": "1,2,3,4,5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5",
+          "word_ids": [
+            449
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5",
+          "word_ids": [
+            256
+          ]
+        }
+      }
+    },
+    {
+      "table": "GB-DSS",
+      "header": "DUCTLESS SPLIT SYSTEM SCHEDULE MARK TYPE LOCATION REFERIGERANT TYPE SUPPLY FAN DATA COOLING HEATING INDOOR UNIT ELECTRICAL OUTDOOR UNIT OUTDOOR UNIT ELECTRICAL TOTAL AIRFLOW CFM FAN MOTOR WATTS TOTAL COOLING MBH SENSIBLE COOLING MBH EAT DB EAT WB MIN EFFICIENCY SEER HEATING CAPACITY AT 47 F MBH HEATING CAPACITY AT 17 F MBH EAT DB F FLA MCA VOLTS PH HZ MARK LOCATION FLA MCA MOCP VOLTS PH HZ NOTES",
+      "page": 9,
+      "bbox": [
+        99,
+        591,
+        1802,
+        671.5
+      ],
+      "engine": "mupdf",
+      "actual": "DUCTLESS SPLIT SYSTEM SCHEDULE SUPPLY FAN DATA COOLING HEATING INDOOR UNIT ELECTRICAL OUTDOOR UNIT OUTDOOR UNIT ELECTRICAL REFERIGERANT MARK TYPE LOCATION TOTAL AIRFLOW FAN MOTOR TOTAL COOLING SENSIBLE MIN EFFICIENCY HEATING CAPACITY HEATING CAPACITY EAT DB TYPE EAT DB (°F) EAT WB (°F) VOLTS PH HZ MARK LOCATION FLA (CFM) (WATTS) (MBH) COOLING (MBH) (SEER) AT 47 °F (MBH) AT 17 °F (MBH) (°F) FLA MCA MCA MOCP VOLTS PH HZ NOTES",
+      "pass": true
+    },
+    {
+      "table": "GB-DSS",
+      "header": "DUCTLESS SPLIT SYSTEM SCHEDULE MARK TYPE LOCATION REFERIGERANT TYPE SUPPLY FAN DATA COOLING HEATING INDOOR UNIT ELECTRICAL OUTDOOR UNIT OUTDOOR UNIT ELECTRICAL TOTAL AIRFLOW CFM FAN MOTOR WATTS TOTAL COOLING MBH SENSIBLE COOLING MBH EAT DB EAT WB MIN EFFICIENCY SEER HEATING CAPACITY AT 47 F MBH HEATING CAPACITY AT 17 F MBH EAT DB F FLA MCA VOLTS PH HZ MARK LOCATION FLA MCA MOCP VOLTS PH HZ NOTES",
+      "page": 9,
+      "bbox": [
+        99,
+        591,
+        1802,
+        671.5
+      ],
+      "engine": "poppler",
+      "actual": "DUCTLESS SPLIT SYSTEM SCHEDULE SUPPLY FAN DATA COOLING HEATING INDOOR UNIT ELECTRICAL OUTDOOR UNIT OUTDOOR UNIT ELECTRICAL REFERIGERANT MARK TYPE LOCATION TOTAL AIRFLOW FAN MOTOR TOTAL COOLING SENSIBLE MIN EFFICIENCY HEATING CAPACITY HEATING CAPACITY EAT DB TYPE EAT DB (°F) EAT WB (°F) VOLTS PH HZ MARK LOCATION FLA (CFM) (WATTS) (MBH) COOLING (MBH) (SEER) AT 47 °F (MBH) AT 17 °F (MBH) (°F) FLA MCA MCA MOCP VOLTS PH HZ NOTES",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

@@ -1,0 +1,230 @@
+{
+  "status": "PASS",
+  "scope": "Every page of all rejoined sets; source versus delivered read-time text/graphics parser warnings.",
+  "assembly_note": "Syracuse and LBNL produced missing-xref warnings during PDF serialization/cleanup. All rejoined page text/geometry/graphics checks and 60 source/final preview pixel comparisons passed. Original sources remain untouched.",
+  "results": [
+    {
+      "key": "vol1__05",
+      "source_and_delivered_read_warnings_identical": true,
+      "warning_pages": {
+        "5": [
+          "invalid marked content and clip nesting"
+        ],
+        "6": [
+          "invalid marked content and clip nesting"
+        ],
+        "7": [
+          "invalid marked content and clip nesting"
+        ],
+        "8": [
+          "invalid marked content and clip nesting"
+        ],
+        "9": [
+          "invalid marked content and clip nesting"
+        ],
+        "10": [
+          "invalid marked content and clip nesting"
+        ],
+        "11": [
+          "invalid marked content and clip nesting"
+        ],
+        "12": [
+          "invalid marked content and clip nesting"
+        ]
+      }
+    },
+    {
+      "key": "vol2__012",
+      "source_and_delivered_read_warnings_identical": true,
+      "warning_pages": {
+        "3": [
+          "invalid marked content and clip nesting"
+        ],
+        "4": [
+          "invalid marked content and clip nesting"
+        ],
+        "5": [
+          "invalid marked content and clip nesting"
+        ],
+        "6": [
+          "invalid marked content and clip nesting"
+        ],
+        "7": [
+          "invalid marked content and clip nesting"
+        ],
+        "8": [
+          "invalid marked content and clip nesting"
+        ],
+        "14": [
+          "invalid marked content and clip nesting"
+        ],
+        "21": [
+          "invalid marked content and clip nesting"
+        ]
+      }
+    },
+    {
+      "key": "vol2__033",
+      "source_and_delivered_read_warnings_identical": true,
+      "warning_pages": {
+        "2": [
+          "invalid marked content and clip nesting"
+        ],
+        "3": [
+          "invalid marked content and clip nesting"
+        ],
+        "13": [
+          "invalid marked content and clip nesting"
+        ],
+        "18": [
+          "invalid marked content and clip nesting"
+        ],
+        "19": [
+          "invalid marked content and clip nesting"
+        ],
+        "20": [
+          "invalid marked content and clip nesting"
+        ],
+        "21": [
+          "invalid marked content and clip nesting"
+        ],
+        "22": [
+          "invalid marked content and clip nesting"
+        ],
+        "23": [
+          "invalid marked content and clip nesting"
+        ],
+        "31": [
+          "invalid marked content and clip nesting"
+        ],
+        "43": [
+          "invalid marked content and clip nesting"
+        ]
+      }
+    },
+    {
+      "key": "vol1__21",
+      "source_and_delivered_read_warnings_identical": true,
+      "warning_pages": {}
+    },
+    {
+      "key": "vol1__26",
+      "source_and_delivered_read_warnings_identical": true,
+      "warning_pages": {}
+    },
+    {
+      "key": "vol2__030",
+      "source_and_delivered_read_warnings_identical": true,
+      "warning_pages": {
+        "22": [
+          "invalid marked content and clip nesting"
+        ],
+        "23": [
+          "invalid marked content and clip nesting"
+        ],
+        "24": [
+          "invalid marked content and clip nesting"
+        ],
+        "25": [
+          "invalid marked content and clip nesting"
+        ],
+        "81": [
+          "invalid marked content and clip nesting"
+        ],
+        "82": [
+          "invalid marked content and clip nesting"
+        ],
+        "83": [
+          "invalid marked content and clip nesting"
+        ],
+        "84": [
+          "invalid marked content and clip nesting"
+        ],
+        "85": [
+          "invalid marked content and clip nesting"
+        ],
+        "86": [
+          "invalid marked content and clip nesting"
+        ],
+        "87": [
+          "invalid marked content and clip nesting"
+        ],
+        "88": [
+          "invalid marked content and clip nesting"
+        ],
+        "89": [
+          "invalid marked content and clip nesting"
+        ],
+        "90": [
+          "invalid marked content and clip nesting"
+        ],
+        "91": [
+          "invalid marked content and clip nesting"
+        ],
+        "92": [
+          "invalid marked content and clip nesting"
+        ]
+      }
+    },
+    {
+      "key": "vol2__058",
+      "source_and_delivered_read_warnings_identical": true,
+      "warning_pages": {
+        "6": [
+          "invalid marked content and clip nesting"
+        ],
+        "7": [
+          "invalid marked content and clip nesting"
+        ],
+        "10": [
+          "invalid marked content and clip nesting"
+        ],
+        "11": [
+          "invalid marked content and clip nesting"
+        ],
+        "12": [
+          "invalid marked content and clip nesting"
+        ],
+        "13": [
+          "invalid marked content and clip nesting"
+        ],
+        "14": [
+          "invalid marked content and clip nesting"
+        ],
+        "15": [
+          "invalid marked content and clip nesting"
+        ],
+        "17": [
+          "invalid marked content and clip nesting"
+        ],
+        "18": [
+          "invalid marked content and clip nesting"
+        ],
+        "19": [
+          "invalid marked content and clip nesting"
+        ],
+        "22": [
+          "invalid marked content and clip nesting"
+        ],
+        "23": [
+          "invalid marked content and clip nesting"
+        ],
+        "24": [
+          "invalid marked content and clip nesting"
+        ],
+        "25": [
+          "invalid marked content and clip nesting"
+        ],
+        "26": [
+          "invalid marked content and clip nesting"
+        ],
+        "27": [
+          "invalid marked content and clip nesting"
+        ],
+        "240": [
+          "invalid marked content and clip nesting"
+        ]
+      }
+    }
+  ]
+}

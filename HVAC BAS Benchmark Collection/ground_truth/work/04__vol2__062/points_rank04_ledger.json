@@ -1,0 +1,250 @@
+{
+  "document_id": "04__vol2__062",
+  "module_role": "Ledger-form literal capture of the M6.2 and M6.3 published point lists, split into source item marker and point name so the final record can present each printed row. This is not a final BAS hardware I/O or ownership schedule.",
+  "tables": [
+    {
+      "id": "M62-BOILER-PUBLISHED-POINTS-LEDGER",
+      "sheet": "M6.2",
+      "page": 18,
+      "title_as_printed": "BOILER POINTS LIST",
+      "columns": "tag|point_name",
+      "x_edges": [
+        1525,
+        1544,
+        1650
+      ],
+      "y_ranges": [
+        [
+          547,
+          558
+        ],
+        [
+          559,
+          570
+        ],
+        [
+          571,
+          582
+        ],
+        [
+          583,
+          594
+        ],
+        [
+          595,
+          606
+        ]
+      ],
+      "rows": [
+        "1.|STATUS.",
+        "2.|ALARM.",
+        "3.|CAPACITY FEEDBACK.",
+        "4.|FIRING RATE.",
+        "5.|SET POINT."
+      ],
+      "source_row_semantics": "Literal published point-list row. The printed list does not assign an AI/DI/AO/DO hardware type to each row."
+    },
+    {
+      "id": "M62-VFD-PUBLISHED-POINTS-LEDGER",
+      "sheet": "M6.2",
+      "page": 18,
+      "title_as_printed": "VFD POINTS LIST",
+      "columns": "tag|point_name",
+      "x_edges": [
+        1525,
+        1544,
+        1650
+      ],
+      "y_ranges": [
+        [
+          639,
+          649
+        ],
+        [
+          650,
+          661
+        ],
+        [
+          662,
+          673
+        ],
+        [
+          674,
+          687
+        ]
+      ],
+      "rows": [
+        "1.|ENABLE/DISABLE.",
+        "2.|STATUS.",
+        "3.|SPEED CONTROL.",
+        "4.|ALARMS."
+      ],
+      "source_row_semantics": "Literal published point-list row. The printed list does not assign an AI/DI/AO/DO hardware type to each row."
+    },
+    {
+      "id": "M63-AHU-WRITEABLE-POINTS-LEDGER",
+      "sheet": "M6.3",
+      "page": 19,
+      "title_as_printed": "AHU POINTS LIST - WRITEABLE POINTS",
+      "columns": "tag|point_name",
+      "x_edges": [
+        1685,
+        1705,
+        1950
+      ],
+      "y_ranges": [
+        [
+          166,
+          180
+        ],
+        [
+          180,
+          191
+        ],
+        [
+          191,
+          203
+        ],
+        [
+          203,
+          214
+        ],
+        [
+          214,
+          226
+        ]
+      ],
+      "rows": [
+        "a.|UNIT ENABLE / DISABLE",
+        "b.|DUCT STATIC PRESSURE RESET SET POINT",
+        "c.|SUPPLY AIR TEMPERATURE RESET SET POINT",
+        "d.|BUILDING STATIC PRESSURE SET POINT",
+        "e.|OUTSIDE AIR MINIMUM POSITION"
+      ],
+      "source_row_semantics": "Literal published point-list row. The printed list does not assign an AI/DI/AO/DO hardware type to each row."
+    },
+    {
+      "id": "M63-AHU-READABLE-POINTS-LEDGER",
+      "sheet": "M6.3",
+      "page": 19,
+      "title_as_printed": "AHU POINTS LIST - READABLE POINTS",
+      "columns": "tag|point_name",
+      "x_edges": [
+        1685,
+        1705,
+        1950
+      ],
+      "y_ranges": [
+        [
+          247,
+          259
+        ],
+        [
+          259,
+          271
+        ],
+        [
+          271,
+          283
+        ],
+        [
+          283,
+          294
+        ],
+        [
+          294,
+          306
+        ],
+        [
+          306,
+          317
+        ],
+        [
+          317,
+          328
+        ],
+        [
+          328,
+          340
+        ],
+        [
+          340,
+          351
+        ],
+        [
+          351,
+          362
+        ],
+        [
+          363,
+          374
+        ]
+      ],
+      "rows": [
+        "a.|SUPPLY AIR TEMPERATURE",
+        "b.|OUTSIDE AIR TEMPERATURE",
+        "c.|SUPPLY FAN(S) STATUS",
+        "d.|SUPPLY FAN(S) VFD FREQUENCY",
+        "e.|BUILDING PRESSURE",
+        "f.|COMPRESSOR(S) SUCTION PRESSURE",
+        "g.|COMPRESSOR(S) DISCHARGE PRESSURE",
+        "h.|COMPRESSOR(S) SATURATED CONDENSING TEMPERATURE",
+        "i.|COMPRESSOR(S) SATURATED SUCTION TEMPERATURE",
+        "j.|ALARMS",
+        "k.|FILTER STATUS"
+      ],
+      "source_row_semantics": "Literal published point-list row. The printed list does not assign an AI/DI/AO/DO hardware type to each row."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "m62-boiler-points-ledger-title",
+      "page": 18,
+      "bbox": [
+        1510,
+        498,
+        1620,
+        520
+      ],
+      "expected": "BOILER POINTS LIST :",
+      "mode": "exact"
+    },
+    {
+      "id": "m62-vfd-points-ledger-title",
+      "page": 18,
+      "bbox": [
+        1510,
+        613,
+        1620,
+        635
+      ],
+      "expected": "VFD POINTS LIST :",
+      "mode": "exact"
+    },
+    {
+      "id": "m63-writeable-ledger-heading",
+      "page": 19,
+      "bbox": [
+        1680,
+        154,
+        1780,
+        171
+      ],
+      "expected": "1. WRITEABLE POINTS:",
+      "mode": "exact"
+    },
+    {
+      "id": "m63-readable-ledger-heading",
+      "page": 19,
+      "bbox": [
+        1680,
+        234,
+        1780,
+        251
+      ],
+      "expected": "2. READABLE POINTS:",
+      "mode": "exact"
+    }
+  ],
+  "source_boundary": "The list is explicitly illustrative/non-exhaustive in context. Retain functional text exactly; do not derive controller cards, physical terminals, wiring, one point per physical device, or an AI/DI/AO/DO total."
+}

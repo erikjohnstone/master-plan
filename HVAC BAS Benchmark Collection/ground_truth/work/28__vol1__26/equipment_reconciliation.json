@@ -1,0 +1,16 @@
+{
+  "document_id": "28__vol1__26",
+  "module_role": "Literal schedule-row boundary.",
+  "tables": [],
+  "ledger_mode": "literal_schedule_rows_v1",
+  "schedule_counts": {
+    "tables": 1,
+    "rows": 3,
+    "interpretation": "Three literal fan-powered terminal schedule rows, not inferred installed totals."
+  },
+  "control_valve_and_damper_schedule_status": {
+    "control_valve_schedule": "No standalone control-valve schedule is retained.",
+    "damper_actuator_schedule": "No standalone damper-actuator schedule is retained; the controls legend identifies an automatic control damper only as a symbol context."
+  },
+  "source_boundary": "No physical BAS takeoff is inferred."
+}

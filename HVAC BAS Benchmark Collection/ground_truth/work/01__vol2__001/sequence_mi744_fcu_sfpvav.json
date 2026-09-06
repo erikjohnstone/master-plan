@@ -1,0 +1,40 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "tables": [],
+  "scope": "Bounded source-text assertions from MI744's occupied fan-coil and SPFVAV/redundant-FCU sequences (source PDF page 71). Source spellings and source-specific application scope are retained; no additional FCU instances or physical I/O are inferred.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [71],
+    "render": "reviews/01__vol2__001/p71-p71-controls-poppler.png",
+    "dpi": 180,
+    "finding": "MI744 was visually reviewed at 180 DPI. Occupied-FCU sequence prose is in the left half; SPFVAV/redundant-FCU prose is lower right."
+  },
+  "sequence_scopes": [
+    {"sheet": "MI744", "sequence_heading": "3.3.5 FAN COIL UNIT WITH HEATING AND COOLING COILS - OCCUPIED SPACE", "equipment": "Occupied FCU", "coverage": ["occupied", "heating", "cooling", "safety", "reset", "duty/standby", "load shed", "alarms", "setpoints"]},
+    {"sheet": "MI744", "sequence_heading": "3.3.6 SPFVAV & REDUNDANT FAN COIL UNIT", "equipment": "SPFVAV and redundant FCU", "coverage": ["associated-AHU failure", "normal restoration", "scheduled exercise"]}
+  ],
+  "assertions": [
+    {"id": "occupied-fcu-low-speed", "page": 71, "bbox": [120, 610, 850, 635], "mode": "contains", "expected": "THE SUPPLY FAN SHALL BE ENABLED (SYS-ENA) AND COMMANDED TO RUN (SF-SS). FAN SHALL RUN AT LOW SPEED (30% OF MAX AIRFLOW)"},
+    {"id": "occupied-fcu-heating-enable", "page": 71, "bbox": [120, 653, 1170, 690], "mode": "contains", "expected": "WHEN ZN-T DROPS BELOW ZN-T-LL (WITH A 2 DEGREES F DEADBAND) RAMP FAN TO HEATING SPEED AND ENABLE THE HEATING COIL TEMPERATURE CONTROL LOOP. DISABLE THE COOLING COIL CONTROL LOOPS"},
+    {"id": "occupied-fcu-cooling-enable", "page": 71, "bbox": [120, 708, 1170, 747], "mode": "contains", "expected": "WHEN ZN-T RISES ABOVE ZN-T-HL (WITH A 2 DEGREES F DEADBAND) RAMP FAN TO COOLING SPEED AND ENABLE THE COOLING COIL TEMPERATURE CONTROL LOOP. DISABLE THE HEATING COIL CONTROL LOOPS"},
+    {"id": "occupied-fcu-safety-response", "page": 71, "bbox": [120, 767, 1190, 817], "mode": "contains", "expected": "FAILURE OF ANY PROOF OR ACTIVATION OF ANY SAFETY RESULT IN ALL CONTROL LOOPS BEING DISABLED AND THE FAN COIL UNIT FAN BEING COMMANDED OFF UNTIL RESET"},
+    {"id": "occupied-fcu-reset-paths", "page": 71, "bbox": [120, 920, 1200, 958], "mode": "contains", "expected": "DDC HARDWARE RESET OF ALL PROOFS AND SAFETIES SHALL BE VIA A LOCAL BINARY PUSH-BUTTON (RST-BUT) INPUT TO THE DDC HARDWARE, VIA A REMOTE COMMAND TO THE DDC HARDWARE"},
+    {"id": "occupied-fcu-hhw-control", "page": 71, "bbox": [120, 976, 1170, 1015], "mode": "contains", "expected": "DDC HARDWARE SHALL MODULATE THE HEATING COIL CONTROL VALVE TO MAINTAIN ZONE TEMPERATURE (ZN-T) AT SETPOINT (ZN-T-SP) AS SHOWN. WHEN THIS LOOP IS DISABLED, THE HEATING COIL CONTROL VALVE SHALL BE CLOSED"},
+    {"id": "occupied-fcu-chw-control", "page": 71, "bbox": [120, 1033, 1170, 1072], "mode": "contains", "expected": "DDC HARDWARE SHALL MODULATE THE COOLING COIL CONTROL VALVE TO MAINTAIN ZONE TEMPERATURE (ZN-T) AT SETPOINT (ZN-T-SP) AS SHOWN. WHEN THIS LOOP IS DISABLED, THE COOLING COIL CONTROL VALVE SHALL BE CLOSED"},
+    {"id": "occupied-fcu-duty-standby", "page": 71, "bbox": [120, 1090, 1190, 1126], "mode": "contains", "expected": "DUTY UNIT FAILURE SHALL BE DUE TO FAN FAILURE OR HIGH/LOW TEMPERATURE FOR 15 MINUTES, OR HIGH CONDENSATE LEVEL. THE STANDBY UNIT SHALL BE ENERGIZED AND SHALL BECOME THE DUTY UNIT"},
+    {"id": "occupied-fcu-load-shed-scope", "page": 71, "bbox": [120, 1133, 710, 1183], "mode": "contains", "expected": "FCU-T6, FCU-T8, FCU-T9, FCU-T10, FCU-T11 ONLY UPON RECIEVING SIGNAL FROM DDC DISABLE COOLING MODE UNTIL FAILED CHILLER IS RESTORED TO SERVICE"},
+    {"id": "occupied-fcu-high-temperature-alarm", "page": 71, "bbox": [120, 1200, 425, 1222], "mode": "contains", "expected": "HIGH SPACE TEMPERATURE (SETPOINT + 3°F FOR 15 MIN)"},
+    {"id": "occupied-fcu-critical-setpoints", "page": 71, "bbox": [120, 1300, 350, 1352], "mode": "contains", "expected": "HIGH LIMIT SETPOINT (ZN-T-HL): 75°F"},
+    {"id": "occupied-fcu-m6-setpoints", "page": 71, "bbox": [120, 1358, 350, 1410], "mode": "contains", "expected": "HIGH LIMIT SETPOINT (ZN-T-HL): 72°F"},
+    {"id": "spfvav-associated-ahu-failure", "page": 71, "bbox": [1320, 1108, 1990, 1174], "mode": "contains", "expected": "IN THE EVENT OF ASSOCIATED AHU FAILURE AS INDICATED BY DDC SYSTEM (SEE SPFVAV/FCU MATRIX), SPFVAV DAMPER SHALL CLOSE AND FAN COIL UNIT SHALL ENERGIZE"},
+    {"id": "spfvav-ahu-restoration", "page": 71, "bbox": [1320, 1137, 1985, 1174], "mode": "contains", "expected": "UPON ASSOCIATED AHU RESTORATION OF OPERATION AS INDICATED BY DDC SYSTEM, FAN COIL UNIT SHALL BE DE-ENERGIZED AND SPFVAV SHALL RESUME NORMAL OPERATION"},
+    {"id": "spfvav-sunday-exercise", "page": 71, "bbox": [1320, 1192, 1985, 1243], "mode": "contains", "expected": "EACH SUNDAY FROM 0000 TO 0200 HRS, THE SPFVAV DAMPER SHALL MODULATE TO MAINTAIN MINIMUM AIRFLOW AND THE FCU SHALL BE ENERGIZED TO PROVIDE SCHEDULED AIRFLOW"},
+    {"id": "spfvav-exercise-end", "page": 71, "bbox": [1320, 1218, 1935, 1243], "mode": "contains", "expected": "AT 0200 HRS, THE FCU SHALL BE DE-ENERIGZED AND THE SFPVAV SHALL RETURN TO NORMAL OPERATION"}
+  ],
+  "source_conflicts": [
+    {"finding": "MI744 prints SPFVAV in its matrix/sequence scope but SFPVAV in the final exercise-return sentence. Both literal spellings are retained."},
+    {"finding": "The source prints RECIEVING and DE-ENERIGZED in two asserted sequence statements; they are retained rather than silently corrected."}
+  ],
+  "remaining_work": "Reconcile the four explicit relationship rows and templates to plan/schedule applications, then continue complete-document controls, equipment, network, scale and sensor review."
+}

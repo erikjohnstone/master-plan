@@ -1,0 +1,267 @@
+{
+  "document_id": "24__vol2__019",
+  "module_role": "BAS network, sequence-of-operations and sensor/thermostat context from the completed M8.2-M8.8 review. It preserves printed control behavior while recording unavailable final-programming and installed-count fields.",
+  "controls_sources": [
+    "M8.2 / PDF p18",
+    "M8.3 / PDF p19",
+    "M8.4 / PDF p20",
+    "M8.5 / PDF p21",
+    "M8.6 / PDF p22",
+    "M8.7 / PDF p23",
+    "M8.8 / PDF p24"
+  ],
+  "network_architecture": {
+    "as_printed": [
+      "M8.2 identifies B-BC-1, B-BC-2 and B-BC-3, and states one B-BC for chilled water, hot water and AHU respectively.",
+      "M8.2 identifies B-ASC, gateway, OWS and a portable programmer's tool; it calls for B-BC controls in the main mechanical room and leaves PPT location TBD / OWS final location to client coordination.",
+      "The M8.2 legend prints Ethernet (Cat-6), RS-485 twisted shielded pair, RS-232 twisted shielded pair, cloud/internet, switch/hub and gateway symbols.",
+      "M8.2 explicitly calls for two MSTP trunks for VAVs and a dedicated MSTP trunk for VFDs."
+    ],
+    "protocol_status": {
+      "BACnet_MSTP": "explicitly identified as MSTP trunks on M8.2",
+      "BACnet_IP": "not explicitly named in the supplied M8.2 text; Ethernet/Cat-6 is shown but protocol mapping is not inferred",
+      "Modbus": "not_stated",
+      "LonWorks": "not_stated"
+    },
+    "not_stated": [
+      "controller manufacturer/model",
+      "IP address plan",
+      "BACnet device instance numbers",
+      "switch/router port design",
+      "final panel count",
+      "final I/O-card/terminal quantity",
+      "field wiring schedule"
+    ]
+  },
+  "sequence_of_operations": {
+    "chilled_water_M83": [
+      "The source describes one air-cooled chiller and two variable primary chilled-water pumps, available 24 hours/day, 365 days/year, with functions and alarms monitored by BAS.",
+      "The chiller manufacturer's panel controls chiller loading/unloading; the source requires a hardwire interface between that panel and site DDC controls.",
+      "BAS lead-lag logic alternates duty and standby pump operation; BAS modulates the duty chilled-water pump from differential pressure and controls the normally closed chilled-water bypass valve when insufficient chiller flow is sensed."
+    ],
+    "heating_hot_water_M84": [
+      "The source describes two hot-water boilers, one boiler-control panel per boiler, and two variable primary hot-water pumps.",
+      "BAS lead-lag logic alternates duty/standby pumps based on runtime and modulates the duty pump from differential pressure.",
+      "The master boiler control panel stages boilers to maintain supply temperature. The written sequence uses T-5 at 150 F adjustable, starts lag when lead firing is 50 percent and temperature remains below setpoint, and stops lag at a stated combined firing-rate threshold of 20 percent adjustable."
+    ],
+    "ahu_1_M85_M86": [
+      "M8.6 starts supply fans only after hardwired damper-open proof; in off mode the listed outdoor-air/economizer/relief/return/supply damper states and fan shutdown are specified, while auto mode starts/stops fans and controls dampers through BMS.",
+      "The AHU sequence states an occupancy/optimal-start framework, occupied and unoccupied heating/cooling behavior, fire/smoke/freezestat/static shutdown, and isolation-damper end-switch alarms.",
+      "M8.6 describes VAV-request duct-static reset and requires separate modulating actuators and analog I/O for minimum-OA, economizer, return and relief dampers. It also covers minimum OA, economizer, relief-fan/space-pressure, energy-wheel and supply-air-temperature behavior."
+    ],
+    "vav_M87": [
+      "M8.7 says BAS modulates VAV-box dampers to maintain space airflow setpoint between box minimum and maximum airflow; space temperature drives airflow reset and the hot-water valve opens after a temperature drop when minimum airflow is being supplied.",
+      "The written VAV sequences print occupied heating/cooling setpoints of 72 F/75 F and unoccupied heating/cooling setpoints of 65 F/80 F, each marked adjustable where shown."
+    ],
+    "miscellaneous_M88": [
+      "M8.8 covers mechanical-room and toilet exhaust fan/damper interlocks and alarms, local thermostat operation for unit heaters/fan coils/radiators, DX split-system monitoring, lighting control, emergency shutdown and storm-water drain-pan leak alarm behavior.",
+      "The emergency drain-pan sequence requires a water detection sensor connected to BAS with a visual alarm at OWS graphics."
+    ]
+  },
+  "control_diagram_bindings": [
+    {
+      "source_sheet": "M8.3",
+      "system": "Chilled water",
+      "equipment_scope": [
+        "CH-1",
+        "CWP-1",
+        "CWP-2",
+        "chilled-water bypass"
+      ]
+    },
+    {
+      "source_sheet": "M8.4",
+      "system": "Heating hot water",
+      "equipment_scope": [
+        "B-1",
+        "B-2",
+        "HWP-1",
+        "HWP-2",
+        "heating-water bypass"
+      ]
+    },
+    {
+      "source_sheet": "M8.5/M8.6",
+      "system": "AHU-1",
+      "equipment_scope": [
+        "AHU-1",
+        "SF-1",
+        "SF-2",
+        "RF-1",
+        "RF-2",
+        "HWRP-1",
+        "ERW-1"
+      ]
+    },
+    {
+      "source_sheet": "M8.7",
+      "system": "VAV controls",
+      "equipment_scope": [
+        "constant-air-volume template",
+        "dual-maximum VAV template",
+        "VAV template"
+      ]
+    },
+    {
+      "source_sheet": "M8.8",
+      "system": "Miscellaneous systems",
+      "equipment_scope": [
+        "mechanical/toilet exhaust",
+        "unit heater",
+        "fan coil",
+        "finned-tube radiator",
+        "DX split",
+        "lighting",
+        "storm-water drain pan"
+      ]
+    }
+  ],
+  "sensor_and_zone_ledger": [
+    {
+      "source_scope": "M8.3 chilled-water point schedule",
+      "sensor_or_thermostat_mapping": "Template rows include CHWR/CHWS temperatures T-1/T-2/T-3, outside-air temperature T-4, chiller CHWS flow FM-1 and differential pressure DP-1.",
+      "count_status": "six AI rows in this source template; not an installed device total."
+    },
+    {
+      "source_scope": "M8.4 heating-hot-water point schedule",
+      "sensor_or_thermostat_mapping": "Template rows include HHWS/HHWR temperatures T-1 through T-6, outside-air temperature T-7, two boiler flow meters and two differential-pressure points.",
+      "count_status": "source-template rows only; repeated/physical placement is not established."
+    },
+    {
+      "source_scope": "M8.5/M8.6 AHU-1",
+      "sensor_or_thermostat_mapping": "The point schedule includes temperature, humidity, static-pressure, air-flow, filter-status, freezestat, CO2 and three literal space-pressure-sensor rows (SPS). M8.6 also says to provide a minimum of three space pressure sensors with final location coordinated with the designer of record.",
+      "count_status": "three SPS rows are a stated minimum for the AHU space-pressure sequence; remaining point rows are template occurrences, not a building-wide sensor count."
+    },
+    {
+      "source_scope": "M8.7 VAV diagrams",
+      "sensor_or_thermostat_mapping": "Each printed VAV control diagram calls for a room/local space-temperature sensor; point rows include zone temperature and VAV discharge-air temperature references.",
+      "count_status": "diagram/template mappings only; no source-wide VAV-to-sensor installation multiplier is emitted."
+    },
+    {
+      "source_scope": "M8.8 miscellaneous diagrams",
+      "sensor_or_thermostat_mapping": "Rows include space-temperature sensors, emergency shutdown switch status and storm-water leak sensor WLS-1; the DX split sequence also calls for a wall-mounted temperature sensor for monitoring.",
+      "count_status": "source-template/diagram context, not a global installed count."
+    }
+  ],
+  "tables": [],
+  "assertions": [
+    {
+      "id": "m82-two-vav-mstp-trunks",
+      "page": 18,
+      "bbox": [
+        1570,
+        1240,
+        1800,
+        1268
+      ],
+      "expected": "PROVIDE TWO MSTP TRUNKS FOR THE VAVS",
+      "mode": "contains"
+    },
+    {
+      "id": "m83-one-chiller-two-pumps",
+      "page": 19,
+      "bbox": [
+        320,
+        906,
+        1010,
+        926
+      ],
+      "expected": "THE CHILLED WATER SYSTEM SHALL CONSIST OF A SINGLE AIR COOLED CHILLER AND TWO VARIABLE PRIMARY CHILLED WATER PUMPS",
+      "mode": "contains"
+    },
+    {
+      "id": "m83-chw-pump-lead-lag",
+      "page": 19,
+      "bbox": [
+        320,
+        1048,
+        1010,
+        1068
+      ],
+      "expected": "THE BMS SHALL AUTOMATICALLY ALTERNATE THE OPERATION OF THE DUTY AND STANDBY PUMP",
+      "mode": "contains"
+    },
+    {
+      "id": "m84-two-boilers-two-pumps",
+      "page": 20,
+      "bbox": [
+        165,
+        980,
+        1040,
+        999
+      ],
+      "expected": "THE HEATING HOT WATER SYSTEM SHALL CONSIST OF TWO HOT WATER BOILERS, TWO BOILER CONTROL PANELS (ONE PER BOILER), AND TWO VARIABLE PRIMARY HOT WATER PUMPS",
+      "mode": "contains"
+    },
+    {
+      "id": "m84-hhw-pump-lead-lag",
+      "page": 20,
+      "bbox": [
+        165,
+        1315,
+        850,
+        1335
+      ],
+      "expected": "THE BMS SHALL AUTOMATICALLY ALTERNATE THE OPERATION OF THE DUTY AND STANDBY PUMP ON A LEAD-LAG ARRANGEMENT",
+      "mode": "contains"
+    },
+    {
+      "id": "m86-damper-proof-before-fans",
+      "page": 22,
+      "bbox": [
+        125,
+        204,
+        850,
+        226
+      ],
+      "expected": "THE SUPPLY FANS SHALL START UPON PROOF OF DAMPER OPENING VIA END SWITCHES",
+      "mode": "contains"
+    },
+    {
+      "id": "m86-four-damper-actuator-io",
+      "page": 22,
+      "bbox": [
+        145,
+        1568,
+        800,
+        1592
+      ],
+      "expected": "PROVIDE SEPARATE MODULATING ACTUATORS AND ANALOG I/O FOR MINIMUM OA DAMPER, ECONOMIZER DAMPER, RETURN DAMPER, AND RELIEF DAMPER",
+      "mode": "contains"
+    },
+    {
+      "id": "m87-vav-airflow-control",
+      "page": 23,
+      "bbox": [
+        200,
+        1030,
+        810,
+        1052
+      ],
+      "expected": "THE BMS SHALL MODULATE THE VAV BOX DAMPER TO MAINTAIN THE AMOUNT OF AIR SUPPLIED TO THE SPACE AT THE SPACE AIRFLOW SET POINT",
+      "mode": "contains"
+    },
+    {
+      "id": "m88-storm-water-sensor",
+      "page": 24,
+      "bbox": [
+        185,
+        1870,
+        590,
+        1892
+      ],
+      "expected": "PROVIDE A WATER DETECTION SENSOR IN THE STORM WATER PIPING EMERGENCY DRAIN PAN",
+      "mode": "contains"
+    }
+  ],
+  "inventory_checks": [
+    {
+      "id": "rank24-controls-diagram-bindings",
+      "records_path": [
+        "control_diagram_bindings"
+      ],
+      "expected": 5,
+      "unique_key": "source_sheet"
+    }
+  ]
+}

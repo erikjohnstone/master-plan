@@ -1,0 +1,1634 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "da1e8cee6d1a1946f23633a99b6d164e17eb5ed7b11b24bf760b375a57214368",
+  "tables": 4,
+  "rows": 12,
+  "cell_assertions": 48,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "ATCT-STAIR-PRESS-AI",
+      "row": 1,
+      "column": "mark",
+      "page": 66,
+      "bbox": [
+        1530,
+        358,
+        1570,
+        378
+      ],
+      "expected": "AI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            315
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            152
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AI",
+      "row": 1,
+      "column": "description",
+      "page": 66,
+      "bbox": [
+        1570,
+        358,
+        1715,
+        378
+      ],
+      "expected": "SPF-T1 SPEED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPF-T1 SPEED (FEEDBACK)",
+          "word_ids": [
+            316,
+            317,
+            318
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPF-T1 SPEED (FEEDBACK)",
+          "word_ids": [
+            153,
+            154,
+            155
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AI",
+      "row": 1,
+      "column": "alarm",
+      "page": 66,
+      "bbox": [
+        1715,
+        358,
+        1765,
+        378
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            319
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            61
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AI",
+      "row": 1,
+      "column": "trend",
+      "page": 66,
+      "bbox": [
+        1765,
+        358,
+        1815,
+        378
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            320
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            63
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AI",
+      "row": 2,
+      "column": "mark",
+      "page": 66,
+      "bbox": [
+        1530,
+        378,
+        1570,
+        395
+      ],
+      "expected": "AI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            321
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            156
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AI",
+      "row": 2,
+      "column": "description",
+      "page": 66,
+      "bbox": [
+        1570,
+        378,
+        1715,
+        395
+      ],
+      "expected": "SPF-T2 SPEED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPF-T2 SPEED (FEEDBACK)",
+          "word_ids": [
+            322,
+            323,
+            324
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPF-T2 SPEED (FEEDBACK)",
+          "word_ids": [
+            157,
+            158,
+            159
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AI",
+      "row": 2,
+      "column": "alarm",
+      "page": 66,
+      "bbox": [
+        1715,
+        378,
+        1765,
+        395
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            325
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            62
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AI",
+      "row": 2,
+      "column": "trend",
+      "page": 66,
+      "bbox": [
+        1765,
+        378,
+        1815,
+        395
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            326
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            64
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AI",
+      "header": "ATCT STAIR PRESSURIZATION DDC POINTS LIST",
+      "page": 66,
+      "bbox": [
+        1370,
+        298,
+        1800,
+        330
+      ],
+      "engine": "mupdf",
+      "actual": "FLOOR 10 ATCT STAIR PRESSURIZATION DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AI",
+      "header": "ATCT STAIR PRESSURIZATION DDC POINTS LIST",
+      "page": 66,
+      "bbox": [
+        1370,
+        298,
+        1800,
+        330
+      ],
+      "engine": "poppler",
+      "actual": "FLOOR 10 ATCT STAIR PRESSURIZATION DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 66,
+      "bbox": [
+        1530,
+        319,
+        1815,
+        348
+      ],
+      "engine": "mupdf",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 66,
+      "bbox": [
+        1530,
+        319,
+        1815,
+        348
+      ],
+      "engine": "poppler",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AI",
+      "header": "ANALOG INPUT",
+      "page": 66,
+      "bbox": [
+        1520,
+        341,
+        1620,
+        358
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AI",
+      "header": "ANALOG INPUT",
+      "page": 66,
+      "bbox": [
+        1520,
+        341,
+        1620,
+        358
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AO",
+      "row": 1,
+      "column": "mark",
+      "page": 66,
+      "bbox": [
+        1530,
+        427,
+        1570,
+        447
+      ],
+      "expected": "AO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            329
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            67
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AO",
+      "row": 1,
+      "column": "description",
+      "page": 66,
+      "bbox": [
+        1570,
+        427,
+        1715,
+        447
+      ],
+      "expected": "SPF-T1 SPEED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPF-T1 SPEED",
+          "word_ids": [
+            330,
+            331
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPF-T1 SPEED",
+          "word_ids": [
+            68,
+            69
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AO",
+      "row": 1,
+      "column": "alarm",
+      "page": 66,
+      "bbox": [
+        1715,
+        427,
+        1765,
+        447
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            332
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            73
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AO",
+      "row": 1,
+      "column": "trend",
+      "page": 66,
+      "bbox": [
+        1765,
+        427,
+        1815,
+        447
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            333
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            75
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AO",
+      "row": 2,
+      "column": "mark",
+      "page": 66,
+      "bbox": [
+        1530,
+        447,
+        1570,
+        464
+      ],
+      "expected": "AO02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            334
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            70
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AO",
+      "row": 2,
+      "column": "description",
+      "page": 66,
+      "bbox": [
+        1570,
+        447,
+        1715,
+        464
+      ],
+      "expected": "SPF-T2 SPEED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPF-T2 SPEED",
+          "word_ids": [
+            335,
+            336
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPF-T2 SPEED",
+          "word_ids": [
+            71,
+            72
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AO",
+      "row": 2,
+      "column": "alarm",
+      "page": 66,
+      "bbox": [
+        1715,
+        447,
+        1765,
+        464
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            337
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            74
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AO",
+      "row": 2,
+      "column": "trend",
+      "page": 66,
+      "bbox": [
+        1765,
+        447,
+        1815,
+        464
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            338
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            76
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 66,
+      "bbox": [
+        1520,
+        401,
+        1620,
+        427
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 66,
+      "bbox": [
+        1520,
+        401,
+        1620,
+        427
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 1,
+      "column": "mark",
+      "page": 66,
+      "bbox": [
+        1530,
+        496,
+        1570,
+        516
+      ],
+      "expected": "BI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            341
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            79
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 1,
+      "column": "description",
+      "page": 66,
+      "bbox": [
+        1570,
+        496,
+        1715,
+        516
+      ],
+      "expected": "SPF-T1 PRESSURE SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPF-T1 PRESSURE SWITCH",
+          "word_ids": [
+            342,
+            343,
+            344
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPF-T1 PRESSURE SWITCH",
+          "word_ids": [
+            80,
+            81,
+            82
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 1,
+      "column": "alarm",
+      "page": 66,
+      "bbox": [
+        1715,
+        496,
+        1765,
+        516
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            345
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            99
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 1,
+      "column": "trend",
+      "page": 66,
+      "bbox": [
+        1765,
+        496,
+        1815,
+        516
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            346
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            105
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 2,
+      "column": "mark",
+      "page": 66,
+      "bbox": [
+        1530,
+        516,
+        1570,
+        534
+      ],
+      "expected": "BI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            347
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            83
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 2,
+      "column": "description",
+      "page": 66,
+      "bbox": [
+        1570,
+        516,
+        1715,
+        534
+      ],
+      "expected": "SFP-T1 ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SFP-T1 ALARM",
+          "word_ids": [
+            348,
+            349
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SFP-T1 ALARM",
+          "word_ids": [
+            84,
+            85
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 2,
+      "column": "alarm",
+      "page": 66,
+      "bbox": [
+        1715,
+        516,
+        1765,
+        534
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            350
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            100
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 2,
+      "column": "trend",
+      "page": 66,
+      "bbox": [
+        1765,
+        516,
+        1815,
+        534
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            351
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            106
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 3,
+      "column": "mark",
+      "page": 66,
+      "bbox": [
+        1530,
+        534,
+        1570,
+        551
+      ],
+      "expected": "BI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            352
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            86
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 3,
+      "column": "description",
+      "page": 66,
+      "bbox": [
+        1570,
+        534,
+        1715,
+        551
+      ],
+      "expected": "SFP-T1 STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SFP-T1 STATUS",
+          "word_ids": [
+            353,
+            354
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SFP-T1 STATUS",
+          "word_ids": [
+            87,
+            88
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 3,
+      "column": "alarm",
+      "page": 66,
+      "bbox": [
+        1715,
+        534,
+        1765,
+        551
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            355
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            101
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 3,
+      "column": "trend",
+      "page": 66,
+      "bbox": [
+        1765,
+        534,
+        1815,
+        551
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            356
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            107
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 4,
+      "column": "mark",
+      "page": 66,
+      "bbox": [
+        1530,
+        551,
+        1570,
+        568
+      ],
+      "expected": "BI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            357
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            89
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 4,
+      "column": "description",
+      "page": 66,
+      "bbox": [
+        1570,
+        551,
+        1715,
+        568
+      ],
+      "expected": "SPF-T2 PRESSURE SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPF-T2 PRESSURE SWITCH",
+          "word_ids": [
+            358,
+            359,
+            360
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPF-T2 PRESSURE SWITCH",
+          "word_ids": [
+            90,
+            91,
+            92
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 4,
+      "column": "alarm",
+      "page": 66,
+      "bbox": [
+        1715,
+        551,
+        1765,
+        568
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            361
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            102
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 4,
+      "column": "trend",
+      "page": 66,
+      "bbox": [
+        1765,
+        551,
+        1815,
+        568
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            362
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            108
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 5,
+      "column": "mark",
+      "page": 66,
+      "bbox": [
+        1530,
+        568,
+        1570,
+        585
+      ],
+      "expected": "BI05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI05",
+          "word_ids": [
+            363
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI05",
+          "word_ids": [
+            93
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 5,
+      "column": "description",
+      "page": 66,
+      "bbox": [
+        1570,
+        568,
+        1715,
+        585
+      ],
+      "expected": "SFP-T2 ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SFP-T2 ALARM",
+          "word_ids": [
+            364,
+            365
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SFP-T2 ALARM",
+          "word_ids": [
+            94,
+            95
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 5,
+      "column": "alarm",
+      "page": 66,
+      "bbox": [
+        1715,
+        568,
+        1765,
+        585
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            366
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            103
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 5,
+      "column": "trend",
+      "page": 66,
+      "bbox": [
+        1765,
+        568,
+        1815,
+        585
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            367
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            109
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 6,
+      "column": "mark",
+      "page": 66,
+      "bbox": [
+        1530,
+        585,
+        1570,
+        603
+      ],
+      "expected": "BI06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI06",
+          "word_ids": [
+            368
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI06",
+          "word_ids": [
+            96
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 6,
+      "column": "description",
+      "page": 66,
+      "bbox": [
+        1570,
+        585,
+        1715,
+        603
+      ],
+      "expected": "SFP-T2 STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SFP-T2 STATUS",
+          "word_ids": [
+            369,
+            370
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SFP-T2 STATUS",
+          "word_ids": [
+            97,
+            98
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 6,
+      "column": "alarm",
+      "page": 66,
+      "bbox": [
+        1715,
+        585,
+        1765,
+        603
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            371
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            104
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "row": 6,
+      "column": "trend",
+      "page": 66,
+      "bbox": [
+        1765,
+        585,
+        1815,
+        603
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            372
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            110
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "header": "BINARY INPUT",
+      "page": 66,
+      "bbox": [
+        1520,
+        470,
+        1620,
+        496
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BI",
+      "header": "BINARY INPUT",
+      "page": 66,
+      "bbox": [
+        1520,
+        470,
+        1620,
+        496
+      ],
+      "engine": "poppler",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BO",
+      "row": 1,
+      "column": "mark",
+      "page": 66,
+      "bbox": [
+        1530,
+        634,
+        1570,
+        654
+      ],
+      "expected": "BO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            375
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            126
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BO",
+      "row": 1,
+      "column": "description",
+      "page": 66,
+      "bbox": [
+        1570,
+        634,
+        1715,
+        654
+      ],
+      "expected": "SPF-T1 ENABLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPF-T1 ENABLE",
+          "word_ids": [
+            376,
+            377
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPF-T1 ENABLE",
+          "word_ids": [
+            127,
+            128
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BO",
+      "row": 1,
+      "column": "alarm",
+      "page": 66,
+      "bbox": [
+        1715,
+        634,
+        1765,
+        654
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            378
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            204
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BO",
+      "row": 1,
+      "column": "trend",
+      "page": 66,
+      "bbox": [
+        1765,
+        634,
+        1815,
+        654
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            379
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            206
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BO",
+      "row": 2,
+      "column": "mark",
+      "page": 66,
+      "bbox": [
+        1530,
+        654,
+        1570,
+        671
+      ],
+      "expected": "BO02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO02",
+          "word_ids": [
+            380
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO02",
+          "word_ids": [
+            129
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BO",
+      "row": 2,
+      "column": "description",
+      "page": 66,
+      "bbox": [
+        1570,
+        654,
+        1715,
+        671
+      ],
+      "expected": "SPF-T2 ENABLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPF-T2 ENABLE",
+          "word_ids": [
+            381,
+            382
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPF-T2 ENABLE",
+          "word_ids": [
+            130,
+            131
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BO",
+      "row": 2,
+      "column": "alarm",
+      "page": 66,
+      "bbox": [
+        1715,
+        654,
+        1765,
+        671
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            383
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            205
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BO",
+      "row": 2,
+      "column": "trend",
+      "page": 66,
+      "bbox": [
+        1765,
+        654,
+        1815,
+        671
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            384
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            207
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BO",
+      "header": "BINARY OUTPUT",
+      "page": 66,
+      "bbox": [
+        1520,
+        608,
+        1620,
+        634
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-STAIR-PRESS-BO",
+      "header": "BINARY OUTPUT",
+      "page": 66,
+      "bbox": [
+        1520,
+        608,
+        1620,
+        634
+      ],
+      "engine": "poppler",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "atct-stair-press-ai-count",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    },
+    {
+      "id": "atct-stair-press-ao-count",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    },
+    {
+      "id": "atct-stair-press-bi-count",
+      "actual": 6,
+      "expected": 6,
+      "pass": true
+    },
+    {
+      "id": "atct-stair-press-bo-count",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

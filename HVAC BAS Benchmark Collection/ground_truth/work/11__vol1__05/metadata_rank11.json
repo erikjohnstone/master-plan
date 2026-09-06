@@ -1,0 +1,474 @@
+{
+  "document_id": "11__vol1__05",
+  "module_role": "Project/title-block facts, full sheet ledger, scale boundary and full visual-review disposition.",
+  "tables": [],
+  "project": {
+    "project_name_as_printed": "FCA REPLACE VARIOUS AIR HANDLING UNITS AND VARIABLE AIR VOLUME UNITS",
+    "facility_as_printed": "JOHN COCHRAN VA MEDICAL CENTER, ST. LOUIS, MO",
+    "issue_date_as_printed": "MARCH 23, 2023",
+    "assertion_ids": [
+      "p",
+      "f",
+      "d",
+      "s"
+    ]
+  },
+  "scale_semantics": {
+    "takeoff_scale_status": "No global scale is asserted; plans, schedules, details and schematics coexist.",
+    "boundary": "No local scale is converted into a document-wide takeoff quantity."
+  },
+  "visual_review_pages": [
+    {
+      "page": 1,
+      "sheet": "G000",
+      "render": "reviews/11__vol1__05/p1-p1-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 2,
+      "sheet": "GJ501",
+      "render": "reviews/11__vol1__05/p2-p2-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 3,
+      "sheet": "GJ502",
+      "render": "reviews/11__vol1__05/p3-p3-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 4,
+      "sheet": "GJ503",
+      "render": "reviews/11__vol1__05/p4-p4-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 5,
+      "sheet": "AC-22",
+      "render": "reviews/11__vol1__05/p5-p5-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 6,
+      "sheet": "AC-22",
+      "render": "reviews/11__vol1__05/p6-p6-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 7,
+      "sheet": "AC-22",
+      "render": "reviews/11__vol1__05/p7-p7-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 8,
+      "sheet": "AC-22",
+      "render": "reviews/11__vol1__05/p8-p8-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 9,
+      "sheet": "AC-22",
+      "render": "reviews/11__vol1__05/p9-p9-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 10,
+      "sheet": "AC-22",
+      "render": "reviews/11__vol1__05/p10-p10-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 11,
+      "sheet": "AC-22",
+      "render": "reviews/11__vol1__05/p11-p11-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 12,
+      "sheet": "AC-22",
+      "render": "reviews/11__vol1__05/p12-p12-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 13,
+      "sheet": "MD101",
+      "render": "reviews/11__vol1__05/p13-p13-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 14,
+      "sheet": "MD103",
+      "render": "reviews/11__vol1__05/p14-p14-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 15,
+      "sheet": "MD106A",
+      "render": "reviews/11__vol1__05/p15-p15-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 16,
+      "sheet": "MD106B",
+      "render": "reviews/11__vol1__05/p16-p16-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 17,
+      "sheet": "MD107A",
+      "render": "reviews/11__vol1__05/p17-p17-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 18,
+      "sheet": "MD107B",
+      "render": "reviews/11__vol1__05/p18-p18-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 19,
+      "sheet": "AC-36",
+      "render": "reviews/11__vol1__05/p19-p19-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 20,
+      "sheet": "AC-36",
+      "render": "reviews/11__vol1__05/p20-p20-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 21,
+      "sheet": "MD111",
+      "render": "reviews/11__vol1__05/p21-p21-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 22,
+      "sheet": "AC-36",
+      "render": "reviews/11__vol1__05/p22-p22-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 23,
+      "sheet": "AC-28",
+      "render": "reviews/11__vol1__05/p23-p23-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 24,
+      "sheet": "DD-2",
+      "render": "reviews/11__vol1__05/p24-p24-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 25,
+      "sheet": "MH101",
+      "render": "reviews/11__vol1__05/p25-p25-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 26,
+      "sheet": "MH103",
+      "render": "reviews/11__vol1__05/p26-p26-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 27,
+      "sheet": "MH106A",
+      "render": "reviews/11__vol1__05/p27-p27-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 28,
+      "sheet": "MH106B",
+      "render": "reviews/11__vol1__05/p28-p28-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 29,
+      "sheet": "MH107A",
+      "render": "reviews/11__vol1__05/p29-p29-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 30,
+      "sheet": "MH107B",
+      "render": "reviews/11__vol1__05/p30-p30-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 31,
+      "sheet": "MH110",
+      "render": "reviews/11__vol1__05/p31-p31-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 32,
+      "sheet": "AC-15",
+      "render": "reviews/11__vol1__05/p32-p32-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 33,
+      "sheet": "AC-21",
+      "render": "reviews/11__vol1__05/p33-p33-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 34,
+      "sheet": "AC-28",
+      "render": "reviews/11__vol1__05/p34-p34-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 35,
+      "sheet": "AC-36",
+      "render": "reviews/11__vol1__05/p35-p35-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 36,
+      "sheet": "MH501",
+      "render": "reviews/11__vol1__05/p36-p36-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 37,
+      "sheet": "MH502",
+      "render": "reviews/11__vol1__05/p37-p37-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 38,
+      "sheet": "AC-36",
+      "render": "reviews/11__vol1__05/p38-p38-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 39,
+      "sheet": "MH601",
+      "render": "reviews/11__vol1__05/p39-p39-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 40,
+      "sheet": "MH602",
+      "render": "reviews/11__vol1__05/p40-p40-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 41,
+      "sheet": "DD-2",
+      "render": "reviews/11__vol1__05/p41-p41-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 42,
+      "sheet": "MP103",
+      "render": "reviews/11__vol1__05/p42-p42-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 43,
+      "sheet": "MP106A",
+      "render": "reviews/11__vol1__05/p43-p43-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 44,
+      "sheet": "MP106B",
+      "render": "reviews/11__vol1__05/p44-p44-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 45,
+      "sheet": "A701",
+      "render": "reviews/11__vol1__05/p45-p45-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 46,
+      "sheet": "MP107B",
+      "render": "reviews/11__vol1__05/p46-p46-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 47,
+      "sheet": "MP501",
+      "render": "reviews/11__vol1__05/p47-p47-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 48,
+      "sheet": "MP502",
+      "render": "reviews/11__vol1__05/p48-p48-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 49,
+      "sheet": "MI700",
+      "render": "reviews/11__vol1__05/p49-p49-full-poppler.png",
+      "finding": "BACnet/controls drawing visually reviewed; retained source clauses/symbols are separately bounded."
+    },
+    {
+      "page": 50,
+      "sheet": "MI701",
+      "render": "reviews/11__vol1__05/p50-p50-full-poppler.png",
+      "finding": "BACnet/controls drawing visually reviewed; retained source clauses/symbols are separately bounded."
+    },
+    {
+      "page": 51,
+      "sheet": "MI702",
+      "render": "reviews/11__vol1__05/p51-p51-full-poppler.png",
+      "finding": "BACnet/controls drawing visually reviewed; retained source clauses/symbols are separately bounded."
+    },
+    {
+      "page": 52,
+      "sheet": "MI703",
+      "render": "reviews/11__vol1__05/p52-p52-full-poppler.png",
+      "finding": "BACnet/controls drawing visually reviewed; retained source clauses/symbols are separately bounded."
+    },
+    {
+      "page": 53,
+      "sheet": "MI704",
+      "render": "reviews/11__vol1__05/p53-p53-full-poppler.png",
+      "finding": "BACnet/controls drawing visually reviewed; retained source clauses/symbols are separately bounded."
+    },
+    {
+      "page": 54,
+      "sheet": "MI705",
+      "render": "reviews/11__vol1__05/p54-p54-full-poppler.png",
+      "finding": "BACnet/controls drawing visually reviewed; retained source clauses/symbols are separately bounded."
+    },
+    {
+      "page": 55,
+      "sheet": "MI706",
+      "render": "reviews/11__vol1__05/p55-p55-full-poppler.png",
+      "finding": "BACnet/controls drawing visually reviewed; retained source clauses/symbols are separately bounded."
+    },
+    {
+      "page": 56,
+      "sheet": "E000",
+      "render": "reviews/11__vol1__05/p56-p56-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 57,
+      "sheet": "E101",
+      "render": "reviews/11__vol1__05/p57-p57-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 58,
+      "sheet": "E103",
+      "render": "reviews/11__vol1__05/p58-p58-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 59,
+      "sheet": "E106A",
+      "render": "reviews/11__vol1__05/p59-p59-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 60,
+      "sheet": "E106B",
+      "render": "reviews/11__vol1__05/p60-p60-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 61,
+      "sheet": "E107A",
+      "render": "reviews/11__vol1__05/p61-p61-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 62,
+      "sheet": "E107B",
+      "render": "reviews/11__vol1__05/p62-p62-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 63,
+      "sheet": "EQA10",
+      "render": "reviews/11__vol1__05/p63-p63-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 64,
+      "sheet": "E110B",
+      "render": "reviews/11__vol1__05/p64-p64-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 65,
+      "sheet": "E111",
+      "render": "reviews/11__vol1__05/p65-p65-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 66,
+      "sheet": "E204",
+      "render": "reviews/11__vol1__05/p66-p66-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 67,
+      "sheet": "E601",
+      "render": "reviews/11__vol1__05/p67-p67-full-poppler.png",
+      "finding": "Full-page source drawing visually reviewed; retained as source context."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "p",
+      "page": 1,
+      "bbox": [
+        2244,
+        1919,
+        2610,
+        1982
+      ],
+      "expected": "FCA REPLACE VARIOUS AIR HANDLING UNITS AND VARIABLE AIR VOLUME UNITS",
+      "mode": "exact"
+    },
+    {
+      "id": "f",
+      "page": 1,
+      "bbox": [
+        2269,
+        2003,
+        2600,
+        2016
+      ],
+      "expected": "JOHN COCHRAN VA MEDICAL CENTER, ST. LOUIS, MO",
+      "mode": "exact"
+    },
+    {
+      "id": "d",
+      "page": 1,
+      "bbox": [
+        2280,
+        2052,
+        2428,
+        2071
+      ],
+      "expected": "MARCH 23, 2023",
+      "mode": "exact"
+    },
+    {
+      "id": "s",
+      "page": 1,
+      "bbox": [
+        2678,
+        2024,
+        2739,
+        2049
+      ],
+      "expected": "G000",
+      "mode": "exact"
+    }
+  ]
+}

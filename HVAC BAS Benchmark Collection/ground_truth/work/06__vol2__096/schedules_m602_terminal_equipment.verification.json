@@ -1,0 +1,3031 @@
+{
+  "document_id": "06__vol2__096",
+  "source_sha256": "72da836a803740382b319b718c1f10d8daeff6e5dbe869f1e68ff173ea4092ec",
+  "annotation_sha256": "ccd6e34740a52a5b241008170a9bad58a824b77024b4b7d8bb78f044cf59b1e9",
+  "tables": 6,
+  "rows": 39,
+  "cell_assertions": 39,
+  "text_assertions": 1,
+  "checks": [
+    {
+      "table": "M602-UNIT-HEATERS",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        920,
+        304,
+        2700,
+        318
+      ],
+      "expected": "CUH-1 CABINET UNIT HEATER SALLYPORT C170 VERTICAL SLOPE TOP 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFS06 1 THRU 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CUH-1 CABINET UNIT HEATER SALLYPORT C170 VERTICAL SLOPE TOP 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFS06 1 THRU 3",
+          "word_ids": [
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234,
+            235,
+            236,
+            237,
+            238,
+            239,
+            240,
+            241,
+            242,
+            243,
+            244,
+            245,
+            246,
+            247,
+            248,
+            249,
+            250,
+            251,
+            252,
+            253,
+            254,
+            255
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CUH-1 CABINET UNIT HEATER SALLYPORT C170 VERTICAL SLOPE TOP 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFS06 1 THRU 3",
+          "word_ids": [
+            641,
+            40,
+            41,
+            42,
+            56,
+            62,
+            77,
+            78,
+            79,
+            71,
+            95,
+            102,
+            110,
+            123,
+            117,
+            130,
+            142,
+            148,
+            154,
+            160,
+            166,
+            173,
+            183,
+            184,
+            194,
+            201,
+            207,
+            208,
+            209
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-UNIT-HEATERS",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        920,
+        318,
+        2700,
+        331
+      ],
+      "expected": "CUH-2 CABINET UNIT HEATER SALLYPORT C100 VERTICAL SLOPE TOP 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFS06 1 THRU 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CUH-2 CABINET UNIT HEATER SALLYPORT C100 VERTICAL SLOPE TOP 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFS06 1 THRU 3",
+          "word_ids": [
+            198,
+            199,
+            200,
+            201,
+            202,
+            203,
+            204,
+            205,
+            206,
+            207,
+            208,
+            209,
+            210,
+            211,
+            212,
+            213,
+            214,
+            215,
+            216,
+            217,
+            218,
+            219,
+            220,
+            221,
+            222,
+            223,
+            224,
+            225,
+            226
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CUH-2 CABINET UNIT HEATER SALLYPORT C100 VERTICAL SLOPE TOP 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFS06 1 THRU 3",
+          "word_ids": [
+            642,
+            43,
+            44,
+            45,
+            57,
+            63,
+            80,
+            81,
+            82,
+            72,
+            96,
+            103,
+            111,
+            124,
+            118,
+            131,
+            143,
+            149,
+            155,
+            161,
+            167,
+            174,
+            185,
+            186,
+            195,
+            202,
+            210,
+            211,
+            212
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-UNIT-HEATERS",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        920,
+        331,
+        2700,
+        344
+      ],
+      "expected": "CUH-3 CABINET UNIT HEATER SALLYPORT C164 VERTICAL SLOPE TOP 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFS06 1 THRU 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CUH-3 CABINET UNIT HEATER SALLYPORT C164 VERTICAL SLOPE TOP 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFS06 1 THRU 3",
+          "word_ids": [
+            169,
+            170,
+            171,
+            172,
+            173,
+            174,
+            175,
+            176,
+            177,
+            178,
+            179,
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194,
+            195,
+            196,
+            197
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CUH-3 CABINET UNIT HEATER SALLYPORT C164 VERTICAL SLOPE TOP 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFS06 1 THRU 3",
+          "word_ids": [
+            643,
+            46,
+            47,
+            48,
+            58,
+            64,
+            83,
+            84,
+            85,
+            73,
+            97,
+            104,
+            112,
+            125,
+            119,
+            132,
+            144,
+            150,
+            156,
+            162,
+            168,
+            175,
+            187,
+            188,
+            196,
+            203,
+            213,
+            214,
+            215
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-UNIT-HEATERS",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        920,
+        344,
+        2700,
+        357
+      ],
+      "expected": "CUH-4 CABINET UNIT HEATER VESTIBULE A100 VERTICAL RECESSED 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFH06 1 THRU 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CUH-4 CABINET UNIT HEATER VESTIBULE A100 VERTICAL RECESSED 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFH06 1 THRU 3",
+          "word_ids": [
+            141,
+            142,
+            143,
+            144,
+            145,
+            146,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            161,
+            162,
+            163,
+            164,
+            165,
+            166,
+            167,
+            168
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CUH-4 CABINET UNIT HEATER VESTIBULE A100 VERTICAL RECESSED 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFH06 1 THRU 3",
+          "word_ids": [
+            644,
+            49,
+            50,
+            51,
+            59,
+            65,
+            86,
+            87,
+            74,
+            98,
+            105,
+            113,
+            126,
+            120,
+            133,
+            145,
+            151,
+            157,
+            163,
+            169,
+            176,
+            189,
+            190,
+            197,
+            204,
+            216,
+            217,
+            218
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-UNIT-HEATERS",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        920,
+        357,
+        2700,
+        370
+      ],
+      "expected": "CUH-5 CABINET UNIT HEATER SALLYPORT B129 VERTICAL SLOPE TOP 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFS06 1 THRU 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CUH-5 CABINET UNIT HEATER SALLYPORT B129 VERTICAL SLOPE TOP 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFS06 1 THRU 3",
+          "word_ids": [
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138,
+            139,
+            140
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CUH-5 CABINET UNIT HEATER SALLYPORT B129 VERTICAL SLOPE TOP 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFS06 1 THRU 3",
+          "word_ids": [
+            645,
+            52,
+            53,
+            54,
+            60,
+            66,
+            88,
+            89,
+            90,
+            75,
+            99,
+            106,
+            114,
+            127,
+            121,
+            134,
+            146,
+            152,
+            158,
+            164,
+            170,
+            177,
+            191,
+            192,
+            198,
+            205,
+            219,
+            220,
+            221
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-UNIT-HEATERS",
+      "header": "UNIT HEATER SCHEDULE",
+      "page": 21,
+      "bbox": [
+        850,
+        95,
+        2200,
+        130
+      ],
+      "engine": "mupdf",
+      "actual": "UNIT HEATER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M602-UNIT-HEATERS",
+      "header": "UNIT HEATER SCHEDULE",
+      "page": 21,
+      "bbox": [
+        850,
+        95,
+        2200,
+        130
+      ],
+      "engine": "poppler",
+      "actual": "UNIT HEATER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M602-DX-SPLITS",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        1150,
+        518,
+        2700,
+        534
+      ],
+      "expected": "AC-1 CONTROL ROOM D200 LG AC-1 LCN128HV4 875 12.0 ACCU-1 LUU1278HV 20.0 / 11.0 11.5 9 15 208 / 1 YES 1 THRU 7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AC-1 CONTROL ROOM D200 LG AC-1 LCN128HV4 875 12.0 ACCU-1 LUU1278HV 20.0 / 11.0 11.5 9 15 208 / 1 YES 1 THRU 7",
+          "word_ids": [
+            571,
+            572,
+            573,
+            574,
+            575,
+            576,
+            577,
+            578,
+            579,
+            580,
+            581,
+            582,
+            583,
+            584,
+            585,
+            586,
+            587,
+            588,
+            589,
+            590,
+            591,
+            592,
+            593,
+            594
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AC-1 CONTROL ROOM D200 LG AC-1 LCN128HV4 875 12.0 ACCU-1 LUU1278HV 20.0 / 11.0 11.5 9 15 208 / 1 YES 1 THRU 7",
+          "word_ids": [
+            385,
+            386,
+            387,
+            388,
+            248,
+            249,
+            250,
+            251,
+            252,
+            253,
+            254,
+            255,
+            256,
+            257,
+            258,
+            259,
+            260,
+            261,
+            262,
+            263,
+            264,
+            265,
+            266,
+            267
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-DX-SPLITS",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        1150,
+        534,
+        2700,
+        552
+      ],
+      "expected": "AC-2 SECURITY D108 LG AC-2 LSN240HEV2 875 24.0 ACCU-2 LSU240HEV2 20.0 / 11.0 11.5 15 20 208 / 1 YES 1 THRU 7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AC-2 SECURITY D108 LG AC-2 LSN240HEV2 875 24.0 ACCU-2 LSU240HEV2 20.0 / 11.0 11.5 15 20 208 / 1 YES 1 THRU 7",
+          "word_ids": [
+            548,
+            549,
+            550,
+            551,
+            552,
+            553,
+            554,
+            555,
+            556,
+            557,
+            558,
+            559,
+            560,
+            561,
+            562,
+            563,
+            564,
+            565,
+            566,
+            567,
+            568,
+            569,
+            570
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AC-2 SECURITY D108 LG AC-2 LSN240HEV2 875 24.0 ACCU-2 LSU240HEV2 20.0 / 11.0 11.5 15 20 208 / 1 YES 1 THRU 7",
+          "word_ids": [
+            389,
+            390,
+            268,
+            269,
+            270,
+            271,
+            272,
+            273,
+            274,
+            275,
+            276,
+            277,
+            278,
+            279,
+            280,
+            281,
+            282,
+            283,
+            284,
+            285,
+            286,
+            287,
+            288
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-DX-SPLITS",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        1150,
+        552,
+        2700,
+        570
+      ],
+      "expected": "AC-3 IT A114 LG AC-3 LSN240HEV2 875 24.0 ACCU-3 LSU240HEV2 20.0 / 11.0 11.5 15 20 208 / 1 YES 1 THRU 7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AC-3 IT A114 LG AC-3 LSN240HEV2 875 24.0 ACCU-3 LSU240HEV2 20.0 / 11.0 11.5 15 20 208 / 1 YES 1 THRU 7",
+          "word_ids": [
+            525,
+            526,
+            527,
+            528,
+            529,
+            530,
+            531,
+            532,
+            533,
+            534,
+            535,
+            536,
+            537,
+            538,
+            539,
+            540,
+            541,
+            542,
+            543,
+            544,
+            545,
+            546,
+            547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AC-3 IT A114 LG AC-3 LSN240HEV2 875 24.0 ACCU-3 LSU240HEV2 20.0 / 11.0 11.5 15 20 208 / 1 YES 1 THRU 7",
+          "word_ids": [
+            391,
+            289,
+            290,
+            291,
+            292,
+            293,
+            294,
+            295,
+            296,
+            297,
+            298,
+            299,
+            300,
+            301,
+            302,
+            303,
+            304,
+            305,
+            306,
+            307,
+            308,
+            309,
+            310
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-DX-SPLITS",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        1150,
+        570,
+        2700,
+        588
+      ],
+      "expected": "AC-4 CONTROL ROOM C126 LG AC-4 ARNU543NKA4 1200 58.0 ACCU-4 ARUN060GSS4 20.0 / 11.0 11.5 25.4 40 208 / 1 YES 1 THRU 7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AC-4 CONTROL ROOM C126 LG AC-4 ARNU543NKA4 1200 58.0 ACCU-4 ARUN060GSS4 20.0 / 11.0 11.5 25.4 40 208 / 1 YES 1 THRU 7",
+          "word_ids": [
+            501,
+            502,
+            503,
+            504,
+            505,
+            506,
+            507,
+            508,
+            509,
+            510,
+            511,
+            512,
+            513,
+            514,
+            515,
+            516,
+            517,
+            518,
+            519,
+            520,
+            521,
+            522,
+            523,
+            524
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AC-4 CONTROL ROOM C126 LG AC-4 ARNU543NKA4 1200 58.0 ACCU-4 ARUN060GSS4 20.0 / 11.0 11.5 25.4 40 208 / 1 YES 1 THRU 7",
+          "word_ids": [
+            311,
+            312,
+            313,
+            314,
+            315,
+            316,
+            317,
+            318,
+            319,
+            320,
+            321,
+            322,
+            323,
+            324,
+            325,
+            326,
+            327,
+            328,
+            329,
+            330,
+            331,
+            332,
+            333,
+            334
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-DX-SPLITS",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        1150,
+        588,
+        2700,
+        606
+      ],
+      "expected": "AC-5 ELECTRICAL C167 LG AC-4 ARNU543NKA4 1200 58.0 ACCU-5 ARUN060GSS4 20.0 / 11.0 11.5 25.4 40 208 / 1 YES 1 THRU 7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AC-5 ELECTRICAL C167 LG AC-4 ARNU543NKA4 1200 58.0 ACCU-5 ARUN060GSS4 20.0 / 11.0 11.5 25.4 40 208 / 1 YES 1 THRU 7",
+          "word_ids": [
+            478,
+            479,
+            480,
+            481,
+            482,
+            483,
+            484,
+            485,
+            486,
+            487,
+            488,
+            489,
+            490,
+            491,
+            492,
+            493,
+            494,
+            495,
+            496,
+            497,
+            498,
+            499,
+            500
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AC-5 ELECTRICAL C167 LG AC-4 ARNU543NKA4 1200 58.0 ACCU-5 ARUN060GSS4 20.0 / 11.0 11.5 25.4 40 208 / 1 YES 1 THRU 7",
+          "word_ids": [
+            335,
+            336,
+            337,
+            338,
+            339,
+            340,
+            341,
+            342,
+            343,
+            344,
+            345,
+            346,
+            347,
+            348,
+            349,
+            350,
+            351,
+            352,
+            353,
+            354,
+            355,
+            356,
+            357
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-DX-SPLITS",
+      "row": 6,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        1150,
+        606,
+        2700,
+        624
+      ],
+      "expected": "AC-6 ELECTRICAL C167 LG AC-4 ARNU543NKA4 1200 58.0 ACCU-6 ARUN060GSS4 20.0 / 11.0 11.5 25.4 40 208 / 1 YES 1 THRU 7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AC-6 ELECTRICAL C167 LG AC-4 ARNU543NKA4 1200 58.0 ACCU-6 ARUN060GSS4 20.0 / 11.0 11.5 25.4 40 208 / 1 YES 1 THRU 7",
+          "word_ids": [
+            455,
+            456,
+            457,
+            458,
+            459,
+            460,
+            461,
+            462,
+            463,
+            464,
+            465,
+            466,
+            467,
+            468,
+            469,
+            470,
+            471,
+            472,
+            473,
+            474,
+            475,
+            476,
+            477
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AC-6 ELECTRICAL C167 LG AC-4 ARNU543NKA4 1200 58.0 ACCU-6 ARUN060GSS4 20.0 / 11.0 11.5 25.4 40 208 / 1 YES 1 THRU 7",
+          "word_ids": [
+            358,
+            359,
+            360,
+            361,
+            362,
+            363,
+            364,
+            365,
+            366,
+            367,
+            368,
+            369,
+            370,
+            371,
+            372,
+            373,
+            374,
+            375,
+            376,
+            377,
+            378,
+            379,
+            380
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-DX-SPLITS",
+      "header": "DX SPLIT SCHEDULE",
+      "page": 21,
+      "bbox": [
+        1700,
+        420,
+        2300,
+        455
+      ],
+      "engine": "mupdf",
+      "actual": "DX SPLIT SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M602-DX-SPLITS",
+      "header": "DX SPLIT SCHEDULE",
+      "page": 21,
+      "bbox": [
+        1700,
+        420,
+        2300,
+        455
+      ],
+      "engine": "poppler",
+      "actual": "DX SPLIT SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M602-LOUVERS",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        1590,
+        907,
+        2700,
+        921
+      ],
+      "expected": "LV-1 RUSKIN ELF6375DXD AHU-2 OA MECHANICAL - 171 REFER TO ARCH PLANS 1,2,3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LV-1 RUSKIN ELF6375DXD AHU-2 OA MECHANICAL - 171 REFER TO ARCH PLANS 1,2,3",
+          "word_ids": [
+            742,
+            743,
+            744,
+            745,
+            746,
+            747,
+            748,
+            749,
+            750,
+            751,
+            752,
+            753,
+            754
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LV-1 RUSKIN ELF6375DXD AHU-2 OA MECHANICAL - 171 REFER TO ARCH PLANS 1,2,3",
+          "word_ids": [
+            526,
+            527,
+            528,
+            529,
+            530,
+            570,
+            571,
+            572,
+            573,
+            574,
+            575,
+            576,
+            577
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-LOUVERS",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        1590,
+        921,
+        2700,
+        936
+      ],
+      "expected": "LV-2 RUSKIN ELF6375DXD AHU-2 EXHAUST MECHANICAL - 171 REFER TO ARCH PLANS 1,2,3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LV-2 RUSKIN ELF6375DXD AHU-2 EXHAUST MECHANICAL - 171 REFER TO ARCH PLANS 1,2,3",
+          "word_ids": [
+            729,
+            730,
+            731,
+            732,
+            733,
+            734,
+            735,
+            736,
+            737,
+            738,
+            739,
+            740,
+            741
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LV-2 RUSKIN ELF6375DXD AHU-2 EXHAUST MECHANICAL - 171 REFER TO ARCH PLANS 1,2,3",
+          "word_ids": [
+            531,
+            532,
+            533,
+            578,
+            579,
+            580,
+            581,
+            582,
+            583,
+            584,
+            585,
+            586,
+            587
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-LOUVERS",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        1590,
+        936,
+        2700,
+        951
+      ],
+      "expected": "LV-3 RUSKIN ELF6375DXD AHU-3 OA MECHANICAL - 71 REFER TO ARCH PLANS 1,2,3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LV-3 RUSKIN ELF6375DXD AHU-3 OA MECHANICAL - 71 REFER TO ARCH PLANS 1,2,3",
+          "word_ids": [
+            716,
+            717,
+            718,
+            719,
+            720,
+            721,
+            722,
+            723,
+            724,
+            725,
+            726,
+            727,
+            728
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LV-3 RUSKIN ELF6375DXD AHU-3 OA MECHANICAL - 71 REFER TO ARCH PLANS 1,2,3",
+          "word_ids": [
+            534,
+            535,
+            536,
+            588,
+            589,
+            590,
+            591,
+            592,
+            593,
+            594,
+            595,
+            596,
+            597
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-LOUVERS",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        1590,
+        951,
+        2700,
+        966
+      ],
+      "expected": "LV-4 RUSKIN ELF6375DXD AHU-3 EXHAUST MECHANICAL - 71 REFER TO ARCH PLANS 1,2,3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LV-4 RUSKIN ELF6375DXD AHU-3 EXHAUST MECHANICAL - 71 REFER TO ARCH PLANS 1,2,3",
+          "word_ids": [
+            703,
+            704,
+            705,
+            706,
+            707,
+            708,
+            709,
+            710,
+            711,
+            712,
+            713,
+            714,
+            715
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LV-4 RUSKIN ELF6375DXD AHU-3 EXHAUST MECHANICAL - 71 REFER TO ARCH PLANS 1,2,3",
+          "word_ids": [
+            537,
+            538,
+            539,
+            598,
+            599,
+            600,
+            601,
+            602,
+            603,
+            604,
+            605,
+            606,
+            607
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-LOUVERS",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        1590,
+        966,
+        2700,
+        981
+      ],
+      "expected": "LV-5 RUSKIN ELF6375DXD AHU-4 OA KITCHEN ATTIC REFER TO ARCH PLANS 1,2,3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LV-5 RUSKIN ELF6375DXD AHU-4 OA KITCHEN ATTIC REFER TO ARCH PLANS 1,2,3",
+          "word_ids": [
+            691,
+            692,
+            693,
+            694,
+            695,
+            696,
+            697,
+            698,
+            699,
+            700,
+            701,
+            702
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LV-5 RUSKIN ELF6375DXD AHU-4 OA KITCHEN ATTIC REFER TO ARCH PLANS 1,2,3",
+          "word_ids": [
+            540,
+            541,
+            542,
+            608,
+            609,
+            610,
+            611,
+            612,
+            613,
+            614,
+            615,
+            616
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-LOUVERS",
+      "row": 6,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        1590,
+        981,
+        2700,
+        996
+      ],
+      "expected": "LV-6 RUSKIN ELF6375DXD AHU-4 EXHAUST KITCHEN ATTIC REFER TO ARCH PLANS 1,2,3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LV-6 RUSKIN ELF6375DXD AHU-4 EXHAUST KITCHEN ATTIC REFER TO ARCH PLANS 1,2,3",
+          "word_ids": [
+            679,
+            680,
+            681,
+            682,
+            683,
+            684,
+            685,
+            686,
+            687,
+            688,
+            689,
+            690
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LV-6 RUSKIN ELF6375DXD AHU-4 EXHAUST KITCHEN ATTIC REFER TO ARCH PLANS 1,2,3",
+          "word_ids": [
+            543,
+            544,
+            545,
+            617,
+            618,
+            619,
+            620,
+            621,
+            622,
+            623,
+            624,
+            625
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-LOUVERS",
+      "row": 7,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        1590,
+        996,
+        2700,
+        1011
+      ],
+      "expected": "LV-7 RUSKIN ELF6375DXD SALLYPORT EXHAUST SALLYPORT - 12 REFER TO ARCH PLANS 1,2,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LV-7 RUSKIN ELF6375DXD SALLYPORT EXHAUST SALLYPORT - 12 REFER TO ARCH PLANS 1,2,4",
+          "word_ids": [
+            666,
+            667,
+            668,
+            669,
+            670,
+            671,
+            672,
+            673,
+            674,
+            675,
+            676,
+            677,
+            678
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LV-7 RUSKIN ELF6375DXD SALLYPORT EXHAUST SALLYPORT - 12 REFER TO ARCH PLANS 1,2,4",
+          "word_ids": [
+            546,
+            547,
+            548,
+            549,
+            550,
+            626,
+            627,
+            628,
+            629,
+            630,
+            631,
+            632,
+            633
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-LOUVERS",
+      "header": "LOUVER SCHEDULE",
+      "page": 21,
+      "bbox": [
+        1900,
+        815,
+        2500,
+        850
+      ],
+      "engine": "mupdf",
+      "actual": "LOUVER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M602-LOUVERS",
+      "header": "LOUVER SCHEDULE",
+      "page": 21,
+      "bbox": [
+        1900,
+        815,
+        2500,
+        850
+      ],
+      "engine": "poppler",
+      "actual": "LOUVER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M602-GRAVITY-HOODS",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        160,
+        1235,
+        2700,
+        1249
+      ],
+      "expected": "OALP-1 POD ROOF - OUTSIDE AIR POD AHU'S YES 18 GREENHECK WIH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OALP-1 POD ROOF - OUTSIDE AIR POD AHU'S YES 18 GREENHECK WIH",
+          "word_ids": [
+            1504,
+            1505,
+            1506,
+            1507,
+            1508,
+            1509,
+            1510,
+            1511,
+            1512,
+            1513,
+            1514,
+            1515
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OALP-1 POD ROOF - OUTSIDE AIR POD AHU'S YES 18 GREENHECK WIH",
+          "word_ids": [
+            707,
+            710,
+            711,
+            715,
+            719,
+            720,
+            721,
+            722,
+            758,
+            753,
+            766,
+            770
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-GRAVITY-HOODS",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        160,
+        1249,
+        2700,
+        1263
+      ],
+      "expected": "EALP-1 POD ROOF - EXHAUST AIR POD AHU'S YES 18 GREENHECK WRH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EALP-1 POD ROOF - EXHAUST AIR POD AHU'S YES 18 GREENHECK WRH",
+          "word_ids": [
+            1492,
+            1493,
+            1494,
+            1495,
+            1496,
+            1497,
+            1498,
+            1499,
+            1500,
+            1501,
+            1502,
+            1503
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EALP-1 POD ROOF - EXHAUST AIR POD AHU'S YES 18 GREENHECK WRH",
+          "word_ids": [
+            708,
+            712,
+            713,
+            716,
+            723,
+            724,
+            725,
+            726,
+            759,
+            754,
+            767,
+            771
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-GRAVITY-HOODS",
+      "header": "GRAVITY HOOD SCHEDULE",
+      "page": 21,
+      "bbox": [
+        600,
+        1150,
+        1200,
+        1190
+      ],
+      "engine": "mupdf",
+      "actual": "GRAVITY HOOD SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M602-GRAVITY-HOODS",
+      "header": "GRAVITY HOOD SCHEDULE",
+      "page": 21,
+      "bbox": [
+        600,
+        1150,
+        1200,
+        1190
+      ],
+      "engine": "poppler",
+      "actual": "GRAVITY HOOD SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M602-FAN-COIL-UNITS",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        355,
+        1541,
+        2700,
+        1557
+      ],
+      "expected": "FCU-1 MECHANICAL D109 1500 400 - 0.20 29.9 27.4 4.3 40.0 55.0 75.0 63.0 58.3 56.1 4 1.7 77.9 5.2 140.0 110.0 50.0 98.1 2 2.8 (2) 1/4 12.00 120/1/60 YES FACTORY FUSED KRUEGER KHGP-16 1,2,3,4,5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-1 MECHANICAL D109 1500 400 - 0.20 29.9 27.4 4.3 40.0 55.0 75.0 63.0 58.3 56.1 4 1.7 77.9 5.2 140.0 110.0 50.0 98.1 2 2.8 (2) 1/4 12.00 120/1/60 YES FACTORY FUSED KRUEGER KHGP-16 1,2,3,4,5",
+          "word_ids": [
+            853,
+            854,
+            855,
+            856,
+            857,
+            858,
+            859,
+            860,
+            861,
+            862,
+            863,
+            864,
+            865,
+            866,
+            867,
+            868,
+            869,
+            870,
+            871,
+            872,
+            873,
+            874,
+            875,
+            876,
+            877,
+            878,
+            879,
+            880,
+            881,
+            882,
+            883,
+            884,
+            885,
+            886,
+            887,
+            888
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-1 MECHANICAL D109 1500 400 - 0.20 29.9 27.4 4.3 40.0 55.0 75.0 63.0 58.3 56.1 4 1.7 77.9 5.2 140.0 110.0 50.0 98.1 2 2.8 (2) 1/4 12.00 120/1/60 YES FACTORY FUSED KRUEGER KHGP-16 1,2,3,4,5",
+          "word_ids": [
+            920,
+            921,
+            922,
+            923,
+            924,
+            925,
+            926,
+            927,
+            928,
+            929,
+            930,
+            931,
+            932,
+            933,
+            934,
+            935,
+            936,
+            937,
+            938,
+            939,
+            940,
+            941,
+            942,
+            943,
+            944,
+            945,
+            946,
+            947,
+            948,
+            949,
+            950,
+            951,
+            952,
+            953,
+            954,
+            955
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FAN-COIL-UNITS",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        355,
+        1557,
+        2700,
+        1575
+      ],
+      "expected": "FCU-2 MECHANICAL C166 1500 400 - 0.20 29.9 27.4 4.3 40.0 55.0 75.0 63.0 58.3 56.1 4 1.7 77.9 5.2 140.0 110.0 50.0 98.1 2 2.8 (2) 1/4 12.00 120/1/60 YES FACTORY FUSED KRUEGER KHGP-16 1,2,3,4,5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-2 MECHANICAL C166 1500 400 - 0.20 29.9 27.4 4.3 40.0 55.0 75.0 63.0 58.3 56.1 4 1.7 77.9 5.2 140.0 110.0 50.0 98.1 2 2.8 (2) 1/4 12.00 120/1/60 YES FACTORY FUSED KRUEGER KHGP-16 1,2,3,4,5",
+          "word_ids": [
+            817,
+            818,
+            819,
+            820,
+            821,
+            822,
+            823,
+            824,
+            825,
+            826,
+            827,
+            828,
+            829,
+            830,
+            831,
+            832,
+            833,
+            834,
+            835,
+            836,
+            837,
+            838,
+            839,
+            840,
+            841,
+            842,
+            843,
+            844,
+            845,
+            846,
+            847,
+            848,
+            849,
+            850,
+            851,
+            852
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-2 MECHANICAL C166 1500 400 - 0.20 29.9 27.4 4.3 40.0 55.0 75.0 63.0 58.3 56.1 4 1.7 77.9 5.2 140.0 110.0 50.0 98.1 2 2.8 (2) 1/4 12.00 120/1/60 YES FACTORY FUSED KRUEGER KHGP-16 1,2,3,4,5",
+          "word_ids": [
+            956,
+            957,
+            958,
+            959,
+            960,
+            961,
+            962,
+            963,
+            964,
+            965,
+            966,
+            967,
+            968,
+            969,
+            970,
+            971,
+            972,
+            973,
+            974,
+            975,
+            976,
+            977,
+            978,
+            979,
+            980,
+            981,
+            982,
+            983,
+            984,
+            985,
+            986,
+            987,
+            988,
+            989,
+            990,
+            991
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FAN-COIL-UNITS",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        355,
+        1575,
+        2700,
+        1593
+      ],
+      "expected": "FCU-3 MECHANICAL B107 1500 400 - 0.20 29.9 27.4 4.3 40.0 55.0 75.0 63.0 58.3 56.1 4 1.7 77.9 5.2 140.0 110.0 50.0 98.1 2 2.8 (2) 1/4 12.00 120/1/60 YES FACTORY FUSED KRUEGER KHGP-16 1,2,3,4,5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-3 MECHANICAL B107 1500 400 - 0.20 29.9 27.4 4.3 40.0 55.0 75.0 63.0 58.3 56.1 4 1.7 77.9 5.2 140.0 110.0 50.0 98.1 2 2.8 (2) 1/4 12.00 120/1/60 YES FACTORY FUSED KRUEGER KHGP-16 1,2,3,4,5",
+          "word_ids": [
+            781,
+            782,
+            783,
+            784,
+            785,
+            786,
+            787,
+            788,
+            789,
+            790,
+            791,
+            792,
+            793,
+            794,
+            795,
+            796,
+            797,
+            798,
+            799,
+            800,
+            801,
+            802,
+            803,
+            804,
+            805,
+            806,
+            807,
+            808,
+            809,
+            810,
+            811,
+            812,
+            813,
+            814,
+            815,
+            816
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-3 MECHANICAL B107 1500 400 - 0.20 29.9 27.4 4.3 40.0 55.0 75.0 63.0 58.3 56.1 4 1.7 77.9 5.2 140.0 110.0 50.0 98.1 2 2.8 (2) 1/4 12.00 120/1/60 YES FACTORY FUSED KRUEGER KHGP-16 1,2,3,4,5",
+          "word_ids": [
+            992,
+            993,
+            994,
+            995,
+            996,
+            997,
+            998,
+            999,
+            1000,
+            1001,
+            1002,
+            1003,
+            1004,
+            1005,
+            1006,
+            1007,
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019,
+            1020,
+            1021,
+            1022,
+            1023,
+            1024,
+            1025,
+            1026,
+            1027
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FAN-COIL-UNITS",
+      "header": "FAN COIL UNIT SCHEDULE",
+      "page": 21,
+      "bbox": [
+        1000,
+        1350,
+        2400,
+        1390
+      ],
+      "engine": "mupdf",
+      "actual": "FAN COIL UNIT SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M602-FAN-COIL-UNITS",
+      "header": "FAN COIL UNIT SCHEDULE",
+      "page": 21,
+      "bbox": [
+        1000,
+        1350,
+        2400,
+        1390
+      ],
+      "engine": "poppler",
+      "actual": "FAN COIL UNIT SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        755,
+        1833,
+        2700,
+        1847
+      ],
+      "expected": "KEF-1 WALL KITCHEN KITCHEN EXHAUST CENTRIFUGAL DOWNBLAST 3000 0.50 BI 1055 1.00 0.77 208/3/60 4.6 YES NO YES YES NO YES GREENHECK CUBE-180-10 1,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "KEF-1 WALL KITCHEN KITCHEN EXHAUST CENTRIFUGAL DOWNBLAST 3000 0.50 BI 1055 1.00 0.77 208/3/60 4.6 YES NO YES YES NO YES GREENHECK CUBE-180-10 1,3,4,5,6",
+          "word_ids": [
+            1372,
+            1373,
+            1374,
+            1375,
+            1376,
+            1377,
+            1378,
+            1379,
+            1380,
+            1381,
+            1382,
+            1383,
+            1384,
+            1385,
+            1386,
+            1387,
+            1388,
+            1389,
+            1390,
+            1391,
+            1392,
+            1393,
+            1394,
+            1395
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "KEF-1 WALL KITCHEN KITCHEN EXHAUST CENTRIFUGAL DOWNBLAST 3000 0.50 BI 1055 1.00 0.77 208/3/60 4.6 YES NO YES YES NO YES GREENHECK CUBE-180-10 1,3,4,5,6",
+          "word_ids": [
+            1137,
+            1155,
+            1172,
+            1191,
+            1192,
+            1224,
+            1225,
+            1257,
+            1275,
+            1292,
+            1298,
+            1299,
+            1332,
+            1349,
+            1366,
+            1384,
+            1402,
+            1420,
+            1438,
+            1456,
+            1475,
+            1494,
+            1512,
+            1529
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        755,
+        1847,
+        2700,
+        1860
+      ],
+      "expected": "GEF-1 ROOF ADMIN GENERAL EXHAUST CENTRIFUGAL DOWNBLAST 1000 0.75 1630 0.50 0.24 115/1/60 6.4 YES NO YES YES NO YES GREENHECK G-103-VG 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GEF-1 ROOF ADMIN GENERAL EXHAUST CENTRIFUGAL DOWNBLAST 1000 0.75 1630 0.50 0.24 115/1/60 6.4 YES NO YES YES NO YES GREENHECK G-103-VG 2",
+          "word_ids": [
+            1349,
+            1350,
+            1351,
+            1352,
+            1353,
+            1354,
+            1355,
+            1356,
+            1357,
+            1358,
+            1359,
+            1360,
+            1361,
+            1362,
+            1363,
+            1364,
+            1365,
+            1366,
+            1367,
+            1368,
+            1369,
+            1370,
+            1371
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GEF-1 ROOF ADMIN GENERAL EXHAUST CENTRIFUGAL DOWNBLAST 1000 0.75 1630 0.50 0.24 115/1/60 6.4 YES NO YES YES NO YES GREENHECK G-103-VG 2",
+          "word_ids": [
+            1138,
+            1156,
+            1173,
+            1193,
+            1194,
+            1226,
+            1227,
+            1258,
+            1276,
+            1300,
+            1301,
+            1333,
+            1350,
+            1367,
+            1385,
+            1403,
+            1421,
+            1439,
+            1457,
+            1476,
+            1495,
+            1513,
+            1530
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        755,
+        1860,
+        2700,
+        1873
+      ],
+      "expected": "GEF-2 ROOF SALLYPORT GENERAL EXHAUST CENTRIFUGAL DOWNBLAST 3350 0.50 1323 2.00 0.87 208/1/60 12.0 YES NO YES YES NO YES GREENHECK CUE-161-VG 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GEF-2 ROOF SALLYPORT GENERAL EXHAUST CENTRIFUGAL DOWNBLAST 3350 0.50 1323 2.00 0.87 208/1/60 12.0 YES NO YES YES NO YES GREENHECK CUE-161-VG 2",
+          "word_ids": [
+            1326,
+            1327,
+            1328,
+            1329,
+            1330,
+            1331,
+            1332,
+            1333,
+            1334,
+            1335,
+            1336,
+            1337,
+            1338,
+            1339,
+            1340,
+            1341,
+            1342,
+            1343,
+            1344,
+            1345,
+            1346,
+            1347,
+            1348
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GEF-2 ROOF SALLYPORT GENERAL EXHAUST CENTRIFUGAL DOWNBLAST 3350 0.50 1323 2.00 0.87 208/1/60 12.0 YES NO YES YES NO YES GREENHECK CUE-161-VG 2",
+          "word_ids": [
+            1139,
+            1157,
+            1174,
+            1195,
+            1196,
+            1228,
+            1229,
+            1259,
+            1277,
+            1302,
+            1303,
+            1334,
+            1351,
+            1368,
+            1386,
+            1404,
+            1422,
+            1440,
+            1458,
+            1477,
+            1496,
+            1514,
+            1531
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        755,
+        1873,
+        2700,
+        1886
+      ],
+      "expected": "PEF-1 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1400 0.56 1417 0.50 0.25 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-121-VG 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PEF-1 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1400 0.56 1417 0.50 0.25 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-121-VG 1,2",
+          "word_ids": [
+            1303,
+            1304,
+            1305,
+            1306,
+            1307,
+            1308,
+            1309,
+            1310,
+            1311,
+            1312,
+            1313,
+            1314,
+            1315,
+            1316,
+            1317,
+            1318,
+            1319,
+            1320,
+            1321,
+            1322,
+            1323,
+            1324,
+            1325
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PEF-1 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1400 0.56 1417 0.50 0.25 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-121-VG 1,2",
+          "word_ids": [
+            1140,
+            1158,
+            1175,
+            1197,
+            1198,
+            1230,
+            1231,
+            1260,
+            1278,
+            1304,
+            1305,
+            1335,
+            1352,
+            1369,
+            1387,
+            1405,
+            1423,
+            1441,
+            1459,
+            1478,
+            1497,
+            1515,
+            1532
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        755,
+        1886,
+        2700,
+        1899
+      ],
+      "expected": "PEF-2 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1300 0.50 1228 0.50 0.21 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-131-VG 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PEF-2 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1300 0.50 1228 0.50 0.21 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-131-VG 1,2",
+          "word_ids": [
+            1280,
+            1281,
+            1282,
+            1283,
+            1284,
+            1285,
+            1286,
+            1287,
+            1288,
+            1289,
+            1290,
+            1291,
+            1292,
+            1293,
+            1294,
+            1295,
+            1296,
+            1297,
+            1298,
+            1299,
+            1300,
+            1301,
+            1302
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PEF-2 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1300 0.50 1228 0.50 0.21 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-131-VG 1,2",
+          "word_ids": [
+            1141,
+            1159,
+            1176,
+            1199,
+            1200,
+            1232,
+            1233,
+            1261,
+            1279,
+            1306,
+            1307,
+            1336,
+            1353,
+            1370,
+            1388,
+            1406,
+            1424,
+            1442,
+            1460,
+            1479,
+            1498,
+            1516,
+            1533
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "row": 6,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        755,
+        1899,
+        2700,
+        1912
+      ],
+      "expected": "PEF-3 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1500 0.50 1491 0.50 0.29 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-121-VG 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PEF-3 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1500 0.50 1491 0.50 0.29 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-121-VG 1,2",
+          "word_ids": [
+            1257,
+            1258,
+            1259,
+            1260,
+            1261,
+            1262,
+            1263,
+            1264,
+            1265,
+            1266,
+            1267,
+            1268,
+            1269,
+            1270,
+            1271,
+            1272,
+            1273,
+            1274,
+            1275,
+            1276,
+            1277,
+            1278,
+            1279
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PEF-3 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1500 0.50 1491 0.50 0.29 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-121-VG 1,2",
+          "word_ids": [
+            1142,
+            1160,
+            1177,
+            1201,
+            1202,
+            1234,
+            1235,
+            1262,
+            1280,
+            1308,
+            1309,
+            1337,
+            1354,
+            1371,
+            1389,
+            1407,
+            1425,
+            1443,
+            1461,
+            1480,
+            1499,
+            1517,
+            1534
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "row": 7,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        755,
+        1912,
+        2700,
+        1925
+      ],
+      "expected": "PEF-4 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1100 0.50 1221 0.50 0.16 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-121-VG 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PEF-4 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1100 0.50 1221 0.50 0.16 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-121-VG 1,2",
+          "word_ids": [
+            1234,
+            1235,
+            1236,
+            1237,
+            1238,
+            1239,
+            1240,
+            1241,
+            1242,
+            1243,
+            1244,
+            1245,
+            1246,
+            1247,
+            1248,
+            1249,
+            1250,
+            1251,
+            1252,
+            1253,
+            1254,
+            1255,
+            1256
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PEF-4 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1100 0.50 1221 0.50 0.16 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-121-VG 1,2",
+          "word_ids": [
+            1143,
+            1161,
+            1178,
+            1203,
+            1204,
+            1236,
+            1237,
+            1263,
+            1281,
+            1310,
+            1311,
+            1338,
+            1355,
+            1372,
+            1390,
+            1408,
+            1426,
+            1444,
+            1462,
+            1481,
+            1500,
+            1518,
+            1535
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "row": 8,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        755,
+        1925,
+        2700,
+        1938
+      ],
+      "expected": "PEF-5 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1350 0.50 1255 0.50 0.22 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-131-VG 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PEF-5 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1350 0.50 1255 0.50 0.22 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-131-VG 1,2",
+          "word_ids": [
+            1211,
+            1212,
+            1213,
+            1214,
+            1215,
+            1216,
+            1217,
+            1218,
+            1219,
+            1220,
+            1221,
+            1222,
+            1223,
+            1224,
+            1225,
+            1226,
+            1227,
+            1228,
+            1229,
+            1230,
+            1231,
+            1232,
+            1233
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PEF-5 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1350 0.50 1255 0.50 0.22 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-131-VG 1,2",
+          "word_ids": [
+            1144,
+            1162,
+            1179,
+            1205,
+            1206,
+            1238,
+            1239,
+            1264,
+            1282,
+            1312,
+            1313,
+            1339,
+            1356,
+            1373,
+            1391,
+            1409,
+            1427,
+            1445,
+            1463,
+            1482,
+            1501,
+            1519,
+            1536
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "row": 9,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        755,
+        1938,
+        2700,
+        1951
+      ],
+      "expected": "PEF-6 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 2050 0.50 956 0.50 0.33 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-161-VG 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PEF-6 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 2050 0.50 956 0.50 0.33 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-161-VG 1,2",
+          "word_ids": [
+            1188,
+            1189,
+            1190,
+            1191,
+            1192,
+            1193,
+            1194,
+            1195,
+            1196,
+            1197,
+            1198,
+            1199,
+            1200,
+            1201,
+            1202,
+            1203,
+            1204,
+            1205,
+            1206,
+            1207,
+            1208,
+            1209,
+            1210
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PEF-6 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 2050 0.50 956 0.50 0.33 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-161-VG 1,2",
+          "word_ids": [
+            1145,
+            1163,
+            1180,
+            1207,
+            1208,
+            1240,
+            1241,
+            1265,
+            1283,
+            1314,
+            1315,
+            1340,
+            1357,
+            1374,
+            1392,
+            1410,
+            1428,
+            1446,
+            1464,
+            1483,
+            1502,
+            1520,
+            1537
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "row": 10,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        755,
+        1951,
+        2700,
+        1964
+      ],
+      "expected": "JEF-1 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 700 0.50 1583 0.50 0.21 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-99-VG 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JEF-1 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 700 0.50 1583 0.50 0.21 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-99-VG 1,2",
+          "word_ids": [
+            1165,
+            1166,
+            1167,
+            1168,
+            1169,
+            1170,
+            1171,
+            1172,
+            1173,
+            1174,
+            1175,
+            1176,
+            1177,
+            1178,
+            1179,
+            1180,
+            1181,
+            1182,
+            1183,
+            1184,
+            1185,
+            1186,
+            1187
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JEF-1 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 700 0.50 1583 0.50 0.21 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-99-VG 1,2",
+          "word_ids": [
+            1146,
+            1164,
+            1181,
+            1209,
+            1210,
+            1242,
+            1243,
+            1266,
+            1284,
+            1316,
+            1317,
+            1341,
+            1358,
+            1375,
+            1393,
+            1411,
+            1429,
+            1447,
+            1465,
+            1484,
+            1503,
+            1521,
+            1538
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "row": 11,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        755,
+        1964,
+        2700,
+        1977
+      ],
+      "expected": "JEF-2 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 705 0.50 1589 0.50 0.25 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-99-VG 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JEF-2 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 705 0.50 1589 0.50 0.25 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-99-VG 1,2",
+          "word_ids": [
+            1142,
+            1143,
+            1144,
+            1145,
+            1146,
+            1147,
+            1148,
+            1149,
+            1150,
+            1151,
+            1152,
+            1153,
+            1154,
+            1155,
+            1156,
+            1157,
+            1158,
+            1159,
+            1160,
+            1161,
+            1162,
+            1163,
+            1164
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JEF-2 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 705 0.50 1589 0.50 0.25 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-99-VG 1,2",
+          "word_ids": [
+            1147,
+            1165,
+            1182,
+            1211,
+            1212,
+            1244,
+            1245,
+            1267,
+            1285,
+            1318,
+            1319,
+            1342,
+            1359,
+            1376,
+            1394,
+            1412,
+            1430,
+            1448,
+            1466,
+            1485,
+            1504,
+            1522,
+            1539
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "row": 12,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        755,
+        1977,
+        2700,
+        1990
+      ],
+      "expected": "JEF-3 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 680 0.50 1559 0.50 0.20 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-99-VG 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JEF-3 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 680 0.50 1559 0.50 0.20 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-99-VG 1,2",
+          "word_ids": [
+            1119,
+            1120,
+            1121,
+            1122,
+            1123,
+            1124,
+            1125,
+            1126,
+            1127,
+            1128,
+            1129,
+            1130,
+            1131,
+            1132,
+            1133,
+            1134,
+            1135,
+            1136,
+            1137,
+            1138,
+            1139,
+            1140,
+            1141
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JEF-3 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 680 0.50 1559 0.50 0.20 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-99-VG 1,2",
+          "word_ids": [
+            1148,
+            1166,
+            1183,
+            1213,
+            1214,
+            1246,
+            1247,
+            1268,
+            1286,
+            1320,
+            1321,
+            1343,
+            1360,
+            1377,
+            1395,
+            1413,
+            1431,
+            1449,
+            1467,
+            1486,
+            1505,
+            1523,
+            1540
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "row": 13,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        755,
+        1990,
+        2700,
+        2003
+      ],
+      "expected": "JEF-4 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 570 0.50 1431 0.50 0.15 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-99-VG 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JEF-4 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 570 0.50 1431 0.50 0.15 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-99-VG 1,2",
+          "word_ids": [
+            1096,
+            1097,
+            1098,
+            1099,
+            1100,
+            1101,
+            1102,
+            1103,
+            1104,
+            1105,
+            1106,
+            1107,
+            1108,
+            1109,
+            1110,
+            1111,
+            1112,
+            1113,
+            1114,
+            1115,
+            1116,
+            1117,
+            1118
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JEF-4 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 570 0.50 1431 0.50 0.15 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-99-VG 1,2",
+          "word_ids": [
+            1149,
+            1167,
+            1184,
+            1215,
+            1216,
+            1248,
+            1249,
+            1269,
+            1287,
+            1322,
+            1323,
+            1344,
+            1361,
+            1378,
+            1396,
+            1414,
+            1432,
+            1450,
+            1468,
+            1487,
+            1506,
+            1524,
+            1541
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "row": 14,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        755,
+        2003,
+        2700,
+        2016
+      ],
+      "expected": "JEF-5 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 1355 0.50 1474 0.50 0.28 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-120-VG 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JEF-5 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 1355 0.50 1474 0.50 0.28 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-120-VG 1,2",
+          "word_ids": [
+            1073,
+            1074,
+            1075,
+            1076,
+            1077,
+            1078,
+            1079,
+            1080,
+            1081,
+            1082,
+            1083,
+            1084,
+            1085,
+            1086,
+            1087,
+            1088,
+            1089,
+            1090,
+            1091,
+            1092,
+            1093,
+            1094,
+            1095
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JEF-5 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 1355 0.50 1474 0.50 0.28 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-120-VG 1,2",
+          "word_ids": [
+            1150,
+            1168,
+            1185,
+            1217,
+            1218,
+            1250,
+            1251,
+            1270,
+            1288,
+            1324,
+            1325,
+            1345,
+            1362,
+            1379,
+            1397,
+            1415,
+            1433,
+            1451,
+            1469,
+            1488,
+            1507,
+            1525,
+            1542
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "row": 15,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        755,
+        2016,
+        2700,
+        2029
+      ],
+      "expected": "JEF-6 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 1070 0.50 1584 0.50 0.19 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-100-VG 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JEF-6 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 1070 0.50 1584 0.50 0.19 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-100-VG 1,2",
+          "word_ids": [
+            1050,
+            1051,
+            1052,
+            1053,
+            1054,
+            1055,
+            1056,
+            1057,
+            1058,
+            1059,
+            1060,
+            1061,
+            1062,
+            1063,
+            1064,
+            1065,
+            1066,
+            1067,
+            1068,
+            1069,
+            1070,
+            1071,
+            1072
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JEF-6 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 1070 0.50 1584 0.50 0.19 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-100-VG 1,2",
+          "word_ids": [
+            1151,
+            1169,
+            1186,
+            1219,
+            1220,
+            1252,
+            1253,
+            1271,
+            1289,
+            1326,
+            1327,
+            1346,
+            1363,
+            1380,
+            1398,
+            1416,
+            1434,
+            1452,
+            1470,
+            1489,
+            1508,
+            1526,
+            1543
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "row": 16,
+      "column": "source_row_as_printed",
+      "page": 21,
+      "bbox": [
+        755,
+        2029,
+        2700,
+        2043
+      ],
+      "expected": "BF-1 SALLYPORT SALLYPORT DESTRATIFICATION BUCKET FAN 1055 - - 1675 94 WATTS - 115/1/60 - NO NO NO NO NO YES VENTS-US 1055 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BF-1 SALLYPORT SALLYPORT DESTRATIFICATION BUCKET FAN 1055 - - 1675 94 WATTS - 115/1/60 - NO NO NO NO NO YES VENTS-US 1055 3",
+          "word_ids": [
+            1026,
+            1027,
+            1028,
+            1029,
+            1030,
+            1031,
+            1032,
+            1033,
+            1034,
+            1035,
+            1036,
+            1037,
+            1038,
+            1039,
+            1040,
+            1041,
+            1042,
+            1043,
+            1044,
+            1045,
+            1046,
+            1047,
+            1048,
+            1049
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BF-1 SALLYPORT SALLYPORT DESTRATIFICATION BUCKET FAN 1055 - - 1675 94 WATTS - 115/1/60 - NO NO NO NO NO YES VENTS-US 1055 3",
+          "word_ids": [
+            1152,
+            1170,
+            1187,
+            1221,
+            1254,
+            1255,
+            1272,
+            1290,
+            1293,
+            1328,
+            1329,
+            1330,
+            1347,
+            1364,
+            1381,
+            1399,
+            1417,
+            1435,
+            1453,
+            1471,
+            1490,
+            1509,
+            1527,
+            1544
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "header": "EXHAUST FAN SCHEDULE",
+      "page": 21,
+      "bbox": [
+        1450,
+        1650,
+        1920,
+        1690
+      ],
+      "engine": "mupdf",
+      "actual": "EXHAUST FAN SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M602-EXHAUST-FANS",
+      "header": "EXHAUST FAN SCHEDULE",
+      "page": 21,
+      "bbox": [
+        1450,
+        1650,
+        1920,
+        1690
+      ],
+      "engine": "poppler",
+      "actual": "EXHAUST FAN SCHEDULE",
+      "pass": true
+    },
+    {
+      "assertion": "m602-exhaust-damper-note",
+      "page": 21,
+      "bbox": [
+        750,
+        1718,
+        1090,
+        1735
+      ],
+      "expected": "MOTORIZED DAMPER PROVIDED BY ECC. REFER TO DAMPER SCHEDULE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MOTORIZED DAMPER PROVIDED BY ECC. REFER TO DAMPER SCHEDULE.",
+          "word_ids": [
+            1438,
+            1439,
+            1440,
+            1441,
+            1442,
+            1443,
+            1444,
+            1445,
+            1446
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MOTORIZED DAMPER PROVIDED BY ECC. REFER TO DAMPER SCHEDULE.",
+          "word_ids": [
+            1084,
+            1085,
+            1086,
+            1087,
+            1088,
+            1089,
+            1090,
+            1091,
+            1092
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

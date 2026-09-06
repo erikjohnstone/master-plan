@@ -1,0 +1,387 @@
+{
+  "document_id": "06__vol2__096",
+  "module_role": "Complete literal-row capture of all M602 unit-heater, DX-split, louver, gravity-hood, fan-coil and exhaust-fan schedule tables.",
+  "tables": [
+    {
+      "id": "M602-UNIT-HEATERS",
+      "sheet": "M602",
+      "page": 21,
+      "title_as_printed": "UNIT HEATER SCHEDULE",
+      "columns": "source_row_as_printed",
+      "x_edges": [
+        920,
+        2700
+      ],
+      "y_ranges": [
+        [
+          304,
+          318
+        ],
+        [
+          318,
+          331
+        ],
+        [
+          331,
+          344
+        ],
+        [
+          344,
+          357
+        ],
+        [
+          357,
+          370
+        ]
+      ],
+      "rows": [
+        "CUH-1 CABINET UNIT HEATER SALLYPORT C170 VERTICAL SLOPE TOP 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFS06 1 THRU 3",
+        "CUH-2 CABINET UNIT HEATER SALLYPORT C100 VERTICAL SLOPE TOP 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFS06 1 THRU 3",
+        "CUH-3 CABINET UNIT HEATER SALLYPORT C164 VERTICAL SLOPE TOP 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFS06 1 THRU 3",
+        "CUH-4 CABINET UNIT HEATER VESTIBULE A100 VERTICAL RECESSED 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFH06 1 THRU 3",
+        "CUH-5 CABINET UNIT HEATER SALLYPORT B129 VERTICAL SLOPE TOP 62 107 560 3/4 1.9 140 110 2.05 1/20 115 1 0.75 YES FUSED NO KRUEGER KVFS06 1 THRU 3"
+      ],
+      "row_reading_order": "left_to_right",
+      "header_evidence": [
+        {
+          "bbox": [
+            850,
+            95,
+            2200,
+            130
+          ],
+          "expected": "UNIT HEATER SCHEDULE"
+        }
+      ],
+      "source_row_semantics": "Complete literal left-to-right nonblank source row. Source table content is retained without an invented normalized schema or plan-installed count."
+    },
+    {
+      "id": "M602-DX-SPLITS",
+      "sheet": "M602",
+      "page": 21,
+      "title_as_printed": "DX SPLIT SCHEDULE",
+      "columns": "source_row_as_printed",
+      "x_edges": [
+        1150,
+        2700
+      ],
+      "y_ranges": [
+        [
+          518,
+          534
+        ],
+        [
+          534,
+          552
+        ],
+        [
+          552,
+          570
+        ],
+        [
+          570,
+          588
+        ],
+        [
+          588,
+          606
+        ],
+        [
+          606,
+          624
+        ]
+      ],
+      "rows": [
+        "AC-1 CONTROL ROOM D200 LG AC-1 LCN128HV4 875 12.0 ACCU-1 LUU1278HV 20.0 / 11.0 11.5 9 15 208 / 1 YES 1 THRU 7",
+        "AC-2 SECURITY D108 LG AC-2 LSN240HEV2 875 24.0 ACCU-2 LSU240HEV2 20.0 / 11.0 11.5 15 20 208 / 1 YES 1 THRU 7",
+        "AC-3 IT A114 LG AC-3 LSN240HEV2 875 24.0 ACCU-3 LSU240HEV2 20.0 / 11.0 11.5 15 20 208 / 1 YES 1 THRU 7",
+        "AC-4 CONTROL ROOM C126 LG AC-4 ARNU543NKA4 1200 58.0 ACCU-4 ARUN060GSS4 20.0 / 11.0 11.5 25.4 40 208 / 1 YES 1 THRU 7",
+        "AC-5 ELECTRICAL C167 LG AC-4 ARNU543NKA4 1200 58.0 ACCU-5 ARUN060GSS4 20.0 / 11.0 11.5 25.4 40 208 / 1 YES 1 THRU 7",
+        "AC-6 ELECTRICAL C167 LG AC-4 ARNU543NKA4 1200 58.0 ACCU-6 ARUN060GSS4 20.0 / 11.0 11.5 25.4 40 208 / 1 YES 1 THRU 7"
+      ],
+      "row_reading_order": "left_to_right",
+      "header_evidence": [
+        {
+          "bbox": [
+            1700,
+            420,
+            2300,
+            455
+          ],
+          "expected": "DX SPLIT SCHEDULE"
+        }
+      ],
+      "source_row_semantics": "Complete literal left-to-right nonblank source row. Source table content is retained without an invented normalized schema or plan-installed count."
+    },
+    {
+      "id": "M602-LOUVERS",
+      "sheet": "M602",
+      "page": 21,
+      "title_as_printed": "LOUVER SCHEDULE",
+      "columns": "source_row_as_printed",
+      "x_edges": [
+        1590,
+        2700
+      ],
+      "y_ranges": [
+        [
+          907,
+          921
+        ],
+        [
+          921,
+          936
+        ],
+        [
+          936,
+          951
+        ],
+        [
+          951,
+          966
+        ],
+        [
+          966,
+          981
+        ],
+        [
+          981,
+          996
+        ],
+        [
+          996,
+          1011
+        ]
+      ],
+      "rows": [
+        "LV-1 RUSKIN ELF6375DXD AHU-2 OA MECHANICAL - 171 REFER TO ARCH PLANS 1,2,3",
+        "LV-2 RUSKIN ELF6375DXD AHU-2 EXHAUST MECHANICAL - 171 REFER TO ARCH PLANS 1,2,3",
+        "LV-3 RUSKIN ELF6375DXD AHU-3 OA MECHANICAL - 71 REFER TO ARCH PLANS 1,2,3",
+        "LV-4 RUSKIN ELF6375DXD AHU-3 EXHAUST MECHANICAL - 71 REFER TO ARCH PLANS 1,2,3",
+        "LV-5 RUSKIN ELF6375DXD AHU-4 OA KITCHEN ATTIC REFER TO ARCH PLANS 1,2,3",
+        "LV-6 RUSKIN ELF6375DXD AHU-4 EXHAUST KITCHEN ATTIC REFER TO ARCH PLANS 1,2,3",
+        "LV-7 RUSKIN ELF6375DXD SALLYPORT EXHAUST SALLYPORT - 12 REFER TO ARCH PLANS 1,2,4"
+      ],
+      "row_reading_order": "left_to_right",
+      "header_evidence": [
+        {
+          "bbox": [
+            1900,
+            815,
+            2500,
+            850
+          ],
+          "expected": "LOUVER SCHEDULE"
+        }
+      ],
+      "source_row_semantics": "Complete literal left-to-right nonblank source row. Source table content is retained without an invented normalized schema or plan-installed count."
+    },
+    {
+      "id": "M602-GRAVITY-HOODS",
+      "sheet": "M602",
+      "page": 21,
+      "title_as_printed": "GRAVITY HOOD SCHEDULE",
+      "columns": "source_row_as_printed",
+      "x_edges": [
+        160,
+        2700
+      ],
+      "y_ranges": [
+        [
+          1235,
+          1249
+        ],
+        [
+          1249,
+          1263
+        ]
+      ],
+      "rows": [
+        "OALP-1 POD ROOF - OUTSIDE AIR POD AHU'S YES 18 GREENHECK WIH",
+        "EALP-1 POD ROOF - EXHAUST AIR POD AHU'S YES 18 GREENHECK WRH"
+      ],
+      "row_reading_order": "left_to_right",
+      "header_evidence": [
+        {
+          "bbox": [
+            600,
+            1150,
+            1200,
+            1190
+          ],
+          "expected": "GRAVITY HOOD SCHEDULE"
+        }
+      ],
+      "source_row_semantics": "Complete literal left-to-right nonblank source row. Source table content is retained without an invented normalized schema or plan-installed count."
+    },
+    {
+      "id": "M602-FAN-COIL-UNITS",
+      "sheet": "M602",
+      "page": 21,
+      "title_as_printed": "FAN COIL UNIT SCHEDULE",
+      "columns": "source_row_as_printed",
+      "x_edges": [
+        355,
+        2700
+      ],
+      "y_ranges": [
+        [
+          1541,
+          1557
+        ],
+        [
+          1557,
+          1575
+        ],
+        [
+          1575,
+          1593
+        ]
+      ],
+      "rows": [
+        "FCU-1 MECHANICAL D109 1500 400 - 0.20 29.9 27.4 4.3 40.0 55.0 75.0 63.0 58.3 56.1 4 1.7 77.9 5.2 140.0 110.0 50.0 98.1 2 2.8 (2) 1/4 12.00 120/1/60 YES FACTORY FUSED KRUEGER KHGP-16 1,2,3,4,5",
+        "FCU-2 MECHANICAL C166 1500 400 - 0.20 29.9 27.4 4.3 40.0 55.0 75.0 63.0 58.3 56.1 4 1.7 77.9 5.2 140.0 110.0 50.0 98.1 2 2.8 (2) 1/4 12.00 120/1/60 YES FACTORY FUSED KRUEGER KHGP-16 1,2,3,4,5",
+        "FCU-3 MECHANICAL B107 1500 400 - 0.20 29.9 27.4 4.3 40.0 55.0 75.0 63.0 58.3 56.1 4 1.7 77.9 5.2 140.0 110.0 50.0 98.1 2 2.8 (2) 1/4 12.00 120/1/60 YES FACTORY FUSED KRUEGER KHGP-16 1,2,3,4,5"
+      ],
+      "row_reading_order": "left_to_right",
+      "header_evidence": [
+        {
+          "bbox": [
+            1000,
+            1350,
+            2400,
+            1390
+          ],
+          "expected": "FAN COIL UNIT SCHEDULE"
+        }
+      ],
+      "source_row_semantics": "Complete literal left-to-right nonblank source row. Source table content is retained without an invented normalized schema or plan-installed count."
+    },
+    {
+      "id": "M602-EXHAUST-FANS",
+      "sheet": "M602",
+      "page": 21,
+      "title_as_printed": "EXHAUST FAN SCHEDULE",
+      "columns": "source_row_as_printed",
+      "x_edges": [
+        755,
+        2700
+      ],
+      "y_ranges": [
+        [
+          1833,
+          1847
+        ],
+        [
+          1847,
+          1860
+        ],
+        [
+          1860,
+          1873
+        ],
+        [
+          1873,
+          1886
+        ],
+        [
+          1886,
+          1899
+        ],
+        [
+          1899,
+          1912
+        ],
+        [
+          1912,
+          1925
+        ],
+        [
+          1925,
+          1938
+        ],
+        [
+          1938,
+          1951
+        ],
+        [
+          1951,
+          1964
+        ],
+        [
+          1964,
+          1977
+        ],
+        [
+          1977,
+          1990
+        ],
+        [
+          1990,
+          2003
+        ],
+        [
+          2003,
+          2016
+        ],
+        [
+          2016,
+          2029
+        ],
+        [
+          2029,
+          2043
+        ]
+      ],
+      "rows": [
+        "KEF-1 WALL KITCHEN KITCHEN EXHAUST CENTRIFUGAL DOWNBLAST 3000 0.50 BI 1055 1.00 0.77 208/3/60 4.6 YES NO YES YES NO YES GREENHECK CUBE-180-10 1,3,4,5,6",
+        "GEF-1 ROOF ADMIN GENERAL EXHAUST CENTRIFUGAL DOWNBLAST 1000 0.75 1630 0.50 0.24 115/1/60 6.4 YES NO YES YES NO YES GREENHECK G-103-VG 2",
+        "GEF-2 ROOF SALLYPORT GENERAL EXHAUST CENTRIFUGAL DOWNBLAST 3350 0.50 1323 2.00 0.87 208/1/60 12.0 YES NO YES YES NO YES GREENHECK CUE-161-VG 2",
+        "PEF-1 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1400 0.56 1417 0.50 0.25 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-121-VG 1,2",
+        "PEF-2 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1300 0.50 1228 0.50 0.21 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-131-VG 1,2",
+        "PEF-3 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1500 0.50 1491 0.50 0.29 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-121-VG 1,2",
+        "PEF-4 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1100 0.50 1221 0.50 0.16 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-121-VG 1,2",
+        "PEF-5 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 1350 0.50 1255 0.50 0.22 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-131-VG 1,2",
+        "PEF-6 ROOF POD POD EXHAUST CENTRIFUGAL UPBLAST 2050 0.50 956 0.50 0.33 115/1/60 6.4 YES YES YES NO YES YES GREENHECK CUE-161-VG 1,2",
+        "JEF-1 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 700 0.50 1583 0.50 0.21 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-99-VG 1,2",
+        "JEF-2 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 705 0.50 1589 0.50 0.25 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-99-VG 1,2",
+        "JEF-3 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 680 0.50 1559 0.50 0.20 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-99-VG 1,2",
+        "JEF-4 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 570 0.50 1431 0.50 0.15 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-99-VG 1,2",
+        "JEF-5 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 1355 0.50 1474 0.50 0.28 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-120-VG 1,2",
+        "JEF-6 ATTIC JAIL POD EXHAUST CENTRIFUGAL UPBLAST 1070 0.50 1584 0.50 0.19 115/1/60 6.4 YES YES YES NO YES YES GREENHECK SQ-100-VG 1,2",
+        "BF-1 SALLYPORT SALLYPORT DESTRATIFICATION BUCKET FAN 1055 - - 1675 94 WATTS - 115/1/60 - NO NO NO NO NO YES VENTS-US 1055 3"
+      ],
+      "row_reading_order": "left_to_right",
+      "header_evidence": [
+        {
+          "bbox": [
+            1450,
+            1650,
+            1920,
+            1690
+          ],
+          "expected": "EXHAUST FAN SCHEDULE"
+        }
+      ],
+      "source_row_semantics": "Complete literal left-to-right nonblank source row. Source table content is retained without an invented normalized schema or plan-installed count."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "m602-exhaust-damper-note",
+      "page": 21,
+      "bbox": [
+        750,
+        1718,
+        1090,
+        1735
+      ],
+      "expected": "MOTORIZED DAMPER PROVIDED BY ECC. REFER TO DAMPER SCHEDULE.",
+      "mode": "exact"
+    }
+  ],
+  "schedule_scope": {
+    "control_valve_schedule": "No standalone control-valve schedule appears on M602.",
+    "damper_actuator_schedule": "M602 cross-references a motorized damper; complete available motorized-damper tags/specifications are retained in the standalone M603 schedule module."
+  }
+}

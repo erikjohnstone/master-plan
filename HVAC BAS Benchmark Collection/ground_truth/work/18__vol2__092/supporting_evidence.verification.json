@@ -1,0 +1,61 @@
+{
+  "document_id": "18__vol2__092",
+  "source_sha256": "85613e85e63e6e3e527a722dc93a9797b2b1edd57a8ec22fc96b4a808bc0f0a5",
+  "annotation_sha256": "59a254d64a85e131f654e0f800cfe0d2b443692973604cd77a0cf4ade467fe57",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 1,
+  "checks": [
+    {
+      "assertion": "m201-valve-tag-chart-sample",
+      "page": 10,
+      "bbox": [
+        1840,
+        1995,
+        2250,
+        2025
+      ],
+      "expected": "VALVE TAG AND VALVE CHART SAMPLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VALVE TAG AND VALVE CHART SAMPLE",
+          "word_ids": [
+            395,
+            396,
+            397,
+            398,
+            399,
+            400
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VALVE TAG AND VALVE CHART SAMPLE",
+          "word_ids": [
+            1765,
+            1766,
+            1767,
+            1768,
+            1769,
+            1770
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "supporting-source-limitations",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

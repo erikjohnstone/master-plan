@@ -1,0 +1,4332 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "24ca55039337ccec6a6d8c610427aac1820e0ffab84c2ecb088c29794896f2ec",
+  "tables": 4,
+  "rows": 34,
+  "cell_assertions": 136,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 1,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        409,
+        1720,
+        429
+      ],
+      "expected": "AI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            1241
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            1314
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 1,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        409,
+        2030,
+        429
+      ],
+      "expected": "UOA RELATIVE HUMIDITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UOA RELATIVE HUMIDITY",
+          "word_ids": [
+            1242,
+            1243,
+            1244
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UOA RELATIVE HUMIDITY",
+          "word_ids": [
+            1261,
+            1262,
+            1263
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 1,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        409,
+        2090,
+        429
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1245
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1185
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 1,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        409,
+        2145,
+        429
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1246
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1137
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 2,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        429,
+        1720,
+        446
+      ],
+      "expected": "AI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            1247
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            1315
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 2,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        429,
+        2030,
+        446
+      ],
+      "expected": "UOA TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UOA TEMPERATURE",
+          "word_ids": [
+            1248,
+            1249
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UOA TEMPERATURE",
+          "word_ids": [
+            1264,
+            1265
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 2,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        429,
+        2090,
+        446
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1250
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1186
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 2,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        429,
+        2145,
+        446
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1251
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1138
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 3,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        446,
+        1720,
+        463
+      ],
+      "expected": "AI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            1252
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            1316
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 3,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        446,
+        2030,
+        463
+      ],
+      "expected": "HHW VALVE POSITION (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            1253,
+            1254,
+            1255,
+            1256
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            1266,
+            1267,
+            1268,
+            1269
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 3,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        446,
+        2090,
+        463
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1257
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1187
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 3,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        446,
+        2145,
+        463
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1258
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1139
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 4,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        463,
+        1720,
+        480
+      ],
+      "expected": "AI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI04",
+          "word_ids": [
+            1259
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI04",
+          "word_ids": [
+            1317
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 4,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        463,
+        2030,
+        480
+      ],
+      "expected": "HEATING COIL LAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HEATING COIL LAT",
+          "word_ids": [
+            1260,
+            1261,
+            1262
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HEATING COIL LAT",
+          "word_ids": [
+            1270,
+            1271,
+            1272
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 4,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        463,
+        2090,
+        480
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1263
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1188
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 4,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        463,
+        2145,
+        480
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1264
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1140
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 5,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        480,
+        1720,
+        497
+      ],
+      "expected": "AI05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI05",
+          "word_ids": [
+            1265
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI05",
+          "word_ids": [
+            1318
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 5,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        480,
+        2030,
+        497
+      ],
+      "expected": "COOLING COIL LAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COOLING COIL LAT",
+          "word_ids": [
+            1266,
+            1267,
+            1268
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COOLING COIL LAT",
+          "word_ids": [
+            1273,
+            1274,
+            1275
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 5,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        480,
+        2090,
+        497
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1269
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1189
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 5,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        480,
+        2145,
+        497
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1270
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1141
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 6,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        497,
+        1720,
+        514
+      ],
+      "expected": "AI06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI06",
+          "word_ids": [
+            1271
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI06",
+          "word_ids": [
+            1319
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 6,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        497,
+        2030,
+        514
+      ],
+      "expected": "TOA TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TOA TEMPERATURE",
+          "word_ids": [
+            1272,
+            1273
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TOA TEMPERATURE",
+          "word_ids": [
+            1276,
+            1277
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 6,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        497,
+        2090,
+        514
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1274
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1190
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 6,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        497,
+        2145,
+        514
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1275
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1142
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 7,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        514,
+        1720,
+        531
+      ],
+      "expected": "AI07",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI07",
+          "word_ids": [
+            1276
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI07",
+          "word_ids": [
+            1320
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 7,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        514,
+        2030,
+        531
+      ],
+      "expected": "TOA HUMIDITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TOA HUMIDITY",
+          "word_ids": [
+            1277,
+            1278
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TOA HUMIDITY",
+          "word_ids": [
+            1278,
+            1279
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 7,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        514,
+        2090,
+        531
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1279
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1191
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 7,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        514,
+        2145,
+        531
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1280
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1143
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 8,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        531,
+        1720,
+        548
+      ],
+      "expected": "AI08",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI08",
+          "word_ids": [
+            1281
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI08",
+          "word_ids": [
+            1321
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 8,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        531,
+        2030,
+        548
+      ],
+      "expected": "TOA AIRFLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TOA AIRFLOW",
+          "word_ids": [
+            1282,
+            1283
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TOA AIRFLOW",
+          "word_ids": [
+            1280,
+            1281
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 8,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        531,
+        2090,
+        548
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1284
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1192
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 8,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        531,
+        2145,
+        548
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1285
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1144
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 9,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        548,
+        1720,
+        565
+      ],
+      "expected": "AI09",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI09",
+          "word_ids": [
+            1286
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI09",
+          "word_ids": [
+            1322
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 9,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        548,
+        2030,
+        565
+      ],
+      "expected": "CHW VALVE POSITION (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            1287,
+            1288,
+            1289,
+            1290
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            1282,
+            1283,
+            1284,
+            1285
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 9,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        548,
+        2090,
+        565
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1291
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1193
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 9,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        548,
+        2145,
+        565
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1292
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1145
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 10,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        565,
+        1720,
+        582
+      ],
+      "expected": "AI10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI10",
+          "word_ids": [
+            1293
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI10",
+          "word_ids": [
+            1323
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 10,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        565,
+        2030,
+        582
+      ],
+      "expected": "FAN SPEED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN SPEED (FEEDBACK)",
+          "word_ids": [
+            1294,
+            1295,
+            1296
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN SPEED (FEEDBACK)",
+          "word_ids": [
+            1286,
+            1287,
+            1288
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 10,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        565,
+        2090,
+        582
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1297
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1194
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 10,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        565,
+        2145,
+        582
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1298
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1146
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 11,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        582,
+        1720,
+        599
+      ],
+      "expected": "AI11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI11",
+          "word_ids": [
+            1299
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI11",
+          "word_ids": [
+            1324
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 11,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        582,
+        2030,
+        599
+      ],
+      "expected": "TOA FAN DIFFERENTIAL PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TOA FAN DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            1300,
+            1301,
+            1302,
+            1303
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TOA FAN DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            1289,
+            1290,
+            1291,
+            1292
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 11,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        582,
+        2090,
+        599
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1304
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1195
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 11,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        582,
+        2145,
+        599
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1305
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1147
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 12,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        599,
+        1720,
+        616
+      ],
+      "expected": "AI12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI12",
+          "word_ids": [
+            1306
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI12",
+          "word_ids": [
+            1325
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 12,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        599,
+        2030,
+        616
+      ],
+      "expected": "REHEAT HHW VALVE POSITION (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "REHEAT HHW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            1307,
+            1308,
+            1309,
+            1310,
+            1311
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "REHEAT HHW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            1293,
+            1294,
+            1295,
+            1296,
+            1297
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 12,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        599,
+        2090,
+        616
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1312
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1196
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 12,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        599,
+        2145,
+        616
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1313
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1148
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 13,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        616,
+        1720,
+        635
+      ],
+      "expected": "AI13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI13",
+          "word_ids": [
+            1314
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI13",
+          "word_ids": [
+            1326
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 13,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        616,
+        2030,
+        635
+      ],
+      "expected": "DOAH DISCHARGE TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH DISCHARGE TEMPERATURE",
+          "word_ids": [
+            1315,
+            1316,
+            1317
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH DISCHARGE TEMPERATURE",
+          "word_ids": [
+            1298,
+            1299,
+            1300
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 13,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        616,
+        2090,
+        635
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1318
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1197
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "row": 13,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        616,
+        2145,
+        635
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1319
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1149
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "header": "POINTS LIST DOAH TI",
+      "page": 64,
+      "bbox": [
+        1780,
+        345,
+        2010,
+        380
+      ],
+      "engine": "mupdf",
+      "actual": "POINTS LIST DOAH-TI",
+      "pass": true
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "header": "POINTS LIST DOAH TI",
+      "page": 64,
+      "bbox": [
+        1780,
+        345,
+        2010,
+        380
+      ],
+      "engine": "poppler",
+      "actual": "POINTS LIST DOAH-TI",
+      "pass": true
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 64,
+      "bbox": [
+        1650,
+        370,
+        2145,
+        398
+      ],
+      "engine": "mupdf",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 64,
+      "bbox": [
+        1650,
+        370,
+        2145,
+        398
+      ],
+      "engine": "poppler",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "header": "ANALOG INPUT",
+      "page": 64,
+      "bbox": [
+        1640,
+        391,
+        1740,
+        409
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-DOAH-AI",
+      "header": "ANALOG INPUT",
+      "page": 64,
+      "bbox": [
+        1640,
+        391,
+        1740,
+        409
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "row": 1,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        668,
+        1720,
+        687
+      ],
+      "expected": "AO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            1322
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            694
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "row": 1,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        668,
+        2030,
+        687
+      ],
+      "expected": "HHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL",
+          "word_ids": [
+            1323,
+            1324,
+            1325
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL",
+          "word_ids": [
+            698,
+            699,
+            700
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "row": 1,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        668,
+        2090,
+        687
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1326
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            711
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "row": 1,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        668,
+        2145,
+        687
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1327
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            715
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "row": 2,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        687,
+        1720,
+        704
+      ],
+      "expected": "AO02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            1328
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            695
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "row": 2,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        687,
+        2030,
+        704
+      ],
+      "expected": "CHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL",
+          "word_ids": [
+            1329,
+            1330,
+            1331
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL",
+          "word_ids": [
+            701,
+            702,
+            703
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "row": 2,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        687,
+        2090,
+        704
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1332
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            712
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "row": 2,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        687,
+        2145,
+        704
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1333
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            716
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "row": 3,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        704,
+        1720,
+        722
+      ],
+      "expected": "AO03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO03",
+          "word_ids": [
+            1334
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO03",
+          "word_ids": [
+            696
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "row": 3,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        704,
+        2030,
+        722
+      ],
+      "expected": "FAN SPEED CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN SPEED CONTROL",
+          "word_ids": [
+            1335,
+            1336,
+            1337
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN SPEED CONTROL",
+          "word_ids": [
+            704,
+            705,
+            706
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "row": 3,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        704,
+        2090,
+        722
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1338
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            713
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "row": 3,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        704,
+        2145,
+        722
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1339
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            717
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "row": 4,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        722,
+        1720,
+        739
+      ],
+      "expected": "AO04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO04",
+          "word_ids": [
+            1340
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO04",
+          "word_ids": [
+            697
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "row": 4,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        722,
+        2030,
+        739
+      ],
+      "expected": "REHEAT HHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "REHEAT HHW VALVE CONTROL",
+          "word_ids": [
+            1341,
+            1342,
+            1343,
+            1344
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "REHEAT HHW VALVE CONTROL",
+          "word_ids": [
+            707,
+            708,
+            709,
+            710
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "row": 4,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        722,
+        2090,
+        739
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1345
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            714
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "row": 4,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        722,
+        2145,
+        739
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1346
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            718
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 64,
+      "bbox": [
+        1640,
+        642,
+        1740,
+        668
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-DOAH-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 64,
+      "bbox": [
+        1640,
+        642,
+        1740,
+        668
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 1,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        771,
+        1720,
+        790
+      ],
+      "expected": "BI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            1349
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            733
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 1,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        771,
+        2030,
+        790
+      ],
+      "expected": "MERV 8 UOA FILTER STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MERV 8 UOA FILTER STATUS",
+          "word_ids": [
+            1350,
+            1351,
+            1352,
+            1353,
+            1354
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MERV 8 UOA FILTER STATUS",
+          "word_ids": [
+            746,
+            747,
+            748,
+            749,
+            750
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 1,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        771,
+        2090,
+        790
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1355
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            803
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 1,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        771,
+        2145,
+        790
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1356
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            816
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 2,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        790,
+        1720,
+        808
+      ],
+      "expected": "BI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            1357
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            734
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 2,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        790,
+        2030,
+        808
+      ],
+      "expected": "MERV 13 UOA FILTER STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MERV 13 UOA FILTER STATUS",
+          "word_ids": [
+            1358,
+            1359,
+            1360,
+            1361,
+            1362
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MERV 13 UOA FILTER STATUS",
+          "word_ids": [
+            751,
+            752,
+            753,
+            754,
+            755
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 2,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        790,
+        2090,
+        808
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1363
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            804
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 2,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        790,
+        2145,
+        808
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1364
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            817
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 3,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        808,
+        1720,
+        825
+      ],
+      "expected": "BI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            1365
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            735
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 3,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        808,
+        2030,
+        825
+      ],
+      "expected": "FREEZESTAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FREEZESTAT",
+          "word_ids": [
+            1366
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FREEZESTAT",
+          "word_ids": [
+            756
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 3,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        808,
+        2090,
+        825
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1367
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            805
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 3,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        808,
+        2145,
+        825
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1368
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            818
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 4,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        825,
+        1720,
+        842
+      ],
+      "expected": "BI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            1369
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            736
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 4,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        825,
+        2030,
+        842
+      ],
+      "expected": "UOA DAMPER POSITION CLOSED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UOA DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            1370,
+            1371,
+            1372,
+            1373,
+            1374
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UOA DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            757,
+            758,
+            759,
+            760,
+            761
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 4,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        825,
+        2090,
+        842
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1375
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            806
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 4,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        825,
+        2145,
+        842
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1376
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            819
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 5,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        842,
+        1720,
+        859
+      ],
+      "expected": "BI05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI05",
+          "word_ids": [
+            1377
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI05",
+          "word_ids": [
+            737
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 5,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        842,
+        2030,
+        859
+      ],
+      "expected": "UOA DAMPER POSITION OPEN (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UOA DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            1378,
+            1379,
+            1380,
+            1381,
+            1382
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UOA DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            762,
+            763,
+            764,
+            765,
+            766
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 5,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        842,
+        2090,
+        859
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1383
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            807
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 5,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        842,
+        2145,
+        859
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1384
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            820
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 6,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        859,
+        1720,
+        876
+      ],
+      "expected": "BI06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI06",
+          "word_ids": [
+            1385
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI06",
+          "word_ids": [
+            738
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 6,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        859,
+        2030,
+        876
+      ],
+      "expected": "HIGH LIMIT STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH LIMIT STATIC PRESSURE",
+          "word_ids": [
+            1386,
+            1387,
+            1388,
+            1389
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH LIMIT STATIC PRESSURE",
+          "word_ids": [
+            767,
+            768,
+            769,
+            770
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 6,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        859,
+        2090,
+        876
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1390
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            808
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 6,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        859,
+        2145,
+        876
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1391
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            821
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 7,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        876,
+        1720,
+        893
+      ],
+      "expected": "BI07",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI07",
+          "word_ids": [
+            1392
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI07",
+          "word_ids": [
+            739
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 7,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        876,
+        2030,
+        893
+      ],
+      "expected": "TREATED OA DAMPER POSITION CLOSED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TREATED OA DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            1393,
+            1394,
+            1395,
+            1396,
+            1397,
+            1398
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TREATED OA DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            771,
+            772,
+            773,
+            774,
+            775,
+            776
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 7,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        876,
+        2090,
+        893
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1399
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            809
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 7,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        876,
+        2145,
+        893
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1400
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            822
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 8,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        893,
+        1720,
+        910
+      ],
+      "expected": "BI08",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI08",
+          "word_ids": [
+            1401
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI08",
+          "word_ids": [
+            740
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 8,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        893,
+        2030,
+        910
+      ],
+      "expected": "TREATED OA DAMPER POSITION OPEN (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TREATED OA DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            1402,
+            1403,
+            1404,
+            1405,
+            1406,
+            1407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TREATED OA DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            777,
+            778,
+            779,
+            780,
+            781,
+            782
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 8,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        893,
+        2090,
+        910
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1408
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            810
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 8,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        893,
+        2145,
+        910
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1409
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            823
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 9,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        910,
+        1720,
+        928
+      ],
+      "expected": "BI09",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI09",
+          "word_ids": [
+            1410
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI09",
+          "word_ids": [
+            741
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 9,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        910,
+        2030,
+        928
+      ],
+      "expected": "HHWP-DOAH-T1 CIRCULATOR PUMP STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHWP-DOAH-T1 CIRCULATOR PUMP STATUS",
+          "word_ids": [
+            1411,
+            1412,
+            1413,
+            1414
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHWP-DOAH-T1 CIRCULATOR PUMP STATUS",
+          "word_ids": [
+            783,
+            784,
+            785,
+            786
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 9,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        910,
+        2090,
+        928
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1415
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            811
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 9,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        910,
+        2145,
+        928
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1416
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            824
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 10,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        928,
+        1720,
+        945
+      ],
+      "expected": "BI10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI10",
+          "word_ids": [
+            1417
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI10",
+          "word_ids": [
+            742
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 10,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        928,
+        2030,
+        945
+      ],
+      "expected": "FAN VFD STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN VFD STATUS",
+          "word_ids": [
+            1418,
+            1419,
+            1420
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN VFD STATUS",
+          "word_ids": [
+            787,
+            788,
+            789
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 10,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        928,
+        2090,
+        945
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1421
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            812
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 10,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        928,
+        2145,
+        945
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1422
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            825
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 11,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        945,
+        1720,
+        962
+      ],
+      "expected": "BI11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI11",
+          "word_ids": [
+            1423
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI11",
+          "word_ids": [
+            743
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 11,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        945,
+        2030,
+        962
+      ],
+      "expected": "FAN VFD ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN VFD ALARM",
+          "word_ids": [
+            1424,
+            1425,
+            1426
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN VFD ALARM",
+          "word_ids": [
+            790,
+            791,
+            792
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 11,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        945,
+        2090,
+        962
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1427
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            813
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 11,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        945,
+        2145,
+        962
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1428
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            826
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 12,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        962,
+        1720,
+        979
+      ],
+      "expected": "BI12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI12",
+          "word_ids": [
+            1429
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI12",
+          "word_ids": [
+            744
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 12,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        962,
+        2030,
+        979
+      ],
+      "expected": "ESS (ATFP EMERGENCY SHUTDOWN) *GLOBAL POINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ESS (ATFP EMERGENCY SHUTDOWN) *GLOBAL POINT",
+          "word_ids": [
+            1430,
+            1431,
+            1432,
+            1433,
+            1434,
+            1435
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ESS (ATFP EMERGENCY SHUTDOWN) *GLOBAL POINT",
+          "word_ids": [
+            793,
+            794,
+            795,
+            796,
+            797,
+            798
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 12,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        962,
+        2090,
+        979
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1436
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            814
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 12,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        962,
+        2145,
+        979
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1437
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            827
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 13,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        979,
+        1720,
+        997
+      ],
+      "expected": "BI13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI13",
+          "word_ids": [
+            1438
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI13",
+          "word_ids": [
+            745
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 13,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        979,
+        2030,
+        997
+      ],
+      "expected": "ATCT DOAH DDC RESET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ATCT DOAH DDC RESET",
+          "word_ids": [
+            1439,
+            1440,
+            1441,
+            1442
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ATCT DOAH DDC RESET",
+          "word_ids": [
+            799,
+            800,
+            801,
+            802
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 13,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        979,
+        2090,
+        997
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1443
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            815
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "row": 13,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        979,
+        2145,
+        997
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1444
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            828
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "header": "BINARY INPUT",
+      "page": 64,
+      "bbox": [
+        1640,
+        745,
+        1740,
+        771
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-DOAH-BI",
+      "header": "BINARY INPUT",
+      "page": 64,
+      "bbox": [
+        1640,
+        745,
+        1740,
+        771
+      ],
+      "engine": "poppler",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "row": 1,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        1030,
+        1720,
+        1049
+      ],
+      "expected": "BO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            1447
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            831
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "row": 1,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        1030,
+        2030,
+        1049
+      ],
+      "expected": "UOA DAMPER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UOA DAMPER CONTROL",
+          "word_ids": [
+            1448,
+            1449,
+            1450
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UOA DAMPER CONTROL",
+          "word_ids": [
+            835,
+            836,
+            837
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "row": 1,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        1030,
+        2090,
+        1049
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1451
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            848
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "row": 1,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        1030,
+        2145,
+        1049
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1452
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            852
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "row": 2,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        1049,
+        1720,
+        1066
+      ],
+      "expected": "BO02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO02",
+          "word_ids": [
+            1453
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO02",
+          "word_ids": [
+            832
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "row": 2,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        1049,
+        2030,
+        1066
+      ],
+      "expected": "TREATED OA DAMPER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TREATED OA DAMPER CONTROL",
+          "word_ids": [
+            1454,
+            1455,
+            1456,
+            1457
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TREATED OA DAMPER CONTROL",
+          "word_ids": [
+            838,
+            839,
+            840,
+            841
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "row": 2,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        1049,
+        2090,
+        1066
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1458
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            849
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "row": 2,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        1049,
+        2145,
+        1066
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1459
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            853
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "row": 3,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        1066,
+        1720,
+        1083
+      ],
+      "expected": "BO03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO03",
+          "word_ids": [
+            1460
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO03",
+          "word_ids": [
+            833
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "row": 3,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        1066,
+        2030,
+        1083
+      ],
+      "expected": "HHWP-DOAH-T1 CIRCULATOR PUMP ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHWP-DOAH-T1 CIRCULATOR PUMP ON/OFF",
+          "word_ids": [
+            1461,
+            1462,
+            1463,
+            1464
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHWP-DOAH-T1 CIRCULATOR PUMP ON/OFF",
+          "word_ids": [
+            842,
+            843,
+            844,
+            845
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "row": 3,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        1066,
+        2090,
+        1083
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1465
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            850
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "row": 3,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        1066,
+        2145,
+        1083
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1466
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            854
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "row": 4,
+      "column": "mark",
+      "page": 64,
+      "bbox": [
+        1650,
+        1083,
+        1720,
+        1101
+      ],
+      "expected": "BO04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO04",
+          "word_ids": [
+            1467
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO04",
+          "word_ids": [
+            834
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "row": 4,
+      "column": "description",
+      "page": 64,
+      "bbox": [
+        1720,
+        1083,
+        2030,
+        1101
+      ],
+      "expected": "FAN START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN START/STOP",
+          "word_ids": [
+            1468,
+            1469
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN START/STOP",
+          "word_ids": [
+            846,
+            847
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "row": 4,
+      "column": "alarm",
+      "page": 64,
+      "bbox": [
+        2030,
+        1083,
+        2090,
+        1101
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1470
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            851
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "row": 4,
+      "column": "trend",
+      "page": 64,
+      "bbox": [
+        2090,
+        1083,
+        2145,
+        1101
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1471
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            855
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "header": "BINARY OUTPUT",
+      "page": 64,
+      "bbox": [
+        1640,
+        1004,
+        1740,
+        1030
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-DOAH-BO",
+      "header": "BINARY OUTPUT",
+      "page": 64,
+      "bbox": [
+        1640,
+        1004,
+        1740,
+        1030
+      ],
+      "engine": "poppler",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "atct-doah-ai-count",
+      "actual": 13,
+      "expected": 13,
+      "pass": true
+    },
+    {
+      "id": "atct-doah-ao-count",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    },
+    {
+      "id": "atct-doah-bi-count",
+      "actual": 13,
+      "expected": 13,
+      "pass": true
+    },
+    {
+      "id": "atct-doah-bo-count",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

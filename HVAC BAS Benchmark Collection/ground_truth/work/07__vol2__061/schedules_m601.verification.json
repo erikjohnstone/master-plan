@@ -1,0 +1,2821 @@
+{
+  "document_id": "07__vol2__061",
+  "source_sha256": "c55da475bac3a1aeaae723b12adf35896970fe249ca3556b4d430a990c0e41a0",
+  "annotation_sha256": "cb4ab4aac8f1d96456a0229ca070fc38349f6aff8e4f863f3855d212967ad553",
+  "tables": 13,
+  "rows": 36,
+  "cell_assertions": 36,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M601-CUSTOM-OUTDOOR-AHU",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        200,
+        313,
+        2750,
+        340
+      ],
+      "expected": "AHU-A HAAKON 66,100 60,000 18,000 4 2x2 DIRECT 460/3 15 1,750 1 1.75 5.3 1750 42,000 84X102 1,258 0.25 35,000 60X120 738 0.1 25,000 42X120 763 0.1 PLEATED 24x24x2 (15) MERV-8 PLEATED 24x24x2 (30) MERV-8 2 60 0.4 30% PG 6 2 7 494 156.1 15.9 0.14 285.8 46.0 41.6/ 51.6 55.6/ 793.8 53.8 41.6/ 59.3 80.0/ 66.7 66.7 67.0 80.9/ 66.5 79.9/ 78.3 77.8/ 1,092.6 979.3 67.0 80.9/ 61.4 66.1/ 47.8 33.0/ WATER 6 1 10 499 1,225.7 60.4 41.6/ 100.0 95.3 120.0/ 9.8 0.1 WATER 6 8 10 499 2904.6 1967.6 362 67.0 81.0/ 50.5 51.0/ 58.0 42.0/ 17.0 0.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-A HAAKON 66,100 60,000 18,000 4 2x2 DIRECT 460/3 15 1,750 1 1.75 5.3 1750 42,000 84X102 1,258 0.25 35,000 60X120 738 0.1 25,000 42X120 763 0.1 PLEATED 24x24x2 (15) MERV-8 PLEATED 24x24x2 (30) MERV-8 2 60 0.4 30% PG 6 2 7 494 156.1 15.9 0.14 285.8 46.0 41.6/ 51.6 55.6/ 793.8 53.8 41.6/ 59.3 80.0/ 66.7 66.7 67.0 80.9/ 66.5 79.9/ 78.3 77.8/ 1,092.6 979.3 67.0 80.9/ 61.4 66.1/ 47.8 33.0/ WATER 6 1 10 499 1,225.7 60.4 41.6/ 100.0 95.3 120.0/ 9.8 0.1 WATER 6 8 10 499 2904.6 1967.6 362 67.0 81.0/ 50.5 51.0/ 58.0 42.0/ 17.0 0.9",
+          "word_ids": [
+            384,
+            385,
+            386,
+            387,
+            388,
+            389,
+            390,
+            391,
+            392,
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            403,
+            404,
+            405,
+            406,
+            407,
+            408,
+            409,
+            410,
+            411,
+            413,
+            412,
+            414,
+            415,
+            417,
+            416,
+            418,
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            429,
+            430,
+            431,
+            433,
+            432,
+            435,
+            434,
+            436,
+            438,
+            437,
+            440,
+            439,
+            441,
+            442,
+            444,
+            443,
+            446,
+            445,
+            448,
+            447,
+            449,
+            450,
+            452,
+            451,
+            454,
+            453,
+            456,
+            455,
+            457,
+            458,
+            459,
+            460,
+            461,
+            462,
+            464,
+            463,
+            465,
+            467,
+            466,
+            468,
+            469,
+            470,
+            471,
+            472,
+            473,
+            474,
+            475,
+            476,
+            477,
+            479,
+            478,
+            481,
+            480,
+            483,
+            482,
+            484,
+            485
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-A HAAKON 66,100 60,000 18,000 4 2x2 DIRECT 460/3 15 1,750 1 1.75 5.3 1750 42,000 84X102 1,258 0.25 35,000 60X120 738 0.1 25,000 42X120 763 0.1 PLEATED 24x24x2 (15) MERV-8 PLEATED 24x24x2 (30) MERV-8 2 60 0.4 30% PG 6 2 7 494 156.1 15.9 0.14 285.8 46.0 41.6/ 51.6 55.6/ 793.8 53.8 41.6/ 59.3 80.0/ 66.7 66.7 67.0 80.9/ 66.5 79.9/ 78.3 77.8/ 1,092.6 979.3 67.0 80.9/ 61.4 66.1/ 47.8 33.0/ WATER 6 1 10 499 1,225.7 60.4 41.6/ 100.0 95.3 120.0/ 9.8 0.1 WATER 6 8 10 499 2904.6 1967.6 362 67.0 81.0/ 50.5 51.0/ 58.0 42.0/ 17.0 0.9",
+          "word_ids": [
+            596,
+            589,
+            590,
+            591,
+            592,
+            572,
+            565,
+            566,
+            567,
+            568,
+            569,
+            555,
+            545,
+            546,
+            547,
+            548,
+            549,
+            266,
+            267,
+            268,
+            269,
+            270,
+            271,
+            272,
+            273,
+            274,
+            275,
+            276,
+            250,
+            245,
+            246,
+            247,
+            251,
+            248,
+            249,
+            221,
+            219,
+            217,
+            211,
+            212,
+            208,
+            204,
+            200,
+            162,
+            163,
+            164,
+            165,
+            166,
+            173,
+            167,
+            174,
+            168,
+            169,
+            175,
+            170,
+            176,
+            171,
+            172,
+            143,
+            146,
+            144,
+            147,
+            145,
+            139,
+            138,
+            125,
+            126,
+            130,
+            127,
+            131,
+            128,
+            132,
+            129,
+            120,
+            115,
+            110,
+            106,
+            92,
+            93,
+            97,
+            94,
+            95,
+            98,
+            96,
+            85,
+            86,
+            87,
+            88,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            68,
+            67,
+            48,
+            47,
+            50,
+            49,
+            327,
+            328
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CUSTOM-OUTDOOR-AHU",
+      "header": "CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE",
+      "page": 58,
+      "bbox": [
+        1200,
+        70,
+        2100,
+        105
+      ],
+      "engine": "mupdf",
+      "actual": "CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-CUSTOM-OUTDOOR-AHU",
+      "header": "CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE",
+      "page": 58,
+      "bbox": [
+        1200,
+        70,
+        2100,
+        105
+      ],
+      "engine": "poppler",
+      "actual": "CUSTOM OUTDOOR AIR HANDLING UNIT SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-CUSTOM-AHU-CONT",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        200,
+        561,
+        1000,
+        578
+      ],
+      "expected": "AHU-A 6 3X3 DIRECT 480/3 20 1,750 2.5 6.2 14.5 1,750 PLEATED (6) 12x24x12 13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-A 6 3X3 DIRECT 480/3 20 1,750 2.5 6.2 14.5 1,750 PLEATED (6) 12x24x12 13",
+          "word_ids": [
+            1925,
+            1926,
+            1927,
+            1928,
+            1929,
+            1930,
+            1931,
+            1932,
+            1933,
+            1934,
+            1935,
+            1936,
+            1937,
+            1938,
+            1941
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-A 6 3X3 DIRECT 480/3 20 1,750 2.5 6.2 14.5 1,750 PLEATED (6) 12x24x12 13",
+          "word_ids": [
+            380,
+            323,
+            42,
+            318,
+            319,
+            38,
+            31,
+            26,
+            14,
+            15,
+            345,
+            346,
+            347,
+            348,
+            351
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CUSTOM-AHU-CONT",
+      "header": "CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.)",
+      "page": 58,
+      "bbox": [
+        250,
+        355,
+        1000,
+        395
+      ],
+      "engine": "mupdf",
+      "actual": "REMARKS: CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.) 1. UNIT COLOR SHALL BE SELECTED BY ARCHITECT. 2. ALL POWER AND CONTROL CONDUIT WITHIN",
+      "pass": true
+    },
+    {
+      "table": "M601-CUSTOM-AHU-CONT",
+      "header": "CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.)",
+      "page": 58,
+      "bbox": [
+        250,
+        355,
+        1000,
+        395
+      ],
+      "engine": "poppler",
+      "actual": "REMARKS: CUSTOM AIR HANDLING UNIT SCHEDULE (CONT.) 1. UNIT COLOR SHALL BE SELECTED BY ARCHITECT. 2. ALL POWER AND CONTROL CONDUIT WITHIN",
+      "pass": true
+    },
+    {
+      "table": "M601-BID-ALT-1-CUSTOM-OUTDOOR-HEAT-RECOVERY",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1000,
+        728,
+        2750,
+        745
+      ],
+      "expected": "HRU-A HAAKON 14,350 18,000 30% PG 6 6 12 152.4 20.6 0.12 284.7 68.0/53.5 150.0 51.6/55.6 67.5 67.5 75.0/78.5 150.0 78.7/77.8 633.5 68.0/35.8 150.0 33.0/41.8 893.4 75.0/120.9 150.0 122.0/109.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HRU-A HAAKON 14,350 18,000 30% PG 6 6 12 152.4 20.6 0.12 284.7 68.0/53.5 150.0 51.6/55.6 67.5 67.5 75.0/78.5 150.0 78.7/77.8 633.5 68.0/35.8 150.0 33.0/41.8 893.4 75.0/120.9 150.0 122.0/109.6",
+          "word_ids": [
+            903,
+            904,
+            905,
+            906,
+            907,
+            908,
+            909,
+            910,
+            911,
+            912,
+            913,
+            914,
+            915,
+            916,
+            917,
+            918,
+            919,
+            920,
+            921,
+            922,
+            923,
+            924,
+            925,
+            926,
+            927,
+            928,
+            929,
+            930,
+            931
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HRU-A HAAKON 14,350 18,000 30% PG 6 6 12 152.4 20.6 0.12 284.7 68.0/53.5 150.0 51.6/55.6 67.5 67.5 75.0/78.5 150.0 78.7/77.8 633.5 68.0/35.8 150.0 33.0/41.8 893.4 75.0/120.9 150.0 122.0/109.6",
+          "word_ids": [
+            621,
+            622,
+            625,
+            626,
+            713,
+            714,
+            715,
+            716,
+            717,
+            718,
+            719,
+            720,
+            721,
+            722,
+            723,
+            724,
+            725,
+            726,
+            727,
+            728,
+            729,
+            730,
+            731,
+            732,
+            733,
+            734,
+            735,
+            736,
+            737
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BID-ALT-1-CUSTOM-OUTDOOR-HEAT-RECOVERY",
+      "header": "BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",
+      "page": 58,
+      "bbox": [
+        1600,
+        640,
+        2600,
+        680
+      ],
+      "engine": "mupdf",
+      "actual": "BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-BID-ALT-1-CUSTOM-OUTDOOR-HEAT-RECOVERY",
+      "header": "BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",
+      "page": 58,
+      "bbox": [
+        1600,
+        640,
+        2600,
+        680
+      ],
+      "engine": "poppler",
+      "actual": "BID ALTERNATE #1 CUSTOM OUTDOOR, HEAT RECOVERY UNIT SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-HUMIDIFIER",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1100,
+        928,
+        2750,
+        941
+      ],
+      "expected": "HUM-A DRISTEEM STS-400 ULTRASORB MP STEAM TO STEAM 950 DI 464.2 495.0 464.2 12.0 140x126 42,000 18,000 -20.0/80.0 68.0/40.0 60.0/38.0 60.0/52.0 489.8 6 120/1 3 20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUM-A DRISTEEM STS-400 ULTRASORB MP STEAM TO STEAM 950 DI 464.2 495.0 464.2 12.0 140x126 42,000 18,000 -20.0/80.0 68.0/40.0 60.0/38.0 60.0/52.0 489.8 6 120/1 3 20",
+          "word_ids": [
+            1269,
+            1270,
+            1271,
+            1272,
+            1273,
+            1274,
+            1275,
+            1276,
+            1277,
+            1278,
+            1279,
+            1280,
+            1281,
+            1282,
+            1283,
+            1284,
+            1285,
+            1286,
+            1287,
+            1288,
+            1289,
+            1290,
+            1291,
+            1292,
+            1293,
+            1294
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUM-A DRISTEEM STS-400 ULTRASORB MP STEAM TO STEAM 950 DI 464.2 495.0 464.2 12.0 140x126 42,000 18,000 -20.0/80.0 68.0/40.0 60.0/38.0 60.0/52.0 489.8 6 120/1 3 20",
+          "word_ids": [
+            838,
+            839,
+            840,
+            841,
+            842,
+            843,
+            844,
+            845,
+            846,
+            856,
+            857,
+            858,
+            868,
+            869,
+            878,
+            876,
+            877,
+            892,
+            893,
+            900,
+            907,
+            908,
+            915,
+            912,
+            913,
+            914
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HUMIDIFIER",
+      "header": "HUMIDIFIER SCHEDULE",
+      "page": 58,
+      "bbox": [
+        1750,
+        840,
+        2150,
+        880
+      ],
+      "engine": "mupdf",
+      "actual": "HUMIDIFIER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-HUMIDIFIER",
+      "header": "HUMIDIFIER SCHEDULE",
+      "page": 58,
+      "bbox": [
+        1750,
+        840,
+        2150,
+        880
+      ],
+      "engine": "poppler",
+      "actual": "HUMIDIFIER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-BID-ALT-1-WATER-TO-WATER-HEAT-PUMP-CHILLER",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1300,
+        1087,
+        2750,
+        1100
+      ],
+      "expected": "WWHP-A MULTISTACK (3)MSH020 5,600 56x32x67 6 R-454B 54.0 30% PG 151.5 16.2 33.0/42.0 41.8/33.0 30% PG 151.5 9.0 109.0/122.0 69.3/80.0 480/3 128 150 22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WWHP-A MULTISTACK (3)MSH020 5,600 56x32x67 6 R-454B 54.0 30% PG 151.5 16.2 33.0/42.0 41.8/33.0 30% PG 151.5 9.0 109.0/122.0 69.3/80.0 480/3 128 150 22",
+          "word_ids": [
+            541,
+            542,
+            543,
+            544,
+            545,
+            546,
+            547,
+            548,
+            549,
+            550,
+            551,
+            552,
+            553,
+            554,
+            555,
+            556,
+            557,
+            558,
+            559,
+            560,
+            561,
+            562,
+            563,
+            564
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WWHP-A MULTISTACK (3)MSH020 5,600 56x32x67 6 R-454B 54.0 30% PG 151.5 16.2 33.0/42.0 41.8/33.0 30% PG 151.5 9.0 109.0/122.0 69.3/80.0 480/3 128 150 22",
+          "word_ids": [
+            1985,
+            953,
+            954,
+            955,
+            956,
+            957,
+            958,
+            959,
+            974,
+            975,
+            976,
+            1980,
+            1921,
+            1906,
+            1826,
+            1827,
+            1805,
+            1222,
+            1223,
+            1224,
+            1225,
+            1227,
+            1228,
+            1229
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BID-ALT-1-WATER-TO-WATER-HEAT-PUMP-CHILLER",
+      "header": "BID ALTERNATE #1 WATER-TO-WATER HEAT PUMP/CHILLER SCHEDULE",
+      "page": 58,
+      "bbox": [
+        1700,
+        995,
+        2550,
+        1040
+      ],
+      "engine": "mupdf",
+      "actual": "BID ALTERNATE #1 WATER-TO-WATER HEAT PUMP/CHILLER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-BID-ALT-1-WATER-TO-WATER-HEAT-PUMP-CHILLER",
+      "header": "BID ALTERNATE #1 WATER-TO-WATER HEAT PUMP/CHILLER SCHEDULE",
+      "page": 58,
+      "bbox": [
+        1700,
+        995,
+        2550,
+        1040
+      ],
+      "engine": "poppler",
+      "actual": "BID ALTERNATE #1 WATER-TO-WATER HEAT PUMP/CHILLER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-SHELL-AND-TUBE-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        300,
+        1243,
+        1450,
+        1258
+      ],
+      "expected": "HX-A-1 TACO E10208-S 415 2 10 4 STEAM 3256.8 12 WATER 3093.0 250 95/120 1.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HX-A-1 TACO E10208-S 415 2 10 4 STEAM 3256.8 12 WATER 3093.0 250 95/120 1.6",
+          "word_ids": [
+            968,
+            969,
+            970,
+            971,
+            972,
+            973,
+            974,
+            975,
+            976,
+            977,
+            978,
+            979,
+            980,
+            981,
+            982
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HX-A-1 TACO E10208-S 415 2 10 4 STEAM 3256.8 12 WATER 3093.0 250 95/120 1.6",
+          "word_ids": [
+            979,
+            981,
+            986,
+            988,
+            991,
+            997,
+            999,
+            1002,
+            1004,
+            1008,
+            1013,
+            1015,
+            1024,
+            1026,
+            1051
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SHELL-AND-TUBE-HEAT-EXCHANGER",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        300,
+        1258,
+        1450,
+        1272
+      ],
+      "expected": "HX-A-2 TACO E10208-S 415 2 10 4 STEAM 3256.8 12 WATER 3093.0 250 95/120 1.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HX-A-2 TACO E10208-S 415 2 10 4 STEAM 3256.8 12 WATER 3093.0 250 95/120 1.6",
+          "word_ids": [
+            983,
+            984,
+            985,
+            986,
+            987,
+            988,
+            989,
+            990,
+            991,
+            992,
+            993,
+            994,
+            995,
+            996,
+            997
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HX-A-2 TACO E10208-S 415 2 10 4 STEAM 3256.8 12 WATER 3093.0 250 95/120 1.6",
+          "word_ids": [
+            980,
+            982,
+            987,
+            989,
+            992,
+            998,
+            1000,
+            1003,
+            1005,
+            1009,
+            1014,
+            1016,
+            1025,
+            1027,
+            1052
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SHELL-AND-TUBE-HEAT-EXCHANGER",
+      "header": "SHELL AND TUBE HEAT EXCHANGER SCHEDULE",
+      "page": 58,
+      "bbox": [
+        600,
+        1170,
+        1300,
+        1205
+      ],
+      "engine": "mupdf",
+      "actual": "SHELL AND TUBE HEAT EXCHANGER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-SHELL-AND-TUBE-HEAT-EXCHANGER",
+      "header": "SHELL AND TUBE HEAT EXCHANGER SCHEDULE",
+      "page": 58,
+      "bbox": [
+        600,
+        1170,
+        1300,
+        1205
+      ],
+      "engine": "poppler",
+      "actual": "SHELL AND TUBE HEAT EXCHANGER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-HYDRONIC-PUMPS",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1460,
+        1255,
+        2750,
+        1268
+      ],
+      "expected": "GWP-A-1 TACO KS3011D HEAT RECOVERY - CONDENSER 3 INLINE 30% PG @ 30°F 9.5 150 90 68 7.5 1,760 5.2 480/3 11 20 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GWP-A-1 TACO KS3011D HEAT RECOVERY - CONDENSER 3 INLINE 30% PG @ 30°F 9.5 150 90 68 7.5 1,760 5.2 480/3 11 20 1,2",
+          "word_ids": [
+            1040,
+            1041,
+            1042,
+            1043,
+            1044,
+            1045,
+            1046,
+            1047,
+            1048,
+            1049,
+            1050,
+            1051,
+            1052,
+            1053,
+            1054,
+            1055,
+            1056,
+            1057,
+            1058,
+            1059,
+            1060,
+            1061,
+            1062,
+            1063
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GWP-A-1 TACO KS3011D HEAT RECOVERY - CONDENSER 3 INLINE 30% PG @ 30°F 9.5 150 90 68 7.5 1,760 5.2 480/3 11 20 1,2",
+          "word_ids": [
+            1053,
+            1094,
+            1104,
+            1111,
+            1112,
+            1113,
+            1114,
+            1139,
+            1146,
+            1153,
+            1154,
+            1155,
+            1156,
+            1178,
+            1231,
+            1238,
+            1338,
+            1289,
+            1296,
+            1303,
+            1310,
+            1317,
+            1324,
+            1331
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-PUMPS",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1460,
+        1268,
+        2750,
+        1281
+      ],
+      "expected": "GWP-A-2 TACO KS3011D HEAT RECOVERY - CONDENSER 3 INLINE 30% PG @ 30°F 9.5 150 90 68 7.5 1,760 5.2 480/3 11 20 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GWP-A-2 TACO KS3011D HEAT RECOVERY - CONDENSER 3 INLINE 30% PG @ 30°F 9.5 150 90 68 7.5 1,760 5.2 480/3 11 20 1,2",
+          "word_ids": [
+            1064,
+            1065,
+            1066,
+            1067,
+            1068,
+            1069,
+            1070,
+            1071,
+            1072,
+            1073,
+            1074,
+            1075,
+            1076,
+            1077,
+            1078,
+            1079,
+            1080,
+            1081,
+            1082,
+            1083,
+            1084,
+            1085,
+            1086,
+            1087
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GWP-A-2 TACO KS3011D HEAT RECOVERY - CONDENSER 3 INLINE 30% PG @ 30°F 9.5 150 90 68 7.5 1,760 5.2 480/3 11 20 1,2",
+          "word_ids": [
+            1054,
+            1095,
+            1105,
+            1115,
+            1116,
+            1117,
+            1118,
+            1140,
+            1147,
+            1157,
+            1158,
+            1159,
+            1160,
+            1179,
+            1232,
+            1239,
+            1339,
+            1290,
+            1297,
+            1304,
+            1311,
+            1318,
+            1325,
+            1332
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-PUMPS",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1460,
+        1281,
+        2750,
+        1294
+      ],
+      "expected": "GWP-B-1 TACO KV2009D HEAT RECOVERY - EVAPORATOR 2 INLINE 30% PG @ 30°F 9.0 150 70 71 5.0 1,760 3.9 480/3 7.6 20 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GWP-B-1 TACO KV2009D HEAT RECOVERY - EVAPORATOR 2 INLINE 30% PG @ 30°F 9.0 150 70 71 5.0 1,760 3.9 480/3 7.6 20 1,2",
+          "word_ids": [
+            1088,
+            1089,
+            1090,
+            1091,
+            1092,
+            1093,
+            1094,
+            1095,
+            1096,
+            1097,
+            1098,
+            1099,
+            1100,
+            1101,
+            1102,
+            1103,
+            1104,
+            1105,
+            1106,
+            1107,
+            1108,
+            1109,
+            1110,
+            1111
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GWP-B-1 TACO KV2009D HEAT RECOVERY - EVAPORATOR 2 INLINE 30% PG @ 30°F 9.0 150 70 71 5.0 1,760 3.9 480/3 7.6 20 1,2",
+          "word_ids": [
+            1055,
+            1096,
+            1106,
+            1119,
+            1120,
+            1121,
+            1122,
+            1141,
+            1148,
+            1161,
+            1162,
+            1163,
+            1164,
+            1180,
+            1233,
+            1240,
+            1340,
+            1291,
+            1298,
+            1305,
+            1312,
+            1319,
+            1326,
+            1333
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-PUMPS",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1460,
+        1294,
+        2750,
+        1307
+      ],
+      "expected": "GWP-B-2 TACO KV2009D HEAT RECOVERY - EVAPORATOR 2 INLINE 30% PG @ 30°F 9.0 150 70 71 5.0 1,760 3.9 480/3 7.6 20 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GWP-B-2 TACO KV2009D HEAT RECOVERY - EVAPORATOR 2 INLINE 30% PG @ 30°F 9.0 150 70 71 5.0 1,760 3.9 480/3 7.6 20 1,2",
+          "word_ids": [
+            1112,
+            1113,
+            1114,
+            1115,
+            1116,
+            1117,
+            1118,
+            1119,
+            1120,
+            1121,
+            1122,
+            1123,
+            1124,
+            1125,
+            1126,
+            1127,
+            1128,
+            1129,
+            1130,
+            1131,
+            1132,
+            1133,
+            1134,
+            1135
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GWP-B-2 TACO KV2009D HEAT RECOVERY - EVAPORATOR 2 INLINE 30% PG @ 30°F 9.0 150 70 71 5.0 1,760 3.9 480/3 7.6 20 1,2",
+          "word_ids": [
+            1056,
+            1097,
+            1107,
+            1123,
+            1124,
+            1125,
+            1126,
+            1142,
+            1149,
+            1165,
+            1166,
+            1167,
+            1168,
+            1181,
+            1234,
+            1241,
+            1341,
+            1292,
+            1299,
+            1306,
+            1313,
+            1320,
+            1327,
+            1334
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-PUMPS",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1460,
+        1307,
+        2750,
+        1320
+      ],
+      "expected": "HWP-A-1 TACO KV4007D HEATING HOT WATER 4 INLINE WATER @ 120°F 6.6 250 40 81 5.0 1,760 3.1 480/3 7.6 20 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP-A-1 TACO KV4007D HEATING HOT WATER 4 INLINE WATER @ 120°F 6.6 250 40 81 5.0 1,760 3.1 480/3 7.6 20 1",
+          "word_ids": [
+            1136,
+            1137,
+            1138,
+            1139,
+            1140,
+            1141,
+            1142,
+            1143,
+            1144,
+            1145,
+            1146,
+            1147,
+            1148,
+            1149,
+            1150,
+            1151,
+            1152,
+            1153,
+            1154,
+            1155,
+            1156,
+            1157
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP-A-1 TACO KV4007D HEATING HOT WATER 4 INLINE WATER @ 120°F 6.6 250 40 81 5.0 1,760 3.1 480/3 7.6 20 1",
+          "word_ids": [
+            1057,
+            1098,
+            1108,
+            1127,
+            1128,
+            1129,
+            1143,
+            1150,
+            1169,
+            1170,
+            1171,
+            1182,
+            1235,
+            1242,
+            1342,
+            1293,
+            1300,
+            1307,
+            1314,
+            1321,
+            1328,
+            1335
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-PUMPS",
+      "row": 6,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1460,
+        1320,
+        2750,
+        1333
+      ],
+      "expected": "HWP-A-2 TACO KV4007D HEATING HOT WATER 4 INLINE WATER @ 120°F 6.6 250 40 81 5.0 1,760 3.1 480/3 7.6 20 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP-A-2 TACO KV4007D HEATING HOT WATER 4 INLINE WATER @ 120°F 6.6 250 40 81 5.0 1,760 3.1 480/3 7.6 20 1",
+          "word_ids": [
+            1158,
+            1159,
+            1160,
+            1161,
+            1162,
+            1163,
+            1164,
+            1165,
+            1166,
+            1167,
+            1168,
+            1169,
+            1170,
+            1171,
+            1172,
+            1173,
+            1174,
+            1175,
+            1176,
+            1177,
+            1178,
+            1179
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP-A-2 TACO KV4007D HEATING HOT WATER 4 INLINE WATER @ 120°F 6.6 250 40 81 5.0 1,760 3.1 480/3 7.6 20 1",
+          "word_ids": [
+            1058,
+            1099,
+            1109,
+            1130,
+            1131,
+            1132,
+            1144,
+            1151,
+            1172,
+            1173,
+            1174,
+            1183,
+            1236,
+            1243,
+            1343,
+            1294,
+            1301,
+            1308,
+            1315,
+            1322,
+            1329,
+            1336
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-PUMPS",
+      "row": 7,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1460,
+        1333,
+        2750,
+        1347
+      ],
+      "expected": "HWP-B-1 TACO 2400-60 HEATING HOT WATER - AHU COIL 2 INLINE WATER @ 120°F - 25 10 - 1/6 1,760 - 120/1 4.4 20 -",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP-B-1 TACO 2400-60 HEATING HOT WATER - AHU COIL 2 INLINE WATER @ 120°F - 25 10 - 1/6 1,760 - 120/1 4.4 20 -",
+          "word_ids": [
+            1180,
+            1181,
+            1182,
+            1183,
+            1184,
+            1185,
+            1186,
+            1187,
+            1188,
+            1189,
+            1190,
+            1191,
+            1192,
+            1193,
+            1194,
+            1195,
+            1196,
+            1197,
+            1198,
+            1199,
+            1200,
+            1201,
+            1202,
+            1203,
+            1204
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP-B-1 TACO 2400-60 HEATING HOT WATER - AHU COIL 2 INLINE WATER @ 120°F - 25 10 - 1/6 1,760 - 120/1 4.4 20 -",
+          "word_ids": [
+            1059,
+            1100,
+            1110,
+            1133,
+            1134,
+            1135,
+            1136,
+            1137,
+            1138,
+            1145,
+            1152,
+            1175,
+            1176,
+            1177,
+            1184,
+            1237,
+            1244,
+            1344,
+            1295,
+            1302,
+            1309,
+            1316,
+            1323,
+            1330,
+            1337
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-PUMPS",
+      "header": "HYDRONIC PUMP SCHEDULE",
+      "page": 58,
+      "bbox": [
+        1900,
+        1170,
+        2450,
+        1205
+      ],
+      "engine": "mupdf",
+      "actual": "HYDRONIC PUMP SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-HYDRONIC-PUMPS",
+      "header": "HYDRONIC PUMP SCHEDULE",
+      "page": 58,
+      "bbox": [
+        1900,
+        1170,
+        2450,
+        1205
+      ],
+      "engine": "poppler",
+      "actual": "HYDRONIC PUMP SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-BID-ALT-2-EXHAUST-FANS",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        500,
+        1405,
+        1500,
+        1418
+      ],
+      "expected": "EF-2 GREENHECK VK-CD 1,325 DIRECT 30 1,770 18,000 3.0 26.1 208/3 80 120",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-2 GREENHECK VK-CD 1,325 DIRECT 30 1,770 18,000 3.0 26.1 208/3 80 120",
+          "word_ids": [
+            1472,
+            1473,
+            1474,
+            1475,
+            1476,
+            1477,
+            1478,
+            1479,
+            1480,
+            1481,
+            1482,
+            1483,
+            1484
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-2 GREENHECK VK-CD 1,325 DIRECT 30 1,770 18,000 3.0 26.1 208/3 80 120",
+          "word_ids": [
+            1028,
+            1030,
+            1040,
+            1042,
+            1044,
+            1060,
+            1062,
+            1064,
+            1066,
+            1068,
+            1070,
+            1072,
+            1822
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BID-ALT-2-EXHAUST-FANS",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        500,
+        1418,
+        1500,
+        1430
+      ],
+      "expected": "EF-3 GREENHECK VK-CD 1,325 DIRECT 30 1,770 18,000 3.0 26.1 480/3 40 60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-3 GREENHECK VK-CD 1,325 DIRECT 30 1,770 18,000 3.0 26.1 480/3 40 60",
+          "word_ids": [
+            1485,
+            1486,
+            1487,
+            1488,
+            1489,
+            1490,
+            1491,
+            1492,
+            1493,
+            1494,
+            1495,
+            1496,
+            1497
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-3 GREENHECK VK-CD 1,325 DIRECT 30 1,770 18,000 3.0 26.1 480/3 40 60",
+          "word_ids": [
+            1029,
+            1031,
+            1041,
+            1043,
+            1045,
+            1061,
+            1063,
+            1065,
+            1067,
+            1069,
+            1071,
+            1073,
+            1823
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BID-ALT-2-EXHAUST-FANS",
+      "header": "BID ALTERNATE #2 EXHAUST FAN SCHEDULE",
+      "page": 58,
+      "bbox": [
+        700,
+        1345,
+        1350,
+        1380
+      ],
+      "engine": "mupdf",
+      "actual": "BID ALTERNATE #2 EXHAUST FAN SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-BID-ALT-2-EXHAUST-FANS",
+      "header": "BID ALTERNATE #2 EXHAUST FAN SCHEDULE",
+      "page": 58,
+      "bbox": [
+        700,
+        1345,
+        1350,
+        1380
+      ],
+      "engine": "poppler",
+      "actual": "BID ALTERNATE #2 EXHAUST FAN SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-EXPANSION-TANKS",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1520,
+        1475,
+        2750,
+        1488
+      ],
+      "expected": "ET-A TACO CBX84-125 BLADDER 150 HEATING HOT WATER WATER 500 125 120 45 5.0 22 12 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ET-A TACO CBX84-125 BLADDER 150 HEATING HOT WATER WATER 500 125 120 45 5.0 22 12 1,2",
+          "word_ids": [
+            1332,
+            1333,
+            1334,
+            1335,
+            1336,
+            1337,
+            1338,
+            1339,
+            1340,
+            1341,
+            1342,
+            1343,
+            1344,
+            1345,
+            1346,
+            1347,
+            1348
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ET-A TACO CBX84-125 BLADDER 150 HEATING HOT WATER WATER 500 125 120 45 5.0 22 12 1,2",
+          "word_ids": [
+            1101,
+            1219,
+            1255,
+            1258,
+            1261,
+            1264,
+            1265,
+            1266,
+            1347,
+            1361,
+            1364,
+            1367,
+            1395,
+            1383,
+            1386,
+            1389,
+            1392
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXPANSION-TANKS",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1520,
+        1488,
+        2750,
+        1501
+      ],
+      "expected": "ET-B TACO CBX84-125 BLADDER 150 HEAT RECOVERY - EVAPORATOR 30% PG 300 125 120 40 5.9 22 12 1,2,3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ET-B TACO CBX84-125 BLADDER 150 HEAT RECOVERY - EVAPORATOR 30% PG 300 125 120 40 5.9 22 12 1,2,3",
+          "word_ids": [
+            1349,
+            1350,
+            1351,
+            1352,
+            1353,
+            1354,
+            1355,
+            1356,
+            1357,
+            1358,
+            1359,
+            1360,
+            1361,
+            1362,
+            1363,
+            1364,
+            1365,
+            1366,
+            1367
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ET-B TACO CBX84-125 BLADDER 150 HEAT RECOVERY - EVAPORATOR 30% PG 300 125 120 40 5.9 22 12 1,2,3",
+          "word_ids": [
+            1102,
+            1220,
+            1256,
+            1259,
+            1262,
+            1267,
+            1268,
+            1269,
+            1270,
+            1348,
+            1349,
+            1362,
+            1365,
+            1368,
+            1396,
+            1384,
+            1387,
+            1390,
+            1393
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXPANSION-TANKS",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1520,
+        1501,
+        2750,
+        1515
+      ],
+      "expected": "ET-C TACO CBX84-125 BLADDER 150 HEAT RECOVERY - CONDENSER 30% PG 250 125 150 35 4.9 22 12 1,2,3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ET-C TACO CBX84-125 BLADDER 150 HEAT RECOVERY - CONDENSER 30% PG 250 125 150 35 4.9 22 12 1,2,3",
+          "word_ids": [
+            1368,
+            1369,
+            1370,
+            1371,
+            1372,
+            1373,
+            1374,
+            1375,
+            1376,
+            1377,
+            1378,
+            1379,
+            1380,
+            1381,
+            1382,
+            1383,
+            1384,
+            1385,
+            1386
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ET-C TACO CBX84-125 BLADDER 150 HEAT RECOVERY - CONDENSER 30% PG 250 125 150 35 4.9 22 12 1,2,3",
+          "word_ids": [
+            1103,
+            1221,
+            1257,
+            1260,
+            1263,
+            1271,
+            1272,
+            1273,
+            1274,
+            1350,
+            1351,
+            1363,
+            1366,
+            1369,
+            1397,
+            1385,
+            1388,
+            1391,
+            1394
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXPANSION-TANKS",
+      "header": "EXPANSION TANK SCHEDULE",
+      "page": 58,
+      "bbox": [
+        1800,
+        1395,
+        2400,
+        1425
+      ],
+      "engine": "mupdf",
+      "actual": "EXPANSION TANK SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-EXPANSION-TANKS",
+      "header": "EXPANSION TANK SCHEDULE",
+      "page": 58,
+      "bbox": [
+        1800,
+        1395,
+        2400,
+        1425
+      ],
+      "engine": "poppler",
+      "actual": "EXPANSION TANK SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-AIR-DIRT-SEPARATORS",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        600,
+        1545,
+        1500,
+        1558
+      ],
+      "expected": "AS-A TACO 4905AR 130 HEATING HOT WATER 250 1.9 5 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AS-A TACO 4905AR 130 HEATING HOT WATER 250 1.9 5 1",
+          "word_ids": [
+            1406,
+            1407,
+            1408,
+            1409,
+            1410,
+            1411,
+            1412,
+            1413,
+            1414,
+            1415,
+            1416
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AS-A TACO 4905AR 130 HEATING HOT WATER 250 1.9 5 1",
+          "word_ids": [
+            1079,
+            1082,
+            1088,
+            1091,
+            1196,
+            1197,
+            1198,
+            1207,
+            1210,
+            1213,
+            1216
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DIRT-SEPARATORS",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        600,
+        1558,
+        1500,
+        1571
+      ],
+      "expected": "AS-B TACO 4004AR 380 HEAT RECOVERY - CONDENSER 150 1.7 4 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AS-B TACO 4004AR 380 HEAT RECOVERY - CONDENSER 150 1.7 4 1,2",
+          "word_ids": [
+            1417,
+            1418,
+            1419,
+            1420,
+            1421,
+            1422,
+            1423,
+            1424,
+            1425,
+            1426,
+            1427,
+            1428
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AS-B TACO 4004AR 380 HEAT RECOVERY - CONDENSER 150 1.7 4 1,2",
+          "word_ids": [
+            1080,
+            1083,
+            1089,
+            1092,
+            1199,
+            1200,
+            1201,
+            1202,
+            1208,
+            1211,
+            1214,
+            1217
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DIRT-SEPARATORS",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        600,
+        1571,
+        1500,
+        1585
+      ],
+      "expected": "AS-C TACO 4904AR 130 HEAT RECOVERY - EVAPORATOR 150 1.7 4 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AS-C TACO 4904AR 130 HEAT RECOVERY - EVAPORATOR 150 1.7 4 1,2",
+          "word_ids": [
+            1429,
+            1430,
+            1431,
+            1432,
+            1433,
+            1434,
+            1435,
+            1436,
+            1437,
+            1438,
+            1439,
+            1440
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AS-C TACO 4904AR 130 HEAT RECOVERY - EVAPORATOR 150 1.7 4 1,2",
+          "word_ids": [
+            1081,
+            1084,
+            1090,
+            1093,
+            1203,
+            1204,
+            1205,
+            1206,
+            1209,
+            1212,
+            1215,
+            1218
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DIRT-SEPARATORS",
+      "header": "AIR/DIRT SEPARATOR SCHEDULE",
+      "page": 58,
+      "bbox": [
+        600,
+        1485,
+        1300,
+        1520
+      ],
+      "engine": "mupdf",
+      "actual": "AIR/DIRT SEPARATOR SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-AIR-DIRT-SEPARATORS",
+      "header": "AIR/DIRT SEPARATOR SCHEDULE",
+      "page": 58,
+      "bbox": [
+        600,
+        1485,
+        1300,
+        1520
+      ],
+      "engine": "poppler",
+      "actual": "AIR/DIRT SEPARATOR SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-STEAM-TRAPS",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        700,
+        1721,
+        1500,
+        1734
+      ],
+      "expected": "TP-1 SPIRAX SARCO FT-15 HX-A-1 & -2 F&T 1-1/2\" 10 6,600 0.50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TP-1 SPIRAX SARCO FT-15 HX-A-1 & -2 F&T 1-1/2\" 10 6,600 0.50",
+          "word_ids": [
+            2109,
+            2110,
+            2111,
+            2112,
+            2113,
+            2114,
+            2115,
+            2116,
+            2117,
+            2118,
+            2119,
+            2120
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TP-1 SPIRAX SARCO FT-15 HX-A-1 & -2 F&T 1-1/2\" 10 6,600 0.50",
+          "word_ids": [
+            1460,
+            1422,
+            1423,
+            1430,
+            1432,
+            1433,
+            1434,
+            1436,
+            1451,
+            1453,
+            1455,
+            1457
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-STEAM-TRAPS",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        700,
+        1734,
+        1500,
+        1748
+      ],
+      "expected": "TP-2 SPIRAX SARCO FT-15 HUM-A F&T 3/4\" 10 1,000 0.22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TP-2 SPIRAX SARCO FT-15 HUM-A F&T 3/4\" 10 1,000 0.22",
+          "word_ids": [
+            2121,
+            2122,
+            2123,
+            2124,
+            2125,
+            2126,
+            2127,
+            2128,
+            2129,
+            2130
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TP-2 SPIRAX SARCO FT-15 HUM-A F&T 3/4\" 10 1,000 0.22",
+          "word_ids": [
+            1461,
+            1424,
+            1425,
+            1431,
+            1435,
+            1437,
+            1452,
+            1454,
+            1456,
+            1458
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-STEAM-TRAPS",
+      "header": "STEAM TRAP SCHEDULE",
+      "page": 58,
+      "bbox": [
+        750,
+        1645,
+        1300,
+        1680
+      ],
+      "engine": "mupdf",
+      "actual": "STEAM TRAP SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-STEAM-TRAPS",
+      "header": "STEAM TRAP SCHEDULE",
+      "page": 58,
+      "bbox": [
+        750,
+        1645,
+        1300,
+        1680
+      ],
+      "engine": "poppler",
+      "actual": "STEAM TRAP SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-VARIABLE-VOLUME-SUPPLY-TERMINALS",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1600,
+        1649,
+        2750,
+        1662
+      ],
+      "expected": "VAV-A PRICE SDV 6 200 200 75 5.5 2 60/85 120/98 0.5 0.1 0.1 24 - 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-A PRICE SDV 6 200 200 75 5.5 2 60/85 120/98 0.5 0.1 0.1 24 - 1,2",
+          "word_ids": [
+            611,
+            612,
+            613,
+            614,
+            615,
+            616,
+            617,
+            618,
+            619,
+            620,
+            621,
+            622,
+            623,
+            624,
+            625,
+            626,
+            627
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-A PRICE SDV 6 200 200 75 5.5 2 60/85 120/98 0.5 0.1 0.1 24 - 1,2",
+          "word_ids": [
+            1411,
+            1495,
+            1507,
+            1528,
+            1539,
+            1550,
+            1567,
+            1578,
+            1589,
+            1613,
+            1624,
+            1635,
+            1649,
+            1664,
+            1675,
+            1687,
+            1698
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VARIABLE-VOLUME-SUPPLY-TERMINALS",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1600,
+        1662,
+        2750,
+        1675
+      ],
+      "expected": "VAV-B PRICE SDV 6 200 200 75 7.7 3 60/95 120/98 0.8 0.2 0.1 24 - 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-B PRICE SDV 6 200 200 75 7.7 3 60/95 120/98 0.8 0.2 0.1 24 - 1,2",
+          "word_ids": [
+            628,
+            629,
+            630,
+            631,
+            632,
+            633,
+            634,
+            635,
+            636,
+            637,
+            638,
+            639,
+            640,
+            641,
+            642,
+            643,
+            644
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-B PRICE SDV 6 200 200 75 7.7 3 60/95 120/98 0.8 0.2 0.1 24 - 1,2",
+          "word_ids": [
+            1412,
+            1496,
+            1508,
+            1529,
+            1540,
+            1551,
+            1568,
+            1579,
+            1590,
+            1614,
+            1625,
+            1636,
+            1650,
+            1665,
+            1676,
+            1688,
+            1699
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VARIABLE-VOLUME-SUPPLY-TERMINALS",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1600,
+        1675,
+        2750,
+        1688
+      ],
+      "expected": "VAV-C PRICE SDV 6 300 300 100 8.2 2 60/85 120/98 0.8 0.1 0.2 25 - 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-C PRICE SDV 6 300 300 100 8.2 2 60/85 120/98 0.8 0.1 0.2 25 - 1,2",
+          "word_ids": [
+            645,
+            646,
+            647,
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            654,
+            655,
+            656,
+            657,
+            658,
+            659,
+            660,
+            661
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-C PRICE SDV 6 300 300 100 8.2 2 60/85 120/98 0.8 0.1 0.2 25 - 1,2",
+          "word_ids": [
+            1413,
+            1497,
+            1509,
+            1530,
+            1541,
+            1552,
+            1569,
+            1580,
+            1591,
+            1615,
+            1626,
+            1637,
+            1651,
+            1666,
+            1677,
+            1689,
+            1700
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VARIABLE-VOLUME-SUPPLY-TERMINALS",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1600,
+        1688,
+        2750,
+        1701
+      ],
+      "expected": "VAV-D PRICE SDV 6 300 300 100 11.5 3 60/95 120/100 1.0 0.4 0.2 25 - 1,2,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-D PRICE SDV 6 300 300 100 11.5 3 60/95 120/100 1.0 0.4 0.2 25 - 1,2,4",
+          "word_ids": [
+            662,
+            663,
+            664,
+            665,
+            666,
+            667,
+            668,
+            669,
+            670,
+            671,
+            672,
+            673,
+            674,
+            675,
+            676,
+            677,
+            678
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-D PRICE SDV 6 300 300 100 11.5 3 60/95 120/100 1.0 0.4 0.2 25 - 1,2,4",
+          "word_ids": [
+            1414,
+            1498,
+            1510,
+            1531,
+            1542,
+            1553,
+            1570,
+            1581,
+            1592,
+            1616,
+            1627,
+            1638,
+            1652,
+            1667,
+            1678,
+            1690,
+            1701
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VARIABLE-VOLUME-SUPPLY-TERMINALS",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1600,
+        1701,
+        2750,
+        1714
+      ],
+      "expected": "VAV-E PRICE SDV 10 600 600 225 16.4 3 60/85 120/88 1.0 0.2 0.3 - - 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-E PRICE SDV 10 600 600 225 16.4 3 60/85 120/88 1.0 0.2 0.3 - - 1,2",
+          "word_ids": [
+            679,
+            680,
+            681,
+            682,
+            683,
+            684,
+            685,
+            686,
+            687,
+            688,
+            689,
+            690,
+            691,
+            692,
+            693,
+            694,
+            695
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-E PRICE SDV 10 600 600 225 16.4 3 60/85 120/88 1.0 0.2 0.3 - - 1,2",
+          "word_ids": [
+            1415,
+            1499,
+            1511,
+            1532,
+            1543,
+            1554,
+            1571,
+            1582,
+            1593,
+            1617,
+            1628,
+            1639,
+            1653,
+            1668,
+            1679,
+            1691,
+            1702
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VARIABLE-VOLUME-SUPPLY-TERMINALS",
+      "row": 6,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1600,
+        1714,
+        2750,
+        1727
+      ],
+      "expected": "VAV-F PRICE SDV 10 600 600 225 22.8 3 60/95 120/98 2.0 0.7 0.2 - - 1,2,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-F PRICE SDV 10 600 600 225 22.8 3 60/95 120/98 2.0 0.7 0.2 - - 1,2,4",
+          "word_ids": [
+            696,
+            697,
+            698,
+            699,
+            700,
+            701,
+            702,
+            703,
+            704,
+            705,
+            706,
+            707,
+            708,
+            709,
+            710,
+            711,
+            712
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-F PRICE SDV 10 600 600 225 22.8 3 60/95 120/98 2.0 0.7 0.2 - - 1,2,4",
+          "word_ids": [
+            1416,
+            1500,
+            1512,
+            1533,
+            1544,
+            1555,
+            1572,
+            1583,
+            1594,
+            1618,
+            1629,
+            1640,
+            1654,
+            1669,
+            1680,
+            1692,
+            1703
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VARIABLE-VOLUME-SUPPLY-TERMINALS",
+      "row": 7,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1600,
+        1727,
+        2750,
+        1740
+      ],
+      "expected": "VAV-G PRICE SDV 10 800 800 250 21.7 2 60/85 120/97 2.0 1.2 0.3 - - 1,2,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-G PRICE SDV 10 800 800 250 21.7 2 60/85 120/97 2.0 1.2 0.3 - - 1,2,4",
+          "word_ids": [
+            713,
+            714,
+            715,
+            716,
+            717,
+            718,
+            719,
+            720,
+            721,
+            722,
+            723,
+            724,
+            725,
+            726,
+            727,
+            728,
+            729
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-G PRICE SDV 10 800 800 250 21.7 2 60/85 120/97 2.0 1.2 0.3 - - 1,2,4",
+          "word_ids": [
+            1417,
+            1501,
+            1513,
+            1534,
+            1545,
+            1556,
+            1573,
+            1584,
+            1595,
+            1619,
+            1630,
+            1641,
+            1655,
+            1670,
+            1681,
+            1693,
+            1704
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VARIABLE-VOLUME-SUPPLY-TERMINALS",
+      "row": 8,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1600,
+        1740,
+        2750,
+        1753
+      ],
+      "expected": "VAV-H PRICE SDV 10 800 800 250 30.4 4 60/95 120/91 2.0 0.5 0.4 - - 1,2,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-H PRICE SDV 10 800 800 250 30.4 4 60/95 120/91 2.0 0.5 0.4 - - 1,2,4",
+          "word_ids": [
+            730,
+            731,
+            732,
+            733,
+            734,
+            735,
+            736,
+            737,
+            738,
+            739,
+            740,
+            741,
+            742,
+            743,
+            744,
+            745,
+            746
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-H PRICE SDV 10 800 800 250 30.4 4 60/95 120/91 2.0 0.5 0.4 - - 1,2,4",
+          "word_ids": [
+            1418,
+            1502,
+            1514,
+            1535,
+            1546,
+            1557,
+            1574,
+            1585,
+            1596,
+            1620,
+            1631,
+            1642,
+            1656,
+            1671,
+            1682,
+            1694,
+            1705
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VARIABLE-VOLUME-SUPPLY-TERMINALS",
+      "row": 9,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1600,
+        1753,
+        2750,
+        1766
+      ],
+      "expected": "VAV-I PRICE SDV 12 1200 1200 400 39.0 4 60/90 120/83 2.0 0.3 0.4 - - 1,2,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-I PRICE SDV 12 1200 1200 400 39.0 4 60/90 120/83 2.0 0.3 0.4 - - 1,2,3,4",
+          "word_ids": [
+            747,
+            748,
+            749,
+            750,
+            751,
+            752,
+            753,
+            754,
+            755,
+            756,
+            757,
+            758,
+            759,
+            760,
+            761,
+            762,
+            763
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-I PRICE SDV 12 1200 1200 400 39.0 4 60/90 120/83 2.0 0.3 0.4 - - 1,2,3,4",
+          "word_ids": [
+            1419,
+            1503,
+            1515,
+            1536,
+            1547,
+            1558,
+            1575,
+            1586,
+            1597,
+            1621,
+            1632,
+            1643,
+            1657,
+            1672,
+            1683,
+            1695,
+            1706
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VARIABLE-VOLUME-SUPPLY-TERMINALS",
+      "row": 10,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1600,
+        1766,
+        2750,
+        1779
+      ],
+      "expected": "VAV-J PRICE SDV 6 150 150 75 N/A N/A N/A N/A 0 N/A N/A 21 - 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-J PRICE SDV 6 150 150 75 N/A N/A N/A N/A 0 N/A N/A 21 - 1,2",
+          "word_ids": [
+            764,
+            765,
+            766,
+            767,
+            768,
+            769,
+            770,
+            771,
+            772,
+            773,
+            774,
+            775,
+            776,
+            777,
+            778,
+            779,
+            780
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-J PRICE SDV 6 150 150 75 N/A N/A N/A N/A 0 N/A N/A 21 - 1,2",
+          "word_ids": [
+            1420,
+            1504,
+            1516,
+            1537,
+            1548,
+            1559,
+            1576,
+            1587,
+            1598,
+            1622,
+            1633,
+            1644,
+            1658,
+            1673,
+            1684,
+            1696,
+            1707
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VARIABLE-VOLUME-SUPPLY-TERMINALS",
+      "row": 11,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1600,
+        1779,
+        2750,
+        1792
+      ],
+      "expected": "VAV-K PRICE SDV 6 300 300 100 N/A N/A N/A N/A 0 N/A N/A 26 - 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-K PRICE SDV 6 300 300 100 N/A N/A N/A N/A 0 N/A N/A 26 - 1,2",
+          "word_ids": [
+            781,
+            782,
+            783,
+            784,
+            785,
+            786,
+            787,
+            788,
+            789,
+            790,
+            791,
+            792,
+            793,
+            794,
+            795,
+            796,
+            797
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-K PRICE SDV 6 300 300 100 N/A N/A N/A N/A 0 N/A N/A 26 - 1,2",
+          "word_ids": [
+            1421,
+            1505,
+            1517,
+            1538,
+            1549,
+            1560,
+            1577,
+            1588,
+            1599,
+            1623,
+            1634,
+            1645,
+            1659,
+            1674,
+            1685,
+            1697,
+            1708
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VARIABLE-VOLUME-SUPPLY-TERMINALS",
+      "header": "VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE",
+      "page": 58,
+      "bbox": [
+        1750,
+        1575,
+        2600,
+        1610
+      ],
+      "engine": "mupdf",
+      "actual": "VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-VARIABLE-VOLUME-SUPPLY-TERMINALS",
+      "header": "VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE",
+      "page": 58,
+      "bbox": [
+        1750,
+        1575,
+        2600,
+        1610
+      ],
+      "engine": "poppler",
+      "actual": "VARIABLE VOLUME SUPPLY TERMINAL UNIT SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-FAN-COIL-UNITS",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 58,
+      "bbox": [
+        1700,
+        1964,
+        2750,
+        1976
+      ],
+      "expected": "FCU-A DAIKIN FCHH208 DIRECT PSC 667 0.0 WATER 4 22.3 16.7 2.5 57.1/56.4 60.0 3.5 120/1 1.8 20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-A DAIKIN FCHH208 DIRECT PSC 667 0.0 WATER 4 22.3 16.7 2.5 57.1/56.4 60.0 3.5 120/1 1.8 20",
+          "word_ids": [
+            2026,
+            2027,
+            2028,
+            2029,
+            2030,
+            2031,
+            2032,
+            2033,
+            2034,
+            2035,
+            2036,
+            2037,
+            2038,
+            2039,
+            2040,
+            2041,
+            2042,
+            2043
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-A DAIKIN FCHH208 DIRECT PSC 667 0.0 WATER 4 22.3 16.7 2.5 57.1/56.4 60.0 3.5 120/1 1.8 20",
+          "word_ids": [
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2031,
+            2032,
+            2033,
+            2038,
+            2039,
+            2048,
+            2049,
+            2063,
+            2064,
+            2065,
+            2066,
+            2067,
+            2068
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FAN-COIL-UNITS",
+      "header": "FAN COIL UNIT SCHEDULE",
+      "page": 58,
+      "bbox": [
+        1900,
+        1880,
+        2500,
+        1910
+      ],
+      "engine": "mupdf",
+      "actual": "FAN COIL UNIT SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-FAN-COIL-UNITS",
+      "header": "FAN COIL UNIT SCHEDULE",
+      "page": 58,
+      "bbox": [
+        1900,
+        1880,
+        2500,
+        1910
+      ],
+      "engine": "poppler",
+      "actual": "FAN COIL UNIT SCHEDULE",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

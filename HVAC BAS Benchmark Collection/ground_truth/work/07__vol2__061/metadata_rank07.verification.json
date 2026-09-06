@@ -1,0 +1,170 @@
+{
+  "document_id": "07__vol2__061",
+  "source_sha256": "c55da475bac3a1aeaae723b12adf35896970fe249ca3556b4d430a990c0e41a0",
+  "annotation_sha256": "2eaa0e826467602695b93805f0f3ef2403150d62dc9c6f153504640666e27f1c",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 5,
+  "checks": [
+    {
+      "assertion": "rank07-title",
+      "page": 1,
+      "bbox": [
+        240,
+        65,
+        1300,
+        250
+      ],
+      "expected": "AMES LABORATORY WILHELM HALL HVAC UPGRADES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AMES LABORATORY WILHELM HALL HVAC UPGRADES",
+          "word_ids": [
+            106,
+            107,
+            108,
+            109,
+            110,
+            111
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AMES LABORATORY WILHELM HALL HVAC UPGRADES",
+          "word_ids": [
+            20,
+            21,
+            12,
+            13,
+            14,
+            15
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank07-project-number",
+      "page": 1,
+      "bbox": [
+        2920,
+        1910,
+        3000,
+        1960
+      ],
+      "expected": "BID ISSUE 23008",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BID ISSUE 23008",
+          "word_ids": [
+            977,
+            978,
+            993
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BID ISSUE 23008",
+          "word_ids": [
+            936,
+            937,
+            940
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank07-bid-issue",
+      "page": 1,
+      "bbox": [
+        2920,
+        1910,
+        3000,
+        1960
+      ],
+      "expected": "BID ISSUE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BID ISSUE 23008",
+          "word_ids": [
+            977,
+            978,
+            993
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BID ISSUE 23008",
+          "word_ids": [
+            936,
+            937,
+            940
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank07-ames-lab-number",
+      "page": 1,
+      "bbox": [
+        2920,
+        1960,
+        3000,
+        1990
+      ],
+      "expected": "SC-24-622",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SC-24-622",
+          "word_ids": [
+            994
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SC-24-622",
+          "word_ids": [
+            941
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank07-issue-date",
+      "page": 1,
+      "bbox": [
+        2920,
+        1990,
+        3000,
+        2025
+      ],
+      "expected": "01.10.24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "01.10.24",
+          "word_ids": [
+            995
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "01.10.24",
+          "word_ids": [
+            1071
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

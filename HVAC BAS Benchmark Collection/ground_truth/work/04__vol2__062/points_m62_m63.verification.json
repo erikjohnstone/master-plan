@@ -1,0 +1,1050 @@
+{
+  "document_id": "04__vol2__062",
+  "source_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "annotation_sha256": "258525ffdfe2ab3e470dced4412c1264fde3d1a59ee6557efec6d0eb59935d7c",
+  "tables": 4,
+  "rows": 25,
+  "cell_assertions": 25,
+  "text_assertions": 5,
+  "checks": [
+    {
+      "table": "M62-BOILER-PUBLISHED-POINTS",
+      "row": 1,
+      "column": "source_item",
+      "page": 18,
+      "bbox": [
+        1525,
+        547,
+        1650,
+        558
+      ],
+      "expected": "1. STATUS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. STATUS.",
+          "word_ids": [
+            986,
+            987
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. STATUS.",
+          "word_ids": [
+            603,
+            842
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-BOILER-PUBLISHED-POINTS",
+      "row": 2,
+      "column": "source_item",
+      "page": 18,
+      "bbox": [
+        1525,
+        559,
+        1650,
+        570
+      ],
+      "expected": "2. ALARM.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2. ALARM.",
+          "word_ids": [
+            988,
+            989
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2. ALARM.",
+          "word_ids": [
+            604,
+            843
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-BOILER-PUBLISHED-POINTS",
+      "row": 3,
+      "column": "source_item",
+      "page": 18,
+      "bbox": [
+        1525,
+        571,
+        1650,
+        582
+      ],
+      "expected": "3. CAPACITY FEEDBACK.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3. CAPACITY FEEDBACK.",
+          "word_ids": [
+            990,
+            991,
+            992
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3. CAPACITY FEEDBACK.",
+          "word_ids": [
+            605,
+            844,
+            845
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-BOILER-PUBLISHED-POINTS",
+      "row": 4,
+      "column": "source_item",
+      "page": 18,
+      "bbox": [
+        1525,
+        583,
+        1650,
+        594
+      ],
+      "expected": "4. FIRING RATE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4. FIRING RATE.",
+          "word_ids": [
+            993,
+            994,
+            995
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4. FIRING RATE.",
+          "word_ids": [
+            606,
+            846,
+            847
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-BOILER-PUBLISHED-POINTS",
+      "row": 5,
+      "column": "source_item",
+      "page": 18,
+      "bbox": [
+        1525,
+        595,
+        1650,
+        606
+      ],
+      "expected": "5. SET POINT.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5. SET POINT.",
+          "word_ids": [
+            996,
+            997,
+            998
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5. SET POINT.",
+          "word_ids": [
+            607,
+            848,
+            849
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-VFD-PUBLISHED-POINTS",
+      "row": 1,
+      "column": "source_item",
+      "page": 18,
+      "bbox": [
+        1525,
+        639,
+        1650,
+        649
+      ],
+      "expected": "1. ENABLE/DISABLE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. ENABLE/DISABLE.",
+          "word_ids": [
+            1016,
+            1017
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. ENABLE/DISABLE.",
+          "word_ids": [
+            867,
+            868
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-VFD-PUBLISHED-POINTS",
+      "row": 2,
+      "column": "source_item",
+      "page": 18,
+      "bbox": [
+        1525,
+        650,
+        1650,
+        661
+      ],
+      "expected": "2. STATUS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2. STATUS.",
+          "word_ids": [
+            1018,
+            1019
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2. STATUS.",
+          "word_ids": [
+            869,
+            870
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-VFD-PUBLISHED-POINTS",
+      "row": 3,
+      "column": "source_item",
+      "page": 18,
+      "bbox": [
+        1525,
+        662,
+        1650,
+        673
+      ],
+      "expected": "3. SPEED CONTROL.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3. SPEED CONTROL.",
+          "word_ids": [
+            1020,
+            1021,
+            1022
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3. SPEED CONTROL.",
+          "word_ids": [
+            871,
+            872,
+            873
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-VFD-PUBLISHED-POINTS",
+      "row": 4,
+      "column": "source_item",
+      "page": 18,
+      "bbox": [
+        1525,
+        674,
+        1650,
+        687
+      ],
+      "expected": "4. ALARMS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4. ALARMS.",
+          "word_ids": [
+            1023,
+            1024
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4. ALARMS.",
+          "word_ids": [
+            874,
+            875
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-WRITEABLE-POINTS",
+      "row": 1,
+      "column": "source_item",
+      "page": 19,
+      "bbox": [
+        1685,
+        166,
+        1950,
+        180
+      ],
+      "expected": "a. UNIT ENABLE / DISABLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "a. UNIT ENABLE / DISABLE",
+          "word_ids": [
+            1663,
+            1664,
+            1665,
+            1666,
+            1667
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "a. UNIT ENABLE / DISABLE",
+          "word_ids": [
+            1465,
+            1466,
+            1467,
+            1468,
+            1469
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-WRITEABLE-POINTS",
+      "row": 2,
+      "column": "source_item",
+      "page": 19,
+      "bbox": [
+        1685,
+        180,
+        1950,
+        191
+      ],
+      "expected": "b. DUCT STATIC PRESSURE RESET SET POINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "b. DUCT STATIC PRESSURE RESET SET POINT",
+          "word_ids": [
+            1668,
+            1669,
+            1670,
+            1671,
+            1672,
+            1673,
+            1674
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "b. DUCT STATIC PRESSURE RESET SET POINT",
+          "word_ids": [
+            1470,
+            1471,
+            1472,
+            1473,
+            1474,
+            1475,
+            1476
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-WRITEABLE-POINTS",
+      "row": 3,
+      "column": "source_item",
+      "page": 19,
+      "bbox": [
+        1685,
+        191,
+        1950,
+        203
+      ],
+      "expected": "c. SUPPLY AIR TEMPERATURE RESET SET POINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "c. SUPPLY AIR TEMPERATURE RESET SET POINT",
+          "word_ids": [
+            1675,
+            1676,
+            1677,
+            1678,
+            1679,
+            1680,
+            1681
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "c. SUPPLY AIR TEMPERATURE RESET SET POINT",
+          "word_ids": [
+            1477,
+            1478,
+            1479,
+            1480,
+            1481,
+            1482,
+            1483
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-WRITEABLE-POINTS",
+      "row": 4,
+      "column": "source_item",
+      "page": 19,
+      "bbox": [
+        1685,
+        203,
+        1950,
+        214
+      ],
+      "expected": "d. BUILDING STATIC PRESSURE SET POINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "d. BUILDING STATIC PRESSURE SET POINT",
+          "word_ids": [
+            1682,
+            1683,
+            1684,
+            1685,
+            1686,
+            1687
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "d. BUILDING STATIC PRESSURE SET POINT",
+          "word_ids": [
+            1484,
+            1485,
+            1486,
+            1487,
+            1488,
+            1489
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-WRITEABLE-POINTS",
+      "row": 5,
+      "column": "source_item",
+      "page": 19,
+      "bbox": [
+        1685,
+        214,
+        1950,
+        226
+      ],
+      "expected": "e. OUTSIDE AIR MINIMUM POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "e. OUTSIDE AIR MINIMUM POSITION",
+          "word_ids": [
+            1688,
+            1689,
+            1690,
+            1691,
+            1692
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "e. OUTSIDE AIR MINIMUM POSITION",
+          "word_ids": [
+            1490,
+            1491,
+            1492,
+            1493,
+            1494
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS",
+      "row": 1,
+      "column": "source_item",
+      "page": 19,
+      "bbox": [
+        1685,
+        247,
+        1950,
+        259
+      ],
+      "expected": "a. SUPPLY AIR TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "a. SUPPLY AIR TEMPERATURE",
+          "word_ids": [
+            1696,
+            1697,
+            1698,
+            1699
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "a. SUPPLY AIR TEMPERATURE",
+          "word_ids": [
+            1185,
+            1186,
+            1187,
+            1188
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS",
+      "row": 2,
+      "column": "source_item",
+      "page": 19,
+      "bbox": [
+        1685,
+        259,
+        1950,
+        271
+      ],
+      "expected": "b. OUTSIDE AIR TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "b. OUTSIDE AIR TEMPERATURE",
+          "word_ids": [
+            1700,
+            1701,
+            1702,
+            1703
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "b. OUTSIDE AIR TEMPERATURE",
+          "word_ids": [
+            1189,
+            1190,
+            1191,
+            1192
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS",
+      "row": 3,
+      "column": "source_item",
+      "page": 19,
+      "bbox": [
+        1685,
+        271,
+        1950,
+        283
+      ],
+      "expected": "c. SUPPLY FAN(S) STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "c. SUPPLY FAN(S) STATUS",
+          "word_ids": [
+            1704,
+            1705,
+            1706,
+            1707
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "c. SUPPLY FAN(S) STATUS",
+          "word_ids": [
+            1193,
+            1194,
+            1195,
+            1196
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS",
+      "row": 4,
+      "column": "source_item",
+      "page": 19,
+      "bbox": [
+        1685,
+        283,
+        1950,
+        294
+      ],
+      "expected": "d. SUPPLY FAN(S) VFD FREQUENCY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "d. SUPPLY FAN(S) VFD FREQUENCY",
+          "word_ids": [
+            1708,
+            1709,
+            1710,
+            1711,
+            1712
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "d. SUPPLY FAN(S) VFD FREQUENCY",
+          "word_ids": [
+            1197,
+            1198,
+            1199,
+            1200,
+            1201
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS",
+      "row": 5,
+      "column": "source_item",
+      "page": 19,
+      "bbox": [
+        1685,
+        294,
+        1950,
+        306
+      ],
+      "expected": "e. BUILDING PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "e. BUILDING PRESSURE",
+          "word_ids": [
+            1713,
+            1714,
+            1715
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "e. BUILDING PRESSURE",
+          "word_ids": [
+            1202,
+            1203,
+            1204
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS",
+      "row": 6,
+      "column": "source_item",
+      "page": 19,
+      "bbox": [
+        1685,
+        306,
+        1950,
+        317
+      ],
+      "expected": "f. COMPRESSOR(S) SUCTION PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "f. COMPRESSOR(S) SUCTION PRESSURE",
+          "word_ids": [
+            1716,
+            1717,
+            1718,
+            1719
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "f. COMPRESSOR(S) SUCTION PRESSURE",
+          "word_ids": [
+            1205,
+            1206,
+            1207,
+            1208
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS",
+      "row": 7,
+      "column": "source_item",
+      "page": 19,
+      "bbox": [
+        1685,
+        317,
+        1950,
+        328
+      ],
+      "expected": "g. COMPRESSOR(S) DISCHARGE PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "g. COMPRESSOR(S) DISCHARGE PRESSURE",
+          "word_ids": [
+            1720,
+            1721,
+            1722,
+            1723
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "g. COMPRESSOR(S) DISCHARGE PRESSURE",
+          "word_ids": [
+            1209,
+            1210,
+            1211,
+            1212
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS",
+      "row": 8,
+      "column": "source_item",
+      "page": 19,
+      "bbox": [
+        1685,
+        328,
+        1950,
+        340
+      ],
+      "expected": "h. COMPRESSOR(S) SATURATED CONDENSING TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "h. COMPRESSOR(S) SATURATED CONDENSING TEMPERATURE",
+          "word_ids": [
+            1724,
+            1725,
+            1726,
+            1727,
+            1728
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "h. COMPRESSOR(S) SATURATED CONDENSING TEMPERATURE",
+          "word_ids": [
+            1213,
+            1214,
+            1215,
+            1216,
+            1217
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS",
+      "row": 9,
+      "column": "source_item",
+      "page": 19,
+      "bbox": [
+        1685,
+        340,
+        1950,
+        351
+      ],
+      "expected": "i. COMPRESSOR(S) SATURATED SUCTION TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "i. COMPRESSOR(S) SATURATED SUCTION TEMPERATURE",
+          "word_ids": [
+            1729,
+            1730,
+            1731,
+            1732,
+            1733
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "i. COMPRESSOR(S) SATURATED SUCTION TEMPERATURE",
+          "word_ids": [
+            1218,
+            1219,
+            1220,
+            1221,
+            1222
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS",
+      "row": 10,
+      "column": "source_item",
+      "page": 19,
+      "bbox": [
+        1685,
+        351,
+        1950,
+        362
+      ],
+      "expected": "j. ALARMS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "j. ALARMS",
+          "word_ids": [
+            1734,
+            1735
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "j. ALARMS",
+          "word_ids": [
+            1223,
+            1224
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS",
+      "row": 11,
+      "column": "source_item",
+      "page": 19,
+      "bbox": [
+        1685,
+        363,
+        1950,
+        374
+      ],
+      "expected": "k. FILTER STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "k. FILTER STATUS",
+          "word_ids": [
+            1736,
+            1737,
+            1738
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "k. FILTER STATUS",
+          "word_ids": [
+            1225,
+            1226,
+            1227
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m62-boiler-points-title",
+      "page": 18,
+      "bbox": [
+        1510,
+        498,
+        1620,
+        520
+      ],
+      "expected": "BOILER POINTS LIST :",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BOILER POINTS LIST :",
+          "word_ids": [
+            961,
+            962,
+            963,
+            964
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BOILER POINTS LIST :",
+          "word_ids": [
+            578,
+            579,
+            580,
+            581
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m62-vfd-points-title",
+      "page": 18,
+      "bbox": [
+        1510,
+        613,
+        1620,
+        635
+      ],
+      "expected": "VFD POINTS LIST :",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD POINTS LIST :",
+          "word_ids": [
+            999,
+            1000,
+            1001,
+            1002
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD POINTS LIST :",
+          "word_ids": [
+            850,
+            851,
+            852,
+            853
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m63-ahu-points-title",
+      "page": 19,
+      "bbox": [
+        1655,
+        140,
+        1750,
+        162
+      ],
+      "expected": "AHU POINTS LIST :",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU POINTS LIST :",
+          "word_ids": [
+            1656,
+            1657,
+            1658,
+            1659
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU POINTS LIST :",
+          "word_ids": [
+            1458,
+            1459,
+            1460,
+            1461
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m63-ahu-writeable-heading",
+      "page": 19,
+      "bbox": [
+        1680,
+        154,
+        1780,
+        171
+      ],
+      "expected": "1. WRITEABLE POINTS:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. WRITEABLE POINTS:",
+          "word_ids": [
+            1660,
+            1661,
+            1662
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. WRITEABLE POINTS:",
+          "word_ids": [
+            1462,
+            1463,
+            1464
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m63-ahu-readable-heading",
+      "page": 19,
+      "bbox": [
+        1680,
+        234,
+        1780,
+        251
+      ],
+      "expected": "2. READABLE POINTS:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2. READABLE POINTS:",
+          "word_ids": [
+            1693,
+            1694,
+            1695
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2. READABLE POINTS:",
+          "word_ids": [
+            1182,
+            1183,
+            1184
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "rank04-published-point-lists",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

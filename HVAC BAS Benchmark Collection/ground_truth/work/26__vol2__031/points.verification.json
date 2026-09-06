@@ -1,0 +1,786 @@
+{
+  "document_id": "26__vol2__031",
+  "source_sha256": "db9141f6582831c37b3a18f55d862e0579b38cf1a702c24208e3030fd8dbeab2",
+  "annotation_sha256": "5944e6435aa4103d543d6ddf9559ec5acf6d02ccb9660bd95ddcf460e55e2a88",
+  "tables": 1,
+  "rows": 21,
+  "cell_assertions": 21,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 1,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1097,
+        1340,
+        1114
+      ],
+      "expected": "T ROOM THERMOSTAT/TRANSMITTER - WALL MOUNT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T ROOM THERMOSTAT/TRANSMITTER - WALL MOUNT",
+          "word_ids": [
+            385,
+            386,
+            387,
+            388,
+            389,
+            390
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T ROOM THERMOSTAT/TRANSMITTER - WALL MOUNT",
+          "word_ids": [
+            405,
+            406,
+            407,
+            408,
+            409,
+            410
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 2,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1133,
+        1340,
+        1150
+      ],
+      "expected": "M ROOM HUMIDISTAT (MOISTURE)/TRANSMITTER - WALL MOUNT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M ROOM HUMIDISTAT (MOISTURE)/TRANSMITTER - WALL MOUNT",
+          "word_ids": [
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M ROOM HUMIDISTAT (MOISTURE)/TRANSMITTER - WALL MOUNT",
+          "word_ids": [
+            414,
+            425,
+            426,
+            427,
+            428,
+            429,
+            430
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 3,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1170,
+        1340,
+        1187
+      ],
+      "expected": "TT TEMPERATURE TRANSMITTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TT TEMPERATURE TRANSMITTER",
+          "word_ids": [
+            391,
+            392,
+            393
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TT TEMPERATURE TRANSMITTER",
+          "word_ids": [
+            415,
+            431,
+            432
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 4,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1206,
+        1340,
+        1223
+      ],
+      "expected": "TT TEMPERATURE TRANSMITTER, AVERAGING ELEMENT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TT TEMPERATURE TRANSMITTER, AVERAGING ELEMENT",
+          "word_ids": [
+            408,
+            409,
+            410,
+            411,
+            412
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TT TEMPERATURE TRANSMITTER, AVERAGING ELEMENT",
+          "word_ids": [
+            416,
+            456,
+            457,
+            458,
+            459
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 5,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1238,
+        1340,
+        1255
+      ],
+      "expected": "MT MOISTURE (HUMIDITY) TRANSMITTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MT MOISTURE (HUMIDITY) TRANSMITTER",
+          "word_ids": [
+            401,
+            402,
+            403,
+            404
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MT MOISTURE (HUMIDITY) TRANSMITTER",
+          "word_ids": [
+            470,
+            472,
+            473,
+            474
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 6,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1270,
+        1340,
+        1287
+      ],
+      "expected": "PT PRESSURE TRANSMITTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PT PRESSURE TRANSMITTER",
+          "word_ids": [
+            405,
+            406,
+            407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PT PRESSURE TRANSMITTER",
+          "word_ids": [
+            471,
+            475,
+            476
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 7,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1302,
+        1340,
+        1319
+      ],
+      "expected": "SPS STATIC PRESSURE SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPS STATIC PRESSURE SENSOR",
+          "word_ids": [
+            419,
+            420,
+            421,
+            422
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPS STATIC PRESSURE SENSOR",
+          "word_ids": [
+            1006,
+            997,
+            998,
+            999
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 8,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1333,
+        1340,
+        1350
+      ],
+      "expected": "FT FLOW TRANSMITTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FT FLOW TRANSMITTER",
+          "word_ids": [
+            413,
+            414,
+            415
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FT FLOW TRANSMITTER",
+          "word_ids": [
+            1001,
+            480,
+            481
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 9,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1365,
+        1340,
+        1382
+      ],
+      "expected": "IT CURRENT TRANSMITTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "IT CURRENT TRANSMITTER",
+          "word_ids": [
+            416,
+            417,
+            418
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "IT CURRENT TRANSMITTER",
+          "word_ids": [
+            479,
+            985,
+            986
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 10,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1395,
+        1340,
+        1412
+      ],
+      "expected": "SD SMOKE DETECTOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD SMOKE DETECTOR",
+          "word_ids": [
+            423,
+            424,
+            425
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD SMOKE DETECTOR",
+          "word_ids": [
+            980,
+            963,
+            964
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 11,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1425,
+        1340,
+        1442
+      ],
+      "expected": "PDT PRESSURE DIFFERENTIAL TRANSMITTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PDT PRESSURE DIFFERENTIAL TRANSMITTER",
+          "word_ids": [
+            426,
+            427,
+            428,
+            429
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PDT PRESSURE DIFFERENTIAL TRANSMITTER",
+          "word_ids": [
+            482,
+            972,
+            973,
+            974
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 12,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1455,
+        1340,
+        1472
+      ],
+      "expected": "PDS PRESSURE DIFFERENTIAL SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PDS PRESSURE DIFFERENTIAL SWITCH",
+          "word_ids": [
+            446,
+            447,
+            448,
+            449
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PDS PRESSURE DIFFERENTIAL SWITCH",
+          "word_ids": [
+            931,
+            909,
+            910,
+            911
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 13,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1485,
+        1340,
+        1502
+      ],
+      "expected": "HS HAND SWITCH (HAND-OFF-AUTO SWITCH)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HS HAND SWITCH (HAND-OFF-AUTO SWITCH)",
+          "word_ids": [
+            435,
+            436,
+            437,
+            438,
+            439
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HS HAND SWITCH (HAND-OFF-AUTO SWITCH)",
+          "word_ids": [
+            508,
+            509,
+            510,
+            511,
+            512
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 14,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1520,
+        1340,
+        1537
+      ],
+      "expected": "ZC VALVE OR DAMPER POSITION CONTROLLER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ZC VALVE OR DAMPER POSITION CONTROLLER",
+          "word_ids": [
+            440,
+            441,
+            442,
+            443,
+            444,
+            445
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ZC VALVE OR DAMPER POSITION CONTROLLER",
+          "word_ids": [
+            513,
+            514,
+            515,
+            516,
+            517,
+            518
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 15,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1550,
+        1340,
+        1567
+      ],
+      "expected": "TSL TEMPERATURE SWITCH, LOW (FREEZESTAT)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TSL TEMPERATURE SWITCH, LOW (FREEZESTAT)",
+          "word_ids": [
+            430,
+            431,
+            432,
+            433,
+            434
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TSL TEMPERATURE SWITCH, LOW (FREEZESTAT)",
+          "word_ids": [
+            519,
+            520,
+            521,
+            522,
+            523
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 16,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1584,
+        1340,
+        1601
+      ],
+      "expected": "PSH PRESSURE SWITCH HIGH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PSH PRESSURE SWITCH HIGH",
+          "word_ids": [
+            478,
+            479,
+            480,
+            481
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PSH PRESSURE SWITCH HIGH",
+          "word_ids": [
+            543,
+            544,
+            545,
+            546
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 17,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1617,
+        1340,
+        1634
+      ],
+      "expected": "PSL PRESSURE SWITCH LOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PSL PRESSURE SWITCH LOW",
+          "word_ids": [
+            482,
+            483,
+            484,
+            485
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PSL PRESSURE SWITCH LOW",
+          "word_ids": [
+            563,
+            564,
+            565,
+            566
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 18,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1647,
+        1340,
+        1664
+      ],
+      "expected": "HVAC HVAC CONTROL PANEL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HVAC HVAC CONTROL PANEL",
+          "word_ids": [
+            450,
+            451,
+            452,
+            453
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HVAC HVAC CONTROL PANEL",
+          "word_ids": [
+            611,
+            612,
+            613,
+            614
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 19,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1676,
+        1340,
+        1693
+      ],
+      "expected": "VSMC VARIABLE SPEED MOTOR CONTROLLER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VSMC VARIABLE SPEED MOTOR CONTROLLER",
+          "word_ids": [
+            473,
+            474,
+            475,
+            476,
+            477
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VSMC VARIABLE SPEED MOTOR CONTROLLER",
+          "word_ids": [
+            615,
+            616,
+            617,
+            618,
+            619
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 20,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1710,
+        1340,
+        1727
+      ],
+      "expected": "ECC INTEGRATE WORKSTATION AT CONTROL ENERGY POINT ON CONTROL REMOTE CENTER GRAPHICS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ECC INTEGRATE WORKSTATION AT CONTROL ENERGY POINT ON CONTROL REMOTE CENTER GRAPHICS",
+          "word_ids": [
+            454,
+            455,
+            461,
+            462,
+            456,
+            463,
+            457,
+            458,
+            464,
+            459,
+            465,
+            460
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ECC INTEGRATE WORKSTATION AT CONTROL ENERGY POINT ON CONTROL REMOTE CENTER GRAPHICS",
+          "word_ids": [
+            620,
+            621,
+            627,
+            628,
+            622,
+            629,
+            623,
+            624,
+            630,
+            625,
+            631,
+            626
+          ]
+        }
+      }
+    },
+    {
+      "table": "M400-CONTROLS-SYMBOLS",
+      "row": 21,
+      "column": "literal_source_row_as_printed",
+      "page": 68,
+      "bbox": [
+        945,
+        1746,
+        1340,
+        1763
+      ],
+      "expected": "TC TEMPERATURE CONTROLLER. SEE SEQUENCE OF OPERATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TC TEMPERATURE CONTROLLER. SEE SEQUENCE OF OPERATION",
+          "word_ids": [
+            466,
+            467,
+            468,
+            469,
+            470,
+            471,
+            472
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TC TEMPERATURE CONTROLLER. SEE SEQUENCE OF OPERATION",
+          "word_ids": [
+            632,
+            633,
+            634,
+            635,
+            636,
+            637,
+            638
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

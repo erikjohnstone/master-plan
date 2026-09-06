@@ -1,0 +1,2452 @@
+{
+  "document_id": "02__vol2__015",
+  "source_sha256": "7ac5b4d6d97b5416f7d04a2a3abd303513ac9f19cec5930d0b9aa3bcd550da97",
+  "annotation_sha256": "d8863cc46809193585a56707fbe324d44a901ccbde7d2afcdc8f0d6030b79cc9",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 50,
+  "checks": [
+    {
+      "assertion": "notes-USB-FC",
+      "page": 18,
+      "bbox": [
+        574,
+        263,
+        1048,
+        294
+      ],
+      "expected": "1. PROVIDE WITH CABINET, HOT WATER COIL, ELECTRIC HEATING COIL, FILTERS AND FAN. 2. PROVIDE WITH SINGLE POINT ELECTRICAL CONNECTION.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. PROVIDE WITH CABINET, HOT WATER COIL, ELECTRIC HEATING COIL, FILTERS AND FAN. 2. PROVIDE WITH SINGLE POINT ELECTRICAL CONNECTION.",
+          "word_ids": [
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. PROVIDE WITH CABINET, HOT WATER COIL, ELECTRIC HEATING COIL, FILTERS AND FAN. 2. PROVIDE WITH SINGLE POINT ELECTRICAL CONNECTION.",
+          "word_ids": [
+            223,
+            204,
+            205,
+            206,
+            207,
+            208,
+            209,
+            210,
+            211,
+            212,
+            213,
+            214,
+            215,
+            224,
+            216,
+            217,
+            218,
+            219,
+            220,
+            221
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "notes-USB-DSS",
+      "page": 18,
+      "bbox": [
+        124,
+        457,
+        765,
+        530
+      ],
+      "expected": "1. PROVIDE WITH 18\" STAND FOR OUTDOOR UNIT. 2. PROVIDE COASTAL CORROSION PROTECTION ON OUTDOOR UNIT. 3. PROVIDE INDOOR UNIT WITH CONDENSATE PUMP. 4. COORDINATE WITH ELECTRICAL CONTRACTOR TO PROVIDE POWER WIRING FROM OUTDOOR UNIT TO INDOOR UNIT PER THE MANUFACTURER'S RECOMMENDATIONS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. PROVIDE WITH 18\" STAND FOR OUTDOOR UNIT. 2. PROVIDE COASTAL CORROSION PROTECTION ON OUTDOOR UNIT. 3. PROVIDE INDOOR UNIT WITH CONDENSATE PUMP. 4. COORDINATE WITH ELECTRICAL CONTRACTOR TO PROVIDE POWER WIRING FROM OUTDOOR UNIT TO INDOOR UNIT PER THE MANUFACTURER'S RECOMMENDATIONS.",
+          "word_ids": [
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. PROVIDE WITH 18\" STAND FOR OUTDOOR UNIT. 2. PROVIDE COASTAL CORROSION PROTECTION ON OUTDOOR UNIT. 3. PROVIDE INDOOR UNIT WITH CONDENSATE PUMP. 4. COORDINATE WITH ELECTRICAL CONTRACTOR TO PROVIDE POWER WIRING FROM OUTDOOR UNIT TO INDOOR UNIT PER THE MANUFACTURER'S RECOMMENDATIONS.",
+          "word_ids": [
+            1585,
+            347,
+            348,
+            349,
+            350,
+            351,
+            352,
+            353,
+            1586,
+            354,
+            355,
+            356,
+            357,
+            358,
+            359,
+            360,
+            1587,
+            361,
+            362,
+            363,
+            364,
+            365,
+            366,
+            1588,
+            367,
+            368,
+            369,
+            370,
+            371,
+            372,
+            373,
+            374,
+            375,
+            376,
+            377,
+            378,
+            379,
+            380,
+            381,
+            382,
+            383,
+            384
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "notes-USB-FAN",
+      "page": 18,
+      "bbox": [
+        854,
+        688,
+        1077,
+        734
+      ],
+      "expected": "1. PROVIDE WITH BACKDRAFT DAMPER. 2. PROVIDE WITH SPEED CONTROLLER. 3. PROVIDE VFD CONTROL.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. PROVIDE WITH BACKDRAFT DAMPER. 2. PROVIDE WITH SPEED CONTROLLER. 3. PROVIDE VFD CONTROL.",
+          "word_ids": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. PROVIDE WITH BACKDRAFT DAMPER. 2. PROVIDE WITH SPEED CONTROLLER. 3. PROVIDE VFD CONTROL.",
+          "word_ids": [
+            469,
+            1370,
+            1371,
+            1372,
+            1373,
+            470,
+            1374,
+            1375,
+            1376,
+            1377,
+            471,
+            1378,
+            1379,
+            1380
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "notes-USB-GRD",
+      "page": 18,
+      "bbox": [
+        128,
+        717,
+        418,
+        734
+      ],
+      "expected": "1. ALUMINUM CONSTRUCTION AND ANODIZED FINISH.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. ALUMINUM CONSTRUCTION AND ANODIZED FINISH.",
+          "word_ids": [
+            15,
+            16,
+            17,
+            18,
+            19,
+            20
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. ALUMINUM CONSTRUCTION AND ANODIZED FINISH.",
+          "word_ids": [
+            1369,
+            473,
+            474,
+            475,
+            476,
+            477
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "notes-USB-GR",
+      "page": 18,
+      "bbox": [
+        128,
+        900,
+        533,
+        932
+      ],
+      "expected": "1. PROVIDE WITH BIRDSCREEN AND SLOPED CURB TO MATCH ROOF SLOPE. 2. PROVIDE WITH BACKDRAFT DAMPER.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. PROVIDE WITH BIRDSCREEN AND SLOPED CURB TO MATCH ROOF SLOPE. 2. PROVIDE WITH BACKDRAFT DAMPER.",
+          "word_ids": [
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138,
+            139,
+            140,
+            141,
+            142
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. PROVIDE WITH BIRDSCREEN AND SLOPED CURB TO MATCH ROOF SLOPE. 2. PROVIDE WITH BACKDRAFT DAMPER.",
+          "word_ids": [
+            547,
+            551,
+            552,
+            553,
+            554,
+            555,
+            556,
+            557,
+            558,
+            559,
+            560,
+            548,
+            561,
+            562,
+            563,
+            564
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "notes-USB-GI",
+      "page": 18,
+      "bbox": [
+        1127,
+        901,
+        1593,
+        933
+      ],
+      "expected": "1. PROVIDE WITH BIRDSCREEN AND SLOPED CURB TO MATCH ROOF SLOPE. 2. PROVIDE WITH 24 VOLT MOTORIZED DAMPER. PROVIDE 120 V TO 24 V TRANSFORMER.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. PROVIDE WITH BIRDSCREEN AND SLOPED CURB TO MATCH ROOF SLOPE. 2. PROVIDE WITH 24 VOLT MOTORIZED DAMPER. PROVIDE 120 V TO 24 V TRANSFORMER.",
+          "word_ids": [
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. PROVIDE WITH BIRDSCREEN AND SLOPED CURB TO MATCH ROOF SLOPE. 2. PROVIDE WITH 24 VOLT MOTORIZED DAMPER. PROVIDE 120 V TO 24 V TRANSFORMER.",
+          "word_ids": [
+            549,
+            845,
+            846,
+            847,
+            848,
+            849,
+            850,
+            851,
+            852,
+            853,
+            854,
+            550,
+            855,
+            856,
+            857,
+            858,
+            859,
+            860,
+            861,
+            862,
+            863,
+            864,
+            865,
+            866,
+            867
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "notes-USB-UH",
+      "page": 18,
+      "bbox": [
+        128,
+        1093,
+        362,
+        1110
+      ],
+      "expected": "1. PROVIDE WITH WALL MOUNT BRACKET.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. PROVIDE WITH WALL MOUNT BRACKET.",
+          "word_ids": [
+            86,
+            87,
+            88,
+            89,
+            90,
+            91
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. PROVIDE WITH WALL MOUNT BRACKET.",
+          "word_ids": [
+            624,
+            980,
+            981,
+            982,
+            983,
+            984
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "notes-USB-LOUVER",
+      "page": 18,
+      "bbox": [
+        128,
+        1496,
+        436,
+        1514
+      ],
+      "expected": "1. PROVIDE WITH BIRDSCREEN AND DUCT CONNECTION.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. PROVIDE WITH BIRDSCREEN AND DUCT CONNECTION.",
+          "word_ids": [
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. PROVIDE WITH BIRDSCREEN AND DUCT CONNECTION.",
+          "word_ids": [
+            705,
+            1550,
+            1551,
+            1552,
+            1553,
+            1554,
+            1555
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "notes-USB-MD",
+      "page": 18,
+      "bbox": [
+        1230,
+        1398,
+        1503,
+        1416
+      ],
+      "expected": "1. PROVIDE 120 VOLT TO 24 VOLT TRANSFORMER.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. PROVIDE 120 VOLT TO 24 VOLT TRANSFORMER.",
+          "word_ids": [
+            144,
+            145,
+            146,
+            147,
+            148,
+            149,
+            150,
+            151
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. PROVIDE 120 VOLT TO 24 VOLT TRANSFORMER.",
+          "word_ids": [
+            1328,
+            1329,
+            1330,
+            1331,
+            1332,
+            1333,
+            1334,
+            1335
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "notes-USB-CCC",
+      "page": 19,
+      "bbox": [
+        268,
+        327,
+        923,
+        471
+      ],
+      "expected": "1. TOTAL CONDENSER WATER FLOW IS 301.2 GPM CLOSED CIRCUIT COOLERS ARE N+1 REDUNDANT (PRIMARY AND STANDBY). 2. HEIGHT OF UNIT MUST NOT EXCEED THE NORTH WALL HEIGHT. SEE DRAWINGS FOR EXACT HEIGHT OF WALL. 3. UNIT MUST BE PROVIDED WITH SINGLE POINT CONNECTION AND CONTROL PANEL. 4. UNIT MUST BE ALL STAINLESS STEEL CONSTRUCTION CASING AND COPPER COILS. 5. UNIT IS SIZED BASED ON 30% PROPYLENE GLYCOL. 6. UNIT MUST MEET OR EXCEED ASHRAE 90.1 REQUIREMENTS. 7. UNIT MUST BE PROVIDED WITH ACCESS LADDER AND PLATFORM. 8. UNIT MUST BE PROVIDED WITH FLOAT SWITCH FOR COLD WATER MAKE UP. 9. COORDINATE WITH MANUFACTURER TO VERIFY CLEARANCES AROUND UNITS AND PROVIDE ANY DERATING TO ASSURE PROPER CAPACITY. ONLY ONE UNIT OPERATES AT A TIME.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. TOTAL CONDENSER WATER FLOW IS 301.2 GPM CLOSED CIRCUIT COOLERS ARE N+1 REDUNDANT (PRIMARY AND STANDBY). 2. HEIGHT OF UNIT MUST NOT EXCEED THE NORTH WALL HEIGHT. SEE DRAWINGS FOR EXACT HEIGHT OF WALL. 3. UNIT MUST BE PROVIDED WITH SINGLE POINT CONNECTION AND CONTROL PANEL. 4. UNIT MUST BE ALL STAINLESS STEEL CONSTRUCTION CASING AND COPPER COILS. 5. UNIT IS SIZED BASED ON 30% PROPYLENE GLYCOL. 6. UNIT MUST MEET OR EXCEED ASHRAE 90.1 REQUIREMENTS. 7. UNIT MUST BE PROVIDED WITH ACCESS LADDER AND PLATFORM. 8. UNIT MUST BE PROVIDED WITH FLOAT SWITCH FOR COLD WATER MAKE UP. 9. COORDINATE WITH MANUFACTURER TO VERIFY CLEARANCES AROUND UNITS AND PROVIDE ANY DERATING TO ASSURE PROPER CAPACITY. ONLY ONE UNIT OPERATES AT A TIME.",
+          "word_ids": [
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138,
+            139,
+            140,
+            141,
+            142,
+            143,
+            144,
+            145,
+            146,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            161,
+            162,
+            163,
+            164,
+            165,
+            166,
+            167,
+            168,
+            169,
+            170,
+            171,
+            172,
+            173,
+            174,
+            175,
+            176,
+            177,
+            178,
+            179,
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200,
+            201,
+            202
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. TOTAL CONDENSER WATER FLOW IS 301.2 GPM CLOSED CIRCUIT COOLERS ARE N+1 REDUNDANT (PRIMARY AND STANDBY). 2. HEIGHT OF UNIT MUST NOT EXCEED THE NORTH WALL HEIGHT. SEE DRAWINGS FOR EXACT HEIGHT OF WALL. 3. UNIT MUST BE PROVIDED WITH SINGLE POINT CONNECTION AND CONTROL PANEL. 4. UNIT MUST BE ALL STAINLESS STEEL CONSTRUCTION CASING AND COPPER COILS. 5. UNIT IS SIZED BASED ON 30% PROPYLENE GLYCOL. 6. UNIT MUST MEET OR EXCEED ASHRAE 90.1 REQUIREMENTS. 7. UNIT MUST BE PROVIDED WITH ACCESS LADDER AND PLATFORM. 8. UNIT MUST BE PROVIDED WITH FLOAT SWITCH FOR COLD WATER MAKE UP. 9. COORDINATE WITH MANUFACTURER TO VERIFY CLEARANCES AROUND UNITS AND PROVIDE ANY DERATING TO ASSURE PROPER CAPACITY. ONLY ONE UNIT OPERATES AT A TIME.",
+          "word_ids": [
+            246,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138,
+            139,
+            140,
+            141,
+            142,
+            143,
+            144,
+            145,
+            247,
+            146,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            161,
+            162,
+            248,
+            163,
+            164,
+            165,
+            166,
+            167,
+            168,
+            169,
+            170,
+            171,
+            172,
+            173,
+            249,
+            174,
+            175,
+            176,
+            177,
+            178,
+            179,
+            180,
+            181,
+            182,
+            183,
+            184,
+            250,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            251,
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200,
+            252,
+            201,
+            202,
+            203,
+            204,
+            205,
+            206,
+            207,
+            208,
+            209,
+            253,
+            210,
+            211,
+            212,
+            213,
+            214,
+            215,
+            216,
+            217,
+            218,
+            219,
+            220,
+            221,
+            254,
+            222,
+            223,
+            224,
+            225,
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234,
+            235,
+            236,
+            237,
+            238,
+            239,
+            240,
+            241,
+            242,
+            243,
+            244
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "notes-USB-VALVE",
+      "page": 19,
+      "bbox": [
+        1010,
+        733,
+        1656,
+        779
+      ],
+      "expected": "1. TOTAL CONDENSER WATER FLOW IS 301.2 GPM WHICH IS BASED ON (3) MPAC AND (2) HPAC. COMPRESSORS ARE N+1 REDUNDANT. FC-1 THRU FC-4 CONNECT SUPPLY AND RETURN TO CWR TO RECOVER HEAT BUT THEY DON'T AFFECT THE TOTAL FLOW.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. TOTAL CONDENSER WATER FLOW IS 301.2 GPM WHICH IS BASED ON (3) MPAC AND (2) HPAC. COMPRESSORS ARE N+1 REDUNDANT. FC-1 THRU FC-4 CONNECT SUPPLY AND RETURN TO CWR TO RECOVER HEAT BUT THEY DON'T AFFECT THE TOTAL FLOW.",
+          "word_ids": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. TOTAL CONDENSER WATER FLOW IS 301.2 GPM WHICH IS BASED ON (3) MPAC AND (2) HPAC. COMPRESSORS ARE N+1 REDUNDANT. FC-1 THRU FC-4 CONNECT SUPPLY AND RETURN TO CWR TO RECOVER HEAT BUT THEY DON'T AFFECT THE TOTAL FLOW.",
+          "word_ids": [
+            579,
+            539,
+            540,
+            541,
+            542,
+            543,
+            544,
+            545,
+            546,
+            547,
+            548,
+            549,
+            550,
+            551,
+            552,
+            553,
+            554,
+            555,
+            556,
+            557,
+            558,
+            559,
+            560,
+            561,
+            562,
+            563,
+            564,
+            565,
+            566,
+            567,
+            568,
+            569,
+            570,
+            571,
+            572,
+            573,
+            574,
+            575,
+            576,
+            577
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "notes-USB-PUMP",
+      "page": 19,
+      "bbox": [
+        267,
+        1181,
+        827,
+        1227
+      ],
+      "expected": "1. TOTAL CONDENSER WATER FLOW IS 301.2 GPM. PUMPS ARE N+1 REDUNDANT (PRIMARY AND STANDBY). 2. PUMPS MUST BE PROVIDE WITH HIGH EFFICIENCY MOTORS (INVERTER DUTY). 3. MINIMUM FLOW IS BASED ON 30% OF THE TOTAL FLOW.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. TOTAL CONDENSER WATER FLOW IS 301.2 GPM. PUMPS ARE N+1 REDUNDANT (PRIMARY AND STANDBY). 2. PUMPS MUST BE PROVIDE WITH HIGH EFFICIENCY MOTORS (INVERTER DUTY). 3. MINIMUM FLOW IS BASED ON 30% OF THE TOTAL FLOW.",
+          "word_ids": [
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. TOTAL CONDENSER WATER FLOW IS 301.2 GPM. PUMPS ARE N+1 REDUNDANT (PRIMARY AND STANDBY). 2. PUMPS MUST BE PROVIDE WITH HIGH EFFICIENCY MOTORS (INVERTER DUTY). 3. MINIMUM FLOW IS BASED ON 30% OF THE TOTAL FLOW.",
+          "word_ids": [
+            730,
+            733,
+            734,
+            735,
+            736,
+            737,
+            738,
+            739,
+            740,
+            741,
+            742,
+            743,
+            744,
+            745,
+            746,
+            731,
+            747,
+            748,
+            749,
+            750,
+            751,
+            752,
+            753,
+            754,
+            755,
+            756,
+            732,
+            757,
+            758,
+            759,
+            760,
+            761,
+            762,
+            763,
+            764,
+            765,
+            766
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "notes-USB-MUFFLER",
+      "page": 19,
+      "bbox": [
+        267,
+        1395,
+        883,
+        1455
+      ],
+      "expected": "1. PROVIDE WITH HORIZONTAL MOUNTING BRACKETS AND LIFTING LUGS. 2. PROVIDE WITH FLEXIBLE CONNECTION/EXPANSION JOINT ON INLET AND OUTLET. 3. PROVIDE MUFFLER THAT IS COMPATIBLE WITH THE GENERATOR. SEE SPECIFICATION SECTION 26 32 15.00 ENGINE-GENERATOR SET STATIONARY 15-2500KW, WITH AUXILIARIES.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. PROVIDE WITH HORIZONTAL MOUNTING BRACKETS AND LIFTING LUGS. 2. PROVIDE WITH FLEXIBLE CONNECTION/EXPANSION JOINT ON INLET AND OUTLET. 3. PROVIDE MUFFLER THAT IS COMPATIBLE WITH THE GENERATOR. SEE SPECIFICATION SECTION 26 32 15.00 ENGINE- GENERATOR SET STATIONARY 15-2500KW, WITH AUXILIARIES.",
+          "word_ids": [
+            204,
+            205,
+            206,
+            207,
+            208,
+            209,
+            210,
+            211,
+            212,
+            213,
+            214,
+            215,
+            216,
+            217,
+            218,
+            219,
+            220,
+            221,
+            222,
+            223,
+            224,
+            225,
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234,
+            235,
+            236,
+            237,
+            238,
+            239,
+            240,
+            241,
+            242,
+            243,
+            244
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. PROVIDE WITH HORIZONTAL MOUNTING BRACKETS AND LIFTING LUGS. 2. PROVIDE WITH FLEXIBLE CONNECTION/EXPANSION JOINT ON INLET AND OUTLET. 3. PROVIDE MUFFLER THAT IS COMPATIBLE WITH THE GENERATOR. SEE SPECIFICATION SECTION 26 32 15.00 ENGINE- GENERATOR SET STATIONARY 15-2500KW, WITH AUXILIARIES.",
+          "word_ids": [
+            879,
+            882,
+            883,
+            884,
+            885,
+            886,
+            887,
+            888,
+            889,
+            880,
+            890,
+            891,
+            892,
+            893,
+            894,
+            895,
+            896,
+            897,
+            898,
+            881,
+            899,
+            900,
+            901,
+            902,
+            903,
+            904,
+            905,
+            906,
+            907,
+            908,
+            909,
+            910,
+            911,
+            912,
+            913,
+            914,
+            915,
+            916,
+            917,
+            918,
+            919
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "notes-GH-HP",
+      "page": 20,
+      "bbox": [
+        768,
+        514,
+        1337,
+        575
+      ],
+      "expected": "1. PROVIDE WITH COASTAL COIL PROTECTION ON COIL. 2. HEAT PUMP UNIT SHALL BE CAPABLE OF OPERATION TO 47°F. 3. RATED OUTDOOR DB SHALL BE 105°. UNIT WILL BE SHADED 100% OF THE TIME, BUT THE BOTTOM OF THE CANOPY IS APPRIOX 3'-0\" FROM THE TOP. MANUFACTURER TO VERIFY DERATING REQUIRED.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. PROVIDE WITH COASTAL COIL PROTECTION ON COIL. 2. HEAT PUMP UNIT SHALL BE CAPABLE OF OPERATION TO 47°F. 3. RATED OUTDOOR DB SHALL BE 105°. UNIT WILL BE SHADED 100% OF THE TIME, BUT THE BOTTOM OF THE CANOPY IS APPRIOX 3'-0\" FROM THE TOP. MANUFACTURER TO VERIFY DERATING REQUIRED.",
+          "word_ids": [
+            593,
+            594,
+            595,
+            596,
+            597,
+            598,
+            599,
+            600,
+            601,
+            602,
+            603,
+            604,
+            605,
+            606,
+            607,
+            608,
+            609,
+            610,
+            611,
+            612,
+            613,
+            614,
+            615,
+            616,
+            617,
+            618,
+            619,
+            620,
+            621,
+            622,
+            623,
+            624,
+            625,
+            626,
+            627,
+            628,
+            629,
+            630,
+            631,
+            632,
+            633,
+            634,
+            635,
+            636,
+            637,
+            638,
+            639,
+            640,
+            641,
+            642,
+            643
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. PROVIDE WITH COASTAL COIL PROTECTION ON COIL. 2. HEAT PUMP UNIT SHALL BE CAPABLE OF OPERATION TO 47°F. 3. RATED OUTDOOR DB SHALL BE 105°. UNIT WILL BE SHADED 100% OF THE TIME, BUT THE BOTTOM OF THE CANOPY IS APPRIOX 3'-0\" FROM THE TOP. MANUFACTURER TO VERIFY DERATING REQUIRED.",
+          "word_ids": [
+            165,
+            225,
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            166,
+            232,
+            233,
+            234,
+            235,
+            236,
+            237,
+            238,
+            239,
+            240,
+            241,
+            167,
+            242,
+            243,
+            244,
+            245,
+            246,
+            247,
+            248,
+            249,
+            250,
+            251,
+            252,
+            253,
+            254,
+            255,
+            256,
+            257,
+            258,
+            259,
+            260,
+            261,
+            262,
+            263,
+            264,
+            265,
+            266,
+            267,
+            268,
+            269,
+            270,
+            271,
+            272
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "notes-GH-MD",
+      "page": 20,
+      "bbox": [
+        416,
+        780,
+        813,
+        798
+      ],
+      "expected": "1. PROVIDE TRANSFORMER FOR 120 VOLTS 1 PHASE POWER TO 24 VOLTS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. PROVIDE TRANSFORMER FOR 120 VOLTS 1 PHASE POWER TO 24 VOLTS.",
+          "word_ids": [
+            686,
+            687,
+            688,
+            689,
+            690,
+            691,
+            692,
+            693,
+            694,
+            695,
+            696,
+            697
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. PROVIDE TRANSFORMER FOR 120 VOLTS 1 PHASE POWER TO 24 VOLTS.",
+          "word_ids": [
+            279,
+            322,
+            323,
+            324,
+            325,
+            326,
+            327,
+            328,
+            329,
+            330,
+            331,
+            332
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "notes-GH-DSS",
+      "page": 20,
+      "bbox": [
+        176,
+        1187,
+        843,
+        1276
+      ],
+      "expected": "1. PROVIDE POWER AND CONTROL WIRING FROM OUTDOOR UNIT TO INDOOR UNIT PER MANUFACTURER'S RECOMMENDATIONS. 2. PROVIDE WITH COASTAL COIL PROTECTION ON CONDENSING UNIT COIL. 3. PROVIDE WITH REMOTE CONTROLLER. 4. PROVIDE REFRIGERANT LINE SET PER MANUFACTURER'S RECOMMENDATION. 5. PROVIDE WITH LOW AMBIENT COOLING OPTION. 6. ELECTRICAL DATA FOR OUTDOOR UNIT INCLUDES INDOOR UNIT.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. PROVIDE POWER AND CONTROL WIRING FROM OUTDOOR UNIT TO INDOOR UNIT PER MANUFACTURER'S RECOMMENDATIONS. 2. PROVIDE WITH COASTAL COIL PROTECTION ON CONDENSING UNIT COIL. 3. PROVIDE WITH REMOTE CONTROLLER. 4. PROVIDE REFRIGERANT LINE SET PER MANUFACTURER'S RECOMMENDATION. 5. PROVIDE WITH LOW AMBIENT COOLING OPTION. 6. ELECTRICAL DATA FOR OUTDOOR UNIT INCLUDES INDOOR UNIT.",
+          "word_ids": [
+            539,
+            540,
+            541,
+            542,
+            543,
+            544,
+            545,
+            546,
+            547,
+            548,
+            549,
+            550,
+            551,
+            552,
+            553,
+            554,
+            555,
+            556,
+            557,
+            558,
+            559,
+            560,
+            561,
+            562,
+            563,
+            564,
+            565,
+            566,
+            567,
+            568,
+            569,
+            570,
+            571,
+            572,
+            573,
+            574,
+            575,
+            576,
+            577,
+            578,
+            579,
+            580,
+            581,
+            582,
+            583,
+            584,
+            585,
+            586,
+            587,
+            588,
+            589,
+            590,
+            591,
+            592
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. PROVIDE POWER AND CONTROL WIRING FROM OUTDOOR UNIT TO INDOOR UNIT PER MANUFACTURER'S RECOMMENDATIONS. 2. PROVIDE WITH COASTAL COIL PROTECTION ON CONDENSING UNIT COIL. 3. PROVIDE WITH REMOTE CONTROLLER. 4. PROVIDE REFRIGERANT LINE SET PER MANUFACTURER'S RECOMMENDATION. 5. PROVIDE WITH LOW AMBIENT COOLING OPTION. 6. ELECTRICAL DATA FOR OUTDOOR UNIT INCLUDES INDOOR UNIT.",
+          "word_ids": [
+            590,
+            519,
+            520,
+            521,
+            522,
+            523,
+            524,
+            525,
+            526,
+            527,
+            528,
+            529,
+            530,
+            531,
+            532,
+            591,
+            533,
+            534,
+            535,
+            536,
+            537,
+            538,
+            539,
+            540,
+            541,
+            592,
+            542,
+            543,
+            544,
+            545,
+            593,
+            546,
+            547,
+            548,
+            549,
+            550,
+            551,
+            552,
+            594,
+            553,
+            554,
+            555,
+            556,
+            557,
+            558,
+            595,
+            559,
+            560,
+            561,
+            562,
+            563,
+            564,
+            565,
+            566
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "notes-GB-DSS",
+      "page": 9,
+      "bbox": [
+        108,
+        699,
+        775,
+        773
+      ],
+      "expected": "1. PROVIDE POWER AND CONTROL WIRING FROM OUTDOOR UNIT TO INDOOR UNIT PER MANUFACTURER'S RECOMMENDATIONS. 2. PROVIDE WITH COASTAL COIL PROTECTION ON CONDENSING UNIT COIL. 3. PROVIDE WITH REMOTE CONTROLLER. 4. PROVIDE REFRIGERANT LINE SET PER MANUFACTURER'S RECOMMENDATION. 5. ELECTRICAL DATA FOR OUTDOOR UNIT INCLUDES INDOOR UNIT.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. PROVIDE POWER AND CONTROL WIRING FROM OUTDOOR UNIT TO INDOOR UNIT PER MANUFACTURER'S RECOMMENDATIONS. 2. PROVIDE WITH COASTAL COIL PROTECTION ON CONDENSING UNIT COIL. 3. PROVIDE WITH REMOTE CONTROLLER. 4. PROVIDE REFRIGERANT LINE SET PER MANUFACTURER'S RECOMMENDATION. 5. ELECTRICAL DATA FOR OUTDOOR UNIT INCLUDES INDOOR UNIT.",
+          "word_ids": [
+            476,
+            477,
+            478,
+            479,
+            480,
+            481,
+            482,
+            483,
+            484,
+            485,
+            486,
+            487,
+            488,
+            489,
+            490,
+            491,
+            492,
+            493,
+            494,
+            495,
+            496,
+            497,
+            498,
+            499,
+            500,
+            501,
+            502,
+            503,
+            504,
+            505,
+            506,
+            507,
+            508,
+            509,
+            510,
+            511,
+            512,
+            513,
+            514,
+            515,
+            516,
+            517,
+            518,
+            519,
+            520,
+            521,
+            522
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. PROVIDE POWER AND CONTROL WIRING FROM OUTDOOR UNIT TO INDOOR UNIT PER MANUFACTURER'S RECOMMENDATIONS. 2. PROVIDE WITH COASTAL COIL PROTECTION ON CONDENSING UNIT COIL. 3. PROVIDE WITH REMOTE CONTROLLER. 4. PROVIDE REFRIGERANT LINE SET PER MANUFACTURER'S RECOMMENDATION. 5. ELECTRICAL DATA FOR OUTDOOR UNIT INCLUDES INDOOR UNIT.",
+          "word_ids": [
+            163,
+            257,
+            258,
+            259,
+            260,
+            261,
+            262,
+            263,
+            264,
+            265,
+            266,
+            267,
+            268,
+            269,
+            270,
+            164,
+            271,
+            272,
+            273,
+            274,
+            275,
+            276,
+            277,
+            278,
+            279,
+            165,
+            280,
+            281,
+            282,
+            283,
+            166,
+            284,
+            285,
+            286,
+            287,
+            288,
+            289,
+            290,
+            167,
+            291,
+            292,
+            293,
+            294,
+            295,
+            296,
+            297,
+            298
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "piping-valve-names/V1/tag",
+      "page": 21,
+      "bbox": [
+        201,
+        601,
+        221,
+        617
+      ],
+      "expected": "V-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-1",
+          "word_ids": [
+            7
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-1",
+          "word_ids": [
+            111
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "piping-valve-names/V2/tag",
+      "page": 21,
+      "bbox": [
+        518,
+        611,
+        538,
+        627
+      ],
+      "expected": "V-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-2",
+          "word_ids": [
+            119
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-2",
+          "word_ids": [
+            118
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "piping-valve-names/V3/tag",
+      "page": 21,
+      "bbox": [
+        786,
+        637,
+        807,
+        653
+      ],
+      "expected": "V-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-3",
+          "word_ids": [
+            130
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-3",
+          "word_ids": [
+            126
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "piping-valve-names/V4/tag",
+      "page": 21,
+      "bbox": [
+        1321,
+        719,
+        1341,
+        736
+      ],
+      "expected": "V-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-4",
+          "word_ids": [
+            241
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-4",
+          "word_ids": [
+            178
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "piping-valve-names/V5/tag",
+      "page": 21,
+      "bbox": [
+        1447,
+        719,
+        1467,
+        736
+      ],
+      "expected": "V-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-5",
+          "word_ids": [
+            242
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-5",
+          "word_ids": [
+            175
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "piping-valve-names/V6/tag",
+      "page": 21,
+      "bbox": [
+        1573,
+        719,
+        1593,
+        736
+      ],
+      "expected": "V-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-6",
+          "word_ids": [
+            243
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-6",
+          "word_ids": [
+            171
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "piping-valve-names/V7/tag",
+      "page": 21,
+      "bbox": [
+        1699,
+        719,
+        1719,
+        736
+      ],
+      "expected": "V-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-7",
+          "word_ids": [
+            244
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-7",
+          "word_ids": [
+            168
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "piping-valve-names/V8/tag",
+      "page": 21,
+      "bbox": [
+        1825,
+        719,
+        1846,
+        736
+      ],
+      "expected": "V-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-8",
+          "word_ids": [
+            245
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-8",
+          "word_ids": [
+            164
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "piping-valve-names/V9/tag",
+      "page": 21,
+      "bbox": [
+        1951,
+        719,
+        1972,
+        736
+      ],
+      "expected": "V-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-9",
+          "word_ids": [
+            246
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-9",
+          "word_ids": [
+            166
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "piping-valve-names/V10/tag",
+      "page": 21,
+      "bbox": [
+        2077,
+        719,
+        2104,
+        736
+      ],
+      "expected": "V-10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-10",
+          "word_ids": [
+            247
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-10",
+          "word_ids": [
+            203
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "piping-valve-names/V11/tag",
+      "page": 21,
+      "bbox": [
+        2139,
+        456,
+        2165,
+        472
+      ],
+      "expected": "V-11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-11",
+          "word_ids": [
+            132
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-11",
+          "word_ids": [
+            81
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "piping-valve-names/V12/tag",
+      "page": 21,
+      "bbox": [
+        903,
+        1174,
+        930,
+        1190
+      ],
+      "expected": "V-12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-12",
+          "word_ids": [
+            64
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-12",
+          "word_ids": [
+            279
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "piping-valve-names/V13/tag",
+      "page": 21,
+      "bbox": [
+        1224,
+        1174,
+        1251,
+        1190
+      ],
+      "expected": "V-13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-13",
+          "word_ids": [
+            215
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-13",
+          "word_ids": [
+            280
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "piping-valve-names/V14/tag",
+      "page": 21,
+      "bbox": [
+        1545,
+        1174,
+        1572,
+        1190
+      ],
+      "expected": "V-14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-14",
+          "word_ids": [
+            227
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-14",
+          "word_ids": [
+            281
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "piping-valve-names/V15/tag",
+      "page": 21,
+      "bbox": [
+        1866,
+        1174,
+        1893,
+        1190
+      ],
+      "expected": "V-15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-15",
+          "word_ids": [
+            239
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-15",
+          "word_ids": [
+            282
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM610-V1/state",
+      "page": 21,
+      "bbox": [
+        166,
+        618,
+        186,
+        634
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            8
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            478
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM610-V2/state",
+      "page": 21,
+      "bbox": [
+        470,
+        618,
+        490,
+        634
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            120
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            42
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM610-V4/state",
+      "page": 21,
+      "bbox": [
+        1256,
+        718,
+        1277,
+        735
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            136
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            180
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM610-V5/state",
+      "page": 21,
+      "bbox": [
+        1393,
+        718,
+        1414,
+        735
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            147
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            177
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM610-V6/state",
+      "page": 21,
+      "bbox": [
+        1522,
+        718,
+        1543,
+        735
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            158
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            173
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM610-V7/state",
+      "page": 21,
+      "bbox": [
+        1646,
+        718,
+        1666,
+        735
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            169
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            170
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM610-V8/state",
+      "page": 21,
+      "bbox": [
+        1770,
+        718,
+        1790,
+        735
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            180
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            162
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM610-V9/state",
+      "page": 21,
+      "bbox": [
+        1899,
+        718,
+        1919,
+        735
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            191
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            163
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM610-V10/state",
+      "page": 21,
+      "bbox": [
+        2020,
+        718,
+        2041,
+        735
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            202
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            165
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM702-V1/state",
+      "page": 23,
+      "bbox": [
+        379,
+        367,
+        399,
+        383
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            107
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            87
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM702-V2/state",
+      "page": 23,
+      "bbox": [
+        786,
+        367,
+        806,
+        383
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            165
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            93
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM702-V4/state",
+      "page": 23,
+      "bbox": [
+        510,
+        951,
+        530,
+        967
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            114
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            240
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM702-V5/state",
+      "page": 23,
+      "bbox": [
+        744,
+        951,
+        764,
+        967
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            116
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            177
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM702-V6/state",
+      "page": 23,
+      "bbox": [
+        978,
+        951,
+        998,
+        967
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            118
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            182
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM702-V7/state",
+      "page": 23,
+      "bbox": [
+        1212,
+        951,
+        1232,
+        967
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            120
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            185
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM702-V8/state",
+      "page": 23,
+      "bbox": [
+        1446,
+        951,
+        1466,
+        967
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            122
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            192
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM702-V9/state",
+      "page": 23,
+      "bbox": [
+        1680,
+        951,
+        1700,
+        967
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            124
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            200
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "isolation-valve-state-conflicts/AM702-V10/state",
+      "page": 23,
+      "bbox": [
+        1914,
+        951,
+        1934,
+        967
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            126
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            202
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "all-schedule-note-blocks",
+      "actual": 17,
+      "expected": 17,
+      "pass": true
+    },
+    {
+      "id": "all-piping-valve-labels",
+      "actual": 15,
+      "expected": 15,
+      "pass": true
+    },
+    {
+      "id": "both-state-versions",
+      "actual": 18,
+      "expected": 18,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

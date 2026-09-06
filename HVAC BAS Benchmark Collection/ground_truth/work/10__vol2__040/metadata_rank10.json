@@ -1,0 +1,360 @@
+{
+  "document_id": "10__vol2__040",
+  "module_role": "Title-block facts, full supplied-sheet ledger, scale boundary and complete visual-review disposition.",
+  "tables": [],
+  "project": {
+    "project_name_as_printed": "EXPAND STERILE PROCESSING SERVICE (SPS)",
+    "facility_as_printed": "Captain James A. Lovell Federal Healthcare Center",
+    "issue_date_as_printed": "11/29/2022",
+    "assertion_ids": [
+      "r10-project",
+      "r10-facility",
+      "r10-issue-date",
+      "r10-sheet"
+    ]
+  },
+  "scale_semantics": {
+    "takeoff_scale_status": "No global drawing scale is asserted across this mixed schedule, plan, detail and diagram set.",
+    "boundary": "No local scale is converted into a document-wide quantity."
+  },
+  "visual_review_pages": [
+    {
+      "page": 1,
+      "sheet": "M000",
+      "render": "reviews/10__vol2__040/p1-p1-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 2,
+      "sheet": "MD2PB.2",
+      "render": "reviews/10__vol2__040/p2-p2-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 3,
+      "sheet": "MD100.1",
+      "render": "reviews/10__vol2__040/p3-p3-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 4,
+      "sheet": "MD100.2",
+      "render": "reviews/10__vol2__040/p4-p4-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 5,
+      "sheet": "MD100.3",
+      "render": "reviews/10__vol2__040/p5-p5-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 6,
+      "sheet": "MD100.4",
+      "render": "reviews/10__vol2__040/p6-p6-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 7,
+      "sheet": "MD101.2",
+      "render": "reviews/10__vol2__040/p7-p7-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 8,
+      "sheet": "MD101.4",
+      "render": "reviews/10__vol2__040/p8-p8-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 9,
+      "sheet": "MD102.4",
+      "render": "reviews/10__vol2__040/p9-p9-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 10,
+      "sheet": "MD103.4",
+      "render": "reviews/10__vol2__040/p10-p10-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 11,
+      "sheet": "MD104.4",
+      "render": "reviews/10__vol2__040/p11-p11-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 12,
+      "sheet": "MD200.4",
+      "render": "reviews/10__vol2__040/p12-p12-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 13,
+      "sheet": "M1PB.2",
+      "render": "reviews/10__vol2__040/p13-p13-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 14,
+      "sheet": "M2PB.2",
+      "render": "reviews/10__vol2__040/p14-p14-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 15,
+      "sheet": "M100.0",
+      "render": "reviews/10__vol2__040/p15-p15-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 16,
+      "sheet": "M100.1",
+      "render": "reviews/10__vol2__040/p16-p16-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 17,
+      "sheet": "M100.2",
+      "render": "reviews/10__vol2__040/p17-p17-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 18,
+      "sheet": "M100.3",
+      "render": "reviews/10__vol2__040/p18-p18-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 19,
+      "sheet": "M100.4",
+      "render": "reviews/10__vol2__040/p19-p19-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 20,
+      "sheet": "M100.41",
+      "render": "reviews/10__vol2__040/p20-p20-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 21,
+      "sheet": "M100.42",
+      "render": "reviews/10__vol2__040/p21-p21-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 22,
+      "sheet": "M100.43",
+      "render": "reviews/10__vol2__040/p22-p22-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 23,
+      "sheet": "M100.44",
+      "render": "reviews/10__vol2__040/p23-p23-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 24,
+      "sheet": "M101.0",
+      "render": "reviews/10__vol2__040/p24-p24-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 25,
+      "sheet": "M101.2",
+      "render": "reviews/10__vol2__040/p25-p25-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 26,
+      "sheet": "M101.4",
+      "render": "reviews/10__vol2__040/p26-p26-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 27,
+      "sheet": "M102.0",
+      "render": "reviews/10__vol2__040/p27-p27-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 28,
+      "sheet": "M102.2",
+      "render": "reviews/10__vol2__040/p28-p28-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 29,
+      "sheet": "M200.0",
+      "render": "reviews/10__vol2__040/p29-p29-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 30,
+      "sheet": "M200.2",
+      "render": "reviews/10__vol2__040/p30-p30-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 31,
+      "sheet": "M200.4",
+      "render": "reviews/10__vol2__040/p31-p31-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 32,
+      "sheet": "M200.44",
+      "render": "reviews/10__vol2__040/p32-p32-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 33,
+      "sheet": "M201.0",
+      "render": "reviews/10__vol2__040/p33-p33-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 34,
+      "sheet": "M201.2",
+      "render": "reviews/10__vol2__040/p34-p34-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 35,
+      "sheet": "M300",
+      "render": "reviews/10__vol2__040/p35-p35-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 36,
+      "sheet": "M301",
+      "render": "reviews/10__vol2__040/p36-p36-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 37,
+      "sheet": "M302",
+      "render": "reviews/10__vol2__040/p37-p37-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 38,
+      "sheet": "M303",
+      "render": "reviews/10__vol2__040/p38-p38-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 39,
+      "sheet": "M304",
+      "render": "reviews/10__vol2__040/p39-p39-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 40,
+      "sheet": "M305",
+      "render": "reviews/10__vol2__040/p40-p40-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 41,
+      "sheet": "M306",
+      "render": "reviews/10__vol2__040/p41-p41-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 42,
+      "sheet": "M307",
+      "render": "reviews/10__vol2__040/p42-p42-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 43,
+      "sheet": "M400",
+      "render": "reviews/10__vol2__040/p43-p43-full-poppler.png",
+      "finding": "Control/sequence drawing visually reviewed and retained with bounded assertions."
+    },
+    {
+      "page": 44,
+      "sheet": "M401",
+      "render": "reviews/10__vol2__040/p44-p44-full-poppler.png",
+      "finding": "Control/sequence drawing visually reviewed and retained with bounded assertions."
+    },
+    {
+      "page": 45,
+      "sheet": "M402",
+      "render": "reviews/10__vol2__040/p45-p45-full-poppler.png",
+      "finding": "Control/sequence drawing visually reviewed and retained with bounded assertions."
+    },
+    {
+      "page": 46,
+      "sheet": "M403",
+      "render": "reviews/10__vol2__040/p46-p46-full-poppler.png",
+      "finding": "Control/sequence drawing visually reviewed and retained with bounded assertions."
+    },
+    {
+      "page": 47,
+      "sheet": "M600",
+      "render": "reviews/10__vol2__040/p47-p47-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 48,
+      "sheet": "M601",
+      "render": "reviews/10__vol2__040/p48-p48-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "r10-project",
+      "page": 1,
+      "bbox": [
+        2535,
+        1922,
+        2789,
+        1963
+      ],
+      "expected": "EXPAND STERILE PROCESSING SERVICE (SPS)",
+      "mode": "exact"
+    },
+    {
+      "id": "r10-facility",
+      "page": 1,
+      "bbox": [
+        2537,
+        2004,
+        2760,
+        2015
+      ],
+      "expected": "Captain James A. Lovell Federal Healthcare Center",
+      "mode": "exact"
+    },
+    {
+      "id": "r10-issue-date",
+      "page": 1,
+      "bbox": [
+        2537,
+        2052,
+        2589,
+        2064
+      ],
+      "expected": "11/29/2022",
+      "mode": "exact"
+    },
+    {
+      "id": "r10-sheet",
+      "page": 1,
+      "bbox": [
+        2866,
+        2032,
+        2916,
+        2056
+      ],
+      "expected": "M000",
+      "mode": "exact"
+    }
+  ]
+}

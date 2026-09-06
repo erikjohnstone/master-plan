@@ -1,0 +1,83 @@
+{
+  "document_id": "20__vol2__097",
+  "module_role": "Explicit source limits, omitted-scope disclosure and standalone-schedule-title checks.",
+  "tables": [],
+  "source_limitations": [
+    "All 25 pages received full-page visual review. H-001's complete 12-row schedule corpus and H-601/E-603 high-value control material are source-bounded in this record; plans/details/one-lines remain reviewed context, not inferred inventory.",
+    "No conventional BAS point-list matrix, controller address list, I/O-card layout, point-to-controller binding, network protocol, LAN topology or media design is published.",
+    "Control/wiring symbols and schedule notes are not expanded into physical controller, card, sensor, timer, relay, actuator, conductor, terminal, damper or device quantities.",
+    "The complete supplied set has no standalone Control Valve Schedule or Damper Actuator Schedule title. The H-001 louver actuator text is retained as part of its literal schedule row, not misclassified as a damper-actuator schedule."
+  ],
+  "text_absence_assertions": [
+    {
+      "id": "no-control-valve-schedule",
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "covers_all_source_pages": true,
+      "patterns": [
+        "CONTROL\\\\s+VALVE\\\\s+SCHEDULE"
+      ],
+      "visual_review_qualification": "Native text plus whole-set visual review support only the limited absence of this standalone title."
+    },
+    {
+      "id": "no-damper-actuator-schedule",
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "covers_all_source_pages": true,
+      "patterns": [
+        "DAMPER\\\\s+ACTUATOR\\\\s+SCHEDULE"
+      ],
+      "visual_review_qualification": "Native text plus whole-set visual review support only the limited absence of this standalone title."
+    }
+  ]
+}

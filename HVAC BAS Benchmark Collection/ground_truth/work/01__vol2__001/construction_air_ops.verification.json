@@ -1,0 +1,3258 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "4f36b8a1bbf28c8ef575d54766794352df61927f297208c2ffae065c05ab84c3",
+  "tables": 3,
+  "rows": 13,
+  "cell_assertions": 100,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 1,
+      "column": "system",
+      "page": 43,
+      "bbox": [
+        150,
+        535,
+        370,
+        552
+      ],
+      "expected": "SUPPLY AIR UPSTREAM OF VAV BOXES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR UPSTREAM OF VAV BOXES",
+          "word_ids": [
+            23,
+            24,
+            25,
+            26,
+            27,
+            28
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR UPSTREAM OF VAV BOXES",
+          "word_ids": [
+            576,
+            577,
+            578,
+            579,
+            580,
+            581
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 1,
+      "column": "location",
+      "page": 43,
+      "bbox": [
+        370,
+        535,
+        520,
+        552
+      ],
+      "expected": "CONCEALED / MECH AREA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONCEALED / MECH AREA",
+          "word_ids": [
+            56,
+            57,
+            58,
+            59
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONCEALED / MECH AREA",
+          "word_ids": [
+            555,
+            556,
+            557,
+            558
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 1,
+      "column": "description",
+      "page": 43,
+      "bbox": [
+        520,
+        535,
+        640,
+        552
+      ],
+      "expected": "SINGLE WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SINGLE WALL",
+          "word_ids": [
+            78,
+            79
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SINGLE WALL",
+          "word_ids": [
+            533,
+            534
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 1,
+      "column": "pressure_class_in_wg",
+      "page": 43,
+      "bbox": [
+        640,
+        535,
+        750,
+        552
+      ],
+      "expected": "+ 4.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "+ 4.0",
+          "word_ids": [
+            109,
+            110
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "+ 4.0",
+          "word_ids": [
+            498,
+            499
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 1,
+      "column": "leakage_class_round",
+      "page": 43,
+      "bbox": [
+        750,
+        535,
+        820,
+        552
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            127
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            489
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 1,
+      "column": "leakage_class_rectangular",
+      "page": 43,
+      "bbox": [
+        820,
+        535,
+        900,
+        552
+      ],
+      "expected": "6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            136
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            302
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 1,
+      "column": "seal_class",
+      "page": 43,
+      "bbox": [
+        900,
+        535,
+        980,
+        552
+      ],
+      "expected": "A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            97
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            311
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 1,
+      "column": "DALT_QTY",
+      "page": 43,
+      "bbox": [
+        980,
+        535,
+        1080,
+        552
+      ],
+      "expected": "YES / 25%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "YES / 25%",
+          "word_ids": [
+            105,
+            106,
+            107
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "YES / 25%",
+          "word_ids": [
+            320,
+            321,
+            322
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 1,
+      "column": "duct_test_pressure_in_wg",
+      "page": 43,
+      "bbox": [
+        1080,
+        535,
+        1210,
+        552
+      ],
+      "expected": "4.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4.0",
+          "word_ids": [
+            108
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4.0",
+          "word_ids": [
+            341
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 2,
+      "column": "system",
+      "page": 43,
+      "bbox": [
+        150,
+        552,
+        370,
+        570
+      ],
+      "expected": "SUPPLY AIR DOWNSTREAM OF VAV BOXES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR DOWNSTREAM OF VAV BOXES",
+          "word_ids": [
+            29,
+            30,
+            31,
+            32,
+            33,
+            34
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR DOWNSTREAM OF VAV BOXES",
+          "word_ids": [
+            582,
+            583,
+            584,
+            585,
+            586,
+            587
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 2,
+      "column": "location",
+      "page": 43,
+      "bbox": [
+        370,
+        552,
+        520,
+        570
+      ],
+      "expected": "CONCEALED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONCEALED",
+          "word_ids": [
+            60
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONCEALED",
+          "word_ids": [
+            559
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 2,
+      "column": "description",
+      "page": 43,
+      "bbox": [
+        520,
+        552,
+        640,
+        570
+      ],
+      "expected": "SINGLE WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SINGLE WALL",
+          "word_ids": [
+            80,
+            81
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SINGLE WALL",
+          "word_ids": [
+            535,
+            536
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 2,
+      "column": "pressure_class_in_wg",
+      "page": 43,
+      "bbox": [
+        640,
+        552,
+        750,
+        570
+      ],
+      "expected": "+ 2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "+ 2.0",
+          "word_ids": [
+            111,
+            112
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "+ 2.0",
+          "word_ids": [
+            500,
+            501
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 2,
+      "column": "leakage_class_round",
+      "page": 43,
+      "bbox": [
+        750,
+        552,
+        820,
+        570
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            128
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            490
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 2,
+      "column": "leakage_class_rectangular",
+      "page": 43,
+      "bbox": [
+        820,
+        552,
+        900,
+        570
+      ],
+      "expected": "6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            137
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            303
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 2,
+      "column": "seal_class",
+      "page": 43,
+      "bbox": [
+        900,
+        552,
+        980,
+        570
+      ],
+      "expected": "A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            96
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            312
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 2,
+      "column": "DALT_QTY",
+      "page": 43,
+      "bbox": [
+        980,
+        552,
+        1080,
+        570
+      ],
+      "expected": "YES / 25%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "YES / 25%",
+          "word_ids": [
+            145,
+            146,
+            147
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "YES / 25%",
+          "word_ids": [
+            323,
+            324,
+            325
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 2,
+      "column": "duct_test_pressure_in_wg",
+      "page": 43,
+      "bbox": [
+        1080,
+        552,
+        1210,
+        570
+      ],
+      "expected": "1.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            148
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            342
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 3,
+      "column": "system",
+      "page": 43,
+      "bbox": [
+        150,
+        570,
+        370,
+        587
+      ],
+      "expected": "RETURN AIR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN AIR",
+          "word_ids": [
+            35,
+            36
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN AIR",
+          "word_ids": [
+            588,
+            589
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 3,
+      "column": "location",
+      "page": 43,
+      "bbox": [
+        370,
+        570,
+        520,
+        587
+      ],
+      "expected": "CONCEALED / MECH AREA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONCEALED / MECH AREA",
+          "word_ids": [
+            61,
+            62,
+            63,
+            64
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONCEALED / MECH AREA",
+          "word_ids": [
+            560,
+            561,
+            562,
+            563
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 3,
+      "column": "description",
+      "page": 43,
+      "bbox": [
+        520,
+        570,
+        640,
+        587
+      ],
+      "expected": "SINGLE WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SINGLE WALL",
+          "word_ids": [
+            84,
+            85
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SINGLE WALL",
+          "word_ids": [
+            537,
+            538
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 3,
+      "column": "pressure_class_in_wg",
+      "page": 43,
+      "bbox": [
+        640,
+        570,
+        750,
+        587
+      ],
+      "expected": "- 2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "- 2.0",
+          "word_ids": [
+            113,
+            114
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "- 2.0",
+          "word_ids": [
+            502,
+            503
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 3,
+      "column": "leakage_class_round",
+      "page": 43,
+      "bbox": [
+        750,
+        570,
+        820,
+        587
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            129
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            491
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 3,
+      "column": "leakage_class_rectangular",
+      "page": 43,
+      "bbox": [
+        820,
+        570,
+        900,
+        587
+      ],
+      "expected": "6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            138
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            304
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 3,
+      "column": "seal_class",
+      "page": 43,
+      "bbox": [
+        900,
+        570,
+        980,
+        587
+      ],
+      "expected": "A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            99
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            313
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 3,
+      "column": "DALT_QTY",
+      "page": 43,
+      "bbox": [
+        980,
+        570,
+        1080,
+        587
+      ],
+      "expected": "YES / 25%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "YES / 25%",
+          "word_ids": [
+            149,
+            150,
+            151
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "YES / 25%",
+          "word_ids": [
+            326,
+            327,
+            328
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 3,
+      "column": "duct_test_pressure_in_wg",
+      "page": 43,
+      "bbox": [
+        1080,
+        570,
+        1210,
+        587
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            152
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            343
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 4,
+      "column": "system",
+      "page": 43,
+      "bbox": [
+        150,
+        587,
+        370,
+        604
+      ],
+      "expected": "EXHAUST AIR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST AIR",
+          "word_ids": [
+            37,
+            38
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST AIR",
+          "word_ids": [
+            590,
+            591
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 4,
+      "column": "location",
+      "page": 43,
+      "bbox": [
+        370,
+        587,
+        520,
+        604
+      ],
+      "expected": "CONCEALED / MECH AREA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONCEALED / MECH AREA",
+          "word_ids": [
+            65,
+            66,
+            67,
+            68
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONCEALED / MECH AREA",
+          "word_ids": [
+            564,
+            565,
+            566,
+            567
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 4,
+      "column": "description",
+      "page": 43,
+      "bbox": [
+        520,
+        587,
+        640,
+        604
+      ],
+      "expected": "SINGLE WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SINGLE WALL",
+          "word_ids": [
+            86,
+            87
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SINGLE WALL",
+          "word_ids": [
+            539,
+            540
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 4,
+      "column": "pressure_class_in_wg",
+      "page": 43,
+      "bbox": [
+        640,
+        587,
+        750,
+        604
+      ],
+      "expected": "- 2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "- 2.0",
+          "word_ids": [
+            115,
+            116
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "- 2.0",
+          "word_ids": [
+            504,
+            505
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 4,
+      "column": "leakage_class_round",
+      "page": 43,
+      "bbox": [
+        750,
+        587,
+        820,
+        604
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            130
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            492
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 4,
+      "column": "leakage_class_rectangular",
+      "page": 43,
+      "bbox": [
+        820,
+        587,
+        900,
+        604
+      ],
+      "expected": "6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            139
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            305
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 4,
+      "column": "seal_class",
+      "page": 43,
+      "bbox": [
+        900,
+        587,
+        980,
+        604
+      ],
+      "expected": "A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            98
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            314
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 4,
+      "column": "DALT_QTY",
+      "page": 43,
+      "bbox": [
+        980,
+        587,
+        1080,
+        604
+      ],
+      "expected": "YES / 25%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "YES / 25%",
+          "word_ids": [
+            153,
+            154,
+            155
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "YES / 25%",
+          "word_ids": [
+            329,
+            330,
+            331
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 4,
+      "column": "duct_test_pressure_in_wg",
+      "page": 43,
+      "bbox": [
+        1080,
+        587,
+        1210,
+        604
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            156
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            344
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 5,
+      "column": "system",
+      "page": 43,
+      "bbox": [
+        150,
+        604,
+        370,
+        622
+      ],
+      "expected": "TRANSFER AIR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TRANSFER AIR",
+          "word_ids": [
+            39,
+            40
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TRANSFER AIR",
+          "word_ids": [
+            592,
+            593
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 5,
+      "column": "location",
+      "page": 43,
+      "bbox": [
+        370,
+        604,
+        520,
+        622
+      ],
+      "expected": "CONCEALED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONCEALED",
+          "word_ids": [
+            69
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONCEALED",
+          "word_ids": [
+            568
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 5,
+      "column": "description",
+      "page": 43,
+      "bbox": [
+        520,
+        604,
+        640,
+        622
+      ],
+      "expected": "SINGLE WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SINGLE WALL",
+          "word_ids": [
+            88,
+            89
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SINGLE WALL",
+          "word_ids": [
+            541,
+            542
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 5,
+      "column": "pressure_class_in_wg",
+      "page": 43,
+      "bbox": [
+        640,
+        604,
+        750,
+        622
+      ],
+      "expected": "+/- 1.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "+/- 1.0",
+          "word_ids": [
+            117,
+            118
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "+/- 1.0",
+          "word_ids": [
+            506,
+            507
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 5,
+      "column": "leakage_class_round",
+      "page": 43,
+      "bbox": [
+        750,
+        604,
+        820,
+        622
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            131
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            493
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 5,
+      "column": "leakage_class_rectangular",
+      "page": 43,
+      "bbox": [
+        820,
+        604,
+        900,
+        622
+      ],
+      "expected": "6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            140
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            306
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 5,
+      "column": "seal_class",
+      "page": 43,
+      "bbox": [
+        900,
+        604,
+        980,
+        622
+      ],
+      "expected": "A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            101
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            315
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 5,
+      "column": "DALT_QTY",
+      "page": 43,
+      "bbox": [
+        980,
+        604,
+        1080,
+        622
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            157
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            332
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 5,
+      "column": "duct_test_pressure_in_wg",
+      "page": 43,
+      "bbox": [
+        1080,
+        604,
+        1210,
+        622
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            158
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            345
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 6,
+      "column": "system",
+      "page": 43,
+      "bbox": [
+        150,
+        622,
+        370,
+        639
+      ],
+      "expected": "TREATED OUTSIDE AIR (VA)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TREATED OUTSIDE AIR (VA)",
+          "word_ids": [
+            41,
+            42,
+            43,
+            44
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TREATED OUTSIDE AIR (VA)",
+          "word_ids": [
+            594,
+            595,
+            596,
+            597
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 6,
+      "column": "location",
+      "page": 43,
+      "bbox": [
+        370,
+        622,
+        520,
+        639
+      ],
+      "expected": "MECH AREA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECH AREA",
+          "word_ids": [
+            70,
+            71
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECH AREA",
+          "word_ids": [
+            525,
+            526
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 6,
+      "column": "description",
+      "page": 43,
+      "bbox": [
+        520,
+        622,
+        640,
+        639
+      ],
+      "expected": "SINGLE WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SINGLE WALL",
+          "word_ids": [
+            90,
+            91
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SINGLE WALL",
+          "word_ids": [
+            543,
+            544
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 6,
+      "column": "pressure_class_in_wg",
+      "page": 43,
+      "bbox": [
+        640,
+        622,
+        750,
+        639
+      ],
+      "expected": "+ 2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "+ 2.0",
+          "word_ids": [
+            119,
+            120
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "+ 2.0",
+          "word_ids": [
+            508,
+            509
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 6,
+      "column": "leakage_class_round",
+      "page": 43,
+      "bbox": [
+        750,
+        622,
+        820,
+        639
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            132
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            494
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 6,
+      "column": "leakage_class_rectangular",
+      "page": 43,
+      "bbox": [
+        820,
+        622,
+        900,
+        639
+      ],
+      "expected": "6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            141
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            307
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 6,
+      "column": "seal_class",
+      "page": 43,
+      "bbox": [
+        900,
+        622,
+        980,
+        639
+      ],
+      "expected": "A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            100
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            316
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 6,
+      "column": "DALT_QTY",
+      "page": 43,
+      "bbox": [
+        980,
+        622,
+        1080,
+        639
+      ],
+      "expected": "YES / 100%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "YES / 100%",
+          "word_ids": [
+            159,
+            160,
+            161
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "YES / 100%",
+          "word_ids": [
+            333,
+            334,
+            335
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 6,
+      "column": "duct_test_pressure_in_wg",
+      "page": 43,
+      "bbox": [
+        1080,
+        622,
+        1210,
+        639
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            162
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            346
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 7,
+      "column": "system",
+      "page": 43,
+      "bbox": [
+        150,
+        639,
+        370,
+        656
+      ],
+      "expected": "UNTREATED OUTSIDE AIR (OA)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UNTREATED OUTSIDE AIR (OA)",
+          "word_ids": [
+            45,
+            46,
+            47,
+            48
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UNTREATED OUTSIDE AIR (OA)",
+          "word_ids": [
+            598,
+            599,
+            600,
+            601
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 7,
+      "column": "location",
+      "page": 43,
+      "bbox": [
+        370,
+        639,
+        520,
+        656
+      ],
+      "expected": "MECH AREA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECH AREA",
+          "word_ids": [
+            72,
+            73
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECH AREA",
+          "word_ids": [
+            527,
+            528
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 7,
+      "column": "description",
+      "page": 43,
+      "bbox": [
+        520,
+        639,
+        640,
+        656
+      ],
+      "expected": "SINGLE WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SINGLE WALL",
+          "word_ids": [
+            92,
+            93
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SINGLE WALL",
+          "word_ids": [
+            545,
+            546
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 7,
+      "column": "pressure_class_in_wg",
+      "page": 43,
+      "bbox": [
+        640,
+        639,
+        750,
+        656
+      ],
+      "expected": "- 2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "- 2.0",
+          "word_ids": [
+            121,
+            122
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "- 2.0",
+          "word_ids": [
+            510,
+            511
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 7,
+      "column": "leakage_class_round",
+      "page": 43,
+      "bbox": [
+        750,
+        639,
+        820,
+        656
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            133
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            495
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 7,
+      "column": "leakage_class_rectangular",
+      "page": 43,
+      "bbox": [
+        820,
+        639,
+        900,
+        656
+      ],
+      "expected": "6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            142
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            308
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 7,
+      "column": "seal_class",
+      "page": 43,
+      "bbox": [
+        900,
+        639,
+        980,
+        656
+      ],
+      "expected": "A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            103
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            317
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 7,
+      "column": "DALT_QTY",
+      "page": 43,
+      "bbox": [
+        980,
+        639,
+        1080,
+        656
+      ],
+      "expected": "YES / 100%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "YES / 100%",
+          "word_ids": [
+            163,
+            164,
+            165
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "YES / 100%",
+          "word_ids": [
+            336,
+            337,
+            338
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 7,
+      "column": "duct_test_pressure_in_wg",
+      "page": 43,
+      "bbox": [
+        1080,
+        639,
+        1210,
+        656
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            166
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            347
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 8,
+      "column": "system",
+      "page": 43,
+      "bbox": [
+        150,
+        656,
+        370,
+        674
+      ],
+      "expected": "COMBUSTION AIR INTAKE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COMBUSTION AIR INTAKE",
+          "word_ids": [
+            49,
+            50,
+            51
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COMBUSTION AIR INTAKE",
+          "word_ids": [
+            602,
+            603,
+            604
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 8,
+      "column": "location",
+      "page": 43,
+      "bbox": [
+        370,
+        656,
+        520,
+        674
+      ],
+      "expected": "MECH AREA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECH AREA",
+          "word_ids": [
+            74,
+            75
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECH AREA",
+          "word_ids": [
+            529,
+            530
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 8,
+      "column": "description",
+      "page": 43,
+      "bbox": [
+        520,
+        656,
+        640,
+        674
+      ],
+      "expected": "SINGLE WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SINGLE WALL",
+          "word_ids": [
+            94,
+            95
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SINGLE WALL",
+          "word_ids": [
+            547,
+            548
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 8,
+      "column": "pressure_class_in_wg",
+      "page": 43,
+      "bbox": [
+        640,
+        656,
+        750,
+        674
+      ],
+      "expected": "- 6.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "- 6.0",
+          "word_ids": [
+            123,
+            124
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "- 6.0",
+          "word_ids": [
+            512,
+            513
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 8,
+      "column": "leakage_class_round",
+      "page": 43,
+      "bbox": [
+        750,
+        656,
+        820,
+        674
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            134
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            496
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 8,
+      "column": "leakage_class_rectangular",
+      "page": 43,
+      "bbox": [
+        820,
+        656,
+        900,
+        674
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            143
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            309
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 8,
+      "column": "seal_class",
+      "page": 43,
+      "bbox": [
+        900,
+        656,
+        980,
+        674
+      ],
+      "expected": "A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            102
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            318
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 8,
+      "column": "DALT_QTY",
+      "page": 43,
+      "bbox": [
+        980,
+        656,
+        1080,
+        674
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            167
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            339
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 8,
+      "column": "duct_test_pressure_in_wg",
+      "page": 43,
+      "bbox": [
+        1080,
+        656,
+        1210,
+        674
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            169
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            348
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 9,
+      "column": "system",
+      "page": 43,
+      "bbox": [
+        150,
+        674,
+        370,
+        691
+      ],
+      "expected": "BOILER COMBUSTION AIR VENT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BOILER COMBUSTION AIR VENT",
+          "word_ids": [
+            52,
+            53,
+            54,
+            55
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BOILER COMBUSTION AIR VENT",
+          "word_ids": [
+            605,
+            606,
+            607,
+            608
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 9,
+      "column": "location",
+      "page": 43,
+      "bbox": [
+        370,
+        674,
+        520,
+        691
+      ],
+      "expected": "MECH AREA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECH AREA",
+          "word_ids": [
+            76,
+            77
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECH AREA",
+          "word_ids": [
+            531,
+            532
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 9,
+      "column": "description",
+      "page": 43,
+      "bbox": [
+        520,
+        674,
+        640,
+        691
+      ],
+      "expected": "DOUBLE WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOUBLE WALL",
+          "word_ids": [
+            82,
+            83
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOUBLE WALL",
+          "word_ids": [
+            549,
+            550
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 9,
+      "column": "pressure_class_in_wg",
+      "page": 43,
+      "bbox": [
+        640,
+        674,
+        750,
+        691
+      ],
+      "expected": "+ 10.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "+ 10.0",
+          "word_ids": [
+            125,
+            126
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "+ 10.0",
+          "word_ids": [
+            514,
+            515
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 9,
+      "column": "leakage_class_round",
+      "page": 43,
+      "bbox": [
+        750,
+        674,
+        820,
+        691
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            135
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            497
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 9,
+      "column": "leakage_class_rectangular",
+      "page": 43,
+      "bbox": [
+        820,
+        674,
+        900,
+        691
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            144
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            310
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 9,
+      "column": "seal_class",
+      "page": 43,
+      "bbox": [
+        900,
+        674,
+        980,
+        691
+      ],
+      "expected": "A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            104
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "A",
+          "word_ids": [
+            319
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 9,
+      "column": "DALT_QTY",
+      "page": 43,
+      "bbox": [
+        980,
+        674,
+        1080,
+        691
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            168
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            340
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "row": 9,
+      "column": "duct_test_pressure_in_wg",
+      "page": 43,
+      "bbox": [
+        1080,
+        674,
+        1210,
+        691
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            170
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            349
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "header": "DUCT CONSTRUCTION SCHEDULE",
+      "page": 43,
+      "bbox": [
+        500,
+        435,
+        800,
+        490
+      ],
+      "engine": "mupdf",
+      "actual": "DUCT CONSTRUCTION SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "header": "DUCT CONSTRUCTION SCHEDULE",
+      "page": 43,
+      "bbox": [
+        500,
+        435,
+        800,
+        490
+      ],
+      "engine": "poppler",
+      "actual": "DUCT CONSTRUCTION SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "header": "SYSTEM LOCATION DESCRIPTION PRESSURE CLASS IN WG LEAKAGE CLASS ROUND RECTANGULAR SEAL CLASS DALT QTY DUCT TEST PRESSURE IN WG",
+      "page": 43,
+      "bbox": [
+        150,
+        490,
+        1210,
+        535
+      ],
+      "engine": "mupdf",
+      "actual": "LEAKAGE CLASS PRESSURE CLASS DALT/ DUCT TEST SYSTEM LOCATION DESCRIPTION SEAL CLASS (IN WG) QTY PRESSURE (IN WG) ROUND RECTANGULAR",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DUCT-CONSTRUCTION",
+      "header": "SYSTEM LOCATION DESCRIPTION PRESSURE CLASS IN WG LEAKAGE CLASS ROUND RECTANGULAR SEAL CLASS DALT QTY DUCT TEST PRESSURE IN WG",
+      "page": 43,
+      "bbox": [
+        150,
+        490,
+        1210,
+        535
+      ],
+      "engine": "poppler",
+      "actual": "LEAKAGE CLASS PRESSURE CLASS DALT/ DUCT TEST SYSTEM LOCATION DESCRIPTION SEAL CLASS (IN WG) QTY PRESSURE (IN WG) ROUND RECTANGULAR",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "row": 1,
+      "column": "system",
+      "page": 43,
+      "bbox": [
+        150,
+        763,
+        280,
+        781
+      ],
+      "expected": "CHILLED WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLED WATER",
+          "word_ids": [
+            177,
+            178
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLED WATER",
+          "word_ids": [
+            465,
+            466
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "row": 1,
+      "column": "material",
+      "page": 43,
+      "bbox": [
+        280,
+        763,
+        500,
+        781
+      ],
+      "expected": "TYPE L COPPER, SCHEDULE 40 STEEL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TYPE L COPPER, SCHEDULE 40 STEEL",
+          "word_ids": [
+            184,
+            185,
+            186,
+            187,
+            188,
+            189
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TYPE L COPPER, SCHEDULE 40 STEEL",
+          "word_ids": [
+            436,
+            437,
+            438,
+            439,
+            440,
+            441
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "row": 1,
+      "column": "insulation",
+      "page": 43,
+      "bbox": [
+        500,
+        763,
+        820,
+        781
+      ],
+      "expected": "CELLULAR GLASS, POLYISOCYANURATE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CELLULAR GLASS, POLYISOCYANURATE",
+          "word_ids": [
+            190,
+            191,
+            192
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CELLULAR GLASS, POLYISOCYANURATE",
+          "word_ids": [
+            442,
+            443,
+            444
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "row": 1,
+      "column": "insulation_jacket",
+      "page": 43,
+      "bbox": [
+        820,
+        763,
+        1080,
+        781
+      ],
+      "expected": "SEE SPECIFICATION SECTION 23 07 00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE SPECIFICATION SECTION 23 07 00",
+          "word_ids": [
+            209,
+            210,
+            211,
+            212,
+            213,
+            214
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE SPECIFICATION SECTION 23 07 00",
+          "word_ids": [
+            636,
+            637,
+            638,
+            639,
+            640,
+            641
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "row": 1,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1080,
+        763,
+        1210,
+        781
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "row": 2,
+      "column": "system",
+      "page": 43,
+      "bbox": [
+        150,
+        798,
+        280,
+        815
+      ],
+      "expected": "CONDENSATE DRAIN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONDENSATE DRAIN",
+          "word_ids": [
+            179,
+            180
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONDENSATE DRAIN",
+          "word_ids": [
+            470,
+            471
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "row": 2,
+      "column": "material",
+      "page": 43,
+      "bbox": [
+        280,
+        798,
+        500,
+        815
+      ],
+      "expected": "TYPE L COPPER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TYPE L COPPER",
+          "word_ids": [
+            200,
+            201,
+            202
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TYPE L COPPER",
+          "word_ids": [
+            450,
+            451,
+            452
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "row": 2,
+      "column": "insulation",
+      "page": 43,
+      "bbox": [
+        500,
+        798,
+        820,
+        815
+      ],
+      "expected": "FLEXIBLE ELASTOMERIC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FLEXIBLE ELASTOMERIC",
+          "word_ids": [
+            193,
+            194
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FLEXIBLE ELASTOMERIC",
+          "word_ids": [
+            453,
+            454
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "row": 2,
+      "column": "insulation_jacket",
+      "page": 43,
+      "bbox": [
+        820,
+        798,
+        1080,
+        815
+      ],
+      "expected": "SEE SPECIFICATION SECTION 23 07 00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE SPECIFICATION SECTION 23 07 00",
+          "word_ids": [
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE SPECIFICATION SECTION 23 07 00",
+          "word_ids": [
+            648,
+            649,
+            650,
+            651,
+            652,
+            653
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "row": 2,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1080,
+        798,
+        1210,
+        815
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "row": 3,
+      "column": "system",
+      "page": 43,
+      "bbox": [
+        150,
+        815,
+        280,
+        833
+      ],
+      "expected": "HEATING HOT WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HEATING HOT WATER",
+          "word_ids": [
+            181,
+            182,
+            183
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HEATING HOT WATER",
+          "word_ids": [
+            472,
+            473,
+            474
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "row": 3,
+      "column": "material",
+      "page": 43,
+      "bbox": [
+        280,
+        815,
+        500,
+        833
+      ],
+      "expected": "TYPE L COPPER, SCHEDULE 40 STEEL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TYPE L COPPER, SCHEDULE 40 STEEL",
+          "word_ids": [
+            203,
+            204,
+            205,
+            206,
+            207,
+            208
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TYPE L COPPER, SCHEDULE 40 STEEL",
+          "word_ids": [
+            455,
+            456,
+            457,
+            458,
+            459,
+            460
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "row": 3,
+      "column": "insulation",
+      "page": 43,
+      "bbox": [
+        500,
+        815,
+        820,
+        833
+      ],
+      "expected": "MINERAL FIBER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MINERAL FIBER",
+          "word_ids": [
+            195,
+            196
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MINERAL FIBER",
+          "word_ids": [
+            461,
+            462
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "row": 3,
+      "column": "insulation_jacket",
+      "page": 43,
+      "bbox": [
+        820,
+        815,
+        1080,
+        833
+      ],
+      "expected": "SEE SPECIFICATION SECTION 23 07 00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE SPECIFICATION SECTION 23 07 00",
+          "word_ids": [
+            223,
+            224,
+            225,
+            226,
+            227,
+            228
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE SPECIFICATION SECTION 23 07 00",
+          "word_ids": [
+            654,
+            655,
+            656,
+            657,
+            658,
+            659
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "row": 3,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1080,
+        815,
+        1210,
+        833
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "header": "PIPING CONSTRUCTION SCHEDULE",
+      "page": 43,
+      "bbox": [
+        480,
+        695,
+        810,
+        750
+      ],
+      "engine": "mupdf",
+      "actual": "PIPING CONSTRUCTION SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "header": "PIPING CONSTRUCTION SCHEDULE",
+      "page": 43,
+      "bbox": [
+        480,
+        695,
+        810,
+        750
+      ],
+      "engine": "poppler",
+      "actual": "PIPING CONSTRUCTION SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "header": "SYSTEM MATERIAL INSULATION INSULATION JACKET NOTES",
+      "page": 43,
+      "bbox": [
+        150,
+        740,
+        1210,
+        763
+      ],
+      "engine": "mupdf",
+      "actual": "SYSTEM MATERIAL INSULATION INSULATION JACKET NOTES",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION",
+      "header": "SYSTEM MATERIAL INSULATION INSULATION JACKET NOTES",
+      "page": 43,
+      "bbox": [
+        150,
+        740,
+        1210,
+        763
+      ],
+      "engine": "poppler",
+      "actual": "SYSTEM MATERIAL INSULATION INSULATION JACKET NOTES",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION-BURIED-CHW",
+      "row": 1,
+      "column": "system",
+      "page": 43,
+      "bbox": [
+        150,
+        781,
+        280,
+        798
+      ],
+      "expected": "BURIED CHILLED WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BURIED CHILLED WATER",
+          "word_ids": [
+            215,
+            216,
+            217
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BURIED CHILLED WATER",
+          "word_ids": [
+            467,
+            468,
+            469
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION-BURIED-CHW",
+      "row": 1,
+      "column": "material_and_insulation_merged",
+      "page": 43,
+      "bbox": [
+        280,
+        781,
+        820,
+        798
+      ],
+      "expected": "BURIED FACTORY-PREFABRICATED PREINSULATED WATER PIPING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BURIED FACTORY-PREFABRICATED PREINSULATED WATER PIPING",
+          "word_ids": [
+            218,
+            219,
+            220,
+            221,
+            222
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BURIED FACTORY-PREFABRICATED PREINSULATED WATER PIPING",
+          "word_ids": [
+            445,
+            446,
+            447,
+            448,
+            449
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION-BURIED-CHW",
+      "row": 1,
+      "column": "insulation_jacket",
+      "page": 43,
+      "bbox": [
+        820,
+        781,
+        1080,
+        798
+      ],
+      "expected": "SEE SPECIFICATION SECTION 33 61 14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE SPECIFICATION SECTION 33 61 14",
+          "word_ids": [
+            235,
+            236,
+            237,
+            238,
+            239,
+            240
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE SPECIFICATION SECTION 33 61 14",
+          "word_ids": [
+            642,
+            643,
+            644,
+            645,
+            646,
+            647
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-PIPING-CONSTRUCTION-BURIED-CHW",
+      "row": 1,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1080,
+        781,
+        1210,
+        798
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "air-ops-duct-construction-row-count",
+      "actual": 9,
+      "expected": 9,
+      "pass": true
+    },
+    {
+      "id": "air-ops-piping-construction-standard-row-count",
+      "actual": 3,
+      "expected": 3,
+      "pass": true
+    },
+    {
+      "id": "air-ops-piping-construction-merged-row-count",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

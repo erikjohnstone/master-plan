@@ -1,0 +1,116 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "Compact equipment schedules and the vibration-isolation reference table on Air Operations sheet M-602 (source PDF page 43): cabinet unit heaters, unit heaters, humidifier and vibration isolation. Rows are printed schedules/reference entries, not installed-plan quantities. M-602 VAV, duct/piping construction schedules and later schedule sheets remain separately open.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "blank_cell_semantics": "A literal dash is the source's printed dash. No dash is normalized to a zero or an absent device.",
+  "visual_review": {
+    "pages": [43],
+    "render": "reviews/01__vol2__001/p43-schedules-poppler.png",
+    "dpi": 180,
+    "finding": "The M-602 render was visually reviewed separately from native-parser corroboration. Its table boundaries, titles, row order, printed dashes and schedule footnotes agree with the bounded annotations below. This is not a completion claim for the large VAV matrix or construction-reference schedules on the same sheet."
+  },
+  "tables": [
+    {
+      "id": "AIR-OPS-CUH",
+      "page": 43,
+      "sheet": "M-602",
+      "building_scope": "Air Operations",
+      "title": "CABINET UNIT HEATER SCHEDULE",
+      "classification": "Cabinet unit heaters",
+      "columns": "mark|type|mounting_style|fan_CFM|fan_ESP_in_WG|fan_motor_HP_or_W|heating_total_capacity_MBH|heating_EWT_F|heating_LWT_F|heating_water_flow_GPM|heating_max_pressure_drop_in_water_column|HHW_runout_size_in|V_phase_Hz|VFD_starter_disconnect_provided_by|notes",
+      "x_edges": [162, 220, 280, 433, 475, 540, 610, 680, 723, 760, 837, 910, 970, 1018, 1100, 1155],
+      "y_ranges": [[155, 173], [173, 190]],
+      "rows": [
+        "CUH-A1|CABINET|VERTICAL FLOOR MOUNTED|140|0.1|15W|5.0|130|110|0.5|10|3/4|120/1/60|DIVISION 23|1",
+        "CUH-A2|CABINET|VERTICAL FLOOR MOUNTED|140|0.1|15W|5.0|130|110|0.5|10|3/4|120/1/60|DIVISION 23|1"
+      ],
+      "notes": [
+        "1. IF PROVIDED, EC MOTORS SHALL BE PROVIDED WITH EQUIPMENT TO PREVENT ADDING HARMONICS TO ELECTRICAL SYSTEM (INDUCTOR, ETC.) AND SHALL BE PROGRAMMED TO PREVENT EC MOTOR OVERSPEED."
+      ],
+      "header_evidence": [
+        {"bbox": [485, 62, 855, 94], "expected": "CABINET UNIT HEATER SCHEDULE"},
+        {"bbox": [160, 90, 1155, 154], "expected": "MARK TYPE MOUNTING STYLE FAN DATA CFM ESP IN W G MOTOR HP HEATING COIL DATA TOTAL CAPACITY MBH EWT F LWT F WATER FLOW GPM MAX PRESSURE DROP IN WC HHW ROUNTOUT SIZE IN V P HZ VFD STARTER DISCONNECT PROVIDED BY NOTES"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-UH",
+      "page": 43,
+      "sheet": "M-602",
+      "building_scope": "Air Operations",
+      "title": "UNIT HEATER SCHEDULE",
+      "classification": "Unit heaters",
+      "columns": "mark|type|total_capacity_MBH|EWT_LWT_F|water_flow_GPM|max_pressure_drop_in_water_column|HHW_runout_size_in|motor_HP_or_W|V_phase_Hz|notes",
+      "x_edges": [162, 220, 380, 490, 600, 680, 800, 915, 985, 1060, 1115],
+      "y_ranges": [[315, 332], [332, 349], [349, 366], [366, 383], [383, 400]],
+      "rows": [
+        "UH-A1|HORIZONTAL DISCHARGE|10.9|130/110|1.1|10|3/4|16W|120/1/60|1",
+        "UH-A2|HORIZONTAL DISCHARGE|10.9|130/110|1.1|10|3/4|16W|120/1/60|1",
+        "UH-A3|HORIZONTAL DISCHARGE|9.2|130/110|1.0|10|3/4|16W|120/1/60|1",
+        "UH-A4|HORIZONTAL DISCHARGE|9.2|130/110|1.0|10|3/4|16W|120/1/60|1",
+        "UH-A5|HORIZONTAL DISCHARGE|9.2|130/110|1.0|10|3/4|16W|120/1/60|1"
+      ],
+      "notes": [
+        "1. MOUNTING HEIGHT SHALL BE 9' ABOVE FINISHED FLOOR."
+      ],
+      "header_evidence": [
+        {"bbox": [510, 253, 770, 284], "expected": "UNIT HEATER SCHEDULE"},
+        {"bbox": [160, 282, 1115, 313], "expected": "MARK TYPE TOTAL CAPACITY MBH EWT F LWT F WATER FLOW GPM MAX PRESSURE DROP IN WC HHW ROUNTOUT SIZE IN MOTOR HP V P HZ NOTES"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-HUMIDIFIER",
+      "page": 43,
+      "sheet": "M-602",
+      "building_scope": "Air Operations",
+      "title": "HUMIDIFIER SCHEDULE",
+      "classification": "Wall-mount electrode steam humidifier",
+      "columns": "mark|type|capacity_lb_per_hr_as_printed|electric_input_kW|volts_phase_Hz|disconnect_provided_by|notes",
+      "x_edges": [1300, 1350, 1610, 1695, 1820, 1930, 2080, 2150],
+      "y_ranges": [[504, 522]],
+      "rows": [
+        "H-A1|WALL MOUNT ELECTRODE STEAM HUMIDIFIER|1.0|1.9|120/1/60|DIVISION 23|1,2,3"
+      ],
+      "notes": [
+        "1. PROVIDE UNIT MOUNTED DRAIN PACK AND DRAIN COOLER.",
+        "2. MOUNT HUMIDIFIER WITH BOTTOM AT 4'-0\" ABOVE FINISHED FLOOR.",
+        "3. PROVIDE UNIT WITH HIGH TEMPERATURE CONDENSATE PUMP SUITABLE FOR WORKING TEMPERATURE UP TO 212°F. PUMP SHALL BE RATED FOR 50 GPH AT 20 FT WC."
+      ],
+      "header_evidence": [
+        {"bbox": [1595, 442, 1840, 472], "expected": "HUMIDIFIER SCHEDULE"},
+        {"bbox": [1300, 472, 2150, 503], "expected": "MARK TYPE LB HR MBH ELECTRIC INPUT KW VOLT PHASE HZ DISCONNECT PROVIDED BY NOTES"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-VIBRATION-ISOLATION",
+      "page": 43,
+      "sheet": "M-602",
+      "building_scope": "Air Operations",
+      "title": "VIBRATION ISOLATION SCHEDULE",
+      "classification": "Vibration isolation reference by equipment mark pattern",
+      "columns": "mark_pattern|base_type|isolator_type|minimum_deflection_inches|notes",
+      "x_edges": [1220, 1300, 1375, 1550, 1720, 1780],
+      "y_ranges": [[117, 133], [133, 151], [151, 169], [169, 186], [186, 203], [203, 221], [221, 243], [243, 260], [260, 278], [278, 295]],
+      "rows": [
+        "AHU-A1,A2|NONE|NONE|-|-",
+        "DOAH-A1,A2|NONE|NONE|-|-",
+        "CH-A1,A2|NONE|NONE|-|-",
+        "FCU-|NONE|SUSPENDED SPRING ISOLATOR|0.75|-",
+        "H-|NONE|NONE|-|-",
+        "DH-|NONE|NEOPRENE PAD|0.75|-",
+        "EF-A1|NONE|SUSPENDED SPRING ISOLATOR|0.75|",
+        "PCHWP-A1,A2|NONE|NONE|-|-",
+        "PHHWP-A1,A2|NONE|SUSPENDED SPRING ISOLATOR|1.50|-",
+        "SHHWP-A1,A2|NONE|NONE|-|-"
+      ],
+      "header_evidence": [
+        {"bbox": [1290, 66, 1645, 97], "expected": "VIBRATION ISOLATION SCHEDULE"},
+        {"bbox": [1220, 98, 1780, 116], "expected": "MARK BASE TYPE ISOLATOR TYPE MINIMUM DEFLECTION INCHES NOTES"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "air-ops-aux-schedule-tables", "records_path": ["tables"], "expected": 4, "unique_key": "id"}
+  ],
+  "remaining_work": "Exhaustively transcribe the 26-row VAV matrix and the duct/piping construction tables on M-602; complete all M-603/M-611 through M-613/M-621 through M-622 equipment and valve/actuator schedules; then reconcile schedule identities to plans, piping schematics and BAS controls."
+}

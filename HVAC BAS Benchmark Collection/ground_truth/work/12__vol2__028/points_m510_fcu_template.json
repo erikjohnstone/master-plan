@@ -1,0 +1,58 @@
+{
+  "document_id": "12__vol2__028",
+  "module_role": "Exact M-510 fan-coil-unit BAS input/output matrix. The numeric rows are a reusable FCU P&ID template, not a per-FCU installed-point count.",
+  "source_sheet": "M-510",
+  "source_page": 6,
+  "logical_row_summary": {
+    "template_rows": 19,
+    "AI": 5,
+    "AO": 3,
+    "DI": 0,
+    "DO": 1,
+    "AV": 0,
+    "BV": 0,
+    "trend_flag": 0,
+    "alarm_flag": 10,
+    "caution": "Only table X marks are classified. The M-510 source does not state a repeated FCU quantity or unique controller identity for this P&ID."
+  },
+  "tables": [
+    {
+      "id": "M510-FCU",
+      "page": 6,
+      "sheet": "M-510",
+      "detail": "1",
+      "title": "FCU P&ID",
+      "columns": "tag|point_name|AI|AO|DI|DO|AV|BV|TREND|ALARM",
+      "x_edges": [1035,1075,1340,1387,1428,1470,1516,1558,1604,1670,1735],
+      "y_ranges": [[162,184],[184,206],[206,227],[227,249],[249,271],[271,293],[293,315],[315,337],[337,359],[359,381],[381,403],[403,425],[425,447],[447,469],[469,491],[491,513],[513,535],[535,557],[557,578]],
+      "rows": [
+        "1|EMERGENCY SHUTDOWN (GLOBAL)||||||||X",
+        "2|SUPPLY AIR TEMPERATURE|X|||||||",
+        "3|SPACE TEMPERATURE|X|||||||",
+        "4|SUPPLY AIR TEMPERATURE SETPOINT||X||||||",
+        "5|SPACE AIR TEMPERATURE SETPOINT||X||||||",
+        "6|SUPPLY FAN ON/OFF||||X||||",
+        "7|SUPPLY FAN SPEED||X||||||",
+        "8|SUPPLY FAN FAILURE||||||||X",
+        "9|RETURN AIR DAMPER POSITION|X|||||||",
+        "10|HOT WATER VALVE POSITION|X|||||||",
+        "11|CHILLED WATER VALVE POSITION|X|||||||",
+        "12|FILTER REPLACEMENT ALARM||||||||X",
+        "13|HIGH TEMPERATURE ALARM||||||||X",
+        "14|FREEZE PROTECTION||||||||X",
+        "15|CHANGE FILTER ALARM||||||||X",
+        "16|HIGH/LOW SUPPLY AIR TEMP. ALARM||||||||X",
+        "17|CONDENSATE OVERFLOW ALARM||||||||X",
+        "18|SMOKE DETERCTOR ALARM||||||||X",
+        "19|HIGH/LOW SUPPLY STATIC PRESSURE ALARM||||||||X"
+      ],
+      "header_evidence": [
+        {"bbox": [1290,108,1478,131], "expected": "BAS INPUT/OUTPUT POINT LIST"},
+        {"bbox": [1035,133,1735,162], "expected": "TAG POINT NAME AI AO DI DO AV BV TREND ALARM"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "fcu-io-matrix", "records_path": ["tables"], "expected": 1, "unique_key": "id"}
+  ]
+}

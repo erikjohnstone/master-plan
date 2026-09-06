@@ -1,0 +1,138 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "Five compact Air Operations equipment schedules on M-603 (source PDF page 44): air-cooled chillers, fans, air separators, expansion tanks and dehumidifiers. The grille/register/diffuser and fan sound-power tables remain in separate unfinished scope.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [44],
+    "render": "reviews/01__vol2__001/p44-schedules-poppler.png",
+    "dpi": 180,
+    "finding": "The named compact tables were visually reviewed at 180 DPI. Their rows, blank cells, multi-level headers and schedule notes were separately transcribed and corroborated from both native-text captures."
+  },
+  "tables": [
+    {
+      "id": "AIR-OPS-AIR-COOLED-CHILLER",
+      "page": 44,
+      "sheet": "M-603",
+      "building_scope": "Air Operations",
+      "title": "AIR COOLED CHILLER SCHEDULE",
+      "classification": "Air-cooled chiller",
+      "columns": "mark|capacity_tons|EWT_F|LWT_F|flowrate_GPM|max_pressure_drop_ft_wc|fouling_factor_hr_ft2_F_BTU|volts|phase|Hz|MCA|MOCP|minimum_EER|minimum_IPLV|disconnect_provided_by|notes",
+      "x_edges": [215, 260, 370, 445, 520, 580, 750, 885, 940, 980, 1020, 1090, 1155, 1240, 1320, 1460, 1585],
+      "y_edges": [150, 167, 184],
+      "rows": [
+        "CH-A1|56.0|55.4|45|128.5|12|0.0001|460|3|60|147|175|10.0|14.3|DIVISION 23|1,2,3,4",
+        "CH-A2|56.0|55.4|45|128.5|12|0.0001|460|3|60|147|175|10.0|14.3|DIVISION 23|1,2,3,4"
+      ],
+      "notes": [
+        "1. PROVIDE SINGLE POINT OF CONNECTION FOR CHILLER. PROVIDE DISCONNECT SWITCH, NEMA-4X STAINLESS STEEL.",
+        "2. PROVIDE FACTORY APPLIED COIL CORROSION PROTECTION COATING TO MEET ASTM B117 3000 HR. CAPACITY INDICATED WITH COATING ON COIL.",
+        "3. UNIT SHALL HAVE FULL CAPACITY AT 98°F AMBIENT AND SHALL PROVIDE FULL COOLING DOWN TO 24°F.",
+        "4. CHILLER SHALL BE EQUIPPED WITH QUICK RESTART. CHILLER SHALL BE CAPABLE OF BEING AT 100% LOAD WITHIN 5 MINUTES OF RESTORATION OF POWER."
+      ],
+      "header_evidence": [
+        {"bbox": [700, 75, 1110, 115], "expected": "AIR COOLED CHILLER SCHEDULE"},
+        {"bbox": [215, 115, 1585, 150], "expected": "MARK CAPACITY TONS EWT F LWT F GPM MAX ALLOWABLE PRESSURE DROP FT WC FOULING FACTOR HR-FT^2-F/BTU ELECTRICAL VOLTS PH Hz MCA MOCP MINIMUM EER MINIMUM IPLV DISCONNECT PROVIDED BY NOTES"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-FAN",
+      "page": 44,
+      "sheet": "M-603",
+      "building_scope": "Air Operations",
+      "title": "FAN SCHEDULE",
+      "classification": "Fans",
+      "columns": "mark|service|type|CFM|RPM|ESP_in_wg|max_sones|HP|volts|phase|FLA|notes",
+      "x_edges": [220, 280, 420, 630, 670, 720, 775, 830, 865, 920, 960, 1005, 1060],
+      "y_edges": [350, 367, 384, 402],
+      "rows": [
+        "EF-A1|STORAGE BAY VENTILATION|DIRECT DRIVE CENTRIFUGAL INLINE|600|1685|0.50|9.2|0.12|120|1|3.4|",
+        "EF-A2|UPS ROOM EXHAUST|BELT DRIVE CENTRIFUGAL UPBLAST|150|1579|0.40|4.1|0.07|120|1|1.3|1,2,3,4",
+        "EF-A3|BASE NODE EXHAUST|BELT DRIVE CENTRIFUGAL UPBLAST|150|1579|0.40|4.1|0.07|120|1|1.3|1,2,3,4"
+      ],
+      "notes": [
+        "1. PROVIDE FAN WITH AMCA 99-0401 TYPE B SPARK RESISTANT CONSTRUCTION.",
+        "2. UPBLAST FAN SHALL BE DESIGNED TO WITHSTAND WIND LOADS INDICATED ON STRUCTURAL DRAWINGS.",
+        "3. FAN SHALL BE ANCHORED TO RESIST UPLIFT LOADS INDICATED ON STRUCTURAL DRAWINGS.",
+        "4. PROVIDE FAN WITH AUTOMATIC BELT TENSIONER."
+      ],
+      "header_evidence": [
+        {"bbox": [540, 275, 685, 315], "expected": "FAN SCHEDULE"},
+        {"bbox": [220, 315, 1060, 350], "expected": "MARK SERVICE TYPE CFM RPM ESP IN WG MAX SONES HP ELECTRICAL DATA VOLTS PH FLA NOTES"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-AIR-SEPARATOR",
+      "page": 44,
+      "sheet": "M-603",
+      "building_scope": "Air Operations",
+      "title": "AIR SEPARATOR SCHEDULE",
+      "classification": "Air separators",
+      "columns": "mark|system_type|type|flowrate_GPM|pipe_size|max_pressure_drop_ft_wc|notes",
+      "x_edges": [220, 335, 480, 565, 700, 770, 900, 960],
+      "y_edges": [1263, 1280, 1297],
+      "rows": [
+        "AS-CHW-A1|CHILLED WATER|INLINE|171|4\"|2|",
+        "AS-HHW-A1|HEATING HOT WATER|INLINE|51|2 1/2\"|2|"
+      ],
+      "header_evidence": [
+        {"bbox": [450, 1185, 780, 1230], "expected": "AIR SEPARATOR SCHEDULE"},
+        {"bbox": [220, 1230, 960, 1263], "expected": "MARK SYSTEM TYPE TYPE FLOW RATE GPM PIPE SIZE MAX PRESSURE DROP FT WC NOTES"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-EXPANSION-TANK",
+      "page": 44,
+      "sheet": "M-603",
+      "building_scope": "Air Operations",
+      "title": "EXPANSION TANK SCHEDULE",
+      "classification": "Expansion tanks",
+      "columns": "mark|system_type|total_volume_gal|acceptance_volume_gal|max_pressure_psig|max_temp_F|notes",
+      "x_edges": [220, 340, 480, 620, 750, 850, 970, 1070],
+      "y_edges": [1386, 1403, 1420],
+      "rows": [
+        "ET-CHW-A1|CHILLED WATER|11.0|5.0|125|95.0|",
+        "ET-HHW-A1|HEATING HOT WATER|8.0|5.0|125|130.0|"
+      ],
+      "header_evidence": [
+        {"bbox": [520, 1305, 900, 1350], "expected": "EXPANSION TANK SCHEDULE"},
+        {"bbox": [220, 1350, 1070, 1386], "expected": "MARK SYSTEM TYPE TOTAL VOLUME GAL ACCEPTANCE VOLUME GAL MAX PRESSURE PSIG MAX TEMP F NOTES"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-DEHUMIDIFIER",
+      "page": 44,
+      "sheet": "M-603",
+      "building_scope": "Air Operations",
+      "title": "DEHUMIDIFIER SCHEDULE",
+      "classification": "Dehumidifiers",
+      "columns": "mark|dry_bulb_F|relative_humidity_percent|capacity_pints_per_hr|FLA|V_PH_HZ|notes",
+      "x_edges": [1730, 1810, 1880, 1950, 2005, 2055, 2135, 2230],
+      "y_edges": [975, 993, 1010, 1027, 1045, 1062, 1080],
+      "rows": [
+        "DH-A1|90|38|5.3|13.1|120/1/60|1,2",
+        "DH-A2|90|38|5.3|13.1|120/1/60|2",
+        "DH-A3|80|50|6.5|13.1|120/1/60|1,2",
+        "DH-A4|90|38|5.3|13.1|120/1/60|1,2",
+        "DH-A5|90|38|5.3|13.1|120/1/60|1,2",
+        "DH-A6|75|60|5.7|13.1|120/1/60|2"
+      ],
+      "notes": [
+        "1. PROVIDE WITH INTERNAL CONDENSATE PUMP. PUMP SHALL BE CAPABLE OF LIFTING SCHEDULED CONDENSATE CAPACITY BY 17 FT WC.",
+        "2. UNITS SHALL BE PLUG IN. PROVIDE WITH CORD AND PLUG."
+      ],
+      "header_evidence": [
+        {"bbox": [1845, 900, 2095, 940], "expected": "DEHUMIDIFIER SCHEDULE"},
+        {"bbox": [1730, 940, 2230, 975], "expected": "MARK F DB RH CAPACITY PINTS/HR FLA V/PH/HZ NOTES"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "air-ops-m603-compact-row-count", "records_path": ["tables", 0, "rows"], "expected": 2},
+    {"id": "air-ops-m603-fan-row-count", "records_path": ["tables", 1, "rows"], "expected": 3},
+    {"id": "air-ops-m603-air-separator-row-count", "records_path": ["tables", 2, "rows"], "expected": 2},
+    {"id": "air-ops-m603-expansion-tank-row-count", "records_path": ["tables", 3, "rows"], "expected": 2},
+    {"id": "air-ops-m603-dehumidifier-row-count", "records_path": ["tables", 4, "rows"], "expected": 6}
+  ],
+  "remaining_work": "Transcribe the remaining M-603 grille/register/diffuser and fan sound-power tables and reconcile these printed schedules against plans, piping schematics and BAS controls without using schedule rows as installed-plan quantities."
+}

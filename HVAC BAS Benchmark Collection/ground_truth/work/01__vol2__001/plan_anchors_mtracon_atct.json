@@ -1,0 +1,19 @@
+{
+  "document_id": "01__vol2__001",
+  "module_role": "Partial MTRACON/ATCT plan-to-schedule anchor review. Matching full-page Poppler and MuPDF renders were visually compared. This maps only the legible enlarged-mechanical-room labels; it is not an asserted whole-project installed-quantity reconciliation.",
+  "visual_reviews": [
+    {"page":30,"sheet":"M-411","scope":"MTRACON mechanical duct/piping enlarged plans","poppler_render":"reviews/01__vol2__001/p30-m411-plan-poppler.png","mupdf_render":"reviews/01__vol2__001/p30-m411-plan-mupdf-mupdf.png"},
+    {"page":31,"sheet":"M-421","scope":"ATCT mechanical-room duct/piping enlarged plans","poppler_render":"reviews/01__vol2__001/p31-m421-plan-poppler.png","mupdf_render":"reviews/01__vol2__001/p31-m421-plan-mupdf-mupdf.png"}
+  ],
+  "plan_equipment_anchors": [
+    {"sheet":"M-411","plan_scope":"MTRACON mechanical room 171","tags":["AHU-M1","DOAH-M1","B-M1","B-M2","PHHWP-M1","PHHWP-M2","SCHWP-M1","SCHWP-M2","SHHWP-M1","SHHWP-M2","FCU-M3","DH-M1"],"finding":"The enlarged duct/piping plans visibly co-locate the scheduled AHU/DOAH, both boilers, primary/secondary hydronic pumps, FCU-M3 and DH-M1 within or adjoining mechanical room 171."},
+    {"sheet":"M-421","plan_scope":"ATCT mechanical room 2102","tags":["DOAH-T1","B-T1","B-T2","SPF-T1","SPF-T2","FCU-T15","DH-T1","HHWP-DOAH-T1","PHHWP-T1","PHHWP-T2","SCHWP-T1","SCHWP-T2","SHHWP-T1","SHHWP-T2"],"finding":"The enlarged duct/piping plans visibly co-locate the DOAH, both boilers, stair-pressurization fans, FCU-T15, DH-T1 and the scheduled heating/chilled-water pump groups in the ATCT mechanical room."}
+  ],
+  "reconciliation_limits": [
+    "The visible enlarged-plan labels establish system/location anchors only. They do not resolve every schedule row, duplicate drawing instance, field-installed accessory or device quantity across all 75 supplied pages.",
+    "The point-list templates remain controller/system scopes. No installed I/O or sensor count is multiplied from these plan anchors without a source-stated mapping.",
+    "MTRACON/ATCT schedule and plan inventories are still partial; final record assembly requires full row specifications and complete all-plan review."
+  ],
+  "tables": [], "assertions": [],
+  "inventory_checks": [{"id":"paired-plan-render-review","records_path":["visual_reviews"],"expected":2,"unique_key":"sheet"},{"id":"system-location-anchors","records_path":["plan_equipment_anchors"],"expected":2,"unique_key":"sheet"}]
+}

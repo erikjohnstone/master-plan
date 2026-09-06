@@ -1,0 +1,400 @@
+{
+  "document_id": "17__vol1__16",
+  "module_role": "Cover/title-sheet project facts, all-page sheet ledger, local stated-scale witnesses and visual-review disposition.",
+  "tables": [],
+  "project": {
+    "project_name_as_printed": "CARSON VALLEY MIDDLE SCHOOL PHASE 1 HVAC REPLACEMENT",
+    "facility_as_printed": "CARSON VALLEY MIDDLE SCHOOL",
+    "location_as_printed": "1477 US HIGHWAY 395N, GARDNERVILLE, NEVADA 89410",
+    "building_type_as_printed": "Middle school (from printed facility name; no more specific occupancy/use classification is asserted).",
+    "mechanical_engineering_consultant_as_printed": "CR ENGINEERING (firm identified in title-block graphics/copyright; its reading order is not used as a scalar parser assertion).",
+    "issue_date_as_printed": "11/10/23",
+    "assertion_ids": [
+      "cover-project",
+      "cover-location",
+      "cover-issue-date"
+    ]
+  },
+  "scale_semantics": {
+    "stated_scale_records": [
+      {
+        "page": 12,
+        "sheet": "M2.11",
+        "printed_scale": "1/8\" = 1'-0\"",
+        "assertion_id": "m211-scale"
+      },
+      {
+        "page": 13,
+        "sheet": "M2.12",
+        "printed_scale": "1/8\" = 1'-0\"",
+        "assertion_id": "m212-scale"
+      },
+      {
+        "page": 17,
+        "sheet": "M2.21",
+        "printed_scale": "1/8\" = 1'-0\"",
+        "assertion_id": "m221-scale"
+      }
+    ],
+    "graphic_scale_bar_status": "No graphic scale bar is asserted as a measurement source. Stated scales are local to individual plan views; schedules, controls diagrams, schematics, one-lines and details are not made distance-takeoff sources.",
+    "takeoff_scale_status": "No global scale, distance, area, duct length, pipe length or physical quantity is derived from the mixed 47-page source set."
+  },
+  "visual_review_pages": [
+    {
+      "page": 1,
+      "sheet": "T0.01",
+      "render": "reviews/17__vol1__16/p1-p1-full-poppler.png",
+      "finding": "Cover/title sheet and drawing index visually reviewed; project, location, issue date and consultant title-block context retained."
+    },
+    {
+      "page": 2,
+      "sheet": "M0.01",
+      "render": "reviews/17__vol1__16/p2-p2-full-poppler.png",
+      "finding": "Mechanical abbreviations, legend and calculation/general-note sheet visually reviewed."
+    },
+    {
+      "page": 3,
+      "sheet": "M0.02",
+      "render": "reviews/17__vol1__16/p3-p3-full-poppler.png",
+      "finding": "M0.02 dense mechanical schedule sheet visually reviewed; all 69 literal schedule rows are retained separately."
+    },
+    {
+      "page": 4,
+      "sheet": "M0.03",
+      "render": "reviews/17__vol1__16/p4-p4-full-poppler.png",
+      "finding": "M0.03 dense mechanical schedule sheet visually reviewed; all 17 literal schedule rows, including control dampers, reference-only rooftop units and bid alternate, are retained separately."
+    },
+    {
+      "page": 5,
+      "sheet": "M1.11",
+      "render": "reviews/17__vol1__16/p5-p5-full-poppler.png",
+      "finding": "Building B HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 6,
+      "sheet": "M1.12",
+      "render": "reviews/17__vol1__16/p6-p6-full-poppler.png",
+      "finding": "Building B HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 7,
+      "sheet": "M1.13",
+      "render": "reviews/17__vol1__16/p7-p7-full-poppler.png",
+      "finding": "Building B HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 8,
+      "sheet": "M1.14",
+      "render": "reviews/17__vol1__16/p8-p8-full-poppler.png",
+      "finding": "Building B HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 9,
+      "sheet": "M1.21",
+      "render": "reviews/17__vol1__16/p9-p9-full-poppler.png",
+      "finding": "Building C HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 10,
+      "sheet": "M1.22",
+      "render": "reviews/17__vol1__16/p10-p10-full-poppler.png",
+      "finding": "Building C HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 11,
+      "sheet": "M1.23",
+      "render": "reviews/17__vol1__16/p11-p11-full-poppler.png",
+      "finding": "Building C HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 12,
+      "sheet": "M2.11",
+      "render": "reviews/17__vol1__16/p12-p12-full-poppler.png",
+      "finding": "Building B new HVAC plan visually reviewed."
+    },
+    {
+      "page": 13,
+      "sheet": "M2.12",
+      "render": "reviews/17__vol1__16/p13-p13-full-poppler.png",
+      "finding": "Building B new HVAC plan visually reviewed."
+    },
+    {
+      "page": 14,
+      "sheet": "M2.13",
+      "render": "reviews/17__vol1__16/p14-p14-full-poppler.png",
+      "finding": "Building B new HVAC plan visually reviewed."
+    },
+    {
+      "page": 15,
+      "sheet": "M2.14",
+      "render": "reviews/17__vol1__16/p15-p15-full-poppler.png",
+      "finding": "Building B new HVAC plan visually reviewed."
+    },
+    {
+      "page": 16,
+      "sheet": "M2.15",
+      "render": "reviews/17__vol1__16/p16-p16-full-poppler.png",
+      "finding": "Building B new HVAC plan visually reviewed."
+    },
+    {
+      "page": 17,
+      "sheet": "M2.21",
+      "render": "reviews/17__vol1__16/p17-p17-full-poppler.png",
+      "finding": "Building C new HVAC plan visually reviewed."
+    },
+    {
+      "page": 18,
+      "sheet": "M2.22",
+      "render": "reviews/17__vol1__16/p18-p18-full-poppler.png",
+      "finding": "Building C new HVAC plan visually reviewed."
+    },
+    {
+      "page": 19,
+      "sheet": "M2.23",
+      "render": "reviews/17__vol1__16/p19-p19-full-poppler.png",
+      "finding": "Building C new HVAC plan visually reviewed."
+    },
+    {
+      "page": 20,
+      "sheet": "M2.24",
+      "render": "reviews/17__vol1__16/p20-p20-full-poppler.png",
+      "finding": "Building C new HVAC plan visually reviewed."
+    },
+    {
+      "page": 21,
+      "sheet": "M3.01",
+      "render": "reviews/17__vol1__16/p21-p21-full-poppler.png",
+      "finding": "Mechanical isometric/detail sheet visually reviewed."
+    },
+    {
+      "page": 22,
+      "sheet": "M3.02",
+      "render": "reviews/17__vol1__16/p22-p22-full-poppler.png",
+      "finding": "Mechanical isometric/detail sheet visually reviewed."
+    },
+    {
+      "page": 23,
+      "sheet": "M3.03",
+      "render": "reviews/17__vol1__16/p23-p23-full-poppler.png",
+      "finding": "Mechanical isometric/detail sheet visually reviewed."
+    },
+    {
+      "page": 24,
+      "sheet": "M3.04",
+      "render": "reviews/17__vol1__16/p24-p24-full-poppler.png",
+      "finding": "Mechanical isometric/detail sheet visually reviewed."
+    },
+    {
+      "page": 25,
+      "sheet": "M5.01",
+      "render": "reviews/17__vol1__16/p25-p25-full-poppler.png",
+      "finding": "M5.01 mechanical detail sheet visually reviewed, including duct-smoke-detector detail context."
+    },
+    {
+      "page": 26,
+      "sheet": "M5.02",
+      "render": "reviews/17__vol1__16/p26-p26-full-poppler.png",
+      "finding": "M5.02 equipment-support detail sheet visually reviewed."
+    },
+    {
+      "page": 27,
+      "sheet": "M6.01",
+      "render": "reviews/17__vol1__16/p27-p27-full-poppler.png",
+      "finding": "M6.01 BAS system architecture, legend and controls notes visually reviewed; BACnet IP/MSTP and system requirements are retained separately."
+    },
+    {
+      "page": 28,
+      "sheet": "M6.02",
+      "render": "reviews/17__vol1__16/p28-p28-full-poppler.png",
+      "finding": "M6.02 BAS controller diagrams, C-Wing ERV/furnace/exhaust sequences and formal 12-row BACnet Inputs to BMS list visually reviewed and retained separately."
+    },
+    {
+      "page": 29,
+      "sheet": "M6.03",
+      "render": "reviews/17__vol1__16/p29-p29-full-poppler.png",
+      "finding": "M6.03 Building B outdoor-air-unit and bid-alternate rooftop-unit sequences/control diagrams visually reviewed; source-bounded clauses are retained separately."
+    },
+    {
+      "page": 30,
+      "sheet": "E0.1",
+      "render": "reviews/17__vol1__16/p30-p30-full-poppler.png",
+      "finding": "Electrical mechanical-equipment connection schedule visually reviewed."
+    },
+    {
+      "page": 31,
+      "sheet": "E0.2",
+      "render": "reviews/17__vol1__16/p31-p31-full-poppler.png",
+      "finding": "Electrical panel schedules visually reviewed."
+    },
+    {
+      "page": 32,
+      "sheet": "E0.3",
+      "render": "reviews/17__vol1__16/p32-p32-full-poppler.png",
+      "finding": "Electrical one-line/panel sheet visually reviewed."
+    },
+    {
+      "page": 33,
+      "sheet": "E0.4",
+      "render": "reviews/17__vol1__16/p33-p33-full-poppler.png",
+      "finding": "Electrical specifications/general sheet visually reviewed."
+    },
+    {
+      "page": 34,
+      "sheet": "E1.11",
+      "render": "reviews/17__vol1__16/p34-p34-full-poppler.png",
+      "finding": "Building B electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 35,
+      "sheet": "E1.12",
+      "render": "reviews/17__vol1__16/p35-p35-full-poppler.png",
+      "finding": "Building B electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 36,
+      "sheet": "E1.13",
+      "render": "reviews/17__vol1__16/p36-p36-full-poppler.png",
+      "finding": "Building B electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 37,
+      "sheet": "E1.21",
+      "render": "reviews/17__vol1__16/p37-p37-full-poppler.png",
+      "finding": "Building C electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 38,
+      "sheet": "E1.22",
+      "render": "reviews/17__vol1__16/p38-p38-full-poppler.png",
+      "finding": "Building C electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 39,
+      "sheet": "E2.11",
+      "render": "reviews/17__vol1__16/p39-p39-full-poppler.png",
+      "finding": "Building B electrical new-work plan visually reviewed."
+    },
+    {
+      "page": 40,
+      "sheet": "E2.12",
+      "render": "reviews/17__vol1__16/p40-p40-full-poppler.png",
+      "finding": "Building B electrical new-work plan visually reviewed."
+    },
+    {
+      "page": 41,
+      "sheet": "E2.13",
+      "render": "reviews/17__vol1__16/p41-p41-full-poppler.png",
+      "finding": "Building B electrical new-work plan visually reviewed."
+    },
+    {
+      "page": 42,
+      "sheet": "E2.21",
+      "render": "reviews/17__vol1__16/p42-p42-full-poppler.png",
+      "finding": "Building C electrical new-work plan visually reviewed."
+    },
+    {
+      "page": 43,
+      "sheet": "E2.22",
+      "render": "reviews/17__vol1__16/p43-p43-full-poppler.png",
+      "finding": "Building C electrical new-work plan visually reviewed."
+    },
+    {
+      "page": 44,
+      "sheet": "S0.1",
+      "render": "reviews/17__vol1__16/p44-p44-full-poppler.png",
+      "finding": "Structural general-notes sheet visually reviewed."
+    },
+    {
+      "page": 45,
+      "sheet": "S1.0",
+      "render": "reviews/17__vol1__16/p45-p45-full-poppler.png",
+      "finding": "Building B structural floor plan visually reviewed."
+    },
+    {
+      "page": 46,
+      "sheet": "S2.0",
+      "render": "reviews/17__vol1__16/p46-p46-full-poppler.png",
+      "finding": "Building B structural roof plan visually reviewed."
+    },
+    {
+      "page": 47,
+      "sheet": "S2.1",
+      "render": "reviews/17__vol1__16/p47-p47-full-poppler.png",
+      "finding": "Building C structural roof plan visually reviewed."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "cover-project",
+      "page": 1,
+      "bbox": [
+        850,
+        70,
+        2050,
+        240
+      ],
+      "expected": "CARSON VALLEY MIDDLE SCHOOL PHASE 1 HVAC REPLACEMENT",
+      "mode": "contains"
+    },
+    {
+      "id": "cover-location",
+      "page": 1,
+      "bbox": [
+        1100,
+        250,
+        1800,
+        360
+      ],
+      "expected": "1477 US HIGHWAY 395N GARDNERVILLE, NEVADA 89410",
+      "mode": "contains"
+    },
+    {
+      "id": "cover-issue-date",
+      "page": 1,
+      "bbox": [
+        2890,
+        1940,
+        2980,
+        1990
+      ],
+      "expected": "11/10/23",
+      "mode": "contains"
+    },
+    {
+      "id": "m211-scale",
+      "page": 12,
+      "bbox": [
+        1100,
+        1235,
+        1300,
+        1275
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "mode": "exact"
+    },
+    {
+      "id": "m212-scale",
+      "page": 13,
+      "bbox": [
+        1325,
+        1320,
+        1520,
+        1360
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "mode": "exact"
+    },
+    {
+      "id": "m221-scale",
+      "page": 17,
+      "bbox": [
+        1320,
+        1500,
+        1520,
+        1545
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "mode": "exact"
+    }
+  ]
+}

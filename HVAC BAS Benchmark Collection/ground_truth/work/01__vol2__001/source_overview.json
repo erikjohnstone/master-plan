@@ -1,0 +1,33 @@
+{
+  "document_id":"01__vol2__001",
+  "status":"partial_document_audit",
+  "tables":[],
+  "scope":"Initial source-context audit of PDF pages 1-2 only. The complete 75-page equipment, sheet, point and sensor audit remains open. Curation previews do not establish full-document coverage.",
+  "project":{"name":"FY20 P-228 ATC TOWER AND AIR OPERATIONS","location":"MCAS CHERRY POINT, CHERRY POINT, NC","building_types":["Air Operations building","MTRACON building","Air Traffic Control Tower (ATCT)"],"classification_basis":"Explicit building roster on M-002, not archive filename","engineer_name":"CHARLES WESLEY SOUTHALL","license_as_printed":"No.053647","engineering_firm":{"initial_visual_read":"Burns & McDonnell","status":"awaiting_independent_enlarged_logo_review","address":"1305 EXECUTIVE BLVD., SUITE 160, CHESAPEAKE, VA 23320"},"eproject":"1596300"},
+  "date_scope":{"page":1,"revision_mark":"0","description":"ISSUED FOR CONSTRUCTION","date_as_printed":"11/19/19","normalized_issue_date":"2019-11-19","warning":"This date is corroborated on page 1 only so far. Do not assume all 75 sheets have identical revision history; the 12 APRIL 2018 border-form revision is not this project issue date."},
+  "source_context":[
+    {"page":2,"finding":"The narrative is an overview and expressly defers to remaining drawings/specifications on conflicts. Equipment ratings and redundancy statements here must be reconciled against actual schedules/controls, not used as overriding truth."},
+    {"page":2,"finding":"Air Operations has AHU-A1/A2, dedicated outdoor-air units, fan coils, chilled-water and hot-water plants. MTRACON and ATCT share a chilled-water plant with heat recovery and separate secondary distributions; critical-room redundancy is explicitly discussed."},
+    {"page":2,"finding":"ATCT includes DOAH-T1, fan coils, redundant cab AHU-T1A/B and stair pressurization SPF-T1. Final per-unit specifications, controls and quantities await the remaining source pages."},
+    {"page":2,"finding":"BACnet DDC is required with capability to tie into existing MCAS Cherry Point Utility Management System. Specific transports, controller topology and point allocations require the M700-series review."}
+  ],
+  "visual_review":{"pages":[1,2],"renders":["reviews/01__vol2__001/p1-full-poppler.png","reviews/01__vol2__001/p2-full-poppler.png"],"qualification":"Full-page layout/context visually inspected; detailed table/symbol/remaining-page audit incomplete."},
+  "assertions":[
+    {"id":"project-title","page":1,"bbox":[2320,970,2348,1395],"reading_direction":"up","mode":"exact","expected":"FY20 P-228 ATC TOWER AND AIR OPERATIONS"},
+    {"id":"project-location","page":1,"bbox":[2295,965,2314,1407],"reading_direction":"up","mode":"exact","expected":"MCAS CHERRY POINT CHERRY POINT, NC"},
+    {"id":"sheet-1-number","page":1,"bbox":[2280,1500,2365,1532],"mode":"exact","expected":"M-001"},
+    {"id":"sheet-1-title","page":1,"bbox":[2365,1040,2385,1310],"reading_direction":"up","mode":"exact","expected":"MECHANICAL LEGEND, ABREVIATIONS AND NOTES"},
+    {"id":"issue-mark","page":1,"bbox":[2365,330,2379,345],"reading_direction":"up","mode":"exact","expected":"0"},
+    {"id":"issue-description","page":1,"bbox":[2365,205,2379,320],"reading_direction":"up","mode":"exact","expected":"ISSUED FOR CONSTRUCTION"},
+    {"id":"issue-date","page":1,"bbox":[2365,106,2379,146],"reading_direction":"up","mode":"exact","expected":"11/19/19"},
+    {"id":"engineer-name","page":1,"bbox":[2270,561,2372,574],"mode":"exact","expected":"CHARLES WESLEY SOUTHALL"},
+    {"id":"engineer-license","page":1,"bbox":[2280,584,2362,598],"mode":"exact","expected":"Lic. No.053647"},
+    {"id":"firm-address","page":1,"bbox":[2260,706,2385,752],"mode":"exact","expected":"1305 EXECUTIVE BLVD. SUITE 160 CHESAPEAKE, VA 23320"},
+    {"id":"eproject","page":1,"bbox":[2328,1422,2365,1436],"mode":"exact","expected":"1596300"},
+    {"id":"sheet-2-number","page":2,"bbox":[2280,1500,2365,1532],"mode":"exact","expected":"M-002"},
+    {"id":"building-roster","page":2,"bbox":[130,137,971,168],"expected":"Air Operations building, MTRACON building, and the Air Traffic Control Tower (ATCT)."},
+    {"id":"overview-precedence","page":2,"bbox":[130,108,973,153],"expected":"In the event of any conflicts between the descriptions and notes on this sheet and the remaining drawings and specifications, the remaining drawings and specifications take precedence."},
+    {"id":"BACnet-utility-integration","page":2,"bbox":[992,792,1762,839],"expected":"A BACnet DDC control system is to be provided. The controls system is to be capable of tie-into the existing MCAS Cherry Point Utility Management System."}
+  ],
+  "remaining_work":"Review all 75 pages; independently corroborate logo; assemble complete per-sheet metadata/scales; transcribe every schedule and BAS matrix; reconcile all equipment identities, points, sensors and source conflicts."
+}

@@ -1,0 +1,8369 @@
+{
+  "document_id": "03__vol1__27",
+  "source_sha256": "2e123db08407f97acd6bc6387ecab6e08ad8204971fb5c24a3668bbd34dec0cf",
+  "annotation_sha256": "e35dfbd22493f05dc6394585be6177dda6f78fec11d7e3ec3df653d991f238dc",
+  "tables": 4,
+  "rows": 16,
+  "cell_assertions": 273,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "tag",
+      "page": 16,
+      "bbox": [
+        290,
+        360,
+        365,
+        390.1
+      ],
+      "expected": "UH-01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-01",
+          "word_ids": [
+            48
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-01",
+          "word_ids": [
+            276
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "location",
+      "page": 16,
+      "bbox": [
+        365,
+        360,
+        460,
+        390.1
+      ],
+      "expected": "MAIN ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            49,
+            50
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            277,
+            278
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 16,
+      "bbox": [
+        460,
+        360,
+        580,
+        390.1
+      ],
+      "expected": "STERLING/ HSB07211",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STERLING/ HSB07211",
+          "word_ids": [
+            51,
+            52
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STERLING/ HSB07211",
+          "word_ids": [
+            202,
+            207
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "orientation",
+      "page": 16,
+      "bbox": [
+        580,
+        360,
+        675,
+        390.1
+      ],
+      "expected": "HORIZONTAL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HORIZONTAL",
+          "word_ids": [
+            53
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HORIZONTAL",
+          "word_ids": [
+            206
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "supply_flow_cfm",
+      "page": 16,
+      "bbox": [
+        675,
+        360,
+        720,
+        390.1
+      ],
+      "expected": "950",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "950",
+          "word_ids": [
+            54
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "950",
+          "word_ids": [
+            203
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "fan_high_speed_rpm",
+      "page": 16,
+      "bbox": [
+        720,
+        360,
+        760,
+        390.1
+      ],
+      "expected": "1550",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1550",
+          "word_ids": [
+            55
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1550",
+          "word_ids": [
+            204
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "drive",
+      "page": 16,
+      "bbox": [
+        760,
+        360,
+        818,
+        390.1
+      ],
+      "expected": "DIRECT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            56
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            205
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "heating_capacity_mbh",
+      "page": 16,
+      "bbox": [
+        818,
+        360,
+        875,
+        390.1
+      ],
+      "expected": "20.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20.5",
+          "word_ids": [
+            57
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20.5",
+          "word_ids": [
+            279
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "eat_f",
+      "page": 16,
+      "bbox": [
+        875,
+        360,
+        908,
+        390.1
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            58
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            280
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "lat_f",
+      "page": 16,
+      "bbox": [
+        908,
+        360,
+        941,
+        390.1
+      ],
+      "expected": "70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            59
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            306
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "ewt_f",
+      "page": 16,
+      "bbox": [
+        941,
+        360,
+        973,
+        390.1
+      ],
+      "expected": "120",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            60
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            309
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "lwt_f",
+      "page": 16,
+      "bbox": [
+        973,
+        360,
+        1004,
+        390.1
+      ],
+      "expected": "100",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            61
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            310
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "coil_flow_gpm",
+      "page": 16,
+      "bbox": [
+        1004,
+        360,
+        1055,
+        390.1
+      ],
+      "expected": "2.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            62
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            307
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "wpd_ft_wc",
+      "page": 16,
+      "bbox": [
+        1055,
+        360,
+        1100,
+        390.1
+      ],
+      "expected": "0.23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.23",
+          "word_ids": [
+            63
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.23",
+          "word_ids": [
+            311
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "motor_hp",
+      "page": 16,
+      "bbox": [
+        1100,
+        360,
+        1140,
+        390.1
+      ],
+      "expected": "1/20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/20",
+          "word_ids": [
+            64
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/20",
+          "word_ids": [
+            308
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "motor_volts",
+      "page": 16,
+      "bbox": [
+        1140,
+        360,
+        1190,
+        390.1
+      ],
+      "expected": "115",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            65
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            312
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "motor_phase",
+      "page": 16,
+      "bbox": [
+        1190,
+        360,
+        1215,
+        390.1
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            66
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            313
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "fla",
+      "page": 16,
+      "bbox": [
+        1215,
+        360,
+        1244,
+        390.1
+      ],
+      "expected": "1.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            67
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            314
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "unit_weight_lbs",
+      "page": 16,
+      "bbox": [
+        1244,
+        360,
+        1290,
+        390.1
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            68
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            319
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 1,
+      "column": "remarks",
+      "page": 16,
+      "bbox": [
+        1290,
+        360,
+        1360,
+        390.1
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            69
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            320
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "tag",
+      "page": 16,
+      "bbox": [
+        290,
+        390.1,
+        365,
+        418.0
+      ],
+      "expected": "UH-02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-02",
+          "word_ids": [
+            70
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-02",
+          "word_ids": [
+            209
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "location",
+      "page": 16,
+      "bbox": [
+        365,
+        390.1,
+        460,
+        418.0
+      ],
+      "expected": "MAIN ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            71,
+            72
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            210,
+            211
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 16,
+      "bbox": [
+        460,
+        390.1,
+        580,
+        418.0
+      ],
+      "expected": "STERLING/ HSB07211",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STERLING/ HSB07211",
+          "word_ids": [
+            73,
+            74
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STERLING/ HSB07211",
+          "word_ids": [
+            208,
+            216
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "orientation",
+      "page": 16,
+      "bbox": [
+        580,
+        390.1,
+        675,
+        418.0
+      ],
+      "expected": "HORIZONTAL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HORIZONTAL",
+          "word_ids": [
+            75
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HORIZONTAL",
+          "word_ids": [
+            212
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "supply_flow_cfm",
+      "page": 16,
+      "bbox": [
+        675,
+        390.1,
+        720,
+        418.0
+      ],
+      "expected": "950",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "950",
+          "word_ids": [
+            76
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "950",
+          "word_ids": [
+            213
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "fan_high_speed_rpm",
+      "page": 16,
+      "bbox": [
+        720,
+        390.1,
+        760,
+        418.0
+      ],
+      "expected": "1550",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1550",
+          "word_ids": [
+            77
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1550",
+          "word_ids": [
+            214
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "drive",
+      "page": 16,
+      "bbox": [
+        760,
+        390.1,
+        818,
+        418.0
+      ],
+      "expected": "DIRECT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            78
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            215
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "heating_capacity_mbh",
+      "page": 16,
+      "bbox": [
+        818,
+        390.1,
+        875,
+        418.0
+      ],
+      "expected": "20.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20.5",
+          "word_ids": [
+            79
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20.5",
+          "word_ids": [
+            349
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "eat_f",
+      "page": 16,
+      "bbox": [
+        875,
+        390.1,
+        908,
+        418.0
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            80
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            350
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "lat_f",
+      "page": 16,
+      "bbox": [
+        908,
+        390.1,
+        941,
+        418.0
+      ],
+      "expected": "70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            81
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            351
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "ewt_f",
+      "page": 16,
+      "bbox": [
+        941,
+        390.1,
+        973,
+        418.0
+      ],
+      "expected": "120",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            82
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            352
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "lwt_f",
+      "page": 16,
+      "bbox": [
+        973,
+        390.1,
+        1004,
+        418.0
+      ],
+      "expected": "100",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            83
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            353
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "coil_flow_gpm",
+      "page": 16,
+      "bbox": [
+        1004,
+        390.1,
+        1055,
+        418.0
+      ],
+      "expected": "2.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            84
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            354
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "wpd_ft_wc",
+      "page": 16,
+      "bbox": [
+        1055,
+        390.1,
+        1100,
+        418.0
+      ],
+      "expected": "0.23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.23",
+          "word_ids": [
+            85
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.23",
+          "word_ids": [
+            355
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "motor_hp",
+      "page": 16,
+      "bbox": [
+        1100,
+        390.1,
+        1140,
+        418.0
+      ],
+      "expected": "1/20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/20",
+          "word_ids": [
+            86
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/20",
+          "word_ids": [
+            356
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "motor_volts",
+      "page": 16,
+      "bbox": [
+        1140,
+        390.1,
+        1190,
+        418.0
+      ],
+      "expected": "115",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            87
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            357
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "motor_phase",
+      "page": 16,
+      "bbox": [
+        1190,
+        390.1,
+        1215,
+        418.0
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            88
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            358
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "fla",
+      "page": 16,
+      "bbox": [
+        1215,
+        390.1,
+        1244,
+        418.0
+      ],
+      "expected": "1.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            89
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            359
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "unit_weight_lbs",
+      "page": 16,
+      "bbox": [
+        1244,
+        390.1,
+        1290,
+        418.0
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            90
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            360
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 2,
+      "column": "remarks",
+      "page": 16,
+      "bbox": [
+        1290,
+        390.1,
+        1360,
+        418.0
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            91
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            361
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "tag",
+      "page": 16,
+      "bbox": [
+        290,
+        418.0,
+        365,
+        445.81
+      ],
+      "expected": "UH-03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-03",
+          "word_ids": [
+            92
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-03",
+          "word_ids": [
+            218
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "location",
+      "page": 16,
+      "bbox": [
+        365,
+        418.0,
+        460,
+        445.81
+      ],
+      "expected": "MAIN ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            93,
+            94
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            219,
+            220
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "manufacturer_model",
+      "page": 16,
+      "bbox": [
+        460,
+        418.0,
+        580,
+        445.81
+      ],
+      "expected": "STERLING/ HSB07211",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STERLING/ HSB07211",
+          "word_ids": [
+            95,
+            96
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STERLING/ HSB07211",
+          "word_ids": [
+            217,
+            225
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "orientation",
+      "page": 16,
+      "bbox": [
+        580,
+        418.0,
+        675,
+        445.81
+      ],
+      "expected": "HORIZONTAL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HORIZONTAL",
+          "word_ids": [
+            97
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HORIZONTAL",
+          "word_ids": [
+            221
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "supply_flow_cfm",
+      "page": 16,
+      "bbox": [
+        675,
+        418.0,
+        720,
+        445.81
+      ],
+      "expected": "950",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "950",
+          "word_ids": [
+            98
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "950",
+          "word_ids": [
+            222
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "fan_high_speed_rpm",
+      "page": 16,
+      "bbox": [
+        720,
+        418.0,
+        760,
+        445.81
+      ],
+      "expected": "1550",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1550",
+          "word_ids": [
+            99
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1550",
+          "word_ids": [
+            223
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "drive",
+      "page": 16,
+      "bbox": [
+        760,
+        418.0,
+        818,
+        445.81
+      ],
+      "expected": "DIRECT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            100
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            224
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "heating_capacity_mbh",
+      "page": 16,
+      "bbox": [
+        818,
+        418.0,
+        875,
+        445.81
+      ],
+      "expected": "20.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20.5",
+          "word_ids": [
+            101
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20.5",
+          "word_ids": [
+            362
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "eat_f",
+      "page": 16,
+      "bbox": [
+        875,
+        418.0,
+        908,
+        445.81
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            102
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            363
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "lat_f",
+      "page": 16,
+      "bbox": [
+        908,
+        418.0,
+        941,
+        445.81
+      ],
+      "expected": "70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            103
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            364
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "ewt_f",
+      "page": 16,
+      "bbox": [
+        941,
+        418.0,
+        973,
+        445.81
+      ],
+      "expected": "120",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            104
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            365
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "lwt_f",
+      "page": 16,
+      "bbox": [
+        973,
+        418.0,
+        1004,
+        445.81
+      ],
+      "expected": "100",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            105
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            366
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "coil_flow_gpm",
+      "page": 16,
+      "bbox": [
+        1004,
+        418.0,
+        1055,
+        445.81
+      ],
+      "expected": "2.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            106
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            367
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "wpd_ft_wc",
+      "page": 16,
+      "bbox": [
+        1055,
+        418.0,
+        1100,
+        445.81
+      ],
+      "expected": "0.23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.23",
+          "word_ids": [
+            107
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.23",
+          "word_ids": [
+            368
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "motor_hp",
+      "page": 16,
+      "bbox": [
+        1100,
+        418.0,
+        1140,
+        445.81
+      ],
+      "expected": "1/20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/20",
+          "word_ids": [
+            108
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/20",
+          "word_ids": [
+            369
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "motor_volts",
+      "page": 16,
+      "bbox": [
+        1140,
+        418.0,
+        1190,
+        445.81
+      ],
+      "expected": "115",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            109
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            370
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "motor_phase",
+      "page": 16,
+      "bbox": [
+        1190,
+        418.0,
+        1215,
+        445.81
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            110
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            371
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "fla",
+      "page": 16,
+      "bbox": [
+        1215,
+        418.0,
+        1244,
+        445.81
+      ],
+      "expected": "1.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            111
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            372
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "unit_weight_lbs",
+      "page": 16,
+      "bbox": [
+        1244,
+        418.0,
+        1290,
+        445.81
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            112
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            373
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 3,
+      "column": "remarks",
+      "page": 16,
+      "bbox": [
+        1290,
+        418.0,
+        1360,
+        445.81
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            113
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            374
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "tag",
+      "page": 16,
+      "bbox": [
+        290,
+        445.81,
+        365,
+        473.62
+      ],
+      "expected": "UH-04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-04",
+          "word_ids": [
+            114
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-04",
+          "word_ids": [
+            227
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "location",
+      "page": 16,
+      "bbox": [
+        365,
+        445.81,
+        460,
+        473.62
+      ],
+      "expected": "MAIN ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            115,
+            116
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            231,
+            232
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "manufacturer_model",
+      "page": 16,
+      "bbox": [
+        460,
+        445.81,
+        580,
+        473.62
+      ],
+      "expected": "STERLING/ HSB07211",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STERLING/ HSB07211",
+          "word_ids": [
+            117,
+            118
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STERLING/ HSB07211",
+          "word_ids": [
+            226,
+            234
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "orientation",
+      "page": 16,
+      "bbox": [
+        580,
+        445.81,
+        675,
+        473.62
+      ],
+      "expected": "HORIZONTAL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HORIZONTAL",
+          "word_ids": [
+            119
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HORIZONTAL",
+          "word_ids": [
+            233
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "supply_flow_cfm",
+      "page": 16,
+      "bbox": [
+        675,
+        445.81,
+        720,
+        473.62
+      ],
+      "expected": "950",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "950",
+          "word_ids": [
+            120
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "950",
+          "word_ids": [
+            228
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "fan_high_speed_rpm",
+      "page": 16,
+      "bbox": [
+        720,
+        445.81,
+        760,
+        473.62
+      ],
+      "expected": "1550",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1550",
+          "word_ids": [
+            121
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1550",
+          "word_ids": [
+            229
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "drive",
+      "page": 16,
+      "bbox": [
+        760,
+        445.81,
+        818,
+        473.62
+      ],
+      "expected": "DIRECT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            122
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            230
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "heating_capacity_mbh",
+      "page": 16,
+      "bbox": [
+        818,
+        445.81,
+        875,
+        473.62
+      ],
+      "expected": "20.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20.5",
+          "word_ids": [
+            123
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20.5",
+          "word_ids": [
+            375
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "eat_f",
+      "page": 16,
+      "bbox": [
+        875,
+        445.81,
+        908,
+        473.62
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            124
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            376
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "lat_f",
+      "page": 16,
+      "bbox": [
+        908,
+        445.81,
+        941,
+        473.62
+      ],
+      "expected": "70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            125
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            377
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "ewt_f",
+      "page": 16,
+      "bbox": [
+        941,
+        445.81,
+        973,
+        473.62
+      ],
+      "expected": "120",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            126
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            378
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "lwt_f",
+      "page": 16,
+      "bbox": [
+        973,
+        445.81,
+        1004,
+        473.62
+      ],
+      "expected": "100",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            127
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            379
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "coil_flow_gpm",
+      "page": 16,
+      "bbox": [
+        1004,
+        445.81,
+        1055,
+        473.62
+      ],
+      "expected": "2.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            128
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            380
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "wpd_ft_wc",
+      "page": 16,
+      "bbox": [
+        1055,
+        445.81,
+        1100,
+        473.62
+      ],
+      "expected": "0.23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.23",
+          "word_ids": [
+            129
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.23",
+          "word_ids": [
+            381
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "motor_hp",
+      "page": 16,
+      "bbox": [
+        1100,
+        445.81,
+        1140,
+        473.62
+      ],
+      "expected": "1/20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/20",
+          "word_ids": [
+            130
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/20",
+          "word_ids": [
+            382
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "motor_volts",
+      "page": 16,
+      "bbox": [
+        1140,
+        445.81,
+        1190,
+        473.62
+      ],
+      "expected": "115",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            131
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            383
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "motor_phase",
+      "page": 16,
+      "bbox": [
+        1190,
+        445.81,
+        1215,
+        473.62
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            132
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            384
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "fla",
+      "page": 16,
+      "bbox": [
+        1215,
+        445.81,
+        1244,
+        473.62
+      ],
+      "expected": "1.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            133
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            385
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "unit_weight_lbs",
+      "page": 16,
+      "bbox": [
+        1244,
+        445.81,
+        1290,
+        473.62
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            134
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            386
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 4,
+      "column": "remarks",
+      "page": 16,
+      "bbox": [
+        1290,
+        445.81,
+        1360,
+        473.62
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            135
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            387
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "tag",
+      "page": 16,
+      "bbox": [
+        290,
+        473.62,
+        365,
+        501.52
+      ],
+      "expected": "UH-05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-05",
+          "word_ids": [
+            136
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-05",
+          "word_ids": [
+            236
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "location",
+      "page": 16,
+      "bbox": [
+        365,
+        473.62,
+        460,
+        501.52
+      ],
+      "expected": "MAIN ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            137,
+            138
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            237,
+            238
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "manufacturer_model",
+      "page": 16,
+      "bbox": [
+        460,
+        473.62,
+        580,
+        501.52
+      ],
+      "expected": "STERLING/ HSB07211",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STERLING/ HSB07211",
+          "word_ids": [
+            139,
+            140
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STERLING/ HSB07211",
+          "word_ids": [
+            235,
+            243
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "orientation",
+      "page": 16,
+      "bbox": [
+        580,
+        473.62,
+        675,
+        501.52
+      ],
+      "expected": "HORIZONTAL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HORIZONTAL",
+          "word_ids": [
+            141
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HORIZONTAL",
+          "word_ids": [
+            239
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "supply_flow_cfm",
+      "page": 16,
+      "bbox": [
+        675,
+        473.62,
+        720,
+        501.52
+      ],
+      "expected": "950",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "950",
+          "word_ids": [
+            142
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "950",
+          "word_ids": [
+            240
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "fan_high_speed_rpm",
+      "page": 16,
+      "bbox": [
+        720,
+        473.62,
+        760,
+        501.52
+      ],
+      "expected": "1550",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1550",
+          "word_ids": [
+            143
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1550",
+          "word_ids": [
+            241
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "drive",
+      "page": 16,
+      "bbox": [
+        760,
+        473.62,
+        818,
+        501.52
+      ],
+      "expected": "DIRECT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            144
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            242
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "heating_capacity_mbh",
+      "page": 16,
+      "bbox": [
+        818,
+        473.62,
+        875,
+        501.52
+      ],
+      "expected": "20.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20.5",
+          "word_ids": [
+            145
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20.5",
+          "word_ids": [
+            450
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "eat_f",
+      "page": 16,
+      "bbox": [
+        875,
+        473.62,
+        908,
+        501.52
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            146
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            451
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "lat_f",
+      "page": 16,
+      "bbox": [
+        908,
+        473.62,
+        941,
+        501.52
+      ],
+      "expected": "70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            147
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            452
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "ewt_f",
+      "page": 16,
+      "bbox": [
+        941,
+        473.62,
+        973,
+        501.52
+      ],
+      "expected": "120",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            148
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            453
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "lwt_f",
+      "page": 16,
+      "bbox": [
+        973,
+        473.62,
+        1004,
+        501.52
+      ],
+      "expected": "100",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            149
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            454
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "coil_flow_gpm",
+      "page": 16,
+      "bbox": [
+        1004,
+        473.62,
+        1055,
+        501.52
+      ],
+      "expected": "2.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            150
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            455
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "wpd_ft_wc",
+      "page": 16,
+      "bbox": [
+        1055,
+        473.62,
+        1100,
+        501.52
+      ],
+      "expected": "0.23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.23",
+          "word_ids": [
+            151
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.23",
+          "word_ids": [
+            456
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "motor_hp",
+      "page": 16,
+      "bbox": [
+        1100,
+        473.62,
+        1140,
+        501.52
+      ],
+      "expected": "1/20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/20",
+          "word_ids": [
+            152
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/20",
+          "word_ids": [
+            457
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "motor_volts",
+      "page": 16,
+      "bbox": [
+        1140,
+        473.62,
+        1190,
+        501.52
+      ],
+      "expected": "115",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            153
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            458
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "motor_phase",
+      "page": 16,
+      "bbox": [
+        1190,
+        473.62,
+        1215,
+        501.52
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            154
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            459
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "fla",
+      "page": 16,
+      "bbox": [
+        1215,
+        473.62,
+        1244,
+        501.52
+      ],
+      "expected": "1.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            155
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            460
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "unit_weight_lbs",
+      "page": 16,
+      "bbox": [
+        1244,
+        473.62,
+        1290,
+        501.52
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            156
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            461
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 5,
+      "column": "remarks",
+      "page": 16,
+      "bbox": [
+        1290,
+        473.62,
+        1360,
+        501.52
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            157
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            462
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "tag",
+      "page": 16,
+      "bbox": [
+        290,
+        501.52,
+        365,
+        529.33
+      ],
+      "expected": "UH-06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-06",
+          "word_ids": [
+            158
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-06",
+          "word_ids": [
+            245
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "location",
+      "page": 16,
+      "bbox": [
+        365,
+        501.52,
+        460,
+        529.33
+      ],
+      "expected": "MAIN ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            159,
+            160
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            246,
+            247
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "manufacturer_model",
+      "page": 16,
+      "bbox": [
+        460,
+        501.52,
+        580,
+        529.33
+      ],
+      "expected": "STERLING/ HSB07211",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STERLING/ HSB07211",
+          "word_ids": [
+            161,
+            162
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STERLING/ HSB07211",
+          "word_ids": [
+            244,
+            252
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "orientation",
+      "page": 16,
+      "bbox": [
+        580,
+        501.52,
+        675,
+        529.33
+      ],
+      "expected": "HORIZONTAL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HORIZONTAL",
+          "word_ids": [
+            163
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HORIZONTAL",
+          "word_ids": [
+            248
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "supply_flow_cfm",
+      "page": 16,
+      "bbox": [
+        675,
+        501.52,
+        720,
+        529.33
+      ],
+      "expected": "950",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "950",
+          "word_ids": [
+            164
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "950",
+          "word_ids": [
+            249
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "fan_high_speed_rpm",
+      "page": 16,
+      "bbox": [
+        720,
+        501.52,
+        760,
+        529.33
+      ],
+      "expected": "1550",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1550",
+          "word_ids": [
+            165
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1550",
+          "word_ids": [
+            250
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "drive",
+      "page": 16,
+      "bbox": [
+        760,
+        501.52,
+        818,
+        529.33
+      ],
+      "expected": "DIRECT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            166
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            251
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "heating_capacity_mbh",
+      "page": 16,
+      "bbox": [
+        818,
+        501.52,
+        875,
+        529.33
+      ],
+      "expected": "20.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20.5",
+          "word_ids": [
+            167
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20.5",
+          "word_ids": [
+            463
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "eat_f",
+      "page": 16,
+      "bbox": [
+        875,
+        501.52,
+        908,
+        529.33
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            168
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            464
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "lat_f",
+      "page": 16,
+      "bbox": [
+        908,
+        501.52,
+        941,
+        529.33
+      ],
+      "expected": "70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            169
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            465
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "ewt_f",
+      "page": 16,
+      "bbox": [
+        941,
+        501.52,
+        973,
+        529.33
+      ],
+      "expected": "120",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            170
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            466
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "lwt_f",
+      "page": 16,
+      "bbox": [
+        973,
+        501.52,
+        1004,
+        529.33
+      ],
+      "expected": "100",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            171
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            467
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "coil_flow_gpm",
+      "page": 16,
+      "bbox": [
+        1004,
+        501.52,
+        1055,
+        529.33
+      ],
+      "expected": "2.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            172
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            468
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "wpd_ft_wc",
+      "page": 16,
+      "bbox": [
+        1055,
+        501.52,
+        1100,
+        529.33
+      ],
+      "expected": "0.23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.23",
+          "word_ids": [
+            173
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.23",
+          "word_ids": [
+            469
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "motor_hp",
+      "page": 16,
+      "bbox": [
+        1100,
+        501.52,
+        1140,
+        529.33
+      ],
+      "expected": "1/20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/20",
+          "word_ids": [
+            174
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/20",
+          "word_ids": [
+            470
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "motor_volts",
+      "page": 16,
+      "bbox": [
+        1140,
+        501.52,
+        1190,
+        529.33
+      ],
+      "expected": "115",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            175
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            471
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "motor_phase",
+      "page": 16,
+      "bbox": [
+        1190,
+        501.52,
+        1215,
+        529.33
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            176
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            472
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "fla",
+      "page": 16,
+      "bbox": [
+        1215,
+        501.52,
+        1244,
+        529.33
+      ],
+      "expected": "1.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            177
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            473
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "unit_weight_lbs",
+      "page": 16,
+      "bbox": [
+        1244,
+        501.52,
+        1290,
+        529.33
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            178
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            474
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 6,
+      "column": "remarks",
+      "page": 16,
+      "bbox": [
+        1290,
+        501.52,
+        1360,
+        529.33
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            179
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            475
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "tag",
+      "page": 16,
+      "bbox": [
+        290,
+        529.33,
+        365,
+        555
+      ],
+      "expected": "UH-07",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-07",
+          "word_ids": [
+            180
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-07",
+          "word_ids": [
+            255
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "location",
+      "page": 16,
+      "bbox": [
+        365,
+        529.33,
+        460,
+        555
+      ],
+      "expected": "MECHANICAL ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL ROOM",
+          "word_ids": [
+            181,
+            182
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL ROOM",
+          "word_ids": [
+            253,
+            260
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "manufacturer_model",
+      "page": 16,
+      "bbox": [
+        460,
+        529.33,
+        580,
+        555
+      ],
+      "expected": "STERLING/ HSB07211",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STERLING/ HSB07211",
+          "word_ids": [
+            183,
+            184
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STERLING/ HSB07211",
+          "word_ids": [
+            254,
+            261
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "orientation",
+      "page": 16,
+      "bbox": [
+        580,
+        529.33,
+        675,
+        555
+      ],
+      "expected": "HORIZONTAL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HORIZONTAL",
+          "word_ids": [
+            185
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HORIZONTAL",
+          "word_ids": [
+            259
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "supply_flow_cfm",
+      "page": 16,
+      "bbox": [
+        675,
+        529.33,
+        720,
+        555
+      ],
+      "expected": "950",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "950",
+          "word_ids": [
+            186
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "950",
+          "word_ids": [
+            256
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "fan_high_speed_rpm",
+      "page": 16,
+      "bbox": [
+        720,
+        529.33,
+        760,
+        555
+      ],
+      "expected": "1550",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1550",
+          "word_ids": [
+            187
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1550",
+          "word_ids": [
+            257
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "drive",
+      "page": 16,
+      "bbox": [
+        760,
+        529.33,
+        818,
+        555
+      ],
+      "expected": "DIRECT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            188
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            258
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "heating_capacity_mbh",
+      "page": 16,
+      "bbox": [
+        818,
+        529.33,
+        875,
+        555
+      ],
+      "expected": "20.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20.5",
+          "word_ids": [
+            189
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20.5",
+          "word_ids": [
+            491
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "eat_f",
+      "page": 16,
+      "bbox": [
+        875,
+        529.33,
+        908,
+        555
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            190
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            492
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "lat_f",
+      "page": 16,
+      "bbox": [
+        908,
+        529.33,
+        941,
+        555
+      ],
+      "expected": "70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            191
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            493
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "ewt_f",
+      "page": 16,
+      "bbox": [
+        941,
+        529.33,
+        973,
+        555
+      ],
+      "expected": "120",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            192
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            494
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "lwt_f",
+      "page": 16,
+      "bbox": [
+        973,
+        529.33,
+        1004,
+        555
+      ],
+      "expected": "100",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            193
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            495
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "coil_flow_gpm",
+      "page": 16,
+      "bbox": [
+        1004,
+        529.33,
+        1055,
+        555
+      ],
+      "expected": "2.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            194
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            496
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "wpd_ft_wc",
+      "page": 16,
+      "bbox": [
+        1055,
+        529.33,
+        1100,
+        555
+      ],
+      "expected": "0.23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.23",
+          "word_ids": [
+            195
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.23",
+          "word_ids": [
+            497
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "motor_hp",
+      "page": 16,
+      "bbox": [
+        1100,
+        529.33,
+        1140,
+        555
+      ],
+      "expected": "1/20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/20",
+          "word_ids": [
+            196
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/20",
+          "word_ids": [
+            498
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "motor_volts",
+      "page": 16,
+      "bbox": [
+        1140,
+        529.33,
+        1190,
+        555
+      ],
+      "expected": "115",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            197
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            499
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "motor_phase",
+      "page": 16,
+      "bbox": [
+        1190,
+        529.33,
+        1215,
+        555
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            198
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            500
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "fla",
+      "page": 16,
+      "bbox": [
+        1215,
+        529.33,
+        1244,
+        555
+      ],
+      "expected": "1.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            199
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            501
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "unit_weight_lbs",
+      "page": 16,
+      "bbox": [
+        1244,
+        529.33,
+        1290,
+        555
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            200
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            502
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "row": 7,
+      "column": "remarks",
+      "page": 16,
+      "bbox": [
+        1290,
+        529.33,
+        1360,
+        555
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            201
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            503
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "header": "HYDRONIC UNIT HEATER SCHEDULE TAG LOCATION MANUFACTURER MODEL ORIENTATION SUPPLY FAN FLOW SPEED HEATING COIL MOTOR ELECTRICAL",
+      "page": 16,
+      "bbox": [
+        285,
+        290,
+        1365,
+        360
+      ],
+      "engine": "mupdf",
+      "actual": "HYDRONIC UNIT HEATER SCHEDULE SUPPLY FAN (HI SPEED) HEATING COIL MOTOR ELECTRICAL UNIT PROJECT LOCATION MANUFACTURER/ MODEL ORIENTATION FLOW SPEED HTG CAP EAT LAT EWT LWT FLOW WPD REQUIREMENTS WT. REMARKS TAG DRIVE HP VOLTS PH FLA (CFM) (RPM) (MBh) (F) (F) (F) (F) (GPM) (FT WC) (LBS)",
+      "pass": true
+    },
+    {
+      "table": "M604-HYDRONIC-UNIT-HEATERS",
+      "header": "HYDRONIC UNIT HEATER SCHEDULE TAG LOCATION MANUFACTURER MODEL ORIENTATION SUPPLY FAN FLOW SPEED HEATING COIL MOTOR ELECTRICAL",
+      "page": 16,
+      "bbox": [
+        285,
+        290,
+        1365,
+        360
+      ],
+      "engine": "poppler",
+      "actual": "HYDRONIC UNIT HEATER SCHEDULE SUPPLY FAN (HI SPEED) HEATING COIL MOTOR ELECTRICAL UNIT PROJECT LOCATION MANUFACTURER/ MODEL ORIENTATION FLOW SPEED HTG CAP EAT LAT EWT LWT FLOW WPD REQUIREMENTS WT. REMARKS TAG DRIVE HP VOLTS PH FLA (CFM) (RPM) (MBh) (F) (F) (F) (F) (GPM) (FT WC) (LBS)",
+      "pass": true
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 1,
+      "column": "tag",
+      "page": 16,
+      "bbox": [
+        210,
+        700,
+        275,
+        744.31
+      ],
+      "expected": "BT-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BT-1",
+          "word_ids": [
+            239
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BT-1",
+          "word_ids": [
+            608
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 1,
+      "column": "location",
+      "page": 16,
+      "bbox": [
+        275,
+        700,
+        365,
+        744.31
+      ],
+      "expected": "MAIN ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            240,
+            241
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            577,
+            578
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 1,
+      "column": "serves",
+      "page": 16,
+      "bbox": [
+        365,
+        700,
+        475,
+        744.31
+      ],
+      "expected": "EVAPORATOR WATER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EVAPORATOR WATER LOOP",
+          "word_ids": [
+            242,
+            243,
+            244
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EVAPORATOR WATER LOOP",
+          "word_ids": [
+            579,
+            580,
+            581
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 16,
+      "bbox": [
+        475,
+        700,
+        600,
+        744.31
+      ],
+      "expected": "AMTROL HWBT300-4/4-125",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AMTROL HWBT300-4/4-125",
+          "word_ids": [
+            245,
+            246
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AMTROL HWBT300-4/4-125",
+          "word_ids": [
+            582,
+            583
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 1,
+      "column": "fluid",
+      "page": 16,
+      "bbox": [
+        600,
+        700,
+        680,
+        744.31
+      ],
+      "expected": "WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            247
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            609
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 1,
+      "column": "tank_size_gal",
+      "page": 16,
+      "bbox": [
+        680,
+        700,
+        740,
+        744.31
+      ],
+      "expected": "300",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            248
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            610
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 1,
+      "column": "fill_pressure_psi",
+      "page": 16,
+      "bbox": [
+        740,
+        700,
+        800,
+        744.31
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            249
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            612
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 1,
+      "column": "maop_psi",
+      "page": 16,
+      "bbox": [
+        800,
+        700,
+        860,
+        744.31
+      ],
+      "expected": "125",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            250
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            611
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 1,
+      "column": "connections",
+      "page": 16,
+      "bbox": [
+        860,
+        700,
+        970,
+        744.31
+      ],
+      "expected": "(4) 4\" CL 150 FLG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(4) 4\" CL 150 FLG",
+          "word_ids": [
+            251,
+            252,
+            253,
+            254,
+            255
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(4) 4\" CL 150 FLG",
+          "word_ids": [
+            713,
+            714,
+            715,
+            716,
+            717
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 1,
+      "column": "operating_weight_lbs",
+      "page": 16,
+      "bbox": [
+        970,
+        700,
+        1040,
+        744.31
+      ],
+      "expected": "3500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3500",
+          "word_ids": [
+            256
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3500",
+          "word_ids": [
+            649
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 1,
+      "column": "remarks",
+      "page": 16,
+      "bbox": [
+        1040,
+        700,
+        1375,
+        744.31
+      ],
+      "expected": "SEE NOTES. ASME TANK. PROVIDE WITH ASME PRESSURE RELIEF VALVE. TANK IS FOR HEATING WATER THERMAL STORAGE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE NOTES. ASME TANK. PROVIDE WITH ASME PRESSURE RELIEF VALVE. TANK IS FOR HEATING WATER THERMAL STORAGE.",
+          "word_ids": [
+            257,
+            258,
+            259,
+            260,
+            261,
+            262,
+            263,
+            264,
+            265,
+            266,
+            267,
+            268,
+            269,
+            270,
+            271,
+            272,
+            273
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE NOTES. ASME TANK. PROVIDE WITH ASME PRESSURE RELIEF VALVE. TANK IS FOR HEATING WATER THERMAL STORAGE.",
+          "word_ids": [
+            650,
+            651,
+            652,
+            653,
+            654,
+            655,
+            656,
+            657,
+            658,
+            659,
+            660,
+            661,
+            662,
+            663,
+            664,
+            665,
+            666
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 2,
+      "column": "tag",
+      "page": 16,
+      "bbox": [
+        210,
+        744.31,
+        275,
+        785.35
+      ],
+      "expected": "BT-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BT-2",
+          "word_ids": [
+            274
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BT-2",
+          "word_ids": [
+            584
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 2,
+      "column": "location",
+      "page": 16,
+      "bbox": [
+        275,
+        744.31,
+        365,
+        785.35
+      ],
+      "expected": "MAIN ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            275,
+            276
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            585,
+            586
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 2,
+      "column": "serves",
+      "page": 16,
+      "bbox": [
+        365,
+        744.31,
+        475,
+        785.35
+      ],
+      "expected": "EVAPORATOR WATER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EVAPORATOR WATER LOOP",
+          "word_ids": [
+            277,
+            278,
+            279
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EVAPORATOR WATER LOOP",
+          "word_ids": [
+            587,
+            588,
+            589
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 16,
+      "bbox": [
+        475,
+        744.31,
+        600,
+        785.35
+      ],
+      "expected": "AMTROL HWBT300-4/4-125",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AMTROL HWBT300-4/4-125",
+          "word_ids": [
+            280,
+            281
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AMTROL HWBT300-4/4-125",
+          "word_ids": [
+            590,
+            591
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 2,
+      "column": "fluid",
+      "page": 16,
+      "bbox": [
+        600,
+        744.31,
+        680,
+        785.35
+      ],
+      "expected": "WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            282
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            592
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 2,
+      "column": "tank_size_gal",
+      "page": 16,
+      "bbox": [
+        680,
+        744.31,
+        740,
+        785.35
+      ],
+      "expected": "300",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            283
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            593
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 2,
+      "column": "fill_pressure_psi",
+      "page": 16,
+      "bbox": [
+        740,
+        744.31,
+        800,
+        785.35
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            284
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            594
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 2,
+      "column": "maop_psi",
+      "page": 16,
+      "bbox": [
+        800,
+        744.31,
+        860,
+        785.35
+      ],
+      "expected": "125",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            285
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            595
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 2,
+      "column": "connections",
+      "page": 16,
+      "bbox": [
+        860,
+        744.31,
+        970,
+        785.35
+      ],
+      "expected": "(4) 4\" CL 150 FLG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(4) 4\" CL 150 FLG",
+          "word_ids": [
+            286,
+            287,
+            288,
+            289,
+            290
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(4) 4\" CL 150 FLG",
+          "word_ids": [
+            667,
+            668,
+            669,
+            670,
+            671
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 2,
+      "column": "operating_weight_lbs",
+      "page": 16,
+      "bbox": [
+        970,
+        744.31,
+        1040,
+        785.35
+      ],
+      "expected": "3500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3500",
+          "word_ids": [
+            291
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3500",
+          "word_ids": [
+            672
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 2,
+      "column": "remarks",
+      "page": 16,
+      "bbox": [
+        1040,
+        744.31,
+        1375,
+        785.35
+      ],
+      "expected": "SEE NOTES. ASME TANK. PROVIDE WITH ASME PRESSURE RELIEF VALVE. TANK IS FOR HEATING WATER THERMAL STORAGE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE NOTES. ASME TANK. PROVIDE WITH ASME PRESSURE RELIEF VALVE. TANK IS FOR HEATING WATER THERMAL STORAGE.",
+          "word_ids": [
+            292,
+            293,
+            294,
+            295,
+            296,
+            297,
+            298,
+            299,
+            300,
+            301,
+            302,
+            303,
+            304,
+            305,
+            306,
+            307,
+            308
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE NOTES. ASME TANK. PROVIDE WITH ASME PRESSURE RELIEF VALVE. TANK IS FOR HEATING WATER THERMAL STORAGE.",
+          "word_ids": [
+            673,
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            680,
+            681,
+            682,
+            683,
+            684,
+            685,
+            686,
+            687,
+            688,
+            689
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 3,
+      "column": "tag",
+      "page": 16,
+      "bbox": [
+        210,
+        785.35,
+        275,
+        826.12
+      ],
+      "expected": "BT-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BT-3",
+          "word_ids": [
+            309
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BT-3",
+          "word_ids": [
+            596
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 3,
+      "column": "location",
+      "page": 16,
+      "bbox": [
+        275,
+        785.35,
+        365,
+        826.12
+      ],
+      "expected": "MAIN ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            310,
+            311
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            597,
+            598
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 3,
+      "column": "serves",
+      "page": 16,
+      "bbox": [
+        365,
+        785.35,
+        475,
+        826.12
+      ],
+      "expected": "CONDENSER WATER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONDENSER WATER LOOP",
+          "word_ids": [
+            312,
+            313,
+            314
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONDENSER WATER LOOP",
+          "word_ids": [
+            599,
+            600,
+            601
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 3,
+      "column": "manufacturer_model",
+      "page": 16,
+      "bbox": [
+        475,
+        785.35,
+        600,
+        826.12
+      ],
+      "expected": "AMTROL HWBT300-4/4-125",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AMTROL HWBT300-4/4-125",
+          "word_ids": [
+            315,
+            316
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AMTROL HWBT300-4/4-125",
+          "word_ids": [
+            602,
+            603
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 3,
+      "column": "fluid",
+      "page": 16,
+      "bbox": [
+        600,
+        785.35,
+        680,
+        826.12
+      ],
+      "expected": "WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            317
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            604
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 3,
+      "column": "tank_size_gal",
+      "page": 16,
+      "bbox": [
+        680,
+        785.35,
+        740,
+        826.12
+      ],
+      "expected": "300",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            318
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            605
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 3,
+      "column": "fill_pressure_psi",
+      "page": 16,
+      "bbox": [
+        740,
+        785.35,
+        800,
+        826.12
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            319
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            606
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 3,
+      "column": "maop_psi",
+      "page": 16,
+      "bbox": [
+        800,
+        785.35,
+        860,
+        826.12
+      ],
+      "expected": "125",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            320
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            607
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 3,
+      "column": "connections",
+      "page": 16,
+      "bbox": [
+        860,
+        785.35,
+        970,
+        826.12
+      ],
+      "expected": "(4) 4\" CL 150 FLG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(4) 4\" CL 150 FLG",
+          "word_ids": [
+            321,
+            322,
+            323,
+            324,
+            325
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(4) 4\" CL 150 FLG",
+          "word_ids": [
+            690,
+            691,
+            692,
+            693,
+            694
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 3,
+      "column": "operating_weight_lbs",
+      "page": 16,
+      "bbox": [
+        970,
+        785.35,
+        1040,
+        826.12
+      ],
+      "expected": "3500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3500",
+          "word_ids": [
+            326
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3500",
+          "word_ids": [
+            695
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 3,
+      "column": "remarks",
+      "page": 16,
+      "bbox": [
+        1040,
+        785.35,
+        1375,
+        826.12
+      ],
+      "expected": "SEE NOTES. ASME TANK. PROVIDE WITH ASME PRESSURE RELIEF VALVE. TANK IS FOR HEATING WATER THERMAL STORAGE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE NOTES. ASME TANK. PROVIDE WITH ASME PRESSURE RELIEF VALVE. TANK IS FOR HEATING WATER THERMAL STORAGE.",
+          "word_ids": [
+            327,
+            328,
+            329,
+            330,
+            331,
+            332,
+            333,
+            334,
+            335,
+            336,
+            337,
+            338,
+            339,
+            340,
+            341,
+            342,
+            343
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE NOTES. ASME TANK. PROVIDE WITH ASME PRESSURE RELIEF VALVE. TANK IS FOR HEATING WATER THERMAL STORAGE.",
+          "word_ids": [
+            696,
+            697,
+            698,
+            699,
+            700,
+            701,
+            702,
+            703,
+            704,
+            705,
+            706,
+            707,
+            708,
+            709,
+            710,
+            711,
+            712
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 4,
+      "column": "tag",
+      "page": 16,
+      "bbox": [
+        210,
+        826.12,
+        275,
+        860
+      ],
+      "expected": "BT-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BT-4",
+          "word_ids": [
+            344
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BT-4",
+          "word_ids": [
+            808
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 4,
+      "column": "location",
+      "page": 16,
+      "bbox": [
+        275,
+        826.12,
+        365,
+        860
+      ],
+      "expected": "MAIN ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            345,
+            346
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            812,
+            813
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 4,
+      "column": "serves",
+      "page": 16,
+      "bbox": [
+        365,
+        826.12,
+        475,
+        860
+      ],
+      "expected": "CONDENSER WATER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONDENSER WATER LOOP",
+          "word_ids": [
+            347,
+            348,
+            349
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONDENSER WATER LOOP",
+          "word_ids": [
+            809,
+            810,
+            811
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 4,
+      "column": "manufacturer_model",
+      "page": 16,
+      "bbox": [
+        475,
+        826.12,
+        600,
+        860
+      ],
+      "expected": "AMTROL HWBT300-4/4-125",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AMTROL HWBT300-4/4-125",
+          "word_ids": [
+            350,
+            351
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AMTROL HWBT300-4/4-125",
+          "word_ids": [
+            814,
+            815
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 4,
+      "column": "fluid",
+      "page": 16,
+      "bbox": [
+        600,
+        826.12,
+        680,
+        860
+      ],
+      "expected": "WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            352
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            816
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 4,
+      "column": "tank_size_gal",
+      "page": 16,
+      "bbox": [
+        680,
+        826.12,
+        740,
+        860
+      ],
+      "expected": "300",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            353
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            817
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 4,
+      "column": "fill_pressure_psi",
+      "page": 16,
+      "bbox": [
+        740,
+        826.12,
+        800,
+        860
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            354
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            819
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 4,
+      "column": "maop_psi",
+      "page": 16,
+      "bbox": [
+        800,
+        826.12,
+        860,
+        860
+      ],
+      "expected": "125",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            355
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            818
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 4,
+      "column": "connections",
+      "page": 16,
+      "bbox": [
+        860,
+        826.12,
+        970,
+        860
+      ],
+      "expected": "(4) 4\" CL 150 FLG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(4) 4\" CL 150 FLG",
+          "word_ids": [
+            356,
+            357,
+            358,
+            359,
+            360
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(4) 4\" CL 150 FLG",
+          "word_ids": [
+            820,
+            821,
+            822,
+            823,
+            824
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 4,
+      "column": "operating_weight_lbs",
+      "page": 16,
+      "bbox": [
+        970,
+        826.12,
+        1040,
+        860
+      ],
+      "expected": "3500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3500",
+          "word_ids": [
+            361
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3500",
+          "word_ids": [
+            825
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "row": 4,
+      "column": "remarks",
+      "page": 16,
+      "bbox": [
+        1040,
+        826.12,
+        1375,
+        860
+      ],
+      "expected": "SEE NOTES. ASME TANK. PROVIDE WITH ASME PRESSURE RELIEF VALVE. TANK IS FOR HEATING WATER THERMAL STORAGE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE NOTES. ASME TANK. PROVIDE WITH ASME PRESSURE RELIEF VALVE. TANK IS FOR HEATING WATER THERMAL STORAGE.",
+          "word_ids": [
+            362,
+            363,
+            364,
+            365,
+            366,
+            367,
+            368,
+            369,
+            370,
+            371,
+            372,
+            373,
+            374,
+            375,
+            376,
+            377,
+            378
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE NOTES. ASME TANK. PROVIDE WITH ASME PRESSURE RELIEF VALVE. TANK IS FOR HEATING WATER THERMAL STORAGE.",
+          "word_ids": [
+            826,
+            827,
+            828,
+            829,
+            830,
+            831,
+            832,
+            833,
+            834,
+            835,
+            836,
+            837,
+            838,
+            839,
+            840,
+            841,
+            842
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "header": "BUFFER TANK SCHEDULE TAG LOCATION SERVES MANUFACTURER MODEL FLUID TANK SIZE FILL PRESS MAOP CONNECTIONS WEIGHT REMARKS",
+      "page": 16,
+      "bbox": [
+        210,
+        640,
+        1375,
+        700
+      ],
+      "engine": "mupdf",
+      "actual": "BUFFER TANK SCHEDULE TANK SIZE FILL PRESS. OPERTATING TAG LOCATION SERVES MANUFACTURER / MODEL FLUID CONNECTIONS REMARKS MAOP (PSI) (GAL) (PSI) WEIGHT (LBS)",
+      "pass": true
+    },
+    {
+      "table": "M604-BUFFER-TANKS",
+      "header": "BUFFER TANK SCHEDULE TAG LOCATION SERVES MANUFACTURER MODEL FLUID TANK SIZE FILL PRESS MAOP CONNECTIONS WEIGHT REMARKS",
+      "page": 16,
+      "bbox": [
+        210,
+        640,
+        1375,
+        700
+      ],
+      "engine": "poppler",
+      "actual": "BUFFER TANK SCHEDULE TANK SIZE FILL PRESS. OPERTATING TAG LOCATION SERVES MANUFACTURER / MODEL FLUID CONNECTIONS REMARKS MAOP (PSI) (GAL) (PSI) WEIGHT (LBS)",
+      "pass": true
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "tag",
+      "page": 16,
+      "bbox": [
+        250,
+        1048,
+        295,
+        1086
+      ],
+      "expected": "HX-1A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HX-1A",
+          "word_ids": [
+            1007
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HX-1A",
+          "word_ids": [
+            1146
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "footprint",
+      "page": 16,
+      "bbox": [
+        295,
+        1048,
+        370,
+        1086
+      ],
+      "expected": "28\" X 22\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "28\" X 22\"",
+          "word_ids": [
+            1008,
+            1009,
+            1010
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "28\" X 22\"",
+          "word_ids": [
+            940,
+            941,
+            942
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "serves",
+      "page": 16,
+      "bbox": [
+        370,
+        1048,
+        465,
+        1086
+      ],
+      "expected": "EVAPORATOR WATER HEATING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EVAPORATOR WATER HEATING",
+          "word_ids": [
+            1011,
+            1012,
+            1013
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EVAPORATOR WATER HEATING",
+          "word_ids": [
+            934,
+            935,
+            936
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 16,
+      "bbox": [
+        465,
+        1048,
+        580,
+        1086
+      ],
+      "expected": "AIC AT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIC AT",
+          "word_ids": [
+            1014,
+            1015
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIC AT",
+          "word_ids": [
+            976,
+            991
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "type",
+      "page": 16,
+      "bbox": [
+        580,
+        1048,
+        680,
+        1086
+      ],
+      "expected": "PLATE AND FRAME",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PLATE AND FRAME",
+          "word_ids": [
+            1016,
+            1017,
+            1018
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PLATE AND FRAME",
+          "word_ids": [
+            986,
+            987,
+            988
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "hot_side_flow_gpm",
+      "page": 16,
+      "bbox": [
+        680,
+        1048,
+        744,
+        1086
+      ],
+      "expected": "265",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "265",
+          "word_ids": [
+            1019
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "265",
+          "word_ids": [
+            977
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "hot_side_dp_psi",
+      "page": 16,
+      "bbox": [
+        744,
+        1048,
+        785,
+        1086
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            1020
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            978
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "cold_side_flow_gpm",
+      "page": 16,
+      "bbox": [
+        785,
+        1048,
+        830,
+        1086
+      ],
+      "expected": "373",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "373",
+          "word_ids": [
+            1021
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "373",
+          "word_ids": [
+            979
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "cold_side_dp_psi",
+      "page": 16,
+      "bbox": [
+        830,
+        1048,
+        875,
+        1086
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            1022
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            980
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "minimum_flow_gpm",
+      "page": 16,
+      "bbox": [
+        875,
+        1048,
+        925,
+        1086
+      ],
+      "expected": "265",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "265",
+          "word_ids": [
+            1023
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "265",
+          "word_ids": [
+            981
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "hot_side_in_f",
+      "page": 16,
+      "bbox": [
+        925,
+        1048,
+        970,
+        1086
+      ],
+      "expected": "60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            1024
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            982
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "hot_side_out_f",
+      "page": 16,
+      "bbox": [
+        970,
+        1048,
+        1025,
+        1086
+      ],
+      "expected": "51.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "51.2",
+          "word_ids": [
+            1025
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "51.2",
+          "word_ids": [
+            983
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "cold_side_in_f",
+      "page": 16,
+      "bbox": [
+        1025,
+        1048,
+        1075,
+        1086
+      ],
+      "expected": "45.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "45.8",
+          "word_ids": [
+            1026
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "45.8",
+          "word_ids": [
+            984
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "cold_side_out_f",
+      "page": 16,
+      "bbox": [
+        1075,
+        1048,
+        1135,
+        1086
+      ],
+      "expected": "52",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "52",
+          "word_ids": [
+            1027
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "52",
+          "word_ids": [
+            985
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "transfer_kw_mbh",
+      "page": 16,
+      "bbox": [
+        1135,
+        1048,
+        1185,
+        1086
+      ],
+      "expected": "338/1155",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "338/1155",
+          "word_ids": [
+            1028
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "338/1155",
+          "word_ids": [
+            989
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "unit_weight_lbs",
+      "page": 16,
+      "bbox": [
+        1185,
+        1048,
+        1230,
+        1086
+      ],
+      "expected": "689",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "689",
+          "word_ids": [
+            1029
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "689",
+          "word_ids": [
+            990
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "fluid",
+      "page": 16,
+      "bbox": [
+        1230,
+        1048,
+        1330,
+        1086
+      ],
+      "expected": "WASTEWATER, 100 MICRON FILTERED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WASTEWATER, 100 MICRON FILTERED",
+          "word_ids": [
+            1030,
+            1031,
+            1032,
+            1033
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WASTEWATER, 100 MICRON FILTERED",
+          "word_ids": [
+            953,
+            958,
+            959,
+            960
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 1,
+      "column": "remarks",
+      "page": 16,
+      "bbox": [
+        1330,
+        1048,
+        1400,
+        1086
+      ],
+      "expected": "1, 3, 4, 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1, 3, 4, 5",
+          "word_ids": [
+            1034,
+            1035,
+            1036,
+            1037
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1, 3, 4, 5",
+          "word_ids": [
+            954,
+            955,
+            956,
+            957
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "tag",
+      "page": 16,
+      "bbox": [
+        250,
+        1086,
+        295,
+        1120
+      ],
+      "expected": "HX-1B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HX-1B",
+          "word_ids": [
+            1038
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HX-1B",
+          "word_ids": [
+            993
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "footprint",
+      "page": 16,
+      "bbox": [
+        295,
+        1086,
+        370,
+        1120
+      ],
+      "expected": "28\" X 22\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "28\" X 22\"",
+          "word_ids": [
+            1039,
+            1040,
+            1041
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "28\" X 22\"",
+          "word_ids": [
+            994,
+            995,
+            996
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "serves",
+      "page": 16,
+      "bbox": [
+        370,
+        1086,
+        465,
+        1120
+      ],
+      "expected": "EVAPORATOR WATER HEATING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EVAPORATOR WATER HEATING",
+          "word_ids": [
+            1042,
+            1043,
+            1044
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EVAPORATOR WATER HEATING",
+          "word_ids": [
+            937,
+            938,
+            939
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 16,
+      "bbox": [
+        465,
+        1086,
+        580,
+        1120
+      ],
+      "expected": "AIC AT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIC AT",
+          "word_ids": [
+            1045,
+            1046
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIC AT",
+          "word_ids": [
+            992,
+            1011
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "type",
+      "page": 16,
+      "bbox": [
+        580,
+        1086,
+        680,
+        1120
+      ],
+      "expected": "PLATE AND FRAME",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PLATE AND FRAME",
+          "word_ids": [
+            1047,
+            1048,
+            1049
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PLATE AND FRAME",
+          "word_ids": [
+            997,
+            998,
+            999
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "hot_side_flow_gpm",
+      "page": 16,
+      "bbox": [
+        680,
+        1086,
+        744,
+        1120
+      ],
+      "expected": "265",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "265",
+          "word_ids": [
+            1050
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "265",
+          "word_ids": [
+            1000
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "hot_side_dp_psi",
+      "page": 16,
+      "bbox": [
+        744,
+        1086,
+        785,
+        1120
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            1051
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            1001
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "cold_side_flow_gpm",
+      "page": 16,
+      "bbox": [
+        785,
+        1086,
+        830,
+        1120
+      ],
+      "expected": "373",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "373",
+          "word_ids": [
+            1052
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "373",
+          "word_ids": [
+            1002
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "cold_side_dp_psi",
+      "page": 16,
+      "bbox": [
+        830,
+        1086,
+        875,
+        1120
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            1053
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            1003
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "minimum_flow_gpm",
+      "page": 16,
+      "bbox": [
+        875,
+        1086,
+        925,
+        1120
+      ],
+      "expected": "265",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "265",
+          "word_ids": [
+            1054
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "265",
+          "word_ids": [
+            1004
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "hot_side_in_f",
+      "page": 16,
+      "bbox": [
+        925,
+        1086,
+        970,
+        1120
+      ],
+      "expected": "60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            1055
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            1005
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "hot_side_out_f",
+      "page": 16,
+      "bbox": [
+        970,
+        1086,
+        1025,
+        1120
+      ],
+      "expected": "51.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "51.2",
+          "word_ids": [
+            1056
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "51.2",
+          "word_ids": [
+            1006
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "cold_side_in_f",
+      "page": 16,
+      "bbox": [
+        1025,
+        1086,
+        1075,
+        1120
+      ],
+      "expected": "45.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "45.8",
+          "word_ids": [
+            1057
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "45.8",
+          "word_ids": [
+            1007
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "cold_side_out_f",
+      "page": 16,
+      "bbox": [
+        1075,
+        1086,
+        1135,
+        1120
+      ],
+      "expected": "52",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "52",
+          "word_ids": [
+            1058
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "52",
+          "word_ids": [
+            1008
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "transfer_kw_mbh",
+      "page": 16,
+      "bbox": [
+        1135,
+        1086,
+        1185,
+        1120
+      ],
+      "expected": "338/1155",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "338/1155",
+          "word_ids": [
+            1059
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "338/1155",
+          "word_ids": [
+            1009
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "unit_weight_lbs",
+      "page": 16,
+      "bbox": [
+        1185,
+        1086,
+        1230,
+        1120
+      ],
+      "expected": "689",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "689",
+          "word_ids": [
+            1060
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "689",
+          "word_ids": [
+            1010
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "fluid",
+      "page": 16,
+      "bbox": [
+        1230,
+        1086,
+        1330,
+        1120
+      ],
+      "expected": "WASTEWATER, 100 MICRON FILTERED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WASTEWATER, 100 MICRON FILTERED",
+          "word_ids": [
+            1061,
+            1062,
+            1063,
+            1064
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WASTEWATER, 100 MICRON FILTERED",
+          "word_ids": [
+            961,
+            966,
+            967,
+            968
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 2,
+      "column": "remarks",
+      "page": 16,
+      "bbox": [
+        1330,
+        1086,
+        1400,
+        1120
+      ],
+      "expected": "1, 3, 4, 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1, 3, 4, 5",
+          "word_ids": [
+            1065,
+            1066,
+            1067,
+            1068
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1, 3, 4, 5",
+          "word_ids": [
+            962,
+            963,
+            964,
+            965
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "tag",
+      "page": 16,
+      "bbox": [
+        250,
+        1120,
+        295,
+        1149
+      ],
+      "expected": "HX-2A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HX-2A",
+          "word_ids": [
+            1069
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HX-2A",
+          "word_ids": [
+            1023
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "footprint",
+      "page": 16,
+      "bbox": [
+        295,
+        1120,
+        370,
+        1149
+      ],
+      "expected": "44\" X 26\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "44\" X 26\"",
+          "word_ids": [
+            1070,
+            1071,
+            1072
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "44\" X 26\"",
+          "word_ids": [
+            1013,
+            1014,
+            1015
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "serves",
+      "page": 16,
+      "bbox": [
+        370,
+        1120,
+        465,
+        1149
+      ],
+      "expected": "TAW HEATING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAW HEATING",
+          "word_ids": [
+            1073,
+            1074
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAW HEATING",
+          "word_ids": [
+            1024,
+            1025
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "manufacturer_model",
+      "page": 16,
+      "bbox": [
+        465,
+        1120,
+        580,
+        1149
+      ],
+      "expected": "AIC AT1100X-IS1-109/70-DW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIC AT1100X-IS1-109/70-DW",
+          "word_ids": [
+            1075,
+            1076
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIC AT1100X-IS1-109/70-DW",
+          "word_ids": [
+            1012,
+            1033
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "type",
+      "page": 16,
+      "bbox": [
+        580,
+        1120,
+        680,
+        1149
+      ],
+      "expected": "PLATE AND FRAME",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PLATE AND FRAME",
+          "word_ids": [
+            1077,
+            1078,
+            1079
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PLATE AND FRAME",
+          "word_ids": [
+            1026,
+            1027,
+            1028
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "hot_side_flow_gpm",
+      "page": 16,
+      "bbox": [
+        680,
+        1120,
+        744,
+        1149
+      ],
+      "expected": "132",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "132",
+          "word_ids": [
+            1080
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "132",
+          "word_ids": [
+            1016
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "hot_side_dp_psi",
+      "page": 16,
+      "bbox": [
+        744,
+        1120,
+        785,
+        1149
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            1081
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            1017
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "cold_side_flow_gpm",
+      "page": 16,
+      "bbox": [
+        785,
+        1120,
+        830,
+        1149
+      ],
+      "expected": "132",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "132",
+          "word_ids": [
+            1082
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "132",
+          "word_ids": [
+            1018
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "cold_side_dp_psi",
+      "page": 16,
+      "bbox": [
+        830,
+        1120,
+        875,
+        1149
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            1083
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            1019
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "minimum_flow_gpm",
+      "page": 16,
+      "bbox": [
+        875,
+        1120,
+        925,
+        1149
+      ],
+      "expected": "80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            1084
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            1020
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "hot_side_in_f",
+      "page": 16,
+      "bbox": [
+        925,
+        1120,
+        970,
+        1149
+      ],
+      "expected": "74",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "74",
+          "word_ids": [
+            1085
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "74",
+          "word_ids": [
+            1029
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "hot_side_out_f",
+      "page": 16,
+      "bbox": [
+        970,
+        1120,
+        1025,
+        1149
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            1086
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            1021
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "cold_side_in_f",
+      "page": 16,
+      "bbox": [
+        1025,
+        1120,
+        1075,
+        1149
+      ],
+      "expected": "48",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "48",
+          "word_ids": [
+            1087
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "48",
+          "word_ids": [
+            1022
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "cold_side_out_f",
+      "page": 16,
+      "bbox": [
+        1075,
+        1120,
+        1135,
+        1149
+      ],
+      "expected": "72",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "72",
+          "word_ids": [
+            1088
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "72",
+          "word_ids": [
+            1030
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "transfer_kw_mbh",
+      "page": 16,
+      "bbox": [
+        1135,
+        1120,
+        1185,
+        1149
+      ],
+      "expected": "464/1584",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "464/1584",
+          "word_ids": [
+            1089
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "464/1584",
+          "word_ids": [
+            1031
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "unit_weight_lbs",
+      "page": 16,
+      "bbox": [
+        1185,
+        1120,
+        1230,
+        1149
+      ],
+      "expected": "3624",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3624",
+          "word_ids": [
+            1090
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3624",
+          "word_ids": [
+            1032
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "fluid",
+      "page": 16,
+      "bbox": [
+        1230,
+        1120,
+        1330,
+        1149
+      ],
+      "expected": "AERATED WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AERATED WATER",
+          "word_ids": [
+            1091,
+            1092
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AERATED WATER",
+          "word_ids": [
+            969,
+            970
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 3,
+      "column": "remarks",
+      "page": 16,
+      "bbox": [
+        1330,
+        1120,
+        1400,
+        1149
+      ],
+      "expected": "1, 2, 3, 4, 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1, 2, 3, 4, 5",
+          "word_ids": [
+            1093,
+            1094,
+            1095,
+            1096,
+            1097
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1, 2, 3, 4, 5",
+          "word_ids": [
+            971,
+            972,
+            973,
+            974,
+            975
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "tag",
+      "page": 16,
+      "bbox": [
+        250,
+        1149,
+        295,
+        1180
+      ],
+      "expected": "HX-2B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HX-2B",
+          "word_ids": [
+            1098
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HX-2B",
+          "word_ids": [
+            1035
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "footprint",
+      "page": 16,
+      "bbox": [
+        295,
+        1149,
+        370,
+        1180
+      ],
+      "expected": "44\" X 26\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "44\" X 26\"",
+          "word_ids": [
+            1099,
+            1100,
+            1101
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "44\" X 26\"",
+          "word_ids": [
+            1036,
+            1037,
+            1038
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "serves",
+      "page": 16,
+      "bbox": [
+        370,
+        1149,
+        465,
+        1180
+      ],
+      "expected": "TAW HEATING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAW HEATING",
+          "word_ids": [
+            1102,
+            1103
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAW HEATING",
+          "word_ids": [
+            1039,
+            1040
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "manufacturer_model",
+      "page": 16,
+      "bbox": [
+        465,
+        1149,
+        580,
+        1180
+      ],
+      "expected": "AIC AT1100X-IS1-109/70-DW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIC AT1100X-IS1-109/70-DW",
+          "word_ids": [
+            1104,
+            1105
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIC AT1100X-IS1-109/70-DW",
+          "word_ids": [
+            1034,
+            1062
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "type",
+      "page": 16,
+      "bbox": [
+        580,
+        1149,
+        680,
+        1180
+      ],
+      "expected": "PLATE AND FRAME",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PLATE AND FRAME",
+          "word_ids": [
+            1106,
+            1107,
+            1108
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PLATE AND FRAME",
+          "word_ids": [
+            1041,
+            1042,
+            1043
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "hot_side_flow_gpm",
+      "page": 16,
+      "bbox": [
+        680,
+        1149,
+        744,
+        1180
+      ],
+      "expected": "132",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "132",
+          "word_ids": [
+            1109
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "132",
+          "word_ids": [
+            1044
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "hot_side_dp_psi",
+      "page": 16,
+      "bbox": [
+        744,
+        1149,
+        785,
+        1180
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            1110
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            1045
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "cold_side_flow_gpm",
+      "page": 16,
+      "bbox": [
+        785,
+        1149,
+        830,
+        1180
+      ],
+      "expected": "132",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "132",
+          "word_ids": [
+            1111
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "132",
+          "word_ids": [
+            1046
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "cold_side_dp_psi",
+      "page": 16,
+      "bbox": [
+        830,
+        1149,
+        875,
+        1180
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            1112
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            1047
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "minimum_flow_gpm",
+      "page": 16,
+      "bbox": [
+        875,
+        1149,
+        925,
+        1180
+      ],
+      "expected": "80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            1113
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            1048
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "hot_side_in_f",
+      "page": 16,
+      "bbox": [
+        925,
+        1149,
+        970,
+        1180
+      ],
+      "expected": "74",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "74",
+          "word_ids": [
+            1114
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "74",
+          "word_ids": [
+            1049
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "hot_side_out_f",
+      "page": 16,
+      "bbox": [
+        970,
+        1149,
+        1025,
+        1180
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            1115
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            1050
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "cold_side_in_f",
+      "page": 16,
+      "bbox": [
+        1025,
+        1149,
+        1075,
+        1180
+      ],
+      "expected": "48",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "48",
+          "word_ids": [
+            1116
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "48",
+          "word_ids": [
+            1051
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "cold_side_out_f",
+      "page": 16,
+      "bbox": [
+        1075,
+        1149,
+        1135,
+        1180
+      ],
+      "expected": "72",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "72",
+          "word_ids": [
+            1117
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "72",
+          "word_ids": [
+            1052
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "transfer_kw_mbh",
+      "page": 16,
+      "bbox": [
+        1135,
+        1149,
+        1185,
+        1180
+      ],
+      "expected": "464/1584",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "464/1584",
+          "word_ids": [
+            1118
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "464/1584",
+          "word_ids": [
+            1053
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "unit_weight_lbs",
+      "page": 16,
+      "bbox": [
+        1185,
+        1149,
+        1230,
+        1180
+      ],
+      "expected": "3624",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3624",
+          "word_ids": [
+            1119
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3624",
+          "word_ids": [
+            1054
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "fluid",
+      "page": 16,
+      "bbox": [
+        1230,
+        1149,
+        1330,
+        1180
+      ],
+      "expected": "AERATED WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AERATED WATER",
+          "word_ids": [
+            1120,
+            1121
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AERATED WATER",
+          "word_ids": [
+            1055,
+            1056
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "row": 4,
+      "column": "remarks",
+      "page": 16,
+      "bbox": [
+        1330,
+        1149,
+        1400,
+        1180
+      ],
+      "expected": "1, 2, 3, 4, 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1, 2, 3, 4, 5",
+          "word_ids": [
+            1122,
+            1123,
+            1124,
+            1125,
+            1126
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1, 2, 3, 4, 5",
+          "word_ids": [
+            1057,
+            1058,
+            1059,
+            1060,
+            1061
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "header": "HEAT EXCHANGERS TAG FOOT PRINT SERVES MANUFACTURER MODEL TYPE HOT SIDE COLD SIDE MINIMUM FLOW TRANSFER UNIT WT FLUID REMARKS",
+      "page": 16,
+      "bbox": [
+        250,
+        970,
+        1400,
+        1050
+      ],
+      "engine": "mupdf",
+      "actual": "HEAT EXCHANGERS HOT SIDE COLD SIDE MINIMUM HOT HOT COLD COLD UNIT MANUFACTURER/ TRANSFER TAG FOOT PRINT SERVES TYPE FLUID REMARKS FLOW DP FLOW DP FLOW SIDE IN SIDE SIDE IN SIDE WT. MODEL (Kw)/(MBH) (GPM) (PSI) (GPM) (PSI) (GPM) (F) OUT(F) (F) OUT(F) (LBS)",
+      "pass": true
+    },
+    {
+      "table": "M604-HEAT-EXCHANGERS",
+      "header": "HEAT EXCHANGERS TAG FOOT PRINT SERVES MANUFACTURER MODEL TYPE HOT SIDE COLD SIDE MINIMUM FLOW TRANSFER UNIT WT FLUID REMARKS",
+      "page": 16,
+      "bbox": [
+        250,
+        970,
+        1400,
+        1050
+      ],
+      "engine": "poppler",
+      "actual": "HEAT EXCHANGERS HOT SIDE COLD SIDE MINIMUM HOT HOT COLD COLD UNIT MANUFACTURER/ TRANSFER TAG FOOT PRINT SERVES TYPE FLOW DP FLOW DP FLOW SIDE IN SIDE SIDE IN SIDE WT. FLUID REMARKS MODEL (Kw)/(MBH) (GPM) (PSI) (GPM) (PSI) (GPM) (F) OUT(F) (F) OUT(F) (LBS)",
+      "pass": true
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "row": 1,
+      "column": "indoor_tag",
+      "page": 16,
+      "bbox": [
+        930,
+        130,
+        970,
+        160
+      ],
+      "expected": "FCU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-1",
+          "word_ids": [
+            498
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-1",
+          "word_ids": [
+            52
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "row": 1,
+      "column": "serves",
+      "page": 16,
+      "bbox": [
+        970,
+        130,
+        1050,
+        160
+      ],
+      "expected": "OFFICE, LAB",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OFFICE, LAB",
+          "word_ids": [
+            499,
+            500
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OFFICE, LAB",
+          "word_ids": [
+            53,
+            54
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "row": 1,
+      "column": "indoor_model",
+      "page": 16,
+      "bbox": [
+        1050,
+        130,
+        1160,
+        160
+      ],
+      "expected": "LG/ LHN188HV1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LG/ LHN188HV1",
+          "word_ids": [
+            501,
+            502
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LG/ LHN188HV1",
+          "word_ids": [
+            50,
+            64
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "row": 1,
+      "column": "indoor_cfm",
+      "page": 16,
+      "bbox": [
+        1160,
+        130,
+        1200,
+        160
+      ],
+      "expected": "635",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "635",
+          "word_ids": [
+            503
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "635",
+          "word_ids": [
+            55
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "row": 1,
+      "column": "indoor_unit_weight_lbs",
+      "page": 16,
+      "bbox": [
+        1200,
+        130,
+        1245,
+        160
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "row": 1,
+      "column": "outdoor_tag",
+      "page": 16,
+      "bbox": [
+        1245,
+        130,
+        1300,
+        160
+      ],
+      "expected": "CU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CU-1",
+          "word_ids": [
+            504
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CU-1",
+          "word_ids": [
+            56
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "row": 1,
+      "column": "outdoor_model",
+      "page": 16,
+      "bbox": [
+        1300,
+        130,
+        1400,
+        160
+      ],
+      "expected": "LG/ LUU180HHV",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LG/ LUU180HHV",
+          "word_ids": [
+            505,
+            506
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LG/ LUU180HHV",
+          "word_ids": [
+            51,
+            65
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "row": 1,
+      "column": "fan_motor_details",
+      "page": 16,
+      "bbox": [
+        1400,
+        130,
+        1660,
+        160
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "row": 1,
+      "column": "unit_power_volts_phase",
+      "page": 16,
+      "bbox": [
+        1660,
+        130,
+        1730,
+        160
+      ],
+      "expected": "208-230 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208-230 1",
+          "word_ids": [
+            507,
+            508
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208-230 1",
+          "word_ids": [
+            57,
+            58
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "row": 1,
+      "column": "mca",
+      "page": 16,
+      "bbox": [
+        1730,
+        130,
+        1770,
+        160
+      ],
+      "expected": "22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            509
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            63
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "row": 1,
+      "column": "mocp",
+      "page": 16,
+      "bbox": [
+        1770,
+        130,
+        1810,
+        160
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            510
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            59
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "row": 1,
+      "column": "outdoor_unit_weight_lbs",
+      "page": 16,
+      "bbox": [
+        1810,
+        130,
+        1850,
+        160
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            511
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            60
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "row": 1,
+      "column": "heating_capacity_mbh",
+      "page": 16,
+      "bbox": [
+        1850,
+        130,
+        1900,
+        160
+      ],
+      "expected": "20.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20.0",
+          "word_ids": [
+            512
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20.0",
+          "word_ids": [
+            61
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "row": 1,
+      "column": "heating_min_hspf_47f",
+      "page": 16,
+      "bbox": [
+        1900,
+        130,
+        1950,
+        160
+      ],
+      "expected": "9.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.2",
+          "word_ids": [
+            513
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.2",
+          "word_ids": [
+            62
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "row": 1,
+      "column": "cooling_capacity_mbh",
+      "page": 16,
+      "bbox": [
+        1950,
+        130,
+        2000,
+        160
+      ],
+      "expected": "18.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18.0",
+          "word_ids": [
+            514
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18.0",
+          "word_ids": [
+            161
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "row": 1,
+      "column": "cooling_tons",
+      "page": 16,
+      "bbox": [
+        2000,
+        130,
+        2050,
+        160
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            515
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            164
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "row": 1,
+      "column": "eer",
+      "page": 16,
+      "bbox": [
+        2050,
+        130,
+        2100,
+        160
+      ],
+      "expected": "12.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12.3",
+          "word_ids": [
+            516
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12.3",
+          "word_ids": [
+            163
+          ]
+        }
+      }
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "header": "INDOOR UNIT OUTDOOR UNIT HEATING CAPACITY COOLING CAPACITY",
+      "page": 16,
+      "bbox": [
+        930,
+        75,
+        2100,
+        130
+      ],
+      "engine": "mupdf",
+      "actual": "INDOOR UNIT OUTDOOR UNIT HEATING CAPACITY COOLING CAPACITY MANUFACTURER/ WT. MANUFACTURER/ FAN MOTOR UNIT POWER REQ'TS WT. MIN HSPF @ MIN NOMINAL COMPRESSOR(S) TAG SERVES CFM TAG EER MODEL MODEL OUTPUT (W) CFM FLA # LRA RLA VOLTS Ø MCA MOCP MBh 47F MBh TONS (LBS) (LBS)",
+      "pass": true
+    },
+    {
+      "table": "M604-SPLIT-SYSTEM-AC",
+      "header": "INDOOR UNIT OUTDOOR UNIT HEATING CAPACITY COOLING CAPACITY",
+      "page": 16,
+      "bbox": [
+        930,
+        75,
+        2100,
+        130
+      ],
+      "engine": "poppler",
+      "actual": "INDOOR UNIT OUTDOOR UNIT HEATING CAPACITY COOLING CAPACITY MANUFACTURER/ MANUFACTURER/ FAN MOTOR UNIT POWER REQ'TS MIN HSPF @ MIN NOMINAL WT. COMPRESSOR(S) WT. TAG SERVES CFM TAG EER MODEL MODEL OUTPUT (W) CFM FLA # LRA RLA VOLTS Ø MCA MOCP MBh 47F MBh TONS (LBS) (LBS)",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m604-core-table-count",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

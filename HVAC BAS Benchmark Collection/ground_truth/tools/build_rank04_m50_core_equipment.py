@@ -1,0 +1,83 @@
+"""Author the non-air-valve M5.0 schedule rows as cell-bounded ground truth."""
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+WORK = ROOT / "ground_truth" / "work" / "04__vol2__062"
+IDENT = "04__vol2__062"
+
+
+def grid(identifier, title, columns, edges, ranges, rows):
+    return {"id": identifier, "sheet": "M5.0", "page": 12, "title_as_printed": title,
+            "columns": "|".join(columns), "x_edges": edges, "y_ranges": ranges, "rows": rows,
+            "row_semantics": "One printed schedule row. Wrapped source cells remain in their source cell. Schedule quantities/specifications are not transformed into plan placements, independent controls, actuators, or field-device counts."}
+
+
+def main():
+    canopy = [
+        "CH-1|RESIDENCY LAB 131|(2) NCAT OVENS (2) GRIEVE OVENS|VAPORS/HEAT VAPORS/HEAT|25-3/4\" 45\"|25-3/4\" 28\"|36-3/4\" 66\"|1,800|100|50-500|(3) 8\"|1,800|198\"|24\"|12\"|CAR-MON CUSTOM MODEL|1 , 2",
+        "CH-2|GENERAL LAB 125|ROTARY EVAPORATOR INFRATEST EXTRACTOR|VAPORS VAPORS|30\" 45\"|20\" 29\"|36\" 59\"|1,425|100|50-500|(3) 8\"|1,800|120\"|30\"|18\"|CAR-MON CUSTOM MODEL|1 , 2",
+        "CH-3|ASPHALT LAB 124|(2) NCAT OVEN (2) GRIEVE BENCH OVEN|VAPORS/HEAT VAPORS/HEAT|25-3/4\" 45\"|25-3/4\" 28\"|36-3/4\" 66\"|1,800|100|50-500|(3) 8\"|1,800|198\"|24\"|12\"|CAR-MON CUSTOM MODEL|1 , 2",
+        "CH-4|ASPHALT LAB 117|(2) NCAT OVEN (2) GRIEVE BENCH OVEN|VAPORS/HEAT VAPORS/HEAT|25-3/4\" 45\"|25-3/4\" 28\"|36-3/4\" 66\"|1,800|100|50-500|(3) 8\"|1,800|198\"|24\"|12\"|CAR-MON CUSTOM MODEL|1 , 2",
+    ]
+    pumps = [
+        "BP-1|BOILER PUMP ( B-1)|INLINE|27.0|15.0|72.3%|0.5|1,750|115/1|N/A N/A|50|GRUNDFOS MAGNA 3|1 , 2 , 4",
+        "BP-2|BOILER PUMP ( B-2)|INLINE|27.0|15.0|72.3%|0.5|1,750|115/1|N/A N/A|50|GRUNDFOS MAGNA 3|1 , 2 , 4",
+        "HWP-1|HOT WATER LOOP|INLINE VARIABLE PRIMARY|46|40|64%|1.0|3,768|208/3|N/A FTV-2TS|50|ARMSTRONG 4380|1 , 2 , 3 , 4",
+        "HWP-2|HOT WATER LOOP|INLINE VARIABLE PRIMARY|46|40|64%|1.0|3,768|208/3|N/A FTV-2TS|50|ARMSTRONG 4380|1 , 2 , 3 , 4",
+    ]
+    exhaust_fans = [
+        "EF-1|RESTROOM 102|CEILING CABINET|100|0.375|1,075|DIRECT|46.5 W|115/1|2.5|15|COOK MODEL GC-148|1 , 2 , 4",
+        "EF-2|RESTROOM 103|CEILING CABINET|100|0.375|1,075|DIRECT|46.5 W|115/1|2.5|15|COOK MODEL GC-148|1 , 2 , 4",
+        "EF-3|JANITOR 105|CEILING CABINET|100|0.375|1,075|DIRECT|46.5 W|115/1|2.5|15|COOK MODEL GC-148|1 , 2 , 4",
+        "EF-4|ELECTRICAL 116|ROOF|125|0.25|1,550|DIRECT|75.9 W|115/1|5.5|25|COOK MODEL 70R15DH|1 , 3 , 4",
+        "EF-5|LAB MECHANICAL 120|CEILING CABINET|250|0.25|1,550|DIRECT|66.9 W|115/1|3.7|30|COOK MODEL 90R15DH|1 , 3 , 4",
+        "EF-6|NUCLEAR GAUGE STORAGE 128|CEILING CABINET|125|0.25|1,550|DIRECT|75.9 W|115/1|5.5|25|COOK MODEL 70R15DH|1 , 3 , 4",
+    ]
+    snorkels = [
+        "SN-1|RESIDENCY LAB 131|SEV-1|DUST / HEAT|8\"|0|700|2,000|53\"|52\"|12\"|1.10\"||X|120|CARMON MODEL WXS-100|1 , 2 , 3 , 4 , 5 , 6",
+        "SN-2|RESIDENCY NOISE ROOM 130|SEV-2|DUST / HEAT|8\"|115|700|2,000|35\"|34\"|12\"|1.10\"|X||100|CARMON MODEL WXS-070|1 , 2 , 3 , 4 , 5 , 6",
+        "SN-3|ASPHALT LAB 124|SEV-3|DUST / HEAT|8\"|400|700|2,000|53\"|52\"|12\"|1.10\"||X|120|CARMON MODEL WXS-100|1 , 2 , 3 , 4 , 5 , 6",
+        "SN-4|MATERIAL LAB 118|SEV-4|DUST / HEAT|8\"|285|700|2,000|53\"|52\"|12\"|1.10\"|X||120|CARMON MODEL WXS-100|1 , 2 , 3 , 4 , 5 , 6",
+        "SN-5|ASPHALT LAB 117|SEV-5|DUST / HEAT|8\"|400|700|2,000|53\"|52\"|12\"|1.10\"||X|120|CAR-MON MODEL WXS-100|1 , 2 , 3 , 4 , 5 , 6",
+    ]
+    data = {
+        "document_id": IDENT,
+        "module_role": "M5.0 non-air-valve schedule capture. The source has separate pressure-independent air-valve schedules in schedules_m50_air_valves.json; this module covers canopy hoods, pumps, exhaust fans, and snorkel hoods.",
+        "schedule_scope": {
+            "sheet": "M5.0 / PDF p12", "literal_line_items": 19,
+            "families": ["canopy hoods", "pumps", "exhaust fans", "snorkel hoods"],
+            "quantity_boundary": "The printed pump/accessory cells and hood rows are schedule data. No duplicate field devices, damper actuators, motor starters, or plan counts are inferred from them.",
+        },
+        "tables": [
+            grid("M50-CANOPY-HOODS", "CANOPY HOOD SCHEDULE",
+                 ["tag", "location", "serves", "exhaust_material", "equipment_width", "equipment_depth", "equipment_height", "exhaust_airflow_cfm", "capture_velocity_fpm", "acgih_recommended_capture_velocity_fpm", "exhaust_outlet_size", "minimum_duct_velocity_fpm", "hood_width", "hood_depth", "hood_height", "manufacturer_model", "remarks"],
+                 [160, 220, 340, 465, 525, 570, 610, 650, 705, 750, 825, 875, 920, 960, 1005, 1065, 1180, 1280],
+                 [[180, 230], [240, 285], [295, 345], [350, 405]], canopy),
+            grid("M50-PUMPS", "PUMP SCHEDULE",
+                 ["tag", "area_served", "type", "flow_gpm", "head_ft", "minimum_efficiency", "hp", "rpm", "voltage_phase", "printed_hydronic_accessory_cells", "operating_weight_lb", "manufacturer_model", "remarks"],
+                 [160, 220, 360, 450, 500, 550, 610, 660, 710, 770, 890, 920, 1100, 1280],
+                 [[1040, 1070], [1076, 1106], [1110, 1142], [1146, 1178]], pumps),
+            grid("M50-EXHAUST-FANS", "EXHAUST FAN SCHEDULE",
+                 ["tag", "area_served", "unit_type", "blower_cfm", "esp_in_wc", "maximum_rpm", "drive", "hp_w", "voltage_phase", "maximum_sones", "operating_weight_lb", "manufacturer_model", "remarks"],
+                 [1300, 1360, 1460, 1580, 1630, 1670, 1715, 1750, 1810, 1860, 1910, 1960, 2280, 2410],
+                 [[1300, 1330], [1336, 1366], [1372, 1402], [1408, 1438], [1444, 1474], [1480, 1510]], exhaust_fans),
+            grid("M50-SNORKEL-HOODS", "SNORKEL HOOD SCHEDULE",
+                 ["tag", "location", "exhaust_valve", "exhaust_material", "exhaust_duct_size", "airflow_min_cfm", "airflow_max_cfm", "minimum_duct_velocity_fpm", "arm_a", "arm_b", "arm_c", "pressure_drop_in_wc", "wall_mount", "ceiling_mount", "operating_weight_lb", "manufacturer_model", "remarks"],
+                 [160, 210, 310, 355, 420, 460, 500, 540, 590, 625, 660, 700, 750, 800, 860, 910, 1080, 1280],
+                 [[580, 610], [615, 645], [651, 681], [687, 717], [723, 753]], snorkels),
+        ],
+        "assertions": [
+            {"id": "m50-canopy-title", "page": 12, "bbox": [550, 25, 860, 70], "expected": "CANOPY HOOD SCHEDULE", "mode": "exact"},
+            {"id": "m50-pump-title", "page": 12, "bbox": [600, 925, 810, 970], "expected": "PUMP SCHEDULE", "mode": "exact"},
+            {"id": "m50-exhaust-fan-title", "page": 12, "bbox": [1680, 1185, 1980, 1230], "expected": "EXHAUST FAN SCHEDULE", "mode": "exact"},
+            {"id": "m50-snorkel-title", "page": 12, "bbox": [540, 465, 870, 515], "expected": "SNORKEL HOOD SCHEDULE", "mode": "exact"},
+        ],
+        "inventory_checks": [{"id": "rank04-m50-core-equipment-tables", "records_path": ["tables"], "expected": 4, "unique_key": "id"}],
+    }
+    WORK.mkdir(parents=True, exist_ok=True)
+    (WORK / "schedules_m50_core_equipment.json").write_text(json.dumps(data, indent=2) + "\n")
+
+
+if __name__ == "__main__":
+    main()

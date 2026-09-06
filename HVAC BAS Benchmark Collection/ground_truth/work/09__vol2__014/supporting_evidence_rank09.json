@@ -1,0 +1,53 @@
+{
+  "document_id": "09__vol2__014",
+  "module_role": "Explicit source limitations and corroboration boundaries for the complete 28-page supplied set.",
+  "tables": [],
+  "source_limitations": [
+    "The literal schedule modules completely capture five selected high-value M0.2-M0.4 schedule tables (27 rows). Other visually reviewed schedules are not silently represented as a transcribed inventory.",
+    "M0.3 publishes a 17-row CONTROL DAMPER SCHEDULE with control and fail-state fields. Its literal schedule rows are not expanded into physical damper, actuator, linkage, end-switch, wiring or controller-I/O counts.",
+    "The drawings repeatedly reference control-point lists and external specifications, but do not publish a conventional point-list row matrix. DDC symbols and diagram labels are retained as bounded context, not invented I/O rows.",
+    "Published BMS, DDC, P/E, gateway/interface, control-valve and sensor language does not constitute a final BAS topology, controller address list, I/O-card layout, terminal schedule, network-media design or wire schedule.",
+    "No standalone CONTROL VALVE SCHEDULE is asserted. M0.1/M9.7 control-valve symbols and bounded control clauses are not a substitute for a table that is not published.",
+    "All 28 pages were visually reviewed using retained full-page Poppler renders. Every retained schedule cell and bounded source clause is independently verified against MuPDF and Poppler captures."
+  ],
+  "text_absence_assertions": [
+    {
+      "id": "rank09-no-control-valve-schedule-title",
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "covers_all_source_pages": true,
+      "patterns": [
+        "CONTROL\\\\s+VALVE\\\\s+SCHEDULE"
+      ],
+      "visual_review_qualification": "Native-text absence is not engineering proof; paired visual review supports only the limited finding that there is no standalone schedule title with this wording."
+    }
+  ]
+}

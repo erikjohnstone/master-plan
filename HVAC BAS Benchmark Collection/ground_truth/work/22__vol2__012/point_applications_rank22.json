@@ -1,0 +1,18 @@
+{
+  "document_id": "22__vol2__012",
+  "module_role": "Formal M701 source-matrix scope and ownership boundary.",
+  "tables": [],
+  "ledger_mode": "source_matrix_templates_v1",
+  "applications": [
+    {
+      "id": "m701-chilled-water-system",
+      "source_table": "M701-CHW-DDC-HARDWIRED-IO",
+      "ownership_scope": "M701 printed chilled-water-system source-matrix scope; physical owner, final controller/card binding and installed-device assignment are not stated."
+    }
+  ],
+  "expanded_template_counts": {
+    "source_rows": 101,
+    "total": 101
+  },
+  "expanded_count_warning": "101 is the count of literal published M701 source rows. It is not a count of installed physical sensors, actuators, controllers, terminations, cards, wires or devices."
+}

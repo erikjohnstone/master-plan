@@ -1,0 +1,464 @@
+{
+  "id": "04__vol2__062",
+  "rank": 4,
+  "title": "ITD District 1 Testing Laboratory HVAC/BAS",
+  "source_pdf": "pdf/04__vol2__062__ITD_District_1_Testing_Laboratory.pdf",
+  "source_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "page_count": 29,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete source-bounded ground truth for the supplied 29-page D-1 Testing Laboratory set: full-page visual review; title-block/sheet/local-scale context; all 94 literal M5.0-M5.3 schedule rows; 82 clean tag-column schedule identities plus cited source-symbol/literal identities; M6.2/M6.3 published boiler/VFD/AHU point lists; BAS/network and thirteen control-sequence contexts; lab/zone bindings; and explicit limitations. It does not fabricate installed equipment, sensors, thermostats, damper actuators, controller I/O/cards/terminals/wiring, network addresses/topology or distances.",
+  "reading_notes": [
+    "All 29 source pages have retained full-page Poppler renders and a completed visual disposition. Strict source cells and bounded assertions are rechecked against retained MuPDF and Poppler captures during every build/verify run.",
+    "The schedule corpus contains 23 tables and 94 literal rows across M5.0-M5.3. The registry has 61 clean tag-column identities; 21 air-valve rows, BCV-1 and 11 D/R source-symbol tags remain separately retained without altering original row geometry.",
+    "M6.2/M6.3 publish 25 literal functional point-list rows. These lists are source-template/application context, not final physical I/O, device, controller-card, terminal, cable or wiring counts.",
+    "M6.0 prints BAS/BACnet/integration context and M6.0-M6.5 retain thirteen control/sequence subjects, but no final network address/topology schedule or standalone damper-actuator schedule is supplied."
+  ],
+  "verification_semantics": "The bundle verifier reruns independent MuPDF and Poppler raw-capture checks for every authored literal table and bounded assertion, and hashes linked modules, source PDF, manifest and cited full-page review renders. It validates source evidence and annotation integrity; it does not automatically infer physical plan quantities or engineering suitability.",
+  "module_order": [
+    "metadata",
+    "schedules",
+    "points",
+    "controls_context",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "metadata": [
+      "metadata_rank04"
+    ],
+    "schedules": [
+      "schedules_m50_air_valves",
+      "schedules_m51_control_valves",
+      "schedules_m52_equipment",
+      "schedules_m53_ahu",
+      "schedules_m51_core_equipment",
+      "schedules_m50_core_equipment",
+      "schedules_m51_air_devices"
+    ],
+    "points": [
+      "points_rank04_ledger"
+    ],
+    "controls_context": [
+      "controls_sequences_network",
+      "controls_lab_zone_bindings",
+      "points_m62_m63"
+    ],
+    "equipment_reconciliation": [
+      "equipment_reconciliation_rank04"
+    ],
+    "point_applications": [
+      "point_applications_rank04"
+    ],
+    "supporting_evidence": [
+      "supporting_evidence_rank04"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Printed project/title-block name, address, number, architect, issue and date are retained with a separate no-revision-date status.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every supplied page has a visual sheet/title disposition and no populated revision date is invented.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "sheet_details"
+        ],
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Only observed local stated plan scales are recorded; no global or graphic-bar scale is asserted.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 23 linked M5.0-M5.3 schedule tables are classified, with 61 clean tag-column identities and separately retained source-symbol/literal identities.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "scheduled_families"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "additional_identities"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every literal source row in the seven schedule-family components is preserved, including valves, louvers, hoods, air devices and AHU fields.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "schedule_counts"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Twenty-five source-list rows from M6.2/M6.3 are retained with explicit source-template ownership scope, not fabricated physical I/O ownership.",
+      "evidence": [
+        [
+          "modules",
+          "points",
+          "tables"
+        ],
+        [
+          "modules",
+          "point_applications",
+          "applications"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Literal BAS/BACnet and integration contexts are retained with final topology/addressing intentionally unavailable.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "source_components",
+          "controls_sequences_network",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Thirteen source-bounded M6.0-M6.5 control/sequence subjects are inventoried alongside lab/zone bindings.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "source_components",
+          "controls_sequences_network",
+          "sequence_inventory"
+        ],
+        [
+          "modules",
+          "controls_context",
+          "source_components",
+          "controls_lab_zone_bindings",
+          "sensor_and_zone_context"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Explicit lab/room control bindings and scoped sensor contexts are preserved; no document-wide sensor/thermostat total is inferred.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "source_components",
+          "controls_lab_zone_bindings",
+          "sensor_and_zone_context"
+        ],
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Damper-actuator, counts, point-type, network and revision limitations are explicit rather than filled with assumptions.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "control_valve_and_damper_schedule_status"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 29 supplied PDF pages have retained full-page render evidence and a completed finding.",
+      "evidence": [
+        [
+          "page_review"
+        ],
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Build and verification rerun MuPDF and Poppler checks for each embedded component and hash source, manifest, modules and cited renders.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ],
+        [
+          "modules",
+          "metadata",
+          "assertions"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p1-p1-full-poppler.png",
+      "finding": "Legend, general notes and commissioning/control-symbol context."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p2-p2-full-poppler.png",
+      "finding": "Energy-code COMcheck information and zone-plan context."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p3-p3-full-poppler.png",
+      "finding": "HVAC floor plan with laboratory equipment, air distribution and equipment-tag context."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p4-p4-full-poppler.png",
+      "finding": "Exhaust floor plan and laboratory exhaust-routing context."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p5-p5-full-poppler.png",
+      "finding": "Hydronic floor plan with heating-water equipment/piping context."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p6-p6-full-poppler.png",
+      "finding": "Mechanical roof plan with roof equipment and exhaust context."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p7-p7-full-poppler.png",
+      "finding": "Enlarged mechanical plan and heating-water piping schematic."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p8-p8-full-poppler.png",
+      "finding": "Ductwork and mechanical-installation details."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p9-p9-full-poppler.png",
+      "finding": "Vent, boiler/furnace, duct and seismic mechanical details."
+    },
+    {
+      "page": 10,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p10-p10-full-poppler.png",
+      "finding": "Boiler/hydronic details, including flow-meter BACnet context."
+    },
+    {
+      "page": 11,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p11-p11-full-poppler.png",
+      "finding": "Roof-unit, penthouse, exhaust-fan and snorkel installation details."
+    },
+    {
+      "page": 12,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p12-p12-full-poppler.png",
+      "finding": "Canopy hood, air valve, pump, exhaust fan and snorkel-hood schedules."
+    },
+    {
+      "page": 13,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p13-p13-full-poppler.png",
+      "finding": "Boiler, reheat coil, humidifier, lab fan, air device and control-valve schedules."
+    },
+    {
+      "page": 14,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p14-p14-full-poppler.png",
+      "finding": "Electric-heater, specialty, split-system, attenuator, penthouse, louver and ductless schedules."
+    },
+    {
+      "page": 15,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p15-p15-full-poppler.png",
+      "finding": "AHU-1 schedule with airflow, coils, humidifier, filters and electrical fields."
+    },
+    {
+      "page": 16,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p16-p16-full-poppler.png",
+      "finding": "Controls legend, BAS/network context and louver/fan/ductless sequences."
+    },
+    {
+      "page": 17,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p17-p17-full-poppler.png",
+      "finding": "Laboratory exhaust and split-system control sequences."
+    },
+    {
+      "page": 18,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p18-p18-full-poppler.png",
+      "finding": "Heating-water sequence/diagram and published boiler/VFD point lists."
+    },
+    {
+      "page": 19,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p19-p19-full-poppler.png",
+      "finding": "VAV AHU-1 sequence/control diagram and published AHU point lists."
+    },
+    {
+      "page": 20,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p20-p20-full-poppler.png",
+      "finding": "Laboratory hood and snorkel control sequences."
+    },
+    {
+      "page": 21,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p21-p21-full-poppler.png",
+      "finding": "General exhaust, electric-heater and general-fan control sequences."
+    },
+    {
+      "page": 22,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p22-p22-full-poppler.png",
+      "finding": "Foundation-plumbing plan."
+    },
+    {
+      "page": 23,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p23-p23-full-poppler.png",
+      "finding": "Plumbing floor plan with laboratory-equipment context."
+    },
+    {
+      "page": 24,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p24-p24-full-poppler.png",
+      "finding": "Plumbing roof plan."
+    },
+    {
+      "page": 25,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p25-p25-full-poppler.png",
+      "finding": "Enlarged plumbing plan."
+    },
+    {
+      "page": 26,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p26-p26-full-poppler.png",
+      "finding": "Plumbing detail sheet."
+    },
+    {
+      "page": 27,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p27-p27-full-poppler.png",
+      "finding": "Gas, compressor and water-softener detail sheet."
+    },
+    {
+      "page": 28,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p28-p28-full-poppler.png",
+      "finding": "Plumbing fixtures, compressor and gas schedule information."
+    },
+    {
+      "page": 29,
+      "review_status": "complete",
+      "render": "reviews/04__vol2__062/p29-p29-full-poppler.png",
+      "finding": "Fire-sprinkler floor plan."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "rank04-full-page-review",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 29
+    },
+    {
+      "id": "rank04-schedule-table-count",
+      "path": [
+        "modules",
+        "schedules",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 23
+    },
+    {
+      "id": "rank04-point-table-count",
+      "path": [
+        "modules",
+        "points",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 4
+    }
+  ],
+  "completion_checks": {
+    "all_29_pages_visually_reviewed": true,
+    "all_authoring_modules_dual_engine_verified_at_build": true,
+    "source_limitations_explicit": true,
+    "required_objectives_covered": true
+  }
+}

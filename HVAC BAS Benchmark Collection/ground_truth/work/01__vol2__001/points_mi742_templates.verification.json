@@ -1,0 +1,3744 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "71e1f7fd91520220fc7b65104059eac7bdd7d519a698531bc61ea98fc8ff76d6",
+  "tables": 11,
+  "rows": 26,
+  "cell_assertions": 104,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "HUMIDIFIER-AI",
+      "row": 1,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        327,
+        130,
+        360,
+        150
+      ],
+      "expected": "AI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            1538
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            1125
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-AI",
+      "row": 1,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        360,
+        130,
+        490,
+        150
+      ],
+      "expected": "ZONE HUMIDITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ZONE HUMIDITY",
+          "word_ids": [
+            1539,
+            1540
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ZONE HUMIDITY",
+          "word_ids": [
+            1126,
+            1127
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-AI",
+      "row": 1,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        490,
+        130,
+        535,
+        150
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1541
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1082
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-AI",
+      "row": 1,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        535,
+        130,
+        575,
+        150
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1542
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1065
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-AI",
+      "header": "HUMIDIFIER DDC POINTS LIST",
+      "page": 69,
+      "bbox": [
+        325,
+        65,
+        575,
+        95
+      ],
+      "engine": "mupdf",
+      "actual": "HUMIDIFIER DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "HUMIDIFIER-AI",
+      "header": "HUMIDIFIER DDC POINTS LIST",
+      "page": 69,
+      "bbox": [
+        325,
+        65,
+        575,
+        95
+      ],
+      "engine": "poppler",
+      "actual": "HUMIDIFIER DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "HUMIDIFIER-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 69,
+      "bbox": [
+        325,
+        95,
+        575,
+        117
+      ],
+      "engine": "mupdf",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "HUMIDIFIER-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 69,
+      "bbox": [
+        325,
+        95,
+        575,
+        117
+      ],
+      "engine": "poppler",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "HUMIDIFIER-AI",
+      "header": "ANALOG INPUT",
+      "page": 69,
+      "bbox": [
+        325,
+        112,
+        410,
+        130
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "HUMIDIFIER-AI",
+      "header": "ANALOG INPUT",
+      "page": 69,
+      "bbox": [
+        325,
+        112,
+        410,
+        130
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "HUMIDIFIER-BI",
+      "row": 1,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        327,
+        181,
+        360,
+        201
+      ],
+      "expected": "BI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            1545
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            1070
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-BI",
+      "row": 1,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        360,
+        181,
+        490,
+        201
+      ],
+      "expected": "HUMIDIFER STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDIFER STATUS",
+          "word_ids": [
+            1546,
+            1547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDIFER STATUS",
+          "word_ids": [
+            1071,
+            1072
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-BI",
+      "row": 1,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        490,
+        181,
+        535,
+        201
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1548
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1045
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-BI",
+      "row": 1,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        535,
+        181,
+        575,
+        201
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1549
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1015
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-BI",
+      "row": 2,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        327,
+        201,
+        360,
+        232
+      ],
+      "expected": "BI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            1550
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            1073
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-BI",
+      "row": 2,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        360,
+        201,
+        490,
+        232
+      ],
+      "expected": "HUMIDIFIER CYLINDER CHANGE STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDIFIER CYLINDER CHANGE STATUS",
+          "word_ids": [
+            1551,
+            1552,
+            1553,
+            1554
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDIFIER CYLINDER CHANGE STATUS",
+          "word_ids": [
+            1074,
+            1075,
+            1076,
+            1077
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-BI",
+      "row": 2,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        490,
+        201,
+        535,
+        232
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1555
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1046
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-BI",
+      "row": 2,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        535,
+        201,
+        575,
+        232
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1556
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1016
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-BI",
+      "row": 3,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        327,
+        232,
+        360,
+        251
+      ],
+      "expected": "BI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            1557
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            1078
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-BI",
+      "row": 3,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        360,
+        232,
+        490,
+        251
+      ],
+      "expected": "HUMIDIFIER DDC RESET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDIFIER DDC RESET",
+          "word_ids": [
+            1558,
+            1559,
+            1560
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDIFIER DDC RESET",
+          "word_ids": [
+            1079,
+            1080,
+            1081
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-BI",
+      "row": 3,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        490,
+        232,
+        535,
+        251
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1561
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            2
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-BI",
+      "row": 3,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        535,
+        232,
+        575,
+        251
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1562
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            3
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-BI",
+      "header": "BINARY INPUT",
+      "page": 69,
+      "bbox": [
+        325,
+        163,
+        410,
+        181
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "HUMIDIFIER-BI",
+      "header": "BINARY INPUT",
+      "page": 69,
+      "bbox": [
+        325,
+        163,
+        410,
+        181
+      ],
+      "engine": "poppler",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "HUMIDIFIER-BO",
+      "row": 1,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        327,
+        282,
+        360,
+        304
+      ],
+      "expected": "BO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            1565
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            1055
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-BO",
+      "row": 1,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        360,
+        282,
+        490,
+        304
+      ],
+      "expected": "HUMIDIFIER START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDIFIER START/STOP",
+          "word_ids": [
+            1566,
+            1567
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDIFIER START/STOP",
+          "word_ids": [
+            1056,
+            1057
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-BO",
+      "row": 1,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        490,
+        282,
+        535,
+        304
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1568
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1058
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-BO",
+      "row": 1,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        535,
+        282,
+        575,
+        304
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1569
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            14
+          ]
+        }
+      }
+    },
+    {
+      "table": "HUMIDIFIER-BO",
+      "header": "BINARY OUTPUT",
+      "page": 69,
+      "bbox": [
+        325,
+        264,
+        415,
+        282
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "HUMIDIFIER-BO",
+      "header": "BINARY OUTPUT",
+      "page": 69,
+      "bbox": [
+        325,
+        264,
+        415,
+        282
+      ],
+      "engine": "poppler",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "row": 1,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        930,
+        122,
+        964,
+        140
+      ],
+      "expected": "BI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            1582
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            1092
+          ]
+        }
+      }
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "row": 1,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        964,
+        122,
+        1145,
+        140
+      ],
+      "expected": "EXHAUST DAMPER END SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST DAMPER END SWITCH",
+          "word_ids": [
+            1583,
+            1584,
+            1585,
+            1586
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST DAMPER END SWITCH",
+          "word_ids": [
+            1093,
+            1094,
+            1095,
+            1096
+          ]
+        }
+      }
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "row": 1,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        1145,
+        122,
+        1185,
+        140
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1587
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1097
+          ]
+        }
+      }
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "row": 1,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        1185,
+        122,
+        1225,
+        140
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1588
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1098
+          ]
+        }
+      }
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "row": 2,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        930,
+        140,
+        964,
+        157
+      ],
+      "expected": "BI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            1589
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            1099
+          ]
+        }
+      }
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "row": 2,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        964,
+        140,
+        1145,
+        157
+      ],
+      "expected": "EXHAUST FAN STATUS (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST FAN STATUS (FEEDBACK)",
+          "word_ids": [
+            1590,
+            1591,
+            1592,
+            1593
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST FAN STATUS (FEEDBACK)",
+          "word_ids": [
+            1100,
+            1101,
+            1102,
+            1103
+          ]
+        }
+      }
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "row": 2,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        1145,
+        140,
+        1185,
+        157
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1594
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1104
+          ]
+        }
+      }
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "row": 2,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        1185,
+        140,
+        1225,
+        157
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1595
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1105
+          ]
+        }
+      }
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "row": 3,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        930,
+        157,
+        964,
+        175
+      ],
+      "expected": "BI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            1596
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            1106
+          ]
+        }
+      }
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "row": 3,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        964,
+        157,
+        1145,
+        175
+      ],
+      "expected": "EXHAUST FAN DDC RESET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST FAN DDC RESET",
+          "word_ids": [
+            1597,
+            1598,
+            1599,
+            1600
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST FAN DDC RESET",
+          "word_ids": [
+            1107,
+            1108,
+            1109,
+            1110
+          ]
+        }
+      }
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "row": 3,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        1145,
+        157,
+        1185,
+        175
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1601
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1111
+          ]
+        }
+      }
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "row": 3,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        1185,
+        157,
+        1225,
+        175
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1602
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1112
+          ]
+        }
+      }
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "header": "UPS EXHAUST FAN DDC POINTS LIST",
+      "page": 69,
+      "bbox": [
+        930,
+        58,
+        1230,
+        88
+      ],
+      "engine": "mupdf",
+      "actual": "UPS EXHAUST FAN DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "header": "UPS EXHAUST FAN DDC POINTS LIST",
+      "page": 69,
+      "bbox": [
+        930,
+        58,
+        1230,
+        88
+      ],
+      "engine": "poppler",
+      "actual": "UPS EXHAUST FAN DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 69,
+      "bbox": [
+        930,
+        87,
+        1230,
+        109
+      ],
+      "engine": "mupdf",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 69,
+      "bbox": [
+        930,
+        87,
+        1230,
+        109
+      ],
+      "engine": "poppler",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "header": "BINARY INPUT",
+      "page": 69,
+      "bbox": [
+        925,
+        104,
+        1010,
+        122
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "UPS-EXHAUST-BI",
+      "header": "BINARY INPUT",
+      "page": 69,
+      "bbox": [
+        925,
+        104,
+        1010,
+        122
+      ],
+      "engine": "poppler",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "UPS-EXHAUST-BO",
+      "row": 1,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        930,
+        208,
+        964,
+        227
+      ],
+      "expected": "BO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            1605
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            759
+          ]
+        }
+      }
+    },
+    {
+      "table": "UPS-EXHAUST-BO",
+      "row": 1,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        964,
+        208,
+        1145,
+        227
+      ],
+      "expected": "EXHAUST FAN START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST FAN START/STOP",
+          "word_ids": [
+            1606,
+            1607,
+            1608
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST FAN START/STOP",
+          "word_ids": [
+            760,
+            761,
+            762
+          ]
+        }
+      }
+    },
+    {
+      "table": "UPS-EXHAUST-BO",
+      "row": 1,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        1145,
+        208,
+        1185,
+        227
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1609
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            749
+          ]
+        }
+      }
+    },
+    {
+      "table": "UPS-EXHAUST-BO",
+      "row": 1,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        1185,
+        208,
+        1225,
+        227
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1610
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            708
+          ]
+        }
+      }
+    },
+    {
+      "table": "UPS-EXHAUST-BO",
+      "header": "BINARY OUTPUT",
+      "page": 69,
+      "bbox": [
+        925,
+        189,
+        1015,
+        208
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "UPS-EXHAUST-BO",
+      "header": "BINARY OUTPUT",
+      "page": 69,
+      "bbox": [
+        925,
+        189,
+        1015,
+        208
+      ],
+      "engine": "poppler",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "row": 1,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        930,
+        826,
+        964,
+        844
+      ],
+      "expected": "BI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            1725
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            446
+          ]
+        }
+      }
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "row": 1,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        964,
+        826,
+        1145,
+        844
+      ],
+      "expected": "EXHAUST DAMPER END SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST DAMPER END SWITCH",
+          "word_ids": [
+            1726,
+            1727,
+            1728,
+            1729
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST DAMPER END SWITCH",
+          "word_ids": [
+            447,
+            448,
+            449,
+            450
+          ]
+        }
+      }
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "row": 1,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        1145,
+        826,
+        1185,
+        844
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1730
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            451
+          ]
+        }
+      }
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "row": 1,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        1185,
+        826,
+        1225,
+        844
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1731
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            452
+          ]
+        }
+      }
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "row": 2,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        930,
+        844,
+        964,
+        861
+      ],
+      "expected": "BI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            1732
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            453
+          ]
+        }
+      }
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "row": 2,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        964,
+        844,
+        1145,
+        861
+      ],
+      "expected": "EXHAUST FAN STATUS (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST FAN STATUS (FEEDBACK)",
+          "word_ids": [
+            1733,
+            1734,
+            1735,
+            1736
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST FAN STATUS (FEEDBACK)",
+          "word_ids": [
+            454,
+            455,
+            456,
+            457
+          ]
+        }
+      }
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "row": 2,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        1145,
+        844,
+        1185,
+        861
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1737
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            458
+          ]
+        }
+      }
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "row": 2,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        1185,
+        844,
+        1225,
+        861
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1738
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            459
+          ]
+        }
+      }
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "row": 3,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        930,
+        861,
+        964,
+        879
+      ],
+      "expected": "BI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            1739
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            460
+          ]
+        }
+      }
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "row": 3,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        964,
+        861,
+        1145,
+        879
+      ],
+      "expected": "EXHAUST FAN DDC RESET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST FAN DDC RESET",
+          "word_ids": [
+            1740,
+            1741,
+            1742,
+            1743
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST FAN DDC RESET",
+          "word_ids": [
+            461,
+            462,
+            463,
+            464
+          ]
+        }
+      }
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "row": 3,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        1145,
+        861,
+        1185,
+        879
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1744
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            465
+          ]
+        }
+      }
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "row": 3,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        1185,
+        861,
+        1225,
+        879
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1745
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            466
+          ]
+        }
+      }
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "header": "BATHROOM EXHAUST FAN DDC POINTS LIST",
+      "page": 69,
+      "bbox": [
+        930,
+        762,
+        1230,
+        792
+      ],
+      "engine": "mupdf",
+      "actual": "BATHROOM EXHAUST FAN DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "header": "BATHROOM EXHAUST FAN DDC POINTS LIST",
+      "page": 69,
+      "bbox": [
+        930,
+        762,
+        1230,
+        792
+      ],
+      "engine": "poppler",
+      "actual": "BATHROOM EXHAUST FAN DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 69,
+      "bbox": [
+        930,
+        790,
+        1230,
+        812
+      ],
+      "engine": "mupdf",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 69,
+      "bbox": [
+        930,
+        790,
+        1230,
+        812
+      ],
+      "engine": "poppler",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "header": "BINARY INPUT",
+      "page": 69,
+      "bbox": [
+        925,
+        807,
+        1010,
+        826
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BI",
+      "header": "BINARY INPUT",
+      "page": 69,
+      "bbox": [
+        925,
+        807,
+        1010,
+        826
+      ],
+      "engine": "poppler",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BO",
+      "row": 1,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        930,
+        912,
+        964,
+        931
+      ],
+      "expected": "BO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            1748
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            469
+          ]
+        }
+      }
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BO",
+      "row": 1,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        964,
+        912,
+        1145,
+        931
+      ],
+      "expected": "EXHAUST FAN START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST FAN START/STOP",
+          "word_ids": [
+            1749,
+            1750,
+            1751
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST FAN START/STOP",
+          "word_ids": [
+            470,
+            471,
+            472
+          ]
+        }
+      }
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BO",
+      "row": 1,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        1145,
+        912,
+        1185,
+        931
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1752
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            827
+          ]
+        }
+      }
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BO",
+      "row": 1,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        1185,
+        912,
+        1225,
+        931
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1753
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            828
+          ]
+        }
+      }
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BO",
+      "header": "BINARY OUTPUT",
+      "page": 69,
+      "bbox": [
+        925,
+        893,
+        1015,
+        912
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "BATHROOM-EXHAUST-BO",
+      "header": "BINARY OUTPUT",
+      "page": 69,
+      "bbox": [
+        925,
+        893,
+        1015,
+        912
+      ],
+      "engine": "poppler",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 1,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        1785,
+        277,
+        1818,
+        295
+      ],
+      "expected": "AI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            1623
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            285
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 1,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        1818,
+        277,
+        2050,
+        295
+      ],
+      "expected": "TEMPERATURE SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR",
+          "word_ids": [
+            1624,
+            1625
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR",
+          "word_ids": [
+            286,
+            287
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 1,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        2050,
+        277,
+        2090,
+        295
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1626
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            304
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 1,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        2090,
+        277,
+        2140,
+        295
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1627
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            309
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 2,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        1785,
+        295,
+        1818,
+        312
+      ],
+      "expected": "AI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            1628
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            288
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 2,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        1818,
+        295,
+        2050,
+        312
+      ],
+      "expected": "HUMIDITY SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDITY SENSOR",
+          "word_ids": [
+            1629,
+            1630
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDITY SENSOR",
+          "word_ids": [
+            289,
+            290
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 2,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        2050,
+        295,
+        2090,
+        312
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1631
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            305
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 2,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        2090,
+        295,
+        2140,
+        312
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1632
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            310
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 3,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        1785,
+        312,
+        1818,
+        329
+      ],
+      "expected": "AI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            1633
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            291
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 3,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        1818,
+        312,
+        2050,
+        329
+      ],
+      "expected": "HUMIDIFIER OUTPUT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDIFIER OUTPUT",
+          "word_ids": [
+            1634,
+            1635
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDIFIER OUTPUT",
+          "word_ids": [
+            292,
+            293
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 3,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        2050,
+        312,
+        2090,
+        329
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1636
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            306
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 3,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        2090,
+        312,
+        2140,
+        329
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1637
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            311
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 4,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        1785,
+        329,
+        1818,
+        347
+      ],
+      "expected": "AI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI04",
+          "word_ids": [
+            1638
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI04",
+          "word_ids": [
+            294
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 4,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        1818,
+        329,
+        2050,
+        347
+      ],
+      "expected": "CHW VALVE POSITION (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            1639,
+            1640,
+            1641,
+            1642
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            295,
+            296,
+            297,
+            298
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 4,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        2050,
+        329,
+        2090,
+        347
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1643
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            307
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 4,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        2090,
+        329,
+        2140,
+        347
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1644
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            312
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 5,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        1785,
+        347,
+        1818,
+        365
+      ],
+      "expected": "AI05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI05",
+          "word_ids": [
+            1645
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI05",
+          "word_ids": [
+            299
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 5,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        1818,
+        347,
+        2050,
+        365
+      ],
+      "expected": "HHW VALVE CONTROL (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL (FEEDBACK)",
+          "word_ids": [
+            1646,
+            1647,
+            1648,
+            1649
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL (FEEDBACK)",
+          "word_ids": [
+            300,
+            301,
+            302,
+            303
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 5,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        2050,
+        347,
+        2090,
+        365
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1650
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            308
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "row": 5,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        2090,
+        347,
+        2140,
+        365
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1651
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            313
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "header": "ELEVATOR MACHINE ROOM DDC POINTS LIST",
+      "page": 69,
+      "bbox": [
+        1780,
+        215,
+        2140,
+        241
+      ],
+      "engine": "mupdf",
+      "actual": "ELEVATOR MACHINE ROOM DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "header": "ELEVATOR MACHINE ROOM DDC POINTS LIST",
+      "page": 69,
+      "bbox": [
+        1780,
+        215,
+        2140,
+        241
+      ],
+      "engine": "poppler",
+      "actual": "ELEVATOR MACHINE ROOM DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 69,
+      "bbox": [
+        1780,
+        240,
+        2140,
+        263
+      ],
+      "engine": "mupdf",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 69,
+      "bbox": [
+        1780,
+        240,
+        2140,
+        263
+      ],
+      "engine": "poppler",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "header": "ANALOG INPUT",
+      "page": 69,
+      "bbox": [
+        1780,
+        258,
+        1870,
+        277
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AI",
+      "header": "ANALOG INPUT",
+      "page": 69,
+      "bbox": [
+        1780,
+        258,
+        1870,
+        277
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AO",
+      "row": 1,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        1785,
+        397,
+        1818,
+        416
+      ],
+      "expected": "AO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            1654
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            316
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AO",
+      "row": 1,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        1818,
+        397,
+        2050,
+        416
+      ],
+      "expected": "HUMIDIFIER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDIFIER CONTROL",
+          "word_ids": [
+            1655,
+            1656
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDIFIER CONTROL",
+          "word_ids": [
+            317,
+            318
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AO",
+      "row": 1,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        2050,
+        397,
+        2090,
+        416
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1657
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            327
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AO",
+      "row": 1,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        2090,
+        397,
+        2140,
+        416
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1658
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            330
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AO",
+      "row": 2,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        1785,
+        416,
+        1818,
+        433
+      ],
+      "expected": "AO02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            1659
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            319
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AO",
+      "row": 2,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        1818,
+        416,
+        2050,
+        433
+      ],
+      "expected": "CHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL",
+          "word_ids": [
+            1660,
+            1661,
+            1662
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL",
+          "word_ids": [
+            320,
+            321,
+            322
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AO",
+      "row": 2,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        2050,
+        416,
+        2090,
+        433
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1663
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            328
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AO",
+      "row": 2,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        2090,
+        416,
+        2140,
+        433
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1664
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            331
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AO",
+      "row": 3,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        1785,
+        433,
+        1818,
+        450
+      ],
+      "expected": "AO03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO03",
+          "word_ids": [
+            1665
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO03",
+          "word_ids": [
+            323
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AO",
+      "row": 3,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        1818,
+        433,
+        2050,
+        450
+      ],
+      "expected": "HHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL",
+          "word_ids": [
+            1666,
+            1667,
+            1668
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL",
+          "word_ids": [
+            324,
+            325,
+            326
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AO",
+      "row": 3,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        2050,
+        433,
+        2090,
+        450
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1669
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            329
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AO",
+      "row": 3,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        2090,
+        433,
+        2140,
+        450
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1670
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            332
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 69,
+      "bbox": [
+        1780,
+        376,
+        1880,
+        397
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 69,
+      "bbox": [
+        1780,
+        376,
+        1880,
+        397
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "row": 1,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        1785,
+        484,
+        1818,
+        502
+      ],
+      "expected": "BI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            1673
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            335
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "row": 1,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        1818,
+        484,
+        2050,
+        502
+      ],
+      "expected": "FILTER STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FILTER STATUS",
+          "word_ids": [
+            1674,
+            1675
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FILTER STATUS",
+          "word_ids": [
+            336,
+            337
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "row": 1,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        2050,
+        484,
+        2090,
+        502
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1676
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            353
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "row": 1,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        2090,
+        484,
+        2140,
+        502
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1677
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            357
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "row": 2,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        1785,
+        502,
+        1818,
+        519
+      ],
+      "expected": "BI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            1678
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            338
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "row": 2,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        1818,
+        502,
+        2050,
+        519
+      ],
+      "expected": "SECONDARY DRAIN PAN OVERFLOW SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SECONDARY DRAIN PAN OVERFLOW SWITCH",
+          "word_ids": [
+            1679,
+            1680,
+            1681,
+            1682,
+            1683
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SECONDARY DRAIN PAN OVERFLOW SWITCH",
+          "word_ids": [
+            339,
+            340,
+            341,
+            342,
+            343
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "row": 2,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        2050,
+        502,
+        2090,
+        519
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1684
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            354
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "row": 2,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        2090,
+        502,
+        2140,
+        519
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1685
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            358
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "row": 3,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        1785,
+        519,
+        1818,
+        536
+      ],
+      "expected": "BI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            1686
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            344
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "row": 3,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        1818,
+        519,
+        2050,
+        536
+      ],
+      "expected": "SUPPLY FAN STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN STATUS",
+          "word_ids": [
+            1687,
+            1688,
+            1689
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN STATUS",
+          "word_ids": [
+            345,
+            346,
+            347
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "row": 3,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        2050,
+        519,
+        2090,
+        536
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1690
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            355
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "row": 3,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        2090,
+        519,
+        2140,
+        536
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1691
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            359
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "row": 4,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        1785,
+        536,
+        1818,
+        555
+      ],
+      "expected": "BI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            1692
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            348
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "row": 4,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        1818,
+        536,
+        2050,
+        555
+      ],
+      "expected": "ELEVATOR MACHINE EQUIPMENT RESET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ELEVATOR MACHINE EQUIPMENT RESET",
+          "word_ids": [
+            1693,
+            1694,
+            1695,
+            1696
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ELEVATOR MACHINE EQUIPMENT RESET",
+          "word_ids": [
+            349,
+            350,
+            351,
+            352
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "row": 4,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        2050,
+        536,
+        2090,
+        555
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1697
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            356
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "row": 4,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        2090,
+        536,
+        2140,
+        555
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1698
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            360
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "header": "BINARY INPUT",
+      "page": 69,
+      "bbox": [
+        1780,
+        462,
+        1875,
+        484
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BI",
+      "header": "BINARY INPUT",
+      "page": 69,
+      "bbox": [
+        1780,
+        462,
+        1875,
+        484
+      ],
+      "engine": "poppler",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BO",
+      "row": 1,
+      "column": "mark",
+      "page": 69,
+      "bbox": [
+        1785,
+        588,
+        1818,
+        607
+      ],
+      "expected": "BO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            1701
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            617
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BO",
+      "row": 1,
+      "column": "description",
+      "page": 69,
+      "bbox": [
+        1818,
+        588,
+        2050,
+        607
+      ],
+      "expected": "SUPPLY FAN START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN START/STOP",
+          "word_ids": [
+            1702,
+            1703,
+            1704
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN START/STOP",
+          "word_ids": [
+            618,
+            619,
+            620
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BO",
+      "row": 1,
+      "column": "alarm",
+      "page": 69,
+      "bbox": [
+        2050,
+        588,
+        2090,
+        607
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1705
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            593
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BO",
+      "row": 1,
+      "column": "trend",
+      "page": 69,
+      "bbox": [
+        2090,
+        588,
+        2140,
+        607
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1706
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            433
+          ]
+        }
+      }
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BO",
+      "header": "BINARY OUTPUT",
+      "page": 69,
+      "bbox": [
+        1780,
+        566,
+        1880,
+        588
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "ELEVATOR-MACHINE-ROOM-BO",
+      "header": "BINARY OUTPUT",
+      "page": 69,
+      "bbox": [
+        1780,
+        566,
+        1880,
+        588
+      ],
+      "engine": "poppler",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "humidifier-ai-count",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "id": "humidifier-bi-count",
+      "actual": 3,
+      "expected": 3,
+      "pass": true
+    },
+    {
+      "id": "humidifier-bo-count",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "id": "ups-exhaust-bi-count",
+      "actual": 3,
+      "expected": 3,
+      "pass": true
+    },
+    {
+      "id": "ups-exhaust-bo-count",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "id": "bathroom-exhaust-bi-count",
+      "actual": 3,
+      "expected": 3,
+      "pass": true
+    },
+    {
+      "id": "bathroom-exhaust-bo-count",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "id": "elevator-machine-room-ai-count",
+      "actual": 5,
+      "expected": 5,
+      "pass": true
+    },
+    {
+      "id": "elevator-machine-room-ao-count",
+      "actual": 3,
+      "expected": 3,
+      "pass": true
+    },
+    {
+      "id": "elevator-machine-room-bi-count",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    },
+    {
+      "id": "elevator-machine-room-bo-count",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

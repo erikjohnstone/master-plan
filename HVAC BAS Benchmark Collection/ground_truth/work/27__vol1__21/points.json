@@ -1,0 +1,29 @@
+{
+  "document_id": "27__vol1__21",
+  "module_role": "Literal published chilled-water control-diagram I/O row.",
+  "tables": [
+    {
+      "id": "M701-CHWP-IO",
+      "page": 52,
+      "sheet": "M-701",
+      "title_as_printed": "CHILLED WATER SYSTEM CONTROL DIAGRAM",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        225,
+        1000
+      ],
+      "y_ranges": [
+        [
+          735,
+          765
+        ]
+      ],
+      "rows": [
+        "48 CHEMICAL FEEDER START/STOP DO HOA 2 VFD"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Literal source row only; it is not an installed quantity, controller binding, ownership or wiring assertion."
+    }
+  ],
+  "assertions": []
+}

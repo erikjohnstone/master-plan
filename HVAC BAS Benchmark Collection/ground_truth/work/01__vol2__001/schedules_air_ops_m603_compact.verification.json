@@ -1,0 +1,4362 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "f2df5040139857f5afe4aa54d172f31d02c2ced7f9945cc07e28b2d96971f03d",
+  "tables": 5,
+  "rows": 15,
+  "cell_assertions": 138,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        215,
+        150,
+        260,
+        167
+      ],
+      "expected": "CH-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-A1",
+          "word_ids": [
+            249
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-A1",
+          "word_ids": [
+            1655
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "capacity_tons",
+      "page": 44,
+      "bbox": [
+        260,
+        150,
+        370,
+        167
+      ],
+      "expected": "56.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "56.0",
+          "word_ids": [
+            250
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "56.0",
+          "word_ids": [
+            1647
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "EWT_F",
+      "page": 44,
+      "bbox": [
+        370,
+        150,
+        445,
+        167
+      ],
+      "expected": "55.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.4",
+          "word_ids": [
+            251
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.4",
+          "word_ids": [
+            1639
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "LWT_F",
+      "page": 44,
+      "bbox": [
+        445,
+        150,
+        520,
+        167
+      ],
+      "expected": "45",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            252
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            1628
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        520,
+        150,
+        580,
+        167
+      ],
+      "expected": "128.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "128.5",
+          "word_ids": [
+            253
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "128.5",
+          "word_ids": [
+            1620
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "max_pressure_drop_ft_wc",
+      "page": 44,
+      "bbox": [
+        580,
+        150,
+        750,
+        167
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            254
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            1738
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "fouling_factor_hr_ft2_F_BTU",
+      "page": 44,
+      "bbox": [
+        750,
+        150,
+        885,
+        167
+      ],
+      "expected": "0.0001",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.0001",
+          "word_ids": [
+            255
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.0001",
+          "word_ids": [
+            1723
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "volts",
+      "page": 44,
+      "bbox": [
+        885,
+        150,
+        940,
+        167
+      ],
+      "expected": "460",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "460",
+          "word_ids": [
+            256
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "460",
+          "word_ids": [
+            1658
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "phase",
+      "page": 44,
+      "bbox": [
+        940,
+        150,
+        980,
+        167
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            257
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            1650
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "Hz",
+      "page": 44,
+      "bbox": [
+        980,
+        150,
+        1020,
+        167
+      ],
+      "expected": "60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            258
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            1710
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "MCA",
+      "page": 44,
+      "bbox": [
+        1020,
+        150,
+        1090,
+        167
+      ],
+      "expected": "147",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "147",
+          "word_ids": [
+            259
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "147",
+          "word_ids": [
+            1711
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "MOCP",
+      "page": 44,
+      "bbox": [
+        1090,
+        150,
+        1155,
+        167
+      ],
+      "expected": "175",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "175",
+          "word_ids": [
+            260
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "175",
+          "word_ids": [
+            1642
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "minimum_EER",
+      "page": 44,
+      "bbox": [
+        1155,
+        150,
+        1240,
+        167
+      ],
+      "expected": "10.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.0",
+          "word_ids": [
+            261
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.0",
+          "word_ids": [
+            1615
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "minimum_IPLV",
+      "page": 44,
+      "bbox": [
+        1240,
+        150,
+        1320,
+        167
+      ],
+      "expected": "14.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14.3",
+          "word_ids": [
+            262
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14.3",
+          "word_ids": [
+            1697
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "disconnect_provided_by",
+      "page": 44,
+      "bbox": [
+        1320,
+        150,
+        1460,
+        167
+      ],
+      "expected": "DIVISION 23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIVISION 23",
+          "word_ids": [
+            263,
+            264
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIVISION 23",
+          "word_ids": [
+            1685,
+            1686
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1460,
+        150,
+        1585,
+        167
+      ],
+      "expected": "1,2,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4",
+          "word_ids": [
+            265
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4",
+          "word_ids": [
+            1612
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 2,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        215,
+        167,
+        260,
+        184
+      ],
+      "expected": "CH-A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-A2",
+          "word_ids": [
+            266
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-A2",
+          "word_ids": [
+            1656
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 2,
+      "column": "capacity_tons",
+      "page": 44,
+      "bbox": [
+        260,
+        167,
+        370,
+        184
+      ],
+      "expected": "56.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "56.0",
+          "word_ids": [
+            267
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "56.0",
+          "word_ids": [
+            1648
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 2,
+      "column": "EWT_F",
+      "page": 44,
+      "bbox": [
+        370,
+        167,
+        445,
+        184
+      ],
+      "expected": "55.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.4",
+          "word_ids": [
+            268
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.4",
+          "word_ids": [
+            1640
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 2,
+      "column": "LWT_F",
+      "page": 44,
+      "bbox": [
+        445,
+        167,
+        520,
+        184
+      ],
+      "expected": "45",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            269
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            1629
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 2,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        520,
+        167,
+        580,
+        184
+      ],
+      "expected": "128.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "128.5",
+          "word_ids": [
+            270
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "128.5",
+          "word_ids": [
+            1621
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 2,
+      "column": "max_pressure_drop_ft_wc",
+      "page": 44,
+      "bbox": [
+        580,
+        167,
+        750,
+        184
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            271
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            1739
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 2,
+      "column": "fouling_factor_hr_ft2_F_BTU",
+      "page": 44,
+      "bbox": [
+        750,
+        167,
+        885,
+        184
+      ],
+      "expected": "0.0001",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.0001",
+          "word_ids": [
+            272
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.0001",
+          "word_ids": [
+            1724
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 2,
+      "column": "volts",
+      "page": 44,
+      "bbox": [
+        885,
+        167,
+        940,
+        184
+      ],
+      "expected": "460",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "460",
+          "word_ids": [
+            273
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "460",
+          "word_ids": [
+            1659
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 2,
+      "column": "phase",
+      "page": 44,
+      "bbox": [
+        940,
+        167,
+        980,
+        184
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            274
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            1651
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 2,
+      "column": "Hz",
+      "page": 44,
+      "bbox": [
+        980,
+        167,
+        1020,
+        184
+      ],
+      "expected": "60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            275
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            1712
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 2,
+      "column": "MCA",
+      "page": 44,
+      "bbox": [
+        1020,
+        167,
+        1090,
+        184
+      ],
+      "expected": "147",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "147",
+          "word_ids": [
+            276
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "147",
+          "word_ids": [
+            1713
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 2,
+      "column": "MOCP",
+      "page": 44,
+      "bbox": [
+        1090,
+        167,
+        1155,
+        184
+      ],
+      "expected": "175",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "175",
+          "word_ids": [
+            277
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "175",
+          "word_ids": [
+            1643
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 2,
+      "column": "minimum_EER",
+      "page": 44,
+      "bbox": [
+        1155,
+        167,
+        1240,
+        184
+      ],
+      "expected": "10.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.0",
+          "word_ids": [
+            278
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.0",
+          "word_ids": [
+            1616
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 2,
+      "column": "minimum_IPLV",
+      "page": 44,
+      "bbox": [
+        1240,
+        167,
+        1320,
+        184
+      ],
+      "expected": "14.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14.3",
+          "word_ids": [
+            279
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14.3",
+          "word_ids": [
+            1698
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 2,
+      "column": "disconnect_provided_by",
+      "page": 44,
+      "bbox": [
+        1320,
+        167,
+        1460,
+        184
+      ],
+      "expected": "DIVISION 23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIVISION 23",
+          "word_ids": [
+            280,
+            281
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIVISION 23",
+          "word_ids": [
+            1687,
+            1688
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "row": 2,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1460,
+        167,
+        1585,
+        184
+      ],
+      "expected": "1,2,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4",
+          "word_ids": [
+            282
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4",
+          "word_ids": [
+            1613
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "header": "AIR COOLED CHILLER SCHEDULE",
+      "page": 44,
+      "bbox": [
+        700,
+        75,
+        1110,
+        115
+      ],
+      "engine": "mupdf",
+      "actual": "AIR COOLED CHILLER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "header": "AIR COOLED CHILLER SCHEDULE",
+      "page": 44,
+      "bbox": [
+        700,
+        75,
+        1110,
+        115
+      ],
+      "engine": "poppler",
+      "actual": "AIR COOLED CHILLER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "header": "MARK CAPACITY TONS EWT F LWT F GPM MAX ALLOWABLE PRESSURE DROP FT WC FOULING FACTOR HR-FT^2-F/BTU ELECTRICAL VOLTS PH Hz MCA MOCP MINIMUM EER MINIMUM IPLV DISCONNECT PROVIDED BY NOTES",
+      "page": 44,
+      "bbox": [
+        215,
+        115,
+        1585,
+        150
+      ],
+      "engine": "mupdf",
+      "actual": "ELECTRICAL MAX ALLOWABLE FOULING FACTOR MINIMUM DISCONNECT MARK CAPACITY (TONS) EWT (°F) LWT (°F) GPM MINIMUM EER NOTES PRESSURE DROP (FT WC) (HR-FT^2-F/BTU) VOLTS PH Hz MCA MOCP IPLV PROVIDED BY",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AIR-COOLED-CHILLER",
+      "header": "MARK CAPACITY TONS EWT F LWT F GPM MAX ALLOWABLE PRESSURE DROP FT WC FOULING FACTOR HR-FT^2-F/BTU ELECTRICAL VOLTS PH Hz MCA MOCP MINIMUM EER MINIMUM IPLV DISCONNECT PROVIDED BY NOTES",
+      "page": 44,
+      "bbox": [
+        215,
+        115,
+        1585,
+        150
+      ],
+      "engine": "poppler",
+      "actual": "ELECTRICAL MAX ALLOWABLE FOULING FACTOR MINIMUM DISCONNECT MARK CAPACITY (TONS) EWT (°F) LWT (°F) GPM MINIMUM EER NOTES PRESSURE DROP (FT WC) (HR-FT^2-F/BTU) VOLTS PH Hz MCA MOCP IPLV PROVIDED BY",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 1,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        350,
+        280,
+        367
+      ],
+      "expected": "EF-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-A1",
+          "word_ids": [
+            302
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-A1",
+          "word_ids": [
+            3
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 1,
+      "column": "service",
+      "page": 44,
+      "bbox": [
+        280,
+        350,
+        420,
+        367
+      ],
+      "expected": "STORAGE BAY VENTILATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STORAGE BAY VENTILATION",
+          "word_ids": [
+            303,
+            304,
+            305
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STORAGE BAY VENTILATION",
+          "word_ids": [
+            6,
+            7,
+            8
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 1,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        420,
+        350,
+        630,
+        367
+      ],
+      "expected": "DIRECT DRIVE CENTRIFUGAL INLINE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIRECT DRIVE CENTRIFUGAL INLINE",
+          "word_ids": [
+            306,
+            307,
+            308,
+            309
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIRECT DRIVE CENTRIFUGAL INLINE",
+          "word_ids": [
+            16,
+            17,
+            18,
+            19
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 1,
+      "column": "CFM",
+      "page": 44,
+      "bbox": [
+        630,
+        350,
+        670,
+        367
+      ],
+      "expected": "600",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "600",
+          "word_ids": [
+            310
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "600",
+          "word_ids": [
+            36
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 1,
+      "column": "RPM",
+      "page": 44,
+      "bbox": [
+        670,
+        350,
+        720,
+        367
+      ],
+      "expected": "1685",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1685",
+          "word_ids": [
+            311
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1685",
+          "word_ids": [
+            39
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 1,
+      "column": "ESP_in_wg",
+      "page": 44,
+      "bbox": [
+        720,
+        350,
+        775,
+        367
+      ],
+      "expected": "0.50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.50",
+          "word_ids": [
+            312
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.50",
+          "word_ids": [
+            42
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 1,
+      "column": "max_sones",
+      "page": 44,
+      "bbox": [
+        775,
+        350,
+        830,
+        367
+      ],
+      "expected": "9.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.2",
+          "word_ids": [
+            313
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.2",
+          "word_ids": [
+            45
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 1,
+      "column": "HP",
+      "page": 44,
+      "bbox": [
+        830,
+        350,
+        865,
+        367
+      ],
+      "expected": "0.12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.12",
+          "word_ids": [
+            314
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.12",
+          "word_ids": [
+            48
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 1,
+      "column": "volts",
+      "page": 44,
+      "bbox": [
+        865,
+        350,
+        920,
+        367
+      ],
+      "expected": "120",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            315
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            56
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 1,
+      "column": "phase",
+      "page": 44,
+      "bbox": [
+        920,
+        350,
+        960,
+        367
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            316
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            57
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 1,
+      "column": "FLA",
+      "page": 44,
+      "bbox": [
+        960,
+        350,
+        1005,
+        367
+      ],
+      "expected": "3.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.4",
+          "word_ids": [
+            317
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.4",
+          "word_ids": [
+            58
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 1,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1005,
+        350,
+        1060,
+        367
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 2,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        367,
+        280,
+        384
+      ],
+      "expected": "EF-A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-A2",
+          "word_ids": [
+            318
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-A2",
+          "word_ids": [
+            4
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 2,
+      "column": "service",
+      "page": 44,
+      "bbox": [
+        280,
+        367,
+        420,
+        384
+      ],
+      "expected": "UPS ROOM EXHAUST",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UPS ROOM EXHAUST",
+          "word_ids": [
+            319,
+            320,
+            321
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UPS ROOM EXHAUST",
+          "word_ids": [
+            9,
+            10,
+            11
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 2,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        420,
+        367,
+        630,
+        384
+      ],
+      "expected": "BELT DRIVE CENTRIFUGAL UPBLAST",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BELT DRIVE CENTRIFUGAL UPBLAST",
+          "word_ids": [
+            322,
+            323,
+            324,
+            325
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BELT DRIVE CENTRIFUGAL UPBLAST",
+          "word_ids": [
+            20,
+            21,
+            22,
+            23
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 2,
+      "column": "CFM",
+      "page": 44,
+      "bbox": [
+        630,
+        367,
+        670,
+        384
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            326
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            37
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 2,
+      "column": "RPM",
+      "page": 44,
+      "bbox": [
+        670,
+        367,
+        720,
+        384
+      ],
+      "expected": "1579",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1579",
+          "word_ids": [
+            327
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1579",
+          "word_ids": [
+            40
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 2,
+      "column": "ESP_in_wg",
+      "page": 44,
+      "bbox": [
+        720,
+        367,
+        775,
+        384
+      ],
+      "expected": "0.40",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.40",
+          "word_ids": [
+            328
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.40",
+          "word_ids": [
+            43
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 2,
+      "column": "max_sones",
+      "page": 44,
+      "bbox": [
+        775,
+        367,
+        830,
+        384
+      ],
+      "expected": "4.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4.1",
+          "word_ids": [
+            329
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4.1",
+          "word_ids": [
+            46
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 2,
+      "column": "HP",
+      "page": 44,
+      "bbox": [
+        830,
+        367,
+        865,
+        384
+      ],
+      "expected": "0.07",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.07",
+          "word_ids": [
+            330
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.07",
+          "word_ids": [
+            49
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 2,
+      "column": "volts",
+      "page": 44,
+      "bbox": [
+        865,
+        367,
+        920,
+        384
+      ],
+      "expected": "120",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            331
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            59
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 2,
+      "column": "phase",
+      "page": 44,
+      "bbox": [
+        920,
+        367,
+        960,
+        384
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            332
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            60
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 2,
+      "column": "FLA",
+      "page": 44,
+      "bbox": [
+        960,
+        367,
+        1005,
+        384
+      ],
+      "expected": "1.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.3",
+          "word_ids": [
+            333
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.3",
+          "word_ids": [
+            61
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 2,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1005,
+        367,
+        1060,
+        384
+      ],
+      "expected": "1,2,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4",
+          "word_ids": [
+            334
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4",
+          "word_ids": [
+            66
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 3,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        384,
+        280,
+        402
+      ],
+      "expected": "EF-A3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-A3",
+          "word_ids": [
+            335
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-A3",
+          "word_ids": [
+            5
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 3,
+      "column": "service",
+      "page": 44,
+      "bbox": [
+        280,
+        384,
+        420,
+        402
+      ],
+      "expected": "BASE NODE EXHAUST",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BASE NODE EXHAUST",
+          "word_ids": [
+            336,
+            337,
+            338
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BASE NODE EXHAUST",
+          "word_ids": [
+            12,
+            13,
+            14
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 3,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        420,
+        384,
+        630,
+        402
+      ],
+      "expected": "BELT DRIVE CENTRIFUGAL UPBLAST",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BELT DRIVE CENTRIFUGAL UPBLAST",
+          "word_ids": [
+            339,
+            340,
+            341,
+            342
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BELT DRIVE CENTRIFUGAL UPBLAST",
+          "word_ids": [
+            24,
+            25,
+            26,
+            27
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 3,
+      "column": "CFM",
+      "page": 44,
+      "bbox": [
+        630,
+        384,
+        670,
+        402
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            343
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            38
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 3,
+      "column": "RPM",
+      "page": 44,
+      "bbox": [
+        670,
+        384,
+        720,
+        402
+      ],
+      "expected": "1579",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1579",
+          "word_ids": [
+            344
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1579",
+          "word_ids": [
+            41
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 3,
+      "column": "ESP_in_wg",
+      "page": 44,
+      "bbox": [
+        720,
+        384,
+        775,
+        402
+      ],
+      "expected": "0.40",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.40",
+          "word_ids": [
+            345
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.40",
+          "word_ids": [
+            44
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 3,
+      "column": "max_sones",
+      "page": 44,
+      "bbox": [
+        775,
+        384,
+        830,
+        402
+      ],
+      "expected": "4.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4.1",
+          "word_ids": [
+            346
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4.1",
+          "word_ids": [
+            47
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 3,
+      "column": "HP",
+      "page": 44,
+      "bbox": [
+        830,
+        384,
+        865,
+        402
+      ],
+      "expected": "0.07",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.07",
+          "word_ids": [
+            347
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.07",
+          "word_ids": [
+            50
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 3,
+      "column": "volts",
+      "page": 44,
+      "bbox": [
+        865,
+        384,
+        920,
+        402
+      ],
+      "expected": "120",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            348
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            62
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 3,
+      "column": "phase",
+      "page": 44,
+      "bbox": [
+        920,
+        384,
+        960,
+        402
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            349
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            63
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 3,
+      "column": "FLA",
+      "page": 44,
+      "bbox": [
+        960,
+        384,
+        1005,
+        402
+      ],
+      "expected": "1.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.3",
+          "word_ids": [
+            350
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.3",
+          "word_ids": [
+            64
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "row": 3,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1005,
+        384,
+        1060,
+        402
+      ],
+      "expected": "1,2,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4",
+          "word_ids": [
+            351
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4",
+          "word_ids": [
+            67
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "header": "FAN SCHEDULE",
+      "page": 44,
+      "bbox": [
+        540,
+        275,
+        685,
+        315
+      ],
+      "engine": "mupdf",
+      "actual": "FAN SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "header": "FAN SCHEDULE",
+      "page": 44,
+      "bbox": [
+        540,
+        275,
+        685,
+        315
+      ],
+      "engine": "poppler",
+      "actual": "FAN SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "header": "MARK SERVICE TYPE CFM RPM ESP IN WG MAX SONES HP ELECTRICAL DATA VOLTS PH FLA NOTES",
+      "page": 44,
+      "bbox": [
+        220,
+        315,
+        1060,
+        350
+      ],
+      "engine": "mupdf",
+      "actual": "ELECTRICAL DATA ESP (IN MAX MARK SERVICE CFM RPM HP NOTES WG) SONES TYPE VOLTS PH FLA",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-FAN",
+      "header": "MARK SERVICE TYPE CFM RPM ESP IN WG MAX SONES HP ELECTRICAL DATA VOLTS PH FLA NOTES",
+      "page": 44,
+      "bbox": [
+        220,
+        315,
+        1060,
+        350
+      ],
+      "engine": "poppler",
+      "actual": "ELECTRICAL DATA ESP (IN MAX MARK SERVICE CFM RPM HP NOTES WG) SONES TYPE VOLTS PH FLA",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "row": 1,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        1263,
+        335,
+        1280
+      ],
+      "expected": "AS-CHW-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AS-CHW-A1",
+          "word_ids": [
+            771
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AS-CHW-A1",
+          "word_ids": [
+            458
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "row": 1,
+      "column": "system_type",
+      "page": 44,
+      "bbox": [
+        335,
+        1263,
+        480,
+        1280
+      ],
+      "expected": "CHILLED WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLED WATER",
+          "word_ids": [
+            772,
+            773
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLED WATER",
+          "word_ids": [
+            453,
+            454
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "row": 1,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        480,
+        1263,
+        565,
+        1280
+      ],
+      "expected": "INLINE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INLINE",
+          "word_ids": [
+            774
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INLINE",
+          "word_ids": [
+            461
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "row": 1,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        565,
+        1263,
+        700,
+        1280
+      ],
+      "expected": "171",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "171",
+          "word_ids": [
+            775
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "171",
+          "word_ids": [
+            468
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "row": 1,
+      "column": "pipe_size",
+      "page": 44,
+      "bbox": [
+        700,
+        1263,
+        770,
+        1280
+      ],
+      "expected": "4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4\"",
+          "word_ids": [
+            776
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4\"",
+          "word_ids": [
+            470
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "row": 1,
+      "column": "max_pressure_drop_ft_wc",
+      "page": 44,
+      "bbox": [
+        770,
+        1263,
+        900,
+        1280
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            777
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            478
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "row": 1,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        900,
+        1263,
+        960,
+        1280
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "row": 2,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        1280,
+        335,
+        1297
+      ],
+      "expected": "AS-HHW-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AS-HHW-A1",
+          "word_ids": [
+            778
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AS-HHW-A1",
+          "word_ids": [
+            459
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "row": 2,
+      "column": "system_type",
+      "page": 44,
+      "bbox": [
+        335,
+        1280,
+        480,
+        1297
+      ],
+      "expected": "HEATING HOT WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HEATING HOT WATER",
+          "word_ids": [
+            779,
+            780,
+            781
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HEATING HOT WATER",
+          "word_ids": [
+            455,
+            456,
+            457
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "row": 2,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        480,
+        1280,
+        565,
+        1297
+      ],
+      "expected": "INLINE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INLINE",
+          "word_ids": [
+            782
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INLINE",
+          "word_ids": [
+            462
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "row": 2,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        565,
+        1280,
+        700,
+        1297
+      ],
+      "expected": "51",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "51",
+          "word_ids": [
+            783
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "51",
+          "word_ids": [
+            469
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "row": 2,
+      "column": "pipe_size",
+      "page": 44,
+      "bbox": [
+        700,
+        1280,
+        770,
+        1297
+      ],
+      "expected": "2 1/2\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2 1/2\"",
+          "word_ids": [
+            784,
+            785
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2 1/2\"",
+          "word_ids": [
+            471,
+            472
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "row": 2,
+      "column": "max_pressure_drop_ft_wc",
+      "page": 44,
+      "bbox": [
+        770,
+        1280,
+        900,
+        1297
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            786
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            479
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "row": 2,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        900,
+        1280,
+        960,
+        1297
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "header": "AIR SEPARATOR SCHEDULE",
+      "page": 44,
+      "bbox": [
+        450,
+        1185,
+        780,
+        1230
+      ],
+      "engine": "mupdf",
+      "actual": "AIR SEPARATOR SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "header": "AIR SEPARATOR SCHEDULE",
+      "page": 44,
+      "bbox": [
+        450,
+        1185,
+        780,
+        1230
+      ],
+      "engine": "poppler",
+      "actual": "AIR SEPARATOR SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "header": "MARK SYSTEM TYPE TYPE FLOW RATE GPM PIPE SIZE MAX PRESSURE DROP FT WC NOTES",
+      "page": 44,
+      "bbox": [
+        220,
+        1230,
+        960,
+        1263
+      ],
+      "engine": "mupdf",
+      "actual": "MAX. PRESSURE DROP MARK FLOW RATE (GPM) PIPE SIZE NOTES SYSTEM TYPE TYPE (FT WC)",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AIR-SEPARATOR",
+      "header": "MARK SYSTEM TYPE TYPE FLOW RATE GPM PIPE SIZE MAX PRESSURE DROP FT WC NOTES",
+      "page": 44,
+      "bbox": [
+        220,
+        1230,
+        960,
+        1263
+      ],
+      "engine": "poppler",
+      "actual": "MAX. PRESSURE DROP MARK FLOW RATE (GPM) PIPE SIZE NOTES (FT WC) SYSTEM TYPE TYPE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "row": 1,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        1386,
+        340,
+        1403
+      ],
+      "expected": "ET-CHW-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ET-CHW-A1",
+          "word_ids": [
+            1399
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ET-CHW-A1",
+          "word_ids": [
+            520
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "row": 1,
+      "column": "system_type",
+      "page": 44,
+      "bbox": [
+        340,
+        1386,
+        480,
+        1403
+      ],
+      "expected": "CHILLED WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLED WATER",
+          "word_ids": [
+            1400,
+            1401
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLED WATER",
+          "word_ids": [
+            522,
+            523
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "row": 1,
+      "column": "total_volume_gal",
+      "page": 44,
+      "bbox": [
+        480,
+        1386,
+        620,
+        1403
+      ],
+      "expected": "11.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11.0",
+          "word_ids": [
+            1402
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11.0",
+          "word_ids": [
+            527
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "row": 1,
+      "column": "acceptance_volume_gal",
+      "page": 44,
+      "bbox": [
+        620,
+        1386,
+        750,
+        1403
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1403
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            532
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "row": 1,
+      "column": "max_pressure_psig",
+      "page": 44,
+      "bbox": [
+        750,
+        1386,
+        850,
+        1403
+      ],
+      "expected": "125",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            1404
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            537
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "row": 1,
+      "column": "max_temp_F",
+      "page": 44,
+      "bbox": [
+        850,
+        1386,
+        970,
+        1403
+      ],
+      "expected": "95.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "95.0",
+          "word_ids": [
+            1405
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "95.0",
+          "word_ids": [
+            542
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "row": 1,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        970,
+        1386,
+        1070,
+        1403
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "row": 2,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        1403,
+        340,
+        1420
+      ],
+      "expected": "ET-HHW-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ET-HHW-A1",
+          "word_ids": [
+            1406
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ET-HHW-A1",
+          "word_ids": [
+            521
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "row": 2,
+      "column": "system_type",
+      "page": 44,
+      "bbox": [
+        340,
+        1403,
+        480,
+        1420
+      ],
+      "expected": "HEATING HOT WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HEATING HOT WATER",
+          "word_ids": [
+            1407,
+            1408,
+            1409
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HEATING HOT WATER",
+          "word_ids": [
+            524,
+            525,
+            526
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "row": 2,
+      "column": "total_volume_gal",
+      "page": 44,
+      "bbox": [
+        480,
+        1403,
+        620,
+        1420
+      ],
+      "expected": "8.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8.0",
+          "word_ids": [
+            1410
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8.0",
+          "word_ids": [
+            528
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "row": 2,
+      "column": "acceptance_volume_gal",
+      "page": 44,
+      "bbox": [
+        620,
+        1403,
+        750,
+        1420
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1411
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            533
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "row": 2,
+      "column": "max_pressure_psig",
+      "page": 44,
+      "bbox": [
+        750,
+        1403,
+        850,
+        1420
+      ],
+      "expected": "125",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            1412
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            538
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "row": 2,
+      "column": "max_temp_F",
+      "page": 44,
+      "bbox": [
+        850,
+        1403,
+        970,
+        1420
+      ],
+      "expected": "130.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "130.0",
+          "word_ids": [
+            1413
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "130.0",
+          "word_ids": [
+            543
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "row": 2,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        970,
+        1403,
+        1070,
+        1420
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "header": "EXPANSION TANK SCHEDULE",
+      "page": 44,
+      "bbox": [
+        520,
+        1305,
+        900,
+        1350
+      ],
+      "engine": "mupdf",
+      "actual": "EXPANSION TANK SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "header": "EXPANSION TANK SCHEDULE",
+      "page": 44,
+      "bbox": [
+        520,
+        1305,
+        900,
+        1350
+      ],
+      "engine": "poppler",
+      "actual": "EXPANSION TANK SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "header": "MARK SYSTEM TYPE TOTAL VOLUME GAL ACCEPTANCE VOLUME GAL MAX PRESSURE PSIG MAX TEMP F NOTES",
+      "page": 44,
+      "bbox": [
+        220,
+        1350,
+        1070,
+        1386
+      ],
+      "engine": "mupdf",
+      "actual": "ACCEPTANCE VOLUME MAX PRESSURE MAX TEMP MARK SYSTEM TYPE TOTAL VOLUME (GAL) NOTES (GAL) (PSIG) (°F)",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-EXPANSION-TANK",
+      "header": "MARK SYSTEM TYPE TOTAL VOLUME GAL ACCEPTANCE VOLUME GAL MAX PRESSURE PSIG MAX TEMP F NOTES",
+      "page": 44,
+      "bbox": [
+        220,
+        1350,
+        1070,
+        1386
+      ],
+      "engine": "poppler",
+      "actual": "ACCEPTANCE VOLUME MAX PRESSURE MAX TEMP MARK SYSTEM TYPE TOTAL VOLUME (GAL) NOTES (GAL) (PSIG) (°F)",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 1,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        975,
+        1810,
+        993
+      ],
+      "expected": "DH-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DH-A1",
+          "word_ids": [
+            1651
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DH-A1",
+          "word_ids": [
+            610
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 1,
+      "column": "dry_bulb_F",
+      "page": 44,
+      "bbox": [
+        1810,
+        975,
+        1880,
+        993
+      ],
+      "expected": "90",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "90",
+          "word_ids": [
+            1652
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "90",
+          "word_ids": [
+            616
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 1,
+      "column": "relative_humidity_percent",
+      "page": 44,
+      "bbox": [
+        1880,
+        975,
+        1950,
+        993
+      ],
+      "expected": "38",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "38",
+          "word_ids": [
+            1653
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "38",
+          "word_ids": [
+            622
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 1,
+      "column": "capacity_pints_per_hr",
+      "page": 44,
+      "bbox": [
+        1950,
+        975,
+        2005,
+        993
+      ],
+      "expected": "5.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.3",
+          "word_ids": [
+            1654
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.3",
+          "word_ids": [
+            630
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 1,
+      "column": "FLA",
+      "page": 44,
+      "bbox": [
+        2005,
+        975,
+        2055,
+        993
+      ],
+      "expected": "13.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13.1",
+          "word_ids": [
+            1655
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13.1",
+          "word_ids": [
+            644
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 1,
+      "column": "V_PH_HZ",
+      "page": 44,
+      "bbox": [
+        2055,
+        975,
+        2135,
+        993
+      ],
+      "expected": "120/1/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            1656
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            650
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 1,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2135,
+        975,
+        2230,
+        993
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1, 2",
+          "word_ids": [
+            1657,
+            1658
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1, 2",
+          "word_ids": [
+            656,
+            657
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 2,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        993,
+        1810,
+        1010
+      ],
+      "expected": "DH-A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DH-A2",
+          "word_ids": [
+            1659
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DH-A2",
+          "word_ids": [
+            611
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 2,
+      "column": "dry_bulb_F",
+      "page": 44,
+      "bbox": [
+        1810,
+        993,
+        1880,
+        1010
+      ],
+      "expected": "90",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "90",
+          "word_ids": [
+            1660
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "90",
+          "word_ids": [
+            617
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 2,
+      "column": "relative_humidity_percent",
+      "page": 44,
+      "bbox": [
+        1880,
+        993,
+        1950,
+        1010
+      ],
+      "expected": "38",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "38",
+          "word_ids": [
+            1661
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "38",
+          "word_ids": [
+            623
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 2,
+      "column": "capacity_pints_per_hr",
+      "page": 44,
+      "bbox": [
+        1950,
+        993,
+        2005,
+        1010
+      ],
+      "expected": "5.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.3",
+          "word_ids": [
+            1662
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.3",
+          "word_ids": [
+            631
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 2,
+      "column": "FLA",
+      "page": 44,
+      "bbox": [
+        2005,
+        993,
+        2055,
+        1010
+      ],
+      "expected": "13.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13.1",
+          "word_ids": [
+            1663
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13.1",
+          "word_ids": [
+            645
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 2,
+      "column": "V_PH_HZ",
+      "page": 44,
+      "bbox": [
+        2055,
+        993,
+        2135,
+        1010
+      ],
+      "expected": "120/1/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            1664
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            651
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 2,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2135,
+        993,
+        2230,
+        1010
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            1665
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            658
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 3,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        1010,
+        1810,
+        1027
+      ],
+      "expected": "DH-A3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DH-A3",
+          "word_ids": [
+            1666
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DH-A3",
+          "word_ids": [
+            612
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 3,
+      "column": "dry_bulb_F",
+      "page": 44,
+      "bbox": [
+        1810,
+        1010,
+        1880,
+        1027
+      ],
+      "expected": "80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            1667
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            618
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 3,
+      "column": "relative_humidity_percent",
+      "page": 44,
+      "bbox": [
+        1880,
+        1010,
+        1950,
+        1027
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            1668
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            624
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 3,
+      "column": "capacity_pints_per_hr",
+      "page": 44,
+      "bbox": [
+        1950,
+        1010,
+        2005,
+        1027
+      ],
+      "expected": "6.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6.5",
+          "word_ids": [
+            1669
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6.5",
+          "word_ids": [
+            632
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 3,
+      "column": "FLA",
+      "page": 44,
+      "bbox": [
+        2005,
+        1010,
+        2055,
+        1027
+      ],
+      "expected": "13.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13.1",
+          "word_ids": [
+            1670
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13.1",
+          "word_ids": [
+            646
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 3,
+      "column": "V_PH_HZ",
+      "page": 44,
+      "bbox": [
+        2055,
+        1010,
+        2135,
+        1027
+      ],
+      "expected": "120/1/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            1671
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            652
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 3,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2135,
+        1010,
+        2230,
+        1027
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            1672
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            659
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 4,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        1027,
+        1810,
+        1045
+      ],
+      "expected": "DH-A4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DH-A4",
+          "word_ids": [
+            1673
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DH-A4",
+          "word_ids": [
+            613
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 4,
+      "column": "dry_bulb_F",
+      "page": 44,
+      "bbox": [
+        1810,
+        1027,
+        1880,
+        1045
+      ],
+      "expected": "90",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "90",
+          "word_ids": [
+            1674
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "90",
+          "word_ids": [
+            619
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 4,
+      "column": "relative_humidity_percent",
+      "page": 44,
+      "bbox": [
+        1880,
+        1027,
+        1950,
+        1045
+      ],
+      "expected": "38",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "38",
+          "word_ids": [
+            1675
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "38",
+          "word_ids": [
+            625
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 4,
+      "column": "capacity_pints_per_hr",
+      "page": 44,
+      "bbox": [
+        1950,
+        1027,
+        2005,
+        1045
+      ],
+      "expected": "5.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.3",
+          "word_ids": [
+            1676
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.3",
+          "word_ids": [
+            633
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 4,
+      "column": "FLA",
+      "page": 44,
+      "bbox": [
+        2005,
+        1027,
+        2055,
+        1045
+      ],
+      "expected": "13.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13.1",
+          "word_ids": [
+            1677
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13.1",
+          "word_ids": [
+            647
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 4,
+      "column": "V_PH_HZ",
+      "page": 44,
+      "bbox": [
+        2055,
+        1027,
+        2135,
+        1045
+      ],
+      "expected": "120/1/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            1678
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            653
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 4,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2135,
+        1027,
+        2230,
+        1045
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1, 2",
+          "word_ids": [
+            1679,
+            1680
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1, 2",
+          "word_ids": [
+            660,
+            661
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 5,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        1045,
+        1810,
+        1062
+      ],
+      "expected": "DH-A5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DH-A5",
+          "word_ids": [
+            1681
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DH-A5",
+          "word_ids": [
+            614
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 5,
+      "column": "dry_bulb_F",
+      "page": 44,
+      "bbox": [
+        1810,
+        1045,
+        1880,
+        1062
+      ],
+      "expected": "90",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "90",
+          "word_ids": [
+            1682
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "90",
+          "word_ids": [
+            620
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 5,
+      "column": "relative_humidity_percent",
+      "page": 44,
+      "bbox": [
+        1880,
+        1045,
+        1950,
+        1062
+      ],
+      "expected": "38",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "38",
+          "word_ids": [
+            1683
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "38",
+          "word_ids": [
+            626
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 5,
+      "column": "capacity_pints_per_hr",
+      "page": 44,
+      "bbox": [
+        1950,
+        1045,
+        2005,
+        1062
+      ],
+      "expected": "5.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.3",
+          "word_ids": [
+            1684
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.3",
+          "word_ids": [
+            634
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 5,
+      "column": "FLA",
+      "page": 44,
+      "bbox": [
+        2005,
+        1045,
+        2055,
+        1062
+      ],
+      "expected": "13.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13.1",
+          "word_ids": [
+            1685
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13.1",
+          "word_ids": [
+            648
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 5,
+      "column": "V_PH_HZ",
+      "page": 44,
+      "bbox": [
+        2055,
+        1045,
+        2135,
+        1062
+      ],
+      "expected": "120/1/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            1686
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            654
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 5,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2135,
+        1045,
+        2230,
+        1062
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            1687
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            662
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 6,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        1062,
+        1810,
+        1080
+      ],
+      "expected": "DH-A6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DH-A6",
+          "word_ids": [
+            1688
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DH-A6",
+          "word_ids": [
+            615
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 6,
+      "column": "dry_bulb_F",
+      "page": 44,
+      "bbox": [
+        1810,
+        1062,
+        1880,
+        1080
+      ],
+      "expected": "75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "75",
+          "word_ids": [
+            1689
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "75",
+          "word_ids": [
+            621
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 6,
+      "column": "relative_humidity_percent",
+      "page": 44,
+      "bbox": [
+        1880,
+        1062,
+        1950,
+        1080
+      ],
+      "expected": "60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            1690
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            627
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 6,
+      "column": "capacity_pints_per_hr",
+      "page": 44,
+      "bbox": [
+        1950,
+        1062,
+        2005,
+        1080
+      ],
+      "expected": "5.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.7",
+          "word_ids": [
+            1691
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.7",
+          "word_ids": [
+            635
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 6,
+      "column": "FLA",
+      "page": 44,
+      "bbox": [
+        2005,
+        1062,
+        2055,
+        1080
+      ],
+      "expected": "13.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13.1",
+          "word_ids": [
+            1692
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13.1",
+          "word_ids": [
+            649
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 6,
+      "column": "V_PH_HZ",
+      "page": 44,
+      "bbox": [
+        2055,
+        1062,
+        2135,
+        1080
+      ],
+      "expected": "120/1/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            1693
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            655
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "row": 6,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2135,
+        1062,
+        2230,
+        1080
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            1694
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            663
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "header": "DEHUMIDIFIER SCHEDULE",
+      "page": 44,
+      "bbox": [
+        1845,
+        900,
+        2095,
+        940
+      ],
+      "engine": "mupdf",
+      "actual": "DEHUMIDIFIER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "header": "DEHUMIDIFIER SCHEDULE",
+      "page": 44,
+      "bbox": [
+        1845,
+        900,
+        2095,
+        940
+      ],
+      "engine": "poppler",
+      "actual": "DEHUMIDIFIER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "header": "MARK F DB RH CAPACITY PINTS/HR FLA V/PH/HZ NOTES",
+      "page": 44,
+      "bbox": [
+        1730,
+        940,
+        2230,
+        975
+      ],
+      "engine": "mupdf",
+      "actual": "CAPACITY MARK °F DB % RH FLA V/PH/HZ NOTES PINTS/HR",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DEHUMIDIFIER",
+      "header": "MARK F DB RH CAPACITY PINTS/HR FLA V/PH/HZ NOTES",
+      "page": 44,
+      "bbox": [
+        1730,
+        940,
+        2230,
+        975
+      ],
+      "engine": "poppler",
+      "actual": "CAPACITY MARK °F DB % RH FLA V/PH/HZ NOTES PINTS/HR",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "air-ops-m603-compact-row-count",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    },
+    {
+      "id": "air-ops-m603-fan-row-count",
+      "actual": 3,
+      "expected": 3,
+      "pass": true
+    },
+    {
+      "id": "air-ops-m603-air-separator-row-count",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    },
+    {
+      "id": "air-ops-m603-expansion-tank-row-count",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    },
+    {
+      "id": "air-ops-m603-dehumidifier-row-count",
+      "actual": 6,
+      "expected": 6,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

@@ -1,0 +1,1631 @@
+{
+  "schema": "opentakeoff.symbol_sweep_ground_truth.v1",
+  "updated": "2026-09-05",
+  "cases": [
+    {
+      "id": "01-cherry-mh111-cd1",
+      "document_id": "01__vol2__001",
+      "source_pdf": "pdf/01__vol2__001__Cherry_Point_Air_Traffic_Tower_and_Air_Operations.pdf",
+      "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+      "page": 12,
+      "sheet_number": "MH111",
+      "page_size_px": [4896, 3168],
+      "seed_rect": [[1715, 405], [1780, 470]],
+      "seed": {
+        "tag": "CD-1",
+        "at": [1746.9, 436.2],
+        "tolerance_px": 2,
+        "tag_bbox": [1710.7, 338.3, 1757.4, 363.4]
+      },
+      "instances": [
+        { "id": "cd1-01", "at": [2927.3, 381.1], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [2909.5, 294.4, 2956.2, 319.4] },
+        { "id": "cd1-02", "at": [3191.5, 381.1], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [3141.4, 300.4, 3188.0, 325.4] },
+        { "id": "cd1-03", "at": [1152.2, 397.7], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [1135.0, 316.7, 1181.6, 341.8] },
+        { "id": "cd1-04", "at": [766.6, 677.3], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [740.9, 701.2, 787.6, 726.2] },
+        { "id": "cd1-05", "at": [3539.3, 722.9], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [3456.2, 676.7, 3502.9, 701.8] },
+        { "id": "cd1-06", "at": [498.5, 915.1], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [477.1, 835.8, 523.8, 860.9] },
+        { "id": "cd1-07", "at": [498.5, 1105.4], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [480.2, 1025.9, 526.9, 1051.0] },
+        { "id": "cd1-08", "at": [994.8, 1301.8], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [951.6, 1370.5, 998.3, 1395.6] },
+        { "id": "cd1-09", "at": [498.5, 1291.4], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [290.6, 1204.9, 337.3, 1230.0] },
+        { "id": "cd1-10", "at": [3539.3, 1477.4], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [3513.1, 1499.2, 3559.8, 1524.2] },
+        { "id": "cd1-11", "at": [997.0, 1540.1], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [1167.8, 1590.6, 1214.5, 1615.7] },
+        { "id": "cd1-12", "at": [462.5, 1627.7], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [495.6, 1618.0, 542.3, 1643.0] },
+        { "id": "cd1-13", "at": [3539.3, 1701.4], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [3455.0, 1647.5, 3501.7, 1672.6] },
+        { "id": "cd1-14", "at": [2836.1, 1734.5], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [2877.8, 1706.0, 2924.5, 1731.1] },
+        { "id": "cd1-15", "at": [3099.8, 1765.9], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [3087.6, 1686.4, 3134.3, 1711.4] },
+        { "id": "cd1-16", "at": [2303.4, 1811.0], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [2341.0, 1784.3, 2387.6, 1809.4] },
+        { "id": "cd1-17", "at": [2497.2, 1851.7], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [2512.6, 1866.1, 2559.2, 1891.2] },
+        { "id": "cd1-18", "at": [1143.3, 2527.7], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [1122.7, 2545.6, 1169.4, 2570.6] },
+        { "id": "cd1-19", "at": [995.1, 2528.2], "tolerance_px": 20, "tag": "CD-1", "tag_bbox": [972.5, 2555.6, 1019.2, 2580.7] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/01__vol2__001/p12-p12-full-poppler.png",
+        "method": "Full-page Poppler visual review, PDF.js text-run boxes, and independent outer-symbol vector-body checks.",
+        "notes": [
+          "Twenty installed CD-1 instances are visible and text-labeled on MH111; the seed is one, so the expected non-seed sweep count is nineteen.",
+          "The ninth callout is separated from its diffuser by other annotation furniture; its black leader begins at the combined CD-1/120 CFM block and terminates at the expected symbol.",
+          "One CD-1 uses the simpler square-and-X graphical variant. Its physical symbol body and exact CD-1 token remain part of the same scheduled family.",
+          "No legend, schedule, detail, CD-2/CD-3, RG, or TG symbol is included."
+        ]
+      }
+    },
+    {
+      "id": "02-norfolk-am104-generator-core",
+      "document_id": "02__vol2__015",
+      "source_pdf": "pdf/02__vol2__015__Norfolk_Submarine_Pier_3_Utility_Services.pdf",
+      "source_sha256": "7ac5b4d6d97b5416f7d04a2a3abd303513ac9f19cec5930d0b9aa3bcd550da97",
+      "page": 6,
+      "sheet_number": "AM104",
+      "page_size_px": [4896, 3168],
+      "seed_rect": [[1840, 730], [1930, 810]],
+      "seed": {
+        "tag": null,
+        "at": [1876.3, 755.6],
+        "tolerance_px": 2,
+        "tag_bbox": null
+      },
+      "instances": [
+        { "id": "generator-m1-core", "at": [1877.8, 1698.5], "tolerance_px": 3, "tag": null, "tag_bbox": null }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/02__vol2__015/page-06.png",
+        "method": "Full-page plan review and exact repeated-vector comparison of the two installed generator blocks.",
+        "notes": [
+          "The seed is a 411-segment internal generator block inside M-2; the one non-seed instance is the identical internal block inside M-1.",
+          "The seed excludes surrounding duct connections, room linework, and equipment text, which differ between the two generators.",
+          "No section, schedule, title-block, or unrelated equipment geometry is included."
+        ]
+      }
+    },
+    {
+      "id": "03-colville-m101-tank-array",
+      "document_id": "03__vol1__27",
+      "source_pdf": "pdf/03__vol1__27__Colville_White_Sturgeon_Fish_Hatchery.pdf",
+      "source_sha256": "2e123db08407f97acd6bc6387ecab6e08ad8204971fb5c24a3668bbd34dec0cf",
+      "page": 1,
+      "sheet_number": "M-101",
+      "page_size_px": [4896, 3168],
+      "seed_rect": [[2170, 740], [2270, 830]],
+      "seed": {
+        "tag": null,
+        "at": [2221.0, 788.2],
+        "tolerance_px": 2,
+        "tag_bbox": null
+      },
+      "instances": [
+        { "id": "tank-02", "at": [2444.6, 786.9], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-03", "at": [2667.4, 786.5], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-04", "at": [2217.1, 976.5], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-05", "at": [2440.3, 975.8], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-06", "at": [2663.1, 975.4], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-07", "at": [2221.7, 1260.9], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-08", "at": [2445.6, 1259.6], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-09", "at": [2668.5, 1258.9], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-10", "at": [2218.5, 1448.8], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-11", "at": [2441.0, 1448.1], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-12", "at": [2663.5, 1448.5], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-13", "at": [2223.9, 1732.3], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-14", "at": [2445.6, 1732.5], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-15", "at": [2669.2, 1731.5], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-16", "at": [2219.2, 1921.1], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-17", "at": [2442.1, 1920.8], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-18", "at": [2664.9, 1920.4], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-19", "at": [2224.6, 2204.9], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-20", "at": [2447.4, 2204.2], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-21", "at": [2669.2, 2204.8], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-22", "at": [2219.6, 2394.2], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-23", "at": [2443.2, 2393.1], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "tank-24", "at": [2665.6, 2392.7], "tolerance_px": 6, "tag": null, "tag_bbox": null }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/03__vol1__27/p1-p1-full-poppler.png",
+        "method": "Full-page plan review and repeated inner-tank vector-motif verification across the complete 3-by-8 array.",
+        "notes": [
+          "Twenty-four installed circular tanks are visibly arranged in three columns by eight rows; the seed is the upper-left tank, leaving twenty-three expected placements.",
+          "The seed captures the 200-segment inner tank motif while excluding the shared long vertical service lines and outer room geometry.",
+          "Alternating rows reverse the motif by 180 degrees; all twenty-three non-seed instances reproduce the seed at score 1.000.",
+          "Transform-equivalent hypotheses 4.3-5.4 px apart are one physical tank and must be coalesced, never double-counted."
+        ]
+      }
+    },
+    {
+      "id": "04-itd-p30-paired-roof-drains",
+      "document_id": "04__vol2__062",
+      "source_pdf": "pdf/04__vol2__062__ITD_District_1_Testing_Laboratory.pdf",
+      "source_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+      "page": 24,
+      "sheet_number": "P3.0",
+      "page_size_px": [5184, 3456],
+      "seed_rect": [[965, 1020], [1015, 1110]],
+      "options": { "tolerance_px": 4 },
+      "seed": {
+        "tag": null,
+        "at": [989.9, 1065.2],
+        "tolerance_px": 2,
+        "tag_bbox": null
+      },
+      "instances": [
+        { "id": "roof-drain-pair-02", "at": [2605.3, 867.7], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "roof-drain-pair-03", "at": [990.1, 1622.7], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "roof-drain-pair-04", "at": [2605.3, 1622.8], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "roof-drain-pair-05", "at": [2605.3, 2180.8], "tolerance_px": 6, "tag": null, "tag_bbox": null },
+        { "id": "roof-drain-pair-06", "at": [989.9, 2432.2], "tolerance_px": 6, "tag": null, "tag_bbox": null }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/04__vol2__062/p24-p24-full-poppler.png",
+        "method": "Full-page plumbing roof-plan review and exact two-ring OD-1/RD-1 assembly verification.",
+        "notes": [
+          "Six installed paired roof-drain assemblies are visible; each contains adjacent OD-1 and RD-1 ring symbols, so the seed leaves five expected assemblies.",
+          "The paired-ring seed excludes the roof boundary and outgoing leaders. A stated 4 px tolerance is required for export jitter among otherwise identical ring assemblies.",
+          "The evaluation counts paired assemblies, not the twelve individual OD/RD rings and not their label text."
+        ]
+      }
+    },
+    {
+      "id": "05-usda-mh101-d10-air-devices",
+      "document_id": "05__vol2__009",
+      "source_pdf": "pdf/05__vol2__009__USDA_APHIS_Plant_Inspection_Station_Building_63.pdf",
+      "source_sha256": "d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1",
+      "page": 15,
+      "sheet_number": "MH101",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[1535, 2650], [1600, 2720]],
+      "seed": {
+        "tag": "D10",
+        "at": [1569.4, 2670.1],
+        "tolerance_px": 2,
+        "tag_bbox": [1600.3, 2672.3, 1636.9, 2697.4]
+      },
+      "instances": [
+        { "id": "d10-02", "at": [1750.8, 2533.3], "tolerance_px": 3, "tag": "D10", "tag_bbox": [1772.6, 2519.9, 1809.2, 2545.0] },
+        { "id": "d10-03", "at": [2002.8, 2533.3], "tolerance_px": 3, "tag": "D10", "tag_bbox": [2024.6, 2519.9, 2061.2, 2545.0] },
+        { "id": "d10-04", "at": [2434.8, 2533.3], "tolerance_px": 3, "tag": "D10", "tag_bbox": [2456.6, 2519.9, 2493.2, 2545.0] },
+        { "id": "d10-05", "at": [2720.6, 2647.3], "tolerance_px": 3, "tag": "D10", "tag_bbox": [2673.4, 2669.4, 2709.9, 2694.5] },
+        { "id": "d10-06", "at": [2400.1, 2745.1], "tolerance_px": 3, "tag": "D10", "tag_bbox": [2414.6, 2765.9, 2451.2, 2791.0] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/05__vol2__009/p15-p15-full-poppler.png",
+        "method": "Full-page mechanical-plan review, vector-text inventory, and exact per-device D10 token-box verification.",
+        "notes": [
+          "Six installed D10 supply-air devices are visible on the level-one plan; the seed is the leftmost interior D10, leaving five expected placements.",
+          "All five non-seed symbols are localized on their physical air-device bodies despite rotations and dense overlapping duct, wall, and annotation linework.",
+          "The exact token boxes prove one-to-one attachment to each device's own D10 type/CFM callout; nearby D12 devices, VAV tags, keyed notes, and attic-plan graphics are excluded.",
+          "Geometry scores around 0.59 reflect contextual line overlap, so same-family drawing labels provide explicit corroboration without converting differently labeled withheld candidates into counts."
+        ]
+      }
+    },
+    {
+      "id": "06-vermillion-m210a-ss15-cell-devices",
+      "document_id": "06__vol2__096",
+      "source_pdf": "pdf/06__vol2__096__Vermillion_County_Jail.pdf",
+      "source_sha256": "72da836a803740382b319b718c1f10d8daeff6e5dbe869f1e68ff173ea4092ec",
+      "page": 7,
+      "sheet_number": "M210A",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[2462, 708], [2502, 750]],
+      "seed": {
+        "tag": "SS15",
+        "at": [2482.5, 725.7],
+        "tolerance_px": 2,
+        "tag_bbox": [2450.4, 690.4, 2515.7, 709.4]
+      },
+      "instances": [
+        { "id": "ss15-upper-02", "at": [2606.6, 725.7], "tolerance_px": 3, "tag": "SS15", "tag_bbox": [2574.5, 690.4, 2639.8, 709.4] },
+        { "id": "ss15-upper-03", "at": [2776.5, 725.7], "tolerance_px": 3, "tag": "SS15", "tag_bbox": [2744.4, 690.4, 2809.7, 709.4] },
+        { "id": "ss15-upper-04", "at": [3057.2, 726.4], "tolerance_px": 3, "tag": "SS15", "tag_bbox": [3024.5, 690.4, 3089.8, 709.4] },
+        { "id": "ss15-upper-05", "at": [3226.5, 725.7], "tolerance_px": 3, "tag": "SS15", "tag_bbox": [3194.4, 690.4, 3259.7, 709.4] },
+        { "id": "ss15-upper-06", "at": [3346.6, 724.5], "tolerance_px": 3, "tag": "SS15", "tag_bbox": [3315.4, 690.4, 3380.7, 709.4] },
+        { "id": "ss15-upper-07", "at": [3517.3, 725.7], "tolerance_px": 3, "tag": "SS15", "tag_bbox": [3485.3, 690.4, 3550.6, 709.4] },
+        { "id": "ss15-lower-01", "at": [2482.2, 1501.2], "tolerance_px": 3, "tag": "SS15", "tag_bbox": [2450.2, 1514.8, 2515.5, 1533.8] },
+        { "id": "ss15-lower-02", "at": [2606.2, 1501.0], "tolerance_px": 3, "tag": "SS15", "tag_bbox": [2574.2, 1514.8, 2639.6, 1533.8] },
+        { "id": "ss15-lower-03", "at": [2776.2, 1501.0], "tolerance_px": 3, "tag": "SS15", "tag_bbox": [2744.2, 1514.8, 2809.5, 1533.8] },
+        { "id": "ss15-lower-04", "at": [2913.9, 1501.0], "tolerance_px": 3, "tag": "SS15", "tag_bbox": [2881.7, 1514.8, 2947.0, 1533.8] },
+        { "id": "ss15-lower-05", "at": [3083.8, 1501.0], "tolerance_px": 3, "tag": "SS15", "tag_bbox": [3051.6, 1514.8, 3116.9, 1533.8] },
+        { "id": "ss15-lower-06", "at": [3191.7, 1501.0], "tolerance_px": 3, "tag": "SS15", "tag_bbox": [3159.8, 1514.8, 3225.2, 1533.8] },
+        { "id": "ss15-lower-07", "at": [3362.0, 1501.0], "tolerance_px": 3, "tag": "SS15", "tag_bbox": [3329.8, 1514.8, 3395.1, 1533.8] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/06__vol2__096/p7-p7-full-poppler.png",
+        "method": "Full-page ductwork-plan review, exact device-row inventory, and one-to-one inline type/airflow token-box verification.",
+        "notes": [
+          "Fourteen installed SS15 cell air devices are visible in two opposed rows of seven; the upper-left SS15 is the seed, leaving thirteen expected placements.",
+          "The upper row is called out as SS15- 65 and the lower row as SS15- 60. The symbol family is SS15 while the trailing number is airflow, matching this office's air-device schedule convention.",
+          "The seed isolates the 47-segment device body. The lower row is rotated 180 degrees, two devices contain mirrored export variants, and one upper device is partly overlapped by surrounding duct geometry.",
+          "Exact SS15 text-run boxes admit the overlapped 0.817 true device and reject geometrically identical SS16 devices plus S12/E12/SE16 fragments elsewhere on the sheet."
+        ]
+      }
+    },
+    {
+      "id": "07-ames-mh101e-vav-e-terminals",
+      "document_id": "07__vol2__061",
+      "source_pdf": "pdf/07__vol2__061__Ames_Laboratory_Harley_Wilhelm_Hall_HVAC_Upgrade.pdf",
+      "source_sha256": "c55da475bac3a1aeaae723b12adf35896970fe249ca3556b4d430a990c0e41a0",
+      "page": 46,
+      "sheet_number": "MH101E",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[1970, 2340], [2015, 2445]],
+      "seed": {
+        "tag": "VAV-E-105",
+        "at": [1985.4, 2399.0],
+        "tolerance_px": 2,
+        "tag_bbox": [1850.6, 2424.5, 1946.0, 2443.7]
+      },
+      "instances": [
+        { "id": "vav-e-109", "at": [2698.0, 2399.0], "tolerance_px": 3, "tag": "VAV-E-109", "tag_bbox": [2569.4, 2424.5, 2664.8, 2443.7] },
+        { "id": "vav-e-111", "at": [2950.0, 2399.0], "tolerance_px": 3, "tag": "VAV-E-111", "tag_bbox": [2815.2, 2424.5, 2910.6, 2443.7] },
+        { "id": "vav-e-115", "at": [3616.7, 2399.0], "tolerance_px": 3, "tag": "VAV-E-115", "tag_bbox": [3481.7, 2424.5, 3577.0, 2443.7] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/07__vol2__061/p46-p46-full-poppler.png",
+        "method": "Full-page HVAC-plan review, VAV family inventory, and exact per-instance equipment-tag attachment verification.",
+        "notes": [
+          "Four installed VAV-E terminal units are visible and labeled VAV-E-105, VAV-E-109, VAV-E-111, and VAV-E-115; the first is the seed, leaving three expected placements.",
+          "The seed isolates the 14-segment hatched terminal body and all three non-seed markers land on the corresponding physical bodies.",
+          "The stable VAV-E family prefix admits distinct equipment instance suffixes while every returned placement retains its own exact nearby tag and text-run box.",
+          "VAV-I, VAV-C, VAV-B, VAV-F, MH03, duct-hatch fragments, and perimeter architectural repeats are excluded."
+        ]
+      }
+    },
+    {
+      "id": "08-albany-mi607-motorized-valve-branch",
+      "document_id": "08__vol2__044",
+      "source_pdf": "pdf/08__vol2__044__Albany_VA_Main_Boiler_Replacement.pdf",
+      "source_sha256": "d726ef89f4021eef903c001f71f786df5837c432887f5d5ca88051fa8a151384",
+      "page": 31,
+      "sheet_number": "MI-607",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[2540, 1190], [3010, 1320]],
+      "seed": {
+        "tag": null,
+        "at": [2705.7, 1270.0],
+        "tolerance_px": 2,
+        "tag_bbox": null
+      },
+      "instances": [
+        { "id": "low-zone-two-thirds-valve-branch", "at": [2705.7, 2522.6], "tolerance_px": 3, "tag": null, "tag_bbox": null }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/08__vol2__044/p31-p31-full-poppler.png",
+        "method": "Full-page packaged-water-heater controls-diagram review and exact repeated valve-branch comparison.",
+        "notes": [
+          "The high- and low-zone packaged domestic-water-heater diagrams each contain one identical 52-segment motorized 2/3-capacity control-valve branch; the high-zone branch is the seed.",
+          "The one returned marker lands on the corresponding low-zone branch at the same local pipe/valve assembly centroid.",
+          "The seed excludes capacity text, heater labels, dashed packaged-control boundaries, the distinct 1/3-capacity return branches, and the BACnet points-list table."
+        ]
+      }
+    },
+    {
+      "id": "09-missoula-m96-cd-a-zone-dampers",
+      "document_id": "09__vol2__014",
+      "source_pdf": "pdf/09__vol2__014__Missoula_Fire_Sciences_Laboratory_Mechanical_Upgrade.pdf",
+      "source_sha256": "f208e34965aba62b3752f39b2691e2a418ac823bd99dbaadfb2e7b06391fc7ff",
+      "page": 27,
+      "sheet_number": "M9.6",
+      "page_size_px": [4896, 3168],
+      "seed_rect": [[2600, 600], [2770, 715]],
+      "seed": {
+        "tag": "CD-A13",
+        "at": [2695.2, 671.7],
+        "tolerance_px": 2,
+        "tag_bbox": [2690.2, 716.9, 2755.8, 735.6]
+      },
+      "instances": [
+        { "id": "cd-a14", "at": [2866.1, 671.7], "tolerance_px": 3, "tag": "CD-A14", "tag_bbox": [2861.0, 716.9, 2926.6, 735.6] },
+        { "id": "cd-a15", "at": [3044.4, 671.7], "tolerance_px": 3, "tag": "CD-A15", "tag_bbox": [3039.6, 716.9, 3105.2, 735.6] },
+        { "id": "cd-a16", "at": [3426.7, 671.7], "tolerance_px": 3, "tag": "CD-A16", "tag_bbox": [3421.7, 716.9, 3487.3, 735.6] },
+        { "id": "cd-a17", "at": [3601.5, 671.7], "tolerance_px": 3, "tag": "CD-A17", "tag_bbox": [3596.4, 716.9, 3662.0, 735.6] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/09__vol2__014/p27-p27-full-poppler.png",
+        "method": "Full-page AHU controls-diagram review, five-zone damper inventory, and exact per-instance damper-tag verification.",
+        "notes": [
+          "Five repeated supply-zone control-damper assemblies are visible and labeled CD-A13 through CD-A17; CD-A13 is the seed, leaving four expected placements.",
+          "The 15-segment seed includes the damper blade marks, actuator box, and DDC box connection while excluding the enclosing duct riser and label text.",
+          "All four geometric matches score 1.000 and attach one-to-one to their own exact CD-A14 through CD-A17 text-run boxes in the stable CD-A family.",
+          "The return-air branch, legend examples, temperature/pressure devices, and lower base-bid control diagrams are excluded."
+        ]
+      }
+    },
+    {
+      "id": "10-lovell-m100-cd1-ceiling-diffusers",
+      "document_id": "10__vol2__040",
+      "source_pdf": "pdf/10__vol2__040__Lovell_Federal_Health_Care_Center_Sterile_Processing_Expansion.pdf",
+      "source_sha256": "2337ee9ae5483fd440d98967f23f63f8337d7f6dc8d3024cd494c29e129a1dc2",
+      "page": 15,
+      "sheet_number": "M100.0",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[2760, 940], [2840, 1020]],
+      "seed": {
+        "tag": "CD-1",
+        "at": [2793.2, 990.2],
+        "tolerance_px": 2,
+        "tag_bbox": [2713.4, 924.7, 2758.1, 943.9]
+      },
+      "instances": [
+        { "id": "cd1-02", "at": [3263.1, 947.1], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [3262.8, 972.2, 3307.5, 991.4] },
+        { "id": "cd1-03", "at": [3009.4, 991.6], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [2999.8, 926.4, 3044.5, 945.6] },
+        { "id": "cd1-04", "at": [3532.5, 1027.1], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [3503.0, 1044.0, 3547.8, 1063.2] },
+        { "id": "cd1-05", "at": [2136.5, 1175.1], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [2168.4, 1189.7, 2213.1, 1208.9] },
+        { "id": "cd1-06", "at": [3158.8, 1201.7], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [3129.4, 1159.2, 3174.1, 1178.4] },
+        { "id": "cd1-07", "at": [2751.4, 1267.7], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [2770.8, 1204.1, 2815.5, 1223.3] },
+        { "id": "cd1-08", "at": [3916.5, 1338.0], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [3896.4, 1303.0, 3941.0, 1322.2] },
+        { "id": "cd1-09", "at": [4330.3, 1342.4], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [4300.8, 1299.8, 4345.4, 1319.0] },
+        { "id": "cd1-10", "at": [2849.7, 1349.2], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [2792.2, 1340.4, 2836.9, 1359.6] },
+        { "id": "cd1-11", "at": [1919.0, 1368.8], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [1884.0, 1346.6, 1928.7, 1365.8] },
+        { "id": "cd1-12", "at": [1716.3, 1379.7], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [1776.7, 1352.6, 1821.5, 1371.8] },
+        { "id": "cd1-13", "at": [3053.5, 1384.6], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [2938.1, 1370.4, 2982.8, 1389.6] },
+        { "id": "cd1-14", "at": [3168.7, 1391.9], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [3142.1, 1418.4, 3186.8, 1437.6] },
+        { "id": "cd1-15", "at": [2496.2, 1434.2], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [2485.9, 1389.1, 2530.6, 1408.3] },
+        { "id": "cd1-16", "at": [2276.2, 1450.4], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [2298.2, 1385.0, 2342.9, 1404.2] },
+        { "id": "cd1-17", "at": [3496.7, 1451.0], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [3433.2, 1390.8, 3477.9, 1410.0] },
+        { "id": "cd1-18", "at": [3312.3, 1709.0], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [3477.1, 1617.4, 3521.8, 1636.6] },
+        { "id": "cd1-19", "at": [2737.1, 1709.5], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [2722.6, 1677.8, 2767.3, 1697.0] },
+        { "id": "cd1-20", "at": [2888.8, 1769.1], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [2859.4, 1726.6, 2904.1, 1745.8] },
+        { "id": "cd1-21", "at": [1877.6, 1818.1], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [1805.8, 1820.6, 1850.5, 1839.8] },
+        { "id": "cd1-22", "at": [2105.5, 1844.0], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [2076.0, 1801.4, 2120.7, 1820.6] },
+        { "id": "cd1-23", "at": [2251.4, 1877.2], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [2217.6, 1817.0, 2262.3, 1836.2] },
+        { "id": "cd1-24", "at": [3580.4, 1927.6], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [3608.9, 1894.6, 3653.5, 1913.8] },
+        { "id": "cd1-25", "at": [2739.1, 1962.3], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [2728.8, 2039.8, 2773.5, 2059.0] },
+        { "id": "cd1-26", "at": [3349.1, 2033.0], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [3337.7, 1997.3, 3382.4, 2016.5] },
+        { "id": "cd1-27", "at": [2493.4, 2054.8], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [2428.8, 2229.1, 2473.5, 2248.3] },
+        { "id": "cd1-28", "at": [2824.3, 2067.1], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [2846.4, 2031.1, 2891.1, 2050.3] },
+        { "id": "cd1-29", "at": [3255.4, 2312.0], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [3320.9, 2325.8, 3365.6, 2345.0] },
+        { "id": "cd1-30", "at": [3197.8, 2319.7], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [3116.6, 2374.8, 3161.4, 2394.0] },
+        { "id": "cd1-31", "at": [2717.2, 2571.4], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [2687.8, 2528.9, 2732.5, 2548.1] },
+        { "id": "cd1-32", "at": [3105.1, 2707.0], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [3075.6, 2664.5, 3120.3, 2683.7] },
+        { "id": "cd1-33", "at": [3475.6, 2880.5], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [3369.6, 2874.0, 3414.2, 2893.2] },
+        { "id": "cd1-34", "at": [4276.6, 3319.6], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [4382.2, 3377.8, 4426.9, 3397.0] },
+        { "id": "cd1-35", "at": [3783.1, 3325.5], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [3753.6, 3283.0, 3798.2, 3302.2] },
+        { "id": "cd1-36", "at": [4317.1, 3459.9], "tolerance_px": 3, "tag": "CD-1", "tag_bbox": [4287.6, 3417.4, 4332.2, 3436.6] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/10__vol2__040/p15-p15-full-poppler.png",
+        "method": "Full-page HVAC-plan review, independent 36-callout vector-text inventory, and exact one-to-one CD-1 token-box verification.",
+        "notes": [
+          "Thirty-six installed CD-1 ceiling diffusers are visible on level one; the upper clean-storage diffuser is the seed, leaving thirty-five expected placements.",
+          "Every returned marker lands on a physical square CD-1 diffuser body and consumes one distinct CD-1 text-run box; the independent PDF text inventory also totals exactly thirty-six CD-1 tags.",
+          "The case spans four rotations, reflected export variants, low geometry scores caused by duct and wall overlap, and long leader routes through an unusually dense renovation plan.",
+          "EG-1 exhaust grilles, CD-2 diffusers, CD-E devices, VAV terminals, duct fittings, room text, and architectural ceiling-grid repeats are excluded."
+        ]
+      }
+    },
+    {
+      "id": "11-st-louis-mh101-keyed-vav-thermostats",
+      "document_id": "11__vol1__05",
+      "source_pdf": "pdf/11__vol1__05__St_Louis_John_Cochran_VA_AHU_and_VAV_Replacement.pdf",
+      "source_sha256": "78755d16240f834ee429960526cadab8edec205b65df36a70c171ab4d4b993db",
+      "page": 25,
+      "sheet_number": "MH101",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[2495, 1250], [2580, 1320]],
+      "seed": {
+        "tag": "1-VAV-2",
+        "at": [2550.7, 1280.6],
+        "tolerance_px": 2,
+        "tag_bbox": [2540.9, 1296.4, 2580.3, 1309.4]
+      },
+      "instances": [
+        { "id": "new-thermostat-vav-3", "at": [3267.6, 1274.6], "tolerance_px": 3, "tag": "1-VAV-3", "tag_bbox": [3255.1, 1296.4, 3294.6, 1309.4] },
+        { "id": "new-thermostat-vav-4", "at": [2069.3, 1360.1], "tolerance_px": 3, "tag": "1-VAV-4", "tag_bbox": [1990.3, 1328.8, 2029.8, 1341.8] },
+        { "id": "new-thermostat-vav-1", "at": [2265.4, 1585.2], "tolerance_px": 3, "tag": "1-VAV-1", "tag_bbox": [2253.8, 1598.6, 2293.3, 1611.6] },
+        { "id": "new-thermostat-vav-9", "at": [3774.8, 1742.9], "tolerance_px": 3, "tag": "1-VAV-9", "tag_bbox": [3748.8, 1765.6, 3788.2, 1778.6] },
+        { "id": "new-thermostat-vav-7", "at": [2692.6, 1867.8], "tolerance_px": 3, "tag": "1-VAV-7", "tag_bbox": [2641.0, 1895.7, 2680.4, 1908.7] },
+        { "id": "new-thermostat-vav-6", "at": [2265.2, 1880.9], "tolerance_px": 3, "tag": "1-VAV-6", "tag_bbox": [2317.4, 1895.7, 2356.9, 1908.7] },
+        { "id": "new-thermostat-vav-8", "at": [2822.2, 1883.8], "tolerance_px": 3, "tag": "1-VAV-8", "tag_bbox": [2812.1, 1895.7, 2851.5, 1908.7] },
+        { "id": "new-thermostat-vav-10", "at": [4081.5, 1949.5], "tolerance_px": 3, "tag": "1-VAV-10", "tag_bbox": [4068.0, 1963.6, 4113.2, 1976.6] },
+        { "id": "new-thermostat-vav-11", "at": [2058.7, 2103.6], "tolerance_px": 3, "tag": "1-VAV-11", "tag_bbox": [1981.7, 2125.6, 2026.9, 2138.6] },
+        { "id": "new-thermostat-vav-12", "at": [2263.0, 2256.4], "tolerance_px": 3, "tag": "1-VAV-12", "tag_bbox": [2247.8, 2271.3, 2293.0, 2284.3] },
+        { "id": "new-thermostat-vav-17", "at": [3568.8, 2293.4], "tolerance_px": 3, "tag": "1-VAV-17", "tag_bbox": [3507.8, 2304.2, 3553.0, 2317.2] },
+        { "id": "new-thermostat-vav-15", "at": [2820.0, 2335.4], "tolerance_px": 3, "tag": "1-VAV-15", "tag_bbox": [2825.0, 2394.2, 2870.2, 2407.2] },
+        { "id": "new-thermostat-vav-16", "at": [3241.7, 2530.8], "tolerance_px": 3, "tag": "1-VAV-16", "tag_bbox": [3277.0, 2560.0, 3322.2, 2573.0] },
+        { "id": "new-thermostat-vav-13", "at": [2564.6, 2540.8], "tolerance_px": 3, "tag": "1-VAV-13", "tag_bbox": [2511.4, 2586.2, 2556.6, 2599.2] },
+        { "id": "new-thermostat-vav-14", "at": [2740.3, 2583.4], "tolerance_px": 3, "tag": "1-VAV-14", "tag_bbox": [2708.4, 2560.0, 2753.6, 2573.0] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/11__vol1__05/p25-p25-full-poppler.png",
+        "method": "Full-page new-work HVAC-plan review, keyed thermostat inventory, and exact floor-prefixed VAV tag-context verification.",
+        "notes": [
+          "Sixteen new wall-thermostat assemblies carry keyed note 1 and a local 1-VAV equipment reference; the VAV-2 thermostat is the seed, leaving fifteen expected placements.",
+          "The seed includes the thermostat circle plus its keyed-note box. Each accepted physical marker owns one unique small-format 1-VAV-# text box in the same annotation context.",
+          "The sheet repeats most VAV IDs in larger terminal-unit callouts. Those differently sized text runs cannot corroborate a thermostat symbol, and each equipment instance ID may validate only one physical placement.",
+          "VAV-5 has no thermostat assembly on this sheet. The unkeyed VAV-18 thermostat is existing rather than keyed new work; terminal bodies, control-valve circles, duct fittings, room tags, and architectural boxes are excluded."
+        ]
+      }
+    },
+    {
+      "id": "12-fort-sam-m508-hwp-pumps",
+      "document_id": "12__vol2__028",
+      "source_pdf": "pdf/12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf",
+      "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+      "page": 4,
+      "sheet_number": "M-508",
+      "page_size_px": [4896, 3168],
+      "seed_rect": [[500, 830], [615, 955]],
+      "seed": {
+        "tag": "HWP-1",
+        "at": [559.8, 893.7],
+        "tolerance_px": 2,
+        "tag_bbox": [437.8, 813.6, 518.0, 841.7]
+      },
+      "instances": [
+        { "id": "hwp-2", "at": [767.7, 893.7], "tolerance_px": 3, "tag": "HWP-2", "tag_bbox": [653.3, 813.6, 733.5, 841.7] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/12__vol2__028/p4-p4-full-poppler.png",
+        "method": "Full-page heating-water P&ID review, exact pump-glyph comparison, and equipment-family tag verification.",
+        "notes": [
+          "The heating-water loop contains two HWP pump bodies, HWP-1 and HWP-2; HWP-1 is the seed, leaving one expected placement.",
+          "The seed isolates the complete circle-and-triangle pump glyph. HWP-2 is an exact 1.000 geometric repeat and retains its own exact tag box.",
+          "BCP-1 and BCP-2 use the same pump glyph and also score 1.000, but their BCP tags place them outside the HWP equipment family, so both are explicitly withheld rather than counted.",
+          "Pump status bubbles, ECM boxes, valves, air separators, expansion tanks, controller-diagram capsules, point-list rows, and title-block graphics are excluded."
+        ]
+      }
+    },
+    {
+      "id": "13-nist-m701-fan-vfd-assemblies",
+      "document_id": "13__vol2__017",
+      "source_pdf": "pdf/13__vol2__017__NIST_Gaithersburg_Building_101_HVAC_Renovation.pdf",
+      "source_sha256": "5821df0d298d0e51a6c20ba36b3cc5d2eb7bbece098f12eb1746c339b56a1533",
+      "page": 15,
+      "sheet_number": "V3",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[3865, 300], [3980, 465]],
+      "seed": {
+        "tag": "VFD",
+        "at": [3930.6, 377.5],
+        "tolerance_px": 2,
+        "tag_bbox": [3918.2, 427.6, 3950.3, 446.5]
+      },
+      "instances": [
+        { "id": "acu1-supply-fan-vfd", "at": [4540.2, 897.5], "tolerance_px": 3, "tag": "VFD", "tag_bbox": [4520.4, 947.7, 4552.4, 966.6] },
+        { "id": "acu2-return-fan-vfd", "at": [3930.6, 1790.9], "tolerance_px": 3, "tag": "VFD", "tag_bbox": [3918.2, 1841.2, 3950.3, 1860.1] },
+        { "id": "acu2-supply-fan-vfd", "at": [4540.2, 2311.1], "tolerance_px": 3, "tag": "VFD", "tag_bbox": [4520.4, 2361.3, 4552.4, 2380.2] },
+        { "id": "acu3-6-return-fan-vfd", "at": [3930.6, 3246.2], "tolerance_px": 3, "tag": "VFD", "tag_bbox": [3918.2, 3296.3, 3950.3, 3315.2] },
+        { "id": "acu3-6-supply-fan-vfd", "at": [4569.0, 3766.5], "tolerance_px": 3, "tag": "VFD", "tag_bbox": [4549.2, 3816.7, 4581.2, 3835.5] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/13__vol2__017/p15-p15-full-poppler.png",
+        "method": "Full-page controls-diagram review and exact fan-plus-VFD assembly comparison across all three ACU P&IDs.",
+        "notes": [
+          "Three vertically stacked ACU control diagrams each contain one return-fan/VFD assembly and one supply-fan/VFD assembly, for six total; the upper return fan is the seed.",
+          "The 98-segment seed isolates the fan scroll, motor hub, VFD box, and their internal connection while excluding the surrounding equipment casing and duct path.",
+          "All five non-seed placements score 1.000. Supply-fan assemblies are mirrored export variants, and the lower supply fan is horizontally shifted within its ACU diagram.",
+          "Each assembly owns a distinct literal VFD text run centered inside its local drive box. The exact six token boxes are frozen as positive one-to-one semantic truth; the earlier null-label baseline predated repeated device-class recognition.",
+          "Standalone motorized dampers, control valves, coil symbols, sensor boxes, airflow stations, dashed equipment boundaries, legend examples, notes, and title-block graphics are excluded."
+        ]
+      }
+    },
+    {
+      "id": "14-usda-m701-t5-ice-storage-tanks",
+      "document_id": "14__vol2__021",
+      "source_pdf": "pdf/14__vol2__021__USDA_ARS_Laboratory_Mechanical_Set_2019.pdf",
+      "source_sha256": "4d883afdd3b2d94ea2e14621dc49df77bc10ca0548bfd077c436420c43ae75f8",
+      "page": 14,
+      "sheet_number": "M-701",
+      "page_size_px": [6912, 5184],
+      "seed_rect": [[4485, 1785], [4575, 1930]],
+      "seed": {
+        "tag": null,
+        "at": [4529.7, 1867.7],
+        "tolerance_px": 2,
+        "tag_bbox": null
+      },
+      "instances": [
+        { "id": "east-wing-t5-2", "at": [4657.4, 1867.7], "tolerance_px": 3, "tag": null, "tag_bbox": null },
+        { "id": "east-wing-t5-3", "at": [4779.3, 1867.7], "tolerance_px": 3, "tag": null, "tag_bbox": null }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/14__vol2__021/p14-p14-full-poppler.png",
+        "method": "Full-page hydronic-schematic review plus separate visual checks of the upper T-5 and lower T-6 ice-storage banks.",
+        "notes": [
+          "The East Wing schematic contains three T-5 ice-storage tanks; the left tank is the seed, leaving two expected placements.",
+          "The seed contains the complete tank body and its outlined T-5 identifier. Both accepted East Wing placements are exact 1.000 vector repeats.",
+          "The West Wing schematic contains three visually similar T-6 tanks. Their outlined identifier is part of the vector fingerprint, and all three remain below acceptance at approximately 0.811 rather than leaking into the T-5 result.",
+          "Pumps, valves, strainers, expansion tanks, heat exchangers, pipe-size marks, flow arrows, notes, and title-block graphics are excluded."
+        ]
+      }
+    },
+    {
+      "id": "15-slac-m63-pcw-pumps-existing-and-new",
+      "document_id": "15__vol2__067",
+      "source_pdf": "pdf/15__vol2__067__SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf",
+      "source_sha256": "254931f1c37ac5afb3b9ad70d21ae7c2001c2f645c29ca8d92c4aefdc294fa1d",
+      "page": 6,
+      "sheet_number": "M6.3",
+      "page_size_px": [6912, 5184],
+      "seed_rect": [[2840, 3825], [2950, 3960]],
+      "seed": {
+        "tag": "PCWP-1001",
+        "at": [2889.0, 3885.7],
+        "tolerance_px": 2,
+        "tag_bbox": [2763.4, 3829.9, 2869.0, 3849.1]
+      },
+      "instances": [
+        { "id": "existing-pcw-pump-left", "at": [2889.0, 1656.9], "tolerance_px": 3, "tag": null, "tag_bbox": null },
+        { "id": "existing-pcw-pump-right", "at": [3212.3, 1656.9], "tolerance_px": 3, "tag": null, "tag_bbox": null },
+        { "id": "new-pcwp-1002", "at": [3212.3, 3885.7], "tolerance_px": 3, "tag": "PCWP-1002", "tag_bbox": [3086.6, 3829.9, 3192.2, 3849.1] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/15__vol2__067/p6-p6-full-poppler-poppler.png",
+        "method": "Full-page P&ID review plus 288-DPI visual audits of the faded existing and dark new pump banks.",
+        "notes": [
+          "The sheet contains exactly four installed PCW pump glyphs: two in the faded existing-skid diagram and PCWP-1001/PCWP-1002 in the new-skid diagram; PCWP-1001 is the seed, leaving three expected placements.",
+          "The two existing pumps remain valid physical matches despite their light-gray renovation styling and score 0.928; the new PCWP-1002 repeat scores 0.965.",
+          "The new pump tags are split over two text lines. The seed and new match attach through their local leaders to the exact PCWP-1001 and PCWP-1002 token boxes, while the two untagged existing pumps remain explicitly null rather than borrowing a new-work tag.",
+          "The smaller pump example in the P&ID symbol legend, pressure-gauge circles, DPIT loops, valves, pot feeder, air separator, solid I/O squares, pipe fittings, notes, and title-block graphics are excluded."
+        ]
+      }
+    },
+    {
+      "id": "16-itd-d2-m20-bypass-control-valves",
+      "document_id": "16__vol2__069",
+      "source_pdf": "pdf/16__vol2__069__ITD_District_2_Laboratory_Heating_Upgrades_Rebid.pdf",
+      "source_sha256": "ce0c2bb973f87194f0f6ed8d68faaad2a5683129f9d0db1a73415f6051ed06f1",
+      "page": 4,
+      "page_size_px": [5184, 3456],
+      "seed_rect": [[280, 2415], [355, 2545]],
+      "seed": {
+        "tag": "BP-2",
+        "at": [319.0, 2474.4],
+        "tolerance_px": 2,
+        "tag_bbox": [206.8, 2456.4, 227.4, 2501.6]
+      },
+      "instances": [
+        { "id": "boiler-bypass-control-valve-1", "at": [733.7, 2474.4], "tolerance_px": 3, "tag": "BP-1", "tag_bbox": [631.6, 2456.9, 652.2, 2502.1] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/16__vol2__069/p4-p4-full-poppler.png",
+        "method": "Full-page mechanical-detail review plus engine-scale visual audit of both boiler bypass control-valve assemblies and their divided control-element tags.",
+        "notes": [
+          "The hot-water new-work piping schematic contains exactly two bypass control-valve assemblies, BP-1 and BP-2; BP-2 is the seed, leaving one expected placement.",
+          "Both complete 56-segment valve/actuator glyphs are exact 1.000 vector repeats. The demolition schematic, boiler bodies, HWP pumps, heating-coil control valve, balance valves, shutoff valves, and detail callouts are excluded.",
+          "Each equipment identity is printed as a divided hexagonal control-element tag with BP above its instance number. The PDF exposes those as separate text runs; symbol labeling reconstructs the visual identities BP-2 and BP-1 and retains each complete local tag-block box.",
+          "A deliberately under-specified two-stroke marquee on this sheet previously produced 754 bogus matches. The interactive distinctiveness guard now refuses that seed and instructs the caller to include the complete symbol."
+        ]
+      }
+    },
+    {
+      "id": "17-carson-m211-condensing-units",
+      "document_id": "17__vol1__16",
+      "source_pdf": "pdf/17__vol1__16__Carson_Valley_Middle_School_Phase_1_HVAC_Replacement.pdf",
+      "source_sha256": "96782a6f81077df39c2eb87f4d04e08c7e353483b596bcd97d534938593612a1",
+      "page": 12,
+      "sheet_number": "M2.11",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[1910, 2060], [1965, 2115]],
+      "seed": {
+        "tag": "CU-B1",
+        "at": [1935.6, 2091.7],
+        "tolerance_px": 2,
+        "tag_bbox": [1800.0, 1949.1, 1826.2, 1992.0]
+      },
+      "instances": [
+        { "id": "cu-b4", "at": [2739.3, 621.5], "tolerance_px": 3, "tag": "CU-B4", "tag_bbox": [2538.7, 719.5, 2564.9, 762.7] },
+        { "id": "cu-b5", "at": [2843.7, 621.5], "tolerance_px": 3, "tag": "CU-B5", "tag_bbox": [2730.2, 719.1, 2756.5, 762.0] },
+        { "id": "cu-b7", "at": [2948.4, 621.5], "tolerance_px": 3, "tag": "CU-B7", "tag_bbox": [2949.8, 720.3, 2976.1, 763.2] },
+        { "id": "cu-b9", "at": [961.7, 1005.5], "tolerance_px": 3, "tag": "CU-B9", "tag_bbox": [1147.9, 792.7, 1174.1, 835.7] },
+        { "id": "cu-bo1", "at": [2039.8, 2075.6], "tolerance_px": 3, "tag": "CU-BO1", "tag_bbox": [1867.4, 1863.6, 1904.0, 1906.8] },
+        { "id": "cu-bo2", "at": [2145.7, 2075.6], "tolerance_px": 3, "tag": "CU-BO2", "tag_bbox": [2033.8, 1938.3, 2070.3, 1981.2] },
+        { "id": "cu-b2", "at": [2251.5, 2078.8], "tolerance_px": 3, "tag": "CU-B2", "tag_bbox": [2159.3, 1870.1, 2185.5, 1913.0] },
+        { "id": "cu-b3", "at": [2356.1, 2078.8], "tolerance_px": 3, "tag": "CU-B3", "tag_bbox": [2361.1, 1927.0, 2387.3, 1969.9] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/17__vol1__16/p12-p12-full-poppler.png",
+        "method": "Full-page new-work plan review plus engine-scale visual audits of the roof, main-plan and five-unit exterior-pad condensing-unit groups.",
+        "notes": [
+          "Nine installed condensing-unit fan glyphs occur on M2.11: CU-B4/CU-B5/CU-B7 at the upper roof bank, CU-B9 in the main plan, and CU-B1/CU-BO1/CU-BO2/CU-B2/CU-B3 on the exterior equipment pad. CU-B1 is the seed, leaving eight expected placements.",
+          "The tight seed isolates the fan circle and blade geometry. Six repeats clear the normal geometry bar and two hatch-overlapped pad units are promoted only after their own literal equipment leaders attach to the same CU family.",
+          "The equipment identities are divided tags with CU above alphanumeric instance suffixes such as B1 and BO2. Each accepted placement owns one unique reconstructed CU tag block; literal equipment leaders outrank broad proximity so adjacent pad units cannot borrow one another's tags.",
+          "Exhaust fans, ceiling diffusers/grilles, room boxes, keynote bubbles, detail references, fence hatching, equipment-pad outlines, furnace components, and architectural symbols are excluded. Alternate transform hypotheses around the same physical fans remain review-only and never increase the count."
+        ]
+      }
+    },
+    {
+      "id": "18-guaranteed-rate-set-fan-coil-units",
+      "document_id": "18__vol2__092",
+      "source_pdf": "pdf/18__vol2__092__Guaranteed_Rate_Field_HVAC_Phase_IX.pdf",
+      "source_sha256": "85613e85e63e6e3e527a722dc93a9797b2b1edd57a8ec22fc96b4a808bc0f0a5",
+      "scope": "set",
+      "page": 9,
+      "sheet_number": "M1.41",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[3990, 1765], [4110, 1875]],
+      "seed": {
+        "tag": "FCU-5",
+        "at": [4046.3, 1824.4],
+        "tolerance_px": 2,
+        "tag_bbox": [4004.4, 1887.2, 4039.3, 1931.6]
+      },
+      "instances": [
+        { "id": "pressbox-fcu5-01", "page": 9, "at": [4609.9, 1039.4], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [4573.0, 1098.8, 4607.8, 1143.1] },
+        { "id": "pressbox-fcu5-02", "page": 9, "at": [4471.0, 1237.9], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [4433.8, 1307.3, 4468.6, 1351.6] },
+        { "id": "pressbox-fcu5-03", "page": 9, "at": [4337.2, 1430.5], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [4361.6, 1351.8, 4396.5, 1396.2] },
+        { "id": "pressbox-fcu5-04", "page": 9, "at": [4192.0, 1632.6], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [4146.6, 1693.8, 4181.5, 1738.2] },
+        { "id": "conference-fcu4", "page": 9, "at": [4736.1, 1712.3], "tolerance_px": 3, "tag": "FCU-4", "tag_bbox": [4741.8, 1769.3, 4776.7, 1813.7] },
+        { "id": "pressbox-fcu5-06", "page": 9, "at": [3916.2, 2007.7], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3874.0, 2073.2, 3908.8, 2117.5] },
+        { "id": "pressbox-fcu5-07", "page": 9, "at": [3766.9, 2199.0], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3735.0, 2268.6, 3769.9, 2312.9] },
+        { "id": "pressbox-fcu5-08", "page": 9, "at": [3635.9, 2380.9], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3597.5, 2444.0, 3632.3, 2488.4] },
+        { "id": "pressbox-fcu5-09", "page": 9, "at": [3479.6, 2566.6], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3439.8, 2631.7, 3474.7, 2676.0] },
+        { "id": "pressbox-fcu5-10", "page": 9, "at": [3334.0, 2742.6], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3284.2, 2800.8, 3319.0, 2845.1] },
+        { "id": "pressbox-fcu5-11", "page": 9, "at": [3163.1, 2944.7], "tolerance_px": 3, "tag": "FCU-5", "tag_bbox": [3107.6, 2999.4, 3142.5, 3043.8] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/18__vol2__092/p9-p9-full-poppler-poppler.png",
+        "method": "Set-wide plan-only sweep plus full-page and high-resolution visual review of every press-box fan-coil assembly, its divided equipment tag, and the N.I.C. lookalikes.",
+        "notes": [
+          "M1.41 contains eleven installed FCU-5 assemblies and one installed FCU-4 assembly with the same fan-coil body; one FCU-5 is the seed, leaving eleven expected placements. The schedule independently lists FCU-5 QTY 11 and FCU-4 QTY 1.",
+          "Each FCU identity is a divided tag with FCU above its schedule/type number. Eleven distinct same-style FCU-5 tag blocks establish that 5 is a repeated schedule type, not one globally unique asset ID; every accepted placement owns its own exact tag-block box.",
+          "Two geometrically similar fan-coil assemblies at the top of the plan sit inside the N.I.C. area and carry no FCU tag. Both remain explicitly withheld rather than being promoted from shape alone.",
+          "The case runs with scope set. All eight plan-role sheets are searched completely, while the mechanical cover/legend, elevation, and three schedule sheets are disclosed as skipped reference pages. No table extraction path is invoked by symbol sweep."
+        ]
+      }
+    },
+    {
+      "id": "19-orange-county-m201-control-valve-actuators",
+      "document_id": "19__vol2__094",
+      "source_pdf": "pdf/19__vol2__094__Orange_County_Regional_History_Center_HVAC.pdf",
+      "source_sha256": "e205afccbaa16d799d33aed3151c5fd06dbe7a6836e1f1132c61aba0c70fdb45",
+      "page": 6,
+      "sheet_number": "M-201",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[4035, 3485], [4110, 3580]],
+      "seed": {
+        "tag": "CV-1",
+        "at": [4074.7, 3539.3],
+        "tolerance_px": 2,
+        "tag_bbox": [4057.9, 3459.2, 4088.8, 3477.8]
+      },
+      "instances": [
+        { "id": "vav-ahu-existing-control-valve-actuator", "at": [4335.4, 1045.9], "tolerance_px": 3, "tag": null, "tag_bbox": null },
+        { "id": "constant-volume-ahu-existing-control-valve-actuator", "at": [4408.1, 2316.7], "tolerance_px": 3, "tag": "CV-1", "tag_bbox": [4393.4, 2236.6, 4424.3, 2255.3] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/19__vol2__094/p6-p6-full-poppler.png",
+        "method": "Full-page controls-sheet review plus high-resolution visual audits of the three AHU control schematics and their existing three-way control-valve actuator assemblies.",
+        "notes": [
+          "M-201 contains three exact repeats of the existing three-way control-valve actuator box, one in each AHU controls schematic. The bottom CV-1 is the seed, leaving the top VAV-AHU and middle constant-volume-AHU instances as the two expected placements.",
+          "The bottom and middle actuator boxes carry literal CV-1 point tags. The top actuator is intentionally untagged in the drawing and remains null instead of borrowing a tag from another schematic.",
+          "The control diagrams require the new controller to connect to the existing DDC controls and to match existing points and sequences of operation, making the repeated actuator a high-value BAS point-takeoff case.",
+          "Analog-output bubbles, the valve bodies and piping, duct sensors, damper actuators, fans, controller boxes, wire lines, and control-note typography are excluded by the tight seed geometry."
+        ]
+      }
+    },
+    {
+      "id": "20-jvwtp-e603-ladder-relay-coils",
+      "document_id": "20__vol2__097",
+      "source_pdf": "pdf/20__vol2__097__JVWTP_Chemical_Buildings_HVAC_Upgrades.pdf",
+      "source_sha256": "95f1c434a5dca5ea297a5981901483d0f57b6a7277abc6c87d5645f072dfe0e3",
+      "page": 25,
+      "sheet_number": "E-603",
+      "page_size_px": [4896, 3168],
+      "seed_rect": [[1430, 375], [1490, 430]],
+      "seed": {
+        "tag": "R1",
+        "at": [1459.3, 402.5],
+        "tolerance_px": 2,
+        "tag_bbox": [1476.7, 357.9, 1502.4, 384.8]
+      },
+      "instances": [
+        { "id": "hydrofluorosilicic-run-relay-r1", "at": [3314.9, 402.5], "tolerance_px": 3, "tag": "R1", "tag_bbox": [3332.4, 357.9, 3358.1, 384.8] },
+        { "id": "chlorine-dioxide-high-speed-relay-r2", "at": [1459.3, 960.7], "tolerance_px": 3, "tag": "R2", "tag_bbox": [1476.7, 915.9, 1502.4, 942.8] },
+        { "id": "chlorine-dioxide-run-command-relay-r3", "at": [1459.3, 1777.9], "tolerance_px": 3, "tag": "R3", "tag_bbox": [1476.7, 1733.1, 1502.4, 1760.0] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/20__vol2__097/p25-p25-full-poppler.png",
+        "method": "Full-page E-603 wiring-diagram review plus high-resolution audit of every inline ladder relay/contactor coil and its literal device identifier.",
+        "notes": [
+          "The tight R1 seed isolates the inline circular coil convention used four times in the ladder diagrams: two R1 relays, R2, and R3. The seeded chlorine-dioxide low-speed R1 is excluded, leaving three relay-coil placements.",
+          "Each accepted coil owns its adjacent literal R1, R2, or R3 tag. Numbered relay identities are reconciled as one R symbol family while retaining the exact device identifier and text box for each physical occurrence.",
+          "Two geometrically identical circular F coils for EF-3 and EF-4 also clear the vector match bar. Their own adjacent fan/contactor tags prove different device semantics, so both are explicitly withheld instead of inflating the relay takeoff.",
+          "Full-sentence wiring annotations such as RUN EXH-1 AND MAU-1 are rejected as prose rather than synthesized into fake equipment IDs. Remote light-voltage relay symbols with terminal circles, pilot-light W symbols, relay contacts, selector switches, timers, and controller input contacts are separate graphical conventions and excluded."
+        ]
+      }
+    },
+    {
+      "id": "21-jvwtp-h601-rooftop-ai-point-callouts",
+      "document_id": "21__vol2__095",
+      "source_pdf": "pdf/21__vol2__095__JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC.pdf",
+      "source_sha256": "17887e9efd271427725d9c334e1ee6119d7fbd2d0d865906b719ed695e7b3606",
+      "page": 7,
+      "sheet_number": "H-601",
+      "page_size_px": [4896, 3168],
+      "seed_rect": [[750, 1640], [980, 1740]],
+      "seed": {
+        "tag": "RT-AI-01",
+        "at": [882.1, 1691.0],
+        "tolerance_px": 2,
+        "tag_bbox": [844.9, 1672.7, 926.5, 1699.7]
+      },
+      "instances": [
+        { "id": "discharge-air-temperature-ai", "at": [884.0, 1763.6], "tolerance_px": 3, "tag": "RT-AI-02", "tag_bbox": [844.9, 1745.5, 926.5, 1772.5] },
+        { "id": "outside-air-temperature-ai", "at": [884.0, 1836.3], "tolerance_px": 3, "tag": "RT-AI-03", "tag_bbox": [844.9, 1818.3, 926.5, 1845.2] },
+        { "id": "economizer-position-status-ai", "at": [884.0, 1909.1], "tolerance_px": 3, "tag": "RT-AI-04", "tag_bbox": [844.9, 1891.1, 926.5, 1918.1] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/21__vol2__095/page-7.png",
+        "method": "Full-page H-601 controls review plus engine-resolution audit of the unit-controller point list, repeated equipment-side point callouts, and the BAS callout legend.",
+        "notes": [
+          "The AC-WW unit-controller diagram publishes exactly four unique analog-input points: RT-AI-01 space temperature, RT-AI-02 discharge-air temperature, RT-AI-03 outside-air temperature, and RT-AI-04 economizer status. RT-AI-01 is the seed, leaving three expected AI point callouts.",
+          "Each accepted rounded point-callout capsule owns the full BAS identifier printed inside it and retains that exact internal token box. Embedded BAS point labels are admitted without weakening the anti-text-decoy guard for ordinary fixture labels.",
+          "The equipment-side diagram redraws some of the same RT-AI identities. Unique point-ID reconciliation prevents those diagram references from becoming duplicate takeoff points, even when weaker vector variants are geometrically corroborated by the repeated tag.",
+          "AO, DI, and DO capsules use the same vector outline but their own literal point-type tags prove different I/O families, so they are withheld. Controller/equipment rectangles, wiring, notes, numbered keynote bubbles, the generic legend example, and non-point symbols are excluded."
+        ]
+      }
+    },
+    {
+      "id": "22-cbfm-m702-chiller-control-assemblies",
+      "document_id": "22__vol2__012",
+      "source_pdf": "pdf/22__vol2__012__Center_for_Behavioral_Medicine_Chiller_Upgrade.pdf",
+      "source_sha256": "b008fd1b72a48adc5ccbacfa74fcf377dd93bbd30c4b8d2ebec2c540a6248711",
+      "page": 21,
+      "sheet_number": "M702",
+      "page_size_px": [5184, 3456],
+      "seed_rect": [[850, 1980], [1420, 2250]],
+      "seed": {
+        "tag": "CH-3",
+        "at": [1176.6, 2109.6],
+        "tolerance_px": 2,
+        "tag_bbox": [1087.8, 2163.8, 1108.0, 2205.2]
+      },
+      "instances": [
+        { "id": "chiller-2-controls-assembly", "at": [1176.6, 2514.0], "tolerance_px": 3, "tag": "CH-2", "tag_bbox": [1087.8, 2568.2, 1108.0, 2609.6] },
+        { "id": "chiller-1-controls-assembly", "at": [1176.6, 2918.4], "tolerance_px": 3, "tag": "CH-1", "tag_bbox": [1087.8, 2972.5, 1108.0, 3014.0] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/22__vol2__012/p21-p21-full-poppler.png",
+        "method": "Full-page M702 controls-schematic review plus high-resolution audit of the three complete chiller control assemblies and their densely surrounding I/O callouts.",
+        "notes": [
+          "M702 draws three complete chilled-water chiller control assemblies, CH-3, CH-2, and CH-1, in a vertically repeated bank. CH-3 is the seed, leaving the other two as expected placements.",
+          "The seed contains 564 vector segments and preserves the chiller body, end connections, and internal equipment geometry. The two repeats score 0.978 and 0.976 despite their separate surrounding pipe and control-point networks.",
+          "Each accepted assembly owns its adjacent divided CH equipment tag and exact tag-block box. The distinct instance suffixes reconcile under the structural CH family without cloning any one asset ID.",
+          "The sheet's 101 numbered I/O bubbles, differential-pressure and temperature sensors, valves, pumps, cooling towers, air separator, piping, control wires, point-matrix typography, and title/reference graphics are excluded."
+        ]
+      }
+    },
+    {
+      "id": "23-st-cloud-set-vav-terminal-units",
+      "document_id": "23__vol2__033",
+      "source_pdf": "pdf/23__vol2__033__St_Cloud_VA_Building_51_MEP_Replacement.pdf",
+      "source_sha256": "235fa6719258c64a8fe48b139e5c5e080a260e558432a63e13d682e2169e507d",
+      "scope": "set",
+      "page": 57,
+      "sheet_number": "MH10B.1",
+      "engine_sheet_number": "VAV-12",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[1540, 2500], [1620, 2590]],
+      "seed": {
+        "tag": "VAV-9",
+        "at": [1562.8, 2545.2],
+        "tolerance_px": 2,
+        "tag_bbox": [1463.0, 2430.3, 1510.7, 2455.4]
+      },
+      "instances": [
+        { "id": "mh10b1-vav-8", "page": 57, "at": [1322.2, 2982.3], "tolerance_px": 3, "tag": "VAV-8", "tag_bbox": [1372.2, 3014.9, 1419.9, 3040.1] },
+        { "id": "mh10b1-vav-9a", "page": 57, "at": [1894.3, 3112.3], "tolerance_px": 3, "tag": "VAV-9A", "tag_bbox": [1882.8, 3146.7, 1941.5, 3171.8] },
+        { "id": "mh10b1-vav-12", "page": 57, "at": [4334.9, 3190.3], "tolerance_px": 3, "tag": "VAV-12", "tag_bbox": [4238.6, 3079.5, 4295.5, 3104.6] },
+        { "id": "mh10b1-vav-7", "page": 57, "at": [913.4, 3467.3], "tolerance_px": 3, "tag": "VAV-7", "tag_bbox": [984.4, 3402.8, 1032.0, 3427.9] },
+        { "id": "mh10b2-vav-2", "page": 58, "at": [3188.8, 1166.2], "tolerance_px": 3, "tag": "VAV-2", "tag_bbox": [3224.9, 1172.0, 3272.5, 1197.1] },
+        { "id": "mh10b2-vav-6", "page": 58, "at": [1223.8, 1181.9], "tolerance_px": 3, "tag": "VAV-6", "tag_bbox": [1087.9, 1089.9, 1135.6, 1115.0] },
+        { "id": "mh10b2-vav-4e", "page": 58, "at": [1411.3, 1255.4], "tolerance_px": 3, "tag": "VAV-4E", "tag_bbox": [1400.6, 1156.6, 1459.3, 1181.8] },
+        { "id": "mh10b2-vav-4d", "page": 58, "at": [1586.1, 1967.9], "tolerance_px": 3, "tag": "VAV-4D", "tag_bbox": [1618.4, 2002.7, 1678.0, 2027.9] },
+        { "id": "mh10b2-vav-4c", "page": 58, "at": [1866.5, 2366.4], "tolerance_px": 3, "tag": "VAV-4C", "tag_bbox": [1777.8, 2098.5, 1837.4, 2123.6] },
+        { "id": "mh10b3-vav-19", "page": 59, "at": [3732.0, 1136.3], "tolerance_px": 3, "tag": "VAV-19", "tag_bbox": [3683.0, 1229.0, 3739.9, 1254.1] },
+        { "id": "mh10b3-vav-21a", "page": 59, "at": [3608.6, 1792.8], "tolerance_px": 3, "tag": "VAV-21A", "tag_bbox": [3610.4, 1706.2, 3678.3, 1731.4] },
+        { "id": "mh10b3-vav-21b", "page": 59, "at": [2932.3, 1808.5], "tolerance_px": 3, "tag": "VAV-21B", "tag_bbox": [2984.6, 1880.2, 3052.5, 1905.4] },
+        { "id": "mh10b3-vav-21", "page": 59, "at": [3413.6, 2319.8], "tolerance_px": 3, "tag": "VAV-21", "tag_bbox": [3454.7, 2327.5, 3511.5, 2352.6] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/23__vol2__033/p57-mh10b1-poppler.png",
+        "renders": [
+          "ground_truth/reviews/23__vol2__033/p57-mh10b1-poppler.png",
+          "ground_truth/reviews/23__vol2__033/p58-mh10b2-poppler.png",
+          "ground_truth/reviews/23__vol2__033/p59-mh10b3-poppler.png"
+        ],
+        "method": "Set-wide sweep plus full-resolution visual audit of every accepted VAV terminal body and its own leader/adjacent equipment tag across three separate mechanical ventilation plan sheets.",
+        "notes": [
+          "The VAV-9 seed on MH10B.1 finds thirteen other installed VAV terminal bodies across MH10B.1, MH10B.2, and MH10B.3. Every accepted placement was visually confirmed at engine resolution and owns its exact local VAV tag box.",
+          "The pages exercise horizontal and vertical terminals, mirrored duct approaches, straight and elbowed downstream connections, overlapping architectural backgrounds, adjacent airflow values, and leader-routed versus direct tag attachment.",
+          "The PDF exporter outlines much of the visible title-block text as vector paths, so the generic text classifier cannot see the three plan titles and even mistakes a field VAV tag for the seed page number. Symbol sweep recovers plan eligibility only from project-independent AEC evidence: MATCHLINE plus multiple field-distributed equipment/flow annotations, or independently dispersed dense tag/flow evidence.",
+          "A deliberately smaller eleven-segment seed initially matched repeated title-block fragments on unrelated plan sheets. In a labeled set-wide sweep those unlabeled geometries are now withheld; only same-family local drawing tags may promote weak VAV-body variants into the count. Schedule/detail/reference roles remain excluded and no table extraction path is invoked."
+        ]
+      }
+    },
+    {
+      "id": "24-eglin-m82-building-controllers",
+      "document_id": "24__vol2__019",
+      "source_pdf": "pdf/24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf",
+      "source_sha256": "b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10",
+      "page": 18,
+      "sheet_number": "M8.2",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[2360, 2560], [2460, 2730]],
+      "seed": {
+        "tag": "B-BC-1",
+        "at": [2402.4, 2640.0],
+        "tolerance_px": 2,
+        "tag_bbox": [2379.1, 2563.2, 2442.1, 2582.4]
+      },
+      "instances": [
+        { "id": "building-controller-b-bc-2", "at": [2510.4, 2640.0], "tolerance_px": 3, "tag": "B-BC-2", "tag_bbox": [2487.1, 2563.2, 2550.1, 2582.4] },
+        { "id": "building-controller-b-bc-3", "at": [2618.4, 2640.0], "tolerance_px": 3, "tag": "B-BC-3", "tag_bbox": [2590.6, 2563.2, 2653.5, 2582.4] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/24__vol2__019/p18-p18-full-poppler.png",
+        "method": "Full-page M8.2 BAS architecture review plus engine-resolution audit of the three building-controller modules and their individual controller identifiers.",
+        "notes": [
+          "The B-BC-1 seed isolates one of three repeated building-controller modules on the BAS network architecture. B-BC-2 and B-BC-3 are the only non-seed installed instances and each owns its exact local identifier box.",
+          "The 919-segment seed exercises a highly structured controller enclosure with dense internal terminal and circuit geometry rather than a simple outline. The two physical repeats score 1.000 and 0.979 despite their separate network connections.",
+          "Adjacent B-ASC application controllers and VFD controllers are different bodies and device families. The Internet gateway, network switch, cloud, enclosure, building elevation, MSTP trunks, dashed network routes, and control legend graphics are also excluded.",
+          "This case freezes the general requirement that dense BAS device assemblies remain distinguishable by both vector structure and their own nearby family tag; it does not encode this project's filename, page number, coordinates, or controller IDs in production logic."
+        ]
+      }
+    },
+    {
+      "id": "25-houston-mh502-ultra-low-leakage-dampers",
+      "document_id": "25__vol2__053",
+      "source_pdf": "pdf/25__vol2__053__Houston_VA_Emergency_Room_Expansion.pdf",
+      "source_sha256": "7eaefacf7f42a077e98d3fa1fd01bc96f03a03d444e29ffda7838895dc2e1d57",
+      "page": 11,
+      "sheet_number": "MH502",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[3580, 2510], [3700, 2670]],
+      "seed": {
+        "tag": null,
+        "at": [3641.0, 2559.6],
+        "tolerance_px": 2,
+        "tag_bbox": null
+      },
+      "instances": [
+        { "id": "lower-isolation-exhaust-damper", "at": [3641.0, 3009.6], "tolerance_px": 3, "tag": null, "tag_bbox": null }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/25__vol2__053/p11-p11-full-poppler-poppler.png",
+        "method": "Full-page MH502 controls review plus high-resolution audit of both motorized ultra-low-leakage damper symbols in the isolation-room exhaust sequence diagram.",
+        "notes": [
+          "The seed is the upper of exactly two repeated motorized ultra-low-leakage damper assemblies feeding the lead/standby exhaust fans. The lower installed damper is the sole expected non-seed placement.",
+          "The 43-segment fingerprint includes the damper blades and actuator graphic while remaining independent of the surrounding BO open/close and BI position leaders. Both occurrences are untagged, consistent with the printed TYP FOR 2 note, so their null label fields are intentional ground truth rather than a missing attachment.",
+          "The nearby reheat control valve, pressure sensors, differential-pressure instruments, HEPA filter, fan bodies, current transformers, VFD boxes, ductwork, wiring, and point-function callouts are separate symbol classes and excluded.",
+          "This case protects the general ability to count a repeated BAS actuator assembly from vector structure when the source drawing legitimately provides no per-instance asset IDs; no document-specific token or coordinate is used by production matching."
+        ]
+      }
+    },
+    {
+      "id": "26-columbia-m401-temperature-transmitters",
+      "document_id": "26__vol2__031",
+      "source_pdf": "pdf/26__vol2__031__Columbia_Truman_VA_Pandemic_Preparedness_Warehouse.pdf",
+      "source_sha256": "db9141f6582831c37b3a18f55d862e0579b38cf1a702c24208e3030fd8dbeab2",
+      "page": 69,
+      "sheet_number": "M-401",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[1580, 640], [1710, 790]],
+      "seed": {
+        "tag": "TT-4",
+        "at": [1648.8, 710.4],
+        "tolerance_px": 2,
+        "tag_bbox": [1636.8, 692.9, 1659.9, 742.1]
+      },
+      "instances": [
+        { "id": "discharge-air-temperature-tt-1", "at": [2118.8, 1131.8], "tolerance_px": 3, "tag": "TT-1", "tag_bbox": [2106.7, 1114.4, 2129.8, 1167.1] },
+        { "id": "cooling-coil-temperature-tt-6", "at": [1886.4, 1141.9], "tolerance_px": 3, "tag": "TT-6", "tag_bbox": [1874.2, 1124.9, 1897.2, 1171.0] },
+        { "id": "preheat-temperature-tt-5", "at": [1448.9, 1142.4], "tolerance_px": 3, "tag": "TT-5", "tag_bbox": [1436.9, 1124.9, 1459.9, 1171.0] },
+        { "id": "mixed-air-temperature-tt-3", "at": [1776.8, 1142.4], "tolerance_px": 3, "tag": "TT-3", "tag_bbox": [1764.7, 1124.9, 1787.8, 1171.0] },
+        { "id": "outside-air-temperature-tt-2", "at": [1139.9, 1302.2], "tolerance_px": 3, "tag": "TT-2", "tag_bbox": [1128.0, 1287.9, 1151.1, 1333.7] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/26__vol2__031/p69-p69-full-poppler.png",
+        "method": "Full-page M-401 AHU-controls review plus engine-resolution audit of every divided temperature-transmitter bubble and its two-line internal point identity.",
+        "notes": [
+          "The return-air TT-4 seed finds the five other temperature transmitters in the VAV AHU sequence diagram: outside-air TT-2, preheat TT-5, mixed-air TT-3, cooling-coil TT-6, and discharge-air TT-1.",
+          "Each accepted bubble owns the exact union box of its stacked TT and instance-number text runs. The TT-2 geometry is partially affected by its outside-shield connection and scores 0.786, but its local TT-family identity correctly promotes that already-detected vector near-match.",
+          "The diagram contains many near-identical divided circular instruments. MT, IT, PT, SPS, PSL, PSH, TSL, MSH, SC, SST, ALM, SD, ZC, and other sibling control functions are withheld rather than silently counted as temperature transmitters.",
+          "The implementation recognizes a repeated, tightly aligned function-over-number drafting convention and a general instrument-family vocabulary. It contains no project, sheet, coordinate, or TT-instance exception, and instrument point functions are not subjected to unique-equipment deduplication."
+        ]
+      }
+    },
+    {
+      "id": "27-orange-county-m703-damper-end-switches",
+      "document_id": "27__vol1__21",
+      "source_pdf": "pdf/27__vol1__21__Orange_County_Public_Safety_Building.pdf",
+      "source_sha256": "e47047c7322d16d44854dd5aa738f3d76087cc47f446927b00d8afc04a128f65",
+      "page": 54,
+      "sheet_number": "M-703",
+      "page_size_px": [4896, 3168],
+      "seed_rect": [[1200, 500], [1350, 660]],
+      "seed": {
+        "tag": "ZS-3",
+        "at": [1264.8, 563.4],
+        "tolerance_px": 2,
+        "tag_bbox": [1266.2, 546.6, 1290.1, 591.6]
+      },
+      "instances": [
+        { "id": "return-fan-2-end-switch-zs-4", "at": [1264.8, 920.3], "tolerance_px": 3, "tag": "ZS-4", "tag_bbox": [1266.5, 903.7, 1290.3, 951.6] },
+        { "id": "supply-fan-1-end-switch-zs-1", "at": [3032.9, 1208.8], "tolerance_px": 3, "tag": "ZS-1", "tag_bbox": [3006.7, 1192.2, 3030.6, 1237.2] },
+        { "id": "supply-fan-2-end-switch-zs-2", "at": [3032.9, 1645.8], "tolerance_px": 3, "tag": "ZS-2", "tag_bbox": [3006.7, 1629.0, 3030.6, 1676.9] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/27__vol1__21/p54-p54-full-poppler.png",
+        "method": "Full-page M-703 AHU-controls review plus engine-resolution audit of the four divided position-switch bubbles monitoring the paired return- and supply-fan isolation dampers.",
+        "notes": [
+          "The ZS-3 seed is the return-fan-1 isolation-damper end switch. The other installed switches are return-fan-2 ZS-4 and supply-fan ZS-1/ZS-2, for exactly three non-seed placements.",
+          "The two return-fan switch geometries are direct and slightly obstructed variants; the supply pair is mirrored with respect to the seed. ZS-4 and ZS-2 score 0.881 and are correctly promoted only after their own local ZS-family identities corroborate the already-detected vector bodies.",
+          "The crowded sequence diagram also contains HOA, AND, NOR, IS, FIT, FE, PDSH, PDI, TT, MT, NS, SPT, VFD and I/O boxes. Geometry from those sibling control functions remains withheld and does not contaminate the end-switch count.",
+          "The fix classifies ZS as the standard position-switch family within the same repeated function-over-number drafting grammar used for other divided instruments. No Orange County, page, coordinate, or instance-number special case exists."
+        ]
+      }
+    },
+    {
+      "id": "28-transbay-m236-stair-pressurization-fans",
+      "document_id": "28__vol1__26",
+      "source_pdf": "pdf/28__vol1__26__Transbay_Tower_Mechanical_Schedules_and_Plans.pdf",
+      "source_sha256": "6873dbdbf3fa2e364c7daf5dfebceb98ab00cb34aab3b2468cac62832771ab43",
+      "page": 26,
+      "sheet_number": "M2.36",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[2670, 1635], [2750, 1695]],
+      "seed": {
+        "tag": "STP-2",
+        "at": [2711.6, 1677.2],
+        "tolerance_px": 2,
+        "tag_bbox": [2931.4, 1665.6, 2966.0, 1723.2]
+      },
+      "instances": [
+        { "id": "stair-1-pressurization-fan", "at": [2704.0, 2365.3], "tolerance_px": 3, "tag": "STP-1", "tag_bbox": [2926.3, 2436.3, 2960.9, 2493.8] },
+        { "id": "stair-3-pressurization-fan", "at": [1517.3, 2845.4], "tolerance_px": 3, "tag": "STP-3", "tag_bbox": [1644.5, 2803.2, 1679.1, 2860.6] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/28__vol1__26/p26-p26-full-poppler.png",
+        "method": "Full-page M2.36 mechanical-plan review plus engine-resolution audit of all three stair-pressurization fan symbols, their airway contexts, and literal STP equipment tags.",
+        "notes": [
+          "The STP-2 seed isolates the complete inline stair-pressurization fan marker: opposing fan triangles, enclosure, and heavy base rather than the nearby generic airflow arrow. STP-1 and STP-3 are the only two non-seed physical repeats.",
+          "The three fan markers occur in different architectural cores. STP-1 is a mirrored same-orientation occurrence and STP-3 is a half-turn occurrence; both are partially affected by their own airway and leader contexts and score 0.834 and 0.829.",
+          "Each near-match is promoted only after the drawing's own literal STP family tag reaches that physical fan through its leader. The exact STP-1 and STP-3 text boxes are frozen, so a nearby black detail arrow or damper cannot satisfy the case.",
+          "A deliberately tighter partial seed reproduced 69 unrelated black plan marks, while a loose context seed lost STP-1. This reviewed seed demonstrates the generalized balance: capture the complete symbol body, retain rotation/mirroring, and let local family evidence corroborate weak vector variants without manufacturing geometry from text."
+        ]
+      }
+    },
+    {
+      "id": "29-syracuse-m704-control-sensor-bubbles",
+      "document_id": "29__vol2__030",
+      "source_pdf": "pdf/29__vol2__030__Syracuse_VA_EHRM_Infrastructure_Controls.pdf",
+      "source_sha256": "c8a85e522ea577c37a658f099e5f3b2af619fb3a8c35ffc219b39a13b9c56367",
+      "page": 90,
+      "sheet_number": "M-704",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[1980, 2600], [2060, 2685]],
+      "seed": {
+        "tag": null,
+        "at": [2021.2, 2643.2],
+        "tolerance_px": 2,
+        "tag_bbox": null
+      },
+      "instances": [
+        { "id": "motorized-damper-space-temperature-bubble", "at": [4697.7, 2609.6], "tolerance_px": 3, "tag": null, "tag_bbox": null },
+        { "id": "motorized-damper-occupancy-sensor-bubble", "at": [4575.5, 2612.1], "tolerance_px": 3, "tag": null, "tag_bbox": null },
+        { "id": "chilled-beam-space-humidity-bubble", "at": [2128.5, 2644.5], "tolerance_px": 3, "tag": null, "tag_bbox": null },
+        { "id": "chilled-beam-discharge-temperature-bubble", "at": [1545.4, 2869.3], "tolerance_px": 3, "tag": null, "tag_bbox": null },
+        { "id": "chilled-beam-discharge-humidity-bubble", "at": [1640.3, 2869.4], "tolerance_px": 3, "tag": null, "tag_bbox": null }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/29__vol2__030/p90-p90-full-poppler.png",
+        "method": "Full-page M-704 controls review plus engine-resolution audit of every repeated circular sensing-point bubble across the chilled-beam and motorized-damper diagrams.",
+        "notes": [
+          "The seed is the chilled-beam space-temperature circle. Five non-seed circles repeat the same sensing-point glyph across two independent control diagrams: space humidity, two discharge-air points, damper occupancy, and damper space temperature.",
+          "The six physical bubbles exercise four quarter-turn hypotheses, two separated schematic systems, dashed control wiring, and a richer local crossing around one discharge point. All five repeats remain exact physical centers; the richer context is disclosed by the engine rather than silently dropped.",
+          "The drawn point captions are bare T, N, and AT abbreviations. Those are intentionally not promoted to asset IDs: accepting arbitrary digitless words would let prose and room abbreviations steer counts, so null label fields are the reviewed truth for this case.",
+          "The chilled-beam controller, control valves, damper actuator, duct and hydronic lines, point-list matrices, sequence text, keynote diamonds, detail bubbles, title graphics, and unrelated circular annotations are excluded."
+        ]
+      }
+    },
+    {
+      "id": "30-lbnl-j610-exhaust-fan-assemblies",
+      "document_id": "30__vol2__058",
+      "source_pdf": "pdf/30__vol2__058__LBNL_Building_59_NERSC_Facility_Upgrade_II.pdf",
+      "source_sha256": "5c0d37ef255d621865fc7e0147ef7cad54321292e4f68d45ae97447d35b8e627",
+      "page": 222,
+      "sheet_number": "J610",
+      "engine_sheet_number": null,
+      "page_size_px": [4896, 3168],
+      "seed_rect": [[2060, 995], [2310, 1320]],
+      "seed": {
+        "tag": null,
+        "at": [2158.2, 1151.7],
+        "tolerance_px": 2,
+        "tag_bbox": null
+      },
+      "instances": [
+        { "id": "electrical-room-exhaust-fan-ebl-23", "at": [2158.2, 1863.5], "tolerance_px": 3, "tag": null, "tag_bbox": null }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/30__vol2__058/p222-p222-full-poppler.png",
+        "method": "Full-page J610 BAS schematic review plus engine-resolution audit of the two complete electrical-room exhaust-fan assemblies and their surrounding control networks.",
+        "notes": [
+          "The EBL-22 seed contains the complete upper fan assembly: louver/filter bank, fan housing, motor, internal blades, and enclosure geometry. EBL-23 is the sole non-seed repeat and lands at the same x coordinate 711.8 pixels below.",
+          "This is a dense 345-segment fingerprint rather than a generic fan circle or box. The second independently connected assembly scores 0.977 despite separate current-switch, thermostat, safety-switch, controller, and dashed BACnet/control routes.",
+          "The visible EBL-22 and EBL-23 captions are descriptive equipment text outside the deliberately tight physical-body marquee, so null label fields are intentional. The case verifies exact assembly geometry without letting text create a placement.",
+          "DPT/DPS instruments, filter switches, temperature and current sensors, keynote diamonds, TCP-M15 and FACP controller boxes, control wiring, room boundary, airflow arrows, notes, and title graphics are excluded."
+        ]
+      }
+    },
+    {
+      "id": "31-lbnl-j610-differential-pressure-transmitters",
+      "campaign": "extended",
+      "document_id": "30__vol2__058",
+      "source_pdf": "pdf/30__vol2__058__LBNL_Building_59_NERSC_Facility_Upgrade_II.pdf",
+      "source_sha256": "5c0d37ef255d621865fc7e0147ef7cad54321292e4f68d45ae97447d35b8e627",
+      "page": 222,
+      "sheet_number": "J610",
+      "engine_sheet_number": null,
+      "page_size_px": [4896, 3168],
+      "seed_rect": [[470, 480], [575, 590]],
+      "seed": {
+        "tag": "DPT",
+        "at": [521.2, 543.7],
+        "tolerance_px": 2,
+        "tag_bbox": [496.6, 522.1, 547.5, 547.6]
+      },
+      "instances": [
+        { "id": "lower-filter-differential-pressure-transmitter", "at": [521.2, 1086.7], "tolerance_px": 2, "tag": "DPT", "tag_bbox": [496.6, 1065.1, 547.5, 1090.6] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/30__vol2__058/p222-p222-full-poppler.png",
+        "method": "Full-page J610 BAS schematic review plus engine-resolution audit of every circular DPT, DPS, thermostat, current-switch, and safety-switch instrument bubble.",
+        "notes": [
+          "This extended-campaign case deliberately reuses the same source document with a different symbol family from the complete exhaust-fan assembly baseline. The upper filter DPT is the seed and the lower filter DPT is the sole same-family non-seed occurrence.",
+          "The seed's 37-segment bubble and internal DPT text also reproduce the circular bodies of DPS, T, CS, and SS instruments. Those are legitimate geometric lookalikes but different control functions, so their own local labels must withhold them from a DPT takeoff.",
+          "Partially symmetric circles cast multiple high-scoring transform peaks 6-11 pixels apart around one physical bubble. A peak whose center overlaps a tag box already claimed by its sibling peak is one occurrence, not another installed device.",
+          "The generalized fix admits a conservative BAS instrument vocabulary, requires repetition for ambiguous bare T/CS/SS functions, and coalesces only candidates overlapping the exact claimed tag footprint. It contains no document, page, coordinate, or project exception."
+        ]
+      }
+    },
+    {
+      "id": "32-syracuse-m703-dehumidifier-fans",
+      "campaign": "extended",
+      "document_id": "29__vol2__030",
+      "source_pdf": "pdf/29__vol2__030__Syracuse_VA_EHRM_Infrastructure_Controls.pdf",
+      "source_sha256": "c8a85e522ea577c37a658f099e5f3b2af619fb3a8c35ffc219b39a13b9c56367",
+      "page": 89,
+      "sheet_number": "M-703",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[1260, 2585], [1440, 2730]],
+      "seed": {
+        "tag": null,
+        "at": [1347.1, 2650.7],
+        "tolerance_px": 2,
+        "tag_bbox": null
+      },
+      "instances": [
+        { "id": "lower-parallel-dehumidifier-fan", "at": [1346.9, 2956.7], "tolerance_px": 2, "tag": null, "tag_bbox": null }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/29__vol2__030/p89-p89-full-poppler.png",
+        "method": "Full-page M-703 controls review plus engine-resolution inspection of both parallel dehumidifier fan bodies and the neighboring fan-coil sequence.",
+        "notes": [
+          "This extended-campaign case uses a different page and topology from the document's baseline sensing-point bubbles. The 67-segment upper centrifugal-fan body is the seed and the lower parallel fan is the sole non-seed repeat.",
+          "The tight fingerprint includes the scroll, inner hub, discharge neck, and its closing edges while excluding the two large equipment enclosures and surrounding parallel duct connection geometry.",
+          "The separate 2-pipe fan-coil diagram contains a FAN bubble, coil, filter, control valve, and multiple control instruments. None reproduces this complete centrifugal-fan vector structure.",
+          "Both dehumidifier fan bodies are intentionally untagged inside the sequence diagram, so their null label fields are reviewed truth. No source name, page, coordinate, or project token participates in production matching."
+        ]
+      }
+    },
+    {
+      "id": "33-orange-county-m703-fan-isolation-dampers",
+      "campaign": "extended",
+      "document_id": "27__vol1__21",
+      "source_pdf": "pdf/27__vol1__21__Orange_County_Public_Safety_Building.pdf",
+      "source_sha256": "e47047c7322d16d44854dd5aa738f3d76087cc47f446927b00d8afc04a128f65",
+      "page": 54,
+      "sheet_number": "M-703",
+      "page_size_px": [4896, 3168],
+      "seed_rect": [[1200, 390], [1240, 540]],
+      "seed": {
+        "tag": null,
+        "at": [1218.4, 481.4],
+        "tolerance_px": 2,
+        "tag_bbox": null
+      },
+      "instances": [
+        { "id": "return-fan-2-isolation-damper", "at": [1218.4, 848.8], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "supply-fan-1-isolation-damper", "at": [3079.3, 1126.6], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "supply-fan-2-isolation-damper", "at": [3079.3, 1574.1], "tolerance_px": 2, "tag": null, "tag_bbox": null }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/27__vol1__21/p54-p54-full-poppler.png",
+        "method": "Full-page M-703 AHU-controls review plus engine-resolution inspection of all four return- and supply-fan isolation damper bodies and their neighboring control points.",
+        "notes": [
+          "This extended-campaign case uses the physical isolation-damper blade/actuator assembly rather than the document's baseline ZS end-switch bubbles. The return-fan-1 damper is the seed; return-fan-2 and both mirrored supply-fan dampers are the three non-seed occurrences.",
+          "The 106-segment fingerprint includes the framed three-blade damper body while excluding its long duct transitions, motor, I/O boxes, wiring, and equipment enclosure. All three mates reproduce it at 0.964 despite opposite airflow orientation on the supply pair.",
+          "ZS-1 through ZS-4 are separate end-switch instruments drawn beside the dampers. Their tall divided text blocks must own only their enclosing circular bubbles; they cannot reach outward and rename an adjacent damper body.",
+          "The D-4/D-5/D-7/D-8 callouts are control identifiers connected outside the tight physical-body marquee and are not attached by a literal short leader under the conservative one-pen rules, so null label fields are intentional. No source-specific exception is used."
+        ]
+      }
+    },
+    {
+      "id": "34-columbia-m401-filter-pressure-monitor-assemblies",
+      "campaign": "extended",
+      "document_id": "26__vol2__031",
+      "source_pdf": "pdf/26__vol2__031__Columbia_Truman_VA_Pandemic_Preparedness_Warehouse.pdf",
+      "source_sha256": "db9141f6582831c37b3a18f55d862e0579b38cf1a702c24208e3030fd8dbeab2",
+      "page": 69,
+      "sheet_number": "M-401",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[1230, 880], [1330, 1015]],
+      "seed": {
+        "tag": null,
+        "at": [1283.4, 958.6],
+        "tolerance_px": 2,
+        "tag_bbox": null
+      },
+      "instances": [
+        { "id": "final-filter-pressure-monitor", "at": [1373.4, 958.6], "tolerance_px": 2, "tag": null, "tag_bbox": null }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/26__vol2__031/p69-p69-full-poppler.png",
+        "method": "Full-page M-401 controls review plus engine-resolution audit of the paired pre-filter and final-filter differential-pressure monitoring assemblies.",
+        "notes": [
+          "This extended-campaign case uses a compound filter-monitor assembly rather than the baseline TT transmitter bubbles. The pre-filter monitor is the seed and the adjacent final-filter monitor is the sole non-seed repeat.",
+          "The 52-segment fingerprint combines the upper circular PDS indicator, rectangular frame, connecting stem, and lower local gauge while excluding the differing PRE-FILTER/FINAL-FILTER vertical text and the air-handler duct line.",
+          "The mate reproduces the compound geometry exactly at score 1.000. Standalone TT, TSL, ZC, pressure-limit, smoke-detector, valve, coil, fan, and motor-controller graphics do not satisfy the complete structure.",
+          "The fingerprint centroid sits between the PDS bubble and gauge rather than inside the PDS text box. Embedded-instrument labels intentionally own only their enclosing bubble, so null label fields are correct and prevent the PDS text from being stretched across the compound assembly."
+        ]
+      }
+    },
+    {
+      "id": "35-houston-mh502-isolation-exhaust-fans",
+      "campaign": "extended",
+      "document_id": "25__vol2__053",
+      "source_pdf": "pdf/25__vol2__053__Houston_VA_Emergency_Room_Expansion.pdf",
+      "source_sha256": "7eaefacf7f42a077e98d3fa1fd01bc96f03a03d444e29ffda7838895dc2e1d57",
+      "page": 11,
+      "sheet_number": "MH502",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[3885, 2585], [3995, 2675]],
+      "seed": {
+        "tag": null,
+        "at": [3938.3, 2627.1],
+        "tolerance_px": 2,
+        "tag_bbox": null
+      },
+      "instances": [
+        { "id": "isolation-exhaust-fan-3d-ef-4", "at": [3938.3, 3068.2], "tolerance_px": 2, "tag": null, "tag_bbox": null }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/25__vol2__053/p11-p11-full-poppler-poppler.png",
+        "method": "Full-page MH502 controls review plus engine-resolution audit of the lead/standby isolation-room exhaust-fan bodies and their independent VFD/control branches.",
+        "notes": [
+          "This extended-campaign case seeds the upper 3D-EF-3 exhaust-fan body, a different family from the page's baseline ultra-low-leakage dampers. The lower 3D-EF-4 body is the sole non-seed repeat.",
+          "The 40-segment fingerprint captures the centrifugal scroll, inner hub, outlet neck, and closing edges while excluding the long exhaust duct, airflow arrow, CT/VFD blocks, and dashed/solid control wiring.",
+          "The independently wired standby fan reproduces the physical body exactly at score 1.000. The reheat valve, HEPA/DPS assembly, pressure sensor, actuator, VAV schematic, alarm icon, tables, and annotation shapes do not match it.",
+          "The 3D-EF-3/3D-EF-4 equipment captions sit outside the tight body marquee with no short literal route to its centroid under the conservative one-pen rules, so null labels are intentional rather than inferred from nearby text."
+        ]
+      }
+    },
+    {
+      "id": "36-eglin-m82-application-controller-modules",
+      "campaign": "extended",
+      "document_id": "24__vol2__019",
+      "source_pdf": "pdf/24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf",
+      "source_sha256": "b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10",
+      "page": 18,
+      "sheet_number": "M8.2",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[2835, 2500], [2930, 2600]],
+      "seed": {
+        "tag": "ASC",
+        "at": [2883.1, 2553.3],
+        "tolerance_px": 2,
+        "tag_bbox": [2869.9, 2494.3, 2909.2, 2513.5]
+      },
+      "instances": [
+        { "id": "lower-application-specific-controller", "at": [2883.1, 2744.1], "tolerance_px": 2, "tag": "ASC", "tag_bbox": [2869.9, 2685.4, 2909.2, 2704.6] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/24__vol2__019/p18-p18-full-poppler.png",
+        "method": "Full-page M8.2 BAS architecture review plus engine-resolution audit of the two application-specific-controller modules and the geometrically identical VFD module.",
+        "notes": [
+          "This extended-campaign case uses the compact application-controller module rather than the baseline dense B-BC building controllers. The upper ASC module is the seed and the lower ASC module is the sole same-class non-seed occurrence.",
+          "The two ASC modules and the VFD module reproduce the same 317-segment enclosure, display, and terminal geometry at score 1.000. Geometry alone therefore returns two candidates, while the drawing's device-class labels establish that only one is another ASC.",
+          "The visible captions read B-ASC, but this PDF exposes the local text run as ASC because the B- prefix is vector artwork. Exact ASC token boxes are frozen; the close VFD run names and withholds the third module instead of relying on a project-specific exception.",
+          "ASC and VFD are treated as repeatable BAS device classes with controller-body reach, not unique asset identifiers. Internet gateway, switch, cloud, network trunks, B-BC controllers, legend symbols, and building renderings remain excluded."
+        ]
+      }
+    },
+    {
+      "id": "37-st-cloud-e701-pump-vfd-modules",
+      "campaign": "extended",
+      "document_id": "23__vol2__033",
+      "source_pdf": "pdf/23__vol2__033__St_Cloud_VA_Building_51_MEP_Replacement.pdf",
+      "source_sha256": "235fa6719258c64a8fe48b139e5c5e080a260e558432a63e13d682e2169e507d",
+      "page": 80,
+      "sheet_number": "E701",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[3320, 2820], [3450, 2970]],
+      "seed": {
+        "tag": "VFD-P-12",
+        "at": [3393.9, 2886.9],
+        "tolerance_px": 2,
+        "tag_bbox": [3424, 2821.2, 3536, 2847.7]
+      },
+      "instances": [
+        { "id": "pump-p-13-variable-frequency-drive", "at": [3737.9, 2886.9], "tolerance_px": 2, "tag": "VFD-P-13", "tag_bbox": [3768.8, 2821.2, 3880.8, 2847.7] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/23__vol2__033/p80-p80-full-poppler.png",
+        "method": "Full-page E701 HVAC electrical one-line review plus engine-resolution audit of both pump VFD modules and their independent feeder branches.",
+        "notes": [
+          "This extended-campaign case uses compact VFD power modules on a different page and discipline from the document's three-page VAV-terminal baseline. VFD-P-12 is the seed and VFD-P-13 is the sole non-seed physical repeat.",
+          "The 16-segment fingerprint contains the rectangular drive enclosure and internal sine-wave glyph while excluding feeder, breaker, conductor, pump, and schedule geometry. The second drive reproduces it exactly at score 1.000.",
+          "The two modules sit only 344 pixels apart among nearly parallel electrical branches. Their exact VFD-P-12 and VFD-P-13 text boxes prove one-to-one local tag ownership; the P-12/P-13 load labels and neighboring AHU disconnect branch cannot steal either placement.",
+          "The page also contains a large electrical equipment schedule and a repeated symbol legend. Neither is traversed by table logic, and neither manufactures placements: this remains a production symbol-sweep and tag-assignment test with no file, page, or coordinate special case."
+        ]
+      }
+    },
+    {
+      "id": "38-cbfm-m702-primary-chilled-water-pumps",
+      "campaign": "extended",
+      "document_id": "22__vol2__012",
+      "source_pdf": "pdf/22__vol2__012__Center_for_Behavioral_Medicine_Chiller_Upgrade.pdf",
+      "source_sha256": "b008fd1b72a48adc5ccbacfa74fcf377dd93bbd30c4b8d2ebec2c540a6248711",
+      "page": 21,
+      "sheet_number": "M702",
+      "page_size_px": [5184, 3456],
+      "seed_rect": [[1800, 2180], [2100, 2490]],
+      "seed": {
+        "tag": "PCHP-1",
+        "at": [1982.4, 2342.6],
+        "tolerance_px": 2,
+        "tag_bbox": [2050.1, 2314, 2088.9, 2355.4]
+      },
+      "instances": [
+        { "id": "primary-chilled-water-pump-2", "at": [2271.9, 2341.7], "tolerance_px": 2, "tag": "PCHP-2", "tag_bbox": [2339.6, 2314, 2378.4, 2355.4] },
+        { "id": "primary-chilled-water-pump-3", "at": [2561.5, 2341.7], "tolerance_px": 2, "tag": "PCHP-3", "tag_bbox": [2629.2, 2314, 2668, 2355.4] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/22__vol2__012/p21-p21-full-poppler.png",
+        "method": "Full-page M702 controls-schematic review plus engine-resolution audit of all three primary chilled-water pump assemblies, their tags, and the surrounding BAS point matrix.",
+        "notes": [
+          "This extended-campaign case uses the primary-pump assembly rather than the document's baseline chiller-control assembly. PCHP-1 is the seed and PCHP-2/PCHP-3 are the two non-seed physical repeats.",
+          "The 1,001-segment fingerprint retains the pump, motor, base, gauge, isolation joints, and local branch geometry in one dense assembly. The two independently connected pumps score 0.988 and 0.974 despite different nearby I/O bubbles and piping intersections.",
+          "Every pump owns its exact divided PCHP tag block. The nearby outlined DI/DO/AO point captions, valves, leaders, pipe labels, and control wiring cannot name or manufacture a pump placement.",
+          "The same sheet also draws CWP and SCHP pump systems with different assembly orientation and surrounding topology. Full-body matching excludes those legitimate but different systems without a source, sheet, coordinate, or project exception."
+        ]
+      }
+    },
+    {
+      "id": "39-jvwtp-h601-rooftop-di-point-callouts",
+      "campaign": "extended",
+      "document_id": "21__vol2__095",
+      "source_pdf": "pdf/21__vol2__095__JVWTP_Washwater_Reclaim_Pump_Station_2_HVAC.pdf",
+      "source_sha256": "17887e9efd271427725d9c334e1ee6119d7fbd2d0d865906b719ed695e7b3606",
+      "page": 7,
+      "sheet_number": "H-601",
+      "page_size_px": [4896, 3168],
+      "seed_rect": [[750, 2040], [980, 2140]],
+      "seed": {
+        "tag": "RT-DI-01",
+        "at": [882.1, 2104.2],
+        "tolerance_px": 2,
+        "tag_bbox": [844.2, 2085.9, 927, 2112.8]
+      },
+      "instances": [
+        { "id": "compressor-refrigerant-leak-input", "at": [884, 2181], "tolerance_px": 2, "tag": "RT-DI-02", "tag_bbox": [844.2, 2162.9, 927, 2189.9] },
+        { "id": "dirty-filter-alarm-input", "at": [884, 2257.9], "tolerance_px": 2, "tag": "RT-DI-03", "tag_bbox": [844.2, 2239.9, 927, 2266.9] },
+        { "id": "supply-air-fan-status-input", "at": [884, 2335], "tolerance_px": 2, "tag": "RT-DI-04", "tag_bbox": [844.2, 2316.9, 927, 2343.8] },
+        { "id": "compressor-status-input", "at": [884, 2412], "tolerance_px": 2, "tag": "RT-DI-05", "tag_bbox": [844.2, 2393.9, 927, 2420.9] },
+        { "id": "electric-heat-status-input", "at": [884, 2488.9], "tolerance_px": 2, "tag": "RT-DI-06", "tag_bbox": [844.2, 2470.9, 927, 2497.9] },
+        { "id": "condensate-overflow-alarm-input", "at": [884, 2566], "tolerance_px": 2, "tag": "RT-DI-07", "tag_bbox": [844.2, 2547.6, 927, 2574.6] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/21__vol2__095/page-7.png",
+        "method": "Full-page H-601 control-diagram review plus engine-resolution audit of all seven unique rooftop-unit digital-input callouts, their duplicate equipment-side references, and sibling I/O types.",
+        "notes": [
+          "This extended-campaign case exercises the seven-point RT-DI family rather than the document's four-point RT-AI baseline. RT-DI-01 is the seed and RT-DI-02 through RT-DI-07 are the six non-seed unique inputs.",
+          "All capsules share the same 66-segment outline with AI, AO, and DO callouts. Literal RT-DI family tags must admit the six sibling IDs and withhold every geometrically identical point belonging to a different I/O family.",
+          "The equipment-side diagram redraws RT-DI-01 and RT-DI-07 as references to the controller list. Unique full-ID reconciliation keeps those repeated annotations from double-counting physical BAS points while preserving all seven distinct IDs.",
+          "The generic OI-AI-1 legend example, controller rectangles, equipment raster, switches, wiring, notes, and symbol-table graphics are excluded. The behavior is driven by exact local tag ownership, not a filename, page, coordinate, or project rule."
+        ]
+      }
+    },
+    {
+      "id": "40-jvwtp-e603-pilot-lights",
+      "campaign": "extended",
+      "document_id": "20__vol2__097",
+      "source_pdf": "pdf/20__vol2__097__JVWTP_Chemical_Buildings_HVAC_Upgrades.pdf",
+      "source_sha256": "95f1c434a5dca5ea297a5981901483d0f57b6a7277abc6c87d5645f072dfe0e3",
+      "page": 25,
+      "sheet_number": "E-603",
+      "page_size_px": [4896, 3168],
+      "seed_rect": [[1425, 480], [1495, 555]],
+      "seed": {
+        "tag": null,
+        "at": [1459.2, 518.4],
+        "tolerance_px": 2,
+        "tag_bbox": null
+      },
+      "instances": [
+        { "id": "hydrofluorosilicic-running-pilot-light", "at": [3314.9, 518.4], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "chlorine-dioxide-high-speed-pilot-light", "at": [1459.2, 1076.4], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "primary-coagulant-running-pilot-light", "at": [3392, 2443], "tolerance_px": 2, "tag": null, "tag_bbox": null }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/20__vol2__097/p25-p25-full-poppler.png",
+        "method": "Full-page E-603 ladder-diagram review plus engine-resolution audit of every W pilot-light glyph across all three independent HVAC controller circuits.",
+        "notes": [
+          "This extended-campaign case uses the pilot-light convention rather than the document's baseline relay coils. The chlorine-dioxide low-speed RUN LOW lamp is the seed; RUN HI and the running lamps in the two other controller circuits are the three non-seed repeats.",
+          "Each 36-segment symbol combines the circular lamp, internal W glyph, and four short light rays. All four physical instances reproduce exactly across separate ladder positions and different surrounding contacts, wires, and annotations.",
+          "The internal W identifies the graphical convention, not an installed asset ID, and the adjacent RUN LOW, RUN HI, and RUNNING phrases are operating-state prose. Null label fields therefore preserve honest symbol counts without inventing equipment tags.",
+          "Relay/contactor coils, F fan coils, selector contacts, thermostats, timer switches, remote controller contacts, terminals, and wiring junctions remain excluded by the complete lamp geometry. No source-specific exception participates."
+        ]
+      }
+    },
+    {
+      "id": "41-orange-county-m201-inline-supply-fans",
+      "campaign": "extended",
+      "document_id": "19__vol2__094",
+      "source_pdf": "pdf/19__vol2__094__Orange_County_Regional_History_Center_HVAC.pdf",
+      "source_sha256": "e205afccbaa16d799d33aed3151c5fd06dbe7a6836e1f1132c61aba0c70fdb45",
+      "page": 6,
+      "sheet_number": "M-201",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[4540, 1930], [4720, 2085]],
+      "seed": {
+        "tag": null,
+        "at": [4632.5, 1999.6],
+        "tolerance_px": 2,
+        "tag_bbox": null
+      },
+      "instances": [
+        { "id": "dedicated-outdoor-air-inline-supply-fan", "at": [4335.1, 3221.9], "tolerance_px": 2, "tag": null, "tag_bbox": null }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/19__vol2__094/p6-p6-full-poppler.png",
+        "method": "Full-page M-201 controls review plus engine-resolution audit of the constant-volume and dedicated-outdoor-air inline supply-fan bodies and the richer VAV fan assembly.",
+        "notes": [
+          "This extended-campaign case uses the inline centrifugal-fan glyph rather than the document's baseline three-way control-valve actuator. The constant-volume AHU fan is the seed and the dedicated-outdoor-air AHU fan is the sole non-seed repeat.",
+          "The 26-segment fingerprint captures the scroll perimeter and discharge neck while excluding the surrounding duct, air-direction breaks, sensors, filter, coil, and humidity instruments. The second fan reproduces it exactly at score 1.000 in a different schematic position.",
+          "The upper variable-air-volume AHU contains a visually related but internally richer fan/motor assembly. It is a legitimate different convention and is not silently collapsed into the simpler inline-fan family.",
+          "The schematic names the AHU systems in their captions rather than attaching a literal equipment tag to either tight fan body, so null labels are intentional. No nearby CV, DPS, TS, HS, AI, AO, DI, or DO tag may rename a fan."
+        ]
+      }
+    },
+    {
+      "id": "42-guaranteed-rate-m121-thermostat-bubbles",
+      "campaign": "extended",
+      "document_id": "18__vol2__092",
+      "source_pdf": "pdf/18__vol2__092__Guaranteed_Rate_Field_HVAC_Phase_IX.pdf",
+      "source_sha256": "85613e85e63e6e3e527a722dc93a9797b2b1edd57a8ec22fc96b4a808bc0f0a5",
+      "page": 8,
+      "sheet_number": "M1.21",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[1525, 2790], [1568, 2848]],
+      "seed": {
+        "tag": "T",
+        "at": [1544.4, 2817.1],
+        "tolerance_px": 2,
+        "tag_bbox": [1541.3, 2807.2, 1552.8, 2826.1]
+      },
+      "instances": [
+        { "id": "northwest-suite-thermostat", "at": [1489.9, 2822.2], "tolerance_px": 2, "tag": "T", "tag_bbox": [1485.1, 2813.4, 1496.6, 2832.2] },
+        { "id": "southwest-suite-thermostat", "at": [1200, 3188.6], "tolerance_px": 2, "tag": "T", "tag_bbox": [1197.2, 3179.6, 1208.8, 3198.5] },
+        { "id": "southeast-suite-thermostat", "at": [1515.4, 3524.4], "tolerance_px": 2, "tag": "T", "tag_bbox": [1512.2, 3514.6, 1523.8, 3533.5] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/18__vol2__092/p8-p8-full-poppler-poppler.png",
+        "method": "Full-page M1.21 plan review plus engine-resolution audit of the four T thermostat bubbles in the section 6-7 fan-coil work area and their neighboring FCU callouts.",
+        "notes": [
+          "This extended-campaign case uses compact thermostat bubbles rather than the document's baseline fan-coil equipment bodies. The northeast thermostat is the seed and the other three installed T bubbles are the non-seed repeats.",
+          "The 33-segment seed contains the circular thermostat body and local T glyph. Two mates are richer contextual variants at score 0.823 and one is exact at 1.000; all four own their exact internal T text boxes.",
+          "Nearby FCU-1 and FCU-2 equipment tags are connected through the same duct/control topology. Equipment-tag reach is now gated by fingerprint ink scale, so a large asset identity cannot rename a 77.3-pixel thermostat glyph even when a route reaches it.",
+          "Fan-coil bodies, diffusers, grilles, ductwork, keyed-note bubbles, airflow values, and the remote equipment yard are excluded. The guard compares symbol ink to source text height and contains no document, page, coordinate, or project exception."
+        ]
+      }
+    },
+    {
+      "id": "43-carson-m601-vlc853e-controller-modules",
+      "campaign": "extended",
+      "document_id": "17__vol1__16",
+      "source_pdf": "pdf/17__vol1__16__Carson_Valley_Middle_School_Phase_1_HVAC_Replacement.pdf",
+      "source_sha256": "96782a6f81077df39c2eb87f4d04e08c7e353483b596bcd97d534938593612a1",
+      "page": 27,
+      "sheet_number": "M6.01",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[1240, 965], [1395, 1135]],
+      "seed": {
+        "tag": "VLC-853-E",
+        "at": [1327.5, 1045.6],
+        "tolerance_px": 2,
+        "tag_bbox": [1285, 1016.2, 1371.2, 1034.2]
+      },
+      "instances": [
+        { "id": "furnace-b2-controller", "at": [1496.7, 1045.6], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [1454.2, 1016.2, 1540.4, 1034.2] },
+        { "id": "furnace-b3-controller", "at": [1666.1, 1045.6], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [1623.6, 1016.2, 1709.8, 1034.2] },
+        { "id": "furnace-b4-controller", "at": [1835.3, 1045.6], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [1792.8, 1016.2, 1879, 1034.2] },
+        { "id": "furnace-b5-controller", "at": [2004.5, 1045.6], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [1962, 1016.2, 2048.2, 1034.2] },
+        { "id": "furnace-b6-controller", "at": [2174, 1045.6], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [2131.2, 1016.2, 2217.4, 1034.2] },
+        { "id": "furnace-b7-controller", "at": [2343.2, 1045.6], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [2300.6, 1016.2, 2386.8, 1034.2] },
+        { "id": "furnace-b8-controller", "at": [2512.4, 1045.6], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [2469.8, 1016.2, 2556, 1034.2] },
+        { "id": "furnace-b9-controller", "at": [2681.6, 1045.6], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [2639, 1016.2, 2725.2, 1034.2] },
+        { "id": "furnace-c9-controller", "at": [1327.5, 1333.8], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [1285, 1304.4, 1371.2, 1322.4] },
+        { "id": "furnace-c8-controller", "at": [1496.7, 1333.8], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [1454.2, 1304.4, 1540.4, 1322.4] },
+        { "id": "furnace-c7-controller", "at": [1666.1, 1333.8], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [1623.6, 1304.4, 1709.8, 1322.4] },
+        { "id": "furnace-c6-controller", "at": [1835.3, 1333.8], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [1792.8, 1304.4, 1879, 1322.4] },
+        { "id": "furnace-c5-controller", "at": [2004.5, 1333.8], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [1962, 1304.4, 2048.2, 1322.4] },
+        { "id": "furnace-c4-controller", "at": [2174, 1333.8], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [2131.2, 1304.4, 2217.4, 1322.4] },
+        { "id": "furnace-c3-controller", "at": [2343.2, 1333.8], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [2300.6, 1304.4, 2386.9, 1322.4] },
+        { "id": "furnace-c2-controller", "at": [2512.4, 1333.8], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [2469.8, 1304.4, 2556, 1322.4] },
+        { "id": "furnace-c1-controller", "at": [2681.6, 1333.8], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [2639, 1304.4, 2725.2, 1322.4] },
+        { "id": "furnace-c10-controller", "at": [1327.5, 1622.1], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [1285, 1592.9, 1371.2, 1610.9] },
+        { "id": "furnace-c11-controller", "at": [1496.7, 1622.1], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [1454.2, 1592.9, 1540.4, 1610.9] },
+        { "id": "furnace-c12-controller", "at": [1666.1, 1622.1], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [1623.6, 1592.9, 1709.8, 1610.9] },
+        { "id": "rtu-b2-controller", "at": [1835.3, 1622.1], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [1792.8, 1592.9, 1879, 1610.9] },
+        { "id": "rtu-b3-controller", "at": [2004.5, 1622.1], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [1962, 1592.9, 2048.2, 1610.9] },
+        { "id": "rtu-b4-controller", "at": [2174, 1622.1], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [2131.2, 1592.9, 2217.4, 1610.9] },
+        { "id": "rtu-b5-controller", "at": [2343.2, 1622.1], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [2300.6, 1592.9, 2386.8, 1610.9] },
+        { "id": "outside-air-unit-b1-controller", "at": [2512.4, 1622.1], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [2469.8, 1592.9, 2556, 1610.9] },
+        { "id": "outside-air-unit-b2-controller", "at": [2681.6, 1622.1], "tolerance_px": 2, "tag": "VLC-853-E", "tag_bbox": [2639, 1592.9, 2725.2, 1610.9] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/17__vol1__16/p27-p27-full-poppler.png",
+        "method": "Full-page M6.01 system-architecture review plus engine-resolution audit of the complete 27-module VLC-853-E controller bank across three BACnet trunk rows.",
+        "notes": [
+          "This extended-campaign case uses compact BAS application-controller modules rather than the document's baseline roof-plan condensing-unit fan assemblies. The F-B1 module is the seed and all 26 non-seed VLC-853-E modules are frozen individually.",
+          "The six-segment fingerprint captures the controller enclosure and clipped lower corner while excluding the BACnet trunk, drop lines, equipment addresses, terminal marks, title graphics, and larger control-panel details.",
+          "Every enclosure contains both a host-equipment identity such as F-B2, RTU-B4, or OAU-B1 and the repeated controller model VLC-853-E. The latter is the correct swept-device family: choosing a host tag would incorrectly split identical controller hardware by the equipment it serves.",
+          "The bank exercises 27 one-to-one text claims, three independent trunk rows, one geometry variant at score 0.762, repeated model labels, and unique address lines. Exact VLC-853-E text boxes are frozen so one token cannot satisfy multiple controller placements."
+        ]
+      }
+    },
+    {
+      "id": "44-itd-d2-m41-temperature-transmitters",
+      "campaign": "extended",
+      "document_id": "16__vol2__069",
+      "source_pdf": "pdf/16__vol2__069__ITD_District_2_Laboratory_Heating_Upgrades_Rebid.pdf",
+      "source_sha256": "ce0c2bb973f87194f0f6ed8d68faaad2a5683129f9d0db1a73415f6051ed06f1",
+      "page": 7,
+      "sheet_number": "M4.1",
+      "engine_sheet_number": null,
+      "page_size_px": [5184, 3456],
+      "seed_rect": [[2670, 1530], [2825, 1715]],
+      "seed": {
+        "tag": "TT",
+        "at": [2757.3, 1591],
+        "tolerance_px": 2,
+        "tag_bbox": [2739, 1582.1, 2757.9, 1600.9]
+      },
+      "instances": [
+        { "id": "chiller-entering-water-temperature-transmitter", "at": [3868.6, 2265.5], "tolerance_px": 2, "tag": "TT", "tag_bbox": [3856.7, 2246.4, 3875.6, 2265.2] },
+        { "id": "chiller-leaving-water-temperature-transmitter", "at": [3958, 2317.4], "tolerance_px": 2, "tag": "TT", "tag_bbox": [3946.1, 2298.2, 3965, 2317.1] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/16__vol2__069/p7-p7-full-poppler.png",
+        "method": "Full-page M4.1 chilled-water controls review plus engine-resolution audit of the three installed temperature-transmitter assemblies and the surrounding relay, pump, and BAS point symbols.",
+        "notes": [
+          "This extended-campaign case uses temperature-transmitter assemblies rather than the document's baseline bypass control valves. The chilled-water tank transmitter is the seed; the chiller entering- and leaving-water transmitters are the two non-seed repeats.",
+          "A circle-only seed produced two exact but semantically wrong CR/CSR control-relay bubbles. The reviewed 34-segment fingerprint includes the TT body and its connected thermowell/stem, eliminating those generic-circle false positives by geometry rather than by a document exception.",
+          "The two chiller transmitters are quarter-turned contextual variants at score 0.946 with substantial adjacent piping linework. Their exact local TT text boxes corroborate both physical placements despite the richer connections.",
+          "DI/DO/AI point callouts, motor circles, CR/CSR relays, current sensors, VFDs, pumps, flow switch, equipment tags, sequences, and title graphics remain excluded. The sheet-level scope preserves the set-wide rule that reference control diagrams are not installed-plan counts."
+        ]
+      }
+    },
+    {
+      "id": "45-slac-m63-analog-input-callouts",
+      "campaign": "extended",
+      "document_id": "15__vol2__067",
+      "source_pdf": "pdf/15__vol2__067__SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf",
+      "source_sha256": "254931f1c37ac5afb3b9ad70d21ae7c2001c2f645c29ca8d92c4aefdc294fa1d",
+      "page": 6,
+      "sheet_number": "M6.3",
+      "page_size_px": [6912, 5184],
+      "seed_rect": [[1160, 2920], [1245, 3015]],
+      "seed": {
+        "tag": "AI",
+        "at": [1203.1, 2968.6],
+        "tolerance_px": 2,
+        "tag_bbox": [1195.2, 2957.1, 1213.7, 2976.2]
+      },
+      "instances": [
+        { "id": "analog-input-callout-01", "at": [3335.5, 2466.5], "tolerance_px": 2, "tag": "AI", "tag_bbox": [3327.6, 2455, 3346.1, 2474.2] },
+        { "id": "analog-input-callout-02", "at": [783.1, 2965.4], "tolerance_px": 2, "tag": "AI", "tag_bbox": [772.8, 2953.7, 791.3, 2972.9] },
+        { "id": "analog-input-callout-03", "at": [2350.1, 2978.6], "tolerance_px": 2, "tag": "AI", "tag_bbox": [2342.2, 2967.1, 2360.6, 2986.3] },
+        { "id": "analog-input-callout-04", "at": [1677.8, 2979.4], "tolerance_px": 2, "tag": "AI", "tag_bbox": [1667.5, 2967.9, 1686, 2987] },
+        { "id": "analog-input-callout-05", "at": [1879.9, 3244.6], "tolerance_px": 2, "tag": "AI", "tag_bbox": [1872, 3233.1, 1890.5, 3252.2] },
+        { "id": "analog-input-callout-06", "at": [4361.8, 3285.8], "tolerance_px": 2, "tag": "AI", "tag_bbox": [4353.8, 3274.1, 4372.3, 3293.3] },
+        { "id": "analog-input-callout-07", "at": [868.6, 3301.7], "tolerance_px": 2, "tag": "AI", "tag_bbox": [858.2, 3290.2, 876.7, 3309.4] },
+        { "id": "analog-input-callout-08", "at": [3583.4, 3326.4], "tolerance_px": 2, "tag": "AI", "tag_bbox": [3573.1, 3314.9, 3591.6, 3334.1] },
+        { "id": "analog-input-callout-09", "at": [2232.7, 3337.4], "tolerance_px": 2, "tag": "AI", "tag_bbox": [2224.8, 3325.9, 2243.3, 3345.1] },
+        { "id": "analog-input-callout-10", "at": [2940, 3671.3], "tolerance_px": 2, "tag": "AI", "tag_bbox": [2929.9, 3659.5, 2948.4, 3678.7] },
+        { "id": "analog-input-callout-11", "at": [3919.2, 3772.3], "tolerance_px": 2, "tag": "AI", "tag_bbox": [3911.3, 3760.8, 3929.8, 3780] },
+        { "id": "analog-input-callout-12", "at": [3552.2, 4009.9], "tolerance_px": 2, "tag": "AI", "tag_bbox": [3544.3, 3998.4, 3562.8, 4017.6] },
+        { "id": "analog-input-callout-13", "at": [2521.2, 4121.3], "tolerance_px": 2, "tag": "AI", "tag_bbox": [2505.6, 4109.8, 2524.1, 4129] },
+        { "id": "analog-input-callout-14", "at": [3523.2, 4219], "tolerance_px": 2, "tag": "AI", "tag_bbox": [3515.3, 4207.5, 3533.7, 4226.6] },
+        { "id": "analog-input-callout-15", "at": [3568.1, 4273.9], "tolerance_px": 2, "tag": "AI", "tag_bbox": [3560.2, 4262.2, 3578.6, 4281.4] },
+        { "id": "analog-input-callout-16", "at": [2521.2, 4331.5], "tolerance_px": 2, "tag": "AI", "tag_bbox": [2505.6, 4320, 2524.1, 4339.2] }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/15__vol2__067/p6-p6-full-poppler-poppler.png",
+        "method": "Full-page M6.3 P&ID review plus engine-resolution audit of all 17 bare AI callout bodies across the new skid, the faded existing skid, and their instrument networks.",
+        "notes": [
+          "This extended-campaign case uses embedded BAS analog-input callouts rather than the document's baseline process-cooling-water pump bodies. One AI is the seed and all 16 non-seed AI placements are frozen with their exact text boxes.",
+          "The five-segment body is geometrically identical to AO, FM, and other P&ID callouts. Before semantic reconciliation it produced 24 non-seed matches; repeated local AI ownership correctly retains 16 and demotes the eight sibling-function bodies.",
+          "Bare AI/AO/DI/DO tokens are admitted only when the sheet repeats the same function, and each may name only the glyph that encloses it. Number-over-type point blocks remain reconstructed as AI-13-style identities without duplicate raw AI claims.",
+          "The case spans horizontal and half-turned callouts, existing/new line weights, temperature, pressure, flow, valve, and pump contexts, and a dense sequence/legend neighborhood. No PDF, page, coordinate, or project token participates in classification."
+        ]
+      }
+    },
+    {
+      "id": "46-usda-m701-primary-circulation-pumps",
+      "campaign": "extended",
+      "document_id": "14__vol2__021",
+      "source_pdf": "pdf/14__vol2__021__USDA_ARS_Laboratory_Mechanical_Set_2019.pdf",
+      "source_sha256": "4d883afdd3b2d94ea2e14621dc49df77bc10ca0548bfd077c436420c43ae75f8",
+      "page": 14,
+      "sheet_number": "M-701",
+      "page_size_px": [6912, 5184],
+      "seed_rect": [[4670, 835], [4748, 910]],
+      "seed": {
+        "tag": null,
+        "at": [4705.7, 863.7],
+        "tolerance_px": 2,
+        "tag_bbox": null
+      },
+      "instances": [
+        { "id": "east-heating-water-primary-pump-1", "at": [1526.3, 794.2], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "east-heating-water-primary-pump-2", "at": [1525.5, 944.1], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "east-chilled-water-primary-pump-2", "at": [4705.5, 1012.7], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "west-heating-water-primary-pump-1", "at": [1526.3, 2912.9], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "west-chilled-water-primary-pump-1", "at": [4721.8, 2982.1], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "west-heating-water-primary-pump-2", "at": [1525.5, 3062.8], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "west-chilled-water-primary-pump-2", "at": [4722.1, 3130.5], "tolerance_px": 2, "tag": null, "tag_bbox": null }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/14__vol2__021/p14-p14-full-poppler-poppler.png",
+        "method": "Full-page M-701 flow-diagram review plus engine-resolution audit of the eight same-scale primary circulation pumps across duplicated east- and west-wing heating/chilled-water systems.",
+        "notes": [
+          "This extended-campaign case uses circulation-pump bodies rather than the document's baseline T-5 ice-storage tanks. One east chilled-water primary pump is the seed and seven non-seed pumps span both wings and both hydronic systems.",
+          "The 62-segment fingerprint captures the complete pump body and local connection geometry. Six mates are exact score-1 repeats and the second east chilled-water pump scores 0.991 with its own surrounding branch context.",
+          "The thermal-energy-meter branches also contain visually related pumps, but their orientation and assembly convention differ materially. They are excluded rather than being forced into a universal pump glyph that the drawing itself does not use.",
+          "VFD boxes, pressure gauges/switches, chemical feeders, air separators, control valves, flow meters, pipe arrows, ice-storage tanks, notes, and title graphics remain excluded. No local tag is close enough to the tight body centroid, so null labels are reviewed truth."
+        ]
+      }
+    },
+    {
+      "id": "47-nist-m801-airflow-diagram-fans",
+      "campaign": "extended",
+      "document_id": "13__vol2__017",
+      "source_pdf": "pdf/13__vol2__017__NIST_Gaithersburg_Building_101_HVAC_Renovation.pdf",
+      "source_sha256": "5821df0d298d0e51a6c20ba36b3cc5d2eb7bbece098f12eb1746c339b56a1533",
+      "page": 18,
+      "sheet_number": "M-801",
+      "page_size_px": [6048, 4320],
+      "seed_rect": [[1300, 950], [1405, 1045]],
+      "seed": {
+        "tag": null,
+        "at": [1341.5, 1001.4],
+        "tolerance_px": 2,
+        "tag_bbox": null
+      },
+      "instances": [
+        { "id": "acu-a1-return-fan", "at": [1106.9, 646.5], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "acu-a2-return-fan", "at": [2898, 646.5], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "acu-a3-supply-fan", "at": [5100.1, 646.5], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "acu-a2-supply-fan", "at": [3212, 1001.4], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "acu-a3-return-fan", "at": [4885.9, 1077.4], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "acu-a4-supply-fan", "at": [1417.2, 2066.3], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "acu-a5-supply-fan", "at": [3212, 2066.3], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "acu-a6-supply-fan", "at": [5100.1, 2090.4], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "acu-a4-exhaust-fan", "at": [1203, 2497.1], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "acu-a5-exhaust-fan", "at": [2997.8, 2497.2], "tolerance_px": 2, "tag": null, "tag_bbox": null },
+        { "id": "acu-a6-return-fan", "at": [4885.9, 2521.2], "tolerance_px": 2, "tag": null, "tag_bbox": null }
+      ],
+      "review": {
+        "render": "ground_truth/reviews/13__vol2__017/p18-p18-full-poppler.png",
+        "method": "Full-page M-801 airflow-diagram review plus engine-resolution audit of all 12 same-convention supply, return, and exhaust fan bodies across ACU-A-1 through ACU-A-6.",
+        "notes": [
+          "This extended-campaign case uses fan bodies in six dense air-system diagrams rather than the document's baseline VFD assemblies. The ACU-A-1 supply fan is the seed; all 11 non-seed supply, return, and exhaust fans are frozen individually.",
+          "The tight 79-segment fingerprint captures the fan scroll, inlet hub, and discharge transition. All 12 placements score 1.000 despite mirrored return/exhaust orientation, different connected coils and dampers, and varying surrounding duct geometry.",
+          "Quarter-turned FA, HCA, CC, and H equipment tags are printed inside upstream inline component rectangles. Text-height scaling now uses the lettering axis, and rotated equipment marks cannot chase connected duct as an annotation leader, preventing CC-A-1 and H-A-3 from renaming adjacent fans.",
+          "Before the generalized rotation correction, ACU-A-3's supply fan was suppressed and other fans inherited coil tags. After correction the engine recovers 12 of 12 fan bodies with no false semantic ownership; dampers, coils, filters, airflow arrows, fan text, and title graphics remain excluded."
+        ]
+      }
+    }
+  ]
+}

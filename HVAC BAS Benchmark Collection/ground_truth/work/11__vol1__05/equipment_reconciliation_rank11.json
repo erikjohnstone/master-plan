@@ -1,0 +1,16 @@
+{
+  "document_id": "11__vol1__05",
+  "module_role": "Literal complete selected schedule-row presentation.",
+  "tables": [],
+  "ledger_mode": "literal_schedule_rows_v1",
+  "schedule_counts": {
+    "tables": 1,
+    "rows": 21,
+    "interpretation": "MH601 Building Steam Trap Schedule: 21 literal rows."
+  },
+  "control_valve_and_damper_schedule_status": {
+    "control_valve_schedule": "No standalone CONTROL VALVE SCHEDULE asserted.",
+    "damper_actuator_schedule": "No standalone DAMPER ACTUATOR SCHEDULE asserted."
+  },
+  "source_boundary": "Rows are not proof of plan placement, final installed count, monitoring, control ownership or I/O."
+}

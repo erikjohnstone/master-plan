@@ -1,0 +1,21 @@
+{
+  "document_id": "16__vol2__069",
+  "module_role": "Source-list ownership ledger for the explicitly printed M4.0 VFD and M4.1 chiller integration lists. It preserves list scope without inventing an installed terminal count, controller wiring assignment, or unprinted AI/AO/DI/DO type.",
+  "tables": [],
+  "ledger_mode": "source_matrix_templates_v1",
+  "source_points_composite": "The points bundle component is controls_context_m4, whose three exact tables retain the VFD, chiller, and all-compressor-circuit source-list rows.",
+  "ownership_binding_semantics": "ownership_scope identifies the printed interface/system scope only. It does not create a physical field-device owner or multiply the open-ended list by an assumed equipment quantity.",
+  "expanded_count_warning": "The ledger contains 16 printed source-list rows. The two printed lists use NOT BE LIMITED TO / ALL AVAILABLE language, so 16 is not a complete installed BAS point or terminal count.",
+  "applications": [
+    {"id": "M40-VFD-INTERFACE", "source_table": "M40-VFD-INTERFACE-POINTS", "ownership_scope": "M4.0 VFD control-interface source list", "physical_installation_count": {"status": "not_stated", "value": null}},
+    {"id": "M41-CHILLER-INTEGRATION", "source_table": "M41-CHILLER-INTEGRATION-POINTS", "ownership_scope": "M4.1 chiller integration-module source list", "physical_installation_count": {"status": "not_stated", "value": null}},
+    {"id": "M41-CHILLER-COMPRESSOR-CIRCUITS", "source_table": "M41-CHILLER-COMPRESSOR-CIRCUIT-POINTS", "ownership_scope": "M4.1 all-compressor-circuits sublist in chiller integration module", "physical_installation_count": {"status": "not_stated", "value": null}}
+  ],
+  "listed_template_counts": {"source_rows": 16, "tables": 3},
+  "expanded_template_counts": {"source_rows": 16},
+  "installed_IO_total": {"status": "not_stated_in_supplied_set", "value": null, "reason": "No terminal plan, controller panel schedule, type-coded point matrix, or complete vendor integration export is supplied. The source lists are expressly open-ended."},
+  "point_transport": {"status": "not_stated_per_point", "value": null, "note": "The controls source prints BACnet and existing Delta-system context, but no list row is assigned a network transport or field wiring method."},
+  "inventory_checks": [
+    {"id": "point-source-list-applications", "records_path": ["applications"], "expected": 3, "unique_key": "source_table"}
+  ]
+}

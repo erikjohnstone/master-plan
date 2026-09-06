@@ -1,0 +1,202 @@
+{
+  "document_id": "24__vol2__019",
+  "source_sha256": "b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10",
+  "annotation_sha256": "a90d63f1581732161043a9ae3c83da3b905b6ad6bd9c47e1fe744619d3dcd49f",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 4,
+  "checks": [
+    {
+      "assertion": "m81-controls-legend-title",
+      "page": 17,
+      "bbox": [
+        2720,
+        1860,
+        2995,
+        1990
+      ],
+      "expected": "DRAWING TITLE MECHANICAL CONTROLS - LEGEND",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DRAWING TITLE MECHANICAL CONTROLS - LEGEND",
+          "word_ids": [
+            1613,
+            1614,
+            1711,
+            1712,
+            1713,
+            1714
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DRAWING TITLE MECHANICAL CONTROLS - LEGEND",
+          "word_ids": [
+            1712,
+            1713,
+            1714,
+            1715,
+            1716,
+            1717
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m83-controls-sheet-title",
+      "page": 19,
+      "bbox": [
+        2700,
+        1850,
+        3010,
+        2000
+      ],
+      "expected": "DRAWING TITLE MECHANICAL CONTROLS - CHILLED WATER SYSTEM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DRAWING TITLE MECHANICAL CONTROLS - CHILLED WATER SYSTEM NONE",
+          "word_ids": [
+            699,
+            700,
+            797,
+            798,
+            799,
+            800,
+            801,
+            802,
+            793
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DRAWING TITLE MECHANICAL CONTROLS - CHILLED WATER SYSTEM NONE",
+          "word_ids": [
+            1223,
+            1224,
+            1225,
+            1226,
+            1227,
+            1228,
+            1229,
+            1230,
+            1231
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m84-controls-sheet-title",
+      "page": 20,
+      "bbox": [
+        2700,
+        1850,
+        3010,
+        2000
+      ],
+      "expected": "DRAWING TITLE MECHANICAL CONTROLS - HEATING HOT WATER SYSTEM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DRAWING TITLE MECHANICAL CONTROLS - HEATING HOT WATER SYSTEM NONE",
+          "word_ids": [
+            1140,
+            1141,
+            1238,
+            1239,
+            1240,
+            1241,
+            1242,
+            1243,
+            1244,
+            1234
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DRAWING TITLE MECHANICAL CONTROLS - HEATING HOT WATER SYSTEM NONE",
+          "word_ids": [
+            1765,
+            1766,
+            1767,
+            1768,
+            1769,
+            1770,
+            1771,
+            1772,
+            1773,
+            1774
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m85-controls-sheet-title",
+      "page": 21,
+      "bbox": [
+        2700,
+        1850,
+        3010,
+        2000
+      ],
+      "expected": "DRAWING TITLE MECHANICAL CONTROLS - AIR HANDLING UNIT AHU-1 DIAGRAM AND POINT LIST",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DRAWING TITLE MECHANICAL CONTROLS - AIR HANDLING UNIT AHU-1 DIAGRAM AND POINT LIST NONE",
+          "word_ids": [
+            514,
+            515,
+            612,
+            613,
+            614,
+            615,
+            616,
+            617,
+            618,
+            619,
+            620,
+            621,
+            622,
+            608
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DRAWING TITLE MECHANICAL CONTROLS - AIR HANDLING UNIT AHU-1 DIAGRAM AND POINT LIST NONE",
+          "word_ids": [
+            1840,
+            1841,
+            1843,
+            1844,
+            1845,
+            1846,
+            1847,
+            1848,
+            1849,
+            1850,
+            1851,
+            1852,
+            1854,
+            1853
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "full-page-review-ledger",
+      "actual": 24,
+      "expected": 24,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

@@ -1,0 +1,163 @@
+{
+  "document_id": "11__vol1__05",
+  "source_sha256": "78755d16240f834ee429960526cadab8edec205b65df36a70c171ab4d4b993db",
+  "annotation_sha256": "7266d51c35193c5eb58ccb72d5faa4085225458794944222b5479962bb7db74b",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 4,
+  "checks": [
+    {
+      "assertion": "p",
+      "page": 1,
+      "bbox": [
+        2244,
+        1919,
+        2610,
+        1982
+      ],
+      "expected": "FCA REPLACE VARIOUS AIR HANDLING UNITS AND VARIABLE AIR VOLUME UNITS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCA REPLACE VARIOUS AIR HANDLING UNITS AND VARIABLE AIR VOLUME UNITS",
+          "word_ids": [
+            377,
+            378,
+            379,
+            380,
+            381,
+            382,
+            383,
+            384,
+            385,
+            386,
+            387
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCA REPLACE VARIOUS AIR HANDLING UNITS AND VARIABLE AIR VOLUME UNITS",
+          "word_ids": [
+            822,
+            823,
+            824,
+            825,
+            826,
+            827,
+            828,
+            829,
+            830,
+            831,
+            832
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "f",
+      "page": 1,
+      "bbox": [
+        2269,
+        2003,
+        2600,
+        2016
+      ],
+      "expected": "JOHN COCHRAN VA MEDICAL CENTER, ST. LOUIS, MO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JOHN COCHRAN VA MEDICAL CENTER, ST. LOUIS, MO",
+          "word_ids": [
+            238,
+            239,
+            240,
+            241,
+            242,
+            243,
+            244,
+            245
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JOHN COCHRAN VA MEDICAL CENTER, ST. LOUIS, MO",
+          "word_ids": [
+            834,
+            835,
+            836,
+            837,
+            838,
+            839,
+            840,
+            841
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "d",
+      "page": 1,
+      "bbox": [
+        2280,
+        2052,
+        2428,
+        2071
+      ],
+      "expected": "MARCH 23, 2023",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MARCH 23, 2023",
+          "word_ids": [
+            388,
+            389,
+            390
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MARCH 23, 2023",
+          "word_ids": [
+            862,
+            863,
+            864
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "s",
+      "page": 1,
+      "bbox": [
+        2678,
+        2024,
+        2739,
+        2049
+      ],
+      "expected": "G000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "G000",
+          "word_ids": [
+            368
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "G000",
+          "word_ids": [
+            877
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

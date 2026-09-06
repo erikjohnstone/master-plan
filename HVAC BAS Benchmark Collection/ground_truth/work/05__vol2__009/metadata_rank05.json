@@ -1,0 +1,404 @@
+{
+  "document_id": "05__vol2__009",
+  "module_role": "Project/title-block, sheet, local-scale and all-page visual-review context. Dense schedule, point-list, DDC and sequence facts are retained in their own independently corroborated modules.",
+  "tables": [],
+  "project": {
+    "project_name_as_printed": "BUILDING 63 ENVELOPE AND HVAC MODIFICATIONS",
+    "owner_as_printed": "U.S. DEPARTMENT OF AGRICULTURE - ANIMAL AND PLANT HEALTH INSPECTION SERVICE (APHIS)",
+    "project_location_as_printed": "OLD CUTLER ROAD, CORAL GABLES, FL 33158",
+    "project_number_as_printed": "CN 10858",
+    "contract_number_as_printed": "12639521D0050",
+    "modification_as_printed": "P00001",
+    "design_firm_as_printed": "CLARK NEXSEN",
+    "issue_as_printed": "FINAL IFC SUBMITTAL",
+    "issue_date_as_printed": "2026.07.31",
+    "revision_date_status": "No populated revision entry/date is asserted from the reviewed revision block; the issue date is not recast as a revision date.",
+    "assertion_ids": [
+      "rank05-project-title",
+      "rank05-project-owner",
+      "rank05-project-location",
+      "rank05-ifc-issue-date"
+    ]
+  },
+  "sheet_details": {
+    "sheet_ledger_semantics": "All 31 supplied PDF pages have a completed full-page visual source-sheet/title disposition below.",
+    "revision_status": "No populated revision date is asserted from the reviewed title block."
+  },
+  "scale_semantics": {
+    "printed_local_view_scales_observed": [
+      {
+        "page": 3,
+        "sheet": "GI003",
+        "view": "phasing/symbology plan view",
+        "scale_as_printed": "1/8\" = 1'-0\""
+      },
+      {
+        "page": 4,
+        "sheet": "GI101",
+        "view": "Level 1 life safety plan",
+        "scale_as_printed": "1/8\" = 1'-0\""
+      },
+      {
+        "page": 8,
+        "sheet": "AE101",
+        "view": "Level 1 floor plan",
+        "scale_as_printed": "1/8\" = 1'-0\""
+      },
+      {
+        "page": 15,
+        "sheet": "MH101",
+        "view": "mechanical plan views",
+        "scale_as_printed": "1/8\" = 1'-0\""
+      },
+      {
+        "page": 16,
+        "sheet": "MH102",
+        "view": "mechanical roof plan",
+        "scale_as_printed": "1/8\" = 1'-0\""
+      }
+    ],
+    "graphic_scale_bar_status": "Graphic scale bars are visible on plan sheets, but their labels/lengths are not converted into a global scale. The cited printed scale is local to its named view.",
+    "takeoff_scale_status": "Distance-based takeoff must use a separately verified local view scale; do not apply these plan scales to schedules, controls, schematics, details or other views."
+  },
+  "visual_review_pages": [
+    {
+      "page": 1,
+      "sheet": "GI000",
+      "title": "COVER SHEET",
+      "render": "reviews/05__vol2__009/p1-p1-full-poppler.png",
+      "finding": "Project title block, project team, sheet index and issue context."
+    },
+    {
+      "page": 2,
+      "sheet": "GI002",
+      "title": "BUILDING CODE SUMMARY",
+      "render": "reviews/05__vol2__009/p2-p2-full-poppler.png",
+      "finding": "Building-code summary."
+    },
+    {
+      "page": 3,
+      "sheet": "GI003",
+      "title": "PHASING PLAN / GENERAL PROJECT SYMBOLOGY",
+      "render": "reviews/05__vol2__009/p3-p3-full-poppler.png",
+      "finding": "Phasing, symbology and local plan-scale context."
+    },
+    {
+      "page": 4,
+      "sheet": "GI101",
+      "title": "LIFE SAFETY PLAN",
+      "render": "reviews/05__vol2__009/p4-p4-full-poppler.png",
+      "finding": "Level 1 life-safety plan and local scale context."
+    },
+    {
+      "page": 5,
+      "sheet": "S-001",
+      "title": "STRUCTURAL NOTES",
+      "render": "reviews/05__vol2__009/p5-p5-full-poppler.png",
+      "finding": "Structural general notes."
+    },
+    {
+      "page": 6,
+      "sheet": "SF101",
+      "title": "ROOF FRAMING PLAN",
+      "render": "reviews/05__vol2__009/p6-p6-full-poppler.png",
+      "finding": "Roof framing and structural-detail context."
+    },
+    {
+      "page": 7,
+      "sheet": "A-001",
+      "title": "ARCHITECTURAL LEGEND",
+      "render": "reviews/05__vol2__009/p7-p7-full-poppler.png",
+      "finding": "Architectural legend, notes and abbreviations."
+    },
+    {
+      "page": 8,
+      "sheet": "AE101",
+      "title": "LEVEL 1 FLOOR PLAN",
+      "render": "reviews/05__vol2__009/p8-p8-full-poppler.png",
+      "finding": "Level 1 architectural floor-plan context."
+    },
+    {
+      "page": 9,
+      "sheet": "AE111",
+      "title": "REFLECTED CEILING PLANS",
+      "render": "reviews/05__vol2__009/p9-p9-full-poppler.png",
+      "finding": "Reflected-ceiling-plan context."
+    },
+    {
+      "page": 10,
+      "sheet": "AE121",
+      "title": "ROOF PLANS",
+      "render": "reviews/05__vol2__009/p10-p10-full-poppler.png",
+      "finding": "Architectural roof-plan context."
+    },
+    {
+      "page": 11,
+      "sheet": "AE201",
+      "title": "EXTERIOR ELEVATIONS",
+      "render": "reviews/05__vol2__009/p11-p11-full-poppler.png",
+      "finding": "Architectural exterior-elevation context."
+    },
+    {
+      "page": 12,
+      "sheet": "AE301",
+      "title": "BUILDING SECTIONS",
+      "render": "reviews/05__vol2__009/p12-p12-full-poppler.png",
+      "finding": "Architectural building-section context."
+    },
+    {
+      "page": 13,
+      "sheet": "M-001",
+      "title": "MECHANICAL LEGEND",
+      "render": "reviews/05__vol2__009/p13-p13-full-poppler.png",
+      "finding": "Mechanical duct, piping, valve and device legends; duct construction/leakage schedule."
+    },
+    {
+      "page": 14,
+      "sheet": "MD101",
+      "title": "MECHANICAL DEMOLITION PLANS",
+      "render": "reviews/05__vol2__009/p14-p14-full-poppler.png",
+      "finding": "Mechanical demolition; explicit thermostat/sensor, damper-actuator and chilled-water-valve demolition context."
+    },
+    {
+      "page": 15,
+      "sheet": "MH101",
+      "title": "MECHANICAL PLANS",
+      "render": "reviews/05__vol2__009/p15-p15-full-poppler.png",
+      "finding": "Attic/mezzanine and Level 1 mechanical plans with AHU, exhaust, VAV, duct heater, chiller and pump context."
+    },
+    {
+      "page": 16,
+      "sheet": "MH102",
+      "title": "MECHANICAL ROOF PLAN",
+      "render": "reviews/05__vol2__009/p16-p16-full-poppler.png",
+      "finding": "Mechanical roof plan and building air-balance table."
+    },
+    {
+      "page": 17,
+      "sheet": "M-501",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/05__vol2__009/p17-p17-full-poppler.png",
+      "finding": "Water-coil three-way-valve, fan-curb and inline-pump mechanical details."
+    },
+    {
+      "page": 18,
+      "sheet": "M-601",
+      "title": "MECHANICAL SCHEDULES",
+      "render": "reviews/05__vol2__009/p18-p18-full-poppler.png",
+      "finding": "Air device, chiller, fan, hydronic control valve, AHU, VAV, pump and electric duct heater schedules."
+    },
+    {
+      "page": 19,
+      "sheet": "M-801",
+      "title": "CONTROLS",
+      "render": "reviews/05__vol2__009/p19-p19-full-poppler.png",
+      "finding": "Controls and point legends, DDC scope/network requirements and VFD BACnet interface schedule."
+    },
+    {
+      "page": 20,
+      "sheet": "M-802",
+      "title": "CONTROLS",
+      "render": "reviews/05__vol2__009/p20-p20-full-poppler.png",
+      "finding": "AHU-1 and chilled-water-plant sequences, diagrams and DDC point lists."
+    },
+    {
+      "page": 21,
+      "sheet": "M-803",
+      "title": "CONTROLS",
+      "render": "reviews/05__vol2__009/p21-p21-full-poppler.png",
+      "finding": "Laboratory/scheduled exhaust and AHU-2 sequences, diagrams and DDC point lists."
+    },
+    {
+      "page": 22,
+      "sheet": "M-804",
+      "title": "CONTROLS",
+      "render": "reviews/05__vol2__009/p22-p22-full-poppler.png",
+      "finding": "VAV/electric-duct-heater sequences, diagrams and DDC point lists."
+    },
+    {
+      "page": 23,
+      "sheet": "E-001",
+      "title": "ELECTRICAL LEGEND",
+      "render": "reviews/05__vol2__009/p23-p23-full-poppler.png",
+      "finding": "Electrical legend, notes and abbreviations."
+    },
+    {
+      "page": 24,
+      "sheet": "ED101",
+      "title": "ELECTRICAL DEMOLITION PLAN",
+      "render": "reviews/05__vol2__009/p24-p24-full-poppler.png",
+      "finding": "Electrical demolition-plan context."
+    },
+    {
+      "page": 25,
+      "sheet": "EG101",
+      "title": "LIGHTNING PROTECTION PLAN",
+      "render": "reviews/05__vol2__009/p25-p25-full-poppler.png",
+      "finding": "Lightning-protection-plan context."
+    },
+    {
+      "page": 26,
+      "sheet": "EG501",
+      "title": "LIGHTNING PROTECTION DETAILS",
+      "render": "reviews/05__vol2__009/p26-p26-full-poppler.png",
+      "finding": "Lightning-protection-detail context."
+    },
+    {
+      "page": 27,
+      "sheet": "EL101",
+      "title": "LIGHTING PLANS",
+      "render": "reviews/05__vol2__009/p27-p27-full-poppler.png",
+      "finding": "Lighting-plan context."
+    },
+    {
+      "page": 28,
+      "sheet": "EL501",
+      "title": "LIGHTING DETAILS / LUMINAIRE SCHEDULE",
+      "render": "reviews/05__vol2__009/p28-p28-full-poppler.png",
+      "finding": "Lighting details and luminaire schedule."
+    },
+    {
+      "page": 29,
+      "sheet": "EP101",
+      "title": "POWER PLANS",
+      "render": "reviews/05__vol2__009/p29-p29-full-poppler.png",
+      "finding": "Power-plan context."
+    },
+    {
+      "page": 30,
+      "sheet": "EP601",
+      "title": "PANELBOARD SCHEDULES / ENLARGED PLANS",
+      "render": "reviews/05__vol2__009/p30-p30-full-poppler.png",
+      "finding": "Electrical panel schedules and enlarged plan context."
+    },
+    {
+      "page": 31,
+      "sheet": "EP701",
+      "title": "POWER RISER DIAGRAM",
+      "render": "reviews/05__vol2__009/p31-p31-full-poppler.png",
+      "finding": "Equipment connection schedules and power riser."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "rank05-project-title",
+      "page": 1,
+      "bbox": [
+        2750,
+        260,
+        3000,
+        360
+      ],
+      "expected": "BUILDING 63 ENVELOPE AND HVAC MODIFICATIONS",
+      "mode": "exact"
+    },
+    {
+      "id": "rank05-project-owner",
+      "page": 1,
+      "bbox": [
+        2750,
+        210,
+        3000,
+        265
+      ],
+      "expected": "U.S. DEPARTMENT OF AGRICULTURE- ANIMAL AND PLANT HEALTH INSPECTION SERVICE (APHIS)",
+      "mode": "exact"
+    },
+    {
+      "id": "rank05-project-location",
+      "page": 1,
+      "bbox": [
+        2750,
+        370,
+        2900,
+        410
+      ],
+      "expected": "OLD CUTLER ROAD CORAL GABLES, FL 33158",
+      "mode": "exact"
+    },
+    {
+      "id": "rank05-ifc-issue-date",
+      "page": 1,
+      "bbox": [
+        2750,
+        1298,
+        2930,
+        1360
+      ],
+      "expected": "2026.07.31 FINAL IFC SUBMITTAL",
+      "mode": "exact"
+    },
+    {
+      "id": "rank05-scale-gi003",
+      "page": 3,
+      "bbox": [
+        370,
+        1944,
+        470,
+        1967
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "mode": "exact"
+    },
+    {
+      "id": "rank05-scale-gi101",
+      "page": 4,
+      "bbox": [
+        520,
+        1762,
+        620,
+        1785
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "mode": "exact"
+    },
+    {
+      "id": "rank05-scale-ae101",
+      "page": 8,
+      "bbox": [
+        470,
+        1080,
+        575,
+        1108
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "mode": "exact"
+    },
+    {
+      "id": "rank05-scale-mh101-upper",
+      "page": 15,
+      "bbox": [
+        250,
+        937,
+        355,
+        964
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "mode": "exact"
+    },
+    {
+      "id": "rank05-scale-mh101-lower",
+      "page": 15,
+      "bbox": [
+        250,
+        1830,
+        355,
+        1856
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "mode": "exact"
+    },
+    {
+      "id": "rank05-scale-mh102",
+      "page": 16,
+      "bbox": [
+        250,
+        937,
+        355,
+        964
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "mode": "exact"
+    }
+  ]
+}

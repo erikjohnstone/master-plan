@@ -1,0 +1,2098 @@
+{
+  "document_id": "02__vol2__015",
+  "source_sha256": "7ac5b4d6d97b5416f7d04a2a3abd303513ac9f19cec5930d0b9aa3bcd550da97",
+  "annotation_sha256": "791d0e85923b9b3fcc261bfb5ad88c318d4460aeeb907749fbf1637fd9b1dbe0",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 56,
+  "checks": [
+    {
+      "assertion": "legend-T",
+      "page": 1,
+      "bbox": [
+        150,
+        114,
+        275,
+        132
+      ],
+      "expected": "T THERMOSTAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T THERMOSTAT",
+          "word_ids": [
+            798,
+            799
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T THERMOSTAT",
+          "word_ids": [
+            1325,
+            1324
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "legend-S",
+      "page": 1,
+      "bbox": [
+        150,
+        140,
+        331,
+        158
+      ],
+      "expected": "S TEMPERATURE SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S TEMPERATURE SENSOR",
+          "word_ids": [
+            870,
+            871,
+            872
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S TEMPERATURE SENSOR",
+          "word_ids": [
+            1311,
+            1291,
+            1292
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "FC1-two",
+      "page": 25,
+      "bbox": [
+        198,
+        1036,
+        733,
+        1084
+      ],
+      "expected": "FC-1 HAS (2) TEMPERATURE SENSORS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FC-1 HAS (2) TEMPERATURE SENSORS THE CONTROL SYSTEM MUST MONITOR BOTH SENSORS AND USE THE WORST CASE TEMPERATURE (I.E. LOWEST) TO PROVIDE HEATING AND BACKUP SEQUENCE INDICATED ABOVE.",
+          "word_ids": [
+            167,
+            168,
+            169,
+            170,
+            171,
+            172,
+            173,
+            174,
+            175,
+            176,
+            177,
+            178,
+            179,
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FC-1 HAS (2) TEMPERATURE SENSORS THE CONTROL SYSTEM MUST MONITOR BOTH SENSORS AND USE THE WORST CASE TEMPERATURE (I.E. LOWEST) TO PROVIDE HEATING AND BACKUP SEQUENCE INDICATED ABOVE.",
+          "word_ids": [
+            195,
+            196,
+            197,
+            198,
+            199,
+            200,
+            201,
+            202,
+            203,
+            204,
+            205,
+            206,
+            207,
+            208,
+            209,
+            210,
+            211,
+            212,
+            213,
+            214,
+            215,
+            216,
+            217,
+            218,
+            219,
+            220,
+            221,
+            222
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "EF1-two",
+      "page": 25,
+      "bbox": [
+        927,
+        1200,
+        1477,
+        1234
+      ],
+      "expected": "EF-1 HAS (2) TEMPERATURE SENSORS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-1 HAS (2) TEMPERATURE SENSORS THE CONTROL SYSTEM MUST MONITOR BOTH SENSOR AND USE THE WORST CASE TEMPERATURE (I.E. HIGHEST) TO PROVIDE VENTILATION SEQUENCE INDICATED ABOVE.",
+          "word_ids": [
+            468,
+            469,
+            470,
+            471,
+            472,
+            473,
+            474,
+            475,
+            476,
+            477,
+            478,
+            479,
+            480,
+            481,
+            482,
+            483,
+            484,
+            485,
+            486,
+            487,
+            488,
+            489,
+            490,
+            491,
+            492,
+            493
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-1 HAS (2) TEMPERATURE SENSORS THE CONTROL SYSTEM MUST MONITOR BOTH SENSOR AND USE THE WORST CASE TEMPERATURE (I.E. HIGHEST) TO PROVIDE VENTILATION SEQUENCE INDICATED ABOVE.",
+          "word_ids": [
+            390,
+            391,
+            392,
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            403,
+            404,
+            405,
+            406,
+            407,
+            408,
+            409,
+            410,
+            411,
+            412,
+            413,
+            414,
+            415
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "MPAC-shared",
+      "page": 26,
+      "bbox": [
+        1955,
+        752,
+        2035,
+        784
+      ],
+      "expected": "FC-3 SENSOR INPUT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FC-3 SENSOR INPUT",
+          "word_ids": [
+            592,
+            593,
+            594
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FC-3 SENSOR INPUT",
+          "word_ids": [
+            646,
+            647,
+            648
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "guard-exempt",
+      "page": 27,
+      "bbox": [
+        1505,
+        890,
+        1730,
+        930
+      ],
+      "expected": "TEMPERATURE SENSOR NOT REQUIRED ON GUARD BOOTH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTE: TEMPERATURE SENSOR NOT REQUIRED ON GUARD BOOTH",
+          "word_ids": [
+            343,
+            344,
+            345,
+            346,
+            347,
+            348,
+            349,
+            350
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTE: TEMPERATURE SENSOR NOT REQUIRED ON GUARD BOOTH",
+          "word_ids": [
+            189,
+            190,
+            191,
+            192,
+            193,
+            194,
+            195,
+            196
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "programmable-7day",
+      "page": 27,
+      "bbox": [
+        179,
+        917,
+        714,
+        1035
+      ],
+      "expected": "7-DAY PROGRAMMABLE THERMOSTAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PROGRAMMABLE THERMOSTAT: THE UNIT MUST BE PROVIDED WITH A 7-DAY PROGRAMMABLE THERMOSTAT TO PROVIDE THE MANUFACTURER’S STANDARD SEQUENCE INCLUDING, BUT NOT LIMITED TO: 1. COOLING MODE 2. HEATING MODE 3. EMERGENCY HEAT 4. DEFROST CYCLE",
+          "word_ids": [
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PROGRAMMABLE THERMOSTAT: THE UNIT MUST BE PROVIDED WITH A 7-DAY PROGRAMMABLE THERMOSTAT TO PROVIDE THE MANUFACTURER’S STANDARD SEQUENCE INCLUDING, BUT NOT LIMITED TO: 1. COOLING MODE 2. HEATING MODE 3. EMERGENCY HEAT 4. DEFROST CYCLE",
+          "word_ids": [
+            654,
+            655,
+            656,
+            657,
+            658,
+            659,
+            660,
+            661,
+            662,
+            663,
+            664,
+            665,
+            666,
+            667,
+            668,
+            669,
+            670,
+            671,
+            672,
+            673,
+            674,
+            675,
+            676,
+            633,
+            520,
+            521,
+            634,
+            522,
+            523,
+            635,
+            524,
+            525,
+            636,
+            526,
+            527
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "guard-controller-height",
+      "page": 9,
+      "bbox": [
+        1820,
+        245,
+        2245,
+        470
+      ],
+      "expected": "MOUNT REMOTE CONTROLLER TO WALL AT 48\" AFF.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12 PROVIDE MANUFACTURER'S RECOMMENDED CLEARENCES FOR AIRFLOW AND MAINTENANCE. 13 PROVIDE 18\" HIGH OUTDOOR UNIT STAND FOR CU-4. 14 SEE DUCTLESS SPLIT AC-WALL DETAIL C4/AM505. 15 PROVIDE CONDENSATE DRAIN SEE DETAIL C1/AM501. 16 MOUNT REMOTE CONTROLLER TO WALL AT 48\" AFF. 17 COORDINATE LOCATION OF INDOOR UNIT WITH TELEPHONE EQUIPMENT RACK. MOUNT DSS INDOOR UNIT 8'6\" AFF. USE MANUFACTURER'S PROVIDED MOUNTING HARDWARE. 18 SECURE REFRIGERANT PIPING AND DRAIN PIPING TO WALL. 19 TELEPHONE EQUIPMENT RACK. 20 PROVIDE MANUFACTURER'S RECOMMENDED PVC LINESET COVER. 33 SEE PIPE PENETRATIONS - DETAIL C3/AP504",
+          "word_ids": [
+            250,
+            251,
+            252,
+            253,
+            254,
+            255,
+            256,
+            257,
+            258,
+            259,
+            260,
+            261,
+            262,
+            263,
+            264,
+            265,
+            266,
+            267,
+            268,
+            269,
+            270,
+            271,
+            272,
+            273,
+            274,
+            275,
+            276,
+            277,
+            278,
+            279,
+            280,
+            281,
+            282,
+            283,
+            284,
+            285,
+            286,
+            287,
+            288,
+            289,
+            290,
+            291,
+            292,
+            293,
+            294,
+            295,
+            296,
+            297,
+            298,
+            299,
+            300,
+            301,
+            302,
+            303,
+            304,
+            305,
+            306,
+            307,
+            308,
+            309,
+            310,
+            311,
+            312,
+            313,
+            314,
+            315,
+            316,
+            317,
+            318,
+            319,
+            320,
+            321,
+            322,
+            323,
+            324,
+            325,
+            326,
+            327,
+            328,
+            329,
+            330,
+            331,
+            332,
+            333,
+            334,
+            335,
+            336,
+            337,
+            338
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12 PROVIDE MANUFACTURER'S RECOMMENDED CLEARENCES FOR AIRFLOW AND MAINTENANCE. 13 PROVIDE 18\" HIGH OUTDOOR UNIT STAND FOR CU-4. 14 SEE DUCTLESS SPLIT AC-WALL DETAIL C4/AM505. 15 PROVIDE CONDENSATE DRAIN SEE DETAIL C1/AM501. 16 MOUNT REMOTE CONTROLLER TO WALL AT 48\" AFF. 17 COORDINATE LOCATION OF INDOOR UNIT WITH TELEPHONE EQUIPMENT RACK. MOUNT DSS INDOOR UNIT 8'6\" AFF. USE MANUFACTURER'S PROVIDED MOUNTING HARDWARE. 18 SECURE REFRIGERANT PIPING AND DRAIN PIPING TO WALL. 19 TELEPHONE EQUIPMENT RACK. 20 PROVIDE MANUFACTURER'S RECOMMENDED PVC LINESET COVER. 33 SEE PIPE PENETRATIONS - DETAIL C3/AP504",
+          "word_ids": [
+            33,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            35,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            36,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            37,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            38,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            39,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            48,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            49,
+            121,
+            122,
+            123,
+            50,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            51,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "general-control-height",
+      "page": 1,
+      "bbox": [
+        1820,
+        690,
+        2225,
+        736
+      ],
+      "expected": "MOUNT THERMOSTATS, HUMIDISTATS, AND ESS 48 INCHES ABOVE FINISHED FLOOR UNLESS OTHERWISE INDICATED.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MOUNT THERMOSTATS, HUMIDISTATS, AND ESS 48 INCHES ABOVE FINISHED FLOOR UNLESS OTHERWISE INDICATED. REFER TO ELECTRICAL DRAWINGS FOR LOCATION OF LIGHT SWITCHES.",
+          "word_ids": [
+            331,
+            332,
+            333,
+            334,
+            335,
+            336,
+            337,
+            338,
+            339,
+            340,
+            341,
+            342,
+            343,
+            344,
+            345,
+            346,
+            347,
+            348,
+            349,
+            350,
+            351,
+            352
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MOUNT THERMOSTATS, HUMIDISTATS, AND ESS 48 INCHES ABOVE FINISHED FLOOR UNLESS OTHERWISE INDICATED. REFER TO ELECTRICAL DRAWINGS FOR LOCATION OF LIGHT SWITCHES.",
+          "word_ids": [
+            814,
+            815,
+            816,
+            817,
+            818,
+            819,
+            820,
+            821,
+            822,
+            823,
+            824,
+            825,
+            826,
+            827,
+            828,
+            829,
+            830,
+            831,
+            832,
+            833,
+            834,
+            835
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "ddc-control-height",
+      "page": 22,
+      "bbox": [
+        1850,
+        131,
+        2190,
+        148
+      ],
+      "expected": "LOCATE ALL THERMOSTAT AND TEMPERATURE SENSORS 5'-0\" AFF.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOCATE ALL THERMOSTAT AND TEMPERATURE SENSORS 5'-0\" AFF.",
+          "word_ids": [
+            422,
+            423,
+            424,
+            425,
+            426,
+            427,
+            428,
+            429
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOCATE ALL THERMOSTAT AND TEMPERATURE SENSORS 5'-0\" AFF.",
+          "word_ids": [
+            246,
+            247,
+            248,
+            249,
+            250,
+            251,
+            252,
+            253
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/EF1-west/glyph",
+      "page": 3,
+      "bbox": [
+        696,
+        742,
+        708,
+        758
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            140
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            347
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/EF1-west/equipment-callout",
+      "page": 3,
+      "bbox": [
+        668,
+        739,
+        710,
+        766
+      ],
+      "expected": "EF-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T EF-1",
+          "word_ids": [
+            140,
+            141
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T EF-1",
+          "word_ids": [
+            347,
+            348
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/EF1-east/glyph",
+      "page": 3,
+      "bbox": [
+        727,
+        741,
+        740,
+        757
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            180
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            346
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/EF1-east/equipment-callout",
+      "page": 3,
+      "bbox": [
+        726,
+        739,
+        770,
+        766
+      ],
+      "expected": "EF-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T EF-1",
+          "word_ids": [
+            180,
+            232
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T EF-1",
+          "word_ids": [
+            346,
+            328
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/FC1-west/glyph",
+      "page": 3,
+      "bbox": [
+        697,
+        785,
+        710,
+        802
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            178
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            326
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/FC1-west/equipment-callout",
+      "page": 3,
+      "bbox": [
+        668,
+        784,
+        711,
+        806
+      ],
+      "expected": "FC-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FC-1 T",
+          "word_ids": [
+            181,
+            178
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FC-1 T",
+          "word_ids": [
+            325,
+            326
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/FC1-east/glyph",
+      "page": 3,
+      "bbox": [
+        727,
+        808,
+        740,
+        825
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            179
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            73
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/FC1-east/equipment-callout",
+      "page": 3,
+      "bbox": [
+        726,
+        806,
+        771,
+        828
+      ],
+      "expected": "FC-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T FC-1",
+          "word_ids": [
+            179,
+            182
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T FC-1",
+          "word_ids": [
+            73,
+            74
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/EF2/glyph",
+      "page": 3,
+      "bbox": [
+        1101,
+        968,
+        1114,
+        986
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            142
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            197
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/EF2/equipment-callout",
+      "page": 3,
+      "bbox": [
+        1099,
+        966,
+        1146,
+        988
+      ],
+      "expected": "EF-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T EF-2",
+          "word_ids": [
+            142,
+            143
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T EF-2",
+          "word_ids": [
+            197,
+            198
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/FC2/glyph",
+      "page": 3,
+      "bbox": [
+        1710,
+        969,
+        1723,
+        986
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            195
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            208
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/FC2/equipment-callout",
+      "page": 3,
+      "bbox": [
+        1680,
+        967,
+        1726,
+        1001
+      ],
+      "expected": "FC-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T FC-2",
+          "word_ids": [
+            195,
+            196
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T FC-2",
+          "word_ids": [
+            208,
+            209
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/FC3/glyph",
+      "page": 4,
+      "bbox": [
+        200,
+        917,
+        213,
+        935
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            223
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            251
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/FC3/equipment-callout",
+      "page": 4,
+      "bbox": [
+        197,
+        915,
+        254,
+        949
+      ],
+      "expected": "FC-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T FC-3",
+          "word_ids": [
+            223,
+            224
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T FC-3",
+          "word_ids": [
+            251,
+            254
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/EF3/glyph",
+      "page": 4,
+      "bbox": [
+        1941,
+        867,
+        1955,
+        885
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            134
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            241
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/EF3/equipment-callout",
+      "page": 4,
+      "bbox": [
+        1910,
+        865,
+        1958,
+        894
+      ],
+      "expected": "EF-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T EF-3",
+          "word_ids": [
+            134,
+            135
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T EF-3",
+          "word_ids": [
+            241,
+            240
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/UH3/glyph",
+      "page": 4,
+      "bbox": [
+        1192,
+        165,
+        1205,
+        184
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            253
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            17
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/UH3/equipment-callout",
+      "page": 4,
+      "bbox": [
+        1189,
+        162,
+        1238,
+        189
+      ],
+      "expected": "UH-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T UH-3",
+          "word_ids": [
+            253,
+            254
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T UH-3",
+          "word_ids": [
+            17,
+            28
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/FC4/glyph",
+      "page": 5,
+      "bbox": [
+        209,
+        871,
+        222,
+        889
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            155
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            462
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/FC4/equipment-callout",
+      "page": 5,
+      "bbox": [
+        206,
+        869,
+        255,
+        899
+      ],
+      "expected": "FC-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T FC-4",
+          "word_ids": [
+            155,
+            156
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T FC-4",
+          "word_ids": [
+            462,
+            456
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/EF4/glyph",
+      "page": 5,
+      "bbox": [
+        1783,
+        888,
+        1797,
+        906
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            123
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            353
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/EF4/equipment-callout",
+      "page": 5,
+      "bbox": [
+        1748,
+        886,
+        1800,
+        911
+      ],
+      "expected": "EF-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T EF-4",
+          "word_ids": [
+            123,
+            124
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T EF-4",
+          "word_ids": [
+            353,
+            352
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/UH4/glyph",
+      "page": 5,
+      "bbox": [
+        1105,
+        155,
+        1118,
+        173
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            168
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            21
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/UH4/equipment-callout",
+      "page": 5,
+      "bbox": [
+        1075,
+        153,
+        1121,
+        180
+      ],
+      "expected": "UH-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T UH-4",
+          "word_ids": [
+            168,
+            169
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T UH-4",
+          "word_ids": [
+            21,
+            19
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/EF5/glyph",
+      "page": 6,
+      "bbox": [
+        240,
+        523,
+        253,
+        541
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            147
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            273
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/EF5/equipment-callout",
+      "page": 6,
+      "bbox": [
+        237,
+        520,
+        282,
+        555
+      ],
+      "expected": "EF-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T EF-5",
+          "word_ids": [
+            147,
+            148
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T EF-5",
+          "word_ids": [
+            273,
+            265
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/UH1/glyph",
+      "page": 6,
+      "bbox": [
+        303,
+        417,
+        316,
+        435
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            171
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            294
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/UH1/equipment-callout",
+      "page": 6,
+      "bbox": [
+        300,
+        414,
+        350,
+        441
+      ],
+      "expected": "UH-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T UH-1",
+          "word_ids": [
+            171,
+            172
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T UH-1",
+          "word_ids": [
+            294,
+            295
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/UH2/glyph",
+      "page": 6,
+      "bbox": [
+        705,
+        992,
+        719,
+        1010
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            154
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            535
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/UH2/equipment-callout",
+      "page": 6,
+      "bbox": [
+        702,
+        989,
+        752,
+        1017
+      ],
+      "expected": "UH-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T UH-2",
+          "word_ids": [
+            154,
+            155
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T UH-2",
+          "word_ids": [
+            535,
+            536
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/EF6/glyph",
+      "page": 6,
+      "bbox": [
+        559,
+        707,
+        573,
+        726
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            152
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            304
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/EF6/equipment-callout",
+      "page": 6,
+      "bbox": [
+        556,
+        704,
+        603,
+        740
+      ],
+      "expected": "EF-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T EF-6",
+          "word_ids": [
+            152,
+            153
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T EF-6",
+          "word_ids": [
+            304,
+            325
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/DSS1-local/glyph",
+      "page": 6,
+      "bbox": [
+        621,
+        284,
+        635,
+        302
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            149
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            15
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/DSS1-local/equipment-callout",
+      "page": 6,
+      "bbox": [
+        530,
+        280,
+        640,
+        332
+      ],
+      "expected": "DSS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(TYP. 2) T S DSS-1",
+          "word_ids": [
+            63,
+            64,
+            149,
+            150,
+            151
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(TYP. 2) T S DSS-1",
+          "word_ids": [
+            11,
+            12,
+            15,
+            16,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/DSS1-DDC/glyph",
+      "page": 6,
+      "bbox": [
+        621,
+        303,
+        635,
+        320
+      ],
+      "expected": "S",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S",
+          "word_ids": [
+            150
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S",
+          "word_ids": [
+            16
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/DSS1-DDC/equipment-callout",
+      "page": 6,
+      "bbox": [
+        530,
+        280,
+        640,
+        332
+      ],
+      "expected": "DSS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(TYP. 2) T S DSS-1",
+          "word_ids": [
+            63,
+            64,
+            149,
+            150,
+            151
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(TYP. 2) T S DSS-1",
+          "word_ids": [
+            11,
+            12,
+            15,
+            16,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/DSS2-local/glyph",
+      "page": 6,
+      "bbox": [
+        624,
+        350,
+        638,
+        367
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            222
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            291
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/DSS2-local/equipment-callout",
+      "page": 6,
+      "bbox": [
+        468,
+        348,
+        644,
+        435
+      ],
+      "expected": "DSS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T 11 S DSS-2 DSS-2",
+          "word_ids": [
+            222,
+            162,
+            223,
+            221,
+            224
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T 11 S DSS-2 DSS-2",
+          "word_ids": [
+            291,
+            293,
+            292,
+            271,
+            277
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/DSS2-DDC/glyph",
+      "page": 6,
+      "bbox": [
+        621,
+        368,
+        635,
+        386
+      ],
+      "expected": "S",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S",
+          "word_ids": [
+            223
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S",
+          "word_ids": [
+            292
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/DSS2-DDC/equipment-callout",
+      "page": 6,
+      "bbox": [
+        468,
+        348,
+        644,
+        435
+      ],
+      "expected": "DSS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T 11 S DSS-2 DSS-2",
+          "word_ids": [
+            222,
+            162,
+            223,
+            221,
+            224
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T 11 S DSS-2 DSS-2",
+          "word_ids": [
+            291,
+            293,
+            292,
+            271,
+            277
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/DSS3-local/glyph",
+      "page": 8,
+      "bbox": [
+        460,
+        181,
+        474,
+        199
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            106
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            36
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/DSS3-local/equipment-callout",
+      "page": 8,
+      "bbox": [
+        426,
+        177,
+        479,
+        213
+      ],
+      "expected": "DSS-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T DSS-3",
+          "word_ids": [
+            106,
+            107
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T DSS-3",
+          "word_ids": [
+            36,
+            336
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/SS1-local/glyph",
+      "page": 8,
+      "bbox": [
+        1083,
+        384,
+        1096,
+        402
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            42
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            62
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/SS1-local/equipment-callout",
+      "page": 8,
+      "bbox": [
+        1080,
+        365,
+        1117,
+        406
+      ],
+      "expected": "SS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SS-1 T",
+          "word_ids": [
+            66,
+            42
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SS-1 T",
+          "word_ids": [
+            61,
+            62
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/DSS4-local/glyph",
+      "page": 9,
+      "bbox": [
+        423,
+        255,
+        436,
+        272
+      ],
+      "expected": "T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            39
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T",
+          "word_ids": [
+            34
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "plan-sensors/DSS4-local/equipment-callout",
+      "page": 9,
+      "bbox": [
+        418,
+        248,
+        549,
+        345
+      ],
+      "expected": "DSS-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T DSS-4 16",
+          "word_ids": [
+            39,
+            43,
+            38
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T 16 DSS-4",
+          "word_ids": [
+            34,
+            44,
+            45
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "drawn-sensor-total",
+      "actual": 23,
+      "expected": 23,
+      "pass": true
+    },
+    {
+      "id": "thermostat-symbols",
+      "actual": 21,
+      "expected": 21,
+      "pass": true
+    },
+    {
+      "id": "temperature-sensor-symbols",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    },
+    {
+      "id": "zone-counts",
+      "actual": {
+        "USB1": 2,
+        "USB2": 2,
+        "USB3": 2,
+        "USB4": 3,
+        "USB5": 3,
+        "USB6": 2,
+        "USB7": 1,
+        "USB6/USB7 shared wall - conflict": 1,
+        "USB8": 2,
+        "USB9": 2,
+        "GH04": 1,
+        "GH01": 1,
+        "GB01": 1
+      },
+      "expected": {
+        "USB1": 2,
+        "USB2": 2,
+        "USB3": 2,
+        "USB4": 3,
+        "USB5": 3,
+        "USB6": 2,
+        "USB7": 1,
+        "USB8": 2,
+        "USB9": 2,
+        "USB6/USB7 shared wall - conflict": 1,
+        "GH04": 1,
+        "GH01": 1,
+        "GB01": 1
+      },
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [
+    {
+      "id": "no-co2-text",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "matches": [],
+          "search_scope": "Native parser lines, NFKC normalized; not global cross-column word concatenation. Wrapped/outlined text still requires visual review."
+        },
+        "poppler": {
+          "pass": true,
+          "matches": [],
+          "search_scope": "Native parser lines, NFKC normalized; not global cross-column word concatenation. Wrapped/outlined text still requires visual review."
+        }
+      }
+    }
+  ],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

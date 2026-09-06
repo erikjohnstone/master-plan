@@ -1,0 +1,83 @@
+{
+  "document_id": "13__vol2__017",
+  "module_role": "Explicit source limits, omitted-scope disclosure and standalone-schedule-title checks.",
+  "tables": [],
+  "source_limitations": [
+    "All 25 pages were visually reviewed. This record transcribes seven selected high-value M-601/M-602 tables (47 literal rows); M-603 ventilation calculations and other schedule material were reviewed but deliberately not silently converted into inventory.",
+    "M-703 supplies 60 source-matrix rows, each marked existing-to-remain/reference-only. They are retained as literal source evidence and not expanded into a final controller, I/O-card, field-device, terminal, wiring, or physical BAS-point count.",
+    "M-702 provides deeply structured ACU operating sequences, but it does not publish an address list, point-to-controller binding, terminal/card layout, protocol configuration, network-media design or wiring schedule.",
+    "No standalone Control Valve Schedule or Damper Actuator Schedule title is published in the complete supplied drawing set; control-valve and damper mentions within sequence/matrix text are not misrepresented as schedules."
+  ],
+  "text_absence_assertions": [
+    {
+      "id": "no-control-valve-schedule",
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "covers_all_source_pages": true,
+      "patterns": [
+        "CONTROL\\\\s+VALVE\\\\s+SCHEDULE"
+      ],
+      "visual_review_qualification": "Native text and whole-set visual review support only this limited absence of a standalone schedule title."
+    },
+    {
+      "id": "no-damper-actuator-schedule",
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "covers_all_source_pages": true,
+      "patterns": [
+        "DAMPER\\\\s+ACTUATOR\\\\s+SCHEDULE"
+      ],
+      "visual_review_qualification": "Native text and whole-set visual review support only this limited absence of a standalone schedule title."
+    }
+  ]
+}

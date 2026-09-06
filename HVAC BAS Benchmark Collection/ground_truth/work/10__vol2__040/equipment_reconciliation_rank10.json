@@ -1,0 +1,16 @@
+{
+  "document_id": "10__vol2__040",
+  "module_role": "Literal selected schedule-row presentation only.",
+  "tables": [],
+  "ledger_mode": "literal_schedule_rows_v1",
+  "schedule_counts": {
+    "tables": 1,
+    "rows": 11,
+    "interpretation": "One selected M601 table and 11 literal rows."
+  },
+  "control_valve_and_damper_schedule_status": {
+    "damper_actuator_schedule": "No standalone damper-actuator schedule title is asserted; TAB control/sensor type fields are captured.",
+    "control_valve_schedule": "No standalone CONTROL VALVE SCHEDULE is asserted."
+  },
+  "source_boundary": "Rows do not establish installed quantities, ownership, wiring or I/O."
+}

@@ -1,0 +1,17 @@
+{
+  "document_id": "18__vol2__092",
+  "module_role": "Supporting full-set evidence and source limitations that qualify schedule/points use. It preserves a visible M2.01 sample-chart distinction instead of creating an unprinted valve schedule.",
+  "source_limitations": [
+    "M2.01 explicitly labels the detail VALVE TAG AND VALVE CHART SAMPLE. It is a detail/template witness, not a populated source schedule for project control-valve counts.",
+    "M3.01 has a populated automatic-control-damper schedule but no populated control-valve schedule.",
+    "M4.02's 11 source point rows are two typical points lists. No equipment instance/terminal/controller/network expansion rule is printed.",
+    "M3.01's schedule quantities and M4.02's specific FCU-1 location wording conflict in scope and are retained as source data rather than reconciled by assumption."
+  ],
+  "tables": [],
+  "assertions": [
+    {"id": "m201-valve-tag-chart-sample", "page": 10, "bbox": [1840,1995,2250,2025], "expected": "VALVE TAG AND VALVE CHART SAMPLE", "mode": "exact"}
+  ],
+  "inventory_checks": [
+    {"id": "supporting-source-limitations", "records_path": ["source_limitations"], "expected": 4}
+  ]
+}

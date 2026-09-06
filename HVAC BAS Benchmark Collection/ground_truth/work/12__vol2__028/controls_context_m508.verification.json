@@ -1,0 +1,388 @@
+{
+  "document_id": "12__vol2__028",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "annotation_sha256": "f3de1a2782be4b52c500a8839a51f1f85592d6b7f9f993c3a0071e691a9f1776",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 8,
+  "checks": [
+    {
+      "assertion": "m508-pid-title",
+      "page": 4,
+      "bbox": [
+        925,
+        1370,
+        1325,
+        1420
+      ],
+      "expected": "HEATING WATER SYSTEM P&ID",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HEATING WATER SYSTEM P&ID NOT TO SCALE",
+          "word_ids": [
+            547,
+            548,
+            549,
+            550,
+            543,
+            544,
+            545
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HEATING WATER SYSTEM P&ID NOT TO SCALE",
+          "word_ids": [
+            391,
+            392,
+            393,
+            394,
+            166,
+            167,
+            168
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m508-not-to-scale",
+      "page": 4,
+      "bbox": [
+        920,
+        1400,
+        1010,
+        1430
+      ],
+      "expected": "NOT TO SCALE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOT TO SCALE",
+          "word_ids": [
+            543,
+            544,
+            545
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOT TO SCALE",
+          "word_ids": [
+            166,
+            167,
+            168
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m508-prv-pressure-basis",
+      "page": 4,
+      "bbox": [
+        580,
+        445,
+        900,
+        490
+      ],
+      "expected": "PRV IS DESIGNED TO MAINTAIN 4 TO 5 PSI AT THE HIGHEST PIPE ELEVATION IN THE SYSTEM.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRV IS DESIGNED TO MAINTAIN 4 TO 5 PSI AT THE HIGHEST PIPE ELEVATION IN THE SYSTEM.",
+          "word_ids": [
+            299,
+            300,
+            301,
+            302,
+            303,
+            304,
+            305,
+            306,
+            307,
+            308,
+            309,
+            310,
+            311,
+            312,
+            313,
+            314,
+            315
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRV IS DESIGNED TO MAINTAIN 4 TO 5 PSI AT THE HIGHEST PIPE ELEVATION IN THE SYSTEM.",
+          "word_ids": [
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m508-prv-tie-in",
+      "page": 4,
+      "bbox": [
+        565,
+        490,
+        900,
+        550
+      ],
+      "expected": "THE MAKEUP WATER PIPE SHALL TIE INTO THE SYSTEM AT THE SAME ELEVATION AS THE EXPANSION TANK AND THE AIR SEPARATOR.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THE MAKEUP WATER PIPE SHALL TIE INTO THE SYSTEM AT THE SAME ELEVATION AS THE EXPANSION TANK AND THE AIR SEPARATOR.",
+          "word_ids": [
+            316,
+            317,
+            318,
+            319,
+            320,
+            321,
+            322,
+            323,
+            324,
+            325,
+            326,
+            327,
+            328,
+            329,
+            330,
+            331,
+            332,
+            333,
+            334,
+            335,
+            336
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THE MAKEUP WATER PIPE SHALL TIE INTO THE SYSTEM AT THE SAME ELEVATION AS THE EXPANSION TANK AND THE AIR SEPARATOR.",
+          "word_ids": [
+            455,
+            456,
+            457,
+            458,
+            459,
+            460,
+            461,
+            462,
+            463,
+            464,
+            465,
+            466,
+            467,
+            468,
+            469,
+            470,
+            471,
+            472,
+            473,
+            474,
+            475
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m508-prv-formula",
+      "page": 4,
+      "bbox": [
+        640,
+        605,
+        900,
+        665
+      ],
+      "expected": "PRV PRESSURE = (MAX. HEIGHT RETURN PIPE - HEIGHT MAKEUP WATER PIPE CONNECTION)/2.3 + 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRV PRESSURE = (MAX. HEIGHT RETURN PIPE - HEIGHT MAKEUP WATER PIPE CONNECTION)/2.3 + 5",
+          "word_ids": [
+            354,
+            355,
+            356,
+            357,
+            358,
+            359,
+            360,
+            361,
+            362,
+            363,
+            364,
+            365,
+            366,
+            367,
+            368
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRV PRESSURE = (MAX. HEIGHT RETURN PIPE - HEIGHT MAKEUP WATER PIPE CONNECTION)/2.3 + 5",
+          "word_ids": [
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m508-bypass-at-loop-end",
+      "page": 4,
+      "bbox": [
+        2060,
+        435,
+        2190,
+        520
+      ],
+      "expected": "2-WAY HEATING WATER BYPASS VALVE LOCATED AT END OF LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY HEATING WATER BYPASS VALVE LOCATED AT END OF LOOP",
+          "word_ids": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY HEATING WATER BYPASS VALVE LOCATED AT END OF LOOP",
+          "word_ids": [
+            140,
+            141,
+            142,
+            143,
+            144,
+            145,
+            146,
+            147,
+            148,
+            149
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m508-boiler-controller-note",
+      "page": 4,
+      "bbox": [
+        1600,
+        1375,
+        1940,
+        1400
+      ],
+      "expected": "* INDICATES POINT PULLED FROM BOILER CONTROLLER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "* INDICATES POINT PULLED FROM BOILER CONTROLLER",
+          "word_ids": [
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "* INDICATES POINT PULLED FROM BOILER CONTROLLER",
+          "word_ids": [
+            373,
+            374,
+            375,
+            376,
+            377,
+            378,
+            379
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m508-co-point",
+      "page": 4,
+      "bbox": [
+        1655,
+        1345,
+        1750,
+        1375
+      ],
+      "expected": "CO SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CO SENSOR",
+          "word_ids": [
+            380,
+            381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CO SENSOR",
+          "word_ids": [
+            326,
+            327
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m508-pid-context-assertions",
+      "actual": 8,
+      "expected": 8,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

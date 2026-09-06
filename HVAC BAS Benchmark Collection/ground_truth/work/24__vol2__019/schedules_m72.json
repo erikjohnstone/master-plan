@@ -1,0 +1,416 @@
+{
+  "document_id": "24__vol2__019",
+  "module_role": "M7.2 schedule-tag registry for air devices, fan-coil/condensing/DX equipment, tanks, heaters, silencers, radiators and penthouses. It preserves every printed schedule mark without creating unsupported device-placement quantities.",
+  "source_sheet": "M7.2",
+  "source_page": 15,
+  "tables": [
+    {
+      "id": "M72-GRD",
+      "page": 15,
+      "sheet": "M7.2",
+      "title": "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+      "classification": "scheduled air device",
+      "columns": "mark",
+      "x_edges": [
+        1591.239,
+        1625.989
+      ],
+      "y_ranges": [
+        [
+          140.377,
+          155.257
+        ],
+        [
+          155.257,
+          170.137
+        ],
+        [
+          170.137,
+          185.017
+        ],
+        [
+          185.017,
+          199.957
+        ],
+        [
+          199.957,
+          214.597
+        ],
+        [
+          214.597,
+          228.517
+        ],
+        [
+          228.517,
+          242.437
+        ],
+        [
+          242.437,
+          257.077
+        ],
+        [
+          257.077,
+          272.017
+        ],
+        [
+          272.017,
+          286.897
+        ],
+        [
+          286.897,
+          301.477
+        ],
+        [
+          301.477,
+          315.757
+        ],
+        [
+          315.757,
+          330.337
+        ],
+        [
+          330.337,
+          345.217
+        ],
+        [
+          345.217,
+          360.097
+        ],
+        [
+          360.097,
+          374.977
+        ],
+        [
+          374.977,
+          389.857
+        ],
+        [
+          389.857,
+          404.737
+        ],
+        [
+          404.737,
+          419.677
+        ],
+        [
+          419.677,
+          434.617
+        ],
+        [
+          434.617,
+          449.497
+        ],
+        [
+          449.497,
+          464.377
+        ],
+        [
+          464.377,
+          479.257
+        ]
+      ],
+      "rows": [
+        "S1-1",
+        "S1-2",
+        "S1-3",
+        "S1-4",
+        "S3-1",
+        "S2-1",
+        "S2-2",
+        "S2-4",
+        "S2-5",
+        "S2-6",
+        "S2-7",
+        "S4-1",
+        "R1-1",
+        "R1-2",
+        "R1-3",
+        "R1-4",
+        "R1-5",
+        "R3-1",
+        "R3-2",
+        "R3-3",
+        "E1-1",
+        "E1-2",
+        "E1-3"
+      ]
+    },
+    {
+      "id": "M72-FCU",
+      "page": 15,
+      "sheet": "M7.2",
+      "title": "HOT WATER FAN COIL UNIT SCHEDULE",
+      "classification": "scheduled hot-water fan-coil unit",
+      "columns": "mark",
+      "x_edges": [
+        973.12,
+        1010.695
+      ],
+      "y_ranges": [
+        [
+          651.04,
+          667.04
+        ]
+      ],
+      "rows": [
+        "FCU-1"
+      ]
+    },
+    {
+      "id": "M72-CONDENSING",
+      "page": 15,
+      "sheet": "M7.2",
+      "title": "AIR-COOLED CONDENSING UNIT SCHEDULE",
+      "classification": "scheduled air-cooled condensing unit",
+      "columns": "mark",
+      "x_edges": [
+        1176.88,
+        1208.695
+      ],
+      "y_ranges": [
+        [
+          805.44,
+          818.4
+        ],
+        [
+          818.4,
+          831.36
+        ],
+        [
+          831.36,
+          844.32
+        ],
+        [
+          844.32,
+          857.219
+        ],
+        [
+          857.219,
+          870.119
+        ],
+        [
+          870.119,
+          883.079
+        ]
+      ],
+      "rows": [
+        "CU-1",
+        "CU-2",
+        "CU-3",
+        "CU-4",
+        "CU-5",
+        "CU-6"
+      ]
+    },
+    {
+      "id": "M72-EXPANSION-TANK",
+      "page": 15,
+      "sheet": "M7.2",
+      "title": "EXPANSION TANK SCHEDULE",
+      "classification": "scheduled expansion tank",
+      "columns": "mark",
+      "x_edges": [
+        881.68,
+        912.055
+      ],
+      "y_ranges": [
+        [
+          1058.999,
+          1071.959
+        ],
+        [
+          1071.959,
+          1084.919
+        ]
+      ],
+      "rows": [
+        "ET-1",
+        "ET-2"
+      ]
+    },
+    {
+      "id": "M72-DX-FCU",
+      "page": 15,
+      "sheet": "M7.2",
+      "title": "DX FAN COIL UNIT SCHEDULE",
+      "classification": "scheduled DX fan-coil unit",
+      "columns": "mark",
+      "x_edges": [
+        733.96,
+        764.815
+      ],
+      "y_ranges": [
+        [
+          1225.8,
+          1238.759
+        ],
+        [
+          1238.759,
+          1251.659
+        ],
+        [
+          1251.659,
+          1264.559
+        ],
+        [
+          1264.559,
+          1277.519
+        ],
+        [
+          1277.519,
+          1290.479
+        ],
+        [
+          1290.479,
+          1303.439
+        ]
+      ],
+      "rows": [
+        "EV-1",
+        "EV-2",
+        "EV-3",
+        "EV-4",
+        "EV-5",
+        "EV-6"
+      ]
+    },
+    {
+      "id": "M72-UNIT-HEATER",
+      "page": 15,
+      "sheet": "M7.2",
+      "title": "UNIT HEATER SCHEDULE (HOT WATER)",
+      "classification": "scheduled hot-water unit heater",
+      "columns": "mark",
+      "x_edges": [
+        815.08,
+        846.895
+      ],
+      "y_ranges": [
+        [
+          1484.039,
+          1496.999
+        ],
+        [
+          1496.999,
+          1509.959
+        ]
+      ],
+      "rows": [
+        "UH-1",
+        "UH-2"
+      ]
+    },
+    {
+      "id": "M72-SILENCER",
+      "page": 15,
+      "sheet": "M7.2",
+      "title": "SILENCER SCHEDULE",
+      "classification": "scheduled silencer",
+      "columns": "mark",
+      "x_edges": [
+        757.0,
+        781.615
+      ],
+      "y_ranges": [
+        [
+          1678.679,
+          1691.639
+        ],
+        [
+          1691.639,
+          1704.599
+        ]
+      ],
+      "rows": [
+        "S-1",
+        "S-2"
+      ]
+    },
+    {
+      "id": "M72-RADIATOR",
+      "page": 15,
+      "sheet": "M7.2",
+      "title": "FIN TUBE RADIATION SCHEDULE",
+      "classification": "scheduled finned-tube radiator",
+      "columns": "mark",
+      "x_edges": [
+        876.88,
+        919.704
+      ],
+      "y_ranges": [
+        [
+          1816.199,
+          1829.159
+        ],
+        [
+          1829.159,
+          1842.119
+        ],
+        [
+          1842.119,
+          1855.019
+        ],
+        [
+          1855.019,
+          1867.859
+        ]
+      ],
+      "rows": [
+        "FTR-1",
+        "FTR-1B",
+        "FTR-2",
+        "FTR-2B"
+      ]
+    },
+    {
+      "id": "M72-LOUVER",
+      "page": 15,
+      "sheet": "M7.2",
+      "title": "ARCHITECTURAL LOUVERED PENTHOUSE SCHEDULE",
+      "classification": "scheduled architectural louvered penthouse",
+      "columns": "mark",
+      "x_edges": [
+        1616.439,
+        1652.579
+      ],
+      "y_ranges": [
+        [
+          2012.519,
+          2025.479
+        ],
+        [
+          2025.479,
+          2038.379
+        ],
+        [
+          2038.379,
+          2051.219
+        ]
+      ],
+      "rows": [
+        "ALP-1",
+        "ALP-2",
+        "ALP-3"
+      ]
+    }
+  ],
+  "schedule_detail_records": {
+    "air_devices": "M7.2 contains 23 air-device type rows across supply, return and exhaust marks. These are schedule types/marks, not an installed terminal or damper-actuator count.",
+    "FCU-1": "VESTIBULE horizontal concealed hot-water fan-coil unit; 200 CFM, CV volume control, 0.50 in. w.g. external, 75 W, 120 V one phase, 55/95 F air, 140/110 F water, 0.60 GPM, 5.50 ft H2O maximum pressure drop.",
+    "CU-1_through_CU-6": "Six roof air-cooled R410A condensing units, each 2 tons, 95 F nominal ambient, one condenser fan at 2,101 CFM, 208 V one phase, 12 FLA and 20 MOCP.",
+    "DX_and_heat_equipment": "EV-1 through EV-6 are 600-CFM DX wall-mounted fan-coil units associated with CU-1 through CU-6. UH-1/UH-2 are 950/1,100-CFM horizontal-discharge hot-water unit heaters. FTR-1/FTR-1B/FTR-2/FTR-2B are finned-tube-radiator schedule identities.",
+    "tanks_silencers_louvers": "ET-1 hot-water and ET-2 chilled-water expansion tanks, S-1/S-2 silencers and ALP-1/ALP-2/ALP-3 louvered penthouses are literal M7.2 schedule identities."
+  },
+  "tables_note": "Every listed mark is a literal schedule identity anchored to its own bounded word cell. A schedule mark is not silently multiplied into plan placements, actuator counts, controller terminals or field-I/O counts.",
+  "assertions": [],
+  "inventory_checks": [
+    {
+      "id": "schedules_m72-families",
+      "records_path": [
+        "tables"
+      ],
+      "expected": 9,
+      "unique_key": "id"
+    }
+  ]
+}

@@ -1,0 +1,2142 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "ed9f5492eb12d16a9366e97ea40ced06bbf23eed4e8581a416155f22a2e9f2fd",
+  "tables": 4,
+  "rows": 16,
+  "cell_assertions": 64,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "AIR-OPS-HV-AI",
+      "row": 1,
+      "column": "mark",
+      "page": 70,
+      "bbox": [
+        792,
+        145,
+        825,
+        162
+      ],
+      "expected": "AI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            615
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            426
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AI",
+      "row": 1,
+      "column": "description",
+      "page": 70,
+      "bbox": [
+        825,
+        145,
+        1000,
+        162
+      ],
+      "expected": "SPACE TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPACE TEMPERATURE",
+          "word_ids": [
+            616,
+            617
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPACE TEMPERATURE",
+          "word_ids": [
+            427,
+            428
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AI",
+      "row": 1,
+      "column": "alarm",
+      "page": 70,
+      "bbox": [
+        1000,
+        145,
+        1045,
+        162
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            618
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            382
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AI",
+      "row": 1,
+      "column": "trend",
+      "page": 70,
+      "bbox": [
+        1045,
+        145,
+        1090,
+        162
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            619
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            375
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AI",
+      "row": 2,
+      "column": "mark",
+      "page": 70,
+      "bbox": [
+        792,
+        162,
+        825,
+        179
+      ],
+      "expected": "AI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            620
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            429
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AI",
+      "row": 2,
+      "column": "description",
+      "page": 70,
+      "bbox": [
+        825,
+        162,
+        1000,
+        179
+      ],
+      "expected": "UH-A1 HHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-A1 HHW VALVE CONTROL",
+          "word_ids": [
+            621,
+            622,
+            623,
+            624
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-A1 HHW VALVE CONTROL",
+          "word_ids": [
+            430,
+            431,
+            432,
+            433
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AI",
+      "row": 2,
+      "column": "alarm",
+      "page": 70,
+      "bbox": [
+        1000,
+        162,
+        1045,
+        179
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            625
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            383
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AI",
+      "row": 2,
+      "column": "trend",
+      "page": 70,
+      "bbox": [
+        1045,
+        162,
+        1090,
+        179
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            626
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            376
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AI",
+      "row": 3,
+      "column": "mark",
+      "page": 70,
+      "bbox": [
+        792,
+        179,
+        825,
+        196
+      ],
+      "expected": "AI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            627
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            434
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AI",
+      "row": 3,
+      "column": "description",
+      "page": 70,
+      "bbox": [
+        825,
+        179,
+        1000,
+        196
+      ],
+      "expected": "UH-A2 HHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-A2 HHW VALVE CONTROL",
+          "word_ids": [
+            628,
+            629,
+            630,
+            631
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-A2 HHW VALVE CONTROL",
+          "word_ids": [
+            435,
+            436,
+            437,
+            438
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AI",
+      "row": 3,
+      "column": "alarm",
+      "page": 70,
+      "bbox": [
+        1000,
+        179,
+        1045,
+        196
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            632
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            384
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AI",
+      "row": 3,
+      "column": "trend",
+      "page": 70,
+      "bbox": [
+        1045,
+        179,
+        1090,
+        196
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            633
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            377
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AI",
+      "header": "AIR OPS H&V DDC POINTS LIST",
+      "page": 70,
+      "bbox": [
+        790,
+        82,
+        1090,
+        109
+      ],
+      "engine": "mupdf",
+      "actual": "AIR OPS H&V DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-HV-AI",
+      "header": "AIR OPS H&V DDC POINTS LIST",
+      "page": 70,
+      "bbox": [
+        790,
+        82,
+        1090,
+        109
+      ],
+      "engine": "poppler",
+      "actual": "AIR OPS H&V DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-HV-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 70,
+      "bbox": [
+        790,
+        109,
+        1090,
+        131
+      ],
+      "engine": "mupdf",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-HV-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 70,
+      "bbox": [
+        790,
+        109,
+        1090,
+        131
+      ],
+      "engine": "poppler",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-HV-AI",
+      "header": "ANALOG INPUT",
+      "page": 70,
+      "bbox": [
+        790,
+        126,
+        875,
+        145
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-HV-AI",
+      "header": "ANALOG INPUT",
+      "page": 70,
+      "bbox": [
+        790,
+        126,
+        875,
+        145
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-HV-AO",
+      "row": 1,
+      "column": "mark",
+      "page": 70,
+      "bbox": [
+        792,
+        231,
+        825,
+        248
+      ],
+      "expected": "AO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            636
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            330
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AO",
+      "row": 1,
+      "column": "description",
+      "page": 70,
+      "bbox": [
+        825,
+        231,
+        1000,
+        248
+      ],
+      "expected": "UH-A1 HHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-A1 HHW VALVE CONTROL",
+          "word_ids": [
+            637,
+            638,
+            639,
+            640
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-A1 HHW VALVE CONTROL",
+          "word_ids": [
+            331,
+            332,
+            333,
+            334
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AO",
+      "row": 1,
+      "column": "alarm",
+      "page": 70,
+      "bbox": [
+        1000,
+        231,
+        1045,
+        248
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            641
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            284
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AO",
+      "row": 1,
+      "column": "trend",
+      "page": 70,
+      "bbox": [
+        1045,
+        231,
+        1090,
+        248
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            642
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            280
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AO",
+      "row": 2,
+      "column": "mark",
+      "page": 70,
+      "bbox": [
+        792,
+        248,
+        825,
+        266
+      ],
+      "expected": "AO02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            643
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            335
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AO",
+      "row": 2,
+      "column": "description",
+      "page": 70,
+      "bbox": [
+        825,
+        248,
+        1000,
+        266
+      ],
+      "expected": "UH-A2 HHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-A2 HHW VALVE CONTROL",
+          "word_ids": [
+            644,
+            645,
+            646,
+            647
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-A2 HHW VALVE CONTROL",
+          "word_ids": [
+            336,
+            337,
+            338,
+            339
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AO",
+      "row": 2,
+      "column": "alarm",
+      "page": 70,
+      "bbox": [
+        1000,
+        248,
+        1045,
+        266
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            648
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            285
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AO",
+      "row": 2,
+      "column": "trend",
+      "page": 70,
+      "bbox": [
+        1045,
+        248,
+        1090,
+        266
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            649
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            281
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 70,
+      "bbox": [
+        790,
+        213,
+        885,
+        231
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-HV-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 70,
+      "bbox": [
+        790,
+        213,
+        885,
+        231
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 1,
+      "column": "mark",
+      "page": 70,
+      "bbox": [
+        792,
+        300,
+        825,
+        318
+      ],
+      "expected": "BI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            652
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            251
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 1,
+      "column": "description",
+      "page": 70,
+      "bbox": [
+        825,
+        300,
+        1000,
+        318
+      ],
+      "expected": "OA DAMPER END SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OA DAMPER END SWITCH",
+          "word_ids": [
+            653,
+            654,
+            655,
+            656
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OA DAMPER END SWITCH",
+          "word_ids": [
+            252,
+            253,
+            254,
+            255
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 1,
+      "column": "alarm",
+      "page": 70,
+      "bbox": [
+        1000,
+        300,
+        1045,
+        318
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            657
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            67
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 1,
+      "column": "trend",
+      "page": 70,
+      "bbox": [
+        1045,
+        300,
+        1090,
+        318
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            658
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            73
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 2,
+      "column": "mark",
+      "page": 70,
+      "bbox": [
+        792,
+        318,
+        825,
+        335
+      ],
+      "expected": "BI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            659
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            256
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 2,
+      "column": "description",
+      "page": 70,
+      "bbox": [
+        825,
+        318,
+        1000,
+        335
+      ],
+      "expected": "EA DAMPER END SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EA DAMPER END SWITCH",
+          "word_ids": [
+            660,
+            661,
+            662,
+            663
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EA DAMPER END SWITCH",
+          "word_ids": [
+            257,
+            258,
+            259,
+            260
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 2,
+      "column": "alarm",
+      "page": 70,
+      "bbox": [
+        1000,
+        318,
+        1045,
+        335
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            664
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            68
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 2,
+      "column": "trend",
+      "page": 70,
+      "bbox": [
+        1045,
+        318,
+        1090,
+        335
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            665
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            74
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 3,
+      "column": "mark",
+      "page": 70,
+      "bbox": [
+        792,
+        335,
+        825,
+        352
+      ],
+      "expected": "BI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            666
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            261
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 3,
+      "column": "description",
+      "page": 70,
+      "bbox": [
+        825,
+        335,
+        1000,
+        352
+      ],
+      "expected": "EF-A1 STATUS (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-A1 STATUS (FEEDBACK)",
+          "word_ids": [
+            667,
+            668,
+            669
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-A1 STATUS (FEEDBACK)",
+          "word_ids": [
+            262,
+            263,
+            264
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 3,
+      "column": "alarm",
+      "page": 70,
+      "bbox": [
+        1000,
+        335,
+        1045,
+        352
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            670
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            69
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 3,
+      "column": "trend",
+      "page": 70,
+      "bbox": [
+        1045,
+        335,
+        1090,
+        352
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            671
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            75
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 4,
+      "column": "mark",
+      "page": 70,
+      "bbox": [
+        792,
+        352,
+        825,
+        370
+      ],
+      "expected": "BI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            672
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            265
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 4,
+      "column": "description",
+      "page": 70,
+      "bbox": [
+        825,
+        352,
+        1000,
+        370
+      ],
+      "expected": "UH-A1 FAN STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-A1 FAN STATUS",
+          "word_ids": [
+            673,
+            674,
+            675
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-A1 FAN STATUS",
+          "word_ids": [
+            266,
+            267,
+            268
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 4,
+      "column": "alarm",
+      "page": 70,
+      "bbox": [
+        1000,
+        352,
+        1045,
+        370
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            676
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            70
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 4,
+      "column": "trend",
+      "page": 70,
+      "bbox": [
+        1045,
+        352,
+        1090,
+        370
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            677
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            76
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 5,
+      "column": "mark",
+      "page": 70,
+      "bbox": [
+        792,
+        370,
+        825,
+        387
+      ],
+      "expected": "BI05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI05",
+          "word_ids": [
+            678
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI05",
+          "word_ids": [
+            269
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 5,
+      "column": "description",
+      "page": 70,
+      "bbox": [
+        825,
+        370,
+        1000,
+        387
+      ],
+      "expected": "UH-A2 FAN STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-A2 FAN STATUS",
+          "word_ids": [
+            679,
+            680,
+            681
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-A2 FAN STATUS",
+          "word_ids": [
+            270,
+            271,
+            272
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 5,
+      "column": "alarm",
+      "page": 70,
+      "bbox": [
+        1000,
+        370,
+        1045,
+        387
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            682
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            71
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 5,
+      "column": "trend",
+      "page": 70,
+      "bbox": [
+        1045,
+        370,
+        1090,
+        387
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            683
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            77
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 6,
+      "column": "mark",
+      "page": 70,
+      "bbox": [
+        792,
+        387,
+        825,
+        405
+      ],
+      "expected": "BI06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI06",
+          "word_ids": [
+            684
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI06",
+          "word_ids": [
+            273
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 6,
+      "column": "description",
+      "page": 70,
+      "bbox": [
+        825,
+        387,
+        1000,
+        405
+      ],
+      "expected": "AIR OPS H&V DDC RESET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIR OPS H&V DDC RESET",
+          "word_ids": [
+            685,
+            686,
+            687,
+            688,
+            689
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIR OPS H&V DDC RESET",
+          "word_ids": [
+            274,
+            275,
+            276,
+            277,
+            278
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 6,
+      "column": "alarm",
+      "page": 70,
+      "bbox": [
+        1000,
+        387,
+        1045,
+        405
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            690
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            72
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "row": 6,
+      "column": "trend",
+      "page": 70,
+      "bbox": [
+        1045,
+        387,
+        1090,
+        405
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            691
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            78
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "header": "BINARY INPUT",
+      "page": 70,
+      "bbox": [
+        790,
+        282,
+        880,
+        300
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-HV-BI",
+      "header": "BINARY INPUT",
+      "page": 70,
+      "bbox": [
+        790,
+        282,
+        880,
+        300
+      ],
+      "engine": "poppler",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 1,
+      "column": "mark",
+      "page": 70,
+      "bbox": [
+        792,
+        439,
+        825,
+        456
+      ],
+      "expected": "BO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            694
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            81
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 1,
+      "column": "description",
+      "page": 70,
+      "bbox": [
+        825,
+        439,
+        1000,
+        456
+      ],
+      "expected": "OA DAMPER OPEN/CLOSE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OA DAMPER OPEN/CLOSE",
+          "word_ids": [
+            695,
+            696,
+            697
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OA DAMPER OPEN/CLOSE",
+          "word_ids": [
+            82,
+            83,
+            84
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 1,
+      "column": "alarm",
+      "page": 70,
+      "bbox": [
+        1000,
+        439,
+        1045,
+        456
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            698
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            100
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 1,
+      "column": "trend",
+      "page": 70,
+      "bbox": [
+        1045,
+        439,
+        1090,
+        456
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            699
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            105
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 2,
+      "column": "mark",
+      "page": 70,
+      "bbox": [
+        792,
+        456,
+        825,
+        473
+      ],
+      "expected": "BO02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO02",
+          "word_ids": [
+            700
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO02",
+          "word_ids": [
+            85
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 2,
+      "column": "description",
+      "page": 70,
+      "bbox": [
+        825,
+        456,
+        1000,
+        473
+      ],
+      "expected": "EA DAMPER OPEN/CLOSE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EA DAMPER OPEN/CLOSE",
+          "word_ids": [
+            701,
+            702,
+            703
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EA DAMPER OPEN/CLOSE",
+          "word_ids": [
+            86,
+            87,
+            88
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 2,
+      "column": "alarm",
+      "page": 70,
+      "bbox": [
+        1000,
+        456,
+        1045,
+        473
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            704
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            101
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 2,
+      "column": "trend",
+      "page": 70,
+      "bbox": [
+        1045,
+        456,
+        1090,
+        473
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            705
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            106
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 3,
+      "column": "mark",
+      "page": 70,
+      "bbox": [
+        792,
+        473,
+        825,
+        491
+      ],
+      "expected": "BO03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO03",
+          "word_ids": [
+            706
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO03",
+          "word_ids": [
+            89
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 3,
+      "column": "description",
+      "page": 70,
+      "bbox": [
+        825,
+        473,
+        1000,
+        491
+      ],
+      "expected": "EF-A1 START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-A1 START/STOP",
+          "word_ids": [
+            707,
+            708
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-A1 START/STOP",
+          "word_ids": [
+            90,
+            91
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 3,
+      "column": "alarm",
+      "page": 70,
+      "bbox": [
+        1000,
+        473,
+        1045,
+        491
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            709
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            102
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 3,
+      "column": "trend",
+      "page": 70,
+      "bbox": [
+        1045,
+        473,
+        1090,
+        491
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            710
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            107
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 4,
+      "column": "mark",
+      "page": 70,
+      "bbox": [
+        792,
+        491,
+        825,
+        508
+      ],
+      "expected": "BO04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO04",
+          "word_ids": [
+            711
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO04",
+          "word_ids": [
+            92
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 4,
+      "column": "description",
+      "page": 70,
+      "bbox": [
+        825,
+        491,
+        1000,
+        508
+      ],
+      "expected": "UH-A1 FAN START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-A1 FAN START/STOP",
+          "word_ids": [
+            712,
+            713,
+            714
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-A1 FAN START/STOP",
+          "word_ids": [
+            93,
+            94,
+            95
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 4,
+      "column": "alarm",
+      "page": 70,
+      "bbox": [
+        1000,
+        491,
+        1045,
+        508
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            715
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            103
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 4,
+      "column": "trend",
+      "page": 70,
+      "bbox": [
+        1045,
+        491,
+        1090,
+        508
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            716
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            108
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 5,
+      "column": "mark",
+      "page": 70,
+      "bbox": [
+        792,
+        508,
+        825,
+        526
+      ],
+      "expected": "BO05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO05",
+          "word_ids": [
+            717
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO05",
+          "word_ids": [
+            96
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 5,
+      "column": "description",
+      "page": 70,
+      "bbox": [
+        825,
+        508,
+        1000,
+        526
+      ],
+      "expected": "UH-A2 FAN START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-A2 FAN START/STOP",
+          "word_ids": [
+            718,
+            719,
+            720
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-A2 FAN START/STOP",
+          "word_ids": [
+            97,
+            98,
+            99
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 5,
+      "column": "alarm",
+      "page": 70,
+      "bbox": [
+        1000,
+        508,
+        1045,
+        526
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            721
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            104
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "row": 5,
+      "column": "trend",
+      "page": 70,
+      "bbox": [
+        1045,
+        508,
+        1090,
+        526
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            722
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            109
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "header": "BINARY OUTPUT",
+      "page": 70,
+      "bbox": [
+        790,
+        420,
+        885,
+        439
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-HV-BO",
+      "header": "BINARY OUTPUT",
+      "page": 70,
+      "bbox": [
+        790,
+        420,
+        885,
+        439
+      ],
+      "engine": "poppler",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "air-ops-hv-ai-count",
+      "actual": 3,
+      "expected": 3,
+      "pass": true
+    },
+    {
+      "id": "air-ops-hv-ao-count",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    },
+    {
+      "id": "air-ops-hv-bi-count",
+      "actual": 6,
+      "expected": 6,
+      "pass": true
+    },
+    {
+      "id": "air-ops-hv-bo-count",
+      "actual": 5,
+      "expected": 5,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

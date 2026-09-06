@@ -1,0 +1,32 @@
+{
+  "document_id": "10__vol2__040",
+  "source_sha256": "2337ee9ae5483fd440d98967f23f63f8337d7f6dc8d3024cd494c29e129a1dc2",
+  "annotation_sha256": "e20e1f71dbc8116ece6afba92599533d377984b005d553f17115750805eea146",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 0,
+  "checks": [],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [
+    {
+      "id": "r10-no-control-valve-schedule",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "matches": [],
+          "search_scope": "Native parser lines, NFKC normalized; not global cross-column word concatenation. Wrapped/outlined text still requires visual review."
+        },
+        "poppler": {
+          "pass": true,
+          "matches": [],
+          "search_scope": "Native parser lines, NFKC normalized; not global cross-column word concatenation. Wrapped/outlined text still requires visual review."
+        }
+      }
+    }
+  ],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

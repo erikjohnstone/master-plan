@@ -1,0 +1,63 @@
+{
+  "document_id": "12__vol2__028",
+  "module_role": "Exact M-512 DOAS-1-or-2 BAS input/output matrix. Numeric rows are a P&ID template, not a multiplied installed-point or controller count.",
+  "source_sheet": "M-512",
+  "source_page": 8,
+  "logical_row_summary": {
+    "template_rows": 27,
+    "AI": 5,
+    "AO": 4,
+    "DI": 2,
+    "DO": 9,
+    "alarm_flag": 7,
+    "caution": "The graphic labels the source scope DOAS 1 OR 2 and identifies no controller address or number of installed instances. I/O classifications are transcribed as printed."
+  },
+  "tables": [
+    {
+      "id": "M512-DOAS12",
+      "page": 8,
+      "sheet": "M-512",
+      "detail": "1",
+      "title": "DOAS 1&2 P&ID",
+      "columns": "tag|point_name|AI|AO|DI|DO|ALARM",
+      "x_edges": [1085,1135,1400,1455,1500,1545,1595,1670],
+      "y_ranges": [[241,261],[261,282],[282,303],[303,324],[324,345],[345,366],[366,387],[387,408],[408,429],[429,450],[450,471],[471,492],[492,513],[513,534],[534,555],[555,576],[576,597],[597,618],[618,639],[639,660],[660,681],[681,702],[702,723],[723,744],[744,765],[765,786],[786,806]],
+      "rows": [
+        "1|EMERGENCY SHUTDOWN (GLOBAL)|||||X",
+        "2|OUTSIDE AIR TEMP.|X||||",
+        "3|SUPPLY AIR FLOW|X||||",
+        "4|SUPPLY AIR TEMP.|X||||",
+        "5|SUPPLY AIR TEMP. SETPOINT||||X|",
+        "6|CHW COIL LEAVING AIR TEMP.|X||||",
+        "7|CHW COIL LEAVING AIR TEMP. SETPOINT||||X|",
+        "8|FILTER DIFFERENTIAL PRESSURE|||||X",
+        "9|SUPPLY FAN ON/OFF||||X|",
+        "10|SUPPLY FAN STATUS|||X||",
+        "11|SUPPLY FAN FAILURE|||||X",
+        "12|CONDENSATE OVERFLOW|||||X",
+        "13|SYSTEM ENABLE||||X|",
+        "14|RELIEF DAMPER OPEN/CLOSE||||X|",
+        "15|EMERGENCY SHUTDOWN (GLOBAL)|||||X",
+        "16|EXHAUST FAN ON/OFF||||X|",
+        "17|EXHAUST FAN STATUS|||X||",
+        "18|EXHAUST FAN FAILURE|||||X",
+        "19|RA DAMPER OPEN/CLOSE||||X|",
+        "20|OA DAMPER OPEN/CLOSE||||X|",
+        "21|DUCT SMOKE DETECTOR|||||X",
+        "22|HW COIL LEAVING AIR TEMP.|X||||",
+        "23|HW COIL LEAVING AIR TEMP. SETPOINT||||X|",
+        "24|HOT WATER VALVE POSITION||X|||",
+        "25|CHILLED WATER VALVE POSITION||X|||",
+        "26|SUPPLY VFD SPEED||X|||",
+        "27|EXHAUST VFD SPEED||X|||"
+      ],
+      "header_evidence": [
+        {"bbox": [1270,198,1490,221], "expected": "BAS INPUT/OUTPUT POINT LIST"},
+        {"bbox": [1085,218,1670,242], "expected": "TAG POINT NAME AI AO DI DO ALARM"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "m512-doas12-io-matrix", "records_path": ["tables"], "expected": 1, "unique_key": "id"}
+  ]
+}

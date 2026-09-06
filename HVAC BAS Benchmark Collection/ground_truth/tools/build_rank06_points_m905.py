@@ -1,0 +1,12 @@
+"""Strict literal M905 exhaust-control DDC point-list capture."""
+import json
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[2];AUDIT=ROOT/'ground_truth';IDENT='06__vol2__096';OUT=AUDIT/'work'/IDENT/'points_m905.json'
+def tbl(id_,ys,rows,box):
+ return {'id':id_,'sheet':'M905','page':35,'title_as_printed':'SCHEDULE OF DDC POINTS','columns':'source_row_as_printed','x_edges':[1910,2450],'y_ranges':ys,'rows':rows,'row_reading_order':'left_to_right','header_evidence':[{'bbox':box,'expected':'SCHEDULE OF DDC POINTS'}],'source_row_semantics':'Complete literal row, retaining duplicate source occurrences. It is not expanded into individual fan/controller terminal or wiring counts.'}
+def main():
+ sally=['BI-1 FAN STATUS X X X','BO-1 FAN START-STOP X X','BO-2 GAS MONITORING SYSTEM EXHAUST FAN ON/OFF X X','BO-3 OUTDOOR INTAKE MOTORIZED DAMPER X X','BO-4 EXHAUST FAN MOTORIZED DAMPER X X']
+ repeated=['AO-1 EXHAUST FAN STARTER X X','AO-1 EXHAUST FAN STARTER X X','BI-1 EXHAUST FAN STATUS X X X','BI-1 EXHAUST FAN STATUS X X X','BI-2 EXHAUST FAN DIFFERENTIAL PRESSURE SWITCH X X X','BI-2 EXHAUST FAN DIFFERENTIAL PRESSURE SWITCH X X X','BI-3 EXHAUST FAN DAMPER END SWITCH X X X','BI-3 EXHAUST FAN DAMPER END SWITCH X X X','BO-1 EXHAUST FAN START-STOP X X','BO-1 EXHAUST FAN START-STOP X X','BO-2 EXHAUST FAN ISOLATION DAMPER X X','BO-2 EXHAUST FAN ISOLATION DAMPER X X']
+ data={'document_id':IDENT,'module_role':'Complete literal M905 sallyport, jail-exhaust and pod-exhaust DDC point matrices, including repeated printed row occurrences.','tables':[tbl('M905-SALLYPORT-EXHAUST-DDC',[[157,171],[171,184],[184,197],[197,210],[210,225]],sally,[2035,120,2180,140]),tbl('M905-JAIL-EXHAUST-DDC',[[703,716],[716,729],[729,742],[742,756],[756,769],[769,782],[782,795],[795,808],[808,821],[821,834],[834,847],[847,862]],repeated,[2035,665,2180,685]),tbl('M905-POD-EXHAUST-DDC',[[1497,1510],[1510,1523],[1523,1536],[1536,1550],[1550,1563],[1563,1576],[1576,1589],[1589,1602],[1602,1615],[1615,1628],[1628,1641],[1641,1656]],repeated,[2035,1460,2180,1480])],'assertions':[],'point_scope':'All 29 printed rows remain source-matrix occurrences; duplicate labels are intentionally retained and are not mechanically deduplicated into physical I/O counts.'}
+ OUT.parent.mkdir(parents=True,exist_ok=True);OUT.write_text(json.dumps(data,indent=2)+'\n')
+if __name__=='__main__':main()

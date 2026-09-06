@@ -1,0 +1,123 @@
+{
+  "document_id": "12__vol2__028",
+  "module_role": "Exact transcription of M-506 details 3 through 6: water, gas, electric, and global BAS I/O matrices. Asterisked note text is retained as a printed integration qualifier; no protocol expansion is inferred from it.",
+  "source_sheet": "M-506",
+  "source_page": 2,
+  "normalization_note": "X marks remain in their exact source cells. The hardware and software columns are not converted into a physical controller-terminal total. GLOBAL rows 4 through 6 are visibly numbered blank template slots and are explicitly retained as unpopulated, not counted points.",
+  "logical_row_summary": {
+    "M506-WATER-METER": {"populated_rows": 9, "template_rows": 9, "AI": 1, "trend": 7, "alarm_flag": 1, "show_on_graphic": 7},
+    "M506-GAS-METER": {"populated_rows": 9, "template_rows": 9, "AI": 1, "trend": 7, "alarm_flag": 1, "show_on_graphic": 7},
+    "M506-ELECTRIC-METER": {"populated_rows": 15, "template_rows": 15, "AV": 15, "trend": 15, "show_on_graphic": 15},
+    "M506-GLOBAL": {"populated_rows": 3, "numbered_template_rows": 6, "unpopulated_numbered_rows": [4,5,6], "AI": 2, "trend": 2, "show_on_graphic": 2},
+    "total_populated_rows": 36,
+    "caution": "Each matrix is a source template keyed by local numeric tags. It does not list an installed device count, a BACnet address, a network transport, or field-wired terminal quantities."
+  },
+  "tables": [
+    {
+      "id": "M506-WATER-METER",
+      "page": 2,
+      "sheet": "M-506",
+      "detail": "3",
+      "title": "WATER METER IO POINTS",
+      "columns": "tag|point_name|AI|AO|DI|DO|AV|BV|TREND|ALARM|ADJUSTABLE|SHOW_ON_GRAPHIC",
+      "x_edges": [128,171,335,372,416,452,489,524,559,614,670,765,844],
+      "y_ranges": [[903,925],[925,946],[946,967],[967,988],[988,1009],[1009,1030],[1030,1051],[1051,1072],[1072,1093]],
+      "rows": [
+        "1|WATER FLOW RATE|X|||||||||",
+        "2|DEMAND|||||||X|||X",
+        "3|PEAK MONTH-TO-DATE|||||||X|||X",
+        "4|PEAK TODAY|||||||X|||X",
+        "5|PEAK YEAR-TO-DATE|||||||X|||X",
+        "6|USAGE MONTH-TO-DATE|||||||X|||X",
+        "7|USAGE TODAY|||||||X|||X",
+        "8|USAGE YEAR-TO-DATE|||||||X|||X",
+        "9|GAS METER FAILURE||||||||X||"
+      ],
+      "header_evidence": [
+        {"bbox": [398,818,583,841], "expected": "BAS INPUT/OUTPUT POINT LIST"},
+        {"bbox": [128,866,844,905], "expected": "TAG POINT NAME AI AO DI DO AV BV TREND ALARM ADJUSTABLE SHOW ON GRAPHIC"}
+      ]
+    },
+    {
+      "id": "M506-GAS-METER",
+      "page": 2,
+      "sheet": "M-506",
+      "detail": "4",
+      "title": "GAS METER IO POINTS",
+      "columns": "tag|point_name|AI|AO|DI|DO|AV|BV|TREND|ALARM|ADJUSTABLE|SHOW_ON_GRAPHIC",
+      "x_edges": [865,910,1068,1098,1135,1161,1197,1228,1258,1314,1371,1455,1535],
+      "y_ranges": [[908,929],[929,948],[948,966],[966,985],[985,1003],[1003,1022],[1022,1041],[1041,1060],[1060,1080]],
+      "rows": [
+        "1|GAS FLOW RATE|X|||||||||",
+        "2|DEMAND|||||||X|||X",
+        "3|PEAK MONTH-TO-DATE|||||||X|||X",
+        "4|PEAK TODAY|||||||X|||X",
+        "5|PEAK YEAR-TO-DATE|||||||X|||X",
+        "6|USAGE MONTH-TO-DATE|||||||X|||X",
+        "7|USAGE TODAY|||||||X|||X",
+        "8|USAGE YEAR-TO-DATE|||||||X|||X",
+        "9|GAS METER FAILURE||||||||X||"
+      ],
+      "header_evidence": [
+        {"bbox": [1108,822,1295,845], "expected": "BAS INPUT/OUTPUT POINT LIST"},
+        {"bbox": [865,872,1535,910], "expected": "TAG POINT NAME AI AO DI DO AV BV TREND ALARM ADJUSTABLE SHOW ON GRAPHIC"}
+      ]
+    },
+    {
+      "id": "M506-ELECTRIC-METER",
+      "page": 2,
+      "sheet": "M-506",
+      "detail": "5",
+      "title": "ELECTRIC METER IO POINTS",
+      "columns": "tag|point_name|AI|AO|DI|DO|AV|BV|TREND|ALARM|ADJUSTABLE|SHOW_ON_GRAPHIC",
+      "x_edges": [1560,1600,1755,1785,1822,1853,1887,1920,1953,2009,2066,2152,2228],
+      "y_ranges": [[913,933],[933,955],[955,976],[976,997],[997,1018],[1018,1039],[1039,1060],[1060,1081],[1081,1102],[1102,1123],[1123,1144],[1144,1165],[1165,1186],[1186,1207],[1207,1228]],
+      "rows": [
+        "1|APPARENT POWER - KVA|||||X||X|||X",
+        "2|CURRENT NEUTRAL|||||X||X|||X",
+        "3|CURRENT PHASE A|||||X||X|||X",
+        "4|CURRENT PHASE B|||||X||X|||X",
+        "5|CURRENT PHASE C|||||X||X|||X",
+        "6|FREQUENCY|||||X||X|||X",
+        "7|POWER FACTOR|||||X||X|||X",
+        "8|REAL ENERGY - KWH|||||X||X|||X",
+        "9|REAL POWER - KW|||||X||X|||X",
+        "10|VOLTAGE A-B|||||X||X|||X",
+        "11|VOLTAGE A-N|||||X||X|||X",
+        "12|VOLTAGE B-C|||||X||X|||X",
+        "13|VOLTAGE B-N|||||X||X|||X",
+        "14|VOLTAGE C-A|||||X||X|||X",
+        "15|VOLTAGE C-N|||||X||X|||X"
+      ],
+      "header_evidence": [
+        {"bbox": [1804,825,1990,848], "expected": "BAS INPUT/OUTPUT POINT LIST"},
+        {"bbox": [1560,874,2228,913], "expected": "TAG POINT NAME AI AO DI DO AV BV TREND ALARM ADJUSTABLE SHOW ON GRAPHIC"}
+      ]
+    },
+    {
+      "id": "M506-GLOBAL",
+      "page": 2,
+      "sheet": "M-506",
+      "detail": "6",
+      "title": "GLOBAL IO POINTS",
+      "columns": "tag|point_name|AI|AO|DI|DO|AV|BV|TREND|ALARM|ADJUSTABLE|SHOW_ON_GRAPHIC",
+      "x_edges": [240,280,480,520,560,594,634,672,706,768,828,918,1000],
+      "y_ranges": [[1308,1329],[1329,1348],[1348,1366],[1366,1385],[1385,1404],[1404,1423]],
+      "rows": [
+        "1|OUTDOOR CO2|X||||||X|||X",
+        "2|OUTDOOR TEMPERATURE|X||||||X|||X",
+        "3|OUTDOOR RELATIVE HUMIDITY||||||||||",
+        "4|||||||||||",
+        "5|||||||||||",
+        "6|||||||||||"
+      ],
+      "header_evidence": [
+        {"bbox": [526,1230,711,1252], "expected": "BAS INPUT/OUTPUT POINT LIST"},
+        {"bbox": [240,1272,1000,1310], "expected": "TAG POINT NAME AI AO DI DO AV BV TREND ALARM ADJUSTABLE SHOW ON GRAPHIC"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "four-meter-and-global-matrices", "records_path": ["tables"], "expected": 4, "unique_key": "id"}
+  ]
+}

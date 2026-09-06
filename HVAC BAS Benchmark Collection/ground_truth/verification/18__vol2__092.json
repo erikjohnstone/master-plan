@@ -1,0 +1,126 @@
+{
+  "id": "18__vol2__092",
+  "record_sha256": "66a0a4d42ef41a25ba4acaccaee5a7efa8ed176f92bb463579d6200bce0decf5",
+  "checked_utc": "2026-09-05T03:31:24.086845+00:00",
+  "errors": [],
+  "modules": {
+    "metadata": {
+      "components": [
+        {
+          "annotation_sha256": "a560edec7c30f1fb88e4c2bf6d6c4ad15d2b030bf47e15dfc38653c6d25b8e65",
+          "cell_assertions": 0,
+          "text_assertions": 33,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 33,
+      "pass": true
+    },
+    "schedules": {
+      "components": [
+        {
+          "annotation_sha256": "e53809889cfa283aa4675a0d90ad8e0d9fc2497b7f6d6ed98fbedee68dcff3c1",
+          "cell_assertions": 421,
+          "text_assertions": 4,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 421,
+      "text_assertions": 4,
+      "pass": true
+    },
+    "points": {
+      "components": [
+        {
+          "annotation_sha256": "0002f35d9e5187ddf4670f35337a1c9fe29d05afcfe59c4b9fc83cfdce34d681",
+          "cell_assertions": 22,
+          "text_assertions": 2,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 22,
+      "text_assertions": 2,
+      "pass": true
+    },
+    "controls_context": {
+      "components": [
+        {
+          "annotation_sha256": "3dc5d0848a9d2694616f1f4832c2db3f4cd1cb7f3542d5755b25e341d9b08212",
+          "cell_assertions": 0,
+          "text_assertions": 6,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 6,
+      "pass": true
+    },
+    "equipment_reconciliation": {
+      "components": [
+        {
+          "annotation_sha256": "94b14c17a565b1449566ec5f8bde39e7eed01344fb105e73e6dd9d1e40e013d5",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "point_applications": {
+      "components": [
+        {
+          "annotation_sha256": "947c724c92ea3d8ef76a8748247b9f80af841ad3c533206fab4bfb3ca8381987",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "supporting_evidence": {
+      "components": [
+        {
+          "annotation_sha256": "59a254d64a85e131f654e0f800cfe0d2b443692973604cd77a0cf4ade467fe57",
+          "cell_assertions": 0,
+          "text_assertions": 1,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 1,
+      "pass": true
+    }
+  },
+  "source_files_sha256": {
+    "work/18__vol2__092/document_manifest.json": "f8c17a965942cfc0b6aa8d0a5eddb3e49ae9a24346965bd0becb99fab7059a0e",
+    "work/18__vol2__092/metadata.json": "a560edec7c30f1fb88e4c2bf6d6c4ad15d2b030bf47e15dfc38653c6d25b8e65",
+    "work/18__vol2__092/schedules_m301.json": "e53809889cfa283aa4675a0d90ad8e0d9fc2497b7f6d6ed98fbedee68dcff3c1",
+    "work/18__vol2__092/points_m402.json": "0002f35d9e5187ddf4670f35337a1c9fe29d05afcfe59c4b9fc83cfdce34d681",
+    "work/18__vol2__092/controls_context_m402.json": "3dc5d0848a9d2694616f1f4832c2db3f4cd1cb7f3542d5755b25e341d9b08212",
+    "work/18__vol2__092/equipment_reconciliation.json": "94b14c17a565b1449566ec5f8bde39e7eed01344fb105e73e6dd9d1e40e013d5",
+    "work/18__vol2__092/point_applications.json": "947c724c92ea3d8ef76a8748247b9f80af841ad3c533206fab4bfb3ca8381987",
+    "work/18__vol2__092/supporting_evidence.json": "59a254d64a85e131f654e0f800cfe0d2b443692973604cd77a0cf4ade467fe57",
+    "reviews/18__vol2__092/p1-p1-full-poppler-poppler.png": "f34fd8e11ceb388e123cb130492f459d0c20485b34aa312fc49a6176bfebcb86",
+    "reviews/18__vol2__092/p2-p2-full-poppler-poppler.png": "50a55a2bd908d3c3f7861cbab2d47afce8748cc553eb115e1418db2b4cc8a75b",
+    "reviews/18__vol2__092/p3-p3-full-poppler-poppler.png": "9c989ec5163d592750b446d65e0963fd5230fd44c9484585fa203502160e9430",
+    "reviews/18__vol2__092/p4-p4-full-poppler-poppler.png": "621c3a40fe49363c4cfd30107b4bc5fb763facc4c81fc737f51aa29696afad9f",
+    "reviews/18__vol2__092/p5-p5-full-poppler-poppler.png": "a960297d58fd93615d23eafc2ec5fa0c324873f53e89916ccd78ae202ee06a94",
+    "reviews/18__vol2__092/p6-p6-full-poppler-poppler.png": "88d9d9aa9377da2c15ead3c54f298d31a5fc9bea1af80a6fd22f9221ad0de11e",
+    "reviews/18__vol2__092/p7-p7-full-poppler-poppler.png": "1156cb74b19e93ce436feb94e35096ed9f1b5e70f679a6a30cf60f7b42b62c8b",
+    "reviews/18__vol2__092/p8-p8-full-poppler-poppler.png": "9cd2e60bece99f5d28b06563566ddc1ed23d75fa406284645085abf416e48eb7",
+    "reviews/18__vol2__092/p9-p9-full-poppler-poppler.png": "4f20c262ac12c0b263003192937cf7037af2fd2a5c2fac43e249a46b3f5fbf7d",
+    "reviews/18__vol2__092/p10-p10-full-poppler-poppler.png": "23482daaee94add7ff74dbe748f5df6efeb11b4a41b5aa0c7796b5b5600006d0",
+    "reviews/18__vol2__092/p11-p11-full-poppler-poppler.png": "a25260cbecf8854b6fc3988bc3b16273cc7635774f7f419728c837d341cb5da3",
+    "reviews/18__vol2__092/p12-p12-full-poppler-poppler.png": "09f286c719515097f2b8232f6c127eac69830039ed0d307e1673297526a00a54",
+    "reviews/18__vol2__092/p13-p13-full-poppler-poppler.png": "28ca84c188ef5ed85d41dc880c67da6e8013de01dde583d16aca46734fc30c50"
+  },
+  "scope": "Rechecks every embedded authored module against MuPDF and Poppler, exact bundle/source identity, authored page/requirement coverage and review-file integrity. Visual interpretation and completeness are coordinator audit assertions, not automatic parser proof.",
+  "bounded_assertions": 489,
+  "independent_engine_checks": 978,
+  "pass": true
+}

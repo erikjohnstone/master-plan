@@ -1,0 +1,2274 @@
+{
+  "document_id": "04__vol2__062",
+  "source_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "annotation_sha256": "99b24fbe85ef1ffe11339120b0c1ea40478064d4e5bd1ef535be3875bd4b8e4d",
+  "tables": 2,
+  "rows": 11,
+  "cell_assertions": 55,
+  "text_assertions": 13,
+  "checks": [
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 1,
+      "column": "source_symbol_cell",
+      "page": 13,
+      "bbox": [
+        1300,
+        805,
+        1360,
+        840
+      ],
+      "expected": "D-1 CFM 6\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-1 CFM 6\"Ø",
+          "word_ids": [
+            1051,
+            1050,
+            1049
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-1 CFM 6\"Ø",
+          "word_ids": [
+            719,
+            720,
+            721
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 1,
+      "column": "nominal_size",
+      "page": 13,
+      "bbox": [
+        1360,
+        805,
+        1450,
+        840
+      ],
+      "expected": "6X6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6X6",
+          "word_ids": [
+            955
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6X6",
+          "word_ids": [
+            722
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 1,
+      "column": "neck_runout_size",
+      "page": 13,
+      "bbox": [
+        1450,
+        805,
+        1540,
+        840
+      ],
+      "expected": "6\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6\"Ø",
+          "word_ids": [
+            956
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6\"Ø",
+          "word_ids": [
+            723
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 1,
+      "column": "cfm_range",
+      "page": 13,
+      "bbox": [
+        1540,
+        805,
+        1635,
+        840
+      ],
+      "expected": "0 - 90",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0 - 90",
+          "word_ids": [
+            957,
+            958,
+            959
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0 - 90",
+          "word_ids": [
+            724,
+            725,
+            726
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 1,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1635,
+        805,
+        1760,
+        840
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5 , 6 , 7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5 , 6 , 7",
+          "word_ids": [
+            960,
+            961,
+            962,
+            963,
+            964,
+            965,
+            966,
+            967,
+            968,
+            969,
+            970,
+            971,
+            972
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5 , 6 , 7",
+          "word_ids": [
+            727,
+            728,
+            729,
+            730,
+            731,
+            732,
+            733,
+            734,
+            735,
+            736,
+            737,
+            738,
+            739
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 2,
+      "column": "source_symbol_cell",
+      "page": 13,
+      "bbox": [
+        1300,
+        842,
+        1360,
+        876
+      ],
+      "expected": "D-2 CFM 10\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-2 CFM 10\"Ø",
+          "word_ids": [
+            1054,
+            1053,
+            1052
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-2 CFM 10\"Ø",
+          "word_ids": [
+            756,
+            757,
+            758
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 2,
+      "column": "nominal_size",
+      "page": 13,
+      "bbox": [
+        1360,
+        842,
+        1450,
+        876
+      ],
+      "expected": "10\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10\"Ø",
+          "word_ids": [
+            973
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10\"Ø",
+          "word_ids": [
+            759
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 2,
+      "column": "neck_runout_size",
+      "page": 13,
+      "bbox": [
+        1450,
+        842,
+        1540,
+        876
+      ],
+      "expected": "10\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10\"Ø",
+          "word_ids": [
+            974
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10\"Ø",
+          "word_ids": [
+            760
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 2,
+      "column": "cfm_range",
+      "page": 13,
+      "bbox": [
+        1540,
+        842,
+        1635,
+        876
+      ],
+      "expected": "0-350",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0-350",
+          "word_ids": [
+            975
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0-350",
+          "word_ids": [
+            761
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 2,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1635,
+        842,
+        1760,
+        876
+      ],
+      "expected": "1 , 3 , 4 , 5 , 6 , 7 , 9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 3 , 4 , 5 , 6 , 7 , 9",
+          "word_ids": [
+            976,
+            977,
+            978,
+            979,
+            980,
+            981,
+            982,
+            983,
+            984,
+            985,
+            986,
+            987,
+            988
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 3 , 4 , 5 , 6 , 7 , 9",
+          "word_ids": [
+            762,
+            763,
+            764,
+            765,
+            766,
+            767,
+            768,
+            769,
+            770,
+            771,
+            772,
+            773,
+            774
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 3,
+      "column": "source_symbol_cell",
+      "page": 13,
+      "bbox": [
+        1300,
+        878,
+        1360,
+        912
+      ],
+      "expected": "D-3 CFM 12\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-3 CFM 12\"Ø",
+          "word_ids": [
+            1057,
+            1056,
+            1055
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-3 CFM 12\"Ø",
+          "word_ids": [
+            789,
+            790,
+            791
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 3,
+      "column": "nominal_size",
+      "page": 13,
+      "bbox": [
+        1360,
+        878,
+        1450,
+        912
+      ],
+      "expected": "12\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12\"Ø",
+          "word_ids": [
+            989
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12\"Ø",
+          "word_ids": [
+            792
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 3,
+      "column": "neck_runout_size",
+      "page": 13,
+      "bbox": [
+        1450,
+        878,
+        1540,
+        912
+      ],
+      "expected": "12\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12\"Ø",
+          "word_ids": [
+            990
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12\"Ø",
+          "word_ids": [
+            793
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 3,
+      "column": "cfm_range",
+      "page": 13,
+      "bbox": [
+        1540,
+        878,
+        1635,
+        912
+      ],
+      "expected": "0-400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0-400",
+          "word_ids": [
+            991
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0-400",
+          "word_ids": [
+            794
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 3,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1635,
+        878,
+        1760,
+        912
+      ],
+      "expected": "1 , 3 , 4 , 5 , 6 , 7 , 9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 3 , 4 , 5 , 6 , 7 , 9",
+          "word_ids": [
+            992,
+            993,
+            994,
+            995,
+            996,
+            997,
+            998,
+            999,
+            1000,
+            1001,
+            1002,
+            1003,
+            1004
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 3 , 4 , 5 , 6 , 7 , 9",
+          "word_ids": [
+            795,
+            796,
+            797,
+            798,
+            799,
+            800,
+            801,
+            802,
+            803,
+            804,
+            805,
+            806,
+            807
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 4,
+      "column": "source_symbol_cell",
+      "page": 13,
+      "bbox": [
+        1300,
+        914,
+        1360,
+        948
+      ],
+      "expected": "D-4 CFM 14\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-4 CFM 14\"Ø",
+          "word_ids": [
+            1060,
+            1059,
+            1058
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-4 CFM 14\"Ø",
+          "word_ids": [
+            822,
+            823,
+            824
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 4,
+      "column": "nominal_size",
+      "page": 13,
+      "bbox": [
+        1360,
+        914,
+        1450,
+        948
+      ],
+      "expected": "14\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14\"Ø",
+          "word_ids": [
+            1005
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14\"Ø",
+          "word_ids": [
+            825
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 4,
+      "column": "neck_runout_size",
+      "page": 13,
+      "bbox": [
+        1450,
+        914,
+        1540,
+        948
+      ],
+      "expected": "14\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14\"Ø",
+          "word_ids": [
+            1006
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14\"Ø",
+          "word_ids": [
+            826
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 4,
+      "column": "cfm_range",
+      "page": 13,
+      "bbox": [
+        1540,
+        914,
+        1635,
+        948
+      ],
+      "expected": "0-550",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0-550",
+          "word_ids": [
+            1007
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0-550",
+          "word_ids": [
+            827
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 4,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1635,
+        914,
+        1760,
+        948
+      ],
+      "expected": "1 , 3 , 4 , 5 , 6 , 7 , 9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 3 , 4 , 5 , 6 , 7 , 9",
+          "word_ids": [
+            1008,
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            1019,
+            1020
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 3 , 4 , 5 , 6 , 7 , 9",
+          "word_ids": [
+            828,
+            829,
+            830,
+            831,
+            832,
+            833,
+            834,
+            835,
+            836,
+            837,
+            838,
+            839,
+            840
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 5,
+      "column": "source_symbol_cell",
+      "page": 13,
+      "bbox": [
+        1300,
+        950,
+        1360,
+        984
+      ],
+      "expected": "D-5 CFM 6\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-5 CFM 6\"Ø",
+          "word_ids": [
+            1063,
+            1062,
+            1061
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-5 CFM 6\"Ø",
+          "word_ids": [
+            855,
+            856,
+            857
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 5,
+      "column": "nominal_size",
+      "page": 13,
+      "bbox": [
+        1360,
+        950,
+        1450,
+        984
+      ],
+      "expected": "13\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13\"Ø",
+          "word_ids": [
+            1021
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13\"Ø",
+          "word_ids": [
+            858
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 5,
+      "column": "neck_runout_size",
+      "page": 13,
+      "bbox": [
+        1450,
+        950,
+        1540,
+        984
+      ],
+      "expected": "6\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6\"Ø",
+          "word_ids": [
+            1022
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6\"Ø",
+          "word_ids": [
+            859
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 5,
+      "column": "cfm_range",
+      "page": 13,
+      "bbox": [
+        1540,
+        950,
+        1635,
+        984
+      ],
+      "expected": "0 - 90",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0 - 90",
+          "word_ids": [
+            1023,
+            1024,
+            1025
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0 - 90",
+          "word_ids": [
+            860,
+            861,
+            862
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 5,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1635,
+        950,
+        1760,
+        984
+      ],
+      "expected": "1 , 3 , 4 , 5 , 6 , 7 , 8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 3 , 4 , 5 , 6 , 7 , 8",
+          "word_ids": [
+            1026,
+            1027,
+            1028,
+            1029,
+            1030,
+            1031,
+            1032,
+            1033,
+            1034,
+            1035,
+            1036,
+            1037,
+            1038
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 3 , 4 , 5 , 6 , 7 , 8",
+          "word_ids": [
+            863,
+            864,
+            865,
+            866,
+            867,
+            868,
+            869,
+            870,
+            871,
+            872,
+            873,
+            874,
+            875
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 6,
+      "column": "source_symbol_cell",
+      "page": 13,
+      "bbox": [
+        1300,
+        986,
+        1360,
+        1020
+      ],
+      "expected": "D-6 CFM 8\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-6 CFM 8\"Ø",
+          "word_ids": [
+            1066,
+            1065,
+            1064
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-6 CFM 8\"Ø",
+          "word_ids": [
+            876,
+            877,
+            878
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 6,
+      "column": "nominal_size",
+      "page": 13,
+      "bbox": [
+        1360,
+        986,
+        1450,
+        1020
+      ],
+      "expected": "18\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"Ø",
+          "word_ids": [
+            1039
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"Ø",
+          "word_ids": [
+            879
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 6,
+      "column": "neck_runout_size",
+      "page": 13,
+      "bbox": [
+        1450,
+        986,
+        1540,
+        1020
+      ],
+      "expected": "8\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8\"Ø",
+          "word_ids": [
+            1040
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8\"Ø",
+          "word_ids": [
+            884
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 6,
+      "column": "cfm_range",
+      "page": 13,
+      "bbox": [
+        1540,
+        986,
+        1635,
+        1020
+      ],
+      "expected": "90 - 200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "90 - 200",
+          "word_ids": [
+            1041,
+            1042,
+            1043
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "90 - 200",
+          "word_ids": [
+            885,
+            886,
+            887
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 6,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1635,
+        986,
+        1760,
+        1020
+      ],
+      "expected": "1 , 3 , 4 , 5 , 6 , 7 , 8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 3 , 4 , 5 , 6 , 7 , 8",
+          "word_ids": [
+            917,
+            918,
+            919,
+            920,
+            921,
+            922,
+            923,
+            924,
+            925,
+            926,
+            927,
+            928,
+            929
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 3 , 4 , 5 , 6 , 7 , 8",
+          "word_ids": [
+            1686,
+            1687,
+            1688,
+            1689,
+            1690,
+            1691,
+            1692,
+            1693,
+            1694,
+            1695,
+            1696,
+            1697,
+            1698
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 7,
+      "column": "source_symbol_cell",
+      "page": 13,
+      "bbox": [
+        1300,
+        1022,
+        1360,
+        1056
+      ],
+      "expected": "D-7 CFM 10\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-7 CFM 10\"Ø",
+          "word_ids": [
+            1069,
+            1068,
+            1067
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-7 CFM 10\"Ø",
+          "word_ids": [
+            880,
+            881,
+            882
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 7,
+      "column": "nominal_size",
+      "page": 13,
+      "bbox": [
+        1360,
+        1022,
+        1450,
+        1056
+      ],
+      "expected": "22\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "22\"Ø",
+          "word_ids": [
+            1044
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "22\"Ø",
+          "word_ids": [
+            883
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 7,
+      "column": "neck_runout_size",
+      "page": 13,
+      "bbox": [
+        1450,
+        1022,
+        1540,
+        1056
+      ],
+      "expected": "10\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10\"Ø",
+          "word_ids": [
+            1045
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10\"Ø",
+          "word_ids": [
+            888
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 7,
+      "column": "cfm_range",
+      "page": 13,
+      "bbox": [
+        1540,
+        1022,
+        1635,
+        1056
+      ],
+      "expected": "200 - 350",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "200 - 350",
+          "word_ids": [
+            1046,
+            1047,
+            1048
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "200 - 350",
+          "word_ids": [
+            979,
+            980,
+            981
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-DIFFUSERS",
+      "row": 7,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1635,
+        1022,
+        1760,
+        1056
+      ],
+      "expected": "1 , 3 , 4 , 5 , 6 , 7 , 8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 3 , 4 , 5 , 6 , 7 , 8",
+          "word_ids": [
+            930,
+            931,
+            932,
+            933,
+            934,
+            935,
+            936,
+            937,
+            938,
+            939,
+            940,
+            941,
+            942
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 3 , 4 , 5 , 6 , 7 , 8",
+          "word_ids": [
+            1662,
+            1663,
+            1664,
+            1665,
+            1666,
+            1667,
+            1668,
+            1669,
+            1670,
+            1671,
+            1672,
+            1673,
+            1674
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 1,
+      "column": "source_symbol_cell",
+      "page": 13,
+      "bbox": [
+        1810,
+        805,
+        1855,
+        840
+      ],
+      "expected": "R-1 8\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R-1 8\"Ø",
+          "word_ids": [
+            1457,
+            1456
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R-1 8\"Ø",
+          "word_ids": [
+            740,
+            741
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 1,
+      "column": "nominal_size",
+      "page": 13,
+      "bbox": [
+        1855,
+        805,
+        1960,
+        840
+      ],
+      "expected": "10X10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10X10",
+          "word_ids": [
+            1239
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10X10",
+          "word_ids": [
+            742
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 1,
+      "column": "neck_runout_size",
+      "page": 13,
+      "bbox": [
+        1960,
+        805,
+        2050,
+        840
+      ],
+      "expected": "8\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8\"Ø",
+          "word_ids": [
+            1240
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8\"Ø",
+          "word_ids": [
+            743
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 1,
+      "column": "cfm_range",
+      "page": 13,
+      "bbox": [
+        2050,
+        805,
+        2150,
+        840
+      ],
+      "expected": "80-180",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80-180",
+          "word_ids": [
+            1241
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80-180",
+          "word_ids": [
+            744
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 1,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        2150,
+        805,
+        2300,
+        840
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5 , 6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5 , 6",
+          "word_ids": [
+            1242,
+            1243,
+            1244,
+            1245,
+            1246,
+            1247,
+            1248,
+            1249,
+            1250,
+            1251,
+            1252
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5 , 6",
+          "word_ids": [
+            745,
+            746,
+            747,
+            748,
+            749,
+            750,
+            751,
+            752,
+            753,
+            754,
+            755
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 2,
+      "column": "source_symbol_cell",
+      "page": 13,
+      "bbox": [
+        1810,
+        842,
+        1855,
+        876
+      ],
+      "expected": "R-2 10X6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R-2 10X6",
+          "word_ids": [
+            1459,
+            1458
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R-2 10X6",
+          "word_ids": [
+            775,
+            776
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 2,
+      "column": "nominal_size",
+      "page": 13,
+      "bbox": [
+        1855,
+        842,
+        1960,
+        876
+      ],
+      "expected": "10X6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10X6",
+          "word_ids": [
+            1253
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10X6",
+          "word_ids": [
+            777
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 2,
+      "column": "neck_runout_size",
+      "page": 13,
+      "bbox": [
+        1960,
+        842,
+        2050,
+        876
+      ],
+      "expected": "10X6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10X6",
+          "word_ids": [
+            1254
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10X6",
+          "word_ids": [
+            778
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 2,
+      "column": "cfm_range",
+      "page": 13,
+      "bbox": [
+        2050,
+        842,
+        2150,
+        876
+      ],
+      "expected": "0-200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0-200",
+          "word_ids": [
+            1255
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0-200",
+          "word_ids": [
+            779
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 2,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        2150,
+        842,
+        2300,
+        876
+      ],
+      "expected": "1 , 3 , 5 , 6 , 7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 3 , 5 , 6 , 7",
+          "word_ids": [
+            1256,
+            1257,
+            1258,
+            1259,
+            1260,
+            1261,
+            1262,
+            1263,
+            1264
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 3 , 5 , 6 , 7",
+          "word_ids": [
+            780,
+            781,
+            782,
+            783,
+            784,
+            785,
+            786,
+            787,
+            788
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 3,
+      "column": "source_symbol_cell",
+      "page": 13,
+      "bbox": [
+        1810,
+        878,
+        1855,
+        912
+      ],
+      "expected": "R-3 12X8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R-3 12X8",
+          "word_ids": [
+            1461,
+            1460
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R-3 12X8",
+          "word_ids": [
+            808,
+            809
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 3,
+      "column": "nominal_size",
+      "page": 13,
+      "bbox": [
+        1855,
+        878,
+        1960,
+        912
+      ],
+      "expected": "12X8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12X8",
+          "word_ids": [
+            1265
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12X8",
+          "word_ids": [
+            810
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 3,
+      "column": "neck_runout_size",
+      "page": 13,
+      "bbox": [
+        1960,
+        878,
+        2050,
+        912
+      ],
+      "expected": "12X8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12X8",
+          "word_ids": [
+            1266
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12X8",
+          "word_ids": [
+            811
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 3,
+      "column": "cfm_range",
+      "page": 13,
+      "bbox": [
+        2050,
+        878,
+        2150,
+        912
+      ],
+      "expected": "200-300",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "200-300",
+          "word_ids": [
+            1267
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "200-300",
+          "word_ids": [
+            812
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 3,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        2150,
+        878,
+        2300,
+        912
+      ],
+      "expected": "1 , 3 , 5 , 6 , 7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 3 , 5 , 6 , 7",
+          "word_ids": [
+            1268,
+            1269,
+            1270,
+            1271,
+            1272,
+            1273,
+            1274,
+            1275,
+            1276
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 3 , 5 , 6 , 7",
+          "word_ids": [
+            813,
+            814,
+            815,
+            816,
+            817,
+            818,
+            819,
+            820,
+            821
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 4,
+      "column": "source_symbol_cell",
+      "page": 13,
+      "bbox": [
+        1810,
+        914,
+        1855,
+        948
+      ],
+      "expected": "R-4 18X10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R-4 18X10",
+          "word_ids": [
+            1463,
+            1462
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R-4 18X10",
+          "word_ids": [
+            841,
+            842
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 4,
+      "column": "nominal_size",
+      "page": 13,
+      "bbox": [
+        1855,
+        914,
+        1960,
+        948
+      ],
+      "expected": "18X10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18X10",
+          "word_ids": [
+            1277
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18X10",
+          "word_ids": [
+            843
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 4,
+      "column": "neck_runout_size",
+      "page": 13,
+      "bbox": [
+        1960,
+        914,
+        2050,
+        948
+      ],
+      "expected": "18X10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18X10",
+          "word_ids": [
+            1278
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18X10",
+          "word_ids": [
+            844
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 4,
+      "column": "cfm_range",
+      "page": 13,
+      "bbox": [
+        2050,
+        914,
+        2150,
+        948
+      ],
+      "expected": "300-550",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "300-550",
+          "word_ids": [
+            1279
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "300-550",
+          "word_ids": [
+            845
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "row": 4,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        2150,
+        914,
+        2300,
+        948
+      ],
+      "expected": "1 , 3 , 5 , 6 , 7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 3 , 5 , 6 , 7",
+          "word_ids": [
+            1280,
+            1281,
+            1282,
+            1283,
+            1284,
+            1285,
+            1286,
+            1287,
+            1288
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 3 , 5 , 6 , 7",
+          "word_ids": [
+            846,
+            847,
+            848,
+            849,
+            850,
+            851,
+            852,
+            853,
+            854
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-diffuser-title",
+      "page": 13,
+      "bbox": [
+        1400,
+        735,
+        1650,
+        775
+      ],
+      "expected": "DIFFUSER SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIFFUSER SCHEDULE",
+          "word_ids": [
+            943,
+            944
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIFFUSER SCHEDULE",
+          "word_ids": [
+            1822,
+            1823
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-return-grille-title",
+      "page": 13,
+      "bbox": [
+        1810,
+        735,
+        2260,
+        775
+      ],
+      "expected": "RETURN & EXHAUST GRILLE SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN & EXHAUST GRILLE SCHEDULE",
+          "word_ids": [
+            1224,
+            1225,
+            1226,
+            1227,
+            1228
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN & EXHAUST GRILLE SCHEDULE",
+          "word_ids": [
+            667,
+            668,
+            669,
+            670,
+            671
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-device-tag-d1",
+      "page": 13,
+      "bbox": [
+        1310,
+        810,
+        1338,
+        823
+      ],
+      "expected": "D-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-1",
+          "word_ids": [
+            1051
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-1",
+          "word_ids": [
+            719
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-device-tag-d2",
+      "page": 13,
+      "bbox": [
+        1310,
+        846,
+        1338,
+        859
+      ],
+      "expected": "D-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-2",
+          "word_ids": [
+            1054
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-2",
+          "word_ids": [
+            756
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-device-tag-d3",
+      "page": 13,
+      "bbox": [
+        1310,
+        882,
+        1338,
+        895
+      ],
+      "expected": "D-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-3",
+          "word_ids": [
+            1057
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-3",
+          "word_ids": [
+            789
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-device-tag-d4",
+      "page": 13,
+      "bbox": [
+        1310,
+        918,
+        1338,
+        931
+      ],
+      "expected": "D-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-4",
+          "word_ids": [
+            1060
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-4",
+          "word_ids": [
+            822
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-device-tag-d5",
+      "page": 13,
+      "bbox": [
+        1310,
+        954,
+        1338,
+        967
+      ],
+      "expected": "D-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-5",
+          "word_ids": [
+            1063
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-5",
+          "word_ids": [
+            855
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-device-tag-d6",
+      "page": 13,
+      "bbox": [
+        1310,
+        989,
+        1338,
+        1003
+      ],
+      "expected": "D-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-6",
+          "word_ids": [
+            1066
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-6",
+          "word_ids": [
+            876
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-device-tag-d7",
+      "page": 13,
+      "bbox": [
+        1310,
+        1025,
+        1338,
+        1039
+      ],
+      "expected": "D-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-7",
+          "word_ids": [
+            1069
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-7",
+          "word_ids": [
+            880
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-device-tag-r1",
+      "page": 13,
+      "bbox": [
+        1820,
+        814,
+        1848,
+        828
+      ],
+      "expected": "R-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R-1",
+          "word_ids": [
+            1457
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R-1",
+          "word_ids": [
+            740
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-device-tag-r2",
+      "page": 13,
+      "bbox": [
+        1820,
+        850,
+        1848,
+        864
+      ],
+      "expected": "R-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R-2",
+          "word_ids": [
+            1459
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R-2",
+          "word_ids": [
+            775
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-device-tag-r3",
+      "page": 13,
+      "bbox": [
+        1820,
+        886,
+        1848,
+        900
+      ],
+      "expected": "R-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R-3",
+          "word_ids": [
+            1461
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R-3",
+          "word_ids": [
+            808
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-device-tag-r4",
+      "page": 13,
+      "bbox": [
+        1820,
+        922,
+        1848,
+        936
+      ],
+      "expected": "R-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R-4",
+          "word_ids": [
+            1463
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R-4",
+          "word_ids": [
+            841
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "rank04-m51-air-device-tables",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    },
+    {
+      "id": "rank04-m51-air-device-tags",
+      "actual": 11,
+      "expected": 11,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

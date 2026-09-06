@@ -1,0 +1,42 @@
+{
+  "document_id": "03__vol1__27",
+  "source_sha256": "2e123db08407f97acd6bc6387ecab6e08ad8204971fb5c24a3668bbd34dec0cf",
+  "annotation_sha256": "fa568d9efc6072281e56062c3aeb2f1b3c7907df2bf2cd56e1e1fc1f1ab6be44",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 0,
+  "checks": [],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "linked-schedule-registry",
+      "pass": true,
+      "tables": 19,
+      "rows": 111,
+      "identities": 75,
+      "primary_anchors": 70
+    },
+    {
+      "id": "rank03-primary-schedule-anchors",
+      "actual": 70,
+      "expected": 70,
+      "pass": true
+    },
+    {
+      "id": "rank03-additional-identity-boundaries",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {
+    "schedules_m601_core.json": "3e0952d867e8fbc7bf8e5c23bdf8fc86fb4360e0425a6e8c4bfe84ba8475ab00",
+    "schedules_m602_core.json": "17a8f8a19b4746c98adbdee8da0c0b42b02b1e7800cfe9c26d9b864a74d57304",
+    "schedules_m603_core.json": "6b40c5bd0498209efaedf49886e61c8c4b09e21ae4e899884ddbc97bdf933bbd",
+    "schedules_m604_core.json": "e35dfbd22493f05dc6394585be6177dda6f78fec11d7e3ec3df653d991f238dc"
+  },
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

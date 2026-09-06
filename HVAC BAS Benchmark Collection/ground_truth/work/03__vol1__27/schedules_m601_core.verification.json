@@ -1,0 +1,4339 @@
+{
+  "document_id": "03__vol1__27",
+  "source_sha256": "2e123db08407f97acd6bc6387ecab6e08ad8204971fb5c24a3668bbd34dec0cf",
+  "annotation_sha256": "3e0952d867e8fbc7bf8e5c23bdf8fc86fb4360e0425a6e8c4bfe84ba8475ab00",
+  "tables": 4,
+  "rows": 35,
+  "cell_assertions": 143,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 1,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        132.8685,
+        700,
+        145.6685
+      ],
+      "expected": "ERV-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ERV-1",
+          "word_ids": [
+            134
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ERV-1",
+          "word_ids": [
+            114
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 2,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        147.0884,
+        700,
+        159.8884
+      ],
+      "expected": "BT-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BT-1",
+          "word_ids": [
+            143
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BT-1",
+          "word_ids": [
+            115
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 3,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        161.4884,
+        700,
+        174.2884
+      ],
+      "expected": "BT-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BT-2",
+          "word_ids": [
+            149
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BT-2",
+          "word_ids": [
+            116
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 4,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        175.8884,
+        700,
+        188.6884
+      ],
+      "expected": "BT-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BT-3",
+          "word_ids": [
+            155
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BT-3",
+          "word_ids": [
+            117
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 5,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        190.1084,
+        700,
+        202.9084
+      ],
+      "expected": "BT-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BT-4",
+          "word_ids": [
+            161
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BT-4",
+          "word_ids": [
+            118
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 6,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        204.5085,
+        700,
+        217.3085
+      ],
+      "expected": "HX-1A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HX-1A",
+          "word_ids": [
+            167
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HX-1A",
+          "word_ids": [
+            119
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 7,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        218.9085,
+        700,
+        231.7085
+      ],
+      "expected": "HX-1B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HX-1B",
+          "word_ids": [
+            173
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HX-1B",
+          "word_ids": [
+            120
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 8,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        233.1286,
+        700,
+        245.9286
+      ],
+      "expected": "HX-2A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HX-2A",
+          "word_ids": [
+            293
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HX-2A",
+          "word_ids": [
+            121
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 9,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        247.5286,
+        700,
+        260.3286
+      ],
+      "expected": "HX-2B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HX-2B",
+          "word_ids": [
+            299
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HX-2B",
+          "word_ids": [
+            122
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 10,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        261.9287,
+        700,
+        274.7287
+      ],
+      "expected": "WSHP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WSHP-1",
+          "word_ids": [
+            305
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WSHP-1",
+          "word_ids": [
+            123
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 11,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        276.1486,
+        700,
+        288.9486
+      ],
+      "expected": "FTR-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FTR-1",
+          "word_ids": [
+            312
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FTR-1",
+          "word_ids": [
+            124
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 12,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        290.5487,
+        700,
+        303.3487
+      ],
+      "expected": "AS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AS-1",
+          "word_ids": [
+            319
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AS-1",
+          "word_ids": [
+            125
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 13,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        304.9487,
+        700,
+        317.7487
+      ],
+      "expected": "AS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AS-2",
+          "word_ids": [
+            325
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AS-2",
+          "word_ids": [
+            126
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 14,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        319.1687,
+        700,
+        331.9687
+      ],
+      "expected": "DISTRIBUTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DISTRIBUTED",
+          "word_ids": [
+            331
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DISTRIBUTED",
+          "word_ids": [
+            127
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 15,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        332.6686,
+        700,
+        345.4686
+      ],
+      "expected": "EP-1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EP-1,2",
+          "word_ids": [
+            344
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EP-1,2",
+          "word_ids": [
+            128
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 16,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        347.7886,
+        700,
+        360.5886
+      ],
+      "expected": "EP-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EP-3",
+          "word_ids": [
+            349
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EP-3",
+          "word_ids": [
+            129
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 17,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        362.1888,
+        700,
+        374.9888
+      ],
+      "expected": "EP-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EP-4",
+          "word_ids": [
+            359
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EP-4",
+          "word_ids": [
+            130
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 18,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        376.5887,
+        700,
+        389.3887
+      ],
+      "expected": "CP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-1",
+          "word_ids": [
+            364
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-1",
+          "word_ids": [
+            131
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 19,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        390.9887,
+        700,
+        403.7887
+      ],
+      "expected": "CP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-2",
+          "word_ids": [
+            373
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-2",
+          "word_ids": [
+            132
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 20,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        405.3887,
+        700,
+        418.1887
+      ],
+      "expected": "HWP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP-1",
+          "word_ids": [
+            381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP-1",
+          "word_ids": [
+            133
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 21,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        419.6087,
+        700,
+        432.4087
+      ],
+      "expected": "HWP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP-2",
+          "word_ids": [
+            389
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP-2",
+          "word_ids": [
+            134
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 22,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        434.0087,
+        700,
+        446.8087
+      ],
+      "expected": "HWP-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP-3",
+          "word_ids": [
+            402
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP-3",
+          "word_ids": [
+            135
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 23,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        448.4088,
+        700,
+        461.2088
+      ],
+      "expected": "HWP-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP-4",
+          "word_ids": [
+            413
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP-4",
+          "word_ids": [
+            136
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 24,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        462.6287,
+        700,
+        475.4287
+      ],
+      "expected": "HWP-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP-5",
+          "word_ids": [
+            428
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP-5",
+          "word_ids": [
+            137
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 25,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        477.0288,
+        700,
+        489.8288
+      ],
+      "expected": "HWP-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP-6",
+          "word_ids": [
+            442
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP-6",
+          "word_ids": [
+            138
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "row": 26,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        600,
+        491.4288,
+        700,
+        504.2288
+      ],
+      "expected": "DISTRIBUTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DISTRIBUTED",
+          "word_ids": [
+            451
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DISTRIBUTED",
+          "word_ids": [
+            139
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "header": "SEISMIC AND VIBRATION CONTROL TAG EQUIPMENT LEVEL RESTRAINTS FLEXIBLE CONNECTORS VIBRATION ISOLATORS DEFLECTION",
+      "page": 13,
+      "bbox": [
+        600,
+        45,
+        1370,
+        130
+      ],
+      "engine": "mupdf",
+      "actual": "SEISMIC AND VIBRATION CONTROL FLEXIBLE VIBRATION DEFLECTION TAG EQUIPMENT LEVEL RESTRAINTS BASE CONNECTORS ISOLATORS (IN)",
+      "pass": true
+    },
+    {
+      "table": "M601-SEISMIC-VIBRATION-LEDGER",
+      "header": "SEISMIC AND VIBRATION CONTROL TAG EQUIPMENT LEVEL RESTRAINTS FLEXIBLE CONNECTORS VIBRATION ISOLATORS DEFLECTION",
+      "page": 13,
+      "bbox": [
+        600,
+        45,
+        1370,
+        130
+      ],
+      "engine": "poppler",
+      "actual": "SEISMIC AND VIBRATION CONTROL FLEXIBLE VIBRATION DEFLECTION TAG EQUIPMENT LEVEL RESTRAINTS BASE CONNECTORS ISOLATORS (IN)",
+      "pass": true
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        770,
+        760,
+        830,
+        795
+      ],
+      "expected": "ERV-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ERV-1",
+          "word_ids": [
+            677
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ERV-1",
+          "word_ids": [
+            630
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "location",
+      "page": 13,
+      "bbox": [
+        830,
+        760,
+        915,
+        795
+      ],
+      "expected": "HATCHERY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HATCHERY",
+          "word_ids": [
+            678
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HATCHERY",
+          "word_ids": [
+            631
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "serves",
+      "page": 13,
+      "bbox": [
+        915,
+        760,
+        1028,
+        795
+      ],
+      "expected": "OFFICE AND LAB VENTILATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OFFICE AND LAB VENTILATION",
+          "word_ids": [
+            679,
+            680,
+            681,
+            682
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OFFICE AND LAB VENTILATION",
+          "word_ids": [
+            577,
+            578,
+            579,
+            588
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        1028,
+        760,
+        1142,
+        795
+      ],
+      "expected": "GREENHECK/ MINIVENT-450-VG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GREENHECK/ MINIVENT-450-VG",
+          "word_ids": [
+            683,
+            684
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GREENHECK/ MINIVENT-450-VG",
+          "word_ids": [
+            580,
+            589
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "supply_cfm",
+      "page": 13,
+      "bbox": [
+        1142,
+        760,
+        1186,
+        795
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            685
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            581
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "supply_esp_in_wc",
+      "page": 13,
+      "bbox": [
+        1186,
+        760,
+        1230,
+        795
+      ],
+      "expected": "0.35",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.35",
+          "word_ids": [
+            686
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.35",
+          "word_ids": [
+            582
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "supply_motor_bhp",
+      "page": 13,
+      "bbox": [
+        1230,
+        760,
+        1275,
+        795
+      ],
+      "expected": "0.038",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.038",
+          "word_ids": [
+            687
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.038",
+          "word_ids": [
+            583
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "supply_motor_hp",
+      "page": 13,
+      "bbox": [
+        1275,
+        760,
+        1300,
+        795
+      ],
+      "expected": "1/4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/4",
+          "word_ids": [
+            688
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/4",
+          "word_ids": [
+            584
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "exhaust_cfm",
+      "page": 13,
+      "bbox": [
+        1300,
+        760,
+        1345,
+        795
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            689
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            585
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "exhaust_esp_in_wc",
+      "page": 13,
+      "bbox": [
+        1345,
+        760,
+        1388,
+        795
+      ],
+      "expected": "0.35",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.35",
+          "word_ids": [
+            690
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.35",
+          "word_ids": [
+            586
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "exhaust_motor_bhp",
+      "page": 13,
+      "bbox": [
+        1388,
+        760,
+        1430,
+        795
+      ],
+      "expected": "0.045",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.045",
+          "word_ids": [
+            691
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.045",
+          "word_ids": [
+            587
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "exhaust_motor_hp",
+      "page": 13,
+      "bbox": [
+        1430,
+        760,
+        1460,
+        795
+      ],
+      "expected": "1/4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/4",
+          "word_ids": [
+            692
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/4",
+          "word_ids": [
+            554
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "cooling_eat",
+      "page": 13,
+      "bbox": [
+        1460,
+        760,
+        1506,
+        795
+      ],
+      "expected": "97.9 DB 67.6 WB",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "97.9 DB 67.6 WB",
+          "word_ids": [
+            693,
+            694,
+            695,
+            696
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "97.9 DB 67.6 WB",
+          "word_ids": [
+            548,
+            549,
+            563,
+            564
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "cooling_lat",
+      "page": 13,
+      "bbox": [
+        1506,
+        760,
+        1560,
+        795
+      ],
+      "expected": "78.9 DB 63.1 WB",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "78.9 DB 63.1 WB",
+          "word_ids": [
+            697,
+            698,
+            699,
+            700
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "78.9 DB 63.1 WB",
+          "word_ids": [
+            550,
+            551,
+            565,
+            566
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "cooling_sensible_effectiveness",
+      "page": 13,
+      "bbox": [
+        1560,
+        760,
+        1620,
+        795
+      ],
+      "expected": "82.6%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "82.6%",
+          "word_ids": [
+            701
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "82.6%",
+          "word_ids": [
+            555
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "heating_eat",
+      "page": 13,
+      "bbox": [
+        1620,
+        760,
+        1677,
+        795
+      ],
+      "expected": "8.6 DB",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8.6 DB",
+          "word_ids": [
+            702,
+            703
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8.6 DB",
+          "word_ids": [
+            556,
+            557
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "heating_lat",
+      "page": 13,
+      "bbox": [
+        1677,
+        760,
+        1729,
+        795
+      ],
+      "expected": "59.9 DB 47.9 WB",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "59.9 DB 47.9 WB",
+          "word_ids": [
+            704,
+            705,
+            706,
+            707
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "59.9 DB 47.9 WB",
+          "word_ids": [
+            552,
+            553,
+            567,
+            568
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "heating_sensible_effectiveness",
+      "page": 13,
+      "bbox": [
+        1729,
+        760,
+        1790,
+        795
+      ],
+      "expected": "83.1%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "83.1%",
+          "word_ids": [
+            708
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "83.1%",
+          "word_ids": [
+            558
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "volts",
+      "page": 13,
+      "bbox": [
+        1790,
+        760,
+        1837,
+        795
+      ],
+      "expected": "120",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            709
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            559
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "phase",
+      "page": 13,
+      "bbox": [
+        1837,
+        760,
+        1860,
+        795
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            710
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            560
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "mca",
+      "page": 13,
+      "bbox": [
+        1860,
+        760,
+        1895,
+        795
+      ],
+      "expected": "7.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "7.1",
+          "word_ids": [
+            711
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "7.1",
+          "word_ids": [
+            561
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "mop",
+      "page": 13,
+      "bbox": [
+        1895,
+        760,
+        1926,
+        795
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            712
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            562
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "filter_count",
+      "page": 13,
+      "bbox": [
+        1926,
+        760,
+        1955,
+        795
+      ],
+      "expected": "1 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 1",
+          "word_ids": [
+            713,
+            714
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 1",
+          "word_ids": [
+            696,
+            697
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "filter_merv",
+      "page": 13,
+      "bbox": [
+        1955,
+        760,
+        1990,
+        795
+      ],
+      "expected": "13 8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13 8",
+          "word_ids": [
+            715,
+            716
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13 8",
+          "word_ids": [
+            699,
+            700
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "filter_size_in",
+      "page": 13,
+      "bbox": [
+        1990,
+        760,
+        2056,
+        795
+      ],
+      "expected": "14x20x2 14x20x2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14x20x2 14x20x2",
+          "word_ids": [
+            717,
+            718
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14x20x2 14x20x2",
+          "word_ids": [
+            703,
+            704
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "unit_weight_lbs",
+      "page": 13,
+      "bbox": [
+        2056,
+        760,
+        2100,
+        795
+      ],
+      "expected": "160",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "160",
+          "word_ids": [
+            719
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "160",
+          "word_ids": [
+            709
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "row": 1,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        2100,
+        760,
+        2155,
+        795
+      ],
+      "expected": "1,2,3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3",
+          "word_ids": [
+            720
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3",
+          "word_ids": [
+            710
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "header": "ENERGY RECOVERY VENTILATOR SCHEDULE TAG LOCATION SERVES MANUFACTURER SUPPLY FAN EXHAUST FAN HEAT EXCHANGER UNIT ELECTRICAL FILTERS UNIT WT REMARKS",
+      "page": 13,
+      "bbox": [
+        770,
+        655,
+        2160,
+        760
+      ],
+      "engine": "mupdf",
+      "actual": "EQUIPMENT VENDOR TO DETERMINE DEFLECTION 6. AIR SPRING 6 ENERGY RECOVERY VENTILATOR SCHEDULE SUPPLY FAN EXHAUST FAN HEAT EXCHANGER UNIT ELECTRICAL UNIT MANUFACTURER/ FILTERS TAG LOCATION SERVES TOTAL ESP MOTOR TOTAL ESP MOTOR COOLING HEATING REQUIREMENTS WT. REMARKS MODEL BHP HP BHP HP SENS. EFF. SENS. EFF. VOLTS Ø MCA MOP # MERV CFM (\" WC) CFM (\" WC) EAT (F) LAT (F) EAT (F) LAT (F) SIZE (IN) (LBS)",
+      "pass": true
+    },
+    {
+      "table": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "header": "ENERGY RECOVERY VENTILATOR SCHEDULE TAG LOCATION SERVES MANUFACTURER SUPPLY FAN EXHAUST FAN HEAT EXCHANGER UNIT ELECTRICAL FILTERS UNIT WT REMARKS",
+      "page": 13,
+      "bbox": [
+        770,
+        655,
+        2160,
+        760
+      ],
+      "engine": "poppler",
+      "actual": "OR HANGER 6. AIR SPRING 6 EQUIPMENT VENDOR TO DETERMINE DEFLECTION ENERGY RECOVERY VENTILATOR SCHEDULE SUPPLY FAN EXHAUST FAN HEAT EXCHANGER UNIT ELECTRICAL UNIT MANUFACTURER/ FILTERS TAG LOCATION SERVES TOTAL ESP MOTOR TOTAL ESP MOTOR COOLING HEATING REQUIREMENTS WT. REMARKS MODEL BHP HP BHP HP SENS. EFF. SENS. EFF. VOLTS Ø MCA MOP # MERV CFM (\" WC) CFM (\" WC) EAT (F) LAT (F) EAT (F) LAT (F) SIZE (IN) (LBS)",
+      "pass": true
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        680,
+        965,
+        744,
+        1000
+      ],
+      "expected": "EF-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-1",
+          "word_ids": [
+            791
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-1",
+          "word_ids": [
+            658
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "serves",
+      "page": 13,
+      "bbox": [
+        744,
+        965,
+        823,
+        1000
+      ],
+      "expected": "HATCHERY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HATCHERY",
+          "word_ids": [
+            792
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HATCHERY",
+          "word_ids": [
+            659
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        823,
+        965,
+        925,
+        1000
+      ],
+      "expected": "GREENHECK/ SE1-12-432-VG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GREENHECK/ SE1-12-432-VG",
+          "word_ids": [
+            793,
+            794
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GREENHECK/ SE1-12-432-VG",
+          "word_ids": [
+            660,
+            661
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "type",
+      "page": 13,
+      "bbox": [
+        925,
+        965,
+        1000,
+        1000
+      ],
+      "expected": "AXIAL WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AXIAL WALL",
+          "word_ids": [
+            795,
+            796
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AXIAL WALL",
+          "word_ids": [
+            662,
+            663
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "drive",
+      "page": 13,
+      "bbox": [
+        1000,
+        965,
+        1054,
+        1000
+      ],
+      "expected": "DIRECT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            797
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            664
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "flow_cfm",
+      "page": 13,
+      "bbox": [
+        1054,
+        965,
+        1100,
+        1000
+      ],
+      "expected": "750",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "750",
+          "word_ids": [
+            798
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "750",
+          "word_ids": [
+            665
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "esp_in_wc",
+      "page": 13,
+      "bbox": [
+        1100,
+        965,
+        1144,
+        1000
+      ],
+      "expected": "0.25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.25",
+          "word_ids": [
+            799
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.25",
+          "word_ids": [
+            666
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "speed_rpm",
+      "page": 13,
+      "bbox": [
+        1144,
+        965,
+        1190,
+        1000
+      ],
+      "expected": "1317",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1317",
+          "word_ids": [
+            800
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1317",
+          "word_ids": [
+            667
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "bhp",
+      "page": 13,
+      "bbox": [
+        1190,
+        965,
+        1232,
+        1000
+      ],
+      "expected": "0.09",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.09",
+          "word_ids": [
+            801
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.09",
+          "word_ids": [
+            668
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "motor_hp",
+      "page": 13,
+      "bbox": [
+        1232,
+        965,
+        1276,
+        1000
+      ],
+      "expected": "1/10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/10",
+          "word_ids": [
+            802
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/10",
+          "word_ids": [
+            669
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "motor_volts",
+      "page": 13,
+      "bbox": [
+        1276,
+        965,
+        1320,
+        1000
+      ],
+      "expected": "115",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            803
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            670
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "motor_phase",
+      "page": 13,
+      "bbox": [
+        1320,
+        965,
+        1344,
+        1000
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            804
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            671
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "fla",
+      "page": 13,
+      "bbox": [
+        1344,
+        965,
+        1388,
+        1000
+      ],
+      "expected": "2.85",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.85",
+          "word_ids": [
+            805
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.85",
+          "word_ids": [
+            672
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "unit_weight_lbs",
+      "page": 13,
+      "bbox": [
+        1388,
+        965,
+        1434,
+        1000
+      ],
+      "expected": "84",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "84",
+          "word_ids": [
+            806
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "84",
+          "word_ids": [
+            673
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1434,
+        965,
+        1498,
+        1000
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            807
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            674
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        680,
+        1000,
+        744,
+        1035
+      ],
+      "expected": "EF-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-2",
+          "word_ids": [
+            808
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-2",
+          "word_ids": [
+            675
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "serves",
+      "page": 13,
+      "bbox": [
+        744,
+        1000,
+        823,
+        1035
+      ],
+      "expected": "HATCHERY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HATCHERY",
+          "word_ids": [
+            809
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HATCHERY",
+          "word_ids": [
+            676
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        823,
+        1000,
+        925,
+        1035
+      ],
+      "expected": "GREENHECK/ SE1-12-432-VG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GREENHECK/ SE1-12-432-VG",
+          "word_ids": [
+            810,
+            811
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GREENHECK/ SE1-12-432-VG",
+          "word_ids": [
+            677,
+            678
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "type",
+      "page": 13,
+      "bbox": [
+        925,
+        1000,
+        1000,
+        1035
+      ],
+      "expected": "AXIAL WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AXIAL WALL",
+          "word_ids": [
+            812,
+            813
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AXIAL WALL",
+          "word_ids": [
+            679,
+            680
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "drive",
+      "page": 13,
+      "bbox": [
+        1000,
+        1000,
+        1054,
+        1035
+      ],
+      "expected": "DIRECT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            814
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            681
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "flow_cfm",
+      "page": 13,
+      "bbox": [
+        1054,
+        1000,
+        1100,
+        1035
+      ],
+      "expected": "750",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "750",
+          "word_ids": [
+            815
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "750",
+          "word_ids": [
+            682
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "esp_in_wc",
+      "page": 13,
+      "bbox": [
+        1100,
+        1000,
+        1144,
+        1035
+      ],
+      "expected": "0.25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.25",
+          "word_ids": [
+            816
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.25",
+          "word_ids": [
+            683
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "speed_rpm",
+      "page": 13,
+      "bbox": [
+        1144,
+        1000,
+        1190,
+        1035
+      ],
+      "expected": "1317",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1317",
+          "word_ids": [
+            817
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1317",
+          "word_ids": [
+            684
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "bhp",
+      "page": 13,
+      "bbox": [
+        1190,
+        1000,
+        1232,
+        1035
+      ],
+      "expected": "0.09",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.09",
+          "word_ids": [
+            818
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.09",
+          "word_ids": [
+            685
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "motor_hp",
+      "page": 13,
+      "bbox": [
+        1232,
+        1000,
+        1276,
+        1035
+      ],
+      "expected": "1/10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/10",
+          "word_ids": [
+            819
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/10",
+          "word_ids": [
+            686
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "motor_volts",
+      "page": 13,
+      "bbox": [
+        1276,
+        1000,
+        1320,
+        1035
+      ],
+      "expected": "115",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            820
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            687
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "motor_phase",
+      "page": 13,
+      "bbox": [
+        1320,
+        1000,
+        1344,
+        1035
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            821
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            688
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "fla",
+      "page": 13,
+      "bbox": [
+        1344,
+        1000,
+        1388,
+        1035
+      ],
+      "expected": "2.85",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.85",
+          "word_ids": [
+            822
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.85",
+          "word_ids": [
+            689
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "unit_weight_lbs",
+      "page": 13,
+      "bbox": [
+        1388,
+        1000,
+        1434,
+        1035
+      ],
+      "expected": "84",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "84",
+          "word_ids": [
+            823
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "84",
+          "word_ids": [
+            690
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1434,
+        1000,
+        1498,
+        1035
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            824
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            691
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        680,
+        1035,
+        744,
+        1073
+      ],
+      "expected": "EF-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-3",
+          "word_ids": [
+            825
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-3",
+          "word_ids": [
+            951
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "serves",
+      "page": 13,
+      "bbox": [
+        744,
+        1035,
+        823,
+        1073
+      ],
+      "expected": "MECHANICAL ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL ROOM",
+          "word_ids": [
+            826,
+            827
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL ROOM",
+          "word_ids": [
+            876,
+            890
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        823,
+        1035,
+        925,
+        1073
+      ],
+      "expected": "GREENHECK/ SQ-90-VG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GREENHECK/ SQ-90-VG",
+          "word_ids": [
+            828,
+            829
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GREENHECK/ SQ-90-VG",
+          "word_ids": [
+            875,
+            889
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "type",
+      "page": 13,
+      "bbox": [
+        925,
+        1035,
+        1000,
+        1073
+      ],
+      "expected": "INLINE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INLINE",
+          "word_ids": [
+            830
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INLINE",
+          "word_ids": [
+            877
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "drive",
+      "page": 13,
+      "bbox": [
+        1000,
+        1035,
+        1054,
+        1073
+      ],
+      "expected": "DIRECT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            831
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIRECT",
+          "word_ids": [
+            878
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "flow_cfm",
+      "page": 13,
+      "bbox": [
+        1054,
+        1035,
+        1100,
+        1073
+      ],
+      "expected": "150/480",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150/480",
+          "word_ids": [
+            832
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150/480",
+          "word_ids": [
+            879
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "esp_in_wc",
+      "page": 13,
+      "bbox": [
+        1100,
+        1035,
+        1144,
+        1073
+      ],
+      "expected": "0.15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.15",
+          "word_ids": [
+            833
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.15",
+          "word_ids": [
+            880
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "speed_rpm",
+      "page": 13,
+      "bbox": [
+        1144,
+        1035,
+        1190,
+        1073
+      ],
+      "expected": "1282",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1282",
+          "word_ids": [
+            834
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1282",
+          "word_ids": [
+            881
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "bhp",
+      "page": 13,
+      "bbox": [
+        1190,
+        1035,
+        1232,
+        1073
+      ],
+      "expected": "0.03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.03",
+          "word_ids": [
+            835
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.03",
+          "word_ids": [
+            882
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "motor_hp",
+      "page": 13,
+      "bbox": [
+        1232,
+        1035,
+        1276,
+        1073
+      ],
+      "expected": "1/10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/10",
+          "word_ids": [
+            836
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/10",
+          "word_ids": [
+            883
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "motor_volts",
+      "page": 13,
+      "bbox": [
+        1276,
+        1035,
+        1320,
+        1073
+      ],
+      "expected": "115",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            837
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115",
+          "word_ids": [
+            884
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "motor_phase",
+      "page": 13,
+      "bbox": [
+        1320,
+        1035,
+        1344,
+        1073
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            838
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            885
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "fla",
+      "page": 13,
+      "bbox": [
+        1344,
+        1035,
+        1388,
+        1073
+      ],
+      "expected": "1.38",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.38",
+          "word_ids": [
+            839
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.38",
+          "word_ids": [
+            886
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "unit_weight_lbs",
+      "page": 13,
+      "bbox": [
+        1388,
+        1035,
+        1434,
+        1073
+      ],
+      "expected": "48",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "48",
+          "word_ids": [
+            840
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "48",
+          "word_ids": [
+            887
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1434,
+        1035,
+        1498,
+        1073
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            841
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            888
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "header": "FAN SCHEDULE TAG SERVES MANUFACTURER MODEL DESCRIPTION FAN PERFORMANCE MOTOR ELECTRICAL UNIT WT REMARKS",
+      "page": 13,
+      "bbox": [
+        680,
+        900,
+        1500,
+        965
+      ],
+      "engine": "mupdf",
+      "actual": "FAN SCHEDULE MOTOR ELECTRICAL DESCRIPTION FAN PERFORMANCE MANUFACTURER/ UNIT WT. TAG SERVES REQUIREMENTS REMARKS FLOW ESP SPEED MODEL TYPE DRIVE BHP (LBS) HP VOLTS Ø FLA (CFM) (\" WC) (RPM)",
+      "pass": true
+    },
+    {
+      "table": "M601-FANS",
+      "header": "FAN SCHEDULE TAG SERVES MANUFACTURER MODEL DESCRIPTION FAN PERFORMANCE MOTOR ELECTRICAL UNIT WT REMARKS",
+      "page": 13,
+      "bbox": [
+        680,
+        900,
+        1500,
+        965
+      ],
+      "engine": "poppler",
+      "actual": "FAN SCHEDULE MOTOR ELECTRICAL DESCRIPTION FAN PERFORMANCE MANUFACTURER/ UNIT WT. TAG SERVES REMARKS FLOW ESP SPEED REQUIREMENTS MODEL TYPE DRIVE BHP (LBS) HP VOLTS Ø FLA (CFM) (\" WC) (RPM)",
+      "pass": true
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 1,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1530,
+        960,
+        1570,
+        993
+      ],
+      "expected": "1S",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1S",
+          "word_ids": [
+            919
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1S",
+          "word_ids": [
+            1034
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 1,
+      "column": "type",
+      "page": 13,
+      "bbox": [
+        1570,
+        960,
+        1650,
+        993
+      ],
+      "expected": "SUPPLY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY",
+          "word_ids": [
+            920
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY",
+          "word_ids": [
+            1035
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        1650,
+        960,
+        1765,
+        993
+      ],
+      "expected": "GREENHECK/ XG-5750",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GREENHECK/ XG-5750",
+          "word_ids": [
+            921,
+            922
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GREENHECK/ XG-5750",
+          "word_ids": [
+            963,
+            970
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 1,
+      "column": "grille_size",
+      "page": 13,
+      "bbox": [
+        1765,
+        960,
+        1845,
+        993
+      ],
+      "expected": "24x24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            923
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            966
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 1,
+      "column": "neck_size",
+      "page": 13,
+      "bbox": [
+        1845,
+        960,
+        1906,
+        993
+      ],
+      "expected": "6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            924
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            965
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 1,
+      "column": "material",
+      "page": 13,
+      "bbox": [
+        1906,
+        960,
+        1980,
+        993
+      ],
+      "expected": "STEEL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STEEL",
+          "word_ids": [
+            925
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STEEL",
+          "word_ids": [
+            967
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 1,
+      "column": "frame_style",
+      "page": 13,
+      "bbox": [
+        1980,
+        960,
+        2050,
+        993
+      ],
+      "expected": "LAY-IN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LAY-IN",
+          "word_ids": [
+            926
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LAY-IN",
+          "word_ids": [
+            968
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 1,
+      "column": "finish",
+      "page": 13,
+      "bbox": [
+        2050,
+        960,
+        2120,
+        993
+      ],
+      "expected": "WHITE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WHITE",
+          "word_ids": [
+            927
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WHITE",
+          "word_ids": [
+            969
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 1,
+      "column": "notes",
+      "page": 13,
+      "bbox": [
+        2120,
+        960,
+        2170,
+        993
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            928
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            964
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 2,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1530,
+        993,
+        1570,
+        1022
+      ],
+      "expected": "2S",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2S",
+          "word_ids": [
+            929
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2S",
+          "word_ids": [
+            973
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 2,
+      "column": "type",
+      "page": 13,
+      "bbox": [
+        1570,
+        993,
+        1650,
+        1022
+      ],
+      "expected": "SUPPLY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY",
+          "word_ids": [
+            930
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY",
+          "word_ids": [
+            974
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        1650,
+        993,
+        1765,
+        1022
+      ],
+      "expected": "GREENHECK/ XG-5750",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GREENHECK/ XG-5750",
+          "word_ids": [
+            931,
+            932
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GREENHECK/ XG-5750",
+          "word_ids": [
+            971,
+            980
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 2,
+      "column": "grille_size",
+      "page": 13,
+      "bbox": [
+        1765,
+        993,
+        1845,
+        1022
+      ],
+      "expected": "24x24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            933
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            975
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 2,
+      "column": "neck_size",
+      "page": 13,
+      "bbox": [
+        1845,
+        993,
+        1906,
+        1022
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            934
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            976
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 2,
+      "column": "material",
+      "page": 13,
+      "bbox": [
+        1906,
+        993,
+        1980,
+        1022
+      ],
+      "expected": "STEEL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STEEL",
+          "word_ids": [
+            935
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STEEL",
+          "word_ids": [
+            977
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 2,
+      "column": "frame_style",
+      "page": 13,
+      "bbox": [
+        1980,
+        993,
+        2050,
+        1022
+      ],
+      "expected": "LAY-IN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LAY-IN",
+          "word_ids": [
+            936
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LAY-IN",
+          "word_ids": [
+            978
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 2,
+      "column": "finish",
+      "page": 13,
+      "bbox": [
+        2050,
+        993,
+        2120,
+        1022
+      ],
+      "expected": "WHITE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WHITE",
+          "word_ids": [
+            937
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WHITE",
+          "word_ids": [
+            979
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 2,
+      "column": "notes",
+      "page": 13,
+      "bbox": [
+        2120,
+        993,
+        2170,
+        1022
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            938
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            972
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 3,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1530,
+        1022,
+        1570,
+        1051
+      ],
+      "expected": "1R",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1R",
+          "word_ids": [
+            939
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1R",
+          "word_ids": [
+            983
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 3,
+      "column": "type",
+      "page": 13,
+      "bbox": [
+        1570,
+        1022,
+        1650,
+        1051
+      ],
+      "expected": "RETURN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN",
+          "word_ids": [
+            940
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN",
+          "word_ids": [
+            984
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 3,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        1650,
+        1022,
+        1765,
+        1051
+      ],
+      "expected": "GREENHECK/ XG-H4002R",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GREENHECK/ XG-H4002R",
+          "word_ids": [
+            941,
+            942
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GREENHECK/ XG-H4002R",
+          "word_ids": [
+            981,
+            990
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 3,
+      "column": "grille_size",
+      "page": 13,
+      "bbox": [
+        1765,
+        1022,
+        1845,
+        1051
+      ],
+      "expected": "6x12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6x12",
+          "word_ids": [
+            943
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6x12",
+          "word_ids": [
+            985
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 3,
+      "column": "neck_size",
+      "page": 13,
+      "bbox": [
+        1845,
+        1022,
+        1906,
+        1051
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            944
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            986
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 3,
+      "column": "material",
+      "page": 13,
+      "bbox": [
+        1906,
+        1022,
+        1980,
+        1051
+      ],
+      "expected": "STEEL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STEEL",
+          "word_ids": [
+            945
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STEEL",
+          "word_ids": [
+            987
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 3,
+      "column": "frame_style",
+      "page": 13,
+      "bbox": [
+        1980,
+        1022,
+        2050,
+        1051
+      ],
+      "expected": "LAY-IN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LAY-IN",
+          "word_ids": [
+            946
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LAY-IN",
+          "word_ids": [
+            988
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 3,
+      "column": "finish",
+      "page": 13,
+      "bbox": [
+        2050,
+        1022,
+        2120,
+        1051
+      ],
+      "expected": "WHITE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WHITE",
+          "word_ids": [
+            947
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WHITE",
+          "word_ids": [
+            989
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 3,
+      "column": "notes",
+      "page": 13,
+      "bbox": [
+        2120,
+        1022,
+        2170,
+        1051
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            948
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            982
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 4,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1530,
+        1051,
+        1570,
+        1079
+      ],
+      "expected": "2R",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2R",
+          "word_ids": [
+            949
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2R",
+          "word_ids": [
+            995
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 4,
+      "column": "type",
+      "page": 13,
+      "bbox": [
+        1570,
+        1051,
+        1650,
+        1079
+      ],
+      "expected": "RETURN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN",
+          "word_ids": [
+            950
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN",
+          "word_ids": [
+            993
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 4,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        1650,
+        1051,
+        1765,
+        1079
+      ],
+      "expected": "GREENHECK/ XG-H4002R",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GREENHECK/ XG-H4002R",
+          "word_ids": [
+            951,
+            952
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GREENHECK/ XG-H4002R",
+          "word_ids": [
+            991,
+            1000
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 4,
+      "column": "grille_size",
+      "page": 13,
+      "bbox": [
+        1765,
+        1051,
+        1845,
+        1079
+      ],
+      "expected": "12x16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12x16",
+          "word_ids": [
+            953
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12x16",
+          "word_ids": [
+            994
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 4,
+      "column": "neck_size",
+      "page": 13,
+      "bbox": [
+        1845,
+        1051,
+        1906,
+        1079
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            954
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            996
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 4,
+      "column": "material",
+      "page": 13,
+      "bbox": [
+        1906,
+        1051,
+        1980,
+        1079
+      ],
+      "expected": "STEEL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STEEL",
+          "word_ids": [
+            955
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STEEL",
+          "word_ids": [
+            997
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 4,
+      "column": "frame_style",
+      "page": 13,
+      "bbox": [
+        1980,
+        1051,
+        2050,
+        1079
+      ],
+      "expected": "LAY-IN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LAY-IN",
+          "word_ids": [
+            956
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LAY-IN",
+          "word_ids": [
+            998
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 4,
+      "column": "finish",
+      "page": 13,
+      "bbox": [
+        2050,
+        1051,
+        2120,
+        1079
+      ],
+      "expected": "WHITE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WHITE",
+          "word_ids": [
+            957
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WHITE",
+          "word_ids": [
+            999
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 4,
+      "column": "notes",
+      "page": 13,
+      "bbox": [
+        2120,
+        1051,
+        2170,
+        1079
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            958
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            992
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 5,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1530,
+        1079,
+        1570,
+        1110
+      ],
+      "expected": "1E",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1E",
+          "word_ids": [
+            959
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1E",
+          "word_ids": [
+            1003
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 5,
+      "column": "type",
+      "page": 13,
+      "bbox": [
+        1570,
+        1079,
+        1650,
+        1110
+      ],
+      "expected": "EXHAUST",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST",
+          "word_ids": [
+            960
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST",
+          "word_ids": [
+            1004
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 5,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        1650,
+        1079,
+        1765,
+        1110
+      ],
+      "expected": "GREENHECK/ XG-H4002R",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GREENHECK/ XG-H4002R",
+          "word_ids": [
+            961,
+            962
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GREENHECK/ XG-H4002R",
+          "word_ids": [
+            1001,
+            1010
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 5,
+      "column": "grille_size",
+      "page": 13,
+      "bbox": [
+        1765,
+        1079,
+        1845,
+        1110
+      ],
+      "expected": "6x12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6x12",
+          "word_ids": [
+            963
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6x12",
+          "word_ids": [
+            1005
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 5,
+      "column": "neck_size",
+      "page": 13,
+      "bbox": [
+        1845,
+        1079,
+        1906,
+        1110
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            964
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            1006
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 5,
+      "column": "material",
+      "page": 13,
+      "bbox": [
+        1906,
+        1079,
+        1980,
+        1110
+      ],
+      "expected": "STEEL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STEEL",
+          "word_ids": [
+            965
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STEEL",
+          "word_ids": [
+            1007
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 5,
+      "column": "frame_style",
+      "page": 13,
+      "bbox": [
+        1980,
+        1079,
+        2050,
+        1110
+      ],
+      "expected": "LAY-IN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LAY-IN",
+          "word_ids": [
+            966
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LAY-IN",
+          "word_ids": [
+            1008
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 5,
+      "column": "finish",
+      "page": 13,
+      "bbox": [
+        2050,
+        1079,
+        2120,
+        1110
+      ],
+      "expected": "WHITE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WHITE",
+          "word_ids": [
+            967
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WHITE",
+          "word_ids": [
+            1009
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "row": 5,
+      "column": "notes",
+      "page": 13,
+      "bbox": [
+        2120,
+        1079,
+        2170,
+        1110
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            968
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            1002
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "header": "GRILLES REGISTERS DIFFUSERS SCHEDULE TAG TYPE MANUFACTURER MODEL GRILLE SIZE NECK SIZE MATERIAL FRAME STYLE FINISH NOTES",
+      "page": 13,
+      "bbox": [
+        1530,
+        900,
+        2170,
+        960
+      ],
+      "engine": "mupdf",
+      "actual": "GRILLES, REGISTERS, DIFFUSERS SCHEDULE MANUFACTURER/ FRAME TAG TYPE GRILLE SIZE NECK SIZE MATERIAL FINISH NOTES MODEL STYLE",
+      "pass": true
+    },
+    {
+      "table": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "header": "GRILLES REGISTERS DIFFUSERS SCHEDULE TAG TYPE MANUFACTURER MODEL GRILLE SIZE NECK SIZE MATERIAL FRAME STYLE FINISH NOTES",
+      "page": 13,
+      "bbox": [
+        1530,
+        900,
+        2170,
+        960
+      ],
+      "engine": "poppler",
+      "actual": "GRILLES, REGISTERS, DIFFUSERS SCHEDULE MANUFACTURER/ FRAME TAG TYPE GRILLE SIZE NECK SIZE MATERIAL FINISH NOTES MODEL STYLE",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m601-core-table-count",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

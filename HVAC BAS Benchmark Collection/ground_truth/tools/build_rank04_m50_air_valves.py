@@ -1,0 +1,97 @@
+"""Author literal M5.0 pressure-independent air-valve schedule rows.
+
+The schedule's source layout has wrapped type/area cells.  Each source row is
+therefore retained as one visually reviewed, row-bounded literal string rather
+than being mechanically re-segmented into speculative columns.  The printed
+table headings below document the columns; tags, quantities, airflows, pressure
+range, installation position, manufacturer/model and remarks remain in their
+original row text.  No installed-plan multiplier is inferred.
+"""
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[2]
+WORK = ROOT / "ground_truth" / "work" / "04__vol2__062"
+IDENT = "04__vol2__062"
+
+
+def table(identifier, title, x0, x1, y_ranges, rows):
+    return {
+        "id": identifier,
+        "sheet": "M5.0",
+        "page": 12,
+        "title_as_printed": title,
+        "columns": "literal_source_row",
+        "x_edges": [x0, x1],
+        "y_ranges": y_ranges,
+        "rows": rows,
+        "row_semantics": "One manually visual-reviewed printed source row. Wrapped type/area cells retain native source reading order; values are not normalized, reclassified or expanded to installed plan quantities.",
+        "printed_column_context": [
+            "SYMBOL", "AREA SERVED", "TYPE", "VALVE INLET/OUTLET", "QUANTITY", "SIZE",
+            "MINIMUM DUCT VELOCITY (FPM)", "VALVE AIRFLOWS / AIRFLOW RANGE",
+            "PRESSURE DROP (IN. W.C.)", "INSTALLED POSITION", "MANUFACTURER AND MODEL", "REMARKS",
+        ],
+    }
+
+
+def main():
+    supply_rows = [
+        "VARIABLE VOLUME SAV-1 RESIDENCY LAB 131 1 24\"X12\" 2,500 530 720 1,525 2,250 180 3,000 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA212M 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+        "VARIABLE VOLUME SAV-2 SOIL/AGGREGATE 126 1 8\" 2,500 220 300 560 560 35 700 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA108M 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+        "VARIABLE VOLUME SAV-3 ASPHALT LAB 124 1 24\"X12\" 2,500 270 410 700 2,260 180 3,000 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA212M 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+        "VARIABLE VOLUME SAV-4 D-1 LAB 123 1 20\"X10\" 2,500 725 980 700 1,500 100 2,000 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA210M 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+        "VARIABLE VOLUME SAV-5 CONCRETE 119 1 8\" 2,500 190 255 585 585 35 700 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA108M 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+        "VARIABLE VOLUME SAV-6 MATERIAL LAB 118 1 8\" 2,500 190 285 725 725 35 700 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA108M 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+        "VARIABLE VOLUME SAV-7 ASPHALT LAB 117 1 24\"X12\" 2,500 270 405 850 2,260 180 3,000 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA212M 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+        "RESIDENCY NOISE VARIABLE VOLUME SAV-8 1 8\" 2,500 75 115 250 630 35 700 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA108M 1 , 2 , 3 ROOM 130 ELECTRONIC EXHAUST VALVE",
+        "VARIABLE VOLUME SAV-9 GENERAL LAB 125 1 12\" 2,500 160 240 275 1,290 90 1,500 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA112M 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+    ]
+    general_rows = [
+        "VARIABLE VOLUME GEV-1 RESIDENCY LAB 131 2 10\" 2,500 0 1,700 100 2,000 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA210 ELECTRONIC EXHAUST VALVE",
+        "VARIABLE VOLUME GEV-2 GENERAL LAB 125 1 8\" 2,500 0 240 35 700 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA108 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+        "VARIABLE VOLUME GEV-3 ASPHALT LAB 124 1 10\" 2,500 405 780 50 1,000 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA110 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+        "VARIABLE VOLUME GEV-4 D-1 LAB 123 1 10\" 2,500 710 710 50 1,000 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA110 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+        "VARIABLE VOLUME GEV-5 ASPHALT LAB 117 1 10\" 2,500 405 950 50 1,000 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA110 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+        "VARIABLE VOLUME GEV-6 CONCRETE 119 1 10\" 2,500 280 650 50 1,000 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA110 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+        "VARIABLE VOLUME GEV-7 SOIL/AGGREGATE 126 1 8\" 2,500 330 625 35 700 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA108 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+    ]
+    snorkel_rows = [
+        "VARIABLE VOLUME SEV-1 RESIDENCY LAB 131 1 10\" 2,500 0 700 50 1,000 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA110 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+        "RESIDENCY NOISE VARIABLE VOLUME SEV-2 1 10\" 2,500 120 700 50 1,000 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA110 1 , 2 , 3 ROOM 130 ELECTRONIC EXHAUST VALVE",
+        "VARIABLE VOLUME SEV-3 ASPHALT LAB 124 1 10\" 2,500 0 700 50 1,000 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA110 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+        "VARIABLE VOLUME SEV-4 MATERIAL LAB 118 1 10\" 2,500 280 810 50 1,000 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA110 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+        "VARIABLE VOLUME SEV-5 ASPHALT LAB 117 1 10\" 2,500 0 700 50 1,000 0.6\" 3.0\" HORIZONTAL PHOENIX MEDIUM PRESSURE BSVA110 1 , 2 , 3 ELECTRONIC EXHAUST VALVE",
+    ]
+    data = {
+        "document_id": IDENT,
+        "module_role": "Cell-bounded literal source-row capture for M5.0's pressure-independent room-supply, general-exhaust and snorkel-exhaust air-valve schedules. These air valves are not hydronic control valves, and source schedule quantity is not a plan-placement multiplier.",
+        "schedule_interpretation": {
+            "schedule_sheet": "M5.0 / PDF p12",
+            "air_valve_scope": "The three schedules publish 21 tagged air-valve rows: nine room-supply (SAV), seven general-exhaust (GEV) and five snorkel-exhaust (SEV).",
+            "quantity_boundary": "GEV-1 prints a quantity of 2; it is retained as a schedule specification inside its literal source row, not silently expanded into two plan instances or discarded.",
+            "controls_boundary": "M6.4/M6.5 sequences and diagrams may bind these tags to rooms and control behavior. This M5.0 module does not infer separate actuator, controller-terminal, wiring or installed point quantities from the schedule rows.",
+        },
+        "tables": [
+            table("M50-ROOM-SUPPLY-AIR-VALVES", "PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE", 1300, 2420,
+                  [[264, 296], [300, 332], [336, 368], [372, 404], [408, 440], [444, 476], [480, 512], [516, 548], [552, 584]], supply_rows),
+            table("M50-GENERAL-EXHAUST-AIR-VALVES", "PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE", 1300, 2420,
+                  [[823, 855], [859, 891], [895, 927], [931, 963], [967, 999], [1003, 1035], [1039, 1071]], general_rows),
+            table("M50-SNORKEL-EXHAUST-AIR-VALVES", "PRESSURE INDEPENDENT SNORKEL EXHAUST VALVE SCHEDULE", 145, 1280,
+                  [[1414, 1446], [1450, 1482], [1486, 1518], [1522, 1554], [1558, 1590]], snorkel_rows),
+        ],
+        "assertions": [
+            {"id": "m50-room-supply-title", "page": 12, "bbox": [1510, 150, 2220, 180], "expected": "PRESSURE INDEPENDENT ROOM SUPPLY VALVE SCHEDULE", "mode": "exact"},
+            {"id": "m50-general-exhaust-title", "page": 12, "bbox": [1450, 710, 2260, 740], "expected": "PRESSURE INDEPENDENT GENERAL EXHAUST VALVE SCHEDULE", "mode": "exact"},
+            {"id": "m50-snorkel-exhaust-title", "page": 12, "bbox": [255, 1300, 1050, 1330], "expected": "PRESSURE INDEPENDENT SNORKEL EXHAUST VALVE SCHEDULE", "mode": "exact"},
+        ],
+        "inventory_checks": [
+            {"id": "rank04-m50-air-valve-schedule-rows", "records_path": ["tables"], "expected": 3, "unique_key": "id"},
+        ],
+    }
+    WORK.mkdir(parents=True, exist_ok=True)
+    (WORK / "schedules_m50_air_valves.json").write_text(json.dumps(data, indent=2) + "\n")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,71 @@
+{
+  "document_id": "19__vol2__094",
+  "module_role": "Exact project, title-block, sheet, date, scale and complete visual-review ledger for the supplied nine-sheet set.",
+  "scope": "This is complete ground truth for the nine supplied pages only. It does not claim that the set contains all project disciplines or an unstated revision history.",
+  "project": {
+    "name": "Orange County Regional History Center",
+    "site": "65 E Central Blvd, Orlando, FL 32801",
+    "design_firm_as_printed": "ATKINS",
+    "project_number": "100040229",
+    "issue": "CD",
+    "issue_date": "2/10/15",
+    "document_date_context": "Date Issued in repeated title blocks",
+    "revision_date": {"status": "not_stated_in_supplied_title_blocks", "value": null, "note": "The blank issue-log rows are not recast as revision events."}
+  },
+  "scale_semantics": {
+    "finding": "All nine supplied pages were visually reviewed. The three roof-plan sheets print 1/8\" = 1'-0\". M-201 and M-401 print NO SCALE, and M-301/S-500 are detail sheets with N.T.S. captions rather than a measurable plan scale. No supplied page has a graphic scale bar.",
+    "graphic_scale_bar_total": 0,
+    "measurable_length_scaled_view_total": 3,
+    "scaled_plan_views": [
+      {"page": 3, "sheet": "M-101", "scale": "1/8\" = 1'-0\""},
+      {"page": 4, "sheet": "M-102", "scale": "1/8\" = 1'-0\""},
+      {"page": 5, "sheet": "M-103", "scale": "1/8\" = 1'-0\""}
+    ]
+  },
+  "visual_review_pages": [
+    {"page": 1, "sheet": "M-000", "title": "COVER SHEET AND SHEET INDEX", "review_status": "complete", "finding": "Cover/index for the nine supplied sheets; project identity and title-block issue data. No schedule or controls point list.", "render": "reviews/19__vol2__094/p1-p1-full-poppler.png"},
+    {"page": 2, "sheet": "M-001", "title": "HVAC SYMBOLS LEGEND AND GENERAL NOTES", "review_status": "complete", "finding": "HVAC symbols, legends and general notes. The page itself warns that some legend symbols may not pertain to the project; legends are not treated as installed inventory.", "render": "reviews/19__vol2__094/p2-p2-full-poppler.png"},
+    {"page": 3, "sheet": "M-101", "title": "HVAC DEMOLITION ROOF PLAN", "review_status": "complete", "finding": "1/8\" = 1'-0\" demolition roof plan: existing cooling tower, chiller, pumps and roof AHU removal/replacement context.", "render": "reviews/19__vol2__094/p3-p3-full-poppler.png"},
+    {"page": 4, "sheet": "M-102", "title": "HVAC NEW WORK ROOF PLAN", "review_status": "complete", "finding": "1/8\" = 1'-0\" new-work roof plan: AHU-04 through AHU-08, CH-2, CT-1, and circulation-pump context.", "render": "reviews/19__vol2__094/p4-p4-full-poppler.png"},
+    {"page": 5, "sheet": "M-103", "title": "HVAC PHASING PLAN", "review_status": "complete", "finding": "1/8\" = 1'-0\" phasing plan with temporary air-cooled chiller/pump requirements and a temperature/humidity guideline table.", "render": "reviews/19__vol2__094/p5-p5-full-poppler.png"},
+    {"page": 6, "sheet": "M-201", "title": "HVAC CONTROLS", "review_status": "complete", "finding": "No-scale controls schematics for variable-volume AHU-4/5/8, constant-volume AHU-6, and 100% dedicated-outdoor-air AHU-7. Typed point bubbles appear on diagrams; no formal points matrix or written standalone sequence is printed.", "render": "reviews/19__vol2__094/p6-p6-full-poppler.png"},
+    {"page": 7, "sheet": "M-301", "title": "HVAC DETAILS", "review_status": "complete", "finding": "No-scale HVAC details including existing three-way-valve/piping, cooling-tower, chiller and rooftop-AHU details. These are details, not a valve/actuator schedule.", "render": "reviews/19__vol2__094/p7-p7-full-poppler.png"},
+    {"page": 8, "sheet": "M-401", "title": "HVAC SCHEDULES", "review_status": "complete", "finding": "No-scale schedule sheet: five AHUs, one air-cooled chiller, one cooling tower and four electric humidifiers, all transcribed as exact source cells.", "render": "reviews/19__vol2__094/p8-p8-full-poppler.png"},
+    {"page": 9, "sheet": "S-500", "title": "STRUCTURAL SUPPORT DETAILS", "review_status": "complete", "finding": "Structural support details for new mechanical-unit and cooling-tower support; no BAS point list or equipment schedule.", "render": "reviews/19__vol2__094/p9-p9-full-poppler.png"}
+  ],
+  "tables": [],
+  "assertion_groups": [
+    {
+      "id": "sheets",
+      "covers_all_source_pages": true,
+      "defaults": {"job_number": "100040229", "issue_date": "2/10/15"},
+      "templates": [
+        {"id": "sheet-number", "field": "sheet_title_block", "bbox": [2840,2040,2970,2110], "mode": "exact"},
+        {"id": "sheet-title", "field": "title", "bbox": [2710,1885,2970,1970], "mode": "exact"},
+        {"id": "job-number", "field": "job_number", "bbox": [2742,2005,2840,2040], "mode": "exact"},
+        {"id": "date-issued", "field": "issue_date", "bbox": [2930,2000,2980,2030], "mode": "exact"}
+      ],
+      "records": [
+        {"id": "1", "page": 1, "sheet": "M-000", "sheet_title_block": "Sheet Number: M-000", "title": "SHEET TITLE: COVER SHEET AND SHEET INDEX"},
+        {"id": "2", "page": 2, "sheet": "M-001", "sheet_title_block": "Sheet Number: M-001", "title": "SHEET TITLE: HVAC SYMBOLS LEGEND AND GENERAL NOTES"},
+        {"id": "3", "page": 3, "sheet": "M-101", "sheet_title_block": "Sheet Number: M-101", "title": "SHEET TITLE: HVAC DEMOLITION PLAN ROOF PLAN"},
+        {"id": "4", "page": 4, "sheet": "M-102", "sheet_title_block": "Sheet Number: M-102", "title": "SHEET TITLE: HVAC NEW WORK PLAN ROOF PLAN"},
+        {"id": "5", "page": 5, "sheet": "M-103", "sheet_title_block": "Sheet Number: M-103", "title": "SHEET TITLE: HVAC PHASING PLAN"},
+        {"id": "6", "page": 6, "sheet": "M-201", "sheet_title_block": "Sheet Number: M-201", "title": "SHEET TITLE: HVAC CONTROLS"},
+        {"id": "7", "page": 7, "sheet": "M-301", "sheet_title_block": "Sheet Number: M-301", "title": "SHEET TITLE: HVAC DETAILS"},
+        {"id": "8", "page": 8, "sheet": "M-401", "sheet_title_block": "Sheet Number: M-401", "title": "SHEET TITLE: HVAC SCHEDULES"},
+        {"id": "9", "page": 9, "sheet": "S-500", "sheet_title_block": "S-500", "title": "STRUCTURAL SUPPORT DETAILS"}
+      ]
+    }
+  ],
+  "assertions": [
+    {"id": "project-name", "page": 1, "bbox": [2800,620,2875,1400], "reading_direction": "up", "expected": "Orange County Regional History Center", "mode": "exact"},
+    {"id": "project-site", "page": 1, "bbox": [2875,780,2920,1200], "reading_direction": "up", "expected": "65 E Central Blvd, Orlando, FL 32801", "mode": "exact"},
+    {"id": "m101-scale", "page": 3, "bbox": [1200,1540,1400,1580], "expected": "1/8\" = 1'-0\"", "mode": "contains"},
+    {"id": "m102-scale", "page": 4, "bbox": [1200,1540,1400,1580], "expected": "1/8\" = 1'-0\"", "mode": "contains"},
+    {"id": "m103-scale", "page": 5, "bbox": [1250,1265,1450,1310], "expected": "1/8\" = 1'-0\"", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "full-page-visual-review", "records_path": ["visual_review_pages"], "expected": 9, "unique_key": "page"}
+  ]
+}

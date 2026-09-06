@@ -1,0 +1,197 @@
+{
+  "document_id": "11__vol1__05",
+  "module_role": "Source-bounded MI700 BACnet network-architecture and controls-symbol context.",
+  "tables": [],
+  "assertions": [
+    {
+      "id": "mi700-temperature-transmitter",
+      "page": 49,
+      "bbox": [
+        298,
+        224,
+        440,
+        234
+      ],
+      "expected": "TEMPERATURE TRANSMITTER",
+      "mode": "exact"
+    },
+    {
+      "id": "mi700-static-pressure-sensor",
+      "page": 49,
+      "bbox": [
+        298,
+        362,
+        430,
+        372
+      ],
+      "expected": "STATIC PRESSURE SENSOR",
+      "mode": "exact"
+    },
+    {
+      "id": "mi700-pressure-differential-transmitter",
+      "page": 49,
+      "bbox": [
+        298,
+        528,
+        491,
+        538
+      ],
+      "expected": "PRESSURE DIFFERENTIAL TRANSMITTER",
+      "mode": "exact"
+    },
+    {
+      "id": "mi700-low-freezestat",
+      "page": 49,
+      "bbox": [
+        298,
+        695,
+        509,
+        704
+      ],
+      "expected": "TEMPERATURE SWITCH, LOW (FREEZESTAT)",
+      "mode": "exact"
+    },
+    {
+      "id": "mi700-high-freezestat",
+      "page": 49,
+      "bbox": [
+        298,
+        727,
+        511,
+        737
+      ],
+      "expected": "TEMPERATURE SWITCH, HIGH (FREEZESTAT)",
+      "mode": "exact"
+    },
+    {
+      "id": "mi700-carbon-dioxide",
+      "page": 49,
+      "bbox": [
+        741,
+        279,
+        894,
+        288
+      ],
+      "expected": "CARBON DIOXIDE TRANSMITTER",
+      "mode": "exact"
+    },
+    {
+      "id": "mi700-variable-speed-controller",
+      "page": 49,
+      "bbox": [
+        741,
+        456,
+        929,
+        466
+      ],
+      "expected": "VARIABLE SPEED MOTOR CONTROLLER",
+      "mode": "exact"
+    },
+    {
+      "id": "mi700-valve-damper-position",
+      "page": 49,
+      "bbox": [
+        298,
+        628,
+        505,
+        638
+      ],
+      "expected": "VALVE OR DAMPER POSITION CONTROLLER",
+      "mode": "exact"
+    },
+    {
+      "id": "mi700-bacnet-install-software",
+      "page": 49,
+      "bbox": [
+        1995,
+        549,
+        2224,
+        569
+      ],
+      "expected": "INSTALL NEW BACNET SOFTWARE ON EXISTING ENGINEERING CONTROL CENTER (ECC).",
+      "mode": "exact"
+    },
+    {
+      "id": "mi700-bacnet-reuse-network",
+      "page": 49,
+      "bbox": [
+        1995,
+        570,
+        2215,
+        580
+      ],
+      "expected": "REUSE EXISTING COMMUNICATION NETWORK.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi700-bacnet-multiple-building-controllers",
+      "page": 49,
+      "bbox": [
+        1995,
+        592,
+        2275,
+        602
+      ],
+      "expected": "INSTALL MULTIPLE BUILDING CONTROLLERS AS REQUIRED.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi700-bacnet-new-controllers",
+      "page": 49,
+      "bbox": [
+        1995,
+        603,
+        2277,
+        613
+      ],
+      "expected": "INSTALL NEW CONTROLLERS (B-AAC, B-ASC) AS REQUIRED.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi700-bacnet-architecture-title",
+      "page": 49,
+      "bbox": [
+        1661,
+        649,
+        1942,
+        667
+      ],
+      "expected": "BACNET SYSTEM ARCHITECTURE",
+      "mode": "exact"
+    }
+  ],
+  "network_architecture": {
+    "published_protocol": "BACnet",
+    "published_integration": [
+      "MI700 directs installation of new BACnet software on existing controllers that remain and reuse of the existing communication network.",
+      "MI700 calls for multiple building controllers and new B-AAC/B-ASC controllers as required."
+    ],
+    "boundary": "The architecture diagram does not publish a final controller address list, point-to-controller assignment, I/O-card layout, terminal schedule, network-media engineering, wire schedule, or physical point count."
+  },
+  "sensors_and_control_symbol_context": {
+    "legend_assertion_ids": [
+      "mi700-temperature-transmitter",
+      "mi700-static-pressure-sensor",
+      "mi700-pressure-differential-transmitter",
+      "mi700-low-freezestat",
+      "mi700-high-freezestat",
+      "mi700-carbon-dioxide",
+      "mi700-variable-speed-controller",
+      "mi700-valve-damper-position"
+    ],
+    "boundary": "The legend states available symbol meanings; it does not establish installed device quantities or per-zone totals."
+  },
+  "sequence_inventory": [
+    {
+      "id": "bacnet-system-architecture",
+      "sheet": "MI700",
+      "assertion_ids": [
+        "mi700-bacnet-install-software",
+        "mi700-bacnet-reuse-network",
+        "mi700-bacnet-multiple-building-controllers",
+        "mi700-bacnet-new-controllers",
+        "mi700-bacnet-architecture-title"
+      ]
+    }
+  ]
+}

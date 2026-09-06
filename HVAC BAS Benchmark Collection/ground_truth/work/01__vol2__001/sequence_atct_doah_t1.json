@@ -1,0 +1,41 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "tables": [],
+  "scope": "Bounded, source-text assertions from the ATCT DOAH-T1 sequence of operation on MI730 (source PDF page 64). It identifies key control logic, safeties, alarms and setpoints without claiming that the remainder of the 75-page document has been sequence-audited.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [64],
+    "render": "reviews/01__vol2__001/p64-p64-controls-poppler.png",
+    "dpi": 180,
+    "finding": "The full MI730 page was visually reviewed at 180 DPI. The sequence occupies both lower text columns beneath the DOAH schematic; each assertion is independently bounded to one source column."
+  },
+  "sequence_scope": {
+    "sheet": "MI730",
+    "sheet_title": "ATCT DOAH - Control Schematic and Points List",
+    "sequence_heading": "3.2.3 Sequence of Operation - DOAH-T1",
+    "equipment": "DOAH-T1",
+    "coverage": ["controller responsibility", "hand/off/auto", "occupancy", "proofs/safeties", "system enable", "fan capacity", "preheat", "cooling", "reheat", "freeze protection", "emergency shutdown", "alarms", "setpoints"]
+  },
+  "assertions": [
+    {"id": "controller-scope", "page": 64, "bbox": [195, 560, 900, 627], "mode": "contains", "expected": "DOAH SHALL BE ENABLED THROUGH THE FACILITY DDC SYSTEM"},
+    {"id": "fap-precedence", "page": 64, "bbox": [195, 701, 900, 765], "mode": "contains", "expected": "FIRE ALARM PANEL (FAP) SIGNAL THAT TAKES PRECEDENCE OVER ALL OTHER VFD INPUTS"},
+    {"id": "hoa-hand", "page": 64, "bbox": [195, 775, 900, 823], "mode": "contains", "expected": "SUPPLY FAN SHALL START AND RUN CONTINUOUSLY, SUBJECT TO SAFETIES"},
+    {"id": "hoa-auto", "page": 64, "bbox": [195, 874, 900, 920], "mode": "contains", "expected": "SUPPLY FAN SHALL RUN SUBJECT TO THE SUPPLY FAN START/STOP SIGNAL (SF-SS) AND SAFETIES"},
+    {"id": "occupancy", "page": 64, "bbox": [195, 930, 900, 975], "mode": "contains", "expected": "SYSTEM SHALL BE OCCUPIED 24/7/365"},
+    {"id": "safety-response", "page": 64, "bbox": [195, 985, 900, 1060], "mode": "contains", "expected": "FAILURE OF ANY PROOF OR ACTIVATION OF ANY SAFETY SHALL RESULT IN ALL CONTROL LOOPS BEING DISABLED AND THE FAN BEING COMMANDED OFF UNTIL RESET"},
+    {"id": "proof-safeties", "page": 64, "bbox": [195, 1070, 900, 1165], "mode": "contains", "expected": "PREHEAT COIL DISCHARGE AIR TEMPERATURE LOW LIMIT (FREEZESTAT)"},
+    {"id": "occupied-enable", "page": 64, "bbox": [195, 1250, 900, 1314], "mode": "contains", "expected": "OUTSIDE AIR DAMPERS SHALL BE COMMANDED OPEN, ONCE THE DAMPERS ARE PROVEN OPEN"},
+    {"id": "fan-capacity-disabled", "page": 64, "bbox": [195, 1350, 900, 1428], "mode": "contains", "expected": "CAPACITY MODULATION OUTPUT TO THE VFD SHALL BE ZERO PERCENT AND DOAH DAMPERS SHALL BE CLOSED"},
+    {"id": "preheat-pump", "page": 64, "bbox": [915, 645, 1630, 695], "mode": "contains", "expected": "PREHEAT COIL ENTERING AIR TEMPERATURE DROPS BELOW 35°F"},
+    {"id": "cooling-mode", "page": 64, "bbox": [915, 748, 1630, 820], "mode": "contains", "expected": "CHW VALVE SHALL MODULATE TO MAINTAIN THE DOAH COOLING COIL DISCHARGE SETPOINT"},
+    {"id": "reheat-mode", "page": 64, "bbox": [915, 830, 1630, 877], "mode": "contains", "expected": "REHEAT HHW VALVE SHALL MODULATE TO MAINTAIN DOAH DISCHARGE SETPOINT"},
+    {"id": "freeze-protection", "page": 64, "bbox": [915, 887, 1630, 962], "mode": "contains", "expected": "GLOBAL OA TEMPERATURE SENSOR INDICATES A DRY BULB TEMPERATURE OF LESS THAN 40°F"},
+    {"id": "emergency-shutdown", "page": 64, "bbox": [915, 970, 1630, 1015], "mode": "contains", "expected": "DISABLE DOAH AND CLOSE INTAKE DAMPERS"},
+    {"id": "airflow-alarm", "page": 64, "bbox": [915, 1025, 1630, 1190], "mode": "contains", "expected": "OUTSIDE AIR FLOW OUT OF RANGE: +/-10% OR MODE FROM SCHEDULED VALUE"},
+    {"id": "maintenance-alarm", "page": 64, "bbox": [915, 1192, 1630, 1270], "mode": "contains", "expected": "SUPPLY AIR DIRTY MERV 13 FILTER SWITCH: 1.00\" WG"},
+    {"id": "coil-setpoints", "page": 64, "bbox": [915, 1275, 1630, 1345], "mode": "contains", "expected": "DOAH DISCHARGE SETPOINT (DOAHSA-T-SP): 68°F"},
+    {"id": "scheduled-airflow", "page": 64, "bbox": [915, 1345, 1630, 1390], "mode": "contains", "expected": "AIRFLOWS: 860 CFM SUPPLY"}
+  ],
+  "remaining_work": "Continue source-bounded transcription/reconciliation of other MI700-series sequences, network architecture, point matrices and plan-level sensor mappings; then complete every sheet/document in the 30-PDF corpus."
+}

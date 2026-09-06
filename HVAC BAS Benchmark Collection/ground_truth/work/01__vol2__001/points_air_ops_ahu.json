@@ -1,0 +1,128 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All printed entries in the Air Ops AHU DDC points list on MI704 (source PDF page 54): 12 analog inputs, 3 analog outputs, 13 binary inputs and 3 binary outputs. This records controller points and flags, not inferred field-device counts.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [54],
+    "render": "reviews/01__vol2__001/p54-p54-controls-poppler.png",
+    "dpi": 180,
+    "finding": "The MI704 AHU schematic and its full right-hand points-list panel were visually reviewed at 180 DPI. Placeholder point marks and printed *TYPICAL qualifiers are retained exactly."
+  },
+  "tables": [
+    {
+      "id": "AIR-OPS-AHU-AI",
+      "page": 54,
+      "sheet": "MI704",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS AHU DDC POINTS LIST - ANALOG INPUT",
+      "classification": "Analog input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1775, 1810, 2100, 2155, 2210],
+      "y_edges": [356, 374, 391, 408, 425, 443, 460, 477, 494, 512, 529, 546, 563],
+      "rows": [
+        "AI1|SF SPEED (FEEDBACK) *TYPICAL OF 2|Yes|Yes",
+        "AI2|MA TEMPERATURE|No|Yes",
+        "AI3|MA HUMIDITY|No|Yes",
+        "AI4|RA DAMPER POSITION (FEEDBACK)|No|Yes",
+        "AI5|MA TEMPERATURE|No|Yes",
+        "AI6|CHW VALVE POSITION (FEEDBACK)|No|No",
+        "AI7|COOLING COIL LAT|No|Yes",
+        "AI8|SA FAN AIRFLOW|No|Yes",
+        "AI9|SA DIFFERENTIAL PRESSURE|No|Yes",
+        "AI10|SA TEMPERATURE|No|Yes",
+        "AI11|SA HUMIDITY|No|Yes",
+        "AI12|SUPPLY AIR PRESSURE|No|Yes"
+      ],
+      "header_evidence": [
+        {"bbox": [1910, 285, 2110, 320], "expected": "AIR OPS AHU DDC POINTS LIST"},
+        {"bbox": [1775, 320, 2210, 347], "expected": "MARK DESCRIPTION ALARM TREND"},
+        {"bbox": [1760, 337, 1850, 356], "expected": "ANALOG INPUT"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-AHU-AO",
+      "page": 54,
+      "sheet": "MI704",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS AHU DDC POINTS LIST - ANALOG OUTPUT",
+      "classification": "Analog output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1775, 1810, 2100, 2155, 2210],
+      "y_edges": [598, 615, 632, 650],
+      "rows": [
+        "AO1|RA DAMPER CONTROL|No|No",
+        "AO2|CHW VALVE CONTROL|No|No",
+        "AO3|SF SPEED *TYPICAL OF 2|No|No"
+      ],
+      "header_evidence": [
+        {"bbox": [1760, 580, 1850, 598], "expected": "ANALOG OUTPUT"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-AHU-BI",
+      "page": 54,
+      "sheet": "MI704",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS AHU DDC POINTS LIST - BINARY INPUT",
+      "classification": "Binary input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1775, 1810, 2100, 2155, 2210],
+      "y_ranges": [[684, 701], [701, 718], [718, 735], [735, 753], [753, 770], [770, 787], [787, 804], [804, 822], [822, 839], [839, 856], [856, 873], [873, 907], [907, 942]],
+      "rows": [
+        "BI1|MERV 8 FILTER STATUS|Yes|No",
+        "BI2|MERV 13 FILTER STATUS|Yes|No",
+        "BI3|SF STATUS *TYPICAL OF 2|No|Yes",
+        "BI4|SF ALARM *TYPICAL OF 2|Yes|No",
+        "BI5|HIGH LIMIT STATIC PRESSURE|Yes|No",
+        "BI6|SA DUCT SMOKE DETECTOR|Yes|No",
+        "BI7|SA SMOKE DAMPER POSITION OPEN (FEEDBACK)|Yes|No",
+        "BI8|SA SMOKE DAMPER POSITION CLOSED (FEEDBACK)|Yes|No",
+        "BI9|LOW LIMIT STATIC PRESSURE|Yes|No",
+        "BI10|ESS (ATFP EMERGENCY SHUTDOWN) *GLOBAL POINT|Yes|No",
+        "BI11|AHU DDC RESET|No|No",
+        "BI#|RA 24/7 ISOLATION DAMPER POSITION OPEN (FEEDBACK) *TYPICAL|Yes|No",
+        "BI##|RA 24/7 ISOLATION DAMPER POSITION CLOSED (FEEDBACK) *TYPICAL|Yes|No"
+      ],
+      "header_evidence": [
+        {"bbox": [1760, 657, 1850, 684], "expected": "BINARY INPUT"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-AHU-BO",
+      "page": 54,
+      "sheet": "MI704",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS AHU DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "Binary output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1775, 1810, 2100, 2155, 2210],
+      "y_ranges": [[972, 989], [989, 1006], [1006, 1040]],
+      "rows": [
+        "BO1|SA SMOKE DAMPER CONTROL|No|No",
+        "BO2|SF ENABLE *TYPICAL OF 2|Yes|No",
+        "BO#|RA 24/7 ISOLATION DAMPER CONTROL *TYPICAL|No|No"
+      ],
+      "header_evidence": [
+        {"bbox": [1760, 944, 1850, 972], "expected": "BINARY OUTPUT"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "air-ops-ahu-ai-count", "records_path": ["tables", 0, "rows"], "expected": 12},
+    {"id": "air-ops-ahu-ao-count", "records_path": ["tables", 1, "rows"], "expected": 3},
+    {"id": "air-ops-ahu-bi-count", "records_path": ["tables", 2, "rows"], "expected": 13},
+    {"id": "air-ops-ahu-bo-count", "records_path": ["tables", 3, "rows"], "expected": 3}
+  ],
+  "source_conflicts": [
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "finding": "The source uses placeholder marks BI# and BI## for 24/7 return-air isolation-damper feedback points. They are literal placeholders, not inferred sequential point numbers."
+    },
+    {
+      "table": "AIR-OPS-AHU-BO",
+      "finding": "The source uses placeholder mark BO# for the 24/7 return-air isolation-damper control point. It is retained literally."
+    }
+  ],
+  "remaining_work": "Capture the remaining system point lists, control diagrams, sequences, DDC-network relationships and plan-level field-device reconciliation."
+}

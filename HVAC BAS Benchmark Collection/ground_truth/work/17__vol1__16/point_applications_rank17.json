@@ -1,0 +1,28 @@
+{
+  "document_id": "17__vol1__16",
+  "module_role": "Formal M6.02 BACnet Inputs to BMS source-matrix scope and ownership boundary.",
+  "tables": [],
+  "ledger_mode": "source_matrix_templates_v1",
+  "applications": [
+    {
+      "id": "m602-c-wing-erv-bacnet-inputs",
+      "source_table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "ownership_scope": "Published BACnet Inputs to BMS table within the C-Wing ERV control diagram; final physical-device owner, controller/card/terminal binding and field wiring are not stated."
+    }
+  ],
+  "expanded_template_counts": {
+    "source_rows": 12,
+    "total": 12
+  },
+  "expanded_count_warning": "12 is the count of literal published BACnet Inputs to BMS rows. It is not a count of installed sensors, actuators, controllers, terminals, I/O cards, wires, BACnet objects or physical devices; the source does not publish DI/DO/AI/AO classification for these rows.",
+  "inventory_checks": [
+    {
+      "id": "formal-bacnet-inputs-source-table",
+      "records_path": [
+        "applications"
+      ],
+      "expected": 1,
+      "unique_key": "source_table"
+    }
+  ]
+}

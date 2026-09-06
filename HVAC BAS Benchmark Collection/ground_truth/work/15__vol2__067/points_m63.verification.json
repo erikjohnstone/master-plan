@@ -1,0 +1,346 @@
+{
+  "document_id": "15__vol2__067",
+  "source_sha256": "254931f1c37ac5afb3b9ad70d21ae7c2001c2f645c29ca8d92c4aefdc294fa1d",
+  "annotation_sha256": "fddfcb0872f6aaa3d5a3eeddfff21e49396863009fec6ef85b8383121c521898",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 8,
+  "checks": [
+    {
+      "assertion": "m63-makeup-io",
+      "page": 6,
+      "bbox": [
+        1560,
+        1210,
+        1960,
+        1255
+      ],
+      "expected": "MAKEUP FLOW MAKEUP ACTUATOR AI AO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAKEUP FLOW MAKEUP ACTUATOR AI AO (N)",
+          "word_ids": [
+            440,
+            441,
+            635,
+            636,
+            439,
+            634,
+            637
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAKEUP FLOW MAKEUP ACTUATOR AI AO (N)",
+          "word_ids": [
+            354,
+            355,
+            360,
+            361,
+            357,
+            356,
+            362
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m63-pump-1001-io",
+      "page": 6,
+      "bbox": [
+        1200,
+        1988,
+        1380,
+        2080
+      ],
+      "expected": "DI ALARM AO VFD SPEED DO START/STOP AI CURRENT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI ALARM AO VFD SPEED DO START/STOP AI CURRENT",
+          "word_ids": [
+            402,
+            401,
+            404,
+            399,
+            400,
+            403,
+            398,
+            621,
+            620
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI ALARM AO VFD SPEED DO START/STOP AI CURRENT",
+          "word_ids": [
+            825,
+            823,
+            746,
+            747,
+            748,
+            749,
+            750,
+            751,
+            752
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m63-pump-1002-io",
+      "page": 6,
+      "bbox": [
+        1200,
+        2095,
+        1380,
+        2180
+      ],
+      "expected": "DI ALARM AO VFD SPEED DO START/STOP AI CURRENT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI ALARM AO VFD SPEED DO START/STOP AI CURRENT",
+          "word_ids": [
+            423,
+            422,
+            425,
+            420,
+            421,
+            424,
+            419,
+            623,
+            622
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI ALARM AO VFD SPEED DO START/STOP AI CURRENT",
+          "word_ids": [
+            753,
+            754,
+            755,
+            756,
+            757,
+            758,
+            759,
+            760,
+            761
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m63-modbus-ignition",
+      "page": 6,
+      "bbox": [
+        1440,
+        1992,
+        1590,
+        2050
+      ],
+      "expected": "CAT6 ETHERNET FOR MODBUS TCP TO IGNITION SCADA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CAT6 ETHERNET FOR MODBUS TCP TO IGNITION SCADA",
+          "word_ids": [
+            487,
+            488,
+            489,
+            490,
+            491,
+            492,
+            493,
+            494
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CAT6 ETHERNET FOR MODBUS TCP TO IGNITION SCADA",
+          "word_ids": [
+            765,
+            766,
+            767,
+            768,
+            769,
+            770,
+            771,
+            772
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m63-tcv-output",
+      "page": 6,
+      "bbox": [
+        290,
+        1495,
+        410,
+        1525
+      ],
+      "expected": "TCV MODULATION AO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TCV MODULATION AO",
+          "word_ids": [
+            484,
+            485,
+            483
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TCV MODULATION AO",
+          "word_ids": [
+            1114,
+            1115,
+            1113
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m63-chw-temp-flow",
+      "page": 6,
+      "bbox": [
+        375,
+        1460,
+        610,
+        1530
+      ],
+      "expected": "CHWR FLOW CHWR TEMP AI AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHWR FLOW CHWR TEMP AI AI (N) (N) TIT (N)",
+          "word_ids": [
+            477,
+            478,
+            481,
+            482,
+            476,
+            480,
+            479,
+            457,
+            589,
+            486
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHWR FLOW CHWR TEMP AI AI (N) (N) TIT (N)",
+          "word_ids": [
+            1125,
+            1126,
+            627,
+            628,
+            1130,
+            629,
+            1119,
+            630,
+            633,
+            1116
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m63-pcw-temp-pressure",
+      "page": 6,
+      "bbox": [
+        820,
+        1460,
+        1185,
+        1525
+      ],
+      "expected": "PCWR TEMP PCWR PRESSURE (N) AI AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCWR TEMP PCWR PRESSURE (N) AI AI 120 PSI (N) TIT",
+          "word_ids": [
+            409,
+            410,
+            444,
+            445,
+            456,
+            408,
+            443,
+            644,
+            645,
+            455,
+            563
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCWR TEMP PCWR PRESSURE (N) AI AI 120 PSI (N) TIT",
+          "word_ids": [
+            631,
+            632,
+            634,
+            635,
+            1107,
+            1117,
+            1098,
+            636,
+            637,
+            1099,
+            1100
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m63-filter-dp",
+      "page": 6,
+      "bbox": [
+        1830,
+        1860,
+        1965,
+        1905
+      ],
+      "expected": "PCW FILTER DP AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCW FILTER DP AI",
+          "word_ids": [
+            649,
+            650,
+            651,
+            648
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCW FILTER DP AI",
+          "word_ids": [
+            734,
+            735,
+            736,
+            737
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m63-typed-diagram-callouts",
+      "actual": 23,
+      "expected": 23,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

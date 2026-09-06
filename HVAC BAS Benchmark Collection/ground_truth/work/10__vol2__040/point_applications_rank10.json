@@ -1,0 +1,12 @@
+{
+  "document_id": "10__vol2__040",
+  "module_role": "No-row point-list disposition.",
+  "tables": [],
+  "ledger_mode": "literal_source_row_matrices_v1",
+  "applications": [],
+  "expanded_template_counts": {
+    "source_rows": 0,
+    "total": 0
+  },
+  "expanded_count_warning": "0 is the formal published point-list source-row count, not a physical BAS/device count."
+}

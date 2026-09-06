@@ -1,0 +1,5178 @@
+{
+  "document_id": "16__vol2__069",
+  "source_sha256": "ce0c2bb973f87194f0f6ed8d68faaad2a5683129f9d0db1a73415f6051ed06f1",
+  "annotation_sha256": "aa8d90a1297b086058112ab2a336df42b977a857e456d70cf32968f6c9b54824",
+  "tables": 4,
+  "rows": 11,
+  "cell_assertions": 160,
+  "text_assertions": 4,
+  "checks": [
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "mark",
+      "page": 5,
+      "bbox": [
+        157.38,
+        250.14,
+        202.38,
+        286.14
+      ],
+      "expected": "AHU-1(E)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-1(E)",
+          "word_ids": [
+            518
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-1(E)",
+          "word_ids": [
+            8
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "type",
+      "page": 5,
+      "bbox": [
+        202.38,
+        250.14,
+        274.38,
+        286.14
+      ],
+      "expected": "SEMI-CUSTOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEMI-CUSTOM",
+          "word_ids": [
+            519
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEMI-CUSTOM",
+          "word_ids": [
+            13
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "area_served",
+      "page": 5,
+      "bbox": [
+        274.38,
+        250.14,
+        346.38,
+        286.14
+      ],
+      "expected": "LABORATORIES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LABORATORIES",
+          "word_ids": [
+            520
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LABORATORIES",
+          "word_ids": [
+            14
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "fan_type",
+      "page": 5,
+      "bbox": [
+        346.38,
+        250.14,
+        386.88,
+        286.14
+      ],
+      "expected": "ECM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ECM",
+          "word_ids": [
+            521
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ECM",
+          "word_ids": [
+            15
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "supply_fan_cfm",
+      "page": 5,
+      "bbox": [
+        386.88,
+        250.14,
+        422.88,
+        286.14
+      ],
+      "expected": "16,400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16,400",
+          "word_ids": [
+            522
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16,400",
+          "word_ids": [
+            18
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "supply_fan_esp_in_wg",
+      "page": 5,
+      "bbox": [
+        422.88,
+        250.14,
+        458.88,
+        286.14
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            523
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            19
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "supply_fan_tsp_in_wg",
+      "page": 5,
+      "bbox": [
+        458.88,
+        250.14,
+        494.88,
+        286.14
+      ],
+      "expected": "5.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.1",
+          "word_ids": [
+            524
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.1",
+          "word_ids": [
+            22
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "supply_fan_hp_qty",
+      "page": 5,
+      "bbox": [
+        494.88,
+        250.14,
+        530.88,
+        286.14
+      ],
+      "expected": "3.2 \\ 6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.2 \\ 6",
+          "word_ids": [
+            525,
+            526,
+            527
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.2 \\ 6",
+          "word_ids": [
+            23,
+            24,
+            25
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "supply_fan_volts_ph",
+      "page": 5,
+      "bbox": [
+        530.88,
+        250.14,
+        566.88,
+        286.14
+      ],
+      "expected": "460/3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "460/3",
+          "word_ids": [
+            528
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "460/3",
+          "word_ids": [
+            27
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "supply_fan_rpm",
+      "page": 5,
+      "bbox": [
+        566.88,
+        250.14,
+        602.88,
+        286.14
+      ],
+      "expected": "3,169",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3,169",
+          "word_ids": [
+            529
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3,169",
+          "word_ids": [
+            29
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "cooling_fluid_type",
+      "page": 5,
+      "bbox": [
+        602.88,
+        250.14,
+        643.38,
+        286.14
+      ],
+      "expected": "30% PG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30% PG",
+          "word_ids": [
+            530,
+            531
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30% PG",
+          "word_ids": [
+            60,
+            61
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "cooling_sensible_capacity_mbh",
+      "page": 5,
+      "bbox": [
+        643.38,
+        250.14,
+        688.38,
+        286.14
+      ],
+      "expected": "842.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "842.7",
+          "word_ids": [
+            532
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "842.7",
+          "word_ids": [
+            58
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "cooling_total_capacity_mbh",
+      "page": 5,
+      "bbox": [
+        688.38,
+        250.14,
+        733.38,
+        286.14
+      ],
+      "expected": "842.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "842.7",
+          "word_ids": [
+            533
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "842.7",
+          "word_ids": [
+            59
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "cooling_cfm",
+      "page": 5,
+      "bbox": [
+        733.38,
+        250.14,
+        769.44,
+        286.14
+      ],
+      "expected": "16,400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16,400",
+          "word_ids": [
+            534
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16,400",
+          "word_ids": [
+            62
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "cooling_eat_db_f",
+      "page": 5,
+      "bbox": [
+        769.44,
+        250.14,
+        805.44,
+        286.14
+      ],
+      "expected": "98.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "98.7",
+          "word_ids": [
+            535
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "98.7",
+          "word_ids": [
+            52
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "cooling_eat_wb_f",
+      "page": 5,
+      "bbox": [
+        805.44,
+        250.14,
+        841.44,
+        286.14
+      ],
+      "expected": "65.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "65.5",
+          "word_ids": [
+            536
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "65.5",
+          "word_ids": [
+            53
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "cooling_lat_db_f",
+      "page": 5,
+      "bbox": [
+        841.44,
+        250.14,
+        877.44,
+        286.14
+      ],
+      "expected": "50.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50.2",
+          "word_ids": [
+            537
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50.2",
+          "word_ids": [
+            54
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "cooling_lat_wb_f",
+      "page": 5,
+      "bbox": [
+        877.44,
+        250.14,
+        913.44,
+        286.14
+      ],
+      "expected": "46.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "46.9",
+          "word_ids": [
+            538
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "46.9",
+          "word_ids": [
+            42
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "cooling_max_face_velocity_fpm",
+      "page": 5,
+      "bbox": [
+        913.44,
+        250.14,
+        967.44,
+        286.14
+      ],
+      "expected": "500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "500",
+          "word_ids": [
+            539
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "500",
+          "word_ids": [
+            43
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "cooling_air_pd_in_wg",
+      "page": 5,
+      "bbox": [
+        967.44,
+        250.14,
+        1003.44,
+        286.14
+      ],
+      "expected": "0.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.8",
+          "word_ids": [
+            540
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.8",
+          "word_ids": [
+            44
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "cooling_fluid_ewt_f",
+      "page": 5,
+      "bbox": [
+        1003.44,
+        250.14,
+        1039.44,
+        286.14
+      ],
+      "expected": "45",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            541
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            70
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "cooling_fluid_lwt_f",
+      "page": 5,
+      "bbox": [
+        1039.44,
+        250.14,
+        1075.44,
+        286.14
+      ],
+      "expected": "55.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            542
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            71
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "cooling_fluid_gpm",
+      "page": 5,
+      "bbox": [
+        1075.44,
+        250.14,
+        1111.44,
+        286.14
+      ],
+      "expected": "177.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "177.0",
+          "word_ids": [
+            543
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "177.0",
+          "word_ids": [
+            72
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "cooling_fluid_pd_ft",
+      "page": 5,
+      "bbox": [
+        1111.44,
+        250.14,
+        1147.44,
+        286.14
+      ],
+      "expected": "18.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18.0",
+          "word_ids": [
+            544
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18.0",
+          "word_ids": [
+            78
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "cooling_max_rh",
+      "page": 5,
+      "bbox": [
+        1147.44,
+        250.14,
+        1183.44,
+        286.14
+      ],
+      "expected": "50%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50%",
+          "word_ids": [
+            545
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50%",
+          "word_ids": [
+            79
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "heating_fluid_type",
+      "page": 5,
+      "bbox": [
+        1183.44,
+        250.14,
+        1228.44,
+        286.14
+      ],
+      "expected": "30% PG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30% PG",
+          "word_ids": [
+            546,
+            547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30% PG",
+          "word_ids": [
+            85,
+            86
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "heating_capacity_mbh",
+      "page": 5,
+      "bbox": [
+        1228.44,
+        250.14,
+        1273.58,
+        286.14
+      ],
+      "expected": "960.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "960.0",
+          "word_ids": [
+            548
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "960.0",
+          "word_ids": [
+            87
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "heating_cfm",
+      "page": 5,
+      "bbox": [
+        1273.58,
+        250.14,
+        1309.44,
+        286.14
+      ],
+      "expected": "16,400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16,400",
+          "word_ids": [
+            549
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16,400",
+          "word_ids": [
+            88
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "heating_eat_db_f",
+      "page": 5,
+      "bbox": [
+        1309.44,
+        250.14,
+        1345.44,
+        286.14
+      ],
+      "expected": "12.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12.9",
+          "word_ids": [
+            550
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12.9",
+          "word_ids": [
+            94
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "heating_lat_db_f",
+      "page": 5,
+      "bbox": [
+        1345.44,
+        250.14,
+        1381.44,
+        286.14
+      ],
+      "expected": "66.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "66.9",
+          "word_ids": [
+            551
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "66.9",
+          "word_ids": [
+            105
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "heating_max_face_velocity_fpm",
+      "page": 5,
+      "bbox": [
+        1381.44,
+        250.14,
+        1435.44,
+        286.14
+      ],
+      "expected": "500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "500",
+          "word_ids": [
+            552
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "500",
+          "word_ids": [
+            106
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "heating_air_pd_in_wg",
+      "page": 5,
+      "bbox": [
+        1435.44,
+        250.14,
+        1471.58,
+        286.14
+      ],
+      "expected": "0.11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.11",
+          "word_ids": [
+            553
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.11",
+          "word_ids": [
+            107
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "heating_fluid_ewt_f",
+      "page": 5,
+      "bbox": [
+        1471.58,
+        250.14,
+        1507.44,
+        286.14
+      ],
+      "expected": "140",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "140",
+          "word_ids": [
+            554
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "140",
+          "word_ids": [
+            113
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "heating_fluid_lwt_f",
+      "page": 5,
+      "bbox": [
+        1507.44,
+        250.14,
+        1543.44,
+        286.14
+      ],
+      "expected": "98.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "98.1",
+          "word_ids": [
+            555
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "98.1",
+          "word_ids": [
+            114
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "heating_fluid_gpm",
+      "page": 5,
+      "bbox": [
+        1543.44,
+        250.14,
+        1579.44,
+        286.14
+      ],
+      "expected": "48.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "48.0",
+          "word_ids": [
+            556
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "48.0",
+          "word_ids": [
+            115
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "heating_fluid_pd_ft",
+      "page": 5,
+      "bbox": [
+        1579.44,
+        250.14,
+        1615.58,
+        286.14
+      ],
+      "expected": "5.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.1",
+          "word_ids": [
+            557
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.1",
+          "word_ids": [
+            129
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "humidification_coil_air_pd_ft",
+      "page": 5,
+      "bbox": [
+        1615.58,
+        250.14,
+        1651.44,
+        286.14
+      ],
+      "expected": "0.01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.01",
+          "word_ids": [
+            558
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.01",
+          "word_ids": [
+            130
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "humidification_finned_height_in",
+      "page": 5,
+      "bbox": [
+        1651.44,
+        250.14,
+        1687.44,
+        286.14
+      ],
+      "expected": "24.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24.0",
+          "word_ids": [
+            559
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24.0",
+          "word_ids": [
+            131
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "humidification_finned_width_in",
+      "page": 5,
+      "bbox": [
+        1687.44,
+        250.14,
+        1723.58,
+        286.14
+      ],
+      "expected": "109.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "109.0",
+          "word_ids": [
+            560
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "109.0",
+          "word_ids": [
+            132
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "humidification_face_area_ft_sq",
+      "page": 5,
+      "bbox": [
+        1723.58,
+        250.14,
+        1759.44,
+        286.14
+      ],
+      "expected": "36.33",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "36.33",
+          "word_ids": [
+            561
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "36.33",
+          "word_ids": [
+            154
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "humidification_face_velocity_fpm",
+      "page": 5,
+      "bbox": [
+        1759.44,
+        250.14,
+        1795.44,
+        286.14
+      ],
+      "expected": "451",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "451",
+          "word_ids": [
+            562
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "451",
+          "word_ids": [
+            155
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "prefilter_efficiency",
+      "page": 5,
+      "bbox": [
+        1795.44,
+        250.14,
+        1831.39,
+        286.14
+      ],
+      "expected": "MERV 8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MERV 8",
+          "word_ids": [
+            563,
+            564
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MERV 8",
+          "word_ids": [
+            156,
+            157
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "prefilter_depth_in",
+      "page": 5,
+      "bbox": [
+        1831.39,
+        250.14,
+        1867.44,
+        286.14
+      ],
+      "expected": "2\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2\"",
+          "word_ids": [
+            565
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2\"",
+          "word_ids": [
+            158
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "final_filter_efficiency",
+      "page": 5,
+      "bbox": [
+        1867.44,
+        250.14,
+        1897.331,
+        286.14
+      ],
+      "expected": "MERV 13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MERV 13",
+          "word_ids": [
+            566,
+            567
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MERV 13",
+          "word_ids": [
+            159,
+            160
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "final_filter_depth_in",
+      "page": 5,
+      "bbox": [
+        1897.331,
+        250.14,
+        1939.58,
+        286.14
+      ],
+      "expected": "4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4\"",
+          "word_ids": [
+            568
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4\"",
+          "word_ids": [
+            161
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "combination_filter_max_face_velocity_fpm",
+      "page": 5,
+      "bbox": [
+        1939.58,
+        250.14,
+        1994.242,
+        286.14
+      ],
+      "expected": "500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "500",
+          "word_ids": [
+            569
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "500",
+          "word_ids": [
+            162
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "min_osa_cfm",
+      "page": 5,
+      "bbox": [
+        1994.242,
+        250.14,
+        2029.44,
+        286.14
+      ],
+      "expected": "2,150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,150",
+          "word_ids": [
+            570
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,150",
+          "word_ids": [
+            169
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "operating_weight_lbs",
+      "page": 5,
+      "bbox": [
+        2029.44,
+        250.14,
+        2081.507,
+        286.14
+      ],
+      "expected": "7,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "7,000",
+          "word_ids": [
+            571
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "7,000",
+          "word_ids": [
+            170
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 5,
+      "bbox": [
+        2081.507,
+        250.14,
+        2197.08,
+        286.14
+      ],
+      "expected": "DAIKIN CAH044GDCM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAIKIN CAH044GDCM",
+          "word_ids": [
+            572,
+            573
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAIKIN CAH044GDCM",
+          "word_ids": [
+            184,
+            185
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "row": 1,
+      "column": "remarks",
+      "page": 5,
+      "bbox": [
+        2197.08,
+        250.14,
+        2251.29,
+        286.14
+      ],
+      "expected": "1 , 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2",
+          "word_ids": [
+            574,
+            575,
+            576
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2",
+          "word_ids": [
+            181,
+            182,
+            183
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "header": "EXISTING AIR HANDLING UNIT SCHEDULE",
+      "page": 5,
+      "bbox": [
+        150,
+        130,
+        2260,
+        180
+      ],
+      "engine": "mupdf",
+      "actual": "EXISTING AIR HANDLING UNIT SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M3-EXISTING-AHU",
+      "header": "EXISTING AIR HANDLING UNIT SCHEDULE",
+      "page": 5,
+      "bbox": [
+        150,
+        130,
+        2260,
+        180
+      ],
+      "engine": "poppler",
+      "actual": "EXISTING AIR HANDLING UNIT SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 1,
+      "column": "mark",
+      "page": 5,
+      "bbox": [
+        157.38,
+        481.978,
+        211.38,
+        515.67
+      ],
+      "expected": "B-1(E)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B-1(E)",
+          "word_ids": [
+            357
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B-1(E)",
+          "word_ids": [
+            239
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 1,
+      "column": "area_served",
+      "page": 5,
+      "bbox": [
+        211.38,
+        481.978,
+        319.38,
+        515.67
+      ],
+      "expected": "HOT WATER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            358,
+            359,
+            360
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            240,
+            241,
+            242
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 1,
+      "column": "thermal_efficiency",
+      "page": 5,
+      "bbox": [
+        319.38,
+        481.978,
+        391.47,
+        515.67
+      ],
+      "expected": "98.3%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "98.3%",
+          "word_ids": [
+            361
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "98.3%",
+          "word_ids": [
+            243
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 1,
+      "column": "fuel",
+      "page": 5,
+      "bbox": [
+        391.47,
+        481.978,
+        463.47,
+        515.67
+      ],
+      "expected": "NATURAL GAS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NATURAL GAS",
+          "word_ids": [
+            362,
+            363
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NATURAL GAS",
+          "word_ids": [
+            244,
+            245
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 1,
+      "column": "ewt_f",
+      "page": 5,
+      "bbox": [
+        463.47,
+        481.978,
+        535.47,
+        515.67
+      ],
+      "expected": "100.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100.0",
+          "word_ids": [
+            364
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100.0",
+          "word_ids": [
+            246
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 1,
+      "column": "lwt_f",
+      "page": 5,
+      "bbox": [
+        535.47,
+        481.978,
+        607.56,
+        515.67
+      ],
+      "expected": "150.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150.0",
+          "word_ids": [
+            365
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150.0",
+          "word_ids": [
+            247
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 1,
+      "column": "boiler_flow_gpm",
+      "page": 5,
+      "bbox": [
+        607.56,
+        481.978,
+        679.56,
+        515.67
+      ],
+      "expected": "40.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "40.0",
+          "word_ids": [
+            366
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "40.0",
+          "word_ids": [
+            248
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 1,
+      "column": "max_pd_ft_h2o",
+      "page": 5,
+      "bbox": [
+        679.56,
+        481.978,
+        751.5,
+        515.67
+      ],
+      "expected": "3.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.5",
+          "word_ids": [
+            367
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.5",
+          "word_ids": [
+            249
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 1,
+      "column": "input_mbh",
+      "page": 5,
+      "bbox": [
+        751.5,
+        481.978,
+        808.74,
+        515.67
+      ],
+      "expected": "1,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,000",
+          "word_ids": [
+            368
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,000",
+          "word_ids": [
+            250
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 1,
+      "column": "output_mbh",
+      "page": 5,
+      "bbox": [
+        808.74,
+        481.978,
+        865.92,
+        515.67
+      ],
+      "expected": "982",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "982",
+          "word_ids": [
+            369
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "982",
+          "word_ids": [
+            251
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 5,
+      "bbox": [
+        865.92,
+        481.978,
+        1165.35,
+        515.67
+      ],
+      "expected": "LOCHINVAR FTX1000 (EXISTING)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOCHINVAR FTX1000 (EXISTING)",
+          "word_ids": [
+            370,
+            371,
+            372
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOCHINVAR FTX1000 (EXISTING)",
+          "word_ids": [
+            252,
+            253,
+            254
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 1,
+      "column": "remarks",
+      "page": 5,
+      "bbox": [
+        1165.35,
+        481.978,
+        1237.65,
+        515.67
+      ],
+      "expected": "1 , 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2",
+          "word_ids": [
+            373,
+            374,
+            375
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2",
+          "word_ids": [
+            255,
+            256,
+            257
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 2,
+      "column": "mark",
+      "page": 5,
+      "bbox": [
+        157.38,
+        515.67,
+        211.38,
+        554.34
+      ],
+      "expected": "B-2(E)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B-2(E)",
+          "word_ids": [
+            376
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B-2(E)",
+          "word_ids": [
+            282
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 2,
+      "column": "area_served",
+      "page": 5,
+      "bbox": [
+        211.38,
+        515.67,
+        319.38,
+        554.34
+      ],
+      "expected": "HOT WATER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            377,
+            378,
+            379
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            283,
+            284,
+            285
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 2,
+      "column": "thermal_efficiency",
+      "page": 5,
+      "bbox": [
+        319.38,
+        515.67,
+        391.47,
+        554.34
+      ],
+      "expected": "98.3%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "98.3%",
+          "word_ids": [
+            380
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "98.3%",
+          "word_ids": [
+            286
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 2,
+      "column": "fuel",
+      "page": 5,
+      "bbox": [
+        391.47,
+        515.67,
+        463.47,
+        554.34
+      ],
+      "expected": "NATURAL GAS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NATURAL GAS",
+          "word_ids": [
+            381,
+            382
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NATURAL GAS",
+          "word_ids": [
+            287,
+            288
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 2,
+      "column": "ewt_f",
+      "page": 5,
+      "bbox": [
+        463.47,
+        515.67,
+        535.47,
+        554.34
+      ],
+      "expected": "100.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100.0",
+          "word_ids": [
+            383
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100.0",
+          "word_ids": [
+            289
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 2,
+      "column": "lwt_f",
+      "page": 5,
+      "bbox": [
+        535.47,
+        515.67,
+        607.56,
+        554.34
+      ],
+      "expected": "150.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150.0",
+          "word_ids": [
+            384
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150.0",
+          "word_ids": [
+            290
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 2,
+      "column": "boiler_flow_gpm",
+      "page": 5,
+      "bbox": [
+        607.56,
+        515.67,
+        679.56,
+        554.34
+      ],
+      "expected": "40.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "40.0",
+          "word_ids": [
+            385
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "40.0",
+          "word_ids": [
+            291
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 2,
+      "column": "max_pd_ft_h2o",
+      "page": 5,
+      "bbox": [
+        679.56,
+        515.67,
+        751.5,
+        554.34
+      ],
+      "expected": "3.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.5",
+          "word_ids": [
+            386
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.5",
+          "word_ids": [
+            292
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 2,
+      "column": "input_mbh",
+      "page": 5,
+      "bbox": [
+        751.5,
+        515.67,
+        808.74,
+        554.34
+      ],
+      "expected": "1,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,000",
+          "word_ids": [
+            387
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,000",
+          "word_ids": [
+            293
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 2,
+      "column": "output_mbh",
+      "page": 5,
+      "bbox": [
+        808.74,
+        515.67,
+        865.92,
+        554.34
+      ],
+      "expected": "982",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "982",
+          "word_ids": [
+            388
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "982",
+          "word_ids": [
+            294
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 5,
+      "bbox": [
+        865.92,
+        515.67,
+        1165.35,
+        554.34
+      ],
+      "expected": "LOCHINVAR FTX1000 (EXISTING)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOCHINVAR FTX1000 (EXISTING)",
+          "word_ids": [
+            389,
+            390,
+            391
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOCHINVAR FTX1000 (EXISTING)",
+          "word_ids": [
+            295,
+            296,
+            297
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "row": 2,
+      "column": "remarks",
+      "page": 5,
+      "bbox": [
+        1165.35,
+        515.67,
+        1237.65,
+        554.34
+      ],
+      "expected": "1 , 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2",
+          "word_ids": [
+            392,
+            393,
+            394
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2",
+          "word_ids": [
+            298,
+            299,
+            300
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "header": "EXISTING CONDENSING HOT WATER BOILER SCHEDULE",
+      "page": 5,
+      "bbox": [
+        150,
+        365,
+        1250,
+        420
+      ],
+      "engine": "mupdf",
+      "actual": "EXISTING CONDENSING HOT WATER BOILER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "header": "EXISTING CONDENSING HOT WATER BOILER SCHEDULE",
+      "page": 5,
+      "bbox": [
+        150,
+        365,
+        1250,
+        420
+      ],
+      "engine": "poppler",
+      "actual": "EXISTING CONDENSING HOT WATER BOILER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 1,
+      "column": "mark",
+      "page": 5,
+      "bbox": [
+        1273.58,
+        481.978,
+        1327.86,
+        515.67
+      ],
+      "expected": "HWP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP-1",
+          "word_ids": [
+            61
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP-1",
+          "word_ids": [
+            258
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 1,
+      "column": "area_served",
+      "page": 5,
+      "bbox": [
+        1327.86,
+        481.978,
+        1471.58,
+        515.67
+      ],
+      "expected": "HOT WATER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            62,
+            63,
+            64
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            259,
+            260,
+            261
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 1,
+      "column": "type",
+      "page": 5,
+      "bbox": [
+        1471.58,
+        481.978,
+        1561.86,
+        515.67
+      ],
+      "expected": "INLINE VARIABLE SECONDARY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INLINE VARIABLE SECONDARY",
+          "word_ids": [
+            65,
+            66,
+            67
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INLINE VARIABLE SECONDARY",
+          "word_ids": [
+            262,
+            263,
+            264
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 1,
+      "column": "flow_gpm",
+      "page": 5,
+      "bbox": [
+        1561.86,
+        481.978,
+        1615.58,
+        515.67
+      ],
+      "expected": "80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            68
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            265
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 1,
+      "column": "head_ft",
+      "page": 5,
+      "bbox": [
+        1615.58,
+        481.978,
+        1669.86,
+        515.67
+      ],
+      "expected": "40",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "40",
+          "word_ids": [
+            69
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "40",
+          "word_ids": [
+            266
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 1,
+      "column": "min_efficiency_percent",
+      "page": 5,
+      "bbox": [
+        1669.86,
+        481.978,
+        1723.58,
+        515.67
+      ],
+      "expected": "71",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "71",
+          "word_ids": [
+            70
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "71",
+          "word_ids": [
+            267
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 1,
+      "column": "motor_hp",
+      "page": 5,
+      "bbox": [
+        1723.58,
+        481.978,
+        1777.86,
+        515.67
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            71
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            268
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 1,
+      "column": "motor_rpm",
+      "page": 5,
+      "bbox": [
+        1777.86,
+        481.978,
+        1831.39,
+        515.67
+      ],
+      "expected": "1,725",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,725",
+          "word_ids": [
+            72
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,725",
+          "word_ids": [
+            269
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 1,
+      "column": "motor_volts_ph",
+      "page": 5,
+      "bbox": [
+        1831.39,
+        481.978,
+        1885.86,
+        515.67
+      ],
+      "expected": "460/3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "460/3",
+          "word_ids": [
+            73
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "460/3",
+          "word_ids": [
+            270
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 1,
+      "column": "operating_weight_lbs",
+      "page": 5,
+      "bbox": [
+        1885.86,
+        481.978,
+        1939.58,
+        515.67
+      ],
+      "expected": "60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            74
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            271
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 5,
+      "bbox": [
+        1939.58,
+        481.978,
+        2180.16,
+        515.67
+      ],
+      "expected": "B&G E-90 2AB",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B&G E-90 2AB",
+          "word_ids": [
+            75,
+            76,
+            77
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B&G E-90 2AB",
+          "word_ids": [
+            272,
+            273,
+            274
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 1,
+      "column": "remarks",
+      "page": 5,
+      "bbox": [
+        2180.16,
+        481.978,
+        2251.29,
+        515.67
+      ],
+      "expected": "1 , 2 , 3 , 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            275,
+            276,
+            277,
+            278,
+            279,
+            280,
+            281
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 2,
+      "column": "mark",
+      "page": 5,
+      "bbox": [
+        1273.58,
+        515.67,
+        1327.86,
+        554.34
+      ],
+      "expected": "HWP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP-2",
+          "word_ids": [
+            85
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP-2",
+          "word_ids": [
+            301
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 2,
+      "column": "area_served",
+      "page": 5,
+      "bbox": [
+        1327.86,
+        515.67,
+        1471.58,
+        554.34
+      ],
+      "expected": "HOT WATER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            86,
+            87,
+            88
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            302,
+            303,
+            304
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 2,
+      "column": "type",
+      "page": 5,
+      "bbox": [
+        1471.58,
+        515.67,
+        1561.86,
+        554.34
+      ],
+      "expected": "INLINE VARIABLE SECONDARY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INLINE VARIABLE SECONDARY",
+          "word_ids": [
+            89,
+            90,
+            91
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INLINE VARIABLE SECONDARY",
+          "word_ids": [
+            305,
+            306,
+            307
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 2,
+      "column": "flow_gpm",
+      "page": 5,
+      "bbox": [
+        1561.86,
+        515.67,
+        1615.58,
+        554.34
+      ],
+      "expected": "80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            92
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            308
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 2,
+      "column": "head_ft",
+      "page": 5,
+      "bbox": [
+        1615.58,
+        515.67,
+        1669.86,
+        554.34
+      ],
+      "expected": "40",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "40",
+          "word_ids": [
+            93
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "40",
+          "word_ids": [
+            309
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 2,
+      "column": "min_efficiency_percent",
+      "page": 5,
+      "bbox": [
+        1669.86,
+        515.67,
+        1723.58,
+        554.34
+      ],
+      "expected": "71",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "71",
+          "word_ids": [
+            94
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "71",
+          "word_ids": [
+            310
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 2,
+      "column": "motor_hp",
+      "page": 5,
+      "bbox": [
+        1723.58,
+        515.67,
+        1777.86,
+        554.34
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            95
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            311
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 2,
+      "column": "motor_rpm",
+      "page": 5,
+      "bbox": [
+        1777.86,
+        515.67,
+        1831.39,
+        554.34
+      ],
+      "expected": "1,725",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,725",
+          "word_ids": [
+            96
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,725",
+          "word_ids": [
+            312
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 2,
+      "column": "motor_volts_ph",
+      "page": 5,
+      "bbox": [
+        1831.39,
+        515.67,
+        1885.86,
+        554.34
+      ],
+      "expected": "460/3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "460/3",
+          "word_ids": [
+            97
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "460/3",
+          "word_ids": [
+            313
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 2,
+      "column": "operating_weight_lbs",
+      "page": 5,
+      "bbox": [
+        1885.86,
+        515.67,
+        1939.58,
+        554.34
+      ],
+      "expected": "60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            98
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            314
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 5,
+      "bbox": [
+        1939.58,
+        515.67,
+        2180.16,
+        554.34
+      ],
+      "expected": "B&G E-90 2AB",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B&G E-90 2AB",
+          "word_ids": [
+            99,
+            100,
+            101
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B&G E-90 2AB",
+          "word_ids": [
+            315,
+            316,
+            317
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 2,
+      "column": "remarks",
+      "page": 5,
+      "bbox": [
+        2180.16,
+        515.67,
+        2251.29,
+        554.34
+      ],
+      "expected": "1 , 2 , 3 , 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            318,
+            319,
+            320,
+            321,
+            322,
+            323,
+            324
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 3,
+      "column": "mark",
+      "page": 5,
+      "bbox": [
+        1273.58,
+        554.34,
+        1327.86,
+        589.2
+      ],
+      "expected": "BP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BP-1",
+          "word_ids": [
+            109
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BP-1",
+          "word_ids": [
+            325
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 3,
+      "column": "area_served",
+      "page": 5,
+      "bbox": [
+        1327.86,
+        554.34,
+        1471.58,
+        589.2
+      ],
+      "expected": "BOILER PUMP (B-1)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BOILER PUMP (B-1)",
+          "word_ids": [
+            110,
+            111,
+            112
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BOILER PUMP (B-1)",
+          "word_ids": [
+            326,
+            327,
+            328
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 3,
+      "column": "type",
+      "page": 5,
+      "bbox": [
+        1471.58,
+        554.34,
+        1561.86,
+        589.2
+      ],
+      "expected": "INLINE PRIMARY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INLINE PRIMARY",
+          "word_ids": [
+            113,
+            114
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INLINE PRIMARY",
+          "word_ids": [
+            329,
+            330
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 3,
+      "column": "flow_gpm",
+      "page": 5,
+      "bbox": [
+        1561.86,
+        554.34,
+        1615.58,
+        589.2
+      ],
+      "expected": "40",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "40",
+          "word_ids": [
+            115
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "40",
+          "word_ids": [
+            331
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 3,
+      "column": "head_ft",
+      "page": 5,
+      "bbox": [
+        1615.58,
+        554.34,
+        1669.86,
+        589.2
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            116
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            332
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 3,
+      "column": "min_efficiency_percent",
+      "page": 5,
+      "bbox": [
+        1669.86,
+        554.34,
+        1723.58,
+        589.2
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            117
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            333
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 3,
+      "column": "motor_hp",
+      "page": 5,
+      "bbox": [
+        1723.58,
+        554.34,
+        1777.86,
+        589.2
+      ],
+      "expected": "1/3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/3",
+          "word_ids": [
+            118
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/3",
+          "word_ids": [
+            334
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 3,
+      "column": "motor_rpm",
+      "page": 5,
+      "bbox": [
+        1777.86,
+        554.34,
+        1831.39,
+        589.2
+      ],
+      "expected": "4,350",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4,350",
+          "word_ids": [
+            119
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4,350",
+          "word_ids": [
+            335
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 3,
+      "column": "motor_volts_ph",
+      "page": 5,
+      "bbox": [
+        1831.39,
+        554.34,
+        1885.86,
+        589.2
+      ],
+      "expected": "115/1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115/1",
+          "word_ids": [
+            120
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115/1",
+          "word_ids": [
+            336
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 3,
+      "column": "operating_weight_lbs",
+      "page": 5,
+      "bbox": [
+        1885.86,
+        554.34,
+        1939.58,
+        589.2
+      ],
+      "expected": "35",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "35",
+          "word_ids": [
+            121
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "35",
+          "word_ids": [
+            337
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 3,
+      "column": "manufacturer_model",
+      "page": 5,
+      "bbox": [
+        1939.58,
+        554.34,
+        2180.16,
+        589.2
+      ],
+      "expected": "GRUNDFOS MAGNA3 40-80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GRUNDFOS MAGNA3 40-80",
+          "word_ids": [
+            122,
+            123,
+            124
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GRUNDFOS MAGNA3 40-80",
+          "word_ids": [
+            338,
+            339,
+            340
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 3,
+      "column": "remarks",
+      "page": 5,
+      "bbox": [
+        2180.16,
+        554.34,
+        2251.29,
+        589.2
+      ],
+      "expected": "1 , 2 , 3 , 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            341,
+            342,
+            343,
+            344,
+            345,
+            346,
+            347
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 4,
+      "column": "mark",
+      "page": 5,
+      "bbox": [
+        1273.58,
+        589.2,
+        1327.86,
+        625.2
+      ],
+      "expected": "BP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BP-2",
+          "word_ids": [
+            132
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BP-2",
+          "word_ids": [
+            348
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 4,
+      "column": "area_served",
+      "page": 5,
+      "bbox": [
+        1327.86,
+        589.2,
+        1471.58,
+        625.2
+      ],
+      "expected": "BOILER PUMP (B-1)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BOILER PUMP (B-1)",
+          "word_ids": [
+            133,
+            134,
+            135
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BOILER PUMP (B-1)",
+          "word_ids": [
+            349,
+            350,
+            351
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 4,
+      "column": "type",
+      "page": 5,
+      "bbox": [
+        1471.58,
+        589.2,
+        1561.86,
+        625.2
+      ],
+      "expected": "INLINE PRIMARY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INLINE PRIMARY",
+          "word_ids": [
+            136,
+            137
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INLINE PRIMARY",
+          "word_ids": [
+            352,
+            353
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 4,
+      "column": "flow_gpm",
+      "page": 5,
+      "bbox": [
+        1561.86,
+        589.2,
+        1615.58,
+        625.2
+      ],
+      "expected": "40",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "40",
+          "word_ids": [
+            138
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "40",
+          "word_ids": [
+            354
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 4,
+      "column": "head_ft",
+      "page": 5,
+      "bbox": [
+        1615.58,
+        589.2,
+        1669.86,
+        625.2
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            139
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            355
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 4,
+      "column": "min_efficiency_percent",
+      "page": 5,
+      "bbox": [
+        1669.86,
+        589.2,
+        1723.58,
+        625.2
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            140
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            356
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 4,
+      "column": "motor_hp",
+      "page": 5,
+      "bbox": [
+        1723.58,
+        589.2,
+        1777.86,
+        625.2
+      ],
+      "expected": "1/3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/3",
+          "word_ids": [
+            141
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/3",
+          "word_ids": [
+            357
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 4,
+      "column": "motor_rpm",
+      "page": 5,
+      "bbox": [
+        1777.86,
+        589.2,
+        1831.39,
+        625.2
+      ],
+      "expected": "4,350",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4,350",
+          "word_ids": [
+            142
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4,350",
+          "word_ids": [
+            358
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 4,
+      "column": "motor_volts_ph",
+      "page": 5,
+      "bbox": [
+        1831.39,
+        589.2,
+        1885.86,
+        625.2
+      ],
+      "expected": "115/1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115/1",
+          "word_ids": [
+            143
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115/1",
+          "word_ids": [
+            359
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 4,
+      "column": "operating_weight_lbs",
+      "page": 5,
+      "bbox": [
+        1885.86,
+        589.2,
+        1939.58,
+        625.2
+      ],
+      "expected": "35",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "35",
+          "word_ids": [
+            144
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "35",
+          "word_ids": [
+            360
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 4,
+      "column": "manufacturer_model",
+      "page": 5,
+      "bbox": [
+        1939.58,
+        589.2,
+        2180.16,
+        625.2
+      ],
+      "expected": "GRUNDFOS MAGNA3 40-80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GRUNDFOS MAGNA3 40-80",
+          "word_ids": [
+            145,
+            146,
+            147
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GRUNDFOS MAGNA3 40-80",
+          "word_ids": [
+            361,
+            362,
+            363
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 4,
+      "column": "remarks",
+      "page": 5,
+      "bbox": [
+        2180.16,
+        589.2,
+        2251.29,
+        625.2
+      ],
+      "expected": "1 , 2 , 3 , 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            364,
+            365,
+            366,
+            367,
+            368,
+            369,
+            370
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 5,
+      "column": "mark",
+      "page": 5,
+      "bbox": [
+        1273.58,
+        625.2,
+        1327.86,
+        661.2
+      ],
+      "expected": "CWP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CWP-1",
+          "word_ids": [
+            155
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CWP-1",
+          "word_ids": [
+            371
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 5,
+      "column": "area_served",
+      "page": 5,
+      "bbox": [
+        1327.86,
+        625.2,
+        1471.58,
+        661.2
+      ],
+      "expected": "CHILLED WATER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLED WATER LOOP",
+          "word_ids": [
+            156,
+            157,
+            158
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLED WATER LOOP",
+          "word_ids": [
+            372,
+            373,
+            374
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 5,
+      "column": "type",
+      "page": 5,
+      "bbox": [
+        1471.58,
+        625.2,
+        1561.86,
+        661.2
+      ],
+      "expected": "INLINE PRIMARY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INLINE PRIMARY",
+          "word_ids": [
+            159,
+            160
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INLINE PRIMARY",
+          "word_ids": [
+            375,
+            376
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 5,
+      "column": "flow_gpm",
+      "page": 5,
+      "bbox": [
+        1561.86,
+        625.2,
+        1615.58,
+        661.2
+      ],
+      "expected": "185",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "185",
+          "word_ids": [
+            161
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "185",
+          "word_ids": [
+            377
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 5,
+      "column": "head_ft",
+      "page": 5,
+      "bbox": [
+        1615.58,
+        625.2,
+        1669.86,
+        661.2
+      ],
+      "expected": "55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55",
+          "word_ids": [
+            162
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55",
+          "word_ids": [
+            378
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 5,
+      "column": "min_efficiency_percent",
+      "page": 5,
+      "bbox": [
+        1669.86,
+        625.2,
+        1723.58,
+        661.2
+      ],
+      "expected": "67",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "67",
+          "word_ids": [
+            163
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "67",
+          "word_ids": [
+            379
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 5,
+      "column": "motor_hp",
+      "page": 5,
+      "bbox": [
+        1723.58,
+        625.2,
+        1777.86,
+        661.2
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            164
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            380
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 5,
+      "column": "motor_rpm",
+      "page": 5,
+      "bbox": [
+        1777.86,
+        625.2,
+        1831.39,
+        661.2
+      ],
+      "expected": "3325",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3325",
+          "word_ids": [
+            165
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3325",
+          "word_ids": [
+            381
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 5,
+      "column": "motor_volts_ph",
+      "page": 5,
+      "bbox": [
+        1831.39,
+        625.2,
+        1885.86,
+        661.2
+      ],
+      "expected": "460/3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "460/3",
+          "word_ids": [
+            166
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "460/3",
+          "word_ids": [
+            382
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 5,
+      "column": "operating_weight_lbs",
+      "page": 5,
+      "bbox": [
+        1885.86,
+        625.2,
+        1939.58,
+        661.2
+      ],
+      "expected": "85",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "85",
+          "word_ids": [
+            167
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "85",
+          "word_ids": [
+            383
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 5,
+      "column": "manufacturer_model",
+      "page": 5,
+      "bbox": [
+        1939.58,
+        625.2,
+        2180.16,
+        661.2
+      ],
+      "expected": "B&G E-90 2AAB",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B&G E-90 2AAB",
+          "word_ids": [
+            168,
+            169,
+            170
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B&G E-90 2AAB",
+          "word_ids": [
+            384,
+            385,
+            386
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 5,
+      "column": "remarks",
+      "page": 5,
+      "bbox": [
+        2180.16,
+        625.2,
+        2251.29,
+        661.2
+      ],
+      "expected": "1 , 2 , 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3",
+          "word_ids": [
+            171,
+            172,
+            173,
+            174,
+            175
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3",
+          "word_ids": [
+            387,
+            388,
+            389,
+            390,
+            391
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 6,
+      "column": "mark",
+      "page": 5,
+      "bbox": [
+        1273.58,
+        661.2,
+        1327.86,
+        697.2
+      ],
+      "expected": "CWP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CWP-2",
+          "word_ids": [
+            176
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CWP-2",
+          "word_ids": [
+            392
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 6,
+      "column": "area_served",
+      "page": 5,
+      "bbox": [
+        1327.86,
+        661.2,
+        1471.58,
+        697.2
+      ],
+      "expected": "CHILLED WATER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLED WATER LOOP",
+          "word_ids": [
+            177,
+            178,
+            179
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLED WATER LOOP",
+          "word_ids": [
+            393,
+            394,
+            395
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 6,
+      "column": "type",
+      "page": 5,
+      "bbox": [
+        1471.58,
+        661.2,
+        1561.86,
+        697.2
+      ],
+      "expected": "INLINE PRIMARY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INLINE PRIMARY",
+          "word_ids": [
+            180,
+            181
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INLINE PRIMARY",
+          "word_ids": [
+            396,
+            397
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 6,
+      "column": "flow_gpm",
+      "page": 5,
+      "bbox": [
+        1561.86,
+        661.2,
+        1615.58,
+        697.2
+      ],
+      "expected": "185",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "185",
+          "word_ids": [
+            182
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "185",
+          "word_ids": [
+            398
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 6,
+      "column": "head_ft",
+      "page": 5,
+      "bbox": [
+        1615.58,
+        661.2,
+        1669.86,
+        697.2
+      ],
+      "expected": "55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55",
+          "word_ids": [
+            183
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55",
+          "word_ids": [
+            399
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 6,
+      "column": "min_efficiency_percent",
+      "page": 5,
+      "bbox": [
+        1669.86,
+        661.2,
+        1723.58,
+        697.2
+      ],
+      "expected": "67",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "67",
+          "word_ids": [
+            184
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "67",
+          "word_ids": [
+            400
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 6,
+      "column": "motor_hp",
+      "page": 5,
+      "bbox": [
+        1723.58,
+        661.2,
+        1777.86,
+        697.2
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            185
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            401
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 6,
+      "column": "motor_rpm",
+      "page": 5,
+      "bbox": [
+        1777.86,
+        661.2,
+        1831.39,
+        697.2
+      ],
+      "expected": "3325",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3325",
+          "word_ids": [
+            186
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3325",
+          "word_ids": [
+            402
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 6,
+      "column": "motor_volts_ph",
+      "page": 5,
+      "bbox": [
+        1831.39,
+        661.2,
+        1885.86,
+        697.2
+      ],
+      "expected": "460/3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "460/3",
+          "word_ids": [
+            187
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "460/3",
+          "word_ids": [
+            403
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 6,
+      "column": "operating_weight_lbs",
+      "page": 5,
+      "bbox": [
+        1885.86,
+        661.2,
+        1939.58,
+        697.2
+      ],
+      "expected": "85",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "85",
+          "word_ids": [
+            188
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "85",
+          "word_ids": [
+            404
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 6,
+      "column": "manufacturer_model",
+      "page": 5,
+      "bbox": [
+        1939.58,
+        661.2,
+        2180.16,
+        697.2
+      ],
+      "expected": "B&G E-90 2AAB",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B&G E-90 2AAB",
+          "word_ids": [
+            189,
+            190,
+            191
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B&G E-90 2AAB",
+          "word_ids": [
+            405,
+            406,
+            407
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "row": 6,
+      "column": "remarks",
+      "page": 5,
+      "bbox": [
+        2180.16,
+        661.2,
+        2251.29,
+        697.2
+      ],
+      "expected": "1 , 2 , 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3",
+          "word_ids": [
+            192,
+            193,
+            194,
+            195,
+            196
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3",
+          "word_ids": [
+            408,
+            409,
+            410,
+            411,
+            412
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "header": "NEW PUMP SCHEDULE",
+      "page": 5,
+      "bbox": [
+        1260,
+        365,
+        2260,
+        420
+      ],
+      "engine": "mupdf",
+      "actual": "NEW PUMP SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M3-NEW-PUMP",
+      "header": "NEW PUMP SCHEDULE",
+      "page": 5,
+      "bbox": [
+        1260,
+        365,
+        2260,
+        420
+      ],
+      "engine": "poppler",
+      "actual": "NEW PUMP SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M3-NEW-VFD",
+      "row": 1,
+      "column": "mark",
+      "page": 5,
+      "bbox": [
+        157.38,
+        745.2,
+        211.38,
+        781.2
+      ],
+      "expected": "VFD-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD-1",
+          "word_ids": [
+            264
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD-1",
+          "word_ids": [
+            451
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-VFD",
+      "row": 1,
+      "column": "system_location",
+      "page": 5,
+      "bbox": [
+        211.38,
+        745.2,
+        391.47,
+        781.2
+      ],
+      "expected": "MECHANICAL LOFT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL LOFT",
+          "word_ids": [
+            265,
+            266
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL LOFT",
+          "word_ids": [
+            452,
+            453
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-VFD",
+      "row": 1,
+      "column": "service_horsepower",
+      "page": 5,
+      "bbox": [
+        391.47,
+        745.2,
+        463.47,
+        781.2
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            267
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            454
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-VFD",
+      "row": 1,
+      "column": "volts_ph",
+      "page": 5,
+      "bbox": [
+        463.47,
+        745.2,
+        535.47,
+        781.2
+      ],
+      "expected": "460/3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "460/3",
+          "word_ids": [
+            268
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "460/3",
+          "word_ids": [
+            461
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-VFD",
+      "row": 1,
+      "column": "purpose",
+      "page": 5,
+      "bbox": [
+        535.47,
+        745.2,
+        751.5,
+        781.2
+      ],
+      "expected": "HWP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP-1",
+          "word_ids": [
+            269
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP-1",
+          "word_ids": [
+            462
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-VFD",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 5,
+      "bbox": [
+        751.5,
+        745.2,
+        1165.35,
+        781.2
+      ],
+      "expected": "ABB MODEL ACH 580",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ABB MODEL ACH 580",
+          "word_ids": [
+            270,
+            271,
+            272,
+            273
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ABB MODEL ACH 580",
+          "word_ids": [
+            468,
+            469,
+            470,
+            471
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-VFD",
+      "row": 1,
+      "column": "remarks",
+      "page": 5,
+      "bbox": [
+        1165.35,
+        745.2,
+        1237.65,
+        781.2
+      ],
+      "expected": "1 , 2 , 3 , 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            274,
+            275,
+            276,
+            277,
+            278,
+            279,
+            280
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            477,
+            478,
+            479,
+            480,
+            481,
+            482,
+            483
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-VFD",
+      "row": 2,
+      "column": "mark",
+      "page": 5,
+      "bbox": [
+        157.38,
+        781.2,
+        211.38,
+        817.2
+      ],
+      "expected": "VFD-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD-2",
+          "word_ids": [
+            281
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD-2",
+          "word_ids": [
+            455
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-VFD",
+      "row": 2,
+      "column": "system_location",
+      "page": 5,
+      "bbox": [
+        211.38,
+        781.2,
+        391.47,
+        817.2
+      ],
+      "expected": "MECHANICAL LOFT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL LOFT",
+          "word_ids": [
+            282,
+            283
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL LOFT",
+          "word_ids": [
+            456,
+            457
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-VFD",
+      "row": 2,
+      "column": "service_horsepower",
+      "page": 5,
+      "bbox": [
+        391.47,
+        781.2,
+        463.47,
+        817.2
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            284
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            458
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-VFD",
+      "row": 2,
+      "column": "volts_ph",
+      "page": 5,
+      "bbox": [
+        463.47,
+        781.2,
+        535.47,
+        817.2
+      ],
+      "expected": "460/3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "460/3",
+          "word_ids": [
+            285
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "460/3",
+          "word_ids": [
+            463
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-VFD",
+      "row": 2,
+      "column": "purpose",
+      "page": 5,
+      "bbox": [
+        535.47,
+        781.2,
+        751.5,
+        817.2
+      ],
+      "expected": "HWP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP-2",
+          "word_ids": [
+            286
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP-2",
+          "word_ids": [
+            464
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-VFD",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 5,
+      "bbox": [
+        751.5,
+        781.2,
+        1165.35,
+        817.2
+      ],
+      "expected": "ABB MODEL ACH 580",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ABB MODEL ACH 580",
+          "word_ids": [
+            287,
+            288,
+            289,
+            290
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ABB MODEL ACH 580",
+          "word_ids": [
+            472,
+            473,
+            474,
+            475
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-VFD",
+      "row": 2,
+      "column": "remarks",
+      "page": 5,
+      "bbox": [
+        1165.35,
+        781.2,
+        1237.65,
+        817.2
+      ],
+      "expected": "1 , 2 , 3 , 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            291,
+            292,
+            293,
+            294,
+            295,
+            296,
+            297
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            484,
+            485,
+            486,
+            487,
+            488,
+            489,
+            490
+          ]
+        }
+      }
+    },
+    {
+      "table": "M3-NEW-VFD",
+      "header": "NEW VARIABLE FREQUENCY DRIVE SCHEDULE",
+      "page": 5,
+      "bbox": [
+        150,
+        665,
+        1250,
+        710
+      ],
+      "engine": "mupdf",
+      "actual": "NEW VARIABLE FREQUENCY DRIVE SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M3-NEW-VFD",
+      "header": "NEW VARIABLE FREQUENCY DRIVE SCHEDULE",
+      "page": 5,
+      "bbox": [
+        150,
+        665,
+        1250,
+        710
+      ],
+      "engine": "poppler",
+      "actual": "NEW VARIABLE FREQUENCY DRIVE SCHEDULE",
+      "pass": true
+    },
+    {
+      "assertion": "m3-ahus-existing-reference-note",
+      "page": 5,
+      "bbox": [
+        155,
+        305,
+        515,
+        330
+      ],
+      "expected": "EXISTING AIR HANDLING UNIT. SPECIFICATIONS SHOWN FOR REFERENCE ONLY.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. EXISTING AIR HANDLING UNIT. SPECIFICATIONS SHOWN FOR REFERENCE ONLY.",
+          "word_ids": [
+            578,
+            579,
+            580,
+            581,
+            582,
+            583,
+            584,
+            585,
+            586,
+            587
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. EXISTING AIR HANDLING UNIT. SPECIFICATIONS SHOWN FOR REFERENCE ONLY.",
+          "word_ids": [
+            583,
+            573,
+            574,
+            575,
+            576,
+            577,
+            578,
+            579,
+            580,
+            581
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m3-ahus-new-three-way-valve-note",
+      "page": 5,
+      "bbox": [
+        155,
+        330,
+        605,
+        355
+      ],
+      "expected": "INSTALL NEW 3-WAY VALVE AT HEATING COIL CONNECTION. SEE DETAIL FOR ADDITIONAL REQUIREMENTS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2. INSTALL NEW 3-WAY VALVE AT HEATING COIL CONNECTION. SEE DETAIL FOR ADDITIONAL REQUIREMENTS.",
+          "word_ids": [
+            588,
+            589,
+            590,
+            591,
+            592,
+            593,
+            594,
+            595,
+            596,
+            597,
+            598,
+            599,
+            600,
+            601
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2. INSTALL NEW 3-WAY VALVE AT HEATING COIL CONNECTION. SEE DETAIL FOR ADDITIONAL REQUIREMENTS.",
+          "word_ids": [
+            570,
+            549,
+            550,
+            551,
+            552,
+            553,
+            554,
+            555,
+            556,
+            557,
+            558,
+            559,
+            560,
+            561
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m3-pump-capacity-basis-note",
+      "page": 5,
+      "bbox": [
+        1275,
+        765,
+        1570,
+        790
+      ],
+      "expected": "CAPACITY BASED ON 70% WATER AND 30% PROPYLENE GLYCOL.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3. CAPACITY BASED ON 70% WATER AND 30% PROPYLENE GLYCOL.",
+          "word_ids": [
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3. CAPACITY BASED ON 70% WATER AND 30% PROPYLENE GLYCOL.",
+          "word_ids": [
+            508,
+            509,
+            510,
+            511,
+            512,
+            513,
+            514,
+            515,
+            516,
+            517
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m3-vfd-control-note",
+      "page": 5,
+      "bbox": [
+        155,
+        885,
+        600,
+        910
+      ],
+      "expected": "EQUIPMENT PROVIDED BY CONTROL CONTRACTOR, INSTALLED BY ELECTRICAL CONTRACTOR.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3. EQUIPMENT PROVIDED BY CONTROL CONTRACTOR, INSTALLED BY ELECTRICAL CONTRACTOR.",
+          "word_ids": [
+            230,
+            231,
+            232,
+            233,
+            234,
+            235,
+            236,
+            237,
+            238,
+            239
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3. EQUIPMENT PROVIDED BY CONTROL CONTRACTOR, INSTALLED BY ELECTRICAL CONTRACTOR.",
+          "word_ids": [
+            618,
+            619,
+            620,
+            621,
+            622,
+            623,
+            624,
+            625,
+            626,
+            627
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m3-schedule-tables",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

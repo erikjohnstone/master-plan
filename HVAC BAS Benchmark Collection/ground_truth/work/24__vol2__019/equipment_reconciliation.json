@@ -1,0 +1,813 @@
+{
+  "document_id": "24__vol2__019",
+  "module_role": "Source-constrained schedule-identity, classification and quantity ledger. Every printed unique mark on M7.1-M7.3 is retained; M7.2 grille/register/diffuser marks are explicitly schedule types rather than unsupported installed quantities.",
+  "schedule_registry_schema": {
+    "namespace_separator": "-",
+    "identity_columns": {
+      "schedule_mark": "mark"
+    },
+    "anchor_records_path": [
+      "primary_anchors"
+    ],
+    "non_instance_table_ids": [
+      "M72-GRD"
+    ]
+  },
+  "scheduled_families": [
+    {
+      "module": "schedules_m71.json",
+      "bundle_module": "schedules",
+      "table": "M71-AHU",
+      "class": "scheduled_air_handling_unit",
+      "rows": 1,
+      "schedule_mark": [
+        "AHU-1"
+      ]
+    },
+    {
+      "module": "schedules_m71.json",
+      "bundle_module": "schedules",
+      "table": "M71-AHU-FANS",
+      "class": "scheduled_ahu_supply_or_relief_fan",
+      "rows": 4,
+      "schedule_mark": [
+        "RF-1",
+        "RF-2",
+        "SF-1",
+        "SF-2"
+      ]
+    },
+    {
+      "module": "schedules_m71.json",
+      "bundle_module": "schedules",
+      "table": "M71-CHILLER",
+      "class": "scheduled_air_cooled_chiller",
+      "rows": 1,
+      "schedule_mark": [
+        "CH-1"
+      ]
+    },
+    {
+      "module": "schedules_m71.json",
+      "bundle_module": "schedules",
+      "table": "M71-BOILER",
+      "class": "scheduled_condensing_boiler",
+      "rows": 2,
+      "schedule_mark": [
+        "B-1",
+        "B-2"
+      ]
+    },
+    {
+      "module": "schedules_m71.json",
+      "bundle_module": "schedules",
+      "table": "M71-PUMP",
+      "class": "scheduled_pump",
+      "rows": 11,
+      "schedule_mark": [
+        "CP-1",
+        "CP-2",
+        "CP-3",
+        "CP-4",
+        "CP-5",
+        "CP-6",
+        "CWP-1",
+        "CWP-2",
+        "HWP-1",
+        "HWP-2",
+        "HWRP-1"
+      ]
+    },
+    {
+      "module": "schedules_m71.json",
+      "bundle_module": "schedules",
+      "table": "M71-GENERAL-FAN",
+      "class": "scheduled_exhaust_fan",
+      "rows": 4,
+      "schedule_mark": [
+        "EF-1",
+        "EF-2",
+        "EF-3",
+        "EF-4"
+      ]
+    },
+    {
+      "module": "schedules_m71.json",
+      "bundle_module": "schedules",
+      "table": "M71-AIR-SEPARATOR",
+      "class": "scheduled_air_separator",
+      "rows": 2,
+      "schedule_mark": [
+        "AS-1",
+        "AS-2"
+      ]
+    },
+    {
+      "module": "schedules_m72.json",
+      "bundle_module": "schedules",
+      "table": "M72-GRD",
+      "class": "scheduled_air_device_type",
+      "rows": 23,
+      "schedule_mark": [
+        "S1-1",
+        "S1-2",
+        "S1-3",
+        "S1-4",
+        "S3-1",
+        "S2-1",
+        "S2-2",
+        "S2-4",
+        "S2-5",
+        "S2-6",
+        "S2-7",
+        "S4-1",
+        "R1-1",
+        "R1-2",
+        "R1-3",
+        "R1-4",
+        "R1-5",
+        "R3-1",
+        "R3-2",
+        "R3-3",
+        "E1-1",
+        "E1-2",
+        "E1-3"
+      ]
+    },
+    {
+      "module": "schedules_m72.json",
+      "bundle_module": "schedules",
+      "table": "M72-FCU",
+      "class": "scheduled_hot_water_fan_coil_unit",
+      "rows": 1,
+      "schedule_mark": [
+        "FCU-1"
+      ]
+    },
+    {
+      "module": "schedules_m72.json",
+      "bundle_module": "schedules",
+      "table": "M72-CONDENSING",
+      "class": "scheduled_air_cooled_condensing_unit",
+      "rows": 6,
+      "schedule_mark": [
+        "CU-1",
+        "CU-2",
+        "CU-3",
+        "CU-4",
+        "CU-5",
+        "CU-6"
+      ]
+    },
+    {
+      "module": "schedules_m72.json",
+      "bundle_module": "schedules",
+      "table": "M72-EXPANSION-TANK",
+      "class": "scheduled_expansion_tank",
+      "rows": 2,
+      "schedule_mark": [
+        "ET-1",
+        "ET-2"
+      ]
+    },
+    {
+      "module": "schedules_m72.json",
+      "bundle_module": "schedules",
+      "table": "M72-DX-FCU",
+      "class": "scheduled_dx_fan_coil_unit",
+      "rows": 6,
+      "schedule_mark": [
+        "EV-1",
+        "EV-2",
+        "EV-3",
+        "EV-4",
+        "EV-5",
+        "EV-6"
+      ]
+    },
+    {
+      "module": "schedules_m72.json",
+      "bundle_module": "schedules",
+      "table": "M72-UNIT-HEATER",
+      "class": "scheduled_hot_water_unit_heater",
+      "rows": 2,
+      "schedule_mark": [
+        "UH-1",
+        "UH-2"
+      ]
+    },
+    {
+      "module": "schedules_m72.json",
+      "bundle_module": "schedules",
+      "table": "M72-SILENCER",
+      "class": "scheduled_silencer",
+      "rows": 2,
+      "schedule_mark": [
+        "S-1",
+        "S-2"
+      ]
+    },
+    {
+      "module": "schedules_m72.json",
+      "bundle_module": "schedules",
+      "table": "M72-RADIATOR",
+      "class": "scheduled_finned_tube_radiator",
+      "rows": 4,
+      "schedule_mark": [
+        "FTR-1",
+        "FTR-1B",
+        "FTR-2",
+        "FTR-2B"
+      ]
+    },
+    {
+      "module": "schedules_m72.json",
+      "bundle_module": "schedules",
+      "table": "M72-LOUVER",
+      "class": "scheduled_louvered_penthouse",
+      "rows": 3,
+      "schedule_mark": [
+        "ALP-1",
+        "ALP-2",
+        "ALP-3"
+      ]
+    },
+    {
+      "module": "schedules_m73.json",
+      "bundle_module": "schedules",
+      "table": "M73-VAV",
+      "class": "scheduled_volume_control_box",
+      "rows": 58,
+      "schedule_mark": [
+        "VAV-1",
+        "VAV-2",
+        "VAV-3",
+        "VAV-4",
+        "VAV-5",
+        "VAV-6",
+        "VAV-7",
+        "VAV-8",
+        "VAV-9",
+        "VAV-10",
+        "VAV-11",
+        "VAV-12",
+        "VAV-13",
+        "VAV-14",
+        "VAV-15",
+        "VAV-16",
+        "VAV-17",
+        "VAV-18",
+        "VAV-19",
+        "VAV-20",
+        "VAV-21",
+        "VAV-22",
+        "VAV-23",
+        "VAV-24",
+        "VAV-25",
+        "VAV-26",
+        "VAV-27",
+        "VAV-28",
+        "VAV-29",
+        "VAV-30",
+        "VAV-31",
+        "VAV-32",
+        "VAV-33",
+        "VAV-34",
+        "VAV-35",
+        "VAV-36",
+        "VAV-37",
+        "VAV-38",
+        "VAV-39",
+        "VAV-40",
+        "VAV-41",
+        "VAV-42",
+        "VAV-43",
+        "VAV-44",
+        "VAV-45",
+        "VAV-46",
+        "VAV-47",
+        "VAV-48",
+        "VAV-49",
+        "VAV-50",
+        "VAV-51",
+        "VAV-52",
+        "VAV-53",
+        "VAV-54",
+        "VAV-55",
+        "VAV-56",
+        "VAV-57",
+        "VAV-58"
+      ]
+    }
+  ],
+  "schedule_counts": {
+    "tables": 17,
+    "rows": 132,
+    "building_scoped_tag_identities_including_outlet_types": 132,
+    "other_scheduled_tag_identities": 109,
+    "full_vav_performance_rows": 58,
+    "source_scope": "There are 132 literal unique schedule marks: 25 on M7.1, 49 on M7.2, and 58 on M7.3. The M7.3 companion table preserves all 58 performance rows with 18 dual-engine-rechecked fields each. M7.2's 23 grille/register/diffuser marks are product/type rows and are not expanded into plan-placement, actuator, or terminal quantities."
+  },
+  "primary_anchors": [
+    {
+      "id": "M71-AHU-1",
+      "scope": "M7.1 AHU-1 schedule row; mechanical-room AHU."
+    },
+    {
+      "id": "M71-RF-1",
+      "scope": "M7.1 AHU-1 supply/relief fan schedule row."
+    },
+    {
+      "id": "M71-RF-2",
+      "scope": "M7.1 AHU-1 supply/relief fan schedule row."
+    },
+    {
+      "id": "M71-SF-1",
+      "scope": "M7.1 AHU-1 supply/relief fan schedule row."
+    },
+    {
+      "id": "M71-SF-2",
+      "scope": "M7.1 AHU-1 supply/relief fan schedule row."
+    },
+    {
+      "id": "M71-CH-1",
+      "scope": "M7.1 utility-enclosure air-cooled chiller schedule row."
+    },
+    {
+      "id": "M71-B-1",
+      "scope": "M7.1 mechanical-room condensing boiler schedule row."
+    },
+    {
+      "id": "M71-B-2",
+      "scope": "M7.1 mechanical-room condensing boiler schedule row."
+    },
+    {
+      "id": "M71-CP-1",
+      "scope": "M7.1 literal condensate, chilled-water, heating-water, or AHU return-pump schedule row."
+    },
+    {
+      "id": "M71-CP-2",
+      "scope": "M7.1 literal condensate, chilled-water, heating-water, or AHU return-pump schedule row."
+    },
+    {
+      "id": "M71-CP-3",
+      "scope": "M7.1 literal condensate, chilled-water, heating-water, or AHU return-pump schedule row."
+    },
+    {
+      "id": "M71-CP-4",
+      "scope": "M7.1 literal condensate, chilled-water, heating-water, or AHU return-pump schedule row."
+    },
+    {
+      "id": "M71-CP-5",
+      "scope": "M7.1 literal condensate, chilled-water, heating-water, or AHU return-pump schedule row."
+    },
+    {
+      "id": "M71-CP-6",
+      "scope": "M7.1 literal condensate, chilled-water, heating-water, or AHU return-pump schedule row."
+    },
+    {
+      "id": "M71-CWP-1",
+      "scope": "M7.1 literal condensate, chilled-water, heating-water, or AHU return-pump schedule row."
+    },
+    {
+      "id": "M71-CWP-2",
+      "scope": "M7.1 literal condensate, chilled-water, heating-water, or AHU return-pump schedule row."
+    },
+    {
+      "id": "M71-HWP-1",
+      "scope": "M7.1 literal condensate, chilled-water, heating-water, or AHU return-pump schedule row."
+    },
+    {
+      "id": "M71-HWP-2",
+      "scope": "M7.1 literal condensate, chilled-water, heating-water, or AHU return-pump schedule row."
+    },
+    {
+      "id": "M71-HWRP-1",
+      "scope": "M7.1 literal condensate, chilled-water, heating-water, or AHU return-pump schedule row."
+    },
+    {
+      "id": "M71-EF-1",
+      "scope": "M7.1 roof general-exhaust-fan schedule row."
+    },
+    {
+      "id": "M71-EF-2",
+      "scope": "M7.1 roof general-exhaust-fan schedule row."
+    },
+    {
+      "id": "M71-EF-3",
+      "scope": "M7.1 roof general-exhaust-fan schedule row."
+    },
+    {
+      "id": "M71-EF-4",
+      "scope": "M7.1 roof general-exhaust-fan schedule row."
+    },
+    {
+      "id": "M71-AS-1",
+      "scope": "M7.1 mechanical-room air-separator schedule row."
+    },
+    {
+      "id": "M71-AS-2",
+      "scope": "M7.1 mechanical-room air-separator schedule row."
+    },
+    {
+      "id": "M72-FCU-1",
+      "scope": "M7.2 vestibule hot-water fan-coil schedule row."
+    },
+    {
+      "id": "M72-CU-1",
+      "scope": "M7.2 roof air-cooled condensing-unit schedule row."
+    },
+    {
+      "id": "M72-CU-2",
+      "scope": "M7.2 roof air-cooled condensing-unit schedule row."
+    },
+    {
+      "id": "M72-CU-3",
+      "scope": "M7.2 roof air-cooled condensing-unit schedule row."
+    },
+    {
+      "id": "M72-CU-4",
+      "scope": "M7.2 roof air-cooled condensing-unit schedule row."
+    },
+    {
+      "id": "M72-CU-5",
+      "scope": "M7.2 roof air-cooled condensing-unit schedule row."
+    },
+    {
+      "id": "M72-CU-6",
+      "scope": "M7.2 roof air-cooled condensing-unit schedule row."
+    },
+    {
+      "id": "M72-ET-1",
+      "scope": "M7.2 mechanical-room expansion-tank schedule row."
+    },
+    {
+      "id": "M72-ET-2",
+      "scope": "M7.2 mechanical-room expansion-tank schedule row."
+    },
+    {
+      "id": "M72-EV-1",
+      "scope": "M7.2 DX wall-mounted fan-coil schedule row."
+    },
+    {
+      "id": "M72-EV-2",
+      "scope": "M7.2 DX wall-mounted fan-coil schedule row."
+    },
+    {
+      "id": "M72-EV-3",
+      "scope": "M7.2 DX wall-mounted fan-coil schedule row."
+    },
+    {
+      "id": "M72-EV-4",
+      "scope": "M7.2 DX wall-mounted fan-coil schedule row."
+    },
+    {
+      "id": "M72-EV-5",
+      "scope": "M7.2 DX wall-mounted fan-coil schedule row."
+    },
+    {
+      "id": "M72-EV-6",
+      "scope": "M7.2 DX wall-mounted fan-coil schedule row."
+    },
+    {
+      "id": "M72-UH-1",
+      "scope": "M7.2 mechanical-room hot-water unit-heater schedule row."
+    },
+    {
+      "id": "M72-UH-2",
+      "scope": "M7.2 mechanical-room hot-water unit-heater schedule row."
+    },
+    {
+      "id": "M72-S-1",
+      "scope": "M7.2 AHU-1 silencer schedule row."
+    },
+    {
+      "id": "M72-S-2",
+      "scope": "M7.2 AHU-1 silencer schedule row."
+    },
+    {
+      "id": "M72-FTR-1",
+      "scope": "M7.2 finned-tube-radiator schedule row."
+    },
+    {
+      "id": "M72-FTR-1B",
+      "scope": "M7.2 finned-tube-radiator schedule row."
+    },
+    {
+      "id": "M72-FTR-2",
+      "scope": "M7.2 finned-tube-radiator schedule row."
+    },
+    {
+      "id": "M72-FTR-2B",
+      "scope": "M7.2 finned-tube-radiator schedule row."
+    },
+    {
+      "id": "M72-ALP-1",
+      "scope": "M7.2 roof louvered-penthouse schedule row."
+    },
+    {
+      "id": "M72-ALP-2",
+      "scope": "M7.2 roof louvered-penthouse schedule row."
+    },
+    {
+      "id": "M72-ALP-3",
+      "scope": "M7.2 roof louvered-penthouse schedule row."
+    },
+    {
+      "id": "M73-VAV-1",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-2",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-3",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-4",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-5",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-6",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-7",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-8",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-9",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-10",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-11",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-12",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-13",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-14",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-15",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-16",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-17",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-18",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-19",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-20",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-21",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-22",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-23",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-24",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-25",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-26",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-27",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-28",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-29",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-30",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-31",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-32",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-33",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-34",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-35",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-36",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-37",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-38",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-39",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-40",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-41",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-42",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-43",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-44",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-45",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-46",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-47",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-48",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-49",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-50",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-51",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-52",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-53",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-54",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-55",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-56",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-57",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    },
+    {
+      "id": "M73-VAV-58",
+      "scope": "M7.3 Price SDV volume-control-box schedule row; the complete literal performance row is retained separately."
+    }
+  ],
+  "additional_identities": [
+    {
+      "id": "M71-HYDRONIC-COIL-TYPES",
+      "classification": "AHU-1 CHWC and HWC source schedule rows",
+      "source_scope": "schedules_m71.schedule_detail_records.AHU-1",
+      "status": "untagged source type rows; their M7.1 design-airflow, MBH, water-flow and pressure-drop values are retained as source-scoped schedule detail."
+    },
+    {
+      "id": "M72-GRD-TYPE-ROWS",
+      "classification": "23 grille/register/diffuser schedule type marks",
+      "source_scope": "schedules_m72.tables[M72-GRD]",
+      "status": "no installed outlet count, damper-actuator count, or BAS-I/O multiplier is asserted."
+    },
+    {
+      "id": "M73-VAV-PERFORMANCE",
+      "classification": "58 literal VAV performance rows",
+      "source_scope": "schedules_m73_performance.tables[M73-VAV-PERFORMANCE]",
+      "status": "one complete source row per M7.3 mark; it is a performance companion, not a duplicate equipment identity registry."
+    },
+    {
+      "id": "M6-VALVE-DAMPER-DETAILS",
+      "classification": "mechanical detail context",
+      "source_scope": "M6.1/M6.2 and M6.4 full-page review",
+      "status": "details depict coil valves, dampers and motorized-control-damper context but do not constitute a tabular valve or actuator schedule."
+    }
+  ],
+  "reconciliation_findings": [
+    "The original schedule review missed HWRP-1, CU-5 and CU-6; all are now included in the literal 132-mark registry and each is independently rechecked in the source schedule cell.",
+    "M7.3's 58 VAV rows are each literal equipment schedule marks and have an associated complete performance row. The source does not state that a schedule tag establishes controller-terminal, actuator, wiring or field-I/O quantity.",
+    "M7.2's GRD table is a type/mark schedule, while plan placement counts require a separately validated plan-symbol quantity workflow; none is fabricated here.",
+    "M8 point tags repeat in separate system diagram/template blocks. Tags are therefore retained with the printed table and row scope rather than merged into a global physical device identity."
+  ],
+  "control_valve_and_damper_schedule_status": {
+    "control_valve_schedule": {
+      "status": "not_present_as_tabular_control_valve_schedule",
+      "value": null,
+      "note": "M6.1/M6.4 details and M8 sequences show modulating coil/bypass valve behavior, but no source table publishes a control-valve tag with Cv, selected actuator, signal, fail position, or quantity."
+    },
+    "damper_actuator_schedule": {
+      "status": "not_present_as_tabular_actuator_schedule",
+      "value": null,
+      "note": "M6.2/M6.4 and M8.6 show damper and actuator control context, including separate analog I/O for four AHU dampers, but no actuator schedule publishes tag, make/model, torque, signal or fail action."
+    }
+  },
+  "tables": [],
+  "assertions": [],
+  "inventory_checks": [
+    {
+      "id": "rank24-primary-schedule-anchors",
+      "records_path": [
+        "primary_anchors"
+      ],
+      "expected": 109,
+      "unique_key": "id"
+    },
+    {
+      "id": "rank24-supplemental-identity-boundaries",
+      "records_path": [
+        "additional_identities"
+      ],
+      "expected": 4,
+      "unique_key": "id"
+    }
+  ]
+}

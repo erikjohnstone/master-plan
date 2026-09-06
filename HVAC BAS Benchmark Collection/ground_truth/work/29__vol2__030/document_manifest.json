@@ -1,0 +1,765 @@
+{
+  "id": "29__vol2__030",
+  "rank": 29,
+  "title": "Syracuse VA EHRM Infrastructure Controls",
+  "source_pdf": "pdf/29__vol2__030__Syracuse_VA_EHRM_Infrastructure_Controls.pdf",
+  "source_sha256": "c8a85e522ea577c37a658f099e5f3b2af619fb3a8c35ffc219b39a13b9c56367",
+  "page_count": 93,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete 93-page visual review with bounded fan-coil/damper/fire-smoke/humidifier schedule context, BACnet interface requirements and explicit no-inference limits.",
+  "reading_notes": [
+    "M-601/M-602 contain dense HVAC schedules including coil, chilled beam, pressure-relief/blast-suppression damper, humidifier and fire/smoke damper tables.",
+    "The record preserves literal rows and BACnet requirements without inventing final BAS topology."
+  ],
+  "verification_semantics": "Every retained row/assertion is rechecked against MuPDF and Poppler; no physical takeoff is inferred.",
+  "module_order": [
+    "metadata",
+    "schedules",
+    "points",
+    "controls_context",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "metadata": [
+      "metadata"
+    ],
+    "schedules": [
+      "schedules"
+    ],
+    "points": [
+      "points"
+    ],
+    "controls_context": [
+      "controls_context"
+    ],
+    "equipment_reconciliation": [
+      "equipment_reconciliation"
+    ],
+    "point_applications": [
+      "point_applications"
+    ],
+    "supporting_evidence": [
+      "supporting_evidence"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Cover title identifies EHRM Infrastructure Upgrades\u2014Syracuse VA.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 93 pages have retained visual review; M-601/M-602/M-603 schedule/control sheets are explicitly reviewed.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "No global scale or plan-derived quantity is asserted.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Three literal two-pipe fan-coil schedule rows are retained.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "schedule_counts"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The fan-coil rows are coordinate-bounded and schedule titles retain cooling/heating, damper, humidifier and fire/smoke context.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "One literal time-clock control-symbol row is retained with source-only ownership.",
+      "evidence": [
+        [
+          "modules",
+          "points",
+          "tables"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "BACnet integration is published as an equipment requirement; final topology is not inferred.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Control-symbol schedule context is retained; no unstated sequence is invented.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sequence_inventory"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "BACnet/temperature/humidity interface requirement and controls-symbol context are retained without device counts.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sensors_and_control_symbol_context"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Point, network, controller, wiring and physical-count limits are explicit.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every page has a Poppler full-page review render.",
+      "evidence": [
+        [
+          "page_review"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All retained rows/assertions are rechecked with MuPDF and Poppler.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p1-p1-full-poppler.png",
+      "finding": "Cover/general-notes sheet visually reviewed; Syracuse VA EHRM identity retained."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p2-p2-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p3-p3-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p4-p4-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p5-p5-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p6-p6-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p7-p7-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p8-p8-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p9-p9-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 10,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p10-p10-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 11,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p11-p11-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 12,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p12-p12-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 13,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p13-p13-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 14,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p14-p14-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 15,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p15-p15-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 16,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p16-p16-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 17,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p17-p17-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 18,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p18-p18-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 19,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p19-p19-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 20,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p20-p20-full-poppler.png",
+      "finding": "Mechanical/plumbing detail or plan source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 21,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p21-p21-full-poppler.png",
+      "finding": "Mechanical/plumbing detail or plan source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 22,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p22-p22-full-poppler.png",
+      "finding": "Mechanical/plumbing detail or plan source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 23,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p23-p23-full-poppler.png",
+      "finding": "Mechanical/plumbing detail or plan source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 24,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p24-p24-full-poppler.png",
+      "finding": "Mechanical/plumbing detail or plan source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 25,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p25-p25-full-poppler.png",
+      "finding": "Mechanical/plumbing detail or plan source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 26,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p26-p26-full-poppler.png",
+      "finding": "Mechanical/plumbing detail or plan source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 27,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p27-p27-full-poppler.png",
+      "finding": "Mechanical/plumbing detail or plan source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 28,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p28-p28-full-poppler.png",
+      "finding": "Mechanical/plumbing detail or plan source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 29,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p29-p29-full-poppler.png",
+      "finding": "Mechanical/plumbing detail or plan source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 30,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p30-p30-full-poppler.png",
+      "finding": "Mechanical/plumbing detail or plan source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 31,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p31-p31-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 32,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p32-p32-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 33,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p33-p33-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 34,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p34-p34-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 35,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p35-p35-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 36,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p36-p36-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 37,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p37-p37-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 38,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p38-p38-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 39,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p39-p39-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 40,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p40-p40-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 41,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p41-p41-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 42,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p42-p42-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 43,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p43-p43-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 44,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p44-p44-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 45,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p45-p45-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 46,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p46-p46-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 47,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p47-p47-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 48,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p48-p48-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 49,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p49-p49-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 50,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p50-p50-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 51,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p51-p51-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 52,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p52-p52-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 53,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p53-p53-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 54,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p54-p54-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 55,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p55-p55-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 56,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p56-p56-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 57,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p57-p57-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 58,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p58-p58-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 59,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p59-p59-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 60,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p60-p60-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 61,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p61-p61-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 62,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p62-p62-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 63,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p63-p63-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 64,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p64-p64-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 65,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p65-p65-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 66,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p66-p66-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 67,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p67-p67-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 68,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p68-p68-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 69,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p69-p69-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 70,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p70-p70-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 71,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p71-p71-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 72,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p72-p72-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 73,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p73-p73-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 74,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p74-p74-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 75,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p75-p75-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 76,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p76-p76-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 77,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p77-p77-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 78,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p78-p78-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 79,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p79-p79-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 80,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p80-p80-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 81,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p81-p81-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 82,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p82-p82-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 83,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p83-p83-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 84,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p84-p84-full-poppler.png",
+      "finding": "Dense mechanical schedule sheet visually reviewed; literal fan-coil rows and schedule/control context retained separately."
+    },
+    {
+      "page": 85,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p85-p85-full-poppler.png",
+      "finding": "Dense mechanical schedule sheet visually reviewed; literal fan-coil rows and schedule/control context retained separately."
+    },
+    {
+      "page": 86,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p86-p86-full-poppler.png",
+      "finding": "Dense mechanical schedule sheet visually reviewed; literal fan-coil rows and schedule/control context retained separately."
+    },
+    {
+      "page": 87,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p87-p87-full-poppler.png",
+      "finding": "Control-symbol/diagram source sheet visually reviewed; time-clock and controls context retained separately."
+    },
+    {
+      "page": 88,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p88-p88-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 89,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p89-p89-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 90,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p90-p90-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 91,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p91-p91-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 92,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p92-p92-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 93,
+      "review_status": "complete",
+      "render": "reviews/29__vol2__030/p93-p93-full-poppler.png",
+      "finding": "General/architectural/structural/electrical/mechanical source sheet visually reviewed as coordinated context."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "pages",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 93
+    }
+  ],
+  "completion_checks": {
+    "all_93_pages_visually_reviewed": true,
+    "all_authoring_modules_dual_engine_verified_at_build": true,
+    "source_limitations_explicit": true,
+    "required_objectives_covered": true
+  }
+}

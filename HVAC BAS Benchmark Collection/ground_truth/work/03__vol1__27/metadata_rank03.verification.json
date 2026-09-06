@@ -1,0 +1,198 @@
+{
+  "document_id": "03__vol1__27",
+  "source_sha256": "2e123db08407f97acd6bc6387ecab6e08ad8204971fb5c24a3668bbd34dec0cf",
+  "annotation_sha256": "0bab0962374f9f240973647d9c6f9ae190726171e64629b58ac9c0f63614f6e9",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 6,
+  "checks": [
+    {
+      "assertion": "rank03-title-project",
+      "page": 1,
+      "bbox": [
+        2215,
+        605,
+        2410,
+        660
+      ],
+      "expected": "WHITE STURGEON FISH HATCHERY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WHITE STURGEON FISH HATCHERY",
+          "word_ids": [
+            120,
+            121,
+            122,
+            123
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WHITE STURGEON FISH HATCHERY",
+          "word_ids": [
+            252,
+            253,
+            254,
+            255
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank03-title-firm",
+      "page": 1,
+      "bbox": [
+        2250,
+        1210,
+        2320,
+        1235
+      ],
+      "expected": "COFFMAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COFFMAN",
+          "word_ids": [
+            116
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COFFMAN",
+          "word_ids": [
+            278
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank03-title-date",
+      "page": 1,
+      "bbox": [
+        2350,
+        1175,
+        2420,
+        1205
+      ],
+      "expected": "06/07/2024",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "06/07/2024",
+          "word_ids": [
+            125
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "06/07/2024",
+          "word_ids": [
+            275
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank03-title-issue",
+      "page": 1,
+      "bbox": [
+        2225,
+        668,
+        2400,
+        722
+      ],
+      "expected": "ISSUED FOR CONSTRUCTION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ISSUED FOR CONSTRUCTION",
+          "word_ids": [
+            147,
+            148,
+            149
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ISSUED FOR CONSTRUCTION",
+          "word_ids": [
+            257,
+            258,
+            259
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank03-m101-sheet",
+      "page": 1,
+      "bbox": [
+        2245,
+        1455,
+        2380,
+        1520
+      ],
+      "expected": "M-101",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-101",
+          "word_ids": [
+            107
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-101",
+          "word_ids": [
+            331
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank03-m101-local-scale",
+      "page": 1,
+      "bbox": [
+        1545,
+        1435,
+        1645,
+        1465
+      ],
+      "expected": "SCALE: 3/16\"=1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 3/16\"=1'-0\"",
+          "word_ids": [
+            188,
+            194
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 3/16\"=1'-0\"",
+          "word_ids": [
+            316,
+            319
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "rank03-full-page-review-ledger",
+      "actual": 38,
+      "expected": 38,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

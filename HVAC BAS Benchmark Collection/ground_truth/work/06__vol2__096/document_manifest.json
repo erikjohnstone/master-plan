@@ -1,0 +1,455 @@
+{
+  "id": "06__vol2__096",
+  "rank": 6,
+  "title": "Vermillion County Jail Addition & Renovation",
+  "source_pdf": "pdf/06__vol2__096__Vermillion_County_Jail.pdf",
+  "source_sha256": "72da836a803740382b319b718c1f10d8daeff6e5dbe869f1e68ff173ea4092ec",
+  "page_count": 36,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete source-bounded ground truth for the supplied 36-page Vermillion County Jail set: visual review of every page; title-block/sheet/local-scale context; 25 complete M600-M603 schedule tables with 239 literal rows; standalone 24-row motorized-damper schedule; 229 literal M901-M906 DDC point-matrix rows; BAS LAN/hard-wire context; and 13 sequence subjects with independently checked operational clauses. It does not fabricate installed equipment/sensor/damper/valve quantities, physical I/O/cards/terminals/wiring, controller details or network topology/addressing.",
+  "reading_notes": [
+    "Wide source tables are retained as complete left-to-right literal nonblank rows to preserve their narrow/merged/vertical headers and all source values without unsupported normalization.",
+    "M603 contains the project’s distinct 24-row motorized-damper schedule and a 58-row VAV schedule, both captured separately at strict source-cell level.",
+    "M901-M906 retain all 229 published point-matrix rows, including repeated labels, as source facts rather than physical point counts.",
+    "All 36 source pages were visually reviewed and every component is dual-parser checked during final build/verification."
+  ],
+  "verification_semantics": "The bundle verifier re-runs independent MuPDF and Poppler checks for every authored schedule/point row and sequence/network/title assertion, then hashes the source, manifest, modules and cited full-page review renders. It validates evidence and annotation integrity rather than performing production extraction or engineering inference.",
+  "module_order": [
+    "metadata",
+    "schedules",
+    "points",
+    "controls_context",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "metadata": [
+      "metadata_rank06"
+    ],
+    "schedules": [
+      "schedules_m600_air_systems",
+      "schedules_m601_core",
+      "schedules_m602_terminal_equipment",
+      "schedules_m603_air_devices",
+      "schedules_m603_vavs",
+      "schedules_m603_motorized_dampers"
+    ],
+    "points": [
+      "points_m901",
+      "points_m902",
+      "points_m903",
+      "points_m904",
+      "points_m905",
+      "points_m906"
+    ],
+    "controls_context": [
+      "controls_sequences"
+    ],
+    "equipment_reconciliation": [
+      "equipment_reconciliation_rank06"
+    ],
+    "point_applications": [
+      "point_applications_rank06"
+    ],
+    "supporting_evidence": [
+      "supporting_evidence_rank06"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Printed project, owner, location, number and issue context are retained.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 36 supplied pages have a reviewed source-sheet/title disposition.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Only an observed local plan scale is stated; no global scale is claimed.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 25 published schedule tables are retained as literal rows without derived installed counts.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "schedule_counts"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The complete 239 literal M600-M603 schedule rows are included in schedule components.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 229 point-matrix rows have explicit source-matrix-only application scopes.",
+      "evidence": [
+        [
+          "modules",
+          "point_applications",
+          "applications"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "LAN and hard-wired loss-of-LAN context is retained while final topology remains unavailable.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Thirteen BAS sequence subjects across M901-M906 have checked operational clauses.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sequence_inventory"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "VAV, pressure, airflow, humidity and temperature controls context is retained in source matrices/sequences without a fabricated sensor total.",
+      "evidence": [
+        [
+          "modules",
+          "points",
+          "tables"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Valve, actuator, network, count and revision boundaries are explicit.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All supplied pages have retained full-page visual review evidence.",
+      "evidence": [
+        [
+          "page_review"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every authored component is rechecked against both raw engines during bundle verification.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p1-p1-full-poppler.png",
+      "finding": "Mechanical legends, abbreviations, symbols and controls context."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p2-p2-full-poppler.png",
+      "finding": "Thermal-zone diagram and local plan-scale context."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p3-p3-full-poppler.png",
+      "finding": "Second-floor thermal-zone diagram and local plan-scale context."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p4-p4-full-poppler.png",
+      "finding": "Mechanical demolition plan for Unit A."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p5-p5-full-poppler.png",
+      "finding": "Mechanical demolition plan for Unit B."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p6-p6-full-poppler.png",
+      "finding": "Mechanical attic demolition-plan context."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p7-p7-full-poppler.png",
+      "finding": "Unit A ductwork, devices and equipment plan context."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p8-p8-full-poppler.png",
+      "finding": "Unit B ductwork, devices and equipment plan context."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p9-p9-full-poppler.png",
+      "finding": "Unit C ductwork, devices and equipment plan context."
+    },
+    {
+      "page": 10,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p10-p10-full-poppler.png",
+      "finding": "Second-floor Unit C ductwork plan context."
+    },
+    {
+      "page": 11,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p11-p11-full-poppler.png",
+      "finding": "Jail roof mechanical plan context."
+    },
+    {
+      "page": 12,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p12-p12-full-poppler.png",
+      "finding": "Pod roof mechanical plan context."
+    },
+    {
+      "page": 13,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p13-p13-full-poppler.png",
+      "finding": "Unit A hydronic piping plan context."
+    },
+    {
+      "page": 14,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p14-p14-full-poppler.png",
+      "finding": "Unit B hydronic piping plan context."
+    },
+    {
+      "page": 15,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p15-p15-full-poppler.png",
+      "finding": "Unit C hydronic piping plan context."
+    },
+    {
+      "page": 16,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p16-p16-full-poppler.png",
+      "finding": "Second-floor Unit C piping plan context."
+    },
+    {
+      "page": 17,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p17-p17-full-poppler.png",
+      "finding": "Cell/chase mechanical sections and detail context."
+    },
+    {
+      "page": 18,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p18-p18-full-poppler.png",
+      "finding": "Mechanical-room Unit B piping plan context."
+    },
+    {
+      "page": 19,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p19-p19-full-poppler.png",
+      "finding": "AHU system, fan, coil, heat-exchanger, filter and attenuator schedules."
+    },
+    {
+      "page": 20,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p20-p20-full-poppler.png",
+      "finding": "Chiller, boiler, pump, expansion tank, separator and glycol make-up schedules."
+    },
+    {
+      "page": 21,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p21-p21-full-poppler.png",
+      "finding": "Unit heater, DX, louver, hood, FCU and exhaust fan schedules."
+    },
+    {
+      "page": 22,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p22-p22-full-poppler.png",
+      "finding": "Air-device, VAV and motorized-damper schedules."
+    },
+    {
+      "page": 23,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p23-p23-full-poppler.png",
+      "finding": "Chilled- and heating-water isometric context."
+    },
+    {
+      "page": 24,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p24-p24-full-poppler.png",
+      "finding": "Mechanical detail context."
+    },
+    {
+      "page": 25,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p25-p25-full-poppler.png",
+      "finding": "Mechanical detail context."
+    },
+    {
+      "page": 26,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p26-p26-full-poppler.png",
+      "finding": "Mechanical detail context."
+    },
+    {
+      "page": 27,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p27-p27-full-poppler.png",
+      "finding": "Mechanical detail context."
+    },
+    {
+      "page": 28,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p28-p28-full-poppler.png",
+      "finding": "Mechanical detail context."
+    },
+    {
+      "page": 29,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p29-p29-full-poppler.png",
+      "finding": "Mechanical detail context."
+    },
+    {
+      "page": 30,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p30-p30-full-poppler.png",
+      "finding": "AHU mechanical details."
+    },
+    {
+      "page": 31,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p31-p31-full-poppler.png",
+      "finding": "Chilled-water/hot-water controls, DDC matrices, sequence and BAS architecture."
+    },
+    {
+      "page": 32,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p32-p32-full-poppler.png",
+      "finding": "DOAS 1/2 controls, DDC matrix and sequence."
+    },
+    {
+      "page": 33,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p33-p33-full-poppler.png",
+      "finding": "AHU-4 controls, DDC matrix and sequence."
+    },
+    {
+      "page": 34,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p34-p34-full-poppler.png",
+      "finding": "DOAS-3 controls, DDC matrix and sequence."
+    },
+    {
+      "page": 35,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p35-p35-full-poppler.png",
+      "finding": "Sallyport, pod and jail exhaust control schematics, matrices and sequences."
+    },
+    {
+      "page": 36,
+      "review_status": "complete",
+      "render": "reviews/06__vol2__096/p36-p36-full-poppler.png",
+      "finding": "Terminal, FCU, unit-heater, general-exhaust and HRC controls."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "rank06-full-page-review",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 36
+    },
+    {
+      "id": "rank06-schedule-table-count",
+      "path": [
+        "modules",
+        "schedules",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 25
+    },
+    {
+      "id": "rank06-point-table-count",
+      "path": [
+        "modules",
+        "points",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 9
+    }
+  ],
+  "completion_checks": {
+    "all_36_pages_visually_reviewed": true,
+    "all_authoring_modules_dual_engine_verified_at_build": true,
+    "source_limitations_explicit": true,
+    "required_objectives_covered": true
+  }
+}

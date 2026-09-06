@@ -1,0 +1,2014 @@
+{
+  "document_id": "17__vol1__16",
+  "source_sha256": "96782a6f81077df39c2eb87f4d04e08c7e353483b596bcd97d534938593612a1",
+  "annotation_sha256": "7f3ab74f80c3a7bc0466e3a521261648ab59009ddccccbf38353c4fe76ae45c2",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 43,
+  "checks": [
+    {
+      "assertion": "m601-bacnet-standard",
+      "page": 27,
+      "bbox": [
+        1365,
+        174,
+        1730,
+        192
+      ],
+      "expected": "BACNET COMPONENTS ARE TO BE IN ACCORDANCE WITH ASHRAE STANDARD 2016.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BACNET COMPONENTS ARE TO BE IN ACCORDANCE WITH ASHRAE STANDARD 2016.",
+          "word_ids": [
+            481,
+            482,
+            483,
+            484,
+            485,
+            486,
+            487,
+            488,
+            489,
+            490,
+            491
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BACNET COMPONENTS ARE TO BE IN ACCORDANCE WITH ASHRAE STANDARD 2016.",
+          "word_ids": [
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-complete-ddc-system",
+      "page": 27,
+      "bbox": [
+        1365,
+        198,
+        1775,
+        238
+      ],
+      "expected": "CONTROL SYSTEM CONTRACTOR SHALL PROVIDE A COMPLETE DIRECT DIGITAL CONTROL SYSTEM. PROVIDE AND INSTALL ALL NECESSARY WIRING TO MAKE SYSTEM OPERATIONAL REFER TO CONTROL DIAGRAMS AND SEQUENCE OF OPERATION ON DRAWINGS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONTROL SYSTEM CONTRACTOR SHALL PROVIDE A COMPLETE DIRECT DIGITAL CONTROL SYSTEM. PROVIDE AND INSTALL ALL NECESSARY WIRING TO MAKE SYSTEM OPERATIONAL REFER TO CONTROL DIAGRAMS AND SEQUENCE OF OPERATION ON DRAWINGS.",
+          "word_ids": [
+            493,
+            494,
+            495,
+            496,
+            497,
+            498,
+            499,
+            500,
+            501,
+            502,
+            503,
+            504,
+            505,
+            506,
+            507,
+            508,
+            509,
+            510,
+            511,
+            512,
+            513,
+            514,
+            515,
+            516,
+            517,
+            518,
+            519,
+            520,
+            521,
+            522,
+            523
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONTROL SYSTEM CONTRACTOR SHALL PROVIDE A COMPLETE DIRECT DIGITAL CONTROL SYSTEM. PROVIDE AND INSTALL ALL NECESSARY WIRING TO MAKE SYSTEM OPERATIONAL REFER TO CONTROL DIAGRAMS AND SEQUENCE OF OPERATION ON DRAWINGS.",
+          "word_ids": [
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-controller-network",
+      "page": 27,
+      "bbox": [
+        1365,
+        241,
+        1760,
+        260
+      ],
+      "expected": "CONTROLS CONTRACTOR SHALL CONNECT CONTROLLERS TO THE CONTROL NETWORK",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONTROLS CONTRACTOR SHALL CONNECT CONTROLLERS TO THE CONTROL NETWORK",
+          "word_ids": [
+            525,
+            526,
+            527,
+            528,
+            529,
+            530,
+            531,
+            532,
+            533
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONTROLS CONTRACTOR SHALL CONNECT CONTROLLERS TO THE CONTROL NETWORK",
+          "word_ids": [
+            139,
+            140,
+            141,
+            142,
+            143,
+            144,
+            145,
+            146,
+            147
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-thermographic-plan",
+      "page": 27,
+      "bbox": [
+        1365,
+        276,
+        1755,
+        295
+      ],
+      "expected": "CONTROLS CONTRACTOR SHALL PROVIDE A THERMOGRAPHIC FLOOR PLAN INDICATING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONTROLS CONTRACTOR SHALL PROVIDE A THERMOGRAPHIC FLOOR PLAN INDICATING",
+          "word_ids": [
+            539,
+            540,
+            541,
+            542,
+            543,
+            544,
+            545,
+            546,
+            547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONTROLS CONTRACTOR SHALL PROVIDE A THERMOGRAPHIC FLOOR PLAN INDICATING",
+          "word_ids": [
+            760,
+            761,
+            762,
+            763,
+            764,
+            765,
+            766,
+            767,
+            768
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-32-device-trunk",
+      "page": 27,
+      "bbox": [
+        1365,
+        306,
+        1710,
+        325
+      ],
+      "expected": "NO MORE THAN 32 DEVICES ALLOWED ON SINGLE COMMUNICATION TRUNK.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO MORE THAN 32 DEVICES ALLOWED ON SINGLE COMMUNICATION TRUNK.",
+          "word_ids": [
+            550,
+            551,
+            552,
+            553,
+            554,
+            555,
+            556,
+            557,
+            558,
+            559
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO MORE THAN 32 DEVICES ALLOWED ON SINGLE COMMUNICATION TRUNK.",
+          "word_ids": [
+            192,
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200,
+            201
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-btl-listed",
+      "page": 27,
+      "bbox": [
+        1365,
+        352,
+        1790,
+        371
+      ],
+      "expected": "ALL CONTROL DEVICES AND CONTROLLERS SHALL BE BTL LISTED (BACNET TESTING LABORATORY).",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALL CONTROL DEVICES AND CONTROLLERS SHALL BE BTL LISTED (BACNET TESTING LABORATORY).",
+          "word_ids": [
+            571,
+            572,
+            573,
+            574,
+            575,
+            576,
+            577,
+            578,
+            579,
+            580,
+            581,
+            582
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALL CONTROL DEVICES AND CONTROLLERS SHALL BE BTL LISTED (BACNET TESTING LABORATORY).",
+          "word_ids": [
+            233,
+            234,
+            235,
+            236,
+            237,
+            238,
+            239,
+            240,
+            241,
+            242,
+            243,
+            244
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-bacnet-ip",
+      "page": 27,
+      "bbox": [
+        275,
+        494,
+        335,
+        515
+      ],
+      "expected": "BACNET IP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BACNET IP",
+          "word_ids": [
+            589,
+            590
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BACNET IP",
+          "word_ids": [
+            757,
+            758
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-mstp-trunk-1",
+      "page": 27,
+      "bbox": [
+        425,
+        476,
+        520,
+        496
+      ],
+      "expected": "MSTP TRUNK XXXX1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MSTP TRUNK XXXX1",
+          "word_ids": [
+            609,
+            610,
+            611
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MSTP TRUNK XXXX1",
+          "word_ids": [
+            743,
+            744,
+            745
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-mstp-trunk-2",
+      "page": 27,
+      "bbox": [
+        425,
+        652,
+        520,
+        672
+      ],
+      "expected": "MSTP TRUNK XXXX2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MSTP TRUNK XXXX2",
+          "word_ids": [
+            606,
+            607,
+            608
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MSTP TRUNK XXXX2",
+          "word_ids": [
+            422,
+            423,
+            424
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-bacnet-mstp-network",
+      "page": 28,
+      "bbox": [
+        915,
+        500,
+        1040,
+        536
+      ],
+      "expected": "BACNET/MSTP NETWORK CONNECTION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BACNET/MSTP NETWORK CONNECTION",
+          "word_ids": [
+            824,
+            829,
+            830
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BACNET/MSTP NETWORK CONNECTION",
+          "word_ids": [
+            398,
+            465,
+            466
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-network-wire",
+      "page": 28,
+      "bbox": [
+        915,
+        537,
+        1035,
+        556
+      ],
+      "expected": "*22AWG/2C SHIELDED*",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "*22AWG/2C SHIELDED*",
+          "word_ids": [
+            827,
+            828
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "*22AWG/2C SHIELDED*",
+          "word_ids": [
+            468,
+            469
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-co2-sensor-legend",
+      "page": 27,
+      "bbox": [
+        2430,
+        191,
+        2560,
+        211
+      ],
+      "expected": "CARBON DIOXIDE SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CARBON DIOXIDE SENSOR",
+          "word_ids": [
+            186,
+            187,
+            188
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CARBON DIOXIDE SENSOR",
+          "word_ids": [
+            69,
+            70,
+            71
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-room-temperature-sensor-legend",
+      "page": 27,
+      "bbox": [
+        2430,
+        608,
+        2575,
+        628
+      ],
+      "expected": "ROOM TEMPERATURE SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ROOM TEMPERATURE SENSOR",
+          "word_ids": [
+            244,
+            245,
+            246
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ROOM TEMPERATURE SENSOR",
+          "word_ids": [
+            368,
+            369,
+            370
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-motorized-actuator-legend",
+      "page": 27,
+      "bbox": [
+        2430,
+        454,
+        2550,
+        474
+      ],
+      "expected": "MOTORIZED ACTUATOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MOTORIZED ACTUATOR",
+          "word_ids": [
+            284,
+            285
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MOTORIZED ACTUATOR",
+          "word_ids": [
+            291,
+            292
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-erv-occupied",
+      "page": 28,
+      "bbox": [
+        2290,
+        204,
+        2735,
+        222
+      ],
+      "expected": "ENERGY RECOVERY VENTILATOR (ERV) SHALL BE ENERGIZED DURING OCCUPIED HOURS. ERV SHALL BE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ENERGY RECOVERY VENTILATOR (ERV) SHALL BE ENERGIZED DURING OCCUPIED HOURS. ERV SHALL BE",
+          "word_ids": [
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ENERGY RECOVERY VENTILATOR (ERV) SHALL BE ENERGIZED DURING OCCUPIED HOURS. ERV SHALL BE",
+          "word_ids": [
+            1328,
+            1329,
+            1330,
+            1331,
+            1332,
+            1333,
+            1334,
+            1335,
+            1336,
+            1337,
+            1338,
+            1339,
+            1340
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-erv-leaving-air-alarm",
+      "page": 28,
+      "bbox": [
+        2290,
+        236,
+        2735,
+        254
+      ],
+      "expected": "BMS SHALL MONITOR LEAVING AIR TEMPERATURE AND SHALL ALARM IF SUPPLY TEMPERATURE IS BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BMS SHALL MONITOR LEAVING AIR TEMPERATURE AND SHALL ALARM IF SUPPLY TEMPERATURE IS BELOW",
+          "word_ids": [
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BMS SHALL MONITOR LEAVING AIR TEMPERATURE AND SHALL ALARM IF SUPPLY TEMPERATURE IS BELOW",
+          "word_ids": [
+            292,
+            293,
+            294,
+            295,
+            296,
+            297,
+            298,
+            299,
+            300,
+            301,
+            302,
+            303,
+            304,
+            305
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-erv-defrost",
+      "page": 28,
+      "bbox": [
+        2290,
+        268,
+        2725,
+        286
+      ],
+      "expected": "UNIT INTERNAL CONTROLLER SHALL CONTROL DEFROST CYCLE BASED ON DIFFERENTIAL PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UNIT INTERNAL CONTROLLER SHALL CONTROL DEFROST CYCLE BASED ON DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138,
+            139,
+            140
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UNIT INTERNAL CONTROLLER SHALL CONTROL DEFROST CYCLE BASED ON DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            313,
+            314,
+            315,
+            316,
+            317,
+            318,
+            319,
+            320,
+            321,
+            322,
+            323
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-erv-economizer",
+      "page": 28,
+      "bbox": [
+        2290,
+        300,
+        2735,
+        318
+      ],
+      "expected": "UNIT CONTROLLER SHALL CONTROL ECONOMIZER CYCLE. ECONOMIZER CYCLE SHALL STOP WHEEL.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UNIT CONTROLLER SHALL CONTROL ECONOMIZER CYCLE. ECONOMIZER CYCLE SHALL STOP WHEEL.",
+          "word_ids": [
+            144,
+            145,
+            146,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UNIT CONTROLLER SHALL CONTROL ECONOMIZER CYCLE. ECONOMIZER CYCLE SHALL STOP WHEEL.",
+          "word_ids": [
+            335,
+            336,
+            337,
+            338,
+            339,
+            340,
+            341,
+            342,
+            343,
+            344,
+            345
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-erv-filter-alarm",
+      "page": 28,
+      "bbox": [
+        2290,
+        332,
+        2670,
+        350
+      ],
+      "expected": "WHEN FILTER RESISTANCE IS GREATER THAN 0.50\" W.C. (ADJUSTABLE) BMS TO ALARM.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WHEN FILTER RESISTANCE IS GREATER THAN 0.50\" W.C. (ADJUSTABLE) BMS TO ALARM.",
+          "word_ids": [
+            165,
+            166,
+            167,
+            168,
+            169,
+            170,
+            171,
+            172,
+            173,
+            174,
+            175,
+            176
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WHEN FILTER RESISTANCE IS GREATER THAN 0.50\" W.C. (ADJUSTABLE) BMS TO ALARM.",
+          "word_ids": [
+            364,
+            365,
+            366,
+            367,
+            368,
+            369,
+            370,
+            371,
+            372,
+            373,
+            374,
+            375
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-supply-fan",
+      "page": 28,
+      "bbox": [
+        2255,
+        473,
+        2725,
+        492
+      ],
+      "expected": "THE SUPPLY FAN SHALL RUN ANYTIME THE UNIT IS COMMANDED TO RUN, UNLESS SHUTDOWN ON SAFETIES.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THE SUPPLY FAN SHALL RUN ANYTIME THE UNIT IS COMMANDED TO RUN, UNLESS SHUTDOWN ON SAFETIES.",
+          "word_ids": [
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200,
+            201
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THE SUPPLY FAN SHALL RUN ANYTIME THE UNIT IS COMMANDED TO RUN, UNLESS SHUTDOWN ON SAFETIES.",
+          "word_ids": [
+            406,
+            407,
+            408,
+            409,
+            410,
+            411,
+            412,
+            413,
+            414,
+            415,
+            416,
+            417,
+            418,
+            419,
+            420,
+            421
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-cooling-zone-temperature",
+      "page": 28,
+      "bbox": [
+        2255,
+        519,
+        2720,
+        538
+      ],
+      "expected": "THE CONTROLLER SHALL MEASURE THE ZONE TEMPERATURE AND THE UNIT SHALL STAGE THE COOLING TO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THE CONTROLLER SHALL MEASURE THE ZONE TEMPERATURE AND THE UNIT SHALL STAGE THE COOLING TO",
+          "word_ids": [
+            218,
+            219,
+            220,
+            221,
+            222,
+            223,
+            224,
+            225,
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THE CONTROLLER SHALL MEASURE THE ZONE TEMPERATURE AND THE UNIT SHALL STAGE THE COOLING TO",
+          "word_ids": [
+            439,
+            440,
+            441,
+            442,
+            443,
+            444,
+            445,
+            446,
+            447,
+            448,
+            449,
+            450,
+            451,
+            452,
+            453
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-cooling-oat-enable",
+      "page": 28,
+      "bbox": [
+        2275,
+        578,
+        2530,
+        597
+      ],
+      "expected": "OUTSIDE AIR TEMPERATURE IS GREATER THAN 60°F (ADJ.).",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMPERATURE IS GREATER THAN 60°F (ADJ.).",
+          "word_ids": [
+            251,
+            252,
+            253,
+            254,
+            255,
+            256,
+            257,
+            258
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMPERATURE IS GREATER THAN 60°F (ADJ.).",
+          "word_ids": [
+            476,
+            477,
+            478,
+            479,
+            480,
+            481,
+            482,
+            483
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-heating-zone-temperature",
+      "page": 28,
+      "bbox": [
+        2255,
+        709,
+        2715,
+        728
+      ],
+      "expected": "THE CONTROLLER SHALL MEASURE THE ZONE TEMPERATURE AND THE UNIT SHALL STAGE THE HEATING TO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THE CONTROLLER SHALL MEASURE THE ZONE TEMPERATURE AND THE UNIT SHALL STAGE THE HEATING TO",
+          "word_ids": [
+            295,
+            296,
+            297,
+            298,
+            299,
+            300,
+            301,
+            302,
+            303,
+            304,
+            305,
+            306,
+            307,
+            308,
+            309
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THE CONTROLLER SHALL MEASURE THE ZONE TEMPERATURE AND THE UNIT SHALL STAGE THE HEATING TO",
+          "word_ids": [
+            1200,
+            1201,
+            1202,
+            1203,
+            1204,
+            1205,
+            1206,
+            1207,
+            1208,
+            1209,
+            1210,
+            1211,
+            1212,
+            1213,
+            1214
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-heating-oat-enable",
+      "page": 28,
+      "bbox": [
+        2275,
+        779,
+        2515,
+        799
+      ],
+      "expected": "OUTSIDE AIR TEMPERATURE IS LESS THAN 65°F (ADJ.).",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMPERATURE IS LESS THAN 65°F (ADJ.).",
+          "word_ids": [
+            328,
+            329,
+            330,
+            331,
+            332,
+            333,
+            334,
+            335
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMPERATURE IS LESS THAN 65°F (ADJ.).",
+          "word_ids": [
+            1151,
+            1152,
+            1153,
+            1154,
+            1155,
+            1156,
+            1157,
+            1158
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-mixed-air",
+      "page": 28,
+      "bbox": [
+        2255,
+        887,
+        2545,
+        906
+      ],
+      "expected": "THE CONTROLLER SHALL MONITOR THE MIXED AIR TEMPERATURE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THE CONTROLLER SHALL MONITOR THE MIXED AIR TEMPERATURE.",
+          "word_ids": [
+            363,
+            364,
+            365,
+            366,
+            367,
+            368,
+            369,
+            370
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THE CONTROLLER SHALL MONITOR THE MIXED AIR TEMPERATURE.",
+          "word_ids": [
+            1162,
+            1163,
+            1164,
+            1165,
+            1166,
+            1167,
+            1168,
+            1169
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-supply-air",
+      "page": 28,
+      "bbox": [
+        2255,
+        921,
+        2550,
+        941
+      ],
+      "expected": "THE CONTROLLER SHALL MONITOR THE SUPPLY AIR TEMPERATURE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THE CONTROLLER SHALL MONITOR THE SUPPLY AIR TEMPERATURE.",
+          "word_ids": [
+            374,
+            375,
+            376,
+            377,
+            378,
+            379,
+            380,
+            381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THE CONTROLLER SHALL MONITOR THE SUPPLY AIR TEMPERATURE.",
+          "word_ids": [
+            1141,
+            1142,
+            1143,
+            1144,
+            1145,
+            1146,
+            1147,
+            1148
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-optimal-start",
+      "page": 28,
+      "bbox": [
+        2255,
+        990,
+        2705,
+        1010
+      ],
+      "expected": "THE UNIT SHALL USE AN OPTIMAL START ALGORITHM FOR MORNING START-UP. THIS ALGORITHM SHALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THE UNIT SHALL USE AN OPTIMAL START ALGORITHM FOR MORNING START-UP. THIS ALGORITHM SHALL",
+          "word_ids": [
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            403,
+            404,
+            405,
+            406,
+            407,
+            408
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THE UNIT SHALL USE AN OPTIMAL START ALGORITHM FOR MORNING START-UP. THIS ALGORITHM SHALL",
+          "word_ids": [
+            615,
+            616,
+            617,
+            618,
+            619,
+            620,
+            621,
+            622,
+            623,
+            624,
+            625,
+            626,
+            627,
+            628
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-override",
+      "page": 28,
+      "bbox": [
+        2255,
+        1048,
+        2730,
+        1067
+      ],
+      "expected": "A TIMED LOCAL OVERRIDE CONTROL SHALL ALLOW AN OCCUPANT TO OVERRIDE THE SCHEDULE AND PLACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "A TIMED LOCAL OVERRIDE CONTROL SHALL ALLOW AN OCCUPANT TO OVERRIDE THE SCHEDULE AND PLACE",
+          "word_ids": [
+            431,
+            432,
+            433,
+            434,
+            435,
+            436,
+            437,
+            438,
+            439,
+            440,
+            441,
+            442,
+            443,
+            444,
+            445
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "A TIMED LOCAL OVERRIDE CONTROL SHALL ALLOW AN OCCUPANT TO OVERRIDE THE SCHEDULE AND PLACE",
+          "word_ids": [
+            656,
+            657,
+            658,
+            659,
+            660,
+            661,
+            662,
+            663,
+            664,
+            665,
+            666,
+            667,
+            668,
+            669,
+            670
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-high-supply-temp-alarm",
+      "page": 28,
+      "bbox": [
+        2275,
+        1118,
+        2655,
+        1137
+      ],
+      "expected": "HIGH SUPPLY AIR TEMP: IF THE SUPPLY AIR TEMPERATURE IS GREATER THAN 120°F (ADJ.).",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH SUPPLY AIR TEMP: IF THE SUPPLY AIR TEMPERATURE IS GREATER THAN 120°F (ADJ.).",
+          "word_ids": [
+            476,
+            477,
+            478,
+            479,
+            480,
+            481,
+            482,
+            483,
+            484,
+            485,
+            486,
+            487,
+            488,
+            489
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH SUPPLY AIR TEMP: IF THE SUPPLY AIR TEMPERATURE IS GREATER THAN 120°F (ADJ.).",
+          "word_ids": [
+            738,
+            739,
+            740,
+            741,
+            742,
+            743,
+            744,
+            745,
+            746,
+            747,
+            748,
+            749,
+            750,
+            751
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-filter-change-alarm",
+      "page": 28,
+      "bbox": [
+        2275,
+        1238,
+        2710,
+        1257
+      ],
+      "expected": "FINAL FILTER CHANGE REQUIRED: FINAL FILTER HAS BEEN IN USE FOR MORE THAN 2200 HRS. (ADJ.).",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FINAL FILTER CHANGE REQUIRED: FINAL FILTER HAS BEEN IN USE FOR MORE THAN 2200 HRS. (ADJ.).",
+          "word_ids": [
+            546,
+            547,
+            548,
+            549,
+            550,
+            551,
+            552,
+            553,
+            554,
+            555,
+            556,
+            557,
+            558,
+            559,
+            560,
+            561
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FINAL FILTER CHANGE REQUIRED: FINAL FILTER HAS BEEN IN USE FOR MORE THAN 2200 HRS. (ADJ.).",
+          "word_ids": [
+            808,
+            809,
+            810,
+            811,
+            812,
+            813,
+            814,
+            815,
+            816,
+            817,
+            818,
+            819,
+            820,
+            821,
+            822,
+            823
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-exhaust-fan-off-warmup",
+      "page": 28,
+      "bbox": [
+        1765,
+        170,
+        2135,
+        189
+      ],
+      "expected": "EXHAUST FAN SHALL REMAIN OFF DURING MORNING WARM UP AND COOL DOWN.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST FAN SHALL REMAIN OFF DURING MORNING WARM UP AND COOL DOWN.",
+          "word_ids": [
+            1288,
+            1289,
+            1290,
+            1291,
+            1292,
+            1293,
+            1294,
+            1295,
+            1296,
+            1297,
+            1298,
+            1299
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST FAN SHALL REMAIN OFF DURING MORNING WARM UP AND COOL DOWN.",
+          "word_ids": [
+            1414,
+            1415,
+            1416,
+            1417,
+            1418,
+            1419,
+            1420,
+            1421,
+            1422,
+            1423,
+            1424,
+            1425
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-exhaust-fan-occupied",
+      "page": 28,
+      "bbox": [
+        1765,
+        188,
+        2205,
+        207
+      ],
+      "expected": "EXHAUST FANS SHALL BE ENABLED THROUGH BUILDING AUTOMATION SYSTEM DURING OCCUPIED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST FANS SHALL BE ENABLED THROUGH BUILDING AUTOMATION SYSTEM DURING OCCUPIED",
+          "word_ids": [
+            1271,
+            1272,
+            1273,
+            1274,
+            1275,
+            1276,
+            1277,
+            1278,
+            1279,
+            1280,
+            1281
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST FANS SHALL BE ENABLED THROUGH BUILDING AUTOMATION SYSTEM DURING OCCUPIED",
+          "word_ids": [
+            1362,
+            1363,
+            1364,
+            1365,
+            1366,
+            1367,
+            1368,
+            1369,
+            1370,
+            1371,
+            1372
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-exhaust-fan-status",
+      "page": 28,
+      "bbox": [
+        1765,
+        215,
+        2145,
+        234
+      ],
+      "expected": "EXHAUST FAN STATUS SHALL BE MONITORED BY THE BUILDING AUTOMATION SYSTEM.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST FAN STATUS SHALL BE MONITORED BY THE BUILDING AUTOMATION SYSTEM.",
+          "word_ids": [
+            1251,
+            1252,
+            1253,
+            1254,
+            1255,
+            1256,
+            1257,
+            1258,
+            1259,
+            1260,
+            1261
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST FAN STATUS SHALL BE MONITORED BY THE BUILDING AUTOMATION SYSTEM.",
+          "word_ids": [
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-exhaust-fan-current-alarm",
+      "page": 28,
+      "bbox": [
+        1765,
+        272,
+        2180,
+        291
+      ],
+      "expected": "AN ALARM CONDITION SHALL BE INDICATED WHENEVER THE EXHAUST FAN CURRENT SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AN ALARM CONDITION SHALL BE INDICATED WHENEVER THE EXHAUST FAN CURRENT SENSOR",
+          "word_ids": [
+            1237,
+            1238,
+            1239,
+            1240,
+            1241,
+            1242,
+            1243,
+            1244,
+            1245,
+            1246,
+            1247,
+            1248
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AN ALARM CONDITION SHALL BE INDICATED WHENEVER THE EXHAUST FAN CURRENT SENSOR",
+          "word_ids": [
+            381,
+            382,
+            383,
+            384,
+            385,
+            386,
+            387,
+            388,
+            389,
+            390,
+            391,
+            392
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m603-oau-occupied",
+      "page": 29,
+      "bbox": [
+        1700,
+        179,
+        2150,
+        198
+      ],
+      "expected": "THE SUPPLY FANS ON OUTSIDE AIR UNITS (OAU-B1 AND OAU-B2) SHALL ENERGIZE DURING OCCUPIED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THE SUPPLY FANS ON OUTSIDE AIR UNITS (OAU-B1 AND OAU-B2) SHALL ENERGIZE DURING OCCUPIED",
+          "word_ids": [
+            828,
+            829,
+            830,
+            831,
+            832,
+            833,
+            834,
+            835,
+            836,
+            837,
+            838,
+            839,
+            840,
+            841
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THE SUPPLY FANS ON OUTSIDE AIR UNITS (OAU-B1 AND OAU-B2) SHALL ENERGIZE DURING OCCUPIED",
+          "word_ids": [
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m603-oau-warmup-off",
+      "page": 29,
+      "bbox": [
+        1720,
+        214,
+        2085,
+        233
+      ],
+      "expected": "SUPPLY FAN SHALL REMAIN OFF DURING MORNING WARM UP AND COOL DOWN.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN SHALL REMAIN OFF DURING MORNING WARM UP AND COOL DOWN.",
+          "word_ids": [
+            814,
+            815,
+            816,
+            817,
+            818,
+            819,
+            820,
+            821,
+            822,
+            823,
+            824,
+            825
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN SHALL REMAIN OFF DURING MORNING WARM UP AND COOL DOWN.",
+          "word_ids": [
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m603-oau-heating-oat",
+      "page": 29,
+      "bbox": [
+        1700,
+        249,
+        2155,
+        268
+      ],
+      "expected": "WHENEVER OUTSIDE AIR TEMPERATURE IS BELOW 35°F (ADJUSTABLE), HEATING MODE SHALL BE ENABLED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WHENEVER OUTSIDE AIR TEMPERATURE IS BELOW 35°F (ADJUSTABLE), HEATING MODE SHALL BE ENABLED",
+          "word_ids": [
+            859,
+            860,
+            861,
+            862,
+            863,
+            864,
+            865,
+            866,
+            867,
+            868,
+            869,
+            870,
+            871
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WHENEVER OUTSIDE AIR TEMPERATURE IS BELOW 35°F (ADJUSTABLE), HEATING MODE SHALL BE ENABLED",
+          "word_ids": [
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m603-oau-gas-valve",
+      "page": 29,
+      "bbox": [
+        1720,
+        284,
+        2145,
+        303
+      ],
+      "expected": "DUCT FURNACE GAS VALVE SHALL MODULATE TO MAINTAIN LEAVING AIR TEMPERATURE OF 35°F",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT FURNACE GAS VALVE SHALL MODULATE TO MAINTAIN LEAVING AIR TEMPERATURE OF 35°F",
+          "word_ids": [
+            844,
+            845,
+            846,
+            847,
+            848,
+            849,
+            850,
+            851,
+            852,
+            853,
+            854,
+            855,
+            856
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT FURNACE GAS VALVE SHALL MODULATE TO MAINTAIN LEAVING AIR TEMPERATURE OF 35°F",
+          "word_ids": [
+            232,
+            233,
+            234,
+            235,
+            236,
+            237,
+            238,
+            239,
+            240,
+            241,
+            242,
+            243,
+            244
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m603-oau-cooling-enable",
+      "page": 29,
+      "bbox": [
+        1700,
+        329,
+        2165,
+        349
+      ],
+      "expected": "WHENEVER OUTSIDE AIR TEMPERATURE IS ABOVE 85°F, COOLING SHALL BE ENABLED ON OUTSIDE AIR FANS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WHENEVER OUTSIDE AIR TEMPERATURE IS ABOVE 85°F, COOLING SHALL BE ENABLED ON OUTSIDE AIR FANS",
+          "word_ids": [
+            877,
+            878,
+            879,
+            880,
+            881,
+            882,
+            883,
+            884,
+            885,
+            886,
+            887,
+            888,
+            889,
+            890,
+            891
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WHENEVER OUTSIDE AIR TEMPERATURE IS ABOVE 85°F, COOLING SHALL BE ENABLED ON OUTSIDE AIR FANS",
+          "word_ids": [
+            250,
+            251,
+            252,
+            253,
+            254,
+            255,
+            256,
+            257,
+            258,
+            259,
+            260,
+            261,
+            262,
+            263,
+            264
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m603-oau-filter-alarm",
+      "page": 29,
+      "bbox": [
+        1720,
+        423,
+        2040,
+        442
+      ],
+      "expected": "FILTER DIFFERENTIAL PRESSURE GREATER THAN 0.25\" W.C. (ADJUSTABLE).",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FILTER DIFFERENTIAL PRESSURE GREATER THAN 0.25\" W.C. (ADJUSTABLE).",
+          "word_ids": [
+            924,
+            925,
+            926,
+            927,
+            928,
+            929,
+            930,
+            931
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FILTER DIFFERENTIAL PRESSURE GREATER THAN 0.25\" W.C. (ADJUSTABLE).",
+          "word_ids": [
+            465,
+            466,
+            467,
+            468,
+            469,
+            470,
+            471,
+            472
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m603-oau-low-leaving-air",
+      "page": 29,
+      "bbox": [
+        1720,
+        448,
+        1995,
+        467
+      ],
+      "expected": "LOW LEAVING AIR TEMPERATURE, BELOW 20°F (ADJUSTABLE).",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOW LEAVING AIR TEMPERATURE, BELOW 20°F (ADJUSTABLE).",
+          "word_ids": [
+            933,
+            934,
+            935,
+            936,
+            937,
+            938,
+            939
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOW LEAVING AIR TEMPERATURE, BELOW 20°F (ADJUSTABLE).",
+          "word_ids": [
+            474,
+            475,
+            476,
+            477,
+            478,
+            479,
+            480
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m603-oau-high-duct-static",
+      "page": 29,
+      "bbox": [
+        1720,
+        496,
+        2140,
+        515
+      ],
+      "expected": "HIGH DUCT STATIC SHALL SHUT DOWN UNIT WHENEVER DUCT STATIC IS GREATER THAN 3\" W.C.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH DUCT STATIC SHALL SHUT DOWN UNIT WHENEVER DUCT STATIC IS GREATER THAN 3\" W.C.",
+          "word_ids": [
+            949,
+            950,
+            951,
+            952,
+            953,
+            954,
+            955,
+            956,
+            957,
+            958,
+            959,
+            960,
+            961,
+            962,
+            963
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH DUCT STATIC SHALL SHUT DOWN UNIT WHENEVER DUCT STATIC IS GREATER THAN 3\" W.C.",
+          "word_ids": [
+            490,
+            491,
+            492,
+            493,
+            494,
+            495,
+            496,
+            497,
+            498,
+            499,
+            500,
+            501,
+            502,
+            503,
+            504
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m603-oau-damper-open",
+      "page": 29,
+      "bbox": [
+        2245,
+        203,
+        2730,
+        222
+      ],
+      "expected": "THE SUPPLY FAN IS ON, CONTROL DAMPERS (CD-B1, CD-OA1, AND CD-OA2) SHALL BE FULLY OPEN.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THE SUPPLY FAN IS ON, CONTROL DAMPERS (CD-B1, CD-OA1, AND CD-OA2) SHALL BE FULLY OPEN. WHEN THE",
+          "word_ids": [
+            774,
+            775,
+            776,
+            777,
+            778,
+            779,
+            780,
+            781,
+            782,
+            783,
+            784,
+            785,
+            786,
+            787,
+            788,
+            789,
+            790
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THE SUPPLY FAN IS ON, CONTROL DAMPERS (CD-B1, CD-OA1, AND CD-OA2) SHALL BE FULLY OPEN. WHEN THE",
+          "word_ids": [
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

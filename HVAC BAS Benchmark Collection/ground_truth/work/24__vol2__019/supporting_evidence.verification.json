@@ -1,0 +1,29 @@
+{
+  "document_id": "24__vol2__019",
+  "source_sha256": "b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10",
+  "annotation_sha256": "ed969106ee3443153aaf7ecc500a65917a08ec8db5701b580dc00cc41745c72e",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 0,
+  "checks": [],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "rank24-source-limitations",
+      "actual": 6,
+      "expected": 6,
+      "pass": true
+    },
+    {
+      "id": "rank24-supporting-visual-evidence",
+      "actual": 6,
+      "expected": 6,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

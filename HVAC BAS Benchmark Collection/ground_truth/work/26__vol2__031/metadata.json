@@ -1,0 +1,603 @@
+{
+  "document_id": "26__vol2__031",
+  "module_role": "Cover/title facts, full 90-page visual ledger and scale boundary.",
+  "tables": [],
+  "project": {
+    "project_name_as_printed": "RENOVATE WAREHOUSE FOR PANDEMIC PREPAREDNESS",
+    "facility_as_printed": "HARRY S. TRUMAN MEM. VETERANS HOSPITAL",
+    "location_as_printed": "800 HOSPITAL DR., COLUMBIA MO 65201",
+    "project_number_as_printed": "589A4-20-158",
+    "architect_engineer_of_record_as_printed": "IMEG Corp.",
+    "issue_as_printed": "BID SET 03/24/2021",
+    "assertion_ids": [
+      "cover-project",
+      "cover-location",
+      "cover-issue"
+    ]
+  },
+  "scale_semantics": {
+    "stated_scale_records": [],
+    "graphic_scale_bar_status": "No graphic scale bar is asserted as a measurement source.",
+    "takeoff_scale_status": "No global scale is asserted across this mixed source. No distance, area, duct/pipe length or physical quantity is derived from drawings."
+  },
+  "visual_review_pages": [
+    {
+      "page": 1,
+      "sheet_context": "PDF 01",
+      "render": "reviews/26__vol2__031/p1-p1-full-poppler.png",
+      "finding": "Cover/title source visually reviewed; project, facility, location, issue and design-team context retained."
+    },
+    {
+      "page": 2,
+      "sheet_context": "PDF 02",
+      "render": "reviews/26__vol2__031/p2-p2-full-poppler.png",
+      "finding": "General/cover/civil/architectural source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 3,
+      "sheet_context": "PDF 03",
+      "render": "reviews/26__vol2__031/p3-p3-full-poppler.png",
+      "finding": "General/cover/civil/architectural source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 4,
+      "sheet_context": "PDF 04",
+      "render": "reviews/26__vol2__031/p4-p4-full-poppler.png",
+      "finding": "General/cover/civil/architectural source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 5,
+      "sheet_context": "PDF 05",
+      "render": "reviews/26__vol2__031/p5-p5-full-poppler.png",
+      "finding": "General/cover/civil/architectural source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 6,
+      "sheet_context": "PDF 06",
+      "render": "reviews/26__vol2__031/p6-p6-full-poppler.png",
+      "finding": "General/cover/civil/architectural source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 7,
+      "sheet_context": "PDF 07",
+      "render": "reviews/26__vol2__031/p7-p7-full-poppler.png",
+      "finding": "General/cover/civil/architectural source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 8,
+      "sheet_context": "PDF 08",
+      "render": "reviews/26__vol2__031/p8-p8-full-poppler.png",
+      "finding": "General/cover/civil/architectural source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 9,
+      "sheet_context": "PDF 09",
+      "render": "reviews/26__vol2__031/p9-p9-full-poppler.png",
+      "finding": "General/cover/civil/architectural source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 10,
+      "sheet_context": "PDF 10",
+      "render": "reviews/26__vol2__031/p10-p10-full-poppler.png",
+      "finding": "General/cover/civil/architectural source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 11,
+      "sheet_context": "PDF 11",
+      "render": "reviews/26__vol2__031/p11-p11-full-poppler.png",
+      "finding": "General/cover/civil/architectural source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 12,
+      "sheet_context": "PDF 12",
+      "render": "reviews/26__vol2__031/p12-p12-full-poppler.png",
+      "finding": "General/cover/civil/architectural source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 13,
+      "sheet_context": "PDF 13",
+      "render": "reviews/26__vol2__031/p13-p13-full-poppler.png",
+      "finding": "General/cover/civil/architectural source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 14,
+      "sheet_context": "PDF 14",
+      "render": "reviews/26__vol2__031/p14-p14-full-poppler.png",
+      "finding": "General/cover/civil/architectural source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 15,
+      "sheet_context": "PDF 15",
+      "render": "reviews/26__vol2__031/p15-p15-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 16,
+      "sheet_context": "PDF 16",
+      "render": "reviews/26__vol2__031/p16-p16-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 17,
+      "sheet_context": "PDF 17",
+      "render": "reviews/26__vol2__031/p17-p17-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 18,
+      "sheet_context": "PDF 18",
+      "render": "reviews/26__vol2__031/p18-p18-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 19,
+      "sheet_context": "PDF 19",
+      "render": "reviews/26__vol2__031/p19-p19-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 20,
+      "sheet_context": "PDF 20",
+      "render": "reviews/26__vol2__031/p20-p20-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 21,
+      "sheet_context": "PDF 21",
+      "render": "reviews/26__vol2__031/p21-p21-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 22,
+      "sheet_context": "PDF 22",
+      "render": "reviews/26__vol2__031/p22-p22-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 23,
+      "sheet_context": "PDF 23",
+      "render": "reviews/26__vol2__031/p23-p23-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 24,
+      "sheet_context": "PDF 24",
+      "render": "reviews/26__vol2__031/p24-p24-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 25,
+      "sheet_context": "PDF 25",
+      "render": "reviews/26__vol2__031/p25-p25-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 26,
+      "sheet_context": "PDF 26",
+      "render": "reviews/26__vol2__031/p26-p26-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 27,
+      "sheet_context": "PDF 27",
+      "render": "reviews/26__vol2__031/p27-p27-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 28,
+      "sheet_context": "PDF 28",
+      "render": "reviews/26__vol2__031/p28-p28-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 29,
+      "sheet_context": "PDF 29",
+      "render": "reviews/26__vol2__031/p29-p29-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 30,
+      "sheet_context": "PDF 30",
+      "render": "reviews/26__vol2__031/p30-p30-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 31,
+      "sheet_context": "PDF 31",
+      "render": "reviews/26__vol2__031/p31-p31-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 32,
+      "sheet_context": "PDF 32",
+      "render": "reviews/26__vol2__031/p32-p32-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 33,
+      "sheet_context": "PDF 33",
+      "render": "reviews/26__vol2__031/p33-p33-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 34,
+      "sheet_context": "PDF 34",
+      "render": "reviews/26__vol2__031/p34-p34-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 35,
+      "sheet_context": "PDF 35",
+      "render": "reviews/26__vol2__031/p35-p35-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 36,
+      "sheet_context": "PDF 36",
+      "render": "reviews/26__vol2__031/p36-p36-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 37,
+      "sheet_context": "PDF 37",
+      "render": "reviews/26__vol2__031/p37-p37-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 38,
+      "sheet_context": "PDF 38",
+      "render": "reviews/26__vol2__031/p38-p38-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 39,
+      "sheet_context": "PDF 39",
+      "render": "reviews/26__vol2__031/p39-p39-full-poppler.png",
+      "finding": "Architectural/structural coordinated source sheet visually reviewed."
+    },
+    {
+      "page": 40,
+      "sheet_context": "PDF 40",
+      "render": "reviews/26__vol2__031/p40-p40-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 41,
+      "sheet_context": "PDF 41",
+      "render": "reviews/26__vol2__031/p41-p41-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 42,
+      "sheet_context": "PDF 42",
+      "render": "reviews/26__vol2__031/p42-p42-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 43,
+      "sheet_context": "PDF 43",
+      "render": "reviews/26__vol2__031/p43-p43-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 44,
+      "sheet_context": "PDF 44",
+      "render": "reviews/26__vol2__031/p44-p44-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 45,
+      "sheet_context": "PDF 45",
+      "render": "reviews/26__vol2__031/p45-p45-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 46,
+      "sheet_context": "PDF 46",
+      "render": "reviews/26__vol2__031/p46-p46-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 47,
+      "sheet_context": "PDF 47",
+      "render": "reviews/26__vol2__031/p47-p47-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 48,
+      "sheet_context": "PDF 48",
+      "render": "reviews/26__vol2__031/p48-p48-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 49,
+      "sheet_context": "PDF 49",
+      "render": "reviews/26__vol2__031/p49-p49-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 50,
+      "sheet_context": "PDF 50",
+      "render": "reviews/26__vol2__031/p50-p50-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 51,
+      "sheet_context": "PDF 51",
+      "render": "reviews/26__vol2__031/p51-p51-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 52,
+      "sheet_context": "PDF 52",
+      "render": "reviews/26__vol2__031/p52-p52-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 53,
+      "sheet_context": "PDF 53",
+      "render": "reviews/26__vol2__031/p53-p53-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 54,
+      "sheet_context": "PDF 54",
+      "render": "reviews/26__vol2__031/p54-p54-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 55,
+      "sheet_context": "PDF 55",
+      "render": "reviews/26__vol2__031/p55-p55-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 56,
+      "sheet_context": "PDF 56",
+      "render": "reviews/26__vol2__031/p56-p56-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 57,
+      "sheet_context": "PDF 57",
+      "render": "reviews/26__vol2__031/p57-p57-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 58,
+      "sheet_context": "PDF 58",
+      "render": "reviews/26__vol2__031/p58-p58-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 59,
+      "sheet_context": "PDF 59",
+      "render": "reviews/26__vol2__031/p59-p59-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 60,
+      "sheet_context": "PDF 60",
+      "render": "reviews/26__vol2__031/p60-p60-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 61,
+      "sheet_context": "PDF 61",
+      "render": "reviews/26__vol2__031/p61-p61-full-poppler.png",
+      "finding": "Mechanical new-work or demolition plan/detail source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 62,
+      "sheet_context": "PDF 62",
+      "render": "reviews/26__vol2__031/p62-p62-full-poppler.png",
+      "finding": "Mechanical diagram/detail/control source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 63,
+      "sheet_context": "PDF 63",
+      "render": "reviews/26__vol2__031/p63-p63-full-poppler.png",
+      "finding": "Mechanical diagram/detail/control source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 64,
+      "sheet_context": "PDF 64",
+      "render": "reviews/26__vol2__031/p64-p64-full-poppler.png",
+      "finding": "Mechanical diagram/detail/control source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 65,
+      "sheet_context": "PDF 65",
+      "render": "reviews/26__vol2__031/p65-p65-full-poppler.png",
+      "finding": "Mechanical diagram/detail/control source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 66,
+      "sheet_context": "PDF 66",
+      "render": "reviews/26__vol2__031/p66-p66-full-poppler.png",
+      "finding": "Mechanical diagram/detail/control source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 67,
+      "sheet_context": "PDF 67",
+      "render": "reviews/26__vol2__031/p67-p67-full-poppler.png",
+      "finding": "Mechanical diagram/detail/control source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 68,
+      "sheet_context": "PDF 68",
+      "render": "reviews/26__vol2__031/p68-p68-full-poppler.png",
+      "finding": "M-400 controls/diagrams source visually reviewed; published heating-water, humidifier, AHU, VAV, BAS architecture and sequence evidence retained separately."
+    },
+    {
+      "page": 69,
+      "sheet_context": "PDF 69",
+      "render": "reviews/26__vol2__031/p69-p69-full-poppler.png",
+      "finding": "M-400 controls/diagrams source visually reviewed; published heating-water, humidifier, AHU, VAV, BAS architecture and sequence evidence retained separately."
+    },
+    {
+      "page": 70,
+      "sheet_context": "PDF 70",
+      "render": "reviews/26__vol2__031/p70-p70-full-poppler.png",
+      "finding": "Mechanical diagram/detail/control source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 71,
+      "sheet_context": "PDF 71",
+      "render": "reviews/26__vol2__031/p71-p71-full-poppler.png",
+      "finding": "M-500 mechanical schedules visually reviewed; bounded heat-exchanger, humidifier and pump schedule rows retained separately."
+    },
+    {
+      "page": 72,
+      "sheet_context": "PDF 72",
+      "render": "reviews/26__vol2__031/p72-p72-full-poppler.png",
+      "finding": "M-501 mechanical schedules visually reviewed; bounded reheat-coil and air-terminal schedule rows retained separately."
+    },
+    {
+      "page": 73,
+      "sheet_context": "PDF 73",
+      "render": "reviews/26__vol2__031/p73-p73-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 74,
+      "sheet_context": "PDF 74",
+      "render": "reviews/26__vol2__031/p74-p74-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 75,
+      "sheet_context": "PDF 75",
+      "render": "reviews/26__vol2__031/p75-p75-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 76,
+      "sheet_context": "PDF 76",
+      "render": "reviews/26__vol2__031/p76-p76-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 77,
+      "sheet_context": "PDF 77",
+      "render": "reviews/26__vol2__031/p77-p77-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 78,
+      "sheet_context": "PDF 78",
+      "render": "reviews/26__vol2__031/p78-p78-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 79,
+      "sheet_context": "PDF 79",
+      "render": "reviews/26__vol2__031/p79-p79-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 80,
+      "sheet_context": "PDF 80",
+      "render": "reviews/26__vol2__031/p80-p80-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 81,
+      "sheet_context": "PDF 81",
+      "render": "reviews/26__vol2__031/p81-p81-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 82,
+      "sheet_context": "PDF 82",
+      "render": "reviews/26__vol2__031/p82-p82-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 83,
+      "sheet_context": "PDF 83",
+      "render": "reviews/26__vol2__031/p83-p83-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 84,
+      "sheet_context": "PDF 84",
+      "render": "reviews/26__vol2__031/p84-p84-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 85,
+      "sheet_context": "PDF 85",
+      "render": "reviews/26__vol2__031/p85-p85-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 86,
+      "sheet_context": "PDF 86",
+      "render": "reviews/26__vol2__031/p86-p86-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 87,
+      "sheet_context": "PDF 87",
+      "render": "reviews/26__vol2__031/p87-p87-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 88,
+      "sheet_context": "PDF 88",
+      "render": "reviews/26__vol2__031/p88-p88-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 89,
+      "sheet_context": "PDF 89",
+      "render": "reviews/26__vol2__031/p89-p89-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 90,
+      "sheet_context": "PDF 90",
+      "render": "reviews/26__vol2__031/p90-p90-full-poppler.png",
+      "finding": "Electrical/general-notes/plan or schedule source sheet visually reviewed as coordinated context."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "cover-project",
+      "page": 1,
+      "bbox": [
+        2450,
+        1860,
+        2940,
+        2040
+      ],
+      "expected": "RENOVATE WAREHOUSE FOR",
+      "mode": "contains"
+    },
+    {
+      "id": "cover-location",
+      "page": 1,
+      "bbox": [
+        2450,
+        1960,
+        2940,
+        2040
+      ],
+      "expected": "HARRY S. TRUMAN MEM. VETERANS HOSPITAL 800 HOSPITAL DR., COLUMBIA MO 65201",
+      "mode": "contains"
+    },
+    {
+      "id": "cover-issue",
+      "page": 1,
+      "bbox": [
+        2200,
+        1880,
+        2420,
+        1980
+      ],
+      "expected": "BID SET",
+      "mode": "contains"
+    }
+  ]
+}

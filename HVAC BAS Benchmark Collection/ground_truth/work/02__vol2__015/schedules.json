@@ -1,0 +1,220 @@
+{
+  "document_id": "02__vol2__015",
+  "status": "corroborated_document_component",
+  "source_pages": [18,19,20],
+  "scope": "All populated equipment/reference schedule rows on AM601, AM602 and AM603. Rows are not physical installed quantities; repeated tag names must retain building scope. Plan-only tags, control matrices, sheet metadata and zone counts remain separate unfinished audit sections.",
+  "coordinate_system": "Displayed page, PDF points; source rotation 0; 2448 x 1584",
+  "blank_cell_semantics": "An empty pipe-delimited field is a visually blank schedule cell, not unknown work or a numeric zero. Literal dashes and comparison signs are preserved.",
+  "tables": [
+    {
+      "id":"USB-FC","page":18,"building":"Utility Services Building","title":"FAN COIL UNIT SCHEDULE","classification":"Fan coil with hot-water and electric heat",
+      "columns":"mark|location|airflow_CFM|motor_HP|ESP_inWG|filter|hot_water_total_MBH|hot_water_EAT_Fdb|hot_water_LAT_Fdb|water_GPM|EWT_F|LWT_F|coil_max_PD_ftH2O|electric_heat_kW|electric_EAT_Fdb|electric_LAT_Fdb|heater_FLA|total_FLA|MOCP|volts|phase|Hz|weight|notes",
+      "x_edges":[558.96,636.84,835.44,911.04,965.4,1010.16,1166.16,1227.72,1273.44,1313.16,1375.32,1411.68,1445.64,1543.56,1614.84,1654.44,1693.44,1748.28,1798.68,1854.96,1911.6,1964.76,2018.16,2090.04,2162.04],
+      "y_edges":[155.04,172.32,189.48,206.76,224.04],
+      "rows":[
+        "FC-1|FRESH WATER PUMP ROOM USB2|420|1/6|.3|2\" 30% PLEATED - MERV 8|20.2|45|87.2|2.0|110|90.3|10.0|4|45|74.6|14.44|15.34|20|277|1|60|87|1,2",
+        "FC-2|PURE WATER ROOM USB3|580|1/4|.3|2\" 30% PLEATED - MERV 8|25.1|45|83.2|2.5|110|90.8|10.0|6|45|77.9|21.66|22.96|30|277|1|60|95|1,2",
+        "FC-3|MEDIUM PRESSURE AIR ROOM USB4|580|1/4|.3|2\" 30% PLEATED - MERV 8|25.1|45|83.2|2.5|110|90.8|10.0|6|45|77.9|21.66|22.96|30|277|1|60|95|1,2",
+        "FC-4|HIGH PRESSURE AIR ROOM USB5|580|1/4|.3|2\" 30% PLEATED - MERV 8|25.1|45|83.2|2.5|110|90.8|10.0|6|45|77.9|21.66|22.96|30|277|1|60|95|1,2"
+      ],
+      "notes":["1. Provide with cabinet, hot water coil, electric heating coil, filters and fan.","2. Provide with single point electrical connection."],
+      "header_evidence":[{"bbox":[1230,75,1495,106],"expected":"FAN COIL UNIT SCHEDULE"},{"bbox":[835,104,1011,155],"expected":"FAN AIR FLOW (CFM) MOTOR (HP) ESP (IN WG)"},{"bbox":[1166,104,1544,155],"expected":"HEATING HOT WATER COIL TOTAL (MBH) EAT LAT FLOW (GPM) EWT LWT COIL MAX PD"},{"bbox":[1543,104,1749,155],"expected":"ELECTRIC HEAT CAPACITY (KW) EAT LAT HEATER (FLA)"},{"bbox":[1748,104,2019,155],"expected":"ELECTRICAL DATA TOTAL (FLA) MOCP VOLTS PHASE HZ"}]
+    },
+    {
+      "id":"USB-DSS","page":18,"building":"Utility Services Building","title":"MINI-SPLIT-SYSTEM HEAT PUMPS SCHEDULE","classification":"Paired ductless indoor unit and outdoor heat pump",
+      "columns":"indoor_mark|type|location|refrigerant|airflow_CFM|fan_W|total_cooling_MBH|sensible_cooling_MBH|EAT_DB_F|EAT_WB_F|min_SEER|heat_MBH|winter_F|indoor_FLA|indoor_MCA|indoor_V|indoor_phase|indoor_Hz|outdoor_mark|outdoor_location|outdoor_FLA|outdoor_MCA|outdoor_MOCP|outdoor_V|outdoor_phase|outdoor_Hz|notes",
+      "x_edges":[117.72,189.72,306.36,436.68,550.56,652.92,742.68,845.52,960.12,1032.12,1104.12,1219.44,1334.04,1391.04,1442.76,1491.96,1554.84,1595.28,1634.16,1730.88,1850.52,1889.04,1943.4,1991.99,2047.56,2085.6,2123.16,2188.8],
+      "y_edges":[391.92,409.08,426.36],
+      "rows":[
+        "DSS-1|WALL-MOUNTED|TELECOM ROOM USB8|R-410A|705|56|24|18|78|65|12.2|28|47|.36|1|208/230|1|60|CU-1|OUTSIDE|19|19|25|208/230|1|60|1,2,3,4",
+        "DSS-2|WALL-MOUNTED|TELECOM ROOM USB8|R-410A|370|30|12|9.6|78|65|20.8|18|47|.33|1|208/230|1|60|CU-2|OUTSIDE|7.83|11|28|208/230|1|60|1,2,3,4"
+      ],
+      "notes":["1. Provide 18-inch stand for outdoor unit.","2. Provide coastal corrosion protection on outdoor unit.","3. Provide indoor unit with condensate pump.","4. Coordinate power wiring from outdoor to indoor unit with electrical contractor per manufacturer."],
+      "header_evidence":[{"bbox":[550,341,1392,392],"expected":"SUPPLY FAN DATA COOLING HEATING TOTAL AIRFLOW FAN MOTOR TOTAL COOLING SENSIBLE COOLING EAT DB EAT WB MIN EFFICIENCY HEATING CAPACITY WINTER"},{"bbox":[1391,341,2124,392],"expected":"INDOOR UNIT ELECTRICAL OUTDOOR UNIT OUTDOOR UNIT ELECTRICAL FLA MCA VOLTS PH HZ MARK LOCATION FLA MCA MOCP VOLTS PH HZ"}],
+      "audit_notes":["Two schedule rows contain four equipment tags. DSS-2 location is printed USB8; reconcile with plan/control fire-alarm closet USB9 before selecting a zone."]
+    },
+    {
+      "id":"USB-FAN","page":18,"building":"Utility Services Building","title":"FAN SCHEDULE","classification":"Exhaust fan",
+      "columns":"mark|location|service|fan_type|airflow_CFM|RPM|ESP_inWG|tip_speed_FPM|motor_HP|V|phase|Hz|notes",
+      "x_edges":[849.36,925.08,1147.44,1274.76,1526.52,1598.4,1670.4,1742.4,1814.4,1886.4,1958.29,2030.29,2102.29,2172],
+      "y_edges":[558.12,575.4,592.68,609.96,627.12,644.4,661.68],
+      "rows":[
+        "EF-1|FIRE PUMP USB1|EXHAUST|IN-LINE CENTRIFUGAL FAN - DIRECT DRIVE|1100|1530|0.375|4483|1/4|115|1|60|1,2",
+        "EF-2|PURE WATER ROOM USB3|EXHAUST|IN-LINE CENTRIGUAL FAN - BELT DRIVE|2160|1291|0.375|4945|1/2|115|1|60|1,2",
+        "EF-3|MEDIUM PRESSURE AIR ROOM USB4|EXHAUST|IN-LINE CENTRIGUAL FAN - BELT DRIVE|6080|1202|0.375|6725|2|460|3|60|1,3",
+        "EF-4|HIGH PRESSURE AIR ROOM USB5|EXHAUST|IN-LINE CENTRIGUAL FAN - BELT DRIVE|5500|1420|0.375|6875|2|460|3|60|1,3",
+        "EF-5|HIGH PRESSURE AIR ROOM USB5|EXHAUST|IN-LINE CENTRIGUAL FAN - BELT DRIVE|1480|1973|0.375|5778|1/2|115|1|60|1,2",
+        "EF-6|GENERATOR ROOM USB7|EXHAUST|AXIAL FLOW - BELT|10000|1770|0.75|11297|5|460|3|60|1,3"
+      ],
+      "notes":["1. Backdraft damper.","2. Speed controller.","3. VFD control."],
+      "header_evidence":[{"bbox":[1430,479,1595,509],"expected":"FAN SCHEDULE"},{"bbox":[1526,508,2172,558],"expected":"AIRFLOW (CFM) RPM ESP (IN WG) TIP SPEED (FPM) ELECTRICAL DATA MOTOR SIZE (HP) VOLTS PHASE HZ NOTES"}]
+    },
+    {
+      "id":"USB-GRD","page":18,"building":"Utility Services Building","title":"GRILLE, REGISTER, AND DIFFUSER SCHEDULE","classification":"Air outlet type, not per-instance quantity",
+      "columns":"mark|type|mounting|face_size_in|neck_size_in|max_NC|max_SP_inWG|notes",
+      "x_edges":[117.72,172.92,299.04,391.32,503.76,589.92,661.92,733.92,805.92],
+      "y_edges":[599.76,616.92,634.2,651.48,668.64,685.92],
+      "rows":["EG-1|EGGCRATE|DUCT/SURFACE|1 1/4 + NECK SIZE|10x10|30|.06|1","EG-2|EGGCRATE|DUCT/SURFACE|1 1/4 + NECK SIZE|16x16|30|.06|1","RG-1|EGGCRATE|DUCT/SURFACE|1 1/4 + NECK SIZE|10x10|30|.06|1","SG-1|DOUBLE DEFLECTION|DUCT/SURFACE|1 1/4 + NECK SIZE|12x6|30|.06|1","SG-2|DOUBLE DEFLECTION|DUCT/SURFACE|1 1/4 + NECK SIZE|48x48|30|0.1|1"],
+      "notes":["1. Aluminum construction and anodized finish."],
+      "header_evidence":[{"bbox":[117,566,806,600],"expected":"MARK TYPE MOUNTING FACE SIZE (IN) NECK SIZE (IN) MAX NC MAX SP NOTES"}]
+    },
+    {
+      "id":"USB-GR","page":18,"building":"Utility Services Building","title":"GRAVITY RELIEF VENT SCHEDULE","classification":"Gravity relief vent",
+      "columns":"mark|location|service|airflow_CFM|curb_in|throat_in|PD_inWG|weight_lb|notes",
+      "x_edges":[117.72,189.72,296.88,408.6,495.36,583.32,692.16,794.76,866.76,1040.4],
+      "y_edges":[800.04,817.32,834.48,851.76,869.04],
+      "rows":["GR-1|ROOF|MPAC EXHAUST|2650|36x36|30x30|.024|88|1,2","GR-2|ROOF|MPAC EXHAUST|2650|36x36|30x30|.024|88|1,2","GR-3|ROOF|MPAC EXHAUST|2650|36x36|30x30|.024|88|1,2","GR-4|ROOF|MPAC EXHAUST|2650|36x36|30x30|.024|88|1,2"],
+      "notes":["1. Birdscreen and sloped curb to match roof slope.","2. Backdraft damper."],
+      "header_evidence":[{"bbox":[117,767,1041,800],"expected":"MARK LOCATION SERVICE AIRFLOW (CFM) CURB SIZE THROAT SIZE PRESSURE DROP WEIGHT NOTES"}]
+    },
+    {
+      "id":"USB-GI","page":18,"building":"Utility Services Building","title":"GRAVITY INTAKE VENT SCHEDULE","classification":"Gravity intake louvered penthouse",
+      "columns":"mark|location|service|type|airflow_CFM|curb_in|throat_in|PD_inWG|number_louvers|weight_lb|notes",
+      "x_edges":[1114.68,1186.68,1293.84,1405.56,1514.76,1601.52,1689.48,1798.32,1901.04,1972.92,2044.92,2181.23],
+      "y_edges":[775.32,807.12,838.92,870.72],
+      "rows":["GI-1|ROOF|GENERATOR INTAKE|LOUVERED PENTHOUSE|20000|62 X 62|54 X 54|.07|8|170|1,2","GI-2|ROOF|GENERATOR INTAKE|LOUVERED PENTHOUSE|20000|62 X 62|54 X 54|.07|8|170|1,2","GI-3|ROOF|GENERATOR INTAKE|LOUVERED PENTHOUSE|20000|62 X 62|54 X 54|.07|8|170|1,2"],
+      "notes":["1. Birdscreen and sloped curb to match roof slope.","2. 24 volt motorized damper and 120 to 24 volt transformer."],
+      "header_evidence":[{"bbox":[1114,742,2182,775],"expected":"MARK LOCATION SERVICE TYPE AIRFLOW CURB SIZE THROAT SIZE PRESSURE DROP NO. OF LOUVERS WEIGHT NOTES"}],
+      "audit_notes":["GI-1 is reused at the gatehouse with different capacity. The 20000 CFM intake rows differ from associated MD-9/10/11 rows at 2000 CFM; retain discrepancy."]
+    },
+    {
+      "id":"USB-UH","page":18,"building":"Utility Services Building","title":"ELECTRIC UNIT HEATER","classification":"Electric resistance unit heater",
+      "columns":"mark|location|description|type|kW_input|motor_HP|airflow_CFM|throw_ft|mounting_height_ft|V_phase|notes",
+      "x_edges":[117.72,189.72,382.44,585.6,736.68,797.4,859.08,919.32,984.36,1056.36,1128.36,1187.88],
+      "y_edges":[997.08,1014.36,1031.52,1048.8,1066.08],
+      "rows":["UH-1|MAIN ELEC ROOM USB6|SUSPENDED HORIZONTAL DISCHARGE|ELECTRIC RESISTANCE|3.3|1/125|400|12|8|480/3|1","UH-2|GENERATOR ROOM USB7|SUSPENDED HORIZONTAL DISCHARGE|ELECTRIC RESISTANCE|3.3|1/125|400|12|8|480/3|1","UH-3|MEDIUM PRESSURE AIR ROOM USB4|SUSPENDED HORIZONTAL DISCHARGE|ELECTRIC RESISTANCE|5|1/125|400|12|8|480/3|1","UH-4|HIGH PRESSURE AIR ROOM USB5|SUSPENDED HORIZONTAL DISCHARGE|ELECTRIC RESISTANCE|5|1/125|400|12|8|480/3|1"],
+      "notes":["1. Wall mount bracket."],
+      "header_evidence":[{"bbox":[117,964,1189,997],"expected":"MARK LOCATION DESCRIPTION TYPE KW INPUT MOTOR HP AIRFLOW THROW MOUNTING HEIGHT VOLTS/PH NOTES"}]
+    },
+    {
+      "id":"USB-LOUVER","page":18,"building":"Utility Services Building","title":"LOUVER SCHEDULE","classification":"Louver",
+      "columns":"mark|location|service|size_in|free_area_sqft|max_PD_inWG|notes",
+      "x_edges":[117.72,189.72,433.44,548.64,602.64,700.08,782.16,854.16],
+      "y_edges":[1176.48,1193.64,1210.92,1228.2,1245.36,1262.64,1279.92,1297.08,1314.36,1331.64,1348.92,1366.08,1383.36,1400.64,1417.8,1435.08,1452.36,1469.64],
+      "rows":[
+        "L-1|FIRE PUMP USB1|EXHAUST|24x32|2.67|0.1|1","L-2|PURE WATER ROOM USB3|EXHAUST|32x24|0.72|0.1|1","L-3|MEDIUM PRESSURE AIR ROOM USB4|EXHAUST|48x48|2.03|0.1|1","L-4|HIGH PRESSURE AIR ROOM USB5|EXHAUST|48x48|7.33|0.1|1","L-5|HIGH PRESSURE AIR ROOM USB5|EXHAUST|24x24|0.49|0.1|1","L-6|GENERATOR ROOM USB7|EXHAUST|48x48|53.5|0.1|1","L-7|GENERATOR ROOM USB7|EXHAUST|48x48|53.5|0.1|1","L-8|FIRE PUMP USB1|OUTSIDE AIR INTAKE|24x16|2.9|0.1|1,2","L-9|FRESH WATER PUMP ROOM USB2|OUTSIDE AIR INTAKE|24x16|2.9|0.1|1,2","L-10|PURE WATER ROOM USB3|OUTSIDE AIR INTAKE|40x32|2.9|0.1|1,2","L-11A|MEDIUM PRESSURE AIR ROOM USB4|OUTSIDE AIR INTAKE|72x48|8.1|0.1|1,2","L-11B|MEDIUM PRESSURE AIR ROOM USB4|OUTSIDE AIR INTAKE|72x48|8.1|0.1|1,2","L-11C|MEDIUM PRESSURE AIR ROOM USB4|OUTSIDE AIR INTAKE|72x48|8.1|0.1|1,2","L-12|HIGH PRESSURE AIR ROOM USB5|OUTSIDE AIR INTAKE|72x48|7.3|0.1|1,2","L-13|MAIN ELECTRICAL ROOM USB6|OUTSIDE AIR INTAKE|18x18|0.49|0.1|1,2","L-14|GENERATOR ROOM USB7|EXHAUST|96x96|33.4|0.1|1","L-15|GENERATOR ROOM USB7|EXHAUST|96x96|33.4|0.1|1"
+      ],
+      "notes":["1. Birdscreen and duct connection."],
+      "header_evidence":[{"bbox":[117,1143,855,1177],"expected":"MARK LOCATION SERVICE SIZE FREE AREA MAX PD NOTES"}],
+      "audit_notes":["Rows reference note 2, but only louver note 1 is shown. Do not import another schedule's note 2.","L-6 and L-7 list 53.5 sq ft free area for a 48x48 inch louver, exceeding its 16 sq ft gross face area. Literal source value retained; no correction guessed."]
+    },
+    {
+      "id":"USB-MD","page":18,"building":"Utility Services Building","title":"MOTORIZED DAMPER SCHEDULE (MD)","classification":"Motorized opposed-blade damper",
+      "columns":"mark|building|location|associated_equipment|airflow|size|type|failure_mode|V|phase|notes",
+      "x_edges":[1210.32,1282.32,1354.32,1560.48,1632.36,1704.36,1776.36,1893.36,1965.23,2037.23,2109.23,2181.23],
+      "y_edges":[1027.44,1044.72,1062,1079.28,1096.44,1113.72,1131,1148.16,1165.44,1182.72,1199.88,1217.16,1234.44,1251.72,1268.88,1286.16,1303.44,1320.6,1337.88,1355.16],
+      "rows":[
+        "MD-1|USB|FIRE PUMP USB1|EF-1|550|24X16|OPPOSED BLADE|N.C.|24|1|1","MD-2|USB|FRESH WATER PUMP ROOM USB2|EF-1|550|24X16|OPPOSED BLADE|N.C.|24|1|1","MD-3|USB|PURE WATER ROOM USB3|EF-2|2160|40X32|OPPOSED BLADE|N.C.|24|1|1","MD-4|USB|MEDIUM PRESSURE AIR ROOM USB4|EF-3|4675|72X48|OPPOSED BLADE|N.C.|24|1|1","MD-5|USB|MEDIUM PRESSURE AIR ROOM USB4|FC-3|4675|72X48|OPPOSED BLADE|N.C.|24|1|1","MD-6|USB|MEDIUM PRESSURE AIR ROOM USB4|EF-3|4675|72X48|OPPOSED BLADE|N.C.|24|1|1","MD-7|USB|HIGH PRESSURE AIR ROOM USB5|FC-4|5500|72X48|OPPOSED BLADE|N.C.|24|1|1","MD-8|USB|MAIN ELECTRICAL ROOM USB6|EF-5|370|18X18|OPPOSED BLADE|N.C.|24|1|1","MD-9|USB|GENERATOR ROOM USB7|EF-6|2000|54X54|OPPOSED BLADE|N.O.|24|1|1","MD-10|USB|GENERATOR ROOM USB7|EF-6|2000|54X54|OPPOSED BLADE|N.O.|24|1|1","MD-11|USB|GENERATOR ROOM USB7|EF-6|2000|54X54|OPPOSED BLADE|N.O.|24|1|1","MD-12|USB|MEDIUM PRESSURE AIR ROOM USB4|MPAC-1|1300|20X12|OPPOSED BLADE|N.C.|24|1|1","MD-13|USB|MEDIUM PRESSURE AIR ROOM USB4|MPAC-1|2650|24X16|OPPOSED BLADE|N.O.|24|1|1","MD-14|USB|MEDIUM PRESSURE AIR ROOM USB4|MPAC-2|2650|24X16|OPPOSED BLADE|N.C.|24|1|1","MD-15|USB|MEDIUM PRESSURE AIR ROOM USB4|MPAC-2|1300|24X16|OPPOSED BLADE|N.O.|24|1|1","MD-16|USB|MEDIUM PRESSURE AIR ROOM USB4|MPAC-3|2650|20X12|OPPOSED BLADE|N.C.|24|1|1","MD-17|USB|MEDIUM PRESSURE AIR ROOM USB4|MPAC-3|1300|24X16|OPPOSED BLADE|N.O.|24|1|1","MD-18|USB|MEDIUM PRESSURE AIR ROOM USB4|MPAC-4|1300|20X12|OPPOSED BLADE|N.C.|24|1|1","MD-19|USB|MEDIUM PRESSURE AIR ROOM USB4|MPAC4|2650|24X16|OPPOSED BLADE|N.O.|24|1|1"
+      ],
+      "notes":["1. Provide 120 volt to 24 volt transformer."],
+      "header_evidence":[{"bbox":[1210,994,2182,1028],"expected":"MARK BUILDING LOCATION ASSOCIATED AIRFLOW SIZE TYPE FAILURE MODE VOLTS PHASE NOTES"}],
+      "audit_notes":["19 rows, not 22 inferred from highest tag. MD-20 is not listed here or in AM603's MD-21/22 rows.","MPAC4 spelling is printed in MD-19; preserve it beside normalized MPAC-4 identity.","Airflow and size units are not printed in this table's abbreviated headers; CFM/inch interpretation must be identified as contextual, not verbatim."]
+    },
+    {
+      "id":"USB-CCC","page":19,"building":"Utility Services Building","title":"CLOSED CIRCUIT COOLER SCHEDULE","classification":"Closed circuit evaporative cooler",
+      "columns":"mark|location|service|GPM|LWT_F|EWT_F|coil_PD_psi|ambient_WB_F|propylene_glycol_percent|fans_per_cell|fan_motor_HP_per_cell|fan_RPM|number_pumps|pump_HP_per_cell|number_electric_heaters|heater_kW|FLA|MOCP|V|phase|Hz|operating_weight_lb|notes",
+      "x_edges":[261.6,333.6,466.32,614.4,669.12,712.08,756,828.84,907.92,979.92,1051.92,1123.8,1195.8,1267.8,1370.52,1442.52,1514.4,1586.4,1658.4,1730.4,1802.4,1874.28,1946.28,2125.8],
+      "y_edges":[255.12,272.4,289.56],
+      "rows":["CCC-1|EQUIPMENT YARD USB0|CONDENSER WATER|301.2|90|110|3.0|79.00|30.0|2|20.00|1800|1|5|1|4.5|48|90|460|3|60|13300|1,2,3,4,5,6,7,8,9","CCC-2|EQUIPMENT YARD USB0|CONDENSER WATER|301.2|90|110|3.0|79.00|30.0|2|20.00|1800|1|5|1|4.5|48|90|460|3|60|13300|1,2,3,4,5,6,7,8,9"],
+      "notes":["1. Total condenser water flow 301.2 GPM; coolers are N+1 primary/standby.","2. Unit height must not exceed north wall height; see drawings.","3. Single point connection and control panel.","4. Stainless steel casing and copper coils.","5. Sized on 30% propylene glycol.","6. Meet or exceed ASHRAE 90.1.","7. Access ladder and platform.","8. Float switch for cold-water makeup.","9. Verify clearances and derating with manufacturer; only one unit operates at a time."],
+      "header_evidence":[{"bbox":[261,192,2126,255],"expected":"MARK LOCATION SERVICE FLOW LWT EWT COIL PRESSURE DROP AMBIENT WET BULB TEMPERATURE PROPYLENE GLYCOL CONTENT FANS PER CELL FAN MOTOR CAPACITY PER CELL FAN SPEED NO. OF PUMPS PUMP MOTOR OUTPUT PER CELL NO. OF ELECTRIC HEATERS HEATER CAPACITY FLA MOCP VOLTS PHASE HZ OPERATING WEIGHT NOTES"}]
+    },
+    {
+      "id":"USB-VALVE","page":19,"building":"Utility Services Building","title":"VALVE SCHEDULE","classification":"Actuated isolation/modulating water valve",
+      "columns":"mark|location|service|type|water_GPM|PD_psi|Cv|notes",
+      "x_edges":[996.84,1090.8,1335.84,1548.24,1799.4,1915.08,2031.36,2103.37,2175.25],
+      "y_edges":[441.84,459.12,476.4,493.68,510.84,528.12,545.4,562.56,579.84,597.12,614.4,631.56,648.84,666.12,683.28,700.56],
+      "rows":["VLV-1|MECHANICAL YARD USB0|CCC-1 ISOLATION|BUTTERFLY TWO WAY TWO POSITION|301.2|3|173|1","VLV-2|MECHANICAL YARD USB0|CCC-2 ISOLATION|BUTTERFLY TWO WAY TWO POSITION|301.2|3|173|1","VLV-3|PURE WATER ROOM USB3|CCC BYPASS|BUTTERFLY TWO WAY TWO POSITION|88|3|50|","VLV-4|MEDIUM PRESSURE ROOM USB4|MPAC-1 ISOLATION|BUTTERFLY TWO WAY TWO POSITION|56.4|3|32.5|","VLV-5|MEDIUM PRESSURE ROOM USB4|MPAC-2 ISOLATION|BUTTERFLY TWO WAY TWO POSITION|56.4|3|32.5|","VLV-6|MEDIUM PRESSURE ROOM USB4|MPAC-3 ISOLATION|BUTTERFLY TWO WAY TWO POSITION|56.4|3|32.5|","VLV-7|MEDIUM PRESSURE ROOM USB4|MPAC-4 ISOLATION|BUTTERFLY TWO WAY TWO POSITION|56.4|3|32.5|","VLV-8|HIGH PRESSURE AIR ROOM USB5|HPAC-1 ISOLATION|BUTTERFLY TWO WAY TWO POSITION|66.0|3|36|","VLV-9|HIGH PRESSURE AIR ROOM USB5|HPAC-2 ISOLATION|BUTTERFLY TWO WAY TWO POSITION|66.0|3|36|","VLV-10|HIGH PRESSURE AIR ROOM USB5|HPAC-3 ISOLATION|BUTTERFLY TWO WAY TWO POSITION|66.0|3|36|","VLV-11|HIGH PRESSURE AIR ROOM USB5|CONDENSER WATER MINIMUM FLOW|BALL VALVE TWO WAY MODULATING|88.0|3|50|","VLV-12|FRESH WATER PUMP ROOM USB2|FC-1|BALL VALVE THREE WAY MODULATING|2.0|3|1.1|","VLV-13|PURE WATER ROOM USB3|FC-2|BALL VALVE THREE WAY MODULATING|2.5|3|1.4|","VLV-14|MEDIUM PRESSURE ROOM USB4|FC-3|BALL VALVE THREE WAY MODULATING|2.5|3|1.4|","VLV-15|MEDIUM PRESSURE ROOM USB4|FC-4|BALL VALVE THREE WAY MODULATING|2.5|3|1.4|"],
+      "notes":["1. Total condenser water flow 301.2 GPM based on (3) MPAC and (2) HPAC; compressors N+1 redundant. FC-1 through FC-4 connect supply/return to CWR to recover heat but do not affect total flow."],
+      "header_evidence":[{"bbox":[996,409,2176,442],"expected":"MARK LOCATION SERVICE TYPE WATER FLOW (GPM) PRESSURE DROP (PSI) VALVE CV NOTES"}],
+      "audit_notes":["15 valve rows. No actuator torque/model/electrical-power columns. VLV-15 location USB4 conflicts with FC-4's USB5 schedule location.","Diagrams use V-1 through V-15, not VLV- prefix. AM702 places AO-1 on bypass V-3, not V-1. VLV-3 is scheduled TWO POSITION while AM702/AM703 require modulating bypass control: preserve this source conflict. AM610 shows NO on V-1, V-2 and V-4 through V-10, while AM702 shows NC on those isolation valves; fail/normal position requires clarification."]
+    },
+    {
+      "id":"USB-PUMP","page":19,"building":"Utility Services Building","title":"PUMP SCHEDULE","classification":"Condenser-water pump or fan-coil circulator",
+      "columns":"mark|type|location|service|GPM|head_ft|suction_in|discharge_in|efficiency_percent|impeller_in|motor_RPM|motor_HP|operating_BHP|speed_control|V|phase|Hz|notes",
+      "x_edges":[255.84,312.24,518.4,745.56,911.4,983.4,1055.4,1154.4,1270.92,1351.8,1415.76,1497.84,1560.24,1676.52,1747.44,1799.04,1849.68,1884,1956],
+      "y_edges":[1043.52,1060.8,1078.08,1095.24,1112.52,1129.8,1146.96],
+      "rows":["P-1|CLOSE-COUPLED VERTICAL IN-LINE|MEDIUM PRESSURE AIR ROOM USB4|CONDENSER WATER|301.2|126|4|4|71|11|1760|15|13.95|VFD|460|3|60|1,2,3","P-2|CLOSE-COUPLED VERTICAL IN-LINE|MEDIUM PRESSURE AIR ROOM USB4|CONDENSER WATER|301.2|126|4|4|71|11|1760|15|13.95|VFD|460|3|60|1,2,3","P-3|IN-LINE CIRCULATOR|FRESH WATER PUMP ROOM USB2|HEATING HOT WATER|2.0|5|3/4|3/4|>50|-|1725|1/8|<1/8|NONE|120|1|60|","P-4|IN-LINE CIRCULATOR|PURE WATER ROOM USB3|HEATING HOT WATER|2.5|5|1-1/4|1-1/4|>50|-|1725|1/8|<1/8|NONE|120|1|60|","P-5|IN-LINE CIRCULATOR|MEDIUM PRESSURE AIR ROOM USB4|HEATING HOT WATER|2.5|5|1-1/2|1-1/2|>50|-|1725|1/8|<1/8|NONE|120|1|60|","P-6|IN-LINE CIRCULATOR|HIGH PRESSURE AIR ROOM USB5|HEATING HOT WATER|2.5|5|1-1/2|1-1/2|>50|-|1725|1/8|<1/8|NONE|120|1|60|"],
+      "notes":["1. Total condenser water flow 301.2 GPM; pumps N+1 redundant primary/standby.","2. High efficiency inverter-duty motors.","3. Minimum flow based on 30% of total flow."],
+      "header_evidence":[{"bbox":[255,978,1957,1044],"expected":"MARK TYPE LOCATION SERVICE CAPACITY PUMP HEAD SUCTION SIZE DISCHARGE SIZE PUMP EFFICIENCY IMPELLER SIZE ELECTRICAL DATA MOTOR SPEED MOTOR SIZE MOTOR OPERATING BHP SPEED CONTROL TYPE VOLTS PHASE HZ NOTES"}],
+      "audit_notes":["Two full-sized primary/standby pumps do not double the design operating flow. Preserve >50 and <1/8 comparison operators."]
+    },
+    {
+      "id":"USB-ET","page":19,"building":"Utility Services Building","title":"EXPANSION TANK SCHEDULE","classification":"Expansion tank",
+      "columns":"mark|system|tank_gal|acceptance_gal|temperature_F|pressure_psig","x_edges":[179.28,238.2,377.04,462.72,582.72,688.44,774.96],"y_edges":[563.52,580.8],
+      "rows":["ET-1|CONDENSER WATER|53|53|240|125"],"header_evidence":[{"bbox":[179,530,776,564],"expected":"MARK SYSTEM TYPE TANK VOLUME ACCEPTANCE VOLUME TEMPERATURE RATING PRESSURE RATING"}]
+    },
+    {
+      "id":"USB-AS","page":19,"building":"Utility Services Building","title":"AIR SEPARATOR SCHEDULE","classification":"Air separator",
+      "columns":"mark|inlet_in|GPM","x_edges":[179.28,258.84,338.64,467.04],"y_edges":[669.24,686.52],
+      "rows":["AS-1|4|301.2"],"header_evidence":[{"bbox":[179,652,468,670],"expected":"MARK INLET SIZE (IN) FLOWRATE (GPM)"}]
+    },
+    {
+      "id":"USB-GFS","page":19,"building":"Utility Services Building","title":"GLYCOL FEED SYSTEM","classification":"Automatic glycol feed package",
+      "columns":"mark|location|service|type|tank_gal|GPM|pressure_psi|motor_HP|V|phase|Hz|weight_lb|notes","x_edges":[255.84,327.72,528.48,640.2,749.4,836.16,924.12,1032.96,1135.68,1207.56,1311.12,1383,1455,1591.32],"y_edges":[873.84,891.12],
+      "rows":["GFS-1|MEDIUM PRESSURE AIR ROOM USB4|CONDENSER WATER|AUTOMATIC|50|1.8|10-70|1/3|120|1|60|134|"],"header_evidence":[{"bbox":[255,841,1592,874],"expected":"MARK LOCATION SERVICE TYPE TANK SIZE WATER FLOW PRESSURE RANGE MOTOR VOLTS PHASE HERTZ WEIGHT NOTES"}]
+    },
+    {
+      "id":"USB-MUFFLER","page":19,"building":"Utility Services Building","title":"MUFFLER SCHEDULE","classification":"Generator exhaust muffler",
+      "columns":"mark|location|service|type|inlet_outlet_in|diameter_in|back_pressure_inWC|length_in|connection|construction|mounting|insulation|dB_63Hz|dB_125Hz|dB_250Hz|dB_500Hz|dB_1000Hz|dB_2000Hz|dB_4000Hz|dB_8000Hz|notes",
+      "x_edges":[255.84,330,467.4,591.6,675.48,755.88,826.08,927.96,1008.24,1104,1214.76,1298.28,1471.32,1516.08,1562.04,1605,1651.2,1701.96,1753.2,1803,1853.04,1908.36],
+      "y_edges":[1296.36,1328.16,1359.96],
+      "rows":["M-1|GENERATOR ROOM USB7|BACKUP GENERATOR 1|RESIDENTAL|8|16|4.4|46|ANSI PATTERN FLANGES|STEEL|HORIZONTAL|THERMAL INSULATION BLANKETS|10|25|32|30|25|25|24|23|1,2,3","M-2|GENERATOR ROOM USB7|BACKUP GENERATOR 2|RESIDENTAL|8|16|4.4|46|ANSI PATTERN FLANGES|STEEL|HORIZONTAL|THERMAL INSULATION BLANKETS|10|25|32|30|25|25|24|23|1,2,3"],
+      "notes":["1. Horizontal mounting brackets and lifting lugs.","2. Flexible connection/expansion joint at inlet/outlet.","3. Muffler compatible with generator; references specification section 26 32 15.00."],
+      "header_evidence":[{"bbox":[255,1261,1909,1297],"expected":"MARK LOCATION SERVICE TYPE INLET/OUTLET DIA BACK PRESSURE LENGTH CONNECTION TYPE CONSTRUCTION TYPE MOUNTING INSULATION ATTENUATION IN dB AT EACH FREQUENCY 63 HZ 125 HZ 250 HZ 500 HZ 1000 HZ 2000 HZ 4000 HZ 8000 HZ NOTES"}]
+    },
+    {
+      "id":"GH-FAN","page":20,"building":"Gatehouse","title":"GATEHOUSE FAN SCHEDULE","classification":"Roof exhaust fan",
+      "columns":"mark|location|service|fan_type|airflow|RPM|ESP_inWG|tip_speed_FPM|max_sones|motor_HP|V|phase|Hz|notes",
+      "x_edges":[872.04,947.76,1094.28,1166.28,1489.56,1561.56,1633.56,1705.56,1777.44,1849.44,1921.44,1993.44,2065.32,2137.32,2209.32],"y_edges":[174.84,192.12],
+      "rows":["EF-7|TOILET ROOM - ROOF|EXHAUST|CENTRIFUGAL TYPE POWER ROOF VENTILATOR - DIRECT DRIVE|50|1300|0.2|2765|2.5|1/100|115|1|60|"],
+      "header_evidence":[{"bbox":[872,142,2210,175],"expected":"MARK LOCATION SERVICE FAN TYPE AIRFLOW RPM ESP TIP SPEED MAX SONES MOTOR SIZE VOLTS PHASE HZ NOTES"}]
+    },
+    {
+      "id":"GH-SS","page":20,"building":"Gatehouse","title":"GATEHOUSE SPLIT SYSTEM AIR CONDITIONER HEAT PUMP SCHEDULE","classification":"Horizontal split-system indoor air handler with electric heater",
+      "columns":"mark|type|location|mounting_height_ft|refrigerant|airflow_CFM|ESP_inWC|outside_air_CFM|fan_HP|total_cooling_MBH|sensible_cooling_MBH|EAT_DB_F|EAT_WB_F|heating_MBH|electric_heater_MBH|electric_heater_kW|heater_stages|FLA|MCA|MOCP|V|phase|Hz|notes",
+      "x_edges":[499.92,580.92,683.76,786.24,853.32,946.92,1049.28,1152,1224,1300.44,1403.28,1517.88,1551.96,1587,1659,1731,1802.88,1874.88,1920.36,1969.81,2026.92,2078.88,2119.44,2158.56,2209.32],"y_edges":[334.92,352.2],
+      "rows":["SS-1|HORIZONTAL|EQUIPMENT ROOM|9' 6\"|R-410A|500|0.7|150|1/3|13|12|78|65|18|17.1|5|SINGLE|20.9|26.1|30|208|1|60|"],
+      "header_evidence":[{"bbox":[499,269,2210,335],"expected":"MARK TYPE LOCATION MOUNTING HEIGHT REFERIGERANT TYPE SUPPLY FAN DATA TOTAL AIRFLW EXTERNAL STATIC PRESSURE OUTSIDE AIRFLOW FAN MOTOR COOLING TOTAL COOLING SENSIBLE COOLING EAT HEATING CAPACITY ELECTRIC HEATER HEATING CAPACITY ELECTRIC HEATER ELEC HTR STAGES ELECTRIC DATA FLA MCA MOCP VOLTS PH HZ NOTES"}]
+    },
+    {
+      "id":"GH-HP","page":20,"building":"Gatehouse","title":"GATEHOUSE HEAT PUMP SCHEDULE","classification":"Split-system outdoor heat pump",
+      "columns":"mark|service|cooling_capacity_BTU_per_h_as_printed|heating_capacity_BTU_per_h_as_printed|compressor_type|EER|rated_outdoor_DB_F|refrigerant|V|phase|FLA|MCA|MOCP|weight_lb|LxWxH_in|notes",
+      "x_edges":[767.4,839.4,1061.88,1132.56,1212.72,1311.6,1391.76,1485.24,1583.04,1655.04,1709.76,1781.64,1853.64,1924.8,1982.64,2134.07,2213.41],"y_edges":[479.76,497.04],
+      "rows":["HP-1|SPLIT SYSTEM CONDENSING UNIT|15.5|18.0|SCROLL|12.6|105|R-410A|208/230|1|9.5|11.8|20|169|32 5/16 x 35 1/2 x 32 9/16|1, 2, 3, 4"],
+      "notes":["1. Coastal coil protection.","2. Heat pump capable of operation to 47 degrees F.","3. Rated outdoor DB 105 degrees; unit shaded 100% of time but canopy bottom approx 3 feet from top; manufacturer to verify required derating."],
+      "audit_notes":["Capacity header says BTU/H while values are 15.5 and 18.0. Do not multiply by 1000 or silently relabel MBH despite surrounding schedules suggesting that scale.","Row references note 4, but only notes 1-3 are printed under this schedule."],
+      "header_evidence":[{"bbox":[1061,432,1213,480],"expected":"COOLING CAPACITY (BTU/H) HEATING CAPACITY (BTU/H)"},{"bbox":[1212,432,2214,480],"expected":"COMPRESSOR TYPE EFFICIENCY RATED OUTDOOR DB REFRIGERANT TYPE UNIT ELECTRICAL VOLTS PH. FLA MCA MOCP WEIGHT SIZE NOTES"}]
+    },
+    {
+      "id":"GH-MD","page":20,"building":"Gatehouse","title":"MOTORIZED DAMPER SCHEDULE","classification":"Motorized opposed-blade damper",
+      "columns":"mark|building|location|associated_equipment|airflow_CFM|size_inxin|type|failure_mode|V|phase|notes",
+      "x_edges":[410.28,482.16,554.16,626.16,698.16,848.88,922.44,1096.08,1167.96,1239.96,1311.96,1383.96],"y_edges":[724.2,741.48,758.64],
+      "rows":["MD-21|GATEHOUSE|GH04|GI-1|50|8x8|OPPOSED BLADE|N.C.|24|1|1","MD-22|GATEHOUSE|GH02|EF-7|50|8x8|OPPOSED BLADE|N.O.|24|1|1"],
+      "notes":["1. Transformer from 120 volt 1 phase power to 24 volts."],
+      "header_evidence":[{"bbox":[410,691,1384,724],"expected":"MARK BUILDING LOCATION ASSOCIATED EQUIPMENT AIRFLOW (CFM) SIZED (INxIN) TYPE FAILURE MODE VOLTS PHASE NOTES"}],
+      "audit_notes":["MD-21 associates with Gatehouse GI-1 at 50 CFM; that intake schedule states 150 CFM. Do not collapse these source values."]
+    },
+    {
+      "id":"GH-GRD","page":20,"building":"Gatehouse","title":"GATEHOUSE GRILLE, REGISTER, AND DIFFUSER SCHEDULE","classification":"Air outlet type, not per-instance quantity",
+      "columns":"mark|service|mounting|face_size_in|neck_size_in|max_NC|max_SP_inWG|notes","x_edges":[1546.2,1601.4,1713.12,1801.56,1873.56,1984.44,2055.95,2141.41,2213.41],"y_edges":[724.2,741.48,758.64,775.92,793.2,810.48],
+      "rows":["CD-1|CEILING DIFFUSER|DUCT/SURFACE|12 x 12|6x6|30|0.10|","EG-1|EXHAUST GRILLE|DUCT/SURFACE|12 x 12|8x8|30|0.10|","LS-1|LINEAR SLOT|LINEAR SLOT|24 x 4|8ø|30|0.10|","RR-1|RETURN REGISTER|DUCT/SURFACE|12 x 12|6x6|30|0.10|","RR-2|RETURN REGISTER|DUCT/SURFACE|24 x 24|8x8|30|0.10|"],
+      "header_evidence":[{"bbox":[1546,691,2214,724],"expected":"MARK SERVICE MOUNTING FACE SIZE NECK SIZE MAX NC MAX SP NOTES"}],
+      "audit_notes":["Gatehouse EG-1 differs from USB EG-1. Each is an outlet type; installed counts require plans."]
+    },
+    {
+      "id":"GH-GI","page":20,"building":"Gatehouse","title":"GATEHOUSE GRAVITY INTAKE VENT SCHEDULE","classification":"Gravity intake vent",
+      "columns":"mark|airflow_CFM|diameter_in|roof_opening_in|PD_inWG|notes","x_edges":[1546.2,1620.36,1739.76,1855.08,1995.47,2128.44,2209.2],"y_edges":[897.6,914.88],
+      "rows":["GI-1|150|20.5|8.25 x 8.25|0.2|"],"header_evidence":[{"bbox":[1546,879,2210,898],"expected":"MARK AIRFLOW (CFM) DIAMETER (IN) ROOF OPENING SIZE (IN) PRESSURE DROP (IN WG) NOTES"}]
+    },
+    {
+      "id":"GH-DSS","page":20,"building":"Gatehouse","title":"GATEHOUSE MINI - SPLIT SYSTEM HEAT PUMP SCHEDULE","classification":"Paired ductless indoor unit and outdoor heat pump",
+      "columns":"indoor_mark|type|location|refrigerant|airflow_CFM|fan_W|total_cooling_MBH|sensible_cooling_MBH|min_SEER|heating_MBH|winter_F|indoor_FLA|indoor_MCA|indoor_V|indoor_phase|indoor_Hz|outdoor_mark|outdoor_location|outdoor_FLA|outdoor_MCA|outdoor_MOCP|outdoor_V|outdoor_phase|outdoor_Hz|notes",
+      "x_edges":[169.08,240.96,357.72,487.92,601.8,704.28,794.04,896.76,1011.48,1126.8,1241.4,1298.4,1350,1399.32,1462.08,1502.64,1541.52,1638.24,1755.12,1793.64,1848,1896.6,1952.16,1990.19,2027.88,2210.63],"y_edges":[1155.72,1173],
+      "rows":["DSS-3|WALL-MOUNTED|EQUIPMENT ROOM|R-410A|370|30|12|9.6|20.8|18|47|0.33|1|208|1|60|CU-3|ROOF|7.83|11|28|208|1|60|1, 2, 3, 4, 5, 6"],
+      "notes":["1. Power/control wiring from outdoor to indoor unit per manufacturer.","2. Coastal coil protection on condensing unit coil.","3. Remote controller.","4. Refrigerant line set per manufacturer.","5. Low ambient cooling option.","6. Outdoor electrical data includes indoor unit."],
+      "header_evidence":[{"bbox":[169,1105,2211,1156],"expected":"MARK TYPE LOCATION REFERIGERANT TYPE SUPPLY FAN DATA TOTAL AIRFLOW FAN MOTOR COOLING TOTAL COOLING SENSIBLE COOLING MIN EFFICIENCY HEATING HEATING CAPACITY WINTER INDOOR UNIT ELECTRICAL OUTDOOR UNIT OUTDOOR UNIT ELECTRICAL NOTES"}],
+      "audit_notes":["One row contains DSS-3 and CU-3. Do not double-add indoor current to the outdoor electrical total; note 6 includes it."]
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "document_id": "25__vol2__053",
+  "source_sha256": "7eaefacf7f42a077e98d3fa1fd01bc96f03a03d444e29ffda7838895dc2e1d57",
+  "annotation_sha256": "b603d834fb9e68d90faf47036584347ed20b46c8be7784f871c58adbd5bf955a",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 2,
+  "checks": [
+    {
+      "assertion": "mh502-vav-sequence-title",
+      "page": 11,
+      "bbox": [
+        1420,
+        899,
+        1825,
+        935
+      ],
+      "expected": "VAV TERMINAL SEQUENCE OF OPERATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV TERMINAL SEQUENCE OF OPERATION SCALE: 12\" = 1'-0\"",
+          "word_ids": [
+            1275,
+            1276,
+            1277,
+            1278,
+            1279,
+            1270,
+            1271,
+            1272,
+            1273
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV TERMINAL SEQUENCE OF OPERATION SCALE: 12\" = 1'-0\"",
+          "word_ids": [
+            571,
+            572,
+            573,
+            574,
+            575,
+            1021,
+            1022,
+            1023,
+            1024
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mh601-valve-schedule-title",
+      "page": 12,
+      "bbox": [
+        1790,
+        849,
+        2375,
+        894
+      ],
+      "expected": "VALVE SCHEDULE MARK SYSTEM AND/OR SERVICE TYPE SIZE FLOW REMARKS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VALVE SCHEDULE MARK SYSTEM AND/OR SERVICE TYPE SIZE FLOW REMARKS",
+          "word_ids": [
+            1109,
+            1110,
+            1111,
+            1112,
+            1113,
+            1114,
+            1115,
+            1116,
+            1117,
+            1118
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VALVE SCHEDULE MARK SYSTEM AND/OR SERVICE TYPE SIZE FLOW REMARKS",
+          "word_ids": [
+            1485,
+            1486,
+            1057,
+            1058,
+            1059,
+            1060,
+            1061,
+            1062,
+            1063,
+            1064
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "supporting-source-limitations",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

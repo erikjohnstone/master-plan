@@ -1,0 +1,42 @@
+{
+  "document_id": "12__vol2__028",
+  "status": "partial_document_audit",
+  "scope": "All three printed rows in the M-601 Dedicated Outside Air System Schedule (source PDF page 9).",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [9],
+    "render": "reviews/12__vol2__028/p9-p9-full-poppler.png",
+    "dpi": 144,
+    "finding": "The vector schedule was visually reviewed as a 31-field, three-row table. The source uses 00/0 as printed NEMA-size values and they are retained literally."
+  },
+  "tables": [
+    {
+      "id": "M601-DOAS",
+      "page": 9,
+      "sheet": "M-601",
+      "title": "DEDICATED OUTSIDE AIR SYSTEM SCHEDULE",
+      "classification": "Dedicated outside air systems",
+      "columns": "mark|max_supply_fan_cfm|supply_fan_esp_in_wg|exhaust_fan_esp_in_wg|airside_eer|airside_pressure_drop_in_wg|coil_fouling_factor_hr_sq_ft_f_btu|cooling_eat_db_wb_f|cooling_lat_db_wb_f|cooling_ewt_lwt_f|cooling_total_cap_mbh|cooling_sensible_cap_mbh|cooling_flow_rate_gpm|cooling_water_side_pressure_drop_ft_wg|heating_eat_db_f|heating_lat_db_f|heating_total_heat_cap_mbh|heating_flow_rate_gpm|heating_water_side_pressure_drop_ft_wg|volt_ph|mca|mocp|supply_fan_motor_hp|exhaust_fan_motor_hp|fan_rpm|supply_fan_nema_size|exhaust_fan_nema_size|length_in|width_in|height_in|manufacturer_model|notes",
+      "x_edges": [125,190,240,300,360,395,455,535,610,675,740,800,870,920,1000,1050,1110,1170,1240,1320,1360,1400,1445,1500,1560,1610,1667,1730,1770,1820,1870,1970,2105],
+      "y_edges": [744,760,776,792],
+      "rows": [
+        "DOAS-1|1,200|0.4|0.8|11|0.48|0.001|101.5/73.9|51.3/51.1|42.0/56.0|88.5|65.8|12.6|12.24|33.8|109.1|51.3|5.2|10.77|208/1|13.4|15|3/4|3/4|1309|0|00|46.0|54.0|18.0|DAIKIN/BCHD0181|1,2,3,4,5,6,7,8,9,10,12",
+        "DOAS-2|1,850|0.9|1.1|11|0.91|0.001|101.5/73.9|54.8/53.2|42.0/56.0|126.0|95.6|18.0|22.16|33.8|108.4|77.7|7.9|15.58|208/1|10.3|15|1.0|1.0|1486|0|00|46.0|54.0|18.0|DAIKIN/BCHD0201|1,2,3,4,5,6,7,8,9,10,12",
+        "DOAS-3|2,550|0.3|0.9|11|0.6|0.001|101.5/73.9|52.2/51.9|42.0/56.0|137.5|182.9|28.0|11.50|33.8|100.8|40.4|2.6|0.90|208/3|5.9|15|2.0|2.0|2319|00|00|84.4|56.5|32.3|DAIKIN/LAH007A|1,2,3,4,5,6,7,8,9,10,11,13"
+      ],
+      "header_evidence": [
+        {"bbox": [125,658,500,686], "expected": "DEDICATED OUTSIDE AIR SYSTEM SCHEDULE"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "m601-doas-schedule-row-count", "records_path": ["tables", 0, "rows"], "expected": 3}
+  ],
+  "source_conflicts": [
+    {
+      "table": "M601-DOAS",
+      "finding": "The M-601 schedule provides three named DOAS rows. It does not itself state how the repeated M-511/M-512 P&ID templates map to controller instances; schedule identity is not treated as a controller-point multiplication rule."
+    }
+  ],
+  "remaining_work": "Reconcile schedule rows with the source plans and controls sheets without treating schedule quantity alone as proof of controller, sensor, or terminal count."
+}

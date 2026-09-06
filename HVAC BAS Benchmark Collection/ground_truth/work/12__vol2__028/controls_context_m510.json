@@ -1,0 +1,71 @@
+{
+  "document_id": "12__vol2__028",
+  "module_role": "M-510 FCU written-controls context. It complements the exact FCU P&ID matrix and does not convert this reusable sequence into an installed FCU or sensor count.",
+  "source_sheet": "M-510",
+  "source_page": 6,
+  "sequences": [
+    {
+      "id": "fcu",
+      "title": "FAN COIL UNIT (FCU) CONTROL SEQUENCE",
+      "equipment_scope": "FCU P&ID/sequence template; installed FCU quantity and zone mapping are not stated on this source sheet.",
+      "statements": [
+        {"number": "A", "text": "THE FAN COIL UNIT WILL CONSIST OF CHILLED WATER COOLING COIL, HOT WATER HEATING COIL, INTEGRAL VARIABLE SPEED DIRECT DRIVE SUPPLY AIR FAN, RETURN AIR DAMPER, AND FILTER.", "assertion_ids": ["fcu-components"]},
+        {"number": "B.a-d", "text": "Start/stop bases: preset time-of-day occupancy schedule through the BAS; unoccupied setback/set-up; local zone-thermostat override; or manual/remote BAS override.", "assertion_ids": ["fcu-startstop-title", "fcu-startstop-schedule", "fcu-startstop-setback", "fcu-startstop-local", "fcu-startstop-bas"]},
+        {"number": "C", "text": "WHEN THE FAN COIL UNIT IS OFF, THE CHILLED WATER CONTROL VALVE SHALL BE FULLY CLOSED TO FLOW THROUGH THE COIL.", "assertion_ids": ["fcu-off-chw"]},
+        {"number": "D", "text": "WHEN THE FAN COIL UNIT IS ENERGIZED BY OCCUPANCY SCHEDULE, THE SUPPLY AIR FAN SHALL RUN CONTINUOUSLY. THE FAN SPEED SHALL MODULATE ACCORDING TO THE MANUFACTURER'S PREFERRED SEQUENCE TO MAINTAIN A SPACE TEMPERATURE OF 78°F (ADJ.) IN COOLING AND 68°F (ADJ.) IN HEATING.", "assertion_ids": ["fcu-fan-control"]},
+        {"number": "E.a", "text": "COOLING: UNDER NORMAL OPERATING CONDITIONS THE AVERAGING TYPE SUPPLY AIR TEMPERATURE SENSOR (LOCATED IN UNIT DISCHARGE) WILL, ACTING THROUGH THE CONTROLLER, MODULATE THE CHILLED WATER COIL TO MAINTAIN A SUPPLY AIR TEMPERATURE OF 55°F (ADJ.).", "assertion_ids": ["fcu-cooling-sat"]},
+        {"number": "E.b", "text": "HEATING: UNDER NORMAL OPERATING CONDITIONS THE AVERAGING TYPE SUPPLY AIR TEMPERATURE SENSOR (LOCATED IN UNIT DISCHARGE) WILL, ACTING THROUGH THE CONTROLLER, MODULATE THE HOT WATER COIL TO MAINTAIN A SUPPLY AIR TEMPERATURE OF 85°F (ADJ.).", "assertion_ids": ["fcu-heating-sat"]},
+        {"number": "F", "text": "During unoccupied cooling, BAS energizes the chilled-water coil above 85°F (ADJ.) and operates it until space temperature drops to 83°F (ADJ.); the return-air damper remains fully open.", "assertion_ids": ["fcu-unoccupied", "fcu-ra-damper"]},
+        {"number": "G", "text": "An averaging-type manual-reset freezestat in the mixed-air section fully opens the chilled-water control valve at 38°F (ADJ.), alarms BAS, and requires manual reset before return to normal operation.", "assertion_ids": ["fcu-freeze"]},
+        {"number": "H", "text": "Emergency shutdown is hard wired into the supply-fan motor-control circuit. It shuts down the fan, alarms BAS, and fully closes all control dampers and hydronic control valves.", "assertion_ids": ["fcu-esd"]},
+        {"number": "I", "text": "Only one coil—heating or cooling—may operate at a time, except in freeze-protection mode.", "assertion_ids": ["fcu-one-coil"]},
+        {"number": "J.a", "text": "Supply-fan failure uses a current transformer: commanded on with no detected current alarms BAS.", "assertion_ids": ["fcu-fan-failure"]},
+        {"number": "J.c", "text": "High/low supply-air-temperature alarm monitors the averaging sensor in the unit discharge; thresholds are above 60°F (ADJ.) or below 45°F (ADJ.).", "assertion_ids": ["fcu-sat-alarm"]},
+        {"number": "J.d-e", "text": "High and low supply-static-pressure switches in the unit discharge are hard wired to shut down the supply fan and alarm BAS at above 4 inches W.C. (ADJ.) or below 0.5 inches W.C. (ADJ.).", "assertion_ids": ["fcu-static-alarms"]},
+        {"number": "J.f", "text": "A return-air-duct smoke detector is hard wired to shut down the fan, with auxiliary notification to fire alarm and BAS.", "assertion_ids": ["fcu-smoke"]},
+        {"number": "J.g-h", "text": "A differential-pressure switch across the filter alarms at a 0.70-inch static-pressure high limit (ADJ.); condensate float-switch overflow is hard wired to shut down the fan and alarm BAS.", "assertion_ids": ["fcu-filter", "fcu-condensate"]}
+      ]
+    }
+  ],
+  "sensor_and_zone_ledger": {
+    "source_items": [
+      {"id": "FCU-SAT", "classification": "Averaging supply-air-temperature sensor in unit discharge", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "FCU discharge", "basis": "M-510 E.a/E.b and J.c."},
+      {"id": "FCU-FREEZESTAT", "classification": "Averaging manual-reset freezestat in mixed-air section", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "FCU mixed-air section", "basis": "M-510 G."},
+      {"id": "FCU-FAN-CT", "classification": "Current transformer on supply-fan circuit", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "FCU supply-fan circuit", "basis": "M-510 J.a."},
+      {"id": "FCU-STATIC-SWITCHES", "classification": "Adjustable high/low static-pressure switches in unit discharge", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "FCU discharge", "basis": "M-510 J.d/J.e."},
+      {"id": "FCU-SMOKE", "classification": "Smoke detector in return-air ductwork", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "FCU return-air duct", "basis": "M-510 J.f."},
+      {"id": "FCU-FILTER-DP", "classification": "Differential-pressure switch across filter section", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "FCU filter section", "basis": "M-510 J.g."},
+      {"id": "FCU-CONDENSATE", "classification": "Condensate float switch in AHU condensate drain", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "AHU condensate drain as printed; relationship to FCU template not further stated", "basis": "M-510 J.h."}
+    ],
+    "counts": {"space_sensors": {"status": "not_stated", "value": null}, "CO2_sensors": {"status": "not_stated", "value": null}, "smart_thermostats": {"status": "not_stated", "value": null}},
+    "limitation": "The M-510 FCU sequence names generic components and a zone thermostat but the supplied excerpt does not identify FCU quantities, thermostat locations, or plan-level zone ownership."
+  },
+  "tables": [],
+  "assertions": [
+    {"id": "fcu-components", "page": 6, "bbox": [120,640,2200,667], "expected": "THE FAN COIL UNIT WILL CONSIST OF CHILLED WATER COOLING COIL, HOT WATER HEATING COIL, INTEGRAL VARIABLE SPEED DIRECT DRIVE SUPPLY AIR FAN, RETURN AIR DAMPER, AND FILTER.", "mode": "contains"},
+    {"id": "fcu-startstop-title", "page": 6, "bbox": [120,675,1200,692], "expected": "START/STOP CONTROL: THE FAN COIL UNIT SHALL START AND STOP BASED ON THE FOLLOWING:", "mode": "contains"},
+    {"id": "fcu-startstop-schedule", "page": 6, "bbox": [150,692,1200,709], "expected": "PRESET TIME OF DAY OCCUPANCY SCHEDULE THROUGH THE BAS", "mode": "contains"},
+    {"id": "fcu-startstop-setback", "page": 6, "bbox": [150,709,1200,727], "expected": "OR UNOCCUPIED SETBACK/SET-UP CONDITIONS.", "mode": "contains"},
+    {"id": "fcu-startstop-local", "page": 6, "bbox": [150,727,1200,744], "expected": "OR LOCAL OVERRIDE OF ZONE THERMOSTAT.", "mode": "contains"},
+    {"id": "fcu-startstop-bas", "page": 6, "bbox": [150,744,1200,761], "expected": "OR MANUAL/REMOTE OVERRIDE OF SYSTEM THROUGH THE BAS.", "mode": "contains"},
+    {"id": "fcu-off-chw", "page": 6, "bbox": [120,778,2200,802], "expected": "WHEN THE FAN COIL UNIT IS OFF, THE CHILLED WATER CONTROL VALVE SHALL BE FULLY CLOSED TO FLOW THROUGH THE COIL.", "mode": "contains"},
+    {"id": "fcu-fan-control", "page": 6, "bbox": [120,812,2200,850], "expected": "SUPPLY AIR FAN CONTROL: WHEN THE FAN COIL UNIT IS ENERGIZED BY OCCUPANCY SCHEDULE, THE SUPPLY AIR FAN SHALL RUN CONTINUOUSLY. THE FAN SPEED SHALL MODULATE ACCORDING TO THE MANUFACTURER'S PREFERRED SEQUENCE TO MAINTAIN A SPACE TEMPERATURE OF 78°F (ADJ.) IN COOLING AND 68°F (ADJ.) IN HEATING.", "mode": "contains"},
+    {"id": "fcu-cooling-sat", "page": 6, "bbox": [150,880,2200,913], "expected": "COOLING: UNDER NORMAL OPERATING CONDITIONS THE AVERAGING TYPE SUPPLY AIR TEMPERATURE SENSOR (LOCATED IN UNIT DISCHARGE) WILL, ACTING THROUGH THE CONTROLLER, MODULATE THE CHILLED WATER COIL TO MAINTAIN A SUPPLY AIR TEMPERATURE OF 55°F (ADJ.).", "mode": "contains"},
+    {"id": "fcu-heating-sat", "page": 6, "bbox": [150,914,2200,947], "expected": "HEATING: UNDER NORMAL OPERATING CONDITIONS THE AVERAGING TYPE SUPPLY AIR TEMPERATURE SENSOR (LOCATED IN UNIT DISCHARGE) WILL, ACTING THROUGH THE CONTROLLER, MODULATE THE HOT WATER COIL TO MAINTAIN A SUPPLY AIR TEMPERATURE OF 85°F (ADJ.).", "mode": "contains"},
+    {"id": "fcu-unoccupied", "page": 6, "bbox": [120,966,2200,1002], "expected": "UNOCCUPIED SETUP CONTROL: THE FAN COIL UNIT SHALL BE PROVIDED WITH UNOCCUPIED SETUP AND UNOCCUPIED SETBACK TEMPERATURE CONTROLS. DURING UNOCCUPIED CONDITIONS, THE BAS SHALL ENERGIZE THE CHILLED WATER COIL IF ANY ZONE’S SPACE AIR TEMPERATURE RISES ABOVE 85°F (ADJ.) DURING UNOCCUPIED HOURS AND THE ZONE IS IN COOLING MODE. ONCE ENERGIZED, THE CHILLED WATER COIL SHALL OPERATE UNDER NORMAL CONDITIONS UNTIL SPACE TEMPERATURE DROPS TO 83°F (ADJ.) FOR UNOCCUPIED SETUP.", "mode": "contains"},
+    {"id": "fcu-ra-damper", "page": 6, "bbox": [120,1000,1600,1018], "expected": "RETURN AIR DAMPER SHALL REMAIN FULLY OPEN TO ALLOW FLOW THROUGH THE FAN COIL UNIT.", "mode": "contains"},
+    {"id": "fcu-freeze", "page": 6, "bbox": [120,1034,2200,1070], "expected": "FREEZE PROTECTION: AN AVERAGING TYPE MANUAL-RESET FREEZESTAT INSTALLED IN THE MIXED AIR SECTION OF THE FAN COIL UNIT SHALL FULLY OPEN THE CHILLED WATER CONTROL VALVE TO ALLOW FLOW THROUGH THE COIL SHOULD THE MIXED AIR TEMPERATURE DROP TO 38°F (ADJ.). THE FREEZESTAT SHALL SEND AN ALARM TO THE BAS. A MANUAL RESET OF THE FREEZESTAT SHALL BE REQUIRED FOR THE FAN COIL UNIT TO RETURN TO NORMAL OPERATING CONDITION.", "mode": "contains"},
+    {"id": "fcu-esd", "page": 6, "bbox": [120,1085,2200,1120], "expected": "EMERGENCY SHUTDOWN: AN EMERGENCY SHUTDOWN SWITCH SHALL BE HARD WIRED IN TO SUPPLY FAN MOTOR CONTROL CIRCUIT TO SHUT DOWN THE FAN AND SEND AN ALARM TO THE BAS WHEN THE EMERGENCY SHUTDOWN SWITCH IS ACTIVATED. ALL CONTROL DAMPERS AND HYDRONIC CONTROL VALVES, REGARDLESS OF WHAT MODE THE UNIT IS IN, SHALL FULLY CLOSE WHEN EMERGENCY SHUTDOWN HAS BEEN ACTIVATED.", "mode": "contains"},
+    {"id": "fcu-one-coil", "page": 6, "bbox": [120,1136,2200,1160], "expected": "THE BAS SHALL ALLOW OPERATION OF ONLY ONE COIL (EITHER HEATING OR COOLING) AT A TIME. UNDER NO CONDITION SHALL BOTH HEATING AND COOLING VALVES BE SIMULTANEOUSLY OPEN OTHER THAN WHEN THE UNIT IS IN FREEZE PROTECTION MODE.", "mode": "contains"},
+    {"id": "fcu-fan-failure", "page": 6, "bbox": [120,1187,2200,1205], "expected": "SUPPLY FAN FAILURE: A CURRENT TRANSFORMER (CT) INSTALLED ON THE SUPPLY FAN CIRCUIT SHALL SEND AN ALARM TO THE BAS IF THE FAN IS COMMANDED ON AND NO CURRENT IS DETECTED.", "mode": "contains"},
+    {"id": "fcu-sat-alarm", "page": 6, "bbox": [120,1221,2200,1239], "expected": "HIGH AND LOW SUPPLY AIR TEMPERATURE: THE BAS SHALL MONITOR THE AVERAGING TYPE SUPPLY AIR TEMPERATURE INSTALLED IN THE UNIT DISCHARGE AND SENDS AN ALARM IF THE SUPPLY AIR TEMPERATURE EXCEEDS 60°F (ADJ.) OR DROPS BELOW 45°F (ADJ.).", "mode": "contains"},
+    {"id": "fcu-static-alarms", "page": 6, "bbox": [120,1239,2200,1308], "expected": "HIGH SUPPLY STATIC PRESSURE ALARM: AN ADJUSTABLE TYPE HIGH STATIC PRESSURE SWITCH, INSTALLED IN THE UNIT DISCHARGE SHALL BE HARD WIRED INTO SUPPLY FAN MOTOR CONTROL CIRCUIT TO SHUT DOWN THE SUPPLY FAN AND SEND AN ALARM TO THE BAS WHEN THE SUPPLY AIR STATIC PRESSURE EXCEEDS 4” W.C. (ADJ.).", "mode": "contains"},
+    {"id": "fcu-smoke", "page": 6, "bbox": [120,1307,2200,1325], "expected": "SMOKE DETECTOR ALARM: SMOKE DETECTOR LOCATED IN THE RETURN AIR DUCTWORK SHALL BE HARD WIRED INTO THE MOTOR CONTROL CIRCUIT TO SHUT DOWN THE FAN. AN AUXILIARY CONTACT WILL NOTIFY THE FIRE ALARM SYSTEM AND SEND AN ALARM TO THE BAS.", "mode": "contains"},
+    {"id": "fcu-filter", "page": 6, "bbox": [120,1325,2200,1342], "expected": "CLOGGED FILTER ALARM: A DIFFERENTIAL PRESSURE SWITCH INSTALLED ACROSS THE FILTER SECTION WILL, THROUGH THE CONTROLLER, ACTIVATE AN ALARM WHEN THE FILTER PRESSURE LOSS EXCEEDS THE HIGH LIMIT SETPOINT OF 0.70 INCH STATIC PRESSURE (ADJ.).", "mode": "contains"},
+    {"id": "fcu-condensate", "page": 6, "bbox": [120,1342,2200,1362], "expected": "CONDENSATE OVERFLOW ALARM: A CONDENSATE FLOAT SWITCH INSTALLED IN THE AHU CONDENSATE DRAIN SHALL BE HARD WIRED INTO THE MOTOR CONTROL CIRCUIT TO SHUT DOWN THE FAN. AN AUXILIARY CONTACT WILL NOTIFY AND SEND AN ALARM TO THE BAS.", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "one-m510-written-sequence", "records_path": ["sequences"], "expected": 1, "unique_key": "id"},
+    {"id": "m510-logical-sensor-items", "records_path": ["sensor_and_zone_ledger", "source_items"], "expected": 7, "unique_key": "id"}
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "document_id": "04__vol2__062",
+  "source_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "annotation_sha256": "67aa37165af123d8ee7e19581747160e95c471d321e72ee5093a898d330460b9",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 0,
+  "checks": [],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "linked-schedule-registry",
+      "pass": true,
+      "tables": 23,
+      "rows": 94,
+      "identities": 61,
+      "primary_anchors": 61
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {
+    "schedules_m50_air_valves.json": "9c46873ff9c5408051f06d85dbc33925a5f5d587b64c47b09a9eb9ac6d87be3d",
+    "schedules_m51_control_valves.json": "1e97aa9f84b67f3f54842efc331f080855664a05ac81e5a11ba9f8c258bddd7d",
+    "schedules_m52_equipment.json": "2d257d702086ea280197829498df33290be568b70647cd80c28873c41ebc3a22",
+    "schedules_m53_ahu.json": "f2aef2af6de8cea441262a627b2120a0fc0597277f7b08f5f325dd1a89914c96",
+    "schedules_m51_core_equipment.json": "5d607e84a2a84336bf32bb6852c389b9355b182e298025320345f60eb067ea2a",
+    "schedules_m50_core_equipment.json": "3a8cec758a94ff9c98ee568e23505b20b70a412a30b1a8a9d509231ac846aca4",
+    "schedules_m51_air_devices.json": "99b24fbe85ef1ffe11339120b0c1ea40478064d4e5bd1ef535be3875bd4b8e4d"
+  },
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

@@ -1,0 +1,20 @@
+{
+  "document_id": "01__vol2__001",
+  "module_role": "Partial M-612 MTRACON schedule inventory. It preserves the two-part DOAH-M1 schedule and three range-hood schedule marks; VAV, duct/piping construction and vibration-isolation coverage remain in their dedicated or future modules.",
+  "source_sheet": "M-612",
+  "source_page": 46,
+  "tables": [
+    {"id":"M612-DOAH-M1-PART-1","page":46,"sheet":"M-612","title":"DEDICATED OUTDOOR AIR UNIT SCHEDULE 1 OF 2","classification":"MTRACON dedicated outdoor air unit schedule — cooling/heating section","columns":"mark","x_edges":[150,220],"y_ranges":[[771,793]],"rows":["DOAH-M1"],"header_evidence":[{"bbox":[150,700,1830,770],"expected":"DEDICATED OUTDOOR AIR UNIT SCHEDULE 1 OF 2"}]},
+    {"id":"M612-DOAH-M1-PART-2","page":46,"sheet":"M-612","title":"DEDICATED OUTDOOR AIR UNIT SCHEDULE 2 OF 2","classification":"MTRACON dedicated outdoor air unit schedule — energy wheel/electrical section","columns":"mark","x_edges":[150,220],"y_ranges":[[913,935]],"rows":["DOAH-M1"]},
+    {"id":"M612-RANGE-HOOD-MARKS","page":46,"sheet":"M-612","title":"RANGE HOOD SCHEDULE","classification":"MTRACON range-hood schedule","columns":"mark","x_edges":[1580,1630],"y_ranges":[[1443,1461],[1462,1479],[1480,1497]],"rows":["RH-M1","RH-M2","RH-M3"]}
+  ],
+  "schedule_detail_records": {
+    "DOAH-M1":"3,730 CFM supply at 1.9 in. w.g. with one 7.5 HP supply fan; 3,400 CFM exhaust at 1.1 in. w.g. with one 3 HP exhaust fan. Cooling: 216.2 MBH total, 106.7 MBH sensible, 45/55 F water, 43.2 GPM. Heating: 112.8 MBH, 130/110 F water, 11.3 GPM. The second schedule part prints energy-wheel summer/winter conditions, 460/60/3, 17.11/19.86 electrical values, a 30 A value, and Division 23 VFD provision. This is one two-part schedule identity, not two units.",
+    "RH-M1":"Range hood: 120 CFM, 7-inch duct connection, 120/1/2.5 electrical, 30x20x5.5-inch dimensions.",
+    "RH-M2":"Range hood: 120 CFM, 7-inch duct connection, 120/1/2.5 electrical, 30x20x5.5-inch dimensions.",
+    "RH-M3":"Range hood: 120 CFM, 7-inch duct connection, 120/1/2.5 electrical, 30x20x5.5-inch dimensions."
+  },
+  "tables_note":"A two-part DOAH schedule represents one source identity across two tables; it is not doubled into two units or a point/terminal quantity.",
+  "assertions":[{"id":"m612-sheet-title","page":46,"bbox":[2280,1500,2365,1533],"expected":"M-612","mode":"exact"}],
+  "inventory_checks":[{"id":"m612-aux-schedule-tables","records_path":["tables"],"expected":3,"unique_key":"id"}]
+}

@@ -1,0 +1,76 @@
+{
+  "document_id": "28__vol1__26",
+  "source_sha256": "6873dbdbf3fa2e364c7daf5dfebceb98ab00cb34aab3b2468cac62832771ab43",
+  "annotation_sha256": "f7c65a5fa5d9e7c5bfb7af10b3de9c7eb6ca5c7056ecf43e48970b2b3abe7cf7",
+  "tables": 1,
+  "rows": 1,
+  "cell_assertions": 1,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M010-FAN-POWERED-TERMINAL",
+      "row": 1,
+      "column": "literal_source_row_as_printed",
+      "page": 10,
+      "bbox": [
+        550,
+        130,
+        1800,
+        140
+      ],
+      "expected": "480 3 1/8 51.00 65.46 680 136 10 9,900 65.75 84.85 0.7 277/1 3.1 15 3.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "480 3 1/8 51.00 65.46 680 136 10 9,900 65.75 84.85 0.7 277/1 3.1 15 3.9",
+          "word_ids": [
+            896,
+            897,
+            898,
+            899,
+            900,
+            901,
+            902,
+            903,
+            904,
+            905,
+            906,
+            907,
+            908,
+            909,
+            910,
+            911
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "480 3 1/8 51.00 65.46 680 136 10 9,900 65.75 84.85 0.7 277/1 3.1 15 3.9",
+          "word_ids": [
+            865,
+            866,
+            867,
+            868,
+            869,
+            870,
+            871,
+            872,
+            873,
+            874,
+            875,
+            876,
+            45,
+            46,
+            47,
+            48
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

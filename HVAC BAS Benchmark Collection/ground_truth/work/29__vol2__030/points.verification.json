@@ -1,0 +1,58 @@
+{
+  "document_id": "29__vol2__030",
+  "source_sha256": "c8a85e522ea577c37a658f099e5f3b2af619fb3a8c35ffc219b39a13b9c56367",
+  "annotation_sha256": "792127cde9ae7d7baf42495d1110fab586588bd915c2e7bcb856ddb83ff58d60",
+  "tables": 1,
+  "rows": 1,
+  "cell_assertions": 1,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M603-TIME-CLOCK",
+      "row": 1,
+      "column": "literal_source_row_as_printed",
+      "page": 87,
+      "bbox": [
+        1165,
+        1045,
+        1540,
+        1080
+      ],
+      "expected": "TIME CLOCK CONTROLLING EQUIPMENT ON A SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TIME CLOCK CONTROLLING EQUIPMENT ON A SCHEDULE",
+          "word_ids": [
+            292,
+            293,
+            294,
+            295,
+            296,
+            297,
+            298
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TIME CLOCK CONTROLLING EQUIPMENT ON A SCHEDULE",
+          "word_ids": [
+            345,
+            346,
+            347,
+            348,
+            349,
+            350,
+            351
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

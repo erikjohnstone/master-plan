@@ -1,0 +1,19 @@
+{
+  "document_id": "16__vol2__069",
+  "module_role": "Coordinator limitation ledger for the complete nine-page supplied ITD District 2 heating-upgrades rebid PDF. These source limits are findings from complete visual review, not parser absence claims alone.",
+  "source_limitations": [
+    {"id": "outlined-sheet-title-text", "finding": "The title-block sheet IDs/names are legible on the full-page renders but largely outlined graphics rather than normal parser text. Visual review records them; no false parser assertion is made for those outlined labels."},
+    {"id": "no-control-valve-schedule", "finding": "No dedicated control-valve schedule appears on the nine supplied sheets. A new AHU-1 3-way-valve note, schematic BCV-1 label, and legend symbols are not converted to a valve-schedule count."},
+    {"id": "no-damper-actuator-schedule", "finding": "No dedicated damper-actuator schedule appears on the nine supplied sheets. The controls legend's DA definition is not an installed actuator quantity."},
+    {"id": "open-ended-interface-lists", "finding": "The VFD list says NOT BE LIMITED TO and the chiller list says ALL AVAILABLE and NOT BE LIMITED TO. The visible 16 rows are preserved but are not treated as a complete physical I/O count."},
+    {"id": "no-zone-sensor-roster", "finding": "The supplied floor/power plans do not provide a space-sensor, CO2-sensor, or smart-thermostat roster mapped to zones. Schematic TT/PT and integration temperature points are recorded only as logical/source items."},
+    {"id": "existing-versus-updated-sequence", "finding": "M4.0/M4.1 explicitly label grey text as existing sequence and bold text as updated sequence. The two layers are preserved separately; the record does not invent a merged final sequence."},
+    {"id": "schedule-versus-installed-count", "finding": "M3.0 has 11 schedule line items. Schedule rows, plan/schematic visual labels, logical source-list rows, and field-installed devices are different quantities and remain separately scoped."}
+  ],
+  "all_document_pages_visually_reviewed": {"status": "complete", "page_count": 9, "basis": "Full-page Poppler renders p1 through p9 were reviewed and the per-page findings are embedded in metadata/page_review."},
+  "tables": [],
+  "assertions": [],
+  "inventory_checks": [
+    {"id": "source-limitations", "records_path": ["source_limitations"], "expected": 7, "unique_key": "id"}
+  ]
+}

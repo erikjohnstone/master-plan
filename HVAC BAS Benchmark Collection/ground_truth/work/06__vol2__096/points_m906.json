@@ -1,0 +1,121 @@
+{
+  "document_id": "06__vol2__096",
+  "module_role": "Complete literal M906 heat-recovery-chiller Schedule of DDC Points capture.",
+  "tables": [
+    {
+      "id": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "sheet": "M906",
+      "page": 36,
+      "title_as_printed": "SCHEDULE OF DDC POINTS",
+      "columns": "source_row_as_printed",
+      "x_edges": [
+        295,
+        800
+      ],
+      "y_ranges": [
+        [
+          1810,
+          1823
+        ],
+        [
+          1823,
+          1836
+        ],
+        [
+          1836,
+          1850
+        ],
+        [
+          1850,
+          1863
+        ],
+        [
+          1863,
+          1876
+        ],
+        [
+          1876,
+          1889
+        ],
+        [
+          1889,
+          1902
+        ],
+        [
+          1902,
+          1915
+        ],
+        [
+          1915,
+          1928
+        ],
+        [
+          1928,
+          1941
+        ],
+        [
+          1941,
+          1954
+        ],
+        [
+          1954,
+          1967
+        ],
+        [
+          1967,
+          1980
+        ],
+        [
+          1980,
+          1994
+        ],
+        [
+          1994,
+          2007
+        ],
+        [
+          2007,
+          2020
+        ],
+        [
+          2020,
+          2034
+        ]
+      ],
+      "rows": [
+        "AI-1 HRC-1 CHILLED WATER ENTERING TEMPERATURE X X X",
+        "AI-2 HRC CHILLED WATER LEAVING TEMPERATURE X X X",
+        "AI-3 HRC-1 SYSTEM CHILLED WATER FLOW X X",
+        "AI-4 HRC-1 SYSTEM CHILLED WATER CALCULATED LOAD X X",
+        "AI-5 HRC-1 ENTERING HOT WATER TEMPERATURE X X X",
+        "AI-6 HRC-1 LEAVING HOT WATER TEMPERATURE X X X",
+        "AI-7 HRC-1 SYSTEM HOT WATER FLOW X X",
+        "AI-8 HRC-1 SYSTEM HOT WATER CALCULATED LOAD X X",
+        "AO-1 HRC-1 FIRING RATE X X",
+        "BI-1 HRC-1 GENERAL ALARM X X X",
+        "BI-2 HEAT RECOVERY CHILLED WATER PUMP STATUS X",
+        "BI-3 HEAT RECOVERY HOT WATER PUMP STATUS X",
+        "BO-1 HRC-1 START/STOP X X",
+        "BO-2 HEAT RECOVERY CHILLED WATER PUMP START-STOP X",
+        "BO-3 HRC-1 CHILLED WATER ISOLATION VALVE X X",
+        "BO-4 HEAT RECOVERY HOT WATER PUMP START-STOP X",
+        "BO-5 HRC-1 HEATING WATER ISOLATION VALVE X X"
+      ],
+      "row_reading_order": "left_to_right",
+      "header_evidence": [
+        {
+          "bbox": [
+            425,
+            1770,
+            565,
+            1792
+          ],
+          "expected": "SCHEDULE OF DDC POINTS"
+        }
+      ],
+      "source_row_semantics": "Complete literal DDC source-row capture including source marks; not a final controller hardware or duplicated HRC-instance count."
+    }
+  ],
+  "assertions": [],
+  "point_scope": "17 literal point rows are retained as printed."
+}

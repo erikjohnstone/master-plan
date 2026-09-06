@@ -1,0 +1,99 @@
+{
+  "document_id": "29__vol2__030",
+  "source_sha256": "c8a85e522ea577c37a658f099e5f3b2af619fb3a8c35ffc219b39a13b9c56367",
+  "annotation_sha256": "b974082273849451ef00f9a704a33145ff0e035717ddfc695d714d9400452dea",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 2,
+  "checks": [
+    {
+      "assertion": "cover-project",
+      "page": 1,
+      "bbox": [
+        2525,
+        1910,
+        2760,
+        1980
+      ],
+      "expected": "EHRM INFRASTRUCTURE UPGRADES - SYRACUSE VA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EHRM INFRASTRUCTURE UPGRADES - SYRACUSE VA",
+          "word_ids": [
+            1048,
+            1049,
+            1050,
+            1051,
+            1052,
+            1053
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EHRM INFRASTRUCTURE UPGRADES - SYRACUSE VA",
+          "word_ids": [
+            1022,
+            1023,
+            1024,
+            1025,
+            1026,
+            1027
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "cover-location",
+      "page": 1,
+      "bbox": [
+        2525,
+        1995,
+        2760,
+        2030
+      ],
+      "expected": "VA NY SYRACUSE 800 IRVING AVE., SYRACUSE, NY 13210",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Location VA NY SYRACUSE 800 IRVING AVE., SYRACUSE, NY 13210",
+          "word_ids": [
+            947,
+            1054,
+            1055,
+            1056,
+            1057,
+            1058,
+            1059,
+            1060,
+            1061,
+            1062
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Location VA NY SYRACUSE 800 IRVING AVE., SYRACUSE, NY 13210",
+          "word_ids": [
+            1031,
+            1035,
+            1036,
+            1037,
+            1038,
+            1039,
+            1040,
+            1041,
+            1042,
+            1043
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

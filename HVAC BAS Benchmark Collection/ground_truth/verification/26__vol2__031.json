@@ -1,0 +1,203 @@
+{
+  "id": "26__vol2__031",
+  "record_sha256": "5a5b80b479778fac45cdcc3f157ab149f96fc25d62e019a2b96c05fdcb2fc85f",
+  "checked_utc": "2026-09-05T10:24:34.244564+00:00",
+  "errors": [],
+  "modules": {
+    "metadata": {
+      "components": [
+        {
+          "annotation_sha256": "01ff528ba2880da41b75c063fc5ba0718f9d77695c0c909135ba79a79381069b",
+          "cell_assertions": 0,
+          "text_assertions": 3,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 3,
+      "pass": true
+    },
+    "schedules": {
+      "components": [
+        {
+          "annotation_sha256": "1e585102c1213e769ab5861900edf364587fa5bfa0112fb8434bee909127adbe",
+          "cell_assertions": 32,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 32,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "points": {
+      "components": [
+        {
+          "annotation_sha256": "5944e6435aa4103d543d6ddf9559ec5acf6d02ccb9660bd95ddcf460e55e2a88",
+          "cell_assertions": 21,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 21,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "controls_context": {
+      "components": [
+        {
+          "annotation_sha256": "04ed37e7b5fdaac0f9a3f930076c5aea759ba2b8cb06fa3524d09e2abf0a8734",
+          "cell_assertions": 0,
+          "text_assertions": 17,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 17,
+      "pass": true
+    },
+    "equipment_reconciliation": {
+      "components": [
+        {
+          "annotation_sha256": "6a410d47edfc730bd280ed557722231796f4d3ae154c973670fc453f19f62b33",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "point_applications": {
+      "components": [
+        {
+          "annotation_sha256": "ee8dd6c36d79e419e4ea0e72bcbf35355ec71c6e68e8806e22596060181955d5",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "supporting_evidence": {
+      "components": [
+        {
+          "annotation_sha256": "5d719eb492106f9c6c63f60d434a57063b661d13e864b03513fcd4b328e78854",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    }
+  },
+  "source_files_sha256": {
+    "work/26__vol2__031/document_manifest.json": "f84c7f1628b27c362dc31b6b4583b98854d21dcb4859cd660b527ba7ccd97818",
+    "work/26__vol2__031/metadata.json": "01ff528ba2880da41b75c063fc5ba0718f9d77695c0c909135ba79a79381069b",
+    "work/26__vol2__031/schedules.json": "1e585102c1213e769ab5861900edf364587fa5bfa0112fb8434bee909127adbe",
+    "work/26__vol2__031/points.json": "5944e6435aa4103d543d6ddf9559ec5acf6d02ccb9660bd95ddcf460e55e2a88",
+    "work/26__vol2__031/controls_context.json": "04ed37e7b5fdaac0f9a3f930076c5aea759ba2b8cb06fa3524d09e2abf0a8734",
+    "work/26__vol2__031/equipment_reconciliation.json": "6a410d47edfc730bd280ed557722231796f4d3ae154c973670fc453f19f62b33",
+    "work/26__vol2__031/point_applications.json": "ee8dd6c36d79e419e4ea0e72bcbf35355ec71c6e68e8806e22596060181955d5",
+    "work/26__vol2__031/supporting_evidence.json": "5d719eb492106f9c6c63f60d434a57063b661d13e864b03513fcd4b328e78854",
+    "reviews/26__vol2__031/p1-p1-full-poppler.png": "fad2c4932d059ec5d604a9f07ee61fb55b00910ee656621a2a75c5e7bcaa30c6",
+    "reviews/26__vol2__031/p2-p2-full-poppler.png": "52fdd15e6057de49cf3839f7e86b1a47f8a16b96df46eb18401454dd8a3c334b",
+    "reviews/26__vol2__031/p3-p3-full-poppler.png": "30be6a8fea8d2b1fca448216fd3ef6ed890bdb9cd665af6666e5b4bb49f81a37",
+    "reviews/26__vol2__031/p4-p4-full-poppler.png": "29e45b1ea0d3c913d371b22310b3890ecdb97e17aefc6e379fe74241c9a5a69d",
+    "reviews/26__vol2__031/p5-p5-full-poppler.png": "baf6590c53b9b6eb7211846d6aa1a4ae155937f95cbf3c193108d4b390a69438",
+    "reviews/26__vol2__031/p6-p6-full-poppler.png": "4fe4aa476dfa5cf8c0c6f6428797735aa952820c26127d263417224e7102f070",
+    "reviews/26__vol2__031/p7-p7-full-poppler.png": "b45914ee4fcfdb2e1cfa8751a0801797495f575053b61d0c2eb2784849d5ae7a",
+    "reviews/26__vol2__031/p8-p8-full-poppler.png": "83903e2d2253e7be3f8d9d9934d1a2528260039c976479afee2fc3c2831c8112",
+    "reviews/26__vol2__031/p9-p9-full-poppler.png": "126e46342dbd190c8b72af2f7c5bbc5b56ef40fe4fb40e926fcce1f29194c7e3",
+    "reviews/26__vol2__031/p10-p10-full-poppler.png": "670cfb3d5b7cae011180e4f97ef78fe7f658d4e940357c9c6bd6c4de7de23b36",
+    "reviews/26__vol2__031/p11-p11-full-poppler.png": "7d4f0e637609fa96f9172c147d69f2b32f7a5b24fd5b9a5d02dd21f18668bba1",
+    "reviews/26__vol2__031/p12-p12-full-poppler.png": "8a5ae27e6067d9c3bd52bfb5e292d4a1a75c4d5164aee8cd8319fddd9696d2d0",
+    "reviews/26__vol2__031/p13-p13-full-poppler.png": "ae4c6deb956bc160f2c3c192651ca6f5b7d1027310c10418bc57c53ba2c0cbf0",
+    "reviews/26__vol2__031/p14-p14-full-poppler.png": "a0bb411667adbca4b29d4ed60189e4951af5345db1ff22eadb2e8f4e3e0171ff",
+    "reviews/26__vol2__031/p15-p15-full-poppler.png": "9c6d9d12326d6b453c209c0bd2da847cd48963996d4deef2bfac7e9d0b741141",
+    "reviews/26__vol2__031/p16-p16-full-poppler.png": "b0fe4fb55d940c5f365b423823e5ba77a4d5d06fa00ca3e1ae7148db14ab8420",
+    "reviews/26__vol2__031/p17-p17-full-poppler.png": "0950a881524fb8ca6981c0e6050ce07d7a9b77a3944e8d3be90af11233c8501e",
+    "reviews/26__vol2__031/p18-p18-full-poppler.png": "8620bbb5c232968613472a3cbcc1e46f6f5981ae20aa8e4ff9ea134675a2ec97",
+    "reviews/26__vol2__031/p19-p19-full-poppler.png": "901e3be846b63424b4cdf159603aecadcd85c8421caded136ccce2f55530e06b",
+    "reviews/26__vol2__031/p20-p20-full-poppler.png": "3bb0a8a14c48696f0ae41fb1517a2586301078528a5c00f025a9bb6ee1f60b25",
+    "reviews/26__vol2__031/p21-p21-full-poppler.png": "a57b6880607d960a2af2587a67dac94c8f8351653d302547b2dba5ab1f96eb0c",
+    "reviews/26__vol2__031/p22-p22-full-poppler.png": "9859d57060e563dfca0244712d6fdbb2fedc8cbb336750f8fa83f20c3da9ea77",
+    "reviews/26__vol2__031/p23-p23-full-poppler.png": "e791463a4453b675e74581b72cf43a809ac617e8acc3443af03e645df949d2ea",
+    "reviews/26__vol2__031/p24-p24-full-poppler.png": "2604e8b3b5647e4f5f5d4b3fc4e9888a6e995fa56c88caba79c6ba51f603c5f1",
+    "reviews/26__vol2__031/p25-p25-full-poppler.png": "7f2c0941d04054ea339c8547be2744f7e77e08c012ffa0a8dba7cb72838c7eec",
+    "reviews/26__vol2__031/p26-p26-full-poppler.png": "b810b911e92fb8024f42f65d680efd15c2f56b1d2fe45cb777d8eaf777aa8945",
+    "reviews/26__vol2__031/p27-p27-full-poppler.png": "d649cec93de16ec32b0bdca6157628efeba5b693ae8c715c0782605c8f78b3ce",
+    "reviews/26__vol2__031/p28-p28-full-poppler.png": "a74c95333c068d5da5386ea68655d5a58672148df8020896f789f8403f76f886",
+    "reviews/26__vol2__031/p29-p29-full-poppler.png": "af5e57a3f798743618de8fd0cd670e0b89ab2e6be738e7effbe232158d0e6a96",
+    "reviews/26__vol2__031/p30-p30-full-poppler.png": "d9c418eaf914da2c1d3253c07517d61bc5cc0e7cfe2545d8607ee0865d51385c",
+    "reviews/26__vol2__031/p31-p31-full-poppler.png": "1d8be5cc2347b399e0e544f6db8bb0291e0a9bb3ac3d50ccaf17a1e67f1ab94c",
+    "reviews/26__vol2__031/p32-p32-full-poppler.png": "d9e4c66adc848630078df2ae02ce53bf4fbda567862add304a44ab2edd57f925",
+    "reviews/26__vol2__031/p33-p33-full-poppler.png": "abfa472f57308f00cac13d434a3a52fd4a2034b57fb6aeabec6e42e9752f075a",
+    "reviews/26__vol2__031/p34-p34-full-poppler.png": "ce0a20c84a679a262b955427e9e939e219aae9b2bf63b4dd929d093116542917",
+    "reviews/26__vol2__031/p35-p35-full-poppler.png": "a89e5d832742e49397f7ce45f14da958d95a378c3a72c0a005e82c7e18950983",
+    "reviews/26__vol2__031/p36-p36-full-poppler.png": "64d8670763cf0380292604ae54639427c54f6d97afdda3f7ccd1bf71ee1319b2",
+    "reviews/26__vol2__031/p37-p37-full-poppler.png": "c5b534d8a687eaf8f1d9fff44e795cbe0c8c2fff45d9d1b8db6aa2e62c42c942",
+    "reviews/26__vol2__031/p38-p38-full-poppler.png": "be35f459a60f90a25bce1ad419b27c9c53ca07ecd1a014d55e11e7321cc55e82",
+    "reviews/26__vol2__031/p39-p39-full-poppler.png": "2887a99aee532510089b101a313d4a2ecc6431fcc6e886d4f31421000a986fa1",
+    "reviews/26__vol2__031/p40-p40-full-poppler.png": "8266f6d5c60caa466038a35b16253398a308530df0af3d42acf6404bba195f4a",
+    "reviews/26__vol2__031/p41-p41-full-poppler.png": "a019aeaad69583781599eb0eb72ec47ff822f5bed7d44a558cfdb44e23827532",
+    "reviews/26__vol2__031/p42-p42-full-poppler.png": "4ac1694bfb1551a8f75d3a1079ec0ba785750ab02529614507bc0dd9c4e6da3d",
+    "reviews/26__vol2__031/p43-p43-full-poppler.png": "0aae10d8890329ed765d0e8c3e7cbb70698431acba0439b0d8167fa576319e32",
+    "reviews/26__vol2__031/p44-p44-full-poppler.png": "9c9c88ebb8acc1a2468763469d5eba95ba6b028c34ada4f1e64a8366d4b6fb5b",
+    "reviews/26__vol2__031/p45-p45-full-poppler.png": "177d9bda44fb2d85f0bb7340580e2cbe4b634cd4e75ed8b0c8048c95ed52284f",
+    "reviews/26__vol2__031/p46-p46-full-poppler.png": "741067b0f32a6cdf85dfefcfa37474f530cf8bff17614c97e9d45d3db764a066",
+    "reviews/26__vol2__031/p47-p47-full-poppler.png": "e2de916728bdbd3b26767cfdac45ba8db6b2e866c3935a631804944d8324f29f",
+    "reviews/26__vol2__031/p48-p48-full-poppler.png": "64fa8928b09153583254e7a2c80ef7d50831d708b28d4b6ac21919cfd6b96b07",
+    "reviews/26__vol2__031/p49-p49-full-poppler.png": "28cd7055d71dd3f8cb717a2e85f85a9693c1a2023cc8e3e89e622c24bc8f28a3",
+    "reviews/26__vol2__031/p50-p50-full-poppler.png": "04a923123c26f5e371bdd4db9a6bfd1b7c9d3cab9a50b17c7f0f6a137f69d5c4",
+    "reviews/26__vol2__031/p51-p51-full-poppler.png": "bed7418ebb3b520f3bfa6c1901d7132475869141cf2cbea0f70a33fe2df297de",
+    "reviews/26__vol2__031/p52-p52-full-poppler.png": "aa43e4e14752506da53079931278245e99d880942ab73f1e620baf3d52c81851",
+    "reviews/26__vol2__031/p53-p53-full-poppler.png": "b6d638b91136103c541cd85b8d8985d67ac9249c14f9fc9060363a14bf25bc9b",
+    "reviews/26__vol2__031/p54-p54-full-poppler.png": "ce326b0bfd116c72961cde5f3f4e907c1f8c08a770fe87baee8de37ad5c27d48",
+    "reviews/26__vol2__031/p55-p55-full-poppler.png": "d313df18be4dc287dd52f33a8c5a6697542836715917f133c5428812f75c41a1",
+    "reviews/26__vol2__031/p56-p56-full-poppler.png": "b976d36bf765502c353dcd52061a71a0bda272719f561d08ea3cdb563e83a5dc",
+    "reviews/26__vol2__031/p57-p57-full-poppler.png": "9e6eae4c8ea9a54ca4ce11cea1360219bb65076d9d0082a5b4de41844bcc016a",
+    "reviews/26__vol2__031/p58-p58-full-poppler.png": "76311caf0dd556fae378a188965a028eed5724f903fb168978620e5a5f6308bf",
+    "reviews/26__vol2__031/p59-p59-full-poppler.png": "4beec7518ed70a3966a5632dc79c4e7dae5d35ddaadc24ee433530d85d5a0591",
+    "reviews/26__vol2__031/p60-p60-full-poppler.png": "a3336729ed40a3e3fe5c120ce6c3f552bed6771e0381078d7d17791246cca02f",
+    "reviews/26__vol2__031/p61-p61-full-poppler.png": "e844d7785909aa42696e85e42ec08cccedceebf773465725f6b32967c0aefce2",
+    "reviews/26__vol2__031/p62-p62-full-poppler.png": "291c66fd002df57b4c5f626baa9ca233f3cfc0e9299737a537207e5ad947d28b",
+    "reviews/26__vol2__031/p63-p63-full-poppler.png": "9206d6543a56ad0f49f9c995ec285e1639e4f8701861fd801f229470daad69da",
+    "reviews/26__vol2__031/p64-p64-full-poppler.png": "f9605092bfcc803fb3029a93dfc9371e2526631619865db2dee4afffd31a8dd5",
+    "reviews/26__vol2__031/p65-p65-full-poppler.png": "287cf222588e1e7f99c5da07f67f6740feefaed6bc9046600c35359280a024ca",
+    "reviews/26__vol2__031/p66-p66-full-poppler.png": "73f2a76e53bde8134bd4c34335b7094b08788b5b0b2d32b7e44cf35bcdf8745b",
+    "reviews/26__vol2__031/p67-p67-full-poppler.png": "4a57993b6a7d3498dd804051d3a1ccc59cda6d439cf44798f78f280b666afdb4",
+    "reviews/26__vol2__031/p68-p68-full-poppler.png": "6e5e6db067e6915760ae215cf862a1cd63c7cb61cd05cb6138f5fcc76b6c22bb",
+    "reviews/26__vol2__031/p69-p69-full-poppler.png": "85a5d955d77b8c550458bfbf93c9e95e30d54c329bcb9d261988a43622b5534f",
+    "reviews/26__vol2__031/p70-p70-full-poppler.png": "17a55f97affac7f0d18b3e8cfe6879afad6ad24972122ab9189336c4cab7882e",
+    "reviews/26__vol2__031/p71-p71-full-poppler.png": "3d921ef6621c607ffd648970dcc1ba95ddcf9c1c8336614e259247e4113ad6cc",
+    "reviews/26__vol2__031/p72-p72-full-poppler.png": "02d9092b2dfe9083226fa1eb5bbe837a9c8f0f5a3f332a8a4295716ec637be70",
+    "reviews/26__vol2__031/p73-p73-full-poppler.png": "2a5e627f20029c04e39fad26f531e0c4bcf817e1e73c554d184896a73030b8ab",
+    "reviews/26__vol2__031/p74-p74-full-poppler.png": "eb5cbbcfef3cf61f6ecd55246b0f6c20d93badf74058e7a7d4f2b126ee678863",
+    "reviews/26__vol2__031/p75-p75-full-poppler.png": "08dd51efb0d5f148e28b0040dc74bfca19a6541164368c68da57e11a53414731",
+    "reviews/26__vol2__031/p76-p76-full-poppler.png": "14e3382203a044afac0135e95a4c000e9db7a610532fe9d283280c64d67975af",
+    "reviews/26__vol2__031/p77-p77-full-poppler.png": "1c5a102793467fe94c6713ba86bd52ee66af096f1958b753d920a6ef366aaf21",
+    "reviews/26__vol2__031/p78-p78-full-poppler.png": "0e8d8df4c91e9467928d22115d7833a99a3d77a55d0b30530fa140b5f2d2f4e8",
+    "reviews/26__vol2__031/p79-p79-full-poppler.png": "5278fe56eb4a19bd15fa198ba3314f06fb8937dc1d039df95237da6f3f0a6a96",
+    "reviews/26__vol2__031/p80-p80-full-poppler.png": "ecd786bda3f93da6013f2c9426bbd2476a2f9bb9facb68d1f4c0eb5d7dc3b636",
+    "reviews/26__vol2__031/p81-p81-full-poppler.png": "19b283f0e83c3bd9a719679f4c9148568abcd7a3d7203c4926ed3e0c4e436e65",
+    "reviews/26__vol2__031/p82-p82-full-poppler.png": "94bc2ea2fe4d8ec193ff37eb20b251ea70442601fbfb5f815cb6f7ea2b5df94e",
+    "reviews/26__vol2__031/p83-p83-full-poppler.png": "31fec04f3a250281ef48c1c4637ecb3043fba8d516f801a0e4804e0047119c6d",
+    "reviews/26__vol2__031/p84-p84-full-poppler.png": "f0e0fbed9823fcbf7df796d5d565a68bf4fc01ddad2ff70841c0496c8611e94b",
+    "reviews/26__vol2__031/p85-p85-full-poppler.png": "2f5842997da0c0d22c6af6a1653f0fa96d65a2c164b23b39e669a366898a3dec",
+    "reviews/26__vol2__031/p86-p86-full-poppler.png": "f166b87a2db6a95bef26e59d080745eb8d7dd3ac5959ebb1b8f363a4047fbd86",
+    "reviews/26__vol2__031/p87-p87-full-poppler.png": "783a262e347740cc8b38baf7e6366aa423dfa8ff5364e234922c9e673e629d57",
+    "reviews/26__vol2__031/p88-p88-full-poppler.png": "1cda441ed2b3b08470727e0ca3a45a706e759df8b85cf9e9b80e0582f2c9708d",
+    "reviews/26__vol2__031/p89-p89-full-poppler.png": "32494066697ab7fec9a0a2a202bafc95577c24bac7c5611dd8e7040dd571e72b",
+    "reviews/26__vol2__031/p90-p90-full-poppler.png": "19b8df22c12c17be81336fdb39d9f755ee88a01bc4da619f02861092fec7618c"
+  },
+  "scope": "Rechecks every embedded authored module against MuPDF and Poppler, exact bundle/source identity, authored page/requirement coverage and review-file integrity. Visual interpretation and completeness are coordinator audit assertions, not automatic parser proof.",
+  "bounded_assertions": 73,
+  "independent_engine_checks": 146,
+  "pass": true
+}

@@ -1,0 +1,381 @@
+{
+  "document_id": "13__vol2__017",
+  "module_role": "All 60 literal M-703 ACU DDC point-schedule rows for the three printed source-template scopes.",
+  "tables": [
+    {
+      "id": "M703-ACU-A1-DDC",
+      "sheet": "M-703",
+      "page": 17,
+      "title_as_printed": "DDC INPUT/OUPUT POINT SCHEDULE - ACU A-1",
+      "columns": "source_row_as_printed",
+      "x_edges": [
+        1870,
+        2700
+      ],
+      "y_ranges": [
+        [
+          286,
+          304
+        ],
+        [
+          304,
+          322
+        ],
+        [
+          322,
+          340
+        ],
+        [
+          340,
+          358
+        ],
+        [
+          358,
+          376
+        ],
+        [
+          376,
+          394
+        ],
+        [
+          394,
+          412
+        ],
+        [
+          412,
+          430
+        ],
+        [
+          430,
+          448
+        ],
+        [
+          448,
+          466
+        ],
+        [
+          466,
+          484
+        ],
+        [
+          484,
+          502
+        ],
+        [
+          502,
+          520
+        ],
+        [
+          520,
+          538
+        ],
+        [
+          538,
+          556
+        ],
+        [
+          556,
+          574
+        ],
+        [
+          574,
+          592
+        ],
+        [
+          592,
+          610
+        ],
+        [
+          610,
+          628
+        ]
+      ],
+      "rows": [
+        "SUPPLY FAN STATUS SENSOR X X X X X VFD",
+        "X RETURN FAN STATUS SENSOR X X X X VFD",
+        "MIXED AIR TEMP SENSOR X T2",
+        "COLD DECK TEMP SENSOR (E) X T3",
+        "HOT DECK TEMP SENSOR (E) X T4",
+        "RETURN AIR TEMP SENSOR (E) X T5",
+        "RETURN AIR HUMIDITY SENSOR (E) X H2",
+        "SUPPLY FAN AND RETURN FAN X X SF, RF, AFMS",
+        "PREHEAT VALVE X V1",
+        "COOLING VALVE X V2",
+        "REHEAT VALVE X V3",
+        "M1(E), M2, M4(E) DAMPERS X X",
+        "MINIMUM OUTSIDE AIR DAMPER X X X M3, AFMS",
+        "OUTSIDE AIR TEMP SENSOR X T1",
+        "OUTSIDE HUMIDITY SENSOR X H1",
+        "PURGE SWITCH X S1",
+        "SMOKE DETECTOR X SD",
+        "FILTER PRESSURE SENSOR X X DPS",
+        "LEAK DETECTION X X LD"
+      ],
+      "row_reading_order": "right",
+      "source_row_semantics": "Complete literal printed DDC source-template row, including source flag marks and tag text. It is not expanded into installed controllers, terminal cards, wiring, devices or physical I/O totals.",
+      "parser_exclusions": [
+        {
+          "engine": "mupdf",
+          "word_ids": [
+            225,
+            226,
+            227
+          ],
+          "reason": "MuPDF combines the printed parenthetical qualifier into three tokens while Poppler emits four reordered parenthesis tokens; the row's qualifier is retained in the visual source review but excluded from this strict cross-engine token comparison."
+        },
+        {
+          "engine": "poppler",
+          "word_ids": [
+            360,
+            361,
+            362,
+            363,
+            364
+          ],
+          "reason": "Poppler separates/reorders the printed parenthetical qualifier; see the paired MuPDF exclusion for the bounded parser disagreement."
+        }
+      ]
+    },
+    {
+      "id": "M703-ACU-A3-A6-DDC",
+      "sheet": "M-703",
+      "page": 17,
+      "title_as_printed": "DDC INPUT/OUPUT POINT SCHEDULE - ACU A-3, A-4, A-5, AND A-6",
+      "columns": "source_row_as_printed",
+      "x_edges": [
+        875,
+        1710
+      ],
+      "y_ranges": [
+        [
+          286,
+          304
+        ],
+        [
+          304,
+          322
+        ],
+        [
+          322,
+          340
+        ],
+        [
+          340,
+          358
+        ],
+        [
+          358,
+          376
+        ],
+        [
+          376,
+          394
+        ],
+        [
+          394,
+          412
+        ],
+        [
+          412,
+          430
+        ],
+        [
+          430,
+          448
+        ],
+        [
+          448,
+          466
+        ],
+        [
+          466,
+          484
+        ],
+        [
+          484,
+          502
+        ],
+        [
+          502,
+          520
+        ],
+        [
+          520,
+          538
+        ],
+        [
+          538,
+          556
+        ],
+        [
+          556,
+          574
+        ],
+        [
+          574,
+          592
+        ],
+        [
+          592,
+          610
+        ],
+        [
+          610,
+          628
+        ],
+        [
+          628,
+          646
+        ],
+        [
+          646,
+          664
+        ],
+        [
+          664,
+          682
+        ],
+        [
+          682,
+          700
+        ],
+        [
+          700,
+          718
+        ]
+      ],
+      "rows": [
+        "SUPPLY FAN STATUS SENSOR X X X X X VFD",
+        "RETURN FAN STATUS SENSOR X X X X X VFD",
+        "MIXED AIR TEMP SENSOR X T2",
+        "SUPPLY AIR TEMP SENSOR X T3",
+        "RETURN AIR TEMP SENSOR (E) X T4",
+        "RETURN AIR HUMIDITY SENSOR (E) X H2",
+        "SUPPLY FAN X X SF, AFMS",
+        "RETURN FAN X X RF, AFMS",
+        "PREHEAT VALVE X V1",
+        "COOLING COIL VALVE X V2",
+        "M1(E), M2, M4(E) DAMPERS X X",
+        "MINIMUM OUTSIDE AIR DAMPER X X X M3, AFMS",
+        "OUTSIDE AIR TEMP SENSOR X T1",
+        "OUTSIDE HUMIDITY SENSOR X H1",
+        "PURGE SWITCH X S1",
+        "SMOKE DETECTOR X SD",
+        "FILTER PRESSURE SENSOR X X DPS",
+        "LEAK DETECTION X X LD",
+        "HUMIDIFIER X X X X X X H-A-3",
+        "STEAM CONTROL VALVE X V3",
+        "RETURN AIR HUMIDITY SENSOR (E) X H2",
+        "HL HIGH LIMIT HUMIDITY SENSOR X X X H",
+        "AIRFLOW SWITCH X DP",
+        "COLD WATER CONTROL VALVE X V4"
+      ],
+      "row_reading_order": "right",
+      "source_row_semantics": "Complete literal printed DDC source-template row, including source flag marks and tag text. It is not expanded into installed controllers, terminal cards, wiring, devices or physical I/O totals."
+    },
+    {
+      "id": "M703-ACU-A2-DDC",
+      "sheet": "M-703",
+      "page": 17,
+      "title_as_printed": "DDC INPUT/OUPUT POINT SCHEDULE - ACU A-2",
+      "columns": "source_row_as_printed",
+      "x_edges": [
+        1870,
+        2700
+      ],
+      "y_ranges": [
+        [
+          1120,
+          1138
+        ],
+        [
+          1138,
+          1156
+        ],
+        [
+          1156,
+          1174
+        ],
+        [
+          1174,
+          1192
+        ],
+        [
+          1192,
+          1210
+        ],
+        [
+          1210,
+          1228
+        ],
+        [
+          1228,
+          1246
+        ],
+        [
+          1246,
+          1264
+        ],
+        [
+          1264,
+          1282
+        ],
+        [
+          1282,
+          1300
+        ],
+        [
+          1300,
+          1318
+        ],
+        [
+          1318,
+          1336
+        ],
+        [
+          1336,
+          1354
+        ],
+        [
+          1354,
+          1372
+        ],
+        [
+          1372,
+          1390
+        ],
+        [
+          1390,
+          1408
+        ],
+        [
+          1408,
+          1426
+        ]
+      ],
+      "rows": [
+        "SUPPLY FAN STATUS SENSOR X X X X X VFD",
+        "RETURN FAN STATUS SENSOR X X X X X VFD",
+        "MIXED AIR TEMP SENSOR X T2",
+        "SUPPLY AIR TEMP SENSOR X T3",
+        "RETURN AIR TEMP SENSOR (E) X T4",
+        "RETURN AIR HUMIDITY SENSOR (E) X H2",
+        "SUPPLY FAN AND RETURN FAN X X SF, RF, AFMS",
+        "PREHEAT VALVE X V1",
+        "COOLING COIL VALVE X V2",
+        "DAMPERS X X M1(E), M2, M4(E)",
+        "MINIMUM OUTSIDE AIR DAMPER X X X M3, AFMS",
+        "OUTSIDE AIR TEMP SENSOR X T1",
+        "OUTSIDE HUMIDITY SENSOR X H1",
+        "PURGE SWITCH X S1",
+        "SMOKE DETECTOR X SD",
+        "FILTER PRESSURE SENSOR X X DPS",
+        "LEAK DETECTION X X LD"
+      ],
+      "row_reading_order": "right",
+      "source_row_semantics": "Complete literal printed DDC source-template row, including source flag marks and tag text. It is not expanded into installed controllers, terminal cards, wiring, devices or physical I/O totals."
+    }
+  ],
+  "assertions": [],
+  "point_scope": "M-703 says the points are existing to remain and shown for reference only. Its local DDC templates are retained as printed and are not a final building controller, card, terminal, wiring, address or field-device schedule."
+}

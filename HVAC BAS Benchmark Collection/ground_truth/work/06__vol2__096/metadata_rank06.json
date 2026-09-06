@@ -1,0 +1,370 @@
+{
+  "document_id": "06__vol2__096",
+  "module_role": "Project/title-block, sheet, local-scale and all-page visual-review context. Strict schedules, point matrices and sequence clauses are in separately corroborated modules.",
+  "tables": [],
+  "project": {
+    "project_name_as_printed": "VERMILLION COUNTY JAIL",
+    "owner_as_printed": "VERMILLION COUNTY COMMISSIONERS",
+    "location_as_printed": "HILLSDALE, IN",
+    "project_number_as_printed": "17-700-078-2",
+    "issue_as_printed": "100% CD Bid Set",
+    "issue_date_as_printed": "04.12.2021",
+    "revision_date_status": "The issue date is retained as an issue date; no populated revision date is asserted.",
+    "assertion_ids": [
+      "rank06-title-owner-project",
+      "rank06-issue",
+      "rank06-location",
+      "rank06-project-no",
+      "rank06-issue-date"
+    ]
+  },
+  "sheet_details": {
+    "sheet_ledger_semantics": "All 36 supplied PDF pages have a completed full-page visual-review disposition below.",
+    "revision_status": "No populated revision date is asserted from the reviewed title blocks."
+  },
+  "scale_semantics": {
+    "printed_local_view_scales_observed": [
+      {
+        "page": 7,
+        "sheet": "M210A",
+        "view": "first floor Unit A ductwork plan",
+        "scale_as_printed": "1/8\" = 1'-0\""
+      }
+    ],
+    "takeoff_scale_status": "The cited scale is local to the cited plan view. No global scale is asserted; schedules, schematics and details must not be scaled from it.",
+    "assertion_ids": [
+      "rank06-scale-m210a"
+    ]
+  },
+  "visual_review_pages": [
+    {
+      "page": 1,
+      "sheet": "M001",
+      "title": "MECHANICAL LEGEND / GENERAL NOTES",
+      "render": "reviews/06__vol2__096/p1-p1-full-poppler.png",
+      "finding": "Mechanical legends, abbreviations, symbols and controls context."
+    },
+    {
+      "page": 2,
+      "sheet": "M012",
+      "title": "LEVEL 1 THERMAL ZONE DIAGRAM",
+      "render": "reviews/06__vol2__096/p2-p2-full-poppler.png",
+      "finding": "Thermal-zone diagram and local plan-scale context."
+    },
+    {
+      "page": 3,
+      "sheet": "M023",
+      "title": "SECOND FLOOR THERMAL ZONE DIAGRAM",
+      "render": "reviews/06__vol2__096/p3-p3-full-poppler.png",
+      "finding": "Second-floor thermal-zone diagram and local plan-scale context."
+    },
+    {
+      "page": 4,
+      "sheet": "M110A",
+      "title": "FIRST FLOOR DEMOLITION PLAN UNIT A",
+      "render": "reviews/06__vol2__096/p4-p4-full-poppler.png",
+      "finding": "Mechanical demolition plan for Unit A."
+    },
+    {
+      "page": 5,
+      "sheet": "M110B",
+      "title": "FIRST FLOOR DEMOLITION PLAN UNIT B",
+      "render": "reviews/06__vol2__096/p5-p5-full-poppler.png",
+      "finding": "Mechanical demolition plan for Unit B."
+    },
+    {
+      "page": 6,
+      "sheet": "M120",
+      "title": "ATTIC FLOOR DEMOLITION PLAN",
+      "render": "reviews/06__vol2__096/p6-p6-full-poppler.png",
+      "finding": "Mechanical attic demolition-plan context."
+    },
+    {
+      "page": 7,
+      "sheet": "M210A",
+      "title": "FIRST FLOOR DUCTWORK PLAN UNIT A",
+      "render": "reviews/06__vol2__096/p7-p7-full-poppler.png",
+      "finding": "Unit A ductwork, devices and equipment plan context."
+    },
+    {
+      "page": 8,
+      "sheet": "M210B",
+      "title": "FIRST FLOOR DUCTWORK PLAN UNIT B",
+      "render": "reviews/06__vol2__096/p8-p8-full-poppler.png",
+      "finding": "Unit B ductwork, devices and equipment plan context."
+    },
+    {
+      "page": 9,
+      "sheet": "M210C",
+      "title": "FIRST FLOOR DUCTWORK PLAN UNIT C",
+      "render": "reviews/06__vol2__096/p9-p9-full-poppler.png",
+      "finding": "Unit C ductwork, devices and equipment plan context."
+    },
+    {
+      "page": 10,
+      "sheet": "M220C",
+      "title": "SECOND FLOOR DUCTWORK PLAN UNIT C",
+      "render": "reviews/06__vol2__096/p10-p10-full-poppler.png",
+      "finding": "Second-floor Unit C ductwork plan context."
+    },
+    {
+      "page": 11,
+      "sheet": "M230",
+      "title": "JAIL ROOF PLAN MECHANICAL",
+      "render": "reviews/06__vol2__096/p11-p11-full-poppler.png",
+      "finding": "Jail roof mechanical plan context."
+    },
+    {
+      "page": 12,
+      "sheet": "M230C",
+      "title": "POD ROOF PLAN MECHANICAL",
+      "render": "reviews/06__vol2__096/p12-p12-full-poppler.png",
+      "finding": "Pod roof mechanical plan context."
+    },
+    {
+      "page": 13,
+      "sheet": "M310A",
+      "title": "FIRST FLOOR PIPING PLAN UNIT A",
+      "render": "reviews/06__vol2__096/p13-p13-full-poppler.png",
+      "finding": "Unit A hydronic piping plan context."
+    },
+    {
+      "page": 14,
+      "sheet": "M310B",
+      "title": "FIRST FLOOR PIPING PLAN UNIT B",
+      "render": "reviews/06__vol2__096/p14-p14-full-poppler.png",
+      "finding": "Unit B hydronic piping plan context."
+    },
+    {
+      "page": 15,
+      "sheet": "M310C",
+      "title": "FIRST FLOOR PIPING PLAN UNIT C",
+      "render": "reviews/06__vol2__096/p15-p15-full-poppler.png",
+      "finding": "Unit C hydronic piping plan context."
+    },
+    {
+      "page": 16,
+      "sheet": "M320C",
+      "title": "SECOND FLOOR PIPING PLAN UNIT C",
+      "render": "reviews/06__vol2__096/p16-p16-full-poppler.png",
+      "finding": "Second-floor Unit C piping plan context."
+    },
+    {
+      "page": 17,
+      "sheet": "M400",
+      "title": "MECHANICAL SECTIONS",
+      "render": "reviews/06__vol2__096/p17-p17-full-poppler.png",
+      "finding": "Cell/chase mechanical sections and detail context."
+    },
+    {
+      "page": 18,
+      "sheet": "M500",
+      "title": "MECHANICAL ROOM PIPING",
+      "render": "reviews/06__vol2__096/p18-p18-full-poppler.png",
+      "finding": "Mechanical-room Unit B piping plan context."
+    },
+    {
+      "page": 19,
+      "sheet": "M600",
+      "title": "SCHEDULES - MECHANICAL",
+      "render": "reviews/06__vol2__096/p19-p19-full-poppler.png",
+      "finding": "AHU system, fan, coil, heat-exchanger, filter and attenuator schedules."
+    },
+    {
+      "page": 20,
+      "sheet": "M601",
+      "title": "SCHEDULES - MECHANICAL",
+      "render": "reviews/06__vol2__096/p20-p20-full-poppler.png",
+      "finding": "Chiller, boiler, pump, expansion tank, separator and glycol make-up schedules."
+    },
+    {
+      "page": 21,
+      "sheet": "M602",
+      "title": "SCHEDULES - MECHANICAL",
+      "render": "reviews/06__vol2__096/p21-p21-full-poppler.png",
+      "finding": "Unit heater, DX, louver, hood, FCU and exhaust fan schedules."
+    },
+    {
+      "page": 22,
+      "sheet": "M603",
+      "title": "SCHEDULES - MECHANICAL",
+      "render": "reviews/06__vol2__096/p22-p22-full-poppler.png",
+      "finding": "Air-device, VAV and motorized-damper schedules."
+    },
+    {
+      "page": 23,
+      "sheet": "M701",
+      "title": "CHILLED/HOT WATER ISOMETRIC",
+      "render": "reviews/06__vol2__096/p23-p23-full-poppler.png",
+      "finding": "Chilled- and heating-water isometric context."
+    },
+    {
+      "page": 24,
+      "sheet": "M801",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/06__vol2__096/p24-p24-full-poppler.png",
+      "finding": "Mechanical detail context."
+    },
+    {
+      "page": 25,
+      "sheet": "M802",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/06__vol2__096/p25-p25-full-poppler.png",
+      "finding": "Mechanical detail context."
+    },
+    {
+      "page": 26,
+      "sheet": "M803",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/06__vol2__096/p26-p26-full-poppler.png",
+      "finding": "Mechanical detail context."
+    },
+    {
+      "page": 27,
+      "sheet": "M804",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/06__vol2__096/p27-p27-full-poppler.png",
+      "finding": "Mechanical detail context."
+    },
+    {
+      "page": 28,
+      "sheet": "M805",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/06__vol2__096/p28-p28-full-poppler.png",
+      "finding": "Mechanical detail context."
+    },
+    {
+      "page": 29,
+      "sheet": "M806",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/06__vol2__096/p29-p29-full-poppler.png",
+      "finding": "Mechanical detail context."
+    },
+    {
+      "page": 30,
+      "sheet": "M807",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/06__vol2__096/p30-p30-full-poppler.png",
+      "finding": "AHU mechanical details."
+    },
+    {
+      "page": 31,
+      "sheet": "M901",
+      "title": "CHILLER AND HOT WATER PLANTS CONTROLS SCHEMATIC",
+      "render": "reviews/06__vol2__096/p31-p31-full-poppler.png",
+      "finding": "Chilled-water/hot-water controls, DDC matrices, sequence and BAS architecture."
+    },
+    {
+      "page": 32,
+      "sheet": "M902",
+      "title": "DOAS-1 & DOAS-2 CONTROL SCHEMATIC",
+      "render": "reviews/06__vol2__096/p32-p32-full-poppler.png",
+      "finding": "DOAS 1/2 controls, DDC matrix and sequence."
+    },
+    {
+      "page": 33,
+      "sheet": "M903",
+      "title": "AHU-4 CONTROL SCHEMATIC",
+      "render": "reviews/06__vol2__096/p33-p33-full-poppler.png",
+      "finding": "AHU-4 controls, DDC matrix and sequence."
+    },
+    {
+      "page": 34,
+      "sheet": "M904",
+      "title": "DOAS-3 CONTROL SCHEMATIC",
+      "render": "reviews/06__vol2__096/p34-p34-full-poppler.png",
+      "finding": "DOAS-3 controls, DDC matrix and sequence."
+    },
+    {
+      "page": 35,
+      "sheet": "M905",
+      "title": "HVAC CONTROLS",
+      "render": "reviews/06__vol2__096/p35-p35-full-poppler.png",
+      "finding": "Sallyport, pod and jail exhaust control schematics, matrices and sequences."
+    },
+    {
+      "page": 36,
+      "sheet": "M906",
+      "title": "HVAC CONTROLS",
+      "render": "reviews/06__vol2__096/p36-p36-full-poppler.png",
+      "finding": "Terminal, FCU, unit-heater, general-exhaust and HRC controls."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "rank06-title-owner-project",
+      "page": 1,
+      "bbox": [
+        2800,
+        400,
+        2940,
+        870
+      ],
+      "expected": "VERMILLION COUNTY COMMISSIONERS VERMILLION COUNTY JAIL",
+      "mode": "exact",
+      "reading_direction": "up"
+    },
+    {
+      "id": "rank06-issue",
+      "page": 1,
+      "bbox": [
+        2760,
+        570,
+        2820,
+        715
+      ],
+      "expected": "100% CD Bid Set",
+      "mode": "exact",
+      "reading_direction": "up"
+    },
+    {
+      "id": "rank06-location",
+      "page": 1,
+      "bbox": [
+        2980,
+        620,
+        3010,
+        710
+      ],
+      "expected": "HILLSDALE, IN",
+      "mode": "exact",
+      "reading_direction": "up"
+    },
+    {
+      "id": "rank06-project-no",
+      "page": 1,
+      "bbox": [
+        2800,
+        1145,
+        2920,
+        1180
+      ],
+      "expected": "#: 17-700-078-2",
+      "mode": "exact"
+    },
+    {
+      "id": "rank06-issue-date",
+      "page": 1,
+      "bbox": [
+        2800,
+        1265,
+        2880,
+        1300
+      ],
+      "expected": "04.12.2021",
+      "mode": "exact"
+    },
+    {
+      "id": "rank06-scale-m210a",
+      "page": 7,
+      "bbox": [
+        800,
+        1625,
+        980,
+        1670
+      ],
+      "expected": "1/8\" = 1'-0\"",
+      "mode": "contains"
+    }
+  ]
+}

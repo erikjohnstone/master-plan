@@ -1,0 +1,62 @@
+"""Strict literal capture of the rotated/merged M-601 air-device schedule."""
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+AUDIT = ROOT / "ground_truth"
+IDENT = "05__vol2__009"
+OUT = AUDIT / "work" / IDENT / "schedules_m601_air_devices.json"
+
+
+def main():
+    # The source has individual mark columns for the accessories.  They are
+    # retained rather than collapsed to a hand-interpreted device description.
+    columns = (
+        "mark|module_sizes_in|mnfr_titus_mark|mnfr_ruskin_mark|model_no|type|"
+        "material_steel_mark|material_aluminum_mark|material_aluminum_with_steel_frame_mark|"
+        "finish_off_white_mark|finish_primer_mark|finish_clear_by_arch_mark|"
+        "accessory_opposed_blade_damper_mark|accessory_air_scoop_mark|"
+        "accessory_butterfly_damper_mark|accessory_fire_damper_mark|"
+        "accessory_equalizing_grid_mark|mounting_lay_in_mark|mounting_surface_mark|"
+        "mounting_duct_mark|max_nc|max_loss_in_wg|notes"
+    )
+    rows = [
+        "D|24 X 24|X||OMNI-AA|PLAQUE||X||| |X|X||||||X||25|0.10|1,2,3,4,5,6",
+        "F|NECK SIZE + 1.75|X||300FL|LOUVERED FACE, DOUBLE DEFLECTION, 3/4\" BLADE SPACEING||X||| |X|X||||||X||25|0.10|1,2,6",
+        "H|24 X 24|X||PAR-AA|PERFORATED FACE||X||| |X|X||||||X||25|0.10|1,2,3,6",
+        "L|NECK SIZE + 1.75|X||350FL|LOUVERED FACE, 35° FIXED SINGLE||X||| |X|X||||||X||25|0.10|1,2,6",
+    ]
+    data = {
+        "document_id": IDENT,
+        "module_role": "Literal M-601 Air Device Schedule capture, preserving its separate material, finish, accessory and mounting mark columns. This is a source type schedule, not an installed outlet quantity takeoff.",
+        "tables": [{
+            "id": "M601-AIR-DEVICES",
+            "sheet": "M-601",
+            "page": 18,
+            "title_as_printed": "AIR DEVICE SCHEDULE",
+            "columns": columns,
+            "x_edges": [1470, 1535, 1640, 1670, 1710, 1770, 1940, 1975, 2015, 2055, 2095, 2135, 2175, 2215, 2255, 2295, 2335, 2375, 2415, 2455, 2495, 2540, 2640, 2710],
+            "y_ranges": [[220, 237], [237, 277], [277, 296], [296, 322]],
+            "rows": rows,
+            "header_evidence": [{"bbox": [2025, 68, 2160, 96], "expected": "AIR DEVICE SCHEDULE"}],
+            "source_row_semantics": "D, F, H and L are literal published air-device marks. No installed count, device placement or actuator association is stated by this schedule itself.",
+        }],
+        "assertions": [
+            {"id": "m601-air-device-note-1", "page": 18, "bbox": [1470, 374, 1770, 392], "expected": "1. FINISH TO BE STANDARD COLOR AS SELECTED BY THE ARCHITECT.", "mode": "exact"},
+            {"id": "m601-air-device-note-2", "page": 18, "bbox": [1470, 390, 1810, 408], "expected": "2. COORDINATE BORDER TYPES AND MOUNTING FRAMES WITH ARCHITECTURE.", "mode": "exact"},
+            {"id": "m601-air-device-note-3", "page": 18, "bbox": [1470, 406, 1685, 424], "expected": "3. MOLDED INSULATION BLANKET (R-6 MINIMUM).", "mode": "exact"},
+            {"id": "m601-air-device-note-4", "page": 18, "bbox": [1470, 422, 1785, 440], "expected": "4. 4-WAY THROW PATTERN UNLESS OTHERWISE NOTED ON FLOOR PLANS.", "mode": "exact"},
+            {"id": "m601-air-device-note-5", "page": 18, "bbox": [1470, 438, 1865, 456], "expected": "5. PROVIDE AIR BAFFLES AS NECESSARY TO ACHIEVE THROW PATTERN INDICATED ON PLANS.", "mode": "exact"},
+        ],
+        "schedule_scope": {
+            "air_device_schedule": "Present: four literal type rows (D, F, H and L) with published material, finish, accessory, mounting, noise, loss and note fields.",
+            "control_valve_schedule": "Not represented by this source table; the separate M-601 hydronic-control-valve schedule is captured in schedules_m601_core.json.",
+            "damper_actuator_schedule": "The air-device table includes an opposed-blade-damper accessory mark but does not state an actuator tag, manufacturer/model, torque, control signal or fail action. It is not recast as an actuator schedule.",
+        },
+    }
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    OUT.write_text(json.dumps(data, indent=2) + "\n")
+
+
+if __name__ == "__main__":
+    main()

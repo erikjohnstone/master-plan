@@ -1,0 +1,515 @@
+{
+  "id": "17__vol1__16",
+  "rank": 17,
+  "title": "Carson Valley Middle School Phase 1 HVAC Replacement",
+  "source_pdf": "pdf/17__vol1__16__Carson_Valley_Middle_School_Phase_1_HVAC_Replacement.pdf",
+  "source_sha256": "96782a6f81077df39c2eb87f4d04e08c7e353483b596bcd97d534938593612a1",
+  "page_count": 47,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete source-bounded Rank 17 ground truth: full 47-page visual review; project/sheet/local-scale boundaries; all 86 M0.02/M0.03 literal equipment-schedule rows; M0.03 control-damper, reference-only and bid-alternate boundaries; the formal 12-row M6.02 BACnet Inputs to BMS list; M6.01/M6.02 BACnet architecture and symbol context; M6.02/M6.03 ERV, furnace, exhaust-fan and outdoor-air-unit sequences; and explicit physical-count, topology, ownership and alternative-scope limits. Nothing is inferred as a final physical BAS takeoff.",
+  "reading_notes": [
+    "M0.02/M0.03 are dense vector schedule sheets with furnaces, condensing units, evaporator coils, ERVs, outdoor-air units, hoods, control dampers, exhaust fans, duct furnace and alternate/reference rooftop equipment, retaining models, capacities, airflow, electrical and other printed specification fields in literal rows.",
+    "M6.01–M6.03 are strong BAS source pages: BACnet IP/MSTP architecture/notes, BTL and 32-device trunk limits, controller diagrams, a rare 12-row BACnet Inputs to BMS list, and sequences for ERV, furnace/condensing, exhaust fan, Building B outdoor-air units and bid-alternate rooftop units.",
+    "The formal BACnet list is source-scoped to its M6.02 control diagram and has no printed hardwired I/O type/card/terminal mapping; all device-count and final-topology interpretation remains expressly limited."
+  ],
+  "verification_semantics": "The bundle verifier rechecks every retained row and assertion against independent MuPDF and Poppler evidence and hashes source/renders. It does not infer plan quantities, selected alternates, controller topology or physical installations.",
+  "module_order": [
+    "metadata",
+    "schedules",
+    "points",
+    "controls_context",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "metadata": [
+      "metadata_rank17"
+    ],
+    "schedules": [
+      "schedules_m002_m003"
+    ],
+    "points": [
+      "points_m602"
+    ],
+    "controls_context": [
+      "controls_context_rank17"
+    ],
+    "equipment_reconciliation": [
+      "equipment_reconciliation_rank17"
+    ],
+    "point_applications": [
+      "point_applications_rank17"
+    ],
+    "supporting_evidence": [
+      "supporting_evidence_rank17"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Cover source bounds project name, Gardnerville location and issued date; consultant role is visually reviewed title-block context.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every supplied page has a source sheet ID and retained full-page visual-review finding.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Local stated 1/8-inch plan-view scale witnesses are retained without global-scale or distance-takeoff claims.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 86 literal M0.02/M0.03 schedule rows are retained across 12 printed schedule tables, including control-damper, reference-only and bid-alternate scope boundaries.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "schedule_counts"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 12 printed equipment schedules have source-bounded literal rows and columns.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The explicit 12-row BACnet Inputs to BMS list is retained with source-matrix ownership limits and without invented physical I/O classification.",
+      "evidence": [
+        [
+          "modules",
+          "points",
+          "tables"
+        ],
+        [
+          "modules",
+          "point_applications",
+          "expanded_template_counts"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M6.01/M6.02 BACnet IP, MSTP/trunk, shielding, 32-device and BTL contexts are bounded without inventing final topology.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M6.02/M6.03 ERV, furnace, exhaust-fan and outdoor-air-unit sequence clauses are retained as bounded text.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sequence_inventory"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Published sensor and actuator legend/sequence contexts are retained without derived zone or physical-device counts.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sensors_and_control_symbol_context"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Point-list, schedule-title, topology, alternative-scope, controller-label and physical-count limits are stated explicitly.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 47 supplied pages have retained full-page Poppler renders and visual-review findings.",
+      "evidence": [
+        [
+          "page_review"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every authored module is rechecked against both MuPDF and Poppler during bundle construction and record verification.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p1-p1-full-poppler.png",
+      "finding": "Cover/title sheet and drawing index visually reviewed; project, location, issue date and consultant title-block context retained."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p2-p2-full-poppler.png",
+      "finding": "Mechanical abbreviations, legend and calculation/general-note sheet visually reviewed."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p3-p3-full-poppler.png",
+      "finding": "M0.02 dense mechanical schedule sheet visually reviewed; all 69 literal schedule rows are retained separately."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p4-p4-full-poppler.png",
+      "finding": "M0.03 dense mechanical schedule sheet visually reviewed; all 17 literal schedule rows, including control dampers, reference-only rooftop units and bid alternate, are retained separately."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p5-p5-full-poppler.png",
+      "finding": "Building B HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p6-p6-full-poppler.png",
+      "finding": "Building B HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p7-p7-full-poppler.png",
+      "finding": "Building B HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p8-p8-full-poppler.png",
+      "finding": "Building B HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p9-p9-full-poppler.png",
+      "finding": "Building C HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 10,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p10-p10-full-poppler.png",
+      "finding": "Building C HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 11,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p11-p11-full-poppler.png",
+      "finding": "Building C HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 12,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p12-p12-full-poppler.png",
+      "finding": "Building B new HVAC plan visually reviewed."
+    },
+    {
+      "page": 13,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p13-p13-full-poppler.png",
+      "finding": "Building B new HVAC plan visually reviewed."
+    },
+    {
+      "page": 14,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p14-p14-full-poppler.png",
+      "finding": "Building B new HVAC plan visually reviewed."
+    },
+    {
+      "page": 15,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p15-p15-full-poppler.png",
+      "finding": "Building B new HVAC plan visually reviewed."
+    },
+    {
+      "page": 16,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p16-p16-full-poppler.png",
+      "finding": "Building B new HVAC plan visually reviewed."
+    },
+    {
+      "page": 17,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p17-p17-full-poppler.png",
+      "finding": "Building C new HVAC plan visually reviewed."
+    },
+    {
+      "page": 18,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p18-p18-full-poppler.png",
+      "finding": "Building C new HVAC plan visually reviewed."
+    },
+    {
+      "page": 19,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p19-p19-full-poppler.png",
+      "finding": "Building C new HVAC plan visually reviewed."
+    },
+    {
+      "page": 20,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p20-p20-full-poppler.png",
+      "finding": "Building C new HVAC plan visually reviewed."
+    },
+    {
+      "page": 21,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p21-p21-full-poppler.png",
+      "finding": "Mechanical isometric/detail sheet visually reviewed."
+    },
+    {
+      "page": 22,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p22-p22-full-poppler.png",
+      "finding": "Mechanical isometric/detail sheet visually reviewed."
+    },
+    {
+      "page": 23,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p23-p23-full-poppler.png",
+      "finding": "Mechanical isometric/detail sheet visually reviewed."
+    },
+    {
+      "page": 24,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p24-p24-full-poppler.png",
+      "finding": "Mechanical isometric/detail sheet visually reviewed."
+    },
+    {
+      "page": 25,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p25-p25-full-poppler.png",
+      "finding": "M5.01 mechanical detail sheet visually reviewed, including duct-smoke-detector detail context."
+    },
+    {
+      "page": 26,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p26-p26-full-poppler.png",
+      "finding": "M5.02 equipment-support detail sheet visually reviewed."
+    },
+    {
+      "page": 27,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p27-p27-full-poppler.png",
+      "finding": "M6.01 BAS system architecture, legend and controls notes visually reviewed; BACnet IP/MSTP and system requirements are retained separately."
+    },
+    {
+      "page": 28,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p28-p28-full-poppler.png",
+      "finding": "M6.02 BAS controller diagrams, C-Wing ERV/furnace/exhaust sequences and formal 12-row BACnet Inputs to BMS list visually reviewed and retained separately."
+    },
+    {
+      "page": 29,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p29-p29-full-poppler.png",
+      "finding": "M6.03 Building B outdoor-air-unit and bid-alternate rooftop-unit sequences/control diagrams visually reviewed; source-bounded clauses are retained separately."
+    },
+    {
+      "page": 30,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p30-p30-full-poppler.png",
+      "finding": "Electrical mechanical-equipment connection schedule visually reviewed."
+    },
+    {
+      "page": 31,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p31-p31-full-poppler.png",
+      "finding": "Electrical panel schedules visually reviewed."
+    },
+    {
+      "page": 32,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p32-p32-full-poppler.png",
+      "finding": "Electrical one-line/panel sheet visually reviewed."
+    },
+    {
+      "page": 33,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p33-p33-full-poppler.png",
+      "finding": "Electrical specifications/general sheet visually reviewed."
+    },
+    {
+      "page": 34,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p34-p34-full-poppler.png",
+      "finding": "Building B electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 35,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p35-p35-full-poppler.png",
+      "finding": "Building B electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 36,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p36-p36-full-poppler.png",
+      "finding": "Building B electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 37,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p37-p37-full-poppler.png",
+      "finding": "Building C electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 38,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p38-p38-full-poppler.png",
+      "finding": "Building C electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 39,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p39-p39-full-poppler.png",
+      "finding": "Building B electrical new-work plan visually reviewed."
+    },
+    {
+      "page": 40,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p40-p40-full-poppler.png",
+      "finding": "Building B electrical new-work plan visually reviewed."
+    },
+    {
+      "page": 41,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p41-p41-full-poppler.png",
+      "finding": "Building B electrical new-work plan visually reviewed."
+    },
+    {
+      "page": 42,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p42-p42-full-poppler.png",
+      "finding": "Building C electrical new-work plan visually reviewed."
+    },
+    {
+      "page": 43,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p43-p43-full-poppler.png",
+      "finding": "Building C electrical new-work plan visually reviewed."
+    },
+    {
+      "page": 44,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p44-p44-full-poppler.png",
+      "finding": "Structural general-notes sheet visually reviewed."
+    },
+    {
+      "page": 45,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p45-p45-full-poppler.png",
+      "finding": "Building B structural floor plan visually reviewed."
+    },
+    {
+      "page": 46,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p46-p46-full-poppler.png",
+      "finding": "Building B structural roof plan visually reviewed."
+    },
+    {
+      "page": 47,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p47-p47-full-poppler.png",
+      "finding": "Building C structural roof plan visually reviewed."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "pages",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 47
+    },
+    {
+      "id": "schedules",
+      "path": [
+        "modules",
+        "schedules",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 12
+    },
+    {
+      "id": "points",
+      "path": [
+        "modules",
+        "points",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 1
+    }
+  ],
+  "completion_checks": {
+    "all_47_pages_visually_reviewed": true,
+    "all_authoring_modules_dual_engine_verified_at_build": true,
+    "source_limitations_explicit": true,
+    "required_objectives_covered": true
+  }
+}

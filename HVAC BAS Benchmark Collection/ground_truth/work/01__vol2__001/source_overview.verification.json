@@ -1,0 +1,816 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "532547cf7616af700be81c996ae624faed5c38937ae5f4c86a612d4fc3d2af87",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 15,
+  "checks": [
+    {
+      "assertion": "project-title",
+      "page": 1,
+      "bbox": [
+        2320,
+        970,
+        2348,
+        1395
+      ],
+      "expected": "FY20 P-228 ATC TOWER AND AIR OPERATIONS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FY20 P-228 ATC TOWER AND AIR OPERATIONS",
+          "word_ids": [
+            1475,
+            1476,
+            1477,
+            1478,
+            1479,
+            1480,
+            1481
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FY20 P-228 ATC TOWER AND AIR OPERATIONS",
+          "word_ids": [
+            1145,
+            1146,
+            1147,
+            1148,
+            1149,
+            1150,
+            1151
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "project-location",
+      "page": 1,
+      "bbox": [
+        2295,
+        965,
+        2314,
+        1407
+      ],
+      "expected": "MCAS CHERRY POINT CHERRY POINT, NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MCAS CHERRY POINT CHERRY POINT, NC",
+          "word_ids": [
+            1459,
+            1460,
+            1461,
+            1462,
+            1463,
+            1464
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MCAS CHERRY POINT CHERRY POINT, NC",
+          "word_ids": [
+            1487,
+            1488,
+            1489,
+            1380,
+            1381,
+            1382
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheet-1-number",
+      "page": 1,
+      "bbox": [
+        2280,
+        1500,
+        2365,
+        1532
+      ],
+      "expected": "M-001",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-001",
+          "word_ids": [
+            1499
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-001",
+          "word_ids": [
+            481
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheet-1-title",
+      "page": 1,
+      "bbox": [
+        2365,
+        1040,
+        2385,
+        1310
+      ],
+      "expected": "MECHANICAL LEGEND, ABREVIATIONS AND NOTES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL LEGEND, ABREVIATIONS AND NOTES",
+          "word_ids": [
+            1500,
+            1501,
+            1502,
+            1503,
+            1504
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL LEGEND, ABREVIATIONS AND NOTES",
+          "word_ids": [
+            1134,
+            1135,
+            1136,
+            1137,
+            1138
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "issue-mark",
+      "page": 1,
+      "bbox": [
+        2365,
+        330,
+        2379,
+        345
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            1562
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            595
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "issue-description",
+      "page": 1,
+      "bbox": [
+        2365,
+        205,
+        2379,
+        320
+      ],
+      "expected": "ISSUED FOR CONSTRUCTION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ISSUED FOR CONSTRUCTION",
+          "word_ids": [
+            1563,
+            1564,
+            1565
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ISSUED FOR CONSTRUCTION",
+          "word_ids": [
+            584,
+            585,
+            586
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "issue-date",
+      "page": 1,
+      "bbox": [
+        2365,
+        106,
+        2379,
+        146
+      ],
+      "expected": "11/19/19",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11/19/19",
+          "word_ids": [
+            1566
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11/19/19",
+          "word_ids": [
+            491
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "engineer-name",
+      "page": 1,
+      "bbox": [
+        2270,
+        561,
+        2372,
+        574
+      ],
+      "expected": "CHARLES WESLEY SOUTHALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHARLES WESLEY SOUTHALL",
+          "word_ids": [
+            1511,
+            1512,
+            1513
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHARLES WESLEY SOUTHALL",
+          "word_ids": [
+            504,
+            505,
+            506
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "engineer-license",
+      "page": 1,
+      "bbox": [
+        2280,
+        584,
+        2362,
+        598
+      ],
+      "expected": "Lic. No.053647",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Lic. No.053647",
+          "word_ids": [
+            1552,
+            1553
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Lic. No.053647",
+          "word_ids": [
+            494,
+            495
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "firm-address",
+      "page": 1,
+      "bbox": [
+        2260,
+        706,
+        2385,
+        752
+      ],
+      "expected": "1305 EXECUTIVE BLVD. SUITE 160 CHESAPEAKE, VA 23320",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1305 EXECUTIVE BLVD. SUITE 160 CHESAPEAKE, VA 23320",
+          "word_ids": [
+            1467,
+            1468,
+            1469,
+            1470,
+            1471,
+            1472,
+            1473,
+            1474
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1305 EXECUTIVE BLVD. SUITE 160 CHESAPEAKE, VA 23320",
+          "word_ids": [
+            425,
+            426,
+            427,
+            428,
+            429,
+            430,
+            431,
+            432
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "eproject",
+      "page": 1,
+      "bbox": [
+        2328,
+        1422,
+        2365,
+        1436
+      ],
+      "expected": "1596300",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1596300",
+          "word_ids": [
+            1510
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1596300",
+          "word_ids": [
+            468
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheet-2-number",
+      "page": 2,
+      "bbox": [
+        2280,
+        1500,
+        2365,
+        1532
+      ],
+      "expected": "M-002",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-002",
+          "word_ids": [
+            126
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-002",
+          "word_ids": [
+            2530
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "building-roster",
+      "page": 2,
+      "bbox": [
+        130,
+        137,
+        971,
+        168
+      ],
+      "expected": "Air Operations building, MTRACON building, and the Air Traffic Control Tower (ATCT).",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "precedence. The design provides resilient and reliable heating, ventilating, and air-conditioning (HVAC), plumbing, and fuel oil service to the Air Operations building, MTRACON building, and the Air Traffic Control Tower (ATCT). The following redundancies and approaches are employed:",
+          "word_ids": [
+            189,
+            190,
+            191,
+            192,
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200,
+            201,
+            202,
+            203,
+            204,
+            205,
+            206,
+            207,
+            208,
+            209,
+            210,
+            211,
+            212,
+            213,
+            214,
+            215,
+            216,
+            217,
+            218,
+            219,
+            220,
+            221,
+            222,
+            223,
+            224,
+            225,
+            226
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "precedence. The design provides resilient and reliable heating, ventilating, and air-conditioning (HVAC), plumbing, and fuel oil service to the Air Operations building, MTRACON building, and the Air Traffic Control Tower (ATCT). The following redundancies and approaches are employed:",
+          "word_ids": [
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "overview-precedence",
+      "page": 2,
+      "bbox": [
+        130,
+        108,
+        973,
+        153
+      ],
+      "expected": "In the event of any conflicts between the descriptions and notes on this sheet and the remaining drawings and specifications, the remaining drawings and specifications take precedence.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "The following descriptions and notes are intended to provide a general overview and background information on the design intent of the drawings and specifications. In the event of any conflicts between the descriptions and notes on this sheet and the remaining drawings and specifications, the remaining drawings and specifications take precedence. The design provides resilient and reliable heating, ventilating, and air-conditioning (HVAC), plumbing, and fuel oil service to the Air Operations building,",
+          "word_ids": [
+            139,
+            140,
+            141,
+            142,
+            143,
+            144,
+            145,
+            146,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            161,
+            162,
+            163,
+            164,
+            165,
+            166,
+            167,
+            168,
+            169,
+            170,
+            171,
+            172,
+            173,
+            174,
+            175,
+            176,
+            177,
+            178,
+            179,
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200,
+            201,
+            202,
+            203,
+            204,
+            205,
+            206,
+            207,
+            208,
+            209,
+            210
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "The following descriptions and notes are intended to provide a general overview and background information on the design intent of the drawings and specifications. In the event of any conflicts between the descriptions and notes on this sheet and the remaining drawings and specifications, the remaining drawings and specifications take precedence. The design provides resilient and reliable heating, ventilating, and air-conditioning (HVAC), plumbing, and fuel oil service to the Air Operations building,",
+          "word_ids": [
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "BACnet-utility-integration",
+      "page": 2,
+      "bbox": [
+        992,
+        792,
+        1762,
+        839
+      ],
+      "expected": "A BACnet DDC control system is to be provided. The controls system is to be capable of tie-into the existing MCAS Cherry Point Utility Management System.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "A BACnet DDC control system is to be provided. The controls system is to be capable of tie-into the existing MCAS Cherry Point Utility Management System. Utility meters are to be capable of being tied-into the existing MCAS Cherry Point Utility Management System. Refer to the MI700 Series of Drawings for detailed information on the design intent networking, controller layout, sequences, and schematics.",
+          "word_ids": [
+            2133,
+            2134,
+            2135,
+            2136,
+            2137,
+            2138,
+            2139,
+            2140,
+            2141,
+            2142,
+            2143,
+            2144,
+            2145,
+            2146,
+            2147,
+            2148,
+            2149,
+            2150,
+            2151,
+            2152,
+            2153,
+            2154,
+            2155,
+            2156,
+            2157,
+            2158,
+            2159,
+            2160,
+            2161,
+            2162,
+            2163,
+            2164,
+            2165,
+            2166,
+            2167,
+            2168,
+            2169,
+            2170,
+            2171,
+            2172,
+            2173,
+            2174,
+            2175,
+            2176,
+            2177,
+            2178,
+            2179,
+            2180,
+            2181,
+            2182,
+            2183,
+            2184,
+            2185,
+            2186,
+            2187,
+            2188,
+            2189,
+            2190,
+            2191,
+            2192,
+            2193,
+            2194,
+            2195
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "A BACnet DDC control system is to be provided. The controls system is to be capable of tie-into the existing MCAS Cherry Point Utility Management System. Utility meters are to be capable of being tied-into the existing MCAS Cherry Point Utility Management System. Refer to the MI700 Series of Drawings for detailed information on the design intent networking, controller layout, sequences, and schematics.",
+          "word_ids": [
+            1483,
+            1484,
+            1485,
+            1486,
+            1487,
+            1488,
+            1489,
+            1490,
+            1491,
+            1492,
+            1493,
+            1494,
+            1495,
+            1496,
+            1497,
+            1498,
+            1499,
+            1500,
+            1501,
+            1502,
+            1503,
+            1504,
+            1505,
+            1506,
+            1507,
+            1508,
+            1509,
+            1510,
+            1511,
+            1512,
+            1513,
+            1514,
+            1515,
+            1516,
+            1517,
+            1518,
+            1519,
+            1520,
+            1521,
+            1522,
+            1523,
+            1524,
+            1525,
+            1526,
+            1527,
+            1528,
+            1529,
+            1530,
+            1531,
+            1532,
+            1533,
+            1534,
+            1535,
+            1536,
+            1537,
+            1538,
+            1539,
+            1540,
+            1541,
+            1542,
+            1543,
+            1544,
+            1545
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

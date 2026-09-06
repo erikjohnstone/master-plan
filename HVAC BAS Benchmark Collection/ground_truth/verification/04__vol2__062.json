@@ -1,0 +1,198 @@
+{
+  "id": "04__vol2__062",
+  "record_sha256": "9b59eb141bfe60a2761a62ab777ace63ed723e5413230731d86e541b719bbfc3",
+  "checked_utc": "2026-09-05T07:13:35.438088+00:00",
+  "errors": [],
+  "modules": {
+    "metadata": {
+      "components": [
+        {
+          "annotation_sha256": "be887208a95be11ab41642f0dad398359052fa039a96807ad022f056b2ba1cce",
+          "cell_assertions": 0,
+          "text_assertions": 7,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 7,
+      "pass": true
+    },
+    "schedules": {
+      "components": [
+        {
+          "annotation_sha256": "9c46873ff9c5408051f06d85dbc33925a5f5d587b64c47b09a9eb9ac6d87be3d",
+          "cell_assertions": 21,
+          "text_assertions": 3,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "1e97aa9f84b67f3f54842efc331f080855664a05ac81e5a11ba9f8c258bddd7d",
+          "cell_assertions": 118,
+          "text_assertions": 2,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "2d257d702086ea280197829498df33290be568b70647cd80c28873c41ebc3a22",
+          "cell_assertions": 208,
+          "text_assertions": 4,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "f2aef2af6de8cea441262a627b2120a0fc0597277f7b08f5f325dd1a89914c96",
+          "cell_assertions": 47,
+          "text_assertions": 2,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "5d607e84a2a84336bf32bb6852c389b9355b182e298025320345f60eb067ea2a",
+          "cell_assertions": 217,
+          "text_assertions": 4,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "3a8cec758a94ff9c98ee568e23505b20b70a412a30b1a8a9d509231ac846aca4",
+          "cell_assertions": 283,
+          "text_assertions": 4,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "99b24fbe85ef1ffe11339120b0c1ea40478064d4e5bd1ef535be3875bd4b8e4d",
+          "cell_assertions": 55,
+          "text_assertions": 13,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 949,
+      "text_assertions": 32,
+      "pass": true
+    },
+    "points": {
+      "components": [
+        {
+          "annotation_sha256": "b5d4768ab0ab3804a71f1d65574551d0f2236eab2df81c4878654d033e14d155",
+          "cell_assertions": 50,
+          "text_assertions": 4,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 50,
+      "text_assertions": 4,
+      "pass": true
+    },
+    "controls_context": {
+      "components": [
+        {
+          "annotation_sha256": "87b8d7c501f34940b72671b275d4d270b6213d423460b2b712fef41d581b0ed0",
+          "cell_assertions": 0,
+          "text_assertions": 17,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "b0ca0fc0dfc8add7eade0437f3a84c5b9046118aeddc9f6285b4ed34d94a16f6",
+          "cell_assertions": 49,
+          "text_assertions": 4,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "258525ffdfe2ab3e470dced4412c1264fde3d1a59ee6557efec6d0eb59935d7c",
+          "cell_assertions": 25,
+          "text_assertions": 5,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 74,
+      "text_assertions": 26,
+      "pass": true
+    },
+    "equipment_reconciliation": {
+      "components": [
+        {
+          "annotation_sha256": "67aa37165af123d8ee7e19581747160e95c471d321e72ee5093a898d330460b9",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "point_applications": {
+      "components": [
+        {
+          "annotation_sha256": "ceb89e2a33afab9ac91c8f29381f347e8b142840c181da5a39a677f52808363d",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "supporting_evidence": {
+      "components": [
+        {
+          "annotation_sha256": "e2833f452c562be6e49694e4a2c92741b0ef20cdd79bd9c85047ffd2ca8aad82",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    }
+  },
+  "source_files_sha256": {
+    "work/04__vol2__062/document_manifest.json": "c0a76dbb41fd8d394d8a86e1b2bf7ec6d5845b1c5e5c3f8c5e4623aa34fa5f2b",
+    "work/04__vol2__062/metadata_rank04.json": "be887208a95be11ab41642f0dad398359052fa039a96807ad022f056b2ba1cce",
+    "work/04__vol2__062/schedules_m50_air_valves.json": "9c46873ff9c5408051f06d85dbc33925a5f5d587b64c47b09a9eb9ac6d87be3d",
+    "work/04__vol2__062/schedules_m51_control_valves.json": "1e97aa9f84b67f3f54842efc331f080855664a05ac81e5a11ba9f8c258bddd7d",
+    "work/04__vol2__062/schedules_m52_equipment.json": "2d257d702086ea280197829498df33290be568b70647cd80c28873c41ebc3a22",
+    "work/04__vol2__062/schedules_m53_ahu.json": "f2aef2af6de8cea441262a627b2120a0fc0597277f7b08f5f325dd1a89914c96",
+    "work/04__vol2__062/schedules_m51_core_equipment.json": "5d607e84a2a84336bf32bb6852c389b9355b182e298025320345f60eb067ea2a",
+    "work/04__vol2__062/schedules_m50_core_equipment.json": "3a8cec758a94ff9c98ee568e23505b20b70a412a30b1a8a9d509231ac846aca4",
+    "work/04__vol2__062/schedules_m51_air_devices.json": "99b24fbe85ef1ffe11339120b0c1ea40478064d4e5bd1ef535be3875bd4b8e4d",
+    "work/04__vol2__062/points_rank04_ledger.json": "b5d4768ab0ab3804a71f1d65574551d0f2236eab2df81c4878654d033e14d155",
+    "work/04__vol2__062/controls_sequences_network.json": "87b8d7c501f34940b72671b275d4d270b6213d423460b2b712fef41d581b0ed0",
+    "work/04__vol2__062/controls_lab_zone_bindings.json": "b0ca0fc0dfc8add7eade0437f3a84c5b9046118aeddc9f6285b4ed34d94a16f6",
+    "work/04__vol2__062/points_m62_m63.json": "258525ffdfe2ab3e470dced4412c1264fde3d1a59ee6557efec6d0eb59935d7c",
+    "work/04__vol2__062/equipment_reconciliation_rank04.json": "67aa37165af123d8ee7e19581747160e95c471d321e72ee5093a898d330460b9",
+    "work/04__vol2__062/point_applications_rank04.json": "ceb89e2a33afab9ac91c8f29381f347e8b142840c181da5a39a677f52808363d",
+    "work/04__vol2__062/supporting_evidence_rank04.json": "e2833f452c562be6e49694e4a2c92741b0ef20cdd79bd9c85047ffd2ca8aad82",
+    "reviews/04__vol2__062/p1-p1-full-poppler.png": "9eab00c0b3f969f5a5b338ba0e732d470b40645387e5a55a662f0fac55495059",
+    "reviews/04__vol2__062/p2-p2-full-poppler.png": "da9af25bd41942ff826e7402883722453885264b2ab311ad3fce7a28a2ca54c4",
+    "reviews/04__vol2__062/p3-p3-full-poppler.png": "2ee438cd888e5406c26252ad690e7a4533748668ee37b84ed2fe7661073e842d",
+    "reviews/04__vol2__062/p4-p4-full-poppler.png": "466d17c7961b648f2a3bf87976b9285175182059e2f0a20c44bcc2a5515037f8",
+    "reviews/04__vol2__062/p5-p5-full-poppler.png": "a4f0162cd0fe5127203ed1a15ddd6067045487e3abb156af31cc1380ec95890a",
+    "reviews/04__vol2__062/p6-p6-full-poppler.png": "71d41486a17e450bad8d9d58237a97789ca185d239419d72c742acb2ca855a7d",
+    "reviews/04__vol2__062/p7-p7-full-poppler.png": "9cb9f35bbfe73473315e78a46d1edec836549d246035a7c58540365542b081f2",
+    "reviews/04__vol2__062/p8-p8-full-poppler.png": "63afb8db37403cee2a979ce25d648247180aa95c36f93b2d0dabc07ea92a0fc5",
+    "reviews/04__vol2__062/p9-p9-full-poppler.png": "19120efd37a317e791aa99dcca5c650129c410fbb15014b3190699b02eb0f3f8",
+    "reviews/04__vol2__062/p10-p10-full-poppler.png": "b5192c8db4386b382e5ceffe850428a16211dc6005e0bfbfc20bd2dcb7dbfb18",
+    "reviews/04__vol2__062/p11-p11-full-poppler.png": "6ed35b0ad380d55ded74fa0ac0bc46d29d0a4f65e64bc4c728757f0f1473dd30",
+    "reviews/04__vol2__062/p12-p12-full-poppler.png": "ba993898f25b830c44f868a84af02f7942cfd321f2994ec5ca41e7ed095c5716",
+    "reviews/04__vol2__062/p13-p13-full-poppler.png": "b193090f0a99d3ca71a831bd43b569f6c702d8a0df18c8dc7b4668d8f89d4d61",
+    "reviews/04__vol2__062/p14-p14-full-poppler.png": "cb577770c78a26c5b73065adc6ef69dfa94e7bd8983f002a5c28ce72e474d305",
+    "reviews/04__vol2__062/p15-p15-full-poppler.png": "d3bc8c1bb996f7f06cee49bfa96d889474ccb952c10e9a6c2e5266a434846ad4",
+    "reviews/04__vol2__062/p16-p16-full-poppler.png": "0466fa4d9f5f12a680593e287df994cae52ac5d994bcc3898d21aa9e0dc432cd",
+    "reviews/04__vol2__062/p17-p17-full-poppler.png": "63c95791c048d234d412f949131b949928bfa675c75deb63e62224907b496ce5",
+    "reviews/04__vol2__062/p18-p18-full-poppler.png": "5371b5417bb46181648620175e6c6780434f5200680844742642c36156f926df",
+    "reviews/04__vol2__062/p19-p19-full-poppler.png": "ed12965516c1e6002c1ef617a59bd54911c9d5006001bf8ee5ac9fd356383c95",
+    "reviews/04__vol2__062/p20-p20-full-poppler.png": "0df8b850a3f5ab4a05059e69f84cae4e388ecca77f0c2961ad5a36f76fee035c",
+    "reviews/04__vol2__062/p21-p21-full-poppler.png": "e6e20d3811d6eb4961e37d84c0da51a3253cf86a3a2eb2c35da83e301bf0f75d",
+    "reviews/04__vol2__062/p22-p22-full-poppler.png": "885140f37c65f692904ae6a7dc5a890d6fcb02ab0afe8a6d5450483a3d701964",
+    "reviews/04__vol2__062/p23-p23-full-poppler.png": "8f03434eecf2da9ff2b260ebc125d5f68ff367b1ea89573e6d58abc9e3da2a1b",
+    "reviews/04__vol2__062/p24-p24-full-poppler.png": "a6e028533d45a6c14fb9c3a92a7fa4bf3fd2a7b394e1623ec54b2aef1c90e435",
+    "reviews/04__vol2__062/p25-p25-full-poppler.png": "fdf83d523fb06aa5f2096b1c74b585cefe93f21bac86926bb56dac9df4462102",
+    "reviews/04__vol2__062/p26-p26-full-poppler.png": "bc015c9c29e532541fc97c9a461e8bdde3080edc15edad60675ab115097fa5f4",
+    "reviews/04__vol2__062/p27-p27-full-poppler.png": "6053d386082c248d6ac7f820147ec7d9cc30f89f5be5b60647fc3d1b61ae5cdb",
+    "reviews/04__vol2__062/p28-p28-full-poppler.png": "26fb597d26a8363352ce37c432ebc03a0054965cc0469a31d0336b2a8e0ebc22",
+    "reviews/04__vol2__062/p29-p29-full-poppler.png": "ef1d9d4058177292fe11effe4333571c7b6fabe6cbbe2b3d6577fcb9f6d65a81"
+  },
+  "scope": "Rechecks every embedded authored module against MuPDF and Poppler, exact bundle/source identity, authored page/requirement coverage and review-file integrity. Visual interpretation and completeness are coordinator audit assertions, not automatic parser proof.",
+  "bounded_assertions": 1142,
+  "independent_engine_checks": 2284,
+  "pass": true
+}

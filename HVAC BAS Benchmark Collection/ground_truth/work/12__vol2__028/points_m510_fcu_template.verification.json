@@ -1,0 +1,5148 @@
+{
+  "document_id": "12__vol2__028",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "annotation_sha256": "9825999c5caebdd4a534c4154256873525f5d6493328040d0306059d9a41fff5",
+  "tables": 1,
+  "rows": 19,
+  "cell_assertions": 190,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M510-FCU",
+      "row": 1,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        162,
+        1075,
+        184
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1077
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            33
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 1,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        162,
+        1340,
+        184
+      ],
+      "expected": "EMERGENCY SHUTDOWN (GLOBAL)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EMERGENCY SHUTDOWN (GLOBAL)",
+          "word_ids": [
+            1078,
+            1079,
+            1080
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EMERGENCY SHUTDOWN (GLOBAL)",
+          "word_ids": [
+            34,
+            35,
+            36
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 1,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        162,
+        1387,
+        184
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 1,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        162,
+        1428,
+        184
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 1,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        162,
+        1470,
+        184
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 1,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        162,
+        1516,
+        184
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 1,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        162,
+        1558,
+        184
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 1,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        162,
+        1604,
+        184
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 1,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        162,
+        1670,
+        184
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 1,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        162,
+        1735,
+        184
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1081
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            131
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 2,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        184,
+        1075,
+        206
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            1072
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            37
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 2,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        184,
+        1340,
+        206
+      ],
+      "expected": "SUPPLY AIR TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE",
+          "word_ids": [
+            1073,
+            1074,
+            1075
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE",
+          "word_ids": [
+            38,
+            39,
+            40
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 2,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        184,
+        1387,
+        206
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1076
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            41
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 2,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        184,
+        1428,
+        206
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 2,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        184,
+        1470,
+        206
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 2,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        184,
+        1516,
+        206
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 2,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        184,
+        1558,
+        206
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 2,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        184,
+        1604,
+        206
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 2,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        184,
+        1670,
+        206
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 2,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        184,
+        1735,
+        206
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 3,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        206,
+        1075,
+        227
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            1068
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            42
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 3,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        206,
+        1340,
+        227
+      ],
+      "expected": "SPACE TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPACE TEMPERATURE",
+          "word_ids": [
+            1069,
+            1070
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPACE TEMPERATURE",
+          "word_ids": [
+            43,
+            44
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 3,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        206,
+        1387,
+        227
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1071
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            45
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 3,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        206,
+        1428,
+        227
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 3,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        206,
+        1470,
+        227
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 3,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        206,
+        1516,
+        227
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 3,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        206,
+        1558,
+        227
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 3,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        206,
+        1604,
+        227
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 3,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        206,
+        1670,
+        227
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 3,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        206,
+        1735,
+        227
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 4,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        227,
+        1075,
+        249
+      ],
+      "expected": "4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            1062
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            46
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 4,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        227,
+        1340,
+        249
+      ],
+      "expected": "SUPPLY AIR TEMPERATURE SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE SETPOINT",
+          "word_ids": [
+            1063,
+            1064,
+            1065,
+            1066
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE SETPOINT",
+          "word_ids": [
+            47,
+            48,
+            49,
+            50
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 4,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        227,
+        1387,
+        249
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 4,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        227,
+        1428,
+        249
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1067
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            51
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 4,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        227,
+        1470,
+        249
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 4,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        227,
+        1516,
+        249
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 4,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        227,
+        1558,
+        249
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 4,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        227,
+        1604,
+        249
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 4,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        227,
+        1670,
+        249
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 4,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        227,
+        1735,
+        249
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 5,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        249,
+        1075,
+        271
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            1056
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            52
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 5,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        249,
+        1340,
+        271
+      ],
+      "expected": "SPACE AIR TEMPERATURE SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPACE AIR TEMPERATURE SETPOINT",
+          "word_ids": [
+            1057,
+            1058,
+            1059,
+            1060
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPACE AIR TEMPERATURE SETPOINT",
+          "word_ids": [
+            53,
+            54,
+            55,
+            56
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 5,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        249,
+        1387,
+        271
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 5,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        249,
+        1428,
+        271
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1061
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            57
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 5,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        249,
+        1470,
+        271
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 5,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        249,
+        1516,
+        271
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 5,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        249,
+        1558,
+        271
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 5,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        249,
+        1604,
+        271
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 5,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        249,
+        1670,
+        271
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 5,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        249,
+        1735,
+        271
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 6,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        271,
+        1075,
+        293
+      ],
+      "expected": "6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            1051
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            58
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 6,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        271,
+        1340,
+        293
+      ],
+      "expected": "SUPPLY FAN ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN ON/OFF",
+          "word_ids": [
+            1052,
+            1053,
+            1054
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN ON/OFF",
+          "word_ids": [
+            59,
+            60,
+            61
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 6,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        271,
+        1387,
+        293
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 6,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        271,
+        1428,
+        293
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 6,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        271,
+        1470,
+        293
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 6,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        271,
+        1516,
+        293
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1055
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            136
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 6,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        271,
+        1558,
+        293
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 6,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        271,
+        1604,
+        293
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 6,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        271,
+        1670,
+        293
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 6,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        271,
+        1735,
+        293
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 7,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        293,
+        1075,
+        315
+      ],
+      "expected": "7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "7",
+          "word_ids": [
+            1046
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "7",
+          "word_ids": [
+            62
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 7,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        293,
+        1340,
+        315
+      ],
+      "expected": "SUPPLY FAN SPEED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN SPEED",
+          "word_ids": [
+            1047,
+            1048,
+            1049
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN SPEED",
+          "word_ids": [
+            63,
+            64,
+            65
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 7,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        293,
+        1387,
+        315
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 7,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        293,
+        1428,
+        315
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1050
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            137
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 7,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        293,
+        1470,
+        315
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 7,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        293,
+        1516,
+        315
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 7,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        293,
+        1558,
+        315
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 7,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        293,
+        1604,
+        315
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 7,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        293,
+        1670,
+        315
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 7,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        293,
+        1735,
+        315
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 8,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        315,
+        1075,
+        337
+      ],
+      "expected": "8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            1041
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            66
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 8,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        315,
+        1340,
+        337
+      ],
+      "expected": "SUPPLY FAN FAILURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN FAILURE",
+          "word_ids": [
+            1042,
+            1043,
+            1044
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN FAILURE",
+          "word_ids": [
+            67,
+            68,
+            69
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 8,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        315,
+        1387,
+        337
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 8,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        315,
+        1428,
+        337
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 8,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        315,
+        1470,
+        337
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 8,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        315,
+        1516,
+        337
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 8,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        315,
+        1558,
+        337
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 8,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        315,
+        1604,
+        337
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 8,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        315,
+        1670,
+        337
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 8,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        315,
+        1735,
+        337
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1045
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            138
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 9,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        337,
+        1075,
+        359
+      ],
+      "expected": "9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9",
+          "word_ids": [
+            1035
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9",
+          "word_ids": [
+            70
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 9,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        337,
+        1340,
+        359
+      ],
+      "expected": "RETURN AIR DAMPER POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN AIR DAMPER POSITION",
+          "word_ids": [
+            1036,
+            1037,
+            1038,
+            1039
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN AIR DAMPER POSITION",
+          "word_ids": [
+            71,
+            72,
+            73,
+            74
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 9,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        337,
+        1387,
+        359
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1040
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            75
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 9,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        337,
+        1428,
+        359
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 9,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        337,
+        1470,
+        359
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 9,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        337,
+        1516,
+        359
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 9,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        337,
+        1558,
+        359
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 9,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        337,
+        1604,
+        359
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 9,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        337,
+        1670,
+        359
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 9,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        337,
+        1735,
+        359
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 10,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        359,
+        1075,
+        381
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            1029
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            76
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 10,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        359,
+        1340,
+        381
+      ],
+      "expected": "HOT WATER VALVE POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT WATER VALVE POSITION",
+          "word_ids": [
+            1030,
+            1031,
+            1032,
+            1033
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT WATER VALVE POSITION",
+          "word_ids": [
+            77,
+            78,
+            79,
+            80
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 10,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        359,
+        1387,
+        381
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1034
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            81
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 10,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        359,
+        1428,
+        381
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 10,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        359,
+        1470,
+        381
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 10,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        359,
+        1516,
+        381
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 10,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        359,
+        1558,
+        381
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 10,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        359,
+        1604,
+        381
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 10,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        359,
+        1670,
+        381
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 10,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        359,
+        1735,
+        381
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 11,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        381,
+        1075,
+        403
+      ],
+      "expected": "11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            1023
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            82
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 11,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        381,
+        1340,
+        403
+      ],
+      "expected": "CHILLED WATER VALVE POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLED WATER VALVE POSITION",
+          "word_ids": [
+            1024,
+            1025,
+            1026,
+            1027
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLED WATER VALVE POSITION",
+          "word_ids": [
+            83,
+            84,
+            85,
+            86
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 11,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        381,
+        1387,
+        403
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1028
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            87
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 11,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        381,
+        1428,
+        403
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 11,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        381,
+        1470,
+        403
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 11,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        381,
+        1516,
+        403
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 11,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        381,
+        1558,
+        403
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 11,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        381,
+        1604,
+        403
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 11,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        381,
+        1670,
+        403
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 11,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        381,
+        1735,
+        403
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 12,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        403,
+        1075,
+        425
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            1018
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            88
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 12,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        403,
+        1340,
+        425
+      ],
+      "expected": "FILTER REPLACEMENT ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FILTER REPLACEMENT ALARM",
+          "word_ids": [
+            1019,
+            1020,
+            1021
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FILTER REPLACEMENT ALARM",
+          "word_ids": [
+            89,
+            90,
+            91
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 12,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        403,
+        1387,
+        425
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 12,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        403,
+        1428,
+        425
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 12,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        403,
+        1470,
+        425
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 12,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        403,
+        1516,
+        425
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 12,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        403,
+        1558,
+        425
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 12,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        403,
+        1604,
+        425
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 12,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        403,
+        1670,
+        425
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 12,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        403,
+        1735,
+        425
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1022
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            92
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 13,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        425,
+        1075,
+        447
+      ],
+      "expected": "13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13",
+          "word_ids": [
+            1013
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13",
+          "word_ids": [
+            93
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 13,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        425,
+        1340,
+        447
+      ],
+      "expected": "HIGH TEMPERATURE ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH TEMPERATURE ALARM",
+          "word_ids": [
+            1014,
+            1015,
+            1016
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH TEMPERATURE ALARM",
+          "word_ids": [
+            94,
+            95,
+            96
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 13,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        425,
+        1387,
+        447
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 13,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        425,
+        1428,
+        447
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 13,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        425,
+        1470,
+        447
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 13,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        425,
+        1516,
+        447
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 13,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        425,
+        1558,
+        447
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 13,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        425,
+        1604,
+        447
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 13,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        425,
+        1670,
+        447
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 13,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        425,
+        1735,
+        447
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1017
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            97
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 14,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        447,
+        1075,
+        469
+      ],
+      "expected": "14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            1009
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            98
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 14,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        447,
+        1340,
+        469
+      ],
+      "expected": "FREEZE PROTECTION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FREEZE PROTECTION",
+          "word_ids": [
+            1010,
+            1011
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FREEZE PROTECTION",
+          "word_ids": [
+            99,
+            100
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 14,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        447,
+        1387,
+        469
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 14,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        447,
+        1428,
+        469
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 14,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        447,
+        1470,
+        469
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 14,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        447,
+        1516,
+        469
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 14,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        447,
+        1558,
+        469
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 14,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        447,
+        1604,
+        469
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 14,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        447,
+        1670,
+        469
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 14,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        447,
+        1735,
+        469
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1012
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            101
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 15,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        469,
+        1075,
+        491
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            1004
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            102
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 15,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        469,
+        1340,
+        491
+      ],
+      "expected": "CHANGE FILTER ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHANGE FILTER ALARM",
+          "word_ids": [
+            1005,
+            1006,
+            1007
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHANGE FILTER ALARM",
+          "word_ids": [
+            103,
+            104,
+            105
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 15,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        469,
+        1387,
+        491
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 15,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        469,
+        1428,
+        491
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 15,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        469,
+        1470,
+        491
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 15,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        469,
+        1516,
+        491
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 15,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        469,
+        1558,
+        491
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 15,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        469,
+        1604,
+        491
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 15,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        469,
+        1670,
+        491
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 15,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        469,
+        1735,
+        491
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1008
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            106
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 16,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        491,
+        1075,
+        513
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            997
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            107
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 16,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        491,
+        1340,
+        513
+      ],
+      "expected": "HIGH/LOW SUPPLY AIR TEMP. ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH/LOW SUPPLY AIR TEMP. ALARM",
+          "word_ids": [
+            998,
+            999,
+            1000,
+            1001,
+            1002
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH/LOW SUPPLY AIR TEMP. ALARM",
+          "word_ids": [
+            108,
+            109,
+            110,
+            111,
+            112
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 16,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        491,
+        1387,
+        513
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 16,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        491,
+        1428,
+        513
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 16,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        491,
+        1470,
+        513
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 16,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        491,
+        1516,
+        513
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 16,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        491,
+        1558,
+        513
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 16,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        491,
+        1604,
+        513
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 16,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        491,
+        1670,
+        513
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 16,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        491,
+        1735,
+        513
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1003
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            113
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 17,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        513,
+        1075,
+        535
+      ],
+      "expected": "17",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "17",
+          "word_ids": [
+            992
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "17",
+          "word_ids": [
+            114
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 17,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        513,
+        1340,
+        535
+      ],
+      "expected": "CONDENSATE OVERFLOW ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONDENSATE OVERFLOW ALARM",
+          "word_ids": [
+            993,
+            994,
+            995
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONDENSATE OVERFLOW ALARM",
+          "word_ids": [
+            115,
+            116,
+            117
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 17,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        513,
+        1387,
+        535
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 17,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        513,
+        1428,
+        535
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 17,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        513,
+        1470,
+        535
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 17,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        513,
+        1516,
+        535
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 17,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        513,
+        1558,
+        535
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 17,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        513,
+        1604,
+        535
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 17,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        513,
+        1670,
+        535
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 17,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        513,
+        1735,
+        535
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            996
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            118
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 18,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        535,
+        1075,
+        557
+      ],
+      "expected": "18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            987
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            119
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 18,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        535,
+        1340,
+        557
+      ],
+      "expected": "SMOKE DETERCTOR ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SMOKE DETERCTOR ALARM",
+          "word_ids": [
+            988,
+            989,
+            990
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SMOKE DETERCTOR ALARM",
+          "word_ids": [
+            120,
+            121,
+            122
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 18,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        535,
+        1387,
+        557
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 18,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        535,
+        1428,
+        557
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 18,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        535,
+        1470,
+        557
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 18,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        535,
+        1516,
+        557
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 18,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        535,
+        1558,
+        557
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 18,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        535,
+        1604,
+        557
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 18,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        535,
+        1670,
+        557
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 18,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        535,
+        1735,
+        557
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            991
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            123
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 19,
+      "column": "tag",
+      "page": 6,
+      "bbox": [
+        1035,
+        557,
+        1075,
+        578
+      ],
+      "expected": "19",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "19",
+          "word_ids": [
+            980
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "19",
+          "word_ids": [
+            124
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 19,
+      "column": "point_name",
+      "page": 6,
+      "bbox": [
+        1075,
+        557,
+        1340,
+        578
+      ],
+      "expected": "HIGH/LOW SUPPLY STATIC PRESSURE ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH/LOW SUPPLY STATIC PRESSURE ALARM",
+          "word_ids": [
+            981,
+            982,
+            983,
+            984,
+            985
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH/LOW SUPPLY STATIC PRESSURE ALARM",
+          "word_ids": [
+            125,
+            126,
+            127,
+            128,
+            129
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 19,
+      "column": "AI",
+      "page": 6,
+      "bbox": [
+        1340,
+        557,
+        1387,
+        578
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 19,
+      "column": "AO",
+      "page": 6,
+      "bbox": [
+        1387,
+        557,
+        1428,
+        578
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 19,
+      "column": "DI",
+      "page": 6,
+      "bbox": [
+        1428,
+        557,
+        1470,
+        578
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 19,
+      "column": "DO",
+      "page": 6,
+      "bbox": [
+        1470,
+        557,
+        1516,
+        578
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 19,
+      "column": "AV",
+      "page": 6,
+      "bbox": [
+        1516,
+        557,
+        1558,
+        578
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 19,
+      "column": "BV",
+      "page": 6,
+      "bbox": [
+        1558,
+        557,
+        1604,
+        578
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 19,
+      "column": "TREND",
+      "page": 6,
+      "bbox": [
+        1604,
+        557,
+        1670,
+        578
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "row": 19,
+      "column": "ALARM",
+      "page": 6,
+      "bbox": [
+        1670,
+        557,
+        1735,
+        578
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            986
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            130
+          ]
+        }
+      }
+    },
+    {
+      "table": "M510-FCU",
+      "header": "BAS INPUT/OUTPUT POINT LIST",
+      "page": 6,
+      "bbox": [
+        1290,
+        108,
+        1478,
+        131
+      ],
+      "engine": "mupdf",
+      "actual": "BAS INPUT/OUTPUT POINT LIST",
+      "pass": true
+    },
+    {
+      "table": "M510-FCU",
+      "header": "BAS INPUT/OUTPUT POINT LIST",
+      "page": 6,
+      "bbox": [
+        1290,
+        108,
+        1478,
+        131
+      ],
+      "engine": "poppler",
+      "actual": "BAS INPUT/OUTPUT POINT LIST",
+      "pass": true
+    },
+    {
+      "table": "M510-FCU",
+      "header": "TAG POINT NAME AI AO DI DO AV BV TREND ALARM",
+      "page": 6,
+      "bbox": [
+        1035,
+        133,
+        1735,
+        162
+      ],
+      "engine": "mupdf",
+      "actual": "TAG POINT NAME AI AO DI DO AV BV TREND ALARM",
+      "pass": true
+    },
+    {
+      "table": "M510-FCU",
+      "header": "TAG POINT NAME AI AO DI DO AV BV TREND ALARM",
+      "page": 6,
+      "bbox": [
+        1035,
+        133,
+        1735,
+        162
+      ],
+      "engine": "poppler",
+      "actual": "TAG POINT NAME AI AO DI DO AV BV TREND ALARM",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "fcu-io-matrix",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

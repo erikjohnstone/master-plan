@@ -1,0 +1,1008 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "1e10f1e5600d9445c023ddf1248a85087ea516c0359668cfc674994842bb1579",
+  "tables": 6,
+  "rows": 33,
+  "cell_assertions": 33,
+  "text_assertions": 1,
+  "checks": [
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        324,
+        1395,
+        342
+      ],
+      "expected": "CD-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-1",
+          "word_ids": [
+            720
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-1",
+          "word_ids": [
+            18
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        343,
+        1395,
+        360
+      ],
+      "expected": "CD-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-2",
+          "word_ids": [
+            733
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-2",
+          "word_ids": [
+            19
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 3,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        361,
+        1395,
+        377
+      ],
+      "expected": "CD-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-3",
+          "word_ids": [
+            746
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-3",
+          "word_ids": [
+            20
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 4,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        378,
+        1395,
+        395
+      ],
+      "expected": "CD-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-4",
+          "word_ids": [
+            759
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-4",
+          "word_ids": [
+            21
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 5,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        396,
+        1395,
+        412
+      ],
+      "expected": "CD-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-5",
+          "word_ids": [
+            772
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-5",
+          "word_ids": [
+            22
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 6,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        413,
+        1395,
+        430
+      ],
+      "expected": "EG-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EG-1",
+          "word_ids": [
+            785
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EG-1",
+          "word_ids": [
+            23
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 7,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        431,
+        1395,
+        447
+      ],
+      "expected": "EG-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EG-2",
+          "word_ids": [
+            799
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EG-2",
+          "word_ids": [
+            24
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 8,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        448,
+        1395,
+        464
+      ],
+      "expected": "EG-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EG-3",
+          "word_ids": [
+            813
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EG-3",
+          "word_ids": [
+            25
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 9,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        465,
+        1395,
+        481
+      ],
+      "expected": "RG-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-1",
+          "word_ids": [
+            827
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-1",
+          "word_ids": [
+            26
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 10,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        482,
+        1395,
+        498
+      ],
+      "expected": "RG-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-2",
+          "word_ids": [
+            840
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-2",
+          "word_ids": [
+            27
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 11,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        499,
+        1395,
+        516
+      ],
+      "expected": "RG-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-3",
+          "word_ids": [
+            853
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-3",
+          "word_ids": [
+            28
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 12,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        517,
+        1395,
+        533
+      ],
+      "expected": "RG-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-4",
+          "word_ids": [
+            866
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-4",
+          "word_ids": [
+            29
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 13,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        534,
+        1395,
+        550
+      ],
+      "expected": "RG-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-5",
+          "word_ids": [
+            879
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-5",
+          "word_ids": [
+            30
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 14,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        551,
+        1395,
+        567
+      ],
+      "expected": "RG-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-6",
+          "word_ids": [
+            892
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-6",
+          "word_ids": [
+            31
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 15,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        568,
+        1395,
+        584
+      ],
+      "expected": "RG-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-7",
+          "word_ids": [
+            906
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-7",
+          "word_ids": [
+            32
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 16,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        585,
+        1395,
+        601
+      ],
+      "expected": "RG-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-8",
+          "word_ids": [
+            920
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-8",
+          "word_ids": [
+            33
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 17,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        602,
+        1395,
+        618
+      ],
+      "expected": "RG-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-9",
+          "word_ids": [
+            934
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-9",
+          "word_ids": [
+            34
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 18,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        619,
+        1395,
+        636
+      ],
+      "expected": "TG-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TG-1",
+          "word_ids": [
+            948
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TG-1",
+          "word_ids": [
+            35
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 19,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        637,
+        1395,
+        653
+      ],
+      "expected": "TG-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TG-2",
+          "word_ids": [
+            964
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TG-2",
+          "word_ids": [
+            36
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-GRD-MARKS",
+      "row": 20,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1340,
+        654,
+        1395,
+        671
+      ],
+      "expected": "TG-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TG-3",
+          "word_ids": [
+            980
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TG-3",
+          "word_ids": [
+            37
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-HUMIDIFIER-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1350,
+        836,
+        1400,
+        854
+      ],
+      "expected": "H-M1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "H-M1",
+          "word_ids": [
+            644
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "H-M1",
+          "word_ids": [
+            301
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-HUMIDIFIER-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1350,
+        855,
+        1400,
+        872
+      ],
+      "expected": "H-M2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "H-M2",
+          "word_ids": [
+            653
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "H-M2",
+          "word_ids": [
+            302
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-HUMIDIFIER-MARKS",
+      "row": 3,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1350,
+        873,
+        1400,
+        889
+      ],
+      "expected": "H-M3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "H-M3",
+          "word_ids": [
+            662
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "H-M3",
+          "word_ids": [
+            303
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-HUMIDIFIER-MARKS",
+      "row": 4,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1350,
+        890,
+        1400,
+        907
+      ],
+      "expected": "H-M4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "H-M4",
+          "word_ids": [
+            671
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "H-M4",
+          "word_ids": [
+            304
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-HUMIDIFIER-MARKS",
+      "row": 5,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1350,
+        908,
+        1400,
+        924
+      ],
+      "expected": "H-M5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "H-M5",
+          "word_ids": [
+            680
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "H-M5",
+          "word_ids": [
+            305
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-HUMIDIFIER-MARKS",
+      "row": 6,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1350,
+        925,
+        1400,
+        942
+      ],
+      "expected": "H-M6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "H-M6",
+          "word_ids": [
+            689
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "H-M6",
+          "word_ids": [
+            306
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-DEHUMIDIFIER-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1350,
+        1160,
+        1400,
+        1178
+      ],
+      "expected": "DH-M1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DH-M1",
+          "word_ids": [
+            1275
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DH-M1",
+          "word_ids": [
+            612
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-DEHUMIDIFIER-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1350,
+        1179,
+        1400,
+        1196
+      ],
+      "expected": "DH-M2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DH-M2",
+          "word_ids": [
+            1284
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DH-M2",
+          "word_ids": [
+            613
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-DEHUMIDIFIER-MARKS",
+      "row": 3,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        1350,
+        1197,
+        1400,
+        1214
+      ],
+      "expected": "DH-M3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DH-M3",
+          "word_ids": [
+            1294
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DH-M3",
+          "word_ids": [
+            614
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-FAN-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        190,
+        1202,
+        245,
+        1220
+      ],
+      "expected": "EF-M1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-M1",
+          "word_ids": [
+            1013
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-M1",
+          "word_ids": [
+            516
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-EXPANSION-TANK-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        175,
+        1410,
+        260,
+        1428
+      ],
+      "expected": "ET-CHW-MT1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ET-CHW-MT1",
+          "word_ids": [
+            1086
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ET-CHW-MT1",
+          "word_ids": [
+            586
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-EXPANSION-TANK-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        175,
+        1429,
+        260,
+        1446
+      ],
+      "expected": "ET-HW-MT1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ET-HW-MT1",
+          "word_ids": [
+            1093
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ET-HW-MT1",
+          "word_ids": [
+            589
+          ]
+        }
+      }
+    },
+    {
+      "table": "M613-CABINET-UNIT-HEATER-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 47,
+      "bbox": [
+        840,
+        1444,
+        910,
+        1463
+      ],
+      "expected": "CUH-M1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CUH-M1",
+          "word_ids": [
+            1144
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CUH-M1",
+          "word_ids": [
+            712
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m613-sheet-title",
+      "page": 47,
+      "bbox": [
+        2280,
+        1500,
+        2365,
+        1533
+      ],
+      "expected": "M-613",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-613",
+          "word_ids": [
+            207
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-613",
+          "word_ids": [
+            1452
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m613-aux-schedule-tables",
+      "actual": 6,
+      "expected": 6,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

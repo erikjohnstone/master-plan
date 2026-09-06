@@ -1,0 +1,383 @@
+{
+  "id": "13__vol2__017",
+  "rank": 13,
+  "title": "NIST Building 101 Replace HVAC Equipment",
+  "source_pdf": "pdf/13__vol2__017__NIST_Gaithersburg_Building_101_HVAC_Renovation.pdf",
+  "source_sha256": "5821df0d298d0e51a6c20ba36b3cc5d2eb7bbece098f12eb1746c339b56a1533",
+  "page_count": 25,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete source-bounded Rank 13 ground truth: 25-page visual review; project/sheet/scale boundaries; 47 literal high-value M-601/M-602 schedule rows; all 60 literal M-703 DDC source-matrix rows; bounded M-702 sequences; Campus DDC/e-mail alert context; and explicit schedule/topology/physical-count limitations. The record does not invent physical counts or controller/wiring/topology details.",
+  "reading_notes": [
+    "M-601/M-602 contain dense, native/vector mechanical schedules tying the six ACUs to supply/return fans, heating/cooling coils, filters and steam traps.",
+    "M-702 contains unusually rich ACU sequences: fan scheduling, preheat, safeties, economizer, cooling, night modes, AFMS, humidity and leakage contexts.",
+    "M-703 provides three large existing-to-remain DDC matrix templates and explicitly limits them to reference use."
+  ],
+  "verification_semantics": "The bundle verifier rechecks every retained cell/assertion against independent MuPDF and Poppler evidence, plus source/render hashes. It does not perform takeoff inference or prove physical installation quantities.",
+  "module_order": [
+    "metadata",
+    "schedules",
+    "points",
+    "controls_context",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "metadata": [
+      "metadata_rank13"
+    ],
+    "schedules": [
+      "schedules_core"
+    ],
+    "points": [
+      "points_m701"
+    ],
+    "controls_context": [
+      "controls_context_rank13"
+    ],
+    "equipment_reconciliation": [
+      "equipment_reconciliation_rank13"
+    ],
+    "point_applications": [
+      "point_applications_rank13"
+    ],
+    "supporting_evidence": [
+      "supporting_evidence_rank13"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Cover-sheet project, NIST facility context, issue date and drawing-list identity are bounded.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 25 pages have a reviewed sheet-ledger entry.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "No local plan scale is converted into a document-wide physical takeoff quantity.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Forty-seven literal high-value rows retain ACU, fan, coil, filter and trap identifiers/spec context without inferred installation counts.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "schedule_counts"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M-601/M-602 retain seven complete selected schedule tables as literal printed rows.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M-703 retains all 60 literal DDC matrix rows with source-template scope and no physical ownership inference.",
+      "evidence": [
+        [
+          "modules",
+          "points",
+          "tables"
+        ],
+        [
+          "modules",
+          "point_applications",
+          "expanded_template_counts"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M-703's Campus DDC visibility and e-mail notification clauses are bounded, along with explicit topology limits.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M-702 retains bounded ACU A-1, A-2 and A-3-to-A-6 operating sequence clauses.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sequence_inventory"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M-702 retains source context for freeze/smoke safety, zone sensors and AFMS without inferred zone/device counts.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sensors_and_control_symbol_context"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Untranscribed schedules, source-template status and missing physical/topology information are explicit.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every source page has a retained full-page Poppler render and visual-review finding.",
+      "evidence": [
+        [
+          "page_review"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Each authored module is rechecked against both MuPDF and Poppler source captures.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p1-p1-full-poppler.png",
+      "finding": "Cover, drawing list, project identity, title-block and map context visually reviewed."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p2-p2-full-poppler.png",
+      "finding": "Structural general-notes sheet visually reviewed as mixed-discipline source context."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p3-p3-full-poppler.png",
+      "finding": "Structural framing-plan sheet visually reviewed as mixed-discipline source context."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p4-p4-full-poppler.png",
+      "finding": "Mechanical general-notes sheet visually reviewed."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p5-p5-full-poppler.png",
+      "finding": "Mechanical demolition floor-plan sheet visually reviewed."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p6-p6-full-poppler.png",
+      "finding": "Mechanical demolition floor-plan sheet visually reviewed."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p7-p7-full-poppler.png",
+      "finding": "New-work mechanical floor-plan sheet visually reviewed."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p8-p8-full-poppler.png",
+      "finding": "New-work mechanical floor-plan sheet visually reviewed."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p9-p9-full-poppler.png",
+      "finding": "Mechanical ACU-detail sheet visually reviewed."
+    },
+    {
+      "page": 10,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p10-p10-full-poppler.png",
+      "finding": "Mechanical return-fan/detail sheet visually reviewed."
+    },
+    {
+      "page": 11,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p11-p11-full-poppler.png",
+      "finding": "Mechanical piping/freezestat detail sheet visually reviewed."
+    },
+    {
+      "page": 12,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p12-p12-full-poppler.png",
+      "finding": "M-601 dense equipment schedules visually reviewed; selected literal ACU-family tables retained separately."
+    },
+    {
+      "page": 13,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p13-p13-full-poppler.png",
+      "finding": "M-602 dense equipment schedules visually reviewed; selected literal ACU-family tables retained separately."
+    },
+    {
+      "page": 14,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p14-p14-full-poppler.png",
+      "finding": "M-603 ventilation schedule/calculation tables visually reviewed; retained as context, not transcribed inventory."
+    },
+    {
+      "page": 15,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p15-p15-full-poppler.png",
+      "finding": "M-701 mechanical control diagrams visually reviewed."
+    },
+    {
+      "page": 16,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p16-p16-full-poppler.png",
+      "finding": "M-702 ACU sequence-of-operations sheet visually reviewed; bounded clauses retained separately."
+    },
+    {
+      "page": 17,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p17-p17-full-poppler.png",
+      "finding": "M-703 DDC input/output source matrices visually reviewed; all 60 literal rows retained separately."
+    },
+    {
+      "page": 18,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p18-p18-full-poppler.png",
+      "finding": "M-801 mechanical air-flow diagrams visually reviewed."
+    },
+    {
+      "page": 19,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p19-p19-full-poppler.png",
+      "finding": "Electrical cover/legend sheet visually reviewed as mixed-discipline source context."
+    },
+    {
+      "page": 20,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p20-p20-full-poppler.png",
+      "finding": "Electrical demolition-plan sheet visually reviewed as mixed-discipline source context."
+    },
+    {
+      "page": 21,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p21-p21-full-poppler.png",
+      "finding": "Electrical new-work-plan sheet visually reviewed as mixed-discipline source context."
+    },
+    {
+      "page": 22,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p22-p22-full-poppler.png",
+      "finding": "Electrical diagrams-and-schedules sheet visually reviewed as mixed-discipline source context."
+    },
+    {
+      "page": 23,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p23-p23-full-poppler.png",
+      "finding": "Electrical motor-control-center/elevation sheet visually reviewed as mixed-discipline source context."
+    },
+    {
+      "page": 24,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p24-p24-full-poppler.png",
+      "finding": "Fire-alarm one-line sheet visually reviewed as mixed-discipline source context."
+    },
+    {
+      "page": 25,
+      "review_status": "complete",
+      "render": "reviews/13__vol2__017/p25-p25-full-poppler.png",
+      "finding": "Fire-alarm input/output matrix sheet visually reviewed as mixed-discipline source context."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "pages",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 25
+    },
+    {
+      "id": "schedules",
+      "path": [
+        "modules",
+        "schedules",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 7
+    },
+    {
+      "id": "points",
+      "path": [
+        "modules",
+        "points",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 3
+    }
+  ],
+  "completion_checks": {
+    "all_25_pages_visually_reviewed": true,
+    "all_authoring_modules_dual_engine_verified_at_build": true,
+    "source_limitations_explicit": true,
+    "required_objectives_covered": true
+  }
+}

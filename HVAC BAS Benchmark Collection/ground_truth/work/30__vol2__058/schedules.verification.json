@@ -1,0 +1,255 @@
+{
+  "document_id": "30__vol2__058",
+  "source_sha256": "5c0d37ef255d621865fc7e0147ef7cad54321292e4f68d45ae97447d35b8e627",
+  "annotation_sha256": "a1d54b8ff40aa17320218863d56f3b54d5cfbd387c0f707fca28c74380fb16e8",
+  "tables": 1,
+  "rows": 6,
+  "cell_assertions": 6,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "J604-CWGP1-VFD-POINTS",
+      "row": 1,
+      "column": "literal_source_row_as_printed",
+      "page": 217,
+      "bbox": [
+        400,
+        270,
+        630,
+        300
+      ],
+      "expected": "CWGP-1 - 12-0-DO1 VFD Enable J606",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CWGP-1 - 12-0-DO1 VFD Enable J606",
+          "word_ids": [
+            231,
+            232,
+            235,
+            233,
+            234,
+            263
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CWGP-1 - 12-0-DO1 VFD Enable J606",
+          "word_ids": [
+            32,
+            33,
+            37,
+            34,
+            35,
+            36
+          ]
+        }
+      }
+    },
+    {
+      "table": "J604-CWGP1-VFD-POINTS",
+      "row": 2,
+      "column": "literal_source_row_as_printed",
+      "page": 217,
+      "bbox": [
+        400,
+        305,
+        630,
+        335
+      ],
+      "expected": "CWGP-1 - 12-0-AO2 VFD Speed J606",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CWGP-1 - 12-0-AO2 VFD Speed J606",
+          "word_ids": [
+            236,
+            237,
+            240,
+            238,
+            239,
+            264
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CWGP-1 - 12-0-AO2 VFD Speed J606",
+          "word_ids": [
+            38,
+            39,
+            43,
+            40,
+            41,
+            42
+          ]
+        }
+      }
+    },
+    {
+      "table": "J604-CWGP1-VFD-POINTS",
+      "row": 3,
+      "column": "literal_source_row_as_printed",
+      "page": 217,
+      "bbox": [
+        400,
+        340,
+        630,
+        370
+      ],
+      "expected": "CWGP-1 - VFD 12-1-AI2 Speed Feedback J606",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CWGP-1 - VFD 12-1-AI2 Speed Feedback J606",
+          "word_ids": [
+            241,
+            242,
+            243,
+            246,
+            244,
+            245,
+            265
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CWGP-1 - VFD 12-1-AI2 Speed Feedback J606",
+          "word_ids": [
+            44,
+            45,
+            46,
+            49,
+            47,
+            48,
+            59
+          ]
+        }
+      }
+    },
+    {
+      "table": "J604-CWGP1-VFD-POINTS",
+      "row": 4,
+      "column": "literal_source_row_as_printed",
+      "page": 217,
+      "bbox": [
+        400,
+        370,
+        630,
+        400
+      ],
+      "expected": "CWGP-1 - 12-1-AI5 VFD kW J606",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CWGP-1 - 12-1-AI5 VFD kW J606",
+          "word_ids": [
+            247,
+            248,
+            251,
+            249,
+            250,
+            266
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CWGP-1 - 12-1-AI5 VFD kW J606",
+          "word_ids": [
+            60,
+            61,
+            65,
+            62,
+            63,
+            64
+          ]
+        }
+      }
+    },
+    {
+      "table": "J604-CWGP1-VFD-POINTS",
+      "row": 5,
+      "column": "literal_source_row_as_printed",
+      "page": 217,
+      "bbox": [
+        400,
+        400,
+        630,
+        435
+      ],
+      "expected": "CWGP-1 - VFD 12-1-AI4 HOA Ref. J606",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CWGP-1 - VFD 12-1-AI4 HOA Ref. J606",
+          "word_ids": [
+            252,
+            253,
+            254,
+            257,
+            255,
+            256,
+            267
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CWGP-1 - VFD 12-1-AI4 HOA Ref. J606",
+          "word_ids": [
+            66,
+            67,
+            68,
+            72,
+            69,
+            70,
+            71
+          ]
+        }
+      }
+    },
+    {
+      "table": "J604-CWGP1-VFD-POINTS",
+      "row": 6,
+      "column": "literal_source_row_as_printed",
+      "page": 217,
+      "bbox": [
+        400,
+        435,
+        630,
+        470
+      ],
+      "expected": "CWGP-1 - 12-1-DI3 VFD Fault J606",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CWGP-1 - 12-1-DI3 VFD Fault J606",
+          "word_ids": [
+            258,
+            259,
+            262,
+            260,
+            261,
+            268
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CWGP-1 - 12-1-DI3 VFD Fault J606",
+          "word_ids": [
+            73,
+            74,
+            78,
+            75,
+            76,
+            77
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

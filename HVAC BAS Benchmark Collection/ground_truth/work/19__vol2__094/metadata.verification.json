@@ -1,0 +1,1285 @@
+{
+  "document_id": "19__vol2__094",
+  "source_sha256": "e205afccbaa16d799d33aed3151c5fd06dbe7a6836e1f1132c61aba0c70fdb45",
+  "annotation_sha256": "ec378e75230156507c158decbddaff29285840809539af29d63e242473ff3d50",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 41,
+  "checks": [
+    {
+      "assertion": "project-name",
+      "page": 1,
+      "bbox": [
+        2800,
+        620,
+        2875,
+        1400
+      ],
+      "expected": "Orange County Regional History Center",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Orange County Regional History Center",
+          "word_ids": [
+            28,
+            29,
+            30,
+            31,
+            32
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Orange County Regional History Center",
+          "word_ids": [
+            31,
+            32,
+            33,
+            34,
+            35
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "project-site",
+      "page": 1,
+      "bbox": [
+        2875,
+        780,
+        2920,
+        1200
+      ],
+      "expected": "65 E Central Blvd, Orlando, FL 32801",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "65 E Central Blvd, Orlando, FL 32801",
+          "word_ids": [
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "65 E Central Blvd, Orlando, FL 32801",
+          "word_ids": [
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m101-scale",
+      "page": 3,
+      "bbox": [
+        1200,
+        1540,
+        1400,
+        1580
+      ],
+      "expected": "1/8\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            150,
+            151,
+            152,
+            153
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            311,
+            312,
+            313,
+            314
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m102-scale",
+      "page": 4,
+      "bbox": [
+        1200,
+        1540,
+        1400,
+        1580
+      ],
+      "expected": "1/8\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            179,
+            180,
+            181,
+            182
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HVAC NEW SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            305,
+            306,
+            311,
+            312,
+            313,
+            314
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m103-scale",
+      "page": 5,
+      "bbox": [
+        1250,
+        1265,
+        1450,
+        1310
+      ],
+      "expected": "1/8\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            134,
+            135,
+            136,
+            137
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            79,
+            80,
+            81,
+            82
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/1/sheet-number",
+      "page": 1,
+      "bbox": [
+        2840,
+        2040,
+        2970,
+        2110
+      ],
+      "expected": "Sheet Number: M-000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Sheet Number: M-000",
+          "word_ids": [
+            0,
+            1,
+            63
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Sheet Number: M-000",
+          "word_ids": [
+            168,
+            169,
+            170
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/1/sheet-title",
+      "page": 1,
+      "bbox": [
+        2710,
+        1885,
+        2970,
+        1970
+      ],
+      "expected": "SHEET TITLE: COVER SHEET AND SHEET INDEX",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SHEET TITLE: COVER SHEET AND SHEET INDEX",
+          "word_ids": [
+            14,
+            15,
+            67,
+            68,
+            69,
+            70,
+            71
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SHEET TITLE: COVER SHEET AND SHEET INDEX",
+          "word_ids": [
+            142,
+            143,
+            144,
+            145,
+            146,
+            147,
+            148
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/1/job-number",
+      "page": 1,
+      "bbox": [
+        2742,
+        2005,
+        2840,
+        2040
+      ],
+      "expected": "100040229",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            64
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            153
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/1/date-issued",
+      "page": 1,
+      "bbox": [
+        2930,
+        2000,
+        2980,
+        2030
+      ],
+      "expected": "2/10/15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            66
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            167
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/2/sheet-number",
+      "page": 2,
+      "bbox": [
+        2840,
+        2040,
+        2970,
+        2110
+      ],
+      "expected": "Sheet Number: M-001",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Sheet Number: M-001",
+          "word_ids": [
+            1646,
+            1647,
+            1709
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Sheet Number: M-001",
+          "word_ids": [
+            1723,
+            1724,
+            1725
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/2/sheet-title",
+      "page": 2,
+      "bbox": [
+        2710,
+        1885,
+        2970,
+        1970
+      ],
+      "expected": "SHEET TITLE: HVAC SYMBOLS LEGEND AND GENERAL NOTES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SHEET TITLE: HVAC SYMBOLS LEGEND AND GENERAL NOTES",
+          "word_ids": [
+            1660,
+            1661,
+            1713,
+            1714,
+            1715,
+            1716,
+            1717,
+            1718
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SHEET TITLE: HVAC SYMBOLS LEGEND AND GENERAL NOTES",
+          "word_ids": [
+            1696,
+            1697,
+            1698,
+            1699,
+            1700,
+            1701,
+            1702,
+            1703
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/2/job-number",
+      "page": 2,
+      "bbox": [
+        2742,
+        2005,
+        2840,
+        2040
+      ],
+      "expected": "100040229",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            1710
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            1708
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/2/date-issued",
+      "page": 2,
+      "bbox": [
+        2930,
+        2000,
+        2980,
+        2030
+      ],
+      "expected": "2/10/15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            1712
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            1722
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/3/sheet-number",
+      "page": 3,
+      "bbox": [
+        2840,
+        2040,
+        2970,
+        2110
+      ],
+      "expected": "Sheet Number: M-101",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Sheet Number: M-101",
+          "word_ids": [
+            77,
+            78,
+            140
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Sheet Number: M-101",
+          "word_ids": [
+            363,
+            364,
+            365
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/3/sheet-title",
+      "page": 3,
+      "bbox": [
+        2710,
+        1885,
+        2970,
+        1970
+      ],
+      "expected": "SHEET TITLE: HVAC DEMOLITION PLAN ROOF PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SHEET TITLE: HVAC DEMOLITION PLAN ROOF PLAN",
+          "word_ids": [
+            91,
+            92,
+            144,
+            145,
+            146,
+            147,
+            148
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SHEET TITLE: HVAC DEMOLITION PLAN ROOF PLAN",
+          "word_ids": [
+            337,
+            338,
+            339,
+            340,
+            341,
+            342,
+            343
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/3/job-number",
+      "page": 3,
+      "bbox": [
+        2742,
+        2005,
+        2840,
+        2040
+      ],
+      "expected": "100040229",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            141
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            348
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/3/date-issued",
+      "page": 3,
+      "bbox": [
+        2930,
+        2000,
+        2980,
+        2030
+      ],
+      "expected": "2/10/15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            143
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            362
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/4/sheet-number",
+      "page": 4,
+      "bbox": [
+        2840,
+        2040,
+        2970,
+        2110
+      ],
+      "expected": "Sheet Number: M-102",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Sheet Number: M-102",
+          "word_ids": [
+            106,
+            107,
+            169
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Sheet Number: M-102",
+          "word_ids": [
+            364,
+            365,
+            366
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/4/sheet-title",
+      "page": 4,
+      "bbox": [
+        2710,
+        1885,
+        2970,
+        1970
+      ],
+      "expected": "SHEET TITLE: HVAC NEW WORK PLAN ROOF PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SHEET TITLE: HVAC NEW WORK PLAN ROOF PLAN",
+          "word_ids": [
+            120,
+            121,
+            173,
+            174,
+            175,
+            176,
+            177,
+            178
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SHEET TITLE: HVAC NEW WORK PLAN ROOF PLAN",
+          "word_ids": [
+            337,
+            338,
+            339,
+            340,
+            341,
+            342,
+            343,
+            344
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/4/job-number",
+      "page": 4,
+      "bbox": [
+        2742,
+        2005,
+        2840,
+        2040
+      ],
+      "expected": "100040229",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            170
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            349
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/4/date-issued",
+      "page": 4,
+      "bbox": [
+        2930,
+        2000,
+        2980,
+        2030
+      ],
+      "expected": "2/10/15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            172
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            363
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/5/sheet-number",
+      "page": 5,
+      "bbox": [
+        2840,
+        2040,
+        2970,
+        2110
+      ],
+      "expected": "Sheet Number: M-103",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Sheet Number: M-103",
+          "word_ids": [
+            64,
+            65,
+            127
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Sheet Number: M-103",
+          "word_ids": [
+            445,
+            446,
+            447
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/5/sheet-title",
+      "page": 5,
+      "bbox": [
+        2710,
+        1885,
+        2970,
+        1970
+      ],
+      "expected": "SHEET TITLE: HVAC PHASING PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SHEET TITLE: HVAC PHASING PLAN",
+          "word_ids": [
+            78,
+            79,
+            131,
+            132,
+            133
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SHEET TITLE: HVAC PHASING PLAN",
+          "word_ids": [
+            421,
+            422,
+            423,
+            424,
+            425
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/5/job-number",
+      "page": 5,
+      "bbox": [
+        2742,
+        2005,
+        2840,
+        2040
+      ],
+      "expected": "100040229",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            128
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            430
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/5/date-issued",
+      "page": 5,
+      "bbox": [
+        2930,
+        2000,
+        2980,
+        2030
+      ],
+      "expected": "2/10/15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            130
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            444
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/6/sheet-number",
+      "page": 6,
+      "bbox": [
+        2840,
+        2040,
+        2970,
+        2110
+      ],
+      "expected": "Sheet Number: M-201",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Sheet Number: M-201",
+          "word_ids": [
+            299,
+            300,
+            362
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Sheet Number: M-201",
+          "word_ids": [
+            402,
+            403,
+            404
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/6/sheet-title",
+      "page": 6,
+      "bbox": [
+        2710,
+        1885,
+        2970,
+        1970
+      ],
+      "expected": "SHEET TITLE: HVAC CONTROLS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SHEET TITLE: HVAC CONTROLS",
+          "word_ids": [
+            313,
+            314,
+            366,
+            367
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SHEET TITLE: HVAC CONTROLS",
+          "word_ids": [
+            369,
+            370,
+            371,
+            372
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/6/job-number",
+      "page": 6,
+      "bbox": [
+        2742,
+        2005,
+        2840,
+        2040
+      ],
+      "expected": "100040229",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            363
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            387
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/6/date-issued",
+      "page": 6,
+      "bbox": [
+        2930,
+        2000,
+        2980,
+        2030
+      ],
+      "expected": "2/10/15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            365
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            401
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/7/sheet-number",
+      "page": 7,
+      "bbox": [
+        2840,
+        2040,
+        2970,
+        2110
+      ],
+      "expected": "Sheet Number: M-301",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Sheet Number: M-301",
+          "word_ids": [
+            689,
+            690,
+            752
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Sheet Number: M-301",
+          "word_ids": [
+            820,
+            821,
+            822
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/7/sheet-title",
+      "page": 7,
+      "bbox": [
+        2710,
+        1885,
+        2970,
+        1970
+      ],
+      "expected": "SHEET TITLE: HVAC DETAILS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SHEET TITLE: HVAC DETAILS",
+          "word_ids": [
+            703,
+            704,
+            756,
+            757
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SHEET TITLE: HVAC DETAILS",
+          "word_ids": [
+            747,
+            748,
+            759,
+            760
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/7/job-number",
+      "page": 7,
+      "bbox": [
+        2742,
+        2005,
+        2840,
+        2040
+      ],
+      "expected": "100040229",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            753
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            787
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/7/date-issued",
+      "page": 7,
+      "bbox": [
+        2930,
+        2000,
+        2980,
+        2030
+      ],
+      "expected": "2/10/15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            755
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            819
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/8/sheet-number",
+      "page": 8,
+      "bbox": [
+        2840,
+        2040,
+        2970,
+        2110
+      ],
+      "expected": "Sheet Number: M-401",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Sheet Number: M-401",
+          "word_ids": [
+            924,
+            925,
+            987
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Sheet Number: M-401",
+          "word_ids": [
+            1554,
+            1555,
+            1556
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/8/sheet-title",
+      "page": 8,
+      "bbox": [
+        2710,
+        1885,
+        2970,
+        1970
+      ],
+      "expected": "SHEET TITLE: HVAC SCHEDULES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SHEET TITLE: HVAC SCHEDULES",
+          "word_ids": [
+            938,
+            939,
+            991,
+            992
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SHEET TITLE: HVAC SCHEDULES",
+          "word_ids": [
+            1531,
+            1532,
+            1533,
+            1534
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/8/job-number",
+      "page": 8,
+      "bbox": [
+        2742,
+        2005,
+        2840,
+        2040
+      ],
+      "expected": "100040229",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            988
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            1539
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/8/date-issued",
+      "page": 8,
+      "bbox": [
+        2930,
+        2000,
+        2980,
+        2030
+      ],
+      "expected": "2/10/15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            990
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            1553
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/9/sheet-number",
+      "page": 9,
+      "bbox": [
+        2840,
+        2040,
+        2970,
+        2110
+      ],
+      "expected": "S-500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S-500",
+          "word_ids": [
+            11
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S-500",
+          "word_ids": [
+            16
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/9/sheet-title",
+      "page": 9,
+      "bbox": [
+        2710,
+        1885,
+        2970,
+        1970
+      ],
+      "expected": "STRUCTURAL SUPPORT DETAILS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STRUCTURAL SUPPORT DETAILS",
+          "word_ids": [
+            12,
+            13,
+            14
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STRUCTURAL SUPPORT DETAILS",
+          "word_ids": [
+            11,
+            12,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/9/job-number",
+      "page": 9,
+      "bbox": [
+        2742,
+        2005,
+        2840,
+        2040
+      ],
+      "expected": "100040229",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            15
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100040229",
+          "word_ids": [
+            14
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/9/date-issued",
+      "page": 9,
+      "bbox": [
+        2930,
+        2000,
+        2980,
+        2030
+      ],
+      "expected": "2/10/15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            17
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2/10/15",
+          "word_ids": [
+            15
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "full-page-visual-review",
+      "actual": 9,
+      "expected": 9,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

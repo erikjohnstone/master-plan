@@ -1,0 +1,65 @@
+{
+  "document_id": "12__vol2__028",
+  "module_role": "Exact M-507 chilled-water-system BAS input/output matrix. Numeric tags are local P&ID callouts, and asterisks are retained as the source's chiller-controller qualifier.",
+  "source_sheet": "M-507",
+  "source_page": 3,
+  "logical_row_summary": {
+    "template_rows": 25,
+    "AI": 5,
+    "AO": 3,
+    "DI": 4,
+    "DO": 3,
+    "alarm_flag": 9,
+    "asterisk_note": "* INDICATES POINT PULLED FROM CHILLER CONTROLLER",
+    "caution": "This P&ID names CH-1, CHP-1, CHP-2 and CI-1, but it does not establish a field-wired I/O terminal count, a controller address, or an all-building schedule quantity."
+  },
+  "tables": [
+    {
+      "id": "M507-CHILLED-WATER-SYSTEM",
+      "page": 3,
+      "sheet": "M-507",
+      "detail": "1",
+      "title": "CHILLED WATER SYSTEM P&ID",
+      "columns": "tag|point_name|AI|AO|DI|DO|ALARM",
+      "x_edges": [1530,1570,1900,1942,1989,2030,2070,2135],
+      "y_ranges": [[788,809],[809,829],[829,849],[849,869],[869,889],[889,909],[909,929],[929,949],[949,970],[970,990],[990,1010],[1010,1031],[1031,1051],[1051,1071],[1071,1091],[1091,1111],[1111,1131],[1131,1150],[1150,1170],[1170,1190],[1190,1210],[1210,1230],[1230,1248],[1248,1268],[1268,1290]],
+      "rows": [
+        "1|CHILLER 1 STATUS*|||X||",
+        "2|CHILLER 1 ENABLE/DISABLE||||X|",
+        "3|CHILLER 1 FAILURE*|||||X",
+        "4|CHILLER 1 LOAD*|X||||",
+        "5|HIGH/LOW CHW PRESSURE DROP ACROSS CHILLER 1|X||||X",
+        "6|CHILLER 1 PROOF OF FLOW*|||X||X",
+        "7|CHILLER 1 LOW CHW FLOW ALARM*|||||X",
+        "8|CHP 1 STATUS VIA CT|||X||",
+        "9|CHP 1 ON/OFF||||X|",
+        "10|CHP 1 FAILURE|||||X",
+        "11|CHP 1 SPEED||X|||",
+        "12|CHP 1 ECM FAULT|||||X",
+        "13|CHP 2 STATUS VIA CT|||X||",
+        "14|CHP 2 ON/OFF||||X|",
+        "15|CHP 2 FAILURE|||||X",
+        "16|CHP 2 SPEED||X|||",
+        "17|CHP 2 ECM FAULT|||||X",
+        "18|CHILLED WATER SUPPLY TEMPERATURE*|X||||",
+        "19|CHILLER WATER SUPPLY TEMPERATURE SETPOINT||X|||",
+        "20|CHILLED WATER RETURN TEMPERATURE*|X||||",
+        "21|CHILLED WATER SYSTEM BYPASS VALVE POSITION||X|||",
+        "22|OUTSIDE AIR TEMPERATURE (GLOBAL)|X||||",
+        "23|EMERGENCY SHUTDOWN (GLOBAL)|||X||X",
+        "24|CHILLED WATER FLOW RATE (GPM)|X||||",
+        "25|FREEZE PROTECTION|||||X"
+      ],
+      "header_evidence": [
+        {"bbox": [1730,735,1918,758], "expected": "BAS INPUT/OUTPUT POINT LIST"},
+        {"bbox": [1530,760,2135,790], "expected": "TAG POINT NAME AI AO DI DO ALARM"}
+      ]
+    }
+  ],
+  "assertions": [
+    {"id": "m507-asterisk-note", "page": 3, "bbox": [1540,1310,1900,1335], "expected": "* INDICATES POINT PULLED FROM CHILLER CONTROLLER", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "chilled-water-io-matrix", "records_path": ["tables"], "expected": 1, "unique_key": "id"}
+  ]
+}

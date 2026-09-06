@@ -1,0 +1,76 @@
+{
+  "document_id": "19__vol2__094",
+  "module_role": "Exact M-401 HVAC schedule cells for the supplied Orange County Regional History Center HVAC replacement set. Each schedule row remains a source row; controls or physical-device quantities are not inferred from schedule specifications.",
+  "source_sheet": "M-401",
+  "source_page": 8,
+  "tables": [
+    {
+      "id": "M401-AIR-HANDLING-UNIT-CHW",
+      "page": 8,
+      "sheet": "M-401",
+      "title": "Air Handling Unit Schedule CHW",
+      "classification": "Air-handling-unit schedule",
+      "columns": "mark|unit_model|unit_type|components_in_direction_of_airflow|total_max_cfm|occupied_mode_oa_cfm|unoccupied_mode_oa_cfm|smoke_mode_sa_oa_cfm|external_sp_in_wg|total_sp_in_wg|fan_size_and_type|fan_rpm|motor_hp|variable_frequency_drive|cooling_sensible_capacity_mbh|cooling_total_capacity_mbh|cooling_air_entering_db_wb|cooling_air_leaving_db_wb|cooling_face_velocity_fpm|cooling_rows_fins_per_ft|cooling_air_pd_in_wg|cooling_water_entering_f|cooling_water_leaving_f|cooling_water_flow_gpm|cooling_water_pd_ft|heating_air_entering_f|heating_air_leaving_f|heating_air_pd_in_wg|heating_capacity_kw|prefilter_air_pd_in_wg|prefilter_type|final_filter_air_pd_in_wg|final_filter_type|volt_phase_hz|mca",
+      "x_edges": [150.24,205.08,289.56,494.52,673.919,722.52,789.0,868.08,934.56,975.0,1015.44,1232.64,1276.8,1316.401,1356.96,1397.16,1437.12,1504.561,1575.001,1616.399,1677.121,1727.04,1765.32,1803.84,1852.56,1903.679,1946.279,1984.68,2023.32,2058.6,2111.276,2242.563,2310.608,2517.238,2582.521,2640.713],
+      "y_edges": [181.44,198.36,215.401,232.32,249.24,266.279],
+      "rows": [
+        "AHU-04|CSAA012UB|OUTDOOR HORIZ. DRAW-THRU|MXTD3-PF-FF-CC-HF-FAN|5400|1000|0|3000|1.25|4.19|20in. direct-drive plenum, full width|1960|7.5|YES|121|136|74/62|53.6/53.2|439|8/82|0.56|45|57|23|1.9|-|-|-|-|0.625|2\" Pleated - MERV 8|0.747|12in. cartridge - 95% eff - MERV 15|460/3/60|11.75",
+        "AHU-05|CSAA014UB|OUTDOOR HORIZ. DRAW-THRU|MXTD3-PF-FF-CC-HF-FAN|7400|965|0|5400|1.50|5.20|20in. direct-drive plenum, 120% width|2342|10|YES|163|180|74/62|53.9/53.6|542|6/134|0.67|45|57|30|2.8|-|-|-|-|0.67|2\" Pleated - MERV 8|0.795|12in. cartridge - 95% eff - MERV 15|460/3/60|15.63",
+        "AHU-06|CSAA008UB|OUTDOOR HORIZ. DRAW-THRU|MXB2-PF-FF-CC-HCS-HF-FAN|3100|675|0|3200|1.50|4.88|14in. belt-drive plenum, M press|3033|5|NO|72|84|74/62|52.9/52.5|388|6/108|0.39|45|57|14|1.7|72|90|0.11|18|0.606|2\" Pleated - MERV 8|0.726|12in. cartridge - 95% eff - MERV 15|460/3/60|8.38",
+        "AHU-07|CSAA021UB|OUTDOOR HORIZ. DRAW-THRU|OAI-PF-FF-CC-HCS-FAN|9770|9770|0|0|1.50|4.46|22in. diameter Housed AF, M press|1580|15|NO|511|898|100/79|53/52.9|469|8/122|0.88|45|57|149|18.4|35|70|0.15|108|0.631|2\" Pleated - MERV 8|0.795|4in. cartridge - MERV 14 - premium|460/3/60|23.13",
+        "AHU-08|CSAA014UB|OUTDOOR HORIZ. DRAW-THRU|MXTD3-PF-FF-CC-HF-FAN|6700|690|0|4800|1.50|4.67|22.25in. direct-drive plenum, full width|1821|7.5|YES|148|163|74/62|53.9/53.6|491|6/127|0.58|45|57|27|2.3|-|-|-|-|0.649|2\" Pleated - MERV 8|0.773|12in. cartridge - 95% eff - MERV 15|460/3/60|11.75"
+      ],
+      "header_evidence": [{"bbox": [125,60,2650,175], "expected": "Air Handling Unit Schedule CHW Air Flows Fan Data Cooling Coil Heating Coil Filters Electrical Data"}]
+    },
+    {
+      "id": "M401-PACKAGED-AIR-COOLED-WATER-CHILLER",
+      "page": 8,
+      "sheet": "M-401",
+      "title": "Packaged Air Cooled Water Chiller Schedule",
+      "classification": "Air-cooled chilled-water chiller schedule",
+      "columns": "mark|model_no|energy_efficiency_rating|integrated_part_load_value|nominal_tons|capacity_tons|ambient_temp_f|flow_gpm|max_pd_ft|ewt_f|lwt_f|condenser_fan_qty|condenser_fan_fla_each|compressor_qty|compressor_rla_each|compressor_lra_each|mca|max_fuse_size|volt_phase",
+      "x_edges": [1625.88,1675.921,1747.92,1819.921,1891.919,1946.16,2015.161,2070.008,2113.791,2160.006,2200.203,2242.687,2285.274,2334.232,2371.913,2413.326,2459.768,2498.521,2568.731,2640.713],
+      "y_edges": [723.239,740.161],
+      "rows": ["CH-2|CGAM-030|9.1|14.4|30|23|105|55|15.1|55|45|3|3.2|2|24.2|197|66.3|90|460/3"],
+      "header_evidence": [{"bbox": [1620,625,2650,710], "expected": "Packaged Air Cooled Water Chiller Schedule Cooling Capacity Chilled Water Data Condenser Fan Compressors Electrical Data"}]
+    },
+    {
+      "id": "M401-COOLING-TOWER",
+      "page": 8,
+      "sheet": "M-401",
+      "title": "Cooling Tower Schedule",
+      "classification": "Cooling-tower schedule",
+      "columns": "mark|model_no|tower_type|cell_qty|operating_weight_lbs|flow_gpm|max_head_ft|water_entering_f|water_leaving_f|ambient_wb_f|drive_type|fan_motor_hp|fan_motor_rpm|volt_phase",
+      "x_edges": [1869.48,1915.439,1987.44,2096.991,2138.754,2210.757,2255.756,2300.034,2346.6,2394.712,2451.234,2505.241,2550.488,2599.197,2643.475],
+      "y_edges": [954.121,971.04],
+      "rows": ["CT-1|MD5016|COUNTERFLOW|1|13150|900|9.6|95|85|80|DIRECT|20|1800|460/3"],
+      "header_evidence": [{"bbox": [1865,850,2650,950], "expected": "Cooling Tower Schedule Operating Weight Flow GPM Max Head Water Temp Ambient WB Drive Type Fan Motor Data"}]
+    },
+    {
+      "id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER",
+      "page": 8,
+      "sheet": "M-401",
+      "title": "Disposable Cylinder Electric Humidifier Schedule",
+      "classification": "Electric humidifier schedule",
+      "columns": "mark|model_no|duct_size|minimum_capacity_lb_per_hr|cylinder_qty|kw|volt_phase",
+      "x_edges": [2091.837,2146.566,2218.569,2348.29,2443.442,2505.963,2560.918,2632.921],
+      "y_edges": [1283.52,1300.561,1317.481,1334.4,1351.44],
+      "rows": [
+        "HF-4|NH-EL-050|(IN AHU-4 CABINET)|50|1|17|480/3/60",
+        "HF-5|NH-EL-050|(IN AHU-5 CABINET)|50|1|17|480/3/60",
+        "HF-6|NH-EL-030|(IN AHU-6 CABINET)|33|1|11.4|480/3/60",
+        "HF-8|NH-EL-050|(IN AHU-8 CABINET)|50|1|17|480/3/60"
+      ],
+      "header_evidence": [{"bbox": [2090,1200,2640,1265], "expected": "Disposable Cylinder Electric Humidifier Schedule Mark Model No Duct Size Min Capacity No Cylinders KW Volt Phase"}]
+    }
+  ],
+  "assertions": [
+    {"id": "m401-cooling-coils-existing-three-way-valves", "page": 8, "bbox": [1230,315,1775,342], "expected": "COOLING COILS SHALL BE RECONNECTED TO EXISTING 3-WAY CONTROL VALVES.", "mode": "contains"},
+    {"id": "m401-humidifier-controls", "page": 8, "bbox": [2120,1380,2580,1410], "expected": "PROVIDE MICROPROCESSOR-BASED P+I AUTO-ADAPTIVE MODULATING CONTROLS AND SELF-DIAGNOSTICS.", "mode": "contains"},
+    {"id": "m401-chiller-controller-existing-bms", "page": 8, "bbox": [1670,785,2200,810], "expected": "PROVIDE FACTORY FURNISHED CONTROLLER AND CONNECT TO EXISTING BMS.", "mode": "contains"},
+    {"id": "m401-tower-additional-ddc", "page": 8, "bbox": [1905,1148,2460,1170], "expected": "ADDITIONAL CONTROL POINTS SHALL BE ADDED TO EXISTING DDC SYSTEM.", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "m401-schedule-tables", "records_path": ["tables"], "expected": 4, "unique_key": "id"}
+  ]
+}

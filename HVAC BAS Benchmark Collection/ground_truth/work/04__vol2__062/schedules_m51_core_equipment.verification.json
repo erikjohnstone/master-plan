@@ -1,0 +1,6785 @@
+{
+  "document_id": "04__vol2__062",
+  "source_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "annotation_sha256": "5d607e84a2a84336bf32bb6852c389b9355b182e298025320345f60eb067ea2a",
+  "tables": 4,
+  "rows": 13,
+  "cell_assertions": 217,
+  "text_assertions": 4,
+  "checks": [
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 1,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        190,
+        220,
+        220
+      ],
+      "expected": "B-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B-1",
+          "word_ids": [
+            140
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B-1",
+          "word_ids": [
+            2079
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 1,
+      "column": "area_served",
+      "page": 13,
+      "bbox": [
+        220,
+        190,
+        360,
+        220
+      ],
+      "expected": "HOT WATER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            141,
+            142,
+            143
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            2074,
+            2075,
+            2076
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 1,
+      "column": "thermal_efficiency",
+      "page": 13,
+      "bbox": [
+        360,
+        190,
+        410,
+        220
+      ],
+      "expected": "95%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "95%",
+          "word_ids": [
+            144
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "95%",
+          "word_ids": [
+            2070
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 1,
+      "column": "fuel",
+      "page": 13,
+      "bbox": [
+        410,
+        190,
+        510,
+        220
+      ],
+      "expected": "NATURAL GAS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NATURAL GAS",
+          "word_ids": [
+            145,
+            146
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NATURAL GAS",
+          "word_ids": [
+            2065,
+            2066
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 1,
+      "column": "ewt_f",
+      "page": 13,
+      "bbox": [
+        510,
+        190,
+        570,
+        220
+      ],
+      "expected": "120.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120.0",
+          "word_ids": [
+            147
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120.0",
+          "word_ids": [
+            9
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 1,
+      "column": "lwt_f",
+      "page": 13,
+      "bbox": [
+        570,
+        190,
+        640,
+        220
+      ],
+      "expected": "140.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            148
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            10
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 1,
+      "column": "boiler_flow_gpm",
+      "page": 13,
+      "bbox": [
+        640,
+        190,
+        710,
+        220
+      ],
+      "expected": "27.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "27.0",
+          "word_ids": [
+            149
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "27.0",
+          "word_ids": [
+            11
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 1,
+      "column": "maximum_pd_ft_h2o",
+      "page": 13,
+      "bbox": [
+        710,
+        190,
+        785,
+        220
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            150
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            12
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 1,
+      "column": "input_mbh",
+      "page": 13,
+      "bbox": [
+        785,
+        190,
+        835,
+        220
+      ],
+      "expected": "285",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "285",
+          "word_ids": [
+            151
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "285",
+          "word_ids": [
+            20
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 1,
+      "column": "output_mbh",
+      "page": 13,
+      "bbox": [
+        835,
+        190,
+        880,
+        220
+      ],
+      "expected": "265",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "265",
+          "word_ids": [
+            152
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "265",
+          "word_ids": [
+            21
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        880,
+        190,
+        1100,
+        220
+      ],
+      "expected": "LOCHINVAR KHB285N",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOCHINVAR KHB285N",
+          "word_ids": [
+            153,
+            154
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOCHINVAR KHB285N",
+          "word_ids": [
+            22,
+            23
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 1,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1100,
+        190,
+        1280,
+        220
+      ],
+      "expected": "1 , 2 , 3 , 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            161
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 2,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        226,
+        220,
+        256
+      ],
+      "expected": "B-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B-2",
+          "word_ids": [
+            162
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B-2",
+          "word_ids": [
+            2055
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 2,
+      "column": "area_served",
+      "page": 13,
+      "bbox": [
+        220,
+        226,
+        360,
+        256
+      ],
+      "expected": "HOT WATER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            163,
+            164,
+            165
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            2037,
+            2038,
+            2039
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 2,
+      "column": "thermal_efficiency",
+      "page": 13,
+      "bbox": [
+        360,
+        226,
+        410,
+        256
+      ],
+      "expected": "95%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "95%",
+          "word_ids": [
+            166
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "95%",
+          "word_ids": [
+            2032
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 2,
+      "column": "fuel",
+      "page": 13,
+      "bbox": [
+        410,
+        226,
+        510,
+        256
+      ],
+      "expected": "NATURAL GAS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NATURAL GAS",
+          "word_ids": [
+            167,
+            168
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NATURAL GAS",
+          "word_ids": [
+            2008,
+            2009
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 2,
+      "column": "ewt_f",
+      "page": 13,
+      "bbox": [
+        510,
+        226,
+        570,
+        256
+      ],
+      "expected": "120.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120.0",
+          "word_ids": [
+            169
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120.0",
+          "word_ids": [
+            1944
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 2,
+      "column": "lwt_f",
+      "page": 13,
+      "bbox": [
+        570,
+        226,
+        640,
+        256
+      ],
+      "expected": "140.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            170
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            35
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 2,
+      "column": "boiler_flow_gpm",
+      "page": 13,
+      "bbox": [
+        640,
+        226,
+        710,
+        256
+      ],
+      "expected": "27.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "27.0",
+          "word_ids": [
+            171
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "27.0",
+          "word_ids": [
+            36
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 2,
+      "column": "maximum_pd_ft_h2o",
+      "page": 13,
+      "bbox": [
+        710,
+        226,
+        785,
+        256
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            172
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            37
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 2,
+      "column": "input_mbh",
+      "page": 13,
+      "bbox": [
+        785,
+        226,
+        835,
+        256
+      ],
+      "expected": "285",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "285",
+          "word_ids": [
+            173
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "285",
+          "word_ids": [
+            38
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 2,
+      "column": "output_mbh",
+      "page": 13,
+      "bbox": [
+        835,
+        226,
+        880,
+        256
+      ],
+      "expected": "265",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "265",
+          "word_ids": [
+            174
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "265",
+          "word_ids": [
+            39
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        880,
+        226,
+        1100,
+        256
+      ],
+      "expected": "LOCHINVAR KHB285N",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOCHINVAR KHB285N",
+          "word_ids": [
+            175,
+            176
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOCHINVAR KHB285N",
+          "word_ids": [
+            40,
+            41
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "row": 2,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1100,
+        226,
+        1280,
+        256
+      ],
+      "expected": "1 , 2 , 3 , 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            177,
+            178,
+            179,
+            180,
+            181,
+            182,
+            183
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        510,
+        220,
+        540
+      ],
+      "expected": "HC-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-1",
+          "word_ids": [
+            270
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-1",
+          "word_ids": [
+            1873
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "area_supply_valve_served",
+      "page": 13,
+      "bbox": [
+        220,
+        510,
+        360,
+        540
+      ],
+      "expected": "RESIDENCY LAB 131 / SAV-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RESIDENCY LAB 131 / SAV-1",
+          "word_ids": [
+            271,
+            272,
+            273,
+            274,
+            275
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RESIDENCY LAB 131 / SAV-1",
+          "word_ids": [
+            283,
+            284,
+            285,
+            286,
+            287
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "capacity_mbh",
+      "page": 13,
+      "bbox": [
+        360,
+        510,
+        410,
+        540
+      ],
+      "expected": "80.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80.0",
+          "word_ids": [
+            276
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80.0",
+          "word_ids": [
+            288
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "cfm",
+      "page": 13,
+      "bbox": [
+        410,
+        510,
+        445,
+        540
+      ],
+      "expected": "2,250",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,250",
+          "word_ids": [
+            277
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,250",
+          "word_ids": [
+            289
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "entering_air_temp_f",
+      "page": 13,
+      "bbox": [
+        445,
+        510,
+        480,
+        540
+      ],
+      "expected": "55.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            278
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            290
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "leaving_air_temp_f",
+      "page": 13,
+      "bbox": [
+        480,
+        510,
+        520,
+        540
+      ],
+      "expected": "90.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "90.3",
+          "word_ids": [
+            279
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "90.3",
+          "word_ids": [
+            291
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "air_pd_in_wc",
+      "page": 13,
+      "bbox": [
+        520,
+        510,
+        560,
+        540
+      ],
+      "expected": "0.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            280
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            292
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "entering_water_temp_f",
+      "page": 13,
+      "bbox": [
+        560,
+        510,
+        600,
+        540
+      ],
+      "expected": "140.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            281
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            293
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "leaving_water_temp_f",
+      "page": 13,
+      "bbox": [
+        600,
+        510,
+        640,
+        540
+      ],
+      "expected": "122.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "122.2",
+          "word_ids": [
+            282
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "122.2",
+          "word_ids": [
+            294
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        640,
+        510,
+        680,
+        540
+      ],
+      "expected": "9.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.0",
+          "word_ids": [
+            283
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.0",
+          "word_ids": [
+            295
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "fluid_pd_ft",
+      "page": 13,
+      "bbox": [
+        680,
+        510,
+        720,
+        540
+      ],
+      "expected": "0.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.9",
+          "word_ids": [
+            284
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.9",
+          "word_ids": [
+            296
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "rows",
+      "page": 13,
+      "bbox": [
+        720,
+        510,
+        750,
+        540
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            285
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            297
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "fpi",
+      "page": 13,
+      "bbox": [
+        750,
+        510,
+        790,
+        540
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            286
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            298
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "coil_width_in",
+      "page": 13,
+      "bbox": [
+        790,
+        510,
+        830,
+        540
+      ],
+      "expected": "24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            287
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            299
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "coil_height_in",
+      "page": 13,
+      "bbox": [
+        830,
+        510,
+        875,
+        540
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            288
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            300
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "piping_runout_size",
+      "page": 13,
+      "bbox": [
+        875,
+        510,
+        915,
+        540
+      ],
+      "expected": "1-1/4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-1/4\"",
+          "word_ids": [
+            289
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-1/4\"",
+          "word_ids": [
+            301
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        915,
+        510,
+        1100,
+        540
+      ],
+      "expected": "DAIKIN 5WH1202B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAIKIN 5WH1202B",
+          "word_ids": [
+            290,
+            291
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAIKIN 5WH1202B",
+          "word_ids": [
+            302,
+            303
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 1,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1100,
+        510,
+        1280,
+        540
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            292,
+            293,
+            294,
+            295,
+            296,
+            297,
+            298,
+            299,
+            300
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            304,
+            305,
+            306,
+            307,
+            308,
+            309,
+            310,
+            311,
+            312
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        546,
+        220,
+        576
+      ],
+      "expected": "HC-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-2",
+          "word_ids": [
+            301
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-2",
+          "word_ids": [
+            313
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "area_supply_valve_served",
+      "page": 13,
+      "bbox": [
+        220,
+        546,
+        360,
+        576
+      ],
+      "expected": "SOIL/AGGREGATE 126 / SAV-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SOIL/AGGREGATE 126 / SAV-2",
+          "word_ids": [
+            302,
+            303,
+            304,
+            305
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SOIL/AGGREGATE 126 / SAV-2",
+          "word_ids": [
+            314,
+            315,
+            316,
+            317
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "capacity_mbh",
+      "page": 13,
+      "bbox": [
+        360,
+        546,
+        410,
+        576
+      ],
+      "expected": "20.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20.4",
+          "word_ids": [
+            306
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20.4",
+          "word_ids": [
+            318
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "cfm",
+      "page": 13,
+      "bbox": [
+        410,
+        546,
+        445,
+        576
+      ],
+      "expected": "560",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "560",
+          "word_ids": [
+            307
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "560",
+          "word_ids": [
+            319
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "entering_air_temp_f",
+      "page": 13,
+      "bbox": [
+        445,
+        546,
+        480,
+        576
+      ],
+      "expected": "55.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            308
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            320
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "leaving_air_temp_f",
+      "page": 13,
+      "bbox": [
+        480,
+        546,
+        520,
+        576
+      ],
+      "expected": "91.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "91.2",
+          "word_ids": [
+            309
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "91.2",
+          "word_ids": [
+            321
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "air_pd_in_wc",
+      "page": 13,
+      "bbox": [
+        520,
+        546,
+        560,
+        576
+      ],
+      "expected": "0.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.2",
+          "word_ids": [
+            310
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.2",
+          "word_ids": [
+            322
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "entering_water_temp_f",
+      "page": 13,
+      "bbox": [
+        560,
+        546,
+        600,
+        576
+      ],
+      "expected": "140.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            311
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            323
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "leaving_water_temp_f",
+      "page": 13,
+      "bbox": [
+        600,
+        546,
+        640,
+        576
+      ],
+      "expected": "119.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "119.6",
+          "word_ids": [
+            312
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "119.6",
+          "word_ids": [
+            324
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        640,
+        546,
+        680,
+        576
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            313
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            325
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "fluid_pd_ft",
+      "page": 13,
+      "bbox": [
+        680,
+        546,
+        720,
+        576
+      ],
+      "expected": "1.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            314
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            326
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "rows",
+      "page": 13,
+      "bbox": [
+        720,
+        546,
+        750,
+        576
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            315
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            327
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "fpi",
+      "page": 13,
+      "bbox": [
+        750,
+        546,
+        790,
+        576
+      ],
+      "expected": "11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            316
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            328
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "coil_width_in",
+      "page": 13,
+      "bbox": [
+        790,
+        546,
+        830,
+        576
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            317
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            329
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "coil_height_in",
+      "page": 13,
+      "bbox": [
+        830,
+        546,
+        875,
+        576
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            318
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            330
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "piping_runout_size",
+      "page": 13,
+      "bbox": [
+        875,
+        546,
+        915,
+        576
+      ],
+      "expected": "3/4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            319
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            331
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        915,
+        546,
+        1100,
+        576
+      ],
+      "expected": "DAIKIN 5BD1102B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAIKIN 5BD1102B",
+          "word_ids": [
+            320,
+            321
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAIKIN 5BD1102B",
+          "word_ids": [
+            332,
+            333
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 2,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1100,
+        546,
+        1280,
+        576
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            322,
+            323,
+            324,
+            325,
+            326,
+            327,
+            328,
+            329,
+            330
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            334,
+            335,
+            336,
+            337,
+            338,
+            339,
+            340,
+            341,
+            342
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        582,
+        220,
+        612
+      ],
+      "expected": "HC-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-3",
+          "word_ids": [
+            331
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-3",
+          "word_ids": [
+            1874
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "area_supply_valve_served",
+      "page": 13,
+      "bbox": [
+        220,
+        582,
+        360,
+        612
+      ],
+      "expected": "ASPHALT LAB 124 / SAV-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ASPHALT LAB 124 / SAV-3",
+          "word_ids": [
+            332,
+            333,
+            334,
+            335,
+            336
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ASPHALT LAB 124 / SAV-3",
+          "word_ids": [
+            344,
+            345,
+            346,
+            347,
+            348
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "capacity_mbh",
+      "page": 13,
+      "bbox": [
+        360,
+        582,
+        410,
+        612
+      ],
+      "expected": "80.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80.2",
+          "word_ids": [
+            337
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80.2",
+          "word_ids": [
+            343
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "cfm",
+      "page": 13,
+      "bbox": [
+        410,
+        582,
+        445,
+        612
+      ],
+      "expected": "2,260",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,260",
+          "word_ids": [
+            338
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,260",
+          "word_ids": [
+            349
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "entering_air_temp_f",
+      "page": 13,
+      "bbox": [
+        445,
+        582,
+        480,
+        612
+      ],
+      "expected": "55.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            339
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            350
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "leaving_air_temp_f",
+      "page": 13,
+      "bbox": [
+        480,
+        582,
+        520,
+        612
+      ],
+      "expected": "90.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "90.2",
+          "word_ids": [
+            340
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "90.2",
+          "word_ids": [
+            351
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "air_pd_in_wc",
+      "page": 13,
+      "bbox": [
+        520,
+        582,
+        560,
+        612
+      ],
+      "expected": "0.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            341
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            352
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "entering_water_temp_f",
+      "page": 13,
+      "bbox": [
+        560,
+        582,
+        600,
+        612
+      ],
+      "expected": "140.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            342
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            353
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "leaving_water_temp_f",
+      "page": 13,
+      "bbox": [
+        600,
+        582,
+        640,
+        612
+      ],
+      "expected": "122.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "122.2",
+          "word_ids": [
+            343
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "122.2",
+          "word_ids": [
+            354
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        640,
+        582,
+        680,
+        612
+      ],
+      "expected": "9.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.0",
+          "word_ids": [
+            344
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.0",
+          "word_ids": [
+            355
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "fluid_pd_ft",
+      "page": 13,
+      "bbox": [
+        680,
+        582,
+        720,
+        612
+      ],
+      "expected": "0.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.9",
+          "word_ids": [
+            345
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.9",
+          "word_ids": [
+            356
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "rows",
+      "page": 13,
+      "bbox": [
+        720,
+        582,
+        750,
+        612
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            346
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            357
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "fpi",
+      "page": 13,
+      "bbox": [
+        750,
+        582,
+        790,
+        612
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            347
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            358
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "coil_width_in",
+      "page": 13,
+      "bbox": [
+        790,
+        582,
+        830,
+        612
+      ],
+      "expected": "22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            348
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            359
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "coil_height_in",
+      "page": 13,
+      "bbox": [
+        830,
+        582,
+        875,
+        612
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            349
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            360
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "piping_runout_size",
+      "page": 13,
+      "bbox": [
+        875,
+        582,
+        915,
+        612
+      ],
+      "expected": "1-1/4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-1/4\"",
+          "word_ids": [
+            350
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-1/4\"",
+          "word_ids": [
+            361
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        915,
+        582,
+        1100,
+        612
+      ],
+      "expected": "DAIKIN 5WH1202B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAIKIN 5WH1202B",
+          "word_ids": [
+            351,
+            352
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAIKIN 5WH1202B",
+          "word_ids": [
+            362,
+            363
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 3,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1100,
+        582,
+        1280,
+        612
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            353,
+            354,
+            355,
+            356,
+            357,
+            358,
+            359,
+            360,
+            361
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            1859,
+            1860,
+            1861,
+            1862,
+            1863,
+            1864,
+            1865,
+            1866,
+            1867
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        618,
+        220,
+        648
+      ],
+      "expected": "HC-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-4",
+          "word_ids": [
+            362
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-4",
+          "word_ids": [
+            1868
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "area_supply_valve_served",
+      "page": 13,
+      "bbox": [
+        220,
+        618,
+        360,
+        648
+      ],
+      "expected": "D-1 LAB 123 / SAV-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-1 LAB 123 / SAV-4",
+          "word_ids": [
+            363,
+            364,
+            365,
+            366,
+            367
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-1 LAB 123 / SAV-4",
+          "word_ids": [
+            366,
+            367,
+            368,
+            369,
+            370
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "capacity_mbh",
+      "page": 13,
+      "bbox": [
+        360,
+        618,
+        410,
+        648
+      ],
+      "expected": "52.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "52.0",
+          "word_ids": [
+            368
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "52.0",
+          "word_ids": [
+            371
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "cfm",
+      "page": 13,
+      "bbox": [
+        410,
+        618,
+        445,
+        648
+      ],
+      "expected": "1,500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,500",
+          "word_ids": [
+            369
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,500",
+          "word_ids": [
+            372
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "entering_air_temp_f",
+      "page": 13,
+      "bbox": [
+        445,
+        618,
+        480,
+        648
+      ],
+      "expected": "55.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            370
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            373
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "leaving_air_temp_f",
+      "page": 13,
+      "bbox": [
+        480,
+        618,
+        520,
+        648
+      ],
+      "expected": "90.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "90.0",
+          "word_ids": [
+            371
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "90.0",
+          "word_ids": [
+            374
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "air_pd_in_wc",
+      "page": 13,
+      "bbox": [
+        520,
+        618,
+        560,
+        648
+      ],
+      "expected": "0.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            372
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            375
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "entering_water_temp_f",
+      "page": 13,
+      "bbox": [
+        560,
+        618,
+        600,
+        648
+      ],
+      "expected": "140.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            373
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            376
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "leaving_water_temp_f",
+      "page": 13,
+      "bbox": [
+        600,
+        618,
+        640,
+        648
+      ],
+      "expected": "120.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120.0",
+          "word_ids": [
+            374
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120.0",
+          "word_ids": [
+            377
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        640,
+        618,
+        680,
+        648
+      ],
+      "expected": "5.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.2",
+          "word_ids": [
+            375
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.2",
+          "word_ids": [
+            378
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "fluid_pd_ft",
+      "page": 13,
+      "bbox": [
+        680,
+        618,
+        720,
+        648
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            376
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            379
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "rows",
+      "page": 13,
+      "bbox": [
+        720,
+        618,
+        750,
+        648
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            377
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            380
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "fpi",
+      "page": 13,
+      "bbox": [
+        750,
+        618,
+        790,
+        648
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            378
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            381
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "coil_width_in",
+      "page": 13,
+      "bbox": [
+        790,
+        618,
+        830,
+        648
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            379
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            382
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "coil_height_in",
+      "page": 13,
+      "bbox": [
+        830,
+        618,
+        875,
+        648
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            380
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            383
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "piping_runout_size",
+      "page": 13,
+      "bbox": [
+        875,
+        618,
+        915,
+        648
+      ],
+      "expected": "1\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1\"",
+          "word_ids": [
+            381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1\"",
+          "word_ids": [
+            384
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        915,
+        618,
+        1100,
+        648
+      ],
+      "expected": "DAIKIN 5BD1202B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAIKIN 5BD1202B",
+          "word_ids": [
+            382,
+            383
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAIKIN 5BD1202B",
+          "word_ids": [
+            385,
+            386
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 4,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1100,
+        618,
+        1280,
+        648
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            384,
+            385,
+            386,
+            387,
+            388,
+            389,
+            390,
+            391,
+            392
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            387,
+            388,
+            389,
+            390,
+            391,
+            392,
+            393,
+            394,
+            395
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        654,
+        220,
+        684
+      ],
+      "expected": "HC-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-5",
+          "word_ids": [
+            393
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-5",
+          "word_ids": [
+            396
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "area_supply_valve_served",
+      "page": 13,
+      "bbox": [
+        220,
+        654,
+        360,
+        684
+      ],
+      "expected": "CONCRETE 119 / SAV-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONCRETE 119 / SAV-5",
+          "word_ids": [
+            394,
+            395,
+            396,
+            397
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONCRETE 119 / SAV-5",
+          "word_ids": [
+            397,
+            398,
+            399,
+            400
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "capacity_mbh",
+      "page": 13,
+      "bbox": [
+        360,
+        654,
+        410,
+        684
+      ],
+      "expected": "20.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20.9",
+          "word_ids": [
+            398
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20.9",
+          "word_ids": [
+            401
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "cfm",
+      "page": 13,
+      "bbox": [
+        410,
+        654,
+        445,
+        684
+      ],
+      "expected": "585",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "585",
+          "word_ids": [
+            399
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "585",
+          "word_ids": [
+            402
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "entering_air_temp_f",
+      "page": 13,
+      "bbox": [
+        445,
+        654,
+        480,
+        684
+      ],
+      "expected": "55.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            400
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            403
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "leaving_air_temp_f",
+      "page": 13,
+      "bbox": [
+        480,
+        654,
+        520,
+        684
+      ],
+      "expected": "90.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "90.4",
+          "word_ids": [
+            401
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "90.4",
+          "word_ids": [
+            404
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "air_pd_in_wc",
+      "page": 13,
+      "bbox": [
+        520,
+        654,
+        560,
+        684
+      ],
+      "expected": "0.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.3",
+          "word_ids": [
+            402
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.3",
+          "word_ids": [
+            405
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "entering_water_temp_f",
+      "page": 13,
+      "bbox": [
+        560,
+        654,
+        600,
+        684
+      ],
+      "expected": "140.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            403
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            406
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "leaving_water_temp_f",
+      "page": 13,
+      "bbox": [
+        600,
+        654,
+        640,
+        684
+      ],
+      "expected": "119.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "119.1",
+          "word_ids": [
+            404
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "119.1",
+          "word_ids": [
+            407
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        640,
+        654,
+        680,
+        684
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            405
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            408
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "fluid_pd_ft",
+      "page": 13,
+      "bbox": [
+        680,
+        654,
+        720,
+        684
+      ],
+      "expected": "1.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            406
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            409
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "rows",
+      "page": 13,
+      "bbox": [
+        720,
+        654,
+        750,
+        684
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            410
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "fpi",
+      "page": 13,
+      "bbox": [
+        750,
+        654,
+        790,
+        684
+      ],
+      "expected": "11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            408
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            411
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "coil_width_in",
+      "page": 13,
+      "bbox": [
+        790,
+        654,
+        830,
+        684
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            409
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            412
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "coil_height_in",
+      "page": 13,
+      "bbox": [
+        830,
+        654,
+        875,
+        684
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            410
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            413
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "piping_runout_size",
+      "page": 13,
+      "bbox": [
+        875,
+        654,
+        915,
+        684
+      ],
+      "expected": "3/4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            411
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            414
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        915,
+        654,
+        1100,
+        684
+      ],
+      "expected": "DAIKIN 5BD1102B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAIKIN 5BD1102B",
+          "word_ids": [
+            412,
+            413
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAIKIN 5BD1102B",
+          "word_ids": [
+            415,
+            416
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 5,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1100,
+        654,
+        1280,
+        684
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            414,
+            415,
+            416,
+            417,
+            418,
+            419,
+            420,
+            421,
+            422
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            417,
+            418,
+            419,
+            420,
+            421,
+            422,
+            423,
+            424,
+            425
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        689,
+        220,
+        719
+      ],
+      "expected": "HC-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-6",
+          "word_ids": [
+            423
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-6",
+          "word_ids": [
+            1869
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "area_supply_valve_served",
+      "page": 13,
+      "bbox": [
+        220,
+        689,
+        360,
+        719
+      ],
+      "expected": "MATERIAL LAB 118 / SV-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MATERIAL LAB 118 / SV-6",
+          "word_ids": [
+            424,
+            425,
+            426,
+            427,
+            428
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MATERIAL LAB 118 / SV-6",
+          "word_ids": [
+            1841,
+            1842,
+            1843,
+            1844,
+            1845
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "capacity_mbh",
+      "page": 13,
+      "bbox": [
+        360,
+        689,
+        410,
+        719
+      ],
+      "expected": "25.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25.7",
+          "word_ids": [
+            429
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25.7",
+          "word_ids": [
+            426
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "cfm",
+      "page": 13,
+      "bbox": [
+        410,
+        689,
+        445,
+        719
+      ],
+      "expected": "725",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "725",
+          "word_ids": [
+            430
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "725",
+          "word_ids": [
+            427
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "entering_air_temp_f",
+      "page": 13,
+      "bbox": [
+        445,
+        689,
+        480,
+        719
+      ],
+      "expected": "55.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            431
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            428
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "leaving_air_temp_f",
+      "page": 13,
+      "bbox": [
+        480,
+        689,
+        520,
+        719
+      ],
+      "expected": "90.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "90.1",
+          "word_ids": [
+            432
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "90.1",
+          "word_ids": [
+            429
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "air_pd_in_wc",
+      "page": 13,
+      "bbox": [
+        520,
+        689,
+        560,
+        719
+      ],
+      "expected": "0.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            433
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            430
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "entering_water_temp_f",
+      "page": 13,
+      "bbox": [
+        560,
+        689,
+        600,
+        719
+      ],
+      "expected": "140.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            434
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            431
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "leaving_water_temp_f",
+      "page": 13,
+      "bbox": [
+        600,
+        689,
+        640,
+        719
+      ],
+      "expected": "121.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "121.0",
+          "word_ids": [
+            435
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "121.0",
+          "word_ids": [
+            432
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        640,
+        689,
+        680,
+        719
+      ],
+      "expected": "2.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.7",
+          "word_ids": [
+            436
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.7",
+          "word_ids": [
+            433
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "fluid_pd_ft",
+      "page": 13,
+      "bbox": [
+        680,
+        689,
+        720,
+        719
+      ],
+      "expected": "1.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.9",
+          "word_ids": [
+            437
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.9",
+          "word_ids": [
+            434
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "rows",
+      "page": 13,
+      "bbox": [
+        720,
+        689,
+        750,
+        719
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            438
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            435
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "fpi",
+      "page": 13,
+      "bbox": [
+        750,
+        689,
+        790,
+        719
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            439
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            436
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "coil_width_in",
+      "page": 13,
+      "bbox": [
+        790,
+        689,
+        830,
+        719
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            440
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            437
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "coil_height_in",
+      "page": 13,
+      "bbox": [
+        830,
+        689,
+        875,
+        719
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            441
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            438
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "piping_runout_size",
+      "page": 13,
+      "bbox": [
+        875,
+        689,
+        915,
+        719
+      ],
+      "expected": "3/4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            442
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            439
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        915,
+        689,
+        1100,
+        719
+      ],
+      "expected": "DAIKIN 5BD1202B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAIKIN 5BD1202B",
+          "word_ids": [
+            443,
+            444
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAIKIN 5BD1202B",
+          "word_ids": [
+            584,
+            585
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 6,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1100,
+        689,
+        1280,
+        719
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            445,
+            446,
+            447,
+            448,
+            449,
+            450,
+            451,
+            452,
+            453
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            624,
+            625,
+            626,
+            627,
+            628,
+            629,
+            630,
+            631,
+            632
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        725,
+        220,
+        755
+      ],
+      "expected": "HC-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-7",
+          "word_ids": [
+            454
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-7",
+          "word_ids": [
+            1831
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "area_supply_valve_served",
+      "page": 13,
+      "bbox": [
+        220,
+        725,
+        360,
+        755
+      ],
+      "expected": "ASPHALT LAB 117 / SV-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ASPHALT LAB 117 / SV-7",
+          "word_ids": [
+            455,
+            456,
+            457,
+            458,
+            459
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ASPHALT LAB 117 / SV-7",
+          "word_ids": [
+            441,
+            442,
+            443,
+            444,
+            445
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "capacity_mbh",
+      "page": 13,
+      "bbox": [
+        360,
+        725,
+        410,
+        755
+      ],
+      "expected": "80.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80.2",
+          "word_ids": [
+            460
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80.2",
+          "word_ids": [
+            440
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "cfm",
+      "page": 13,
+      "bbox": [
+        410,
+        725,
+        445,
+        755
+      ],
+      "expected": "2,260",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,260",
+          "word_ids": [
+            461
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,260",
+          "word_ids": [
+            446
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "entering_air_temp_f",
+      "page": 13,
+      "bbox": [
+        445,
+        725,
+        480,
+        755
+      ],
+      "expected": "55.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            462
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            447
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "leaving_air_temp_f",
+      "page": 13,
+      "bbox": [
+        480,
+        725,
+        520,
+        755
+      ],
+      "expected": "90.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "90.2",
+          "word_ids": [
+            463
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "90.2",
+          "word_ids": [
+            448
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "air_pd_in_wc",
+      "page": 13,
+      "bbox": [
+        520,
+        725,
+        560,
+        755
+      ],
+      "expected": "0.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            464
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            449
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "entering_water_temp_f",
+      "page": 13,
+      "bbox": [
+        560,
+        725,
+        600,
+        755
+      ],
+      "expected": "140.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            465
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            450
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "leaving_water_temp_f",
+      "page": 13,
+      "bbox": [
+        600,
+        725,
+        640,
+        755
+      ],
+      "expected": "122.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "122.2",
+          "word_ids": [
+            466
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "122.2",
+          "word_ids": [
+            451
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        640,
+        725,
+        680,
+        755
+      ],
+      "expected": "9.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.0",
+          "word_ids": [
+            467
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.0",
+          "word_ids": [
+            452
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "fluid_pd_ft",
+      "page": 13,
+      "bbox": [
+        680,
+        725,
+        720,
+        755
+      ],
+      "expected": "0.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.9",
+          "word_ids": [
+            468
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.9",
+          "word_ids": [
+            453
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "rows",
+      "page": 13,
+      "bbox": [
+        720,
+        725,
+        750,
+        755
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            469
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            454
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "fpi",
+      "page": 13,
+      "bbox": [
+        750,
+        725,
+        790,
+        755
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            470
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            455
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "coil_width_in",
+      "page": 13,
+      "bbox": [
+        790,
+        725,
+        830,
+        755
+      ],
+      "expected": "22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            471
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            456
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "coil_height_in",
+      "page": 13,
+      "bbox": [
+        830,
+        725,
+        875,
+        755
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            472
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            457
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "piping_runout_size",
+      "page": 13,
+      "bbox": [
+        875,
+        725,
+        915,
+        755
+      ],
+      "expected": "3/4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            473
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            458
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        915,
+        725,
+        1100,
+        755
+      ],
+      "expected": "DAIKIN 5WH1202B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAIKIN 5WH1202B",
+          "word_ids": [
+            474,
+            475
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAIKIN 5WH1202B",
+          "word_ids": [
+            633,
+            634
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 7,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1100,
+        725,
+        1280,
+        755
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            476,
+            477,
+            478,
+            479,
+            480,
+            481,
+            482,
+            483,
+            484
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            654,
+            655,
+            656,
+            657,
+            658,
+            659,
+            660,
+            661,
+            662
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        760,
+        220,
+        790
+      ],
+      "expected": "HC-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-8",
+          "word_ids": [
+            485
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-8",
+          "word_ids": [
+            1824
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "area_supply_valve_served",
+      "page": 13,
+      "bbox": [
+        220,
+        760,
+        360,
+        790
+      ],
+      "expected": "RESIDENCY NOISE ROOM 130 / SAV-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RESIDENCY NOISE ROOM 130 / SAV-8",
+          "word_ids": [
+            486,
+            487,
+            488,
+            489,
+            490,
+            491
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RESIDENCY NOISE ROOM 130 / SAV-8",
+          "word_ids": [
+            480,
+            481,
+            482,
+            483,
+            484,
+            485
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "capacity_mbh",
+      "page": 13,
+      "bbox": [
+        360,
+        760,
+        410,
+        790
+      ],
+      "expected": "22.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "22.3",
+          "word_ids": [
+            492
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "22.3",
+          "word_ids": [
+            479
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "cfm",
+      "page": 13,
+      "bbox": [
+        410,
+        760,
+        445,
+        790
+      ],
+      "expected": "630",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "630",
+          "word_ids": [
+            493
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "630",
+          "word_ids": [
+            493
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "entering_air_temp_f",
+      "page": 13,
+      "bbox": [
+        445,
+        760,
+        480,
+        790
+      ],
+      "expected": "55.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            494
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            495
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "leaving_air_temp_f",
+      "page": 13,
+      "bbox": [
+        480,
+        760,
+        520,
+        790
+      ],
+      "expected": "90.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "90.1",
+          "word_ids": [
+            495
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "90.1",
+          "word_ids": [
+            497
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "air_pd_in_wc",
+      "page": 13,
+      "bbox": [
+        520,
+        760,
+        560,
+        790
+      ],
+      "expected": "0.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.3",
+          "word_ids": [
+            496
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.3",
+          "word_ids": [
+            499
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "entering_water_temp_f",
+      "page": 13,
+      "bbox": [
+        560,
+        760,
+        600,
+        790
+      ],
+      "expected": "140.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            497
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            501
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "leaving_water_temp_f",
+      "page": 13,
+      "bbox": [
+        600,
+        760,
+        640,
+        790
+      ],
+      "expected": "120.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120.6",
+          "word_ids": [
+            498
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120.6",
+          "word_ids": [
+            503
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        640,
+        760,
+        680,
+        790
+      ],
+      "expected": "2.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.3",
+          "word_ids": [
+            499
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.3",
+          "word_ids": [
+            505
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "fluid_pd_ft",
+      "page": 13,
+      "bbox": [
+        680,
+        760,
+        720,
+        790
+      ],
+      "expected": "10.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.3",
+          "word_ids": [
+            500
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.3",
+          "word_ids": [
+            507
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "rows",
+      "page": 13,
+      "bbox": [
+        720,
+        760,
+        750,
+        790
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            501
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            509
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "fpi",
+      "page": 13,
+      "bbox": [
+        750,
+        760,
+        790,
+        790
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            502
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            511
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "coil_width_in",
+      "page": 13,
+      "bbox": [
+        790,
+        760,
+        830,
+        790
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            503
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            513
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "coil_height_in",
+      "page": 13,
+      "bbox": [
+        830,
+        760,
+        875,
+        790
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            504
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            515
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "piping_runout_size",
+      "page": 13,
+      "bbox": [
+        875,
+        760,
+        915,
+        790
+      ],
+      "expected": "3/4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            505
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4\"",
+          "word_ids": [
+            517
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        915,
+        760,
+        1100,
+        790
+      ],
+      "expected": "DAIKIN 5BD1002B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAIKIN 5BD1002B",
+          "word_ids": [
+            506,
+            507
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAIKIN 5BD1002B",
+          "word_ids": [
+            663,
+            664
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 8,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1100,
+        760,
+        1280,
+        790
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            508,
+            509,
+            510,
+            511,
+            512,
+            513,
+            514,
+            515,
+            516
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            672,
+            673,
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            680
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        170,
+        796,
+        220,
+        826
+      ],
+      "expected": "HC-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-9",
+          "word_ids": [
+            517
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-9",
+          "word_ids": [
+            486
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "area_supply_valve_served",
+      "page": 13,
+      "bbox": [
+        220,
+        796,
+        360,
+        826
+      ],
+      "expected": "GENERAL LAB 125 / SAV-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GENERAL LAB 125 / SAV-9",
+          "word_ids": [
+            518,
+            519,
+            520,
+            521,
+            522
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GENERAL LAB 125 / SAV-9",
+          "word_ids": [
+            488,
+            489,
+            490,
+            491,
+            492
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "capacity_mbh",
+      "page": 13,
+      "bbox": [
+        360,
+        796,
+        410,
+        826
+      ],
+      "expected": "45.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "45.6",
+          "word_ids": [
+            523
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "45.6",
+          "word_ids": [
+            487
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "cfm",
+      "page": 13,
+      "bbox": [
+        410,
+        796,
+        445,
+        826
+      ],
+      "expected": "1,290",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,290",
+          "word_ids": [
+            524
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,290",
+          "word_ids": [
+            494
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "entering_air_temp_f",
+      "page": 13,
+      "bbox": [
+        445,
+        796,
+        480,
+        826
+      ],
+      "expected": "55.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            525
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            496
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "leaving_air_temp_f",
+      "page": 13,
+      "bbox": [
+        480,
+        796,
+        520,
+        826
+      ],
+      "expected": "90.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "90.1",
+          "word_ids": [
+            526
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "90.1",
+          "word_ids": [
+            498
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "air_pd_in_wc",
+      "page": 13,
+      "bbox": [
+        520,
+        796,
+        560,
+        826
+      ],
+      "expected": "0.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            527
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            500
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "entering_water_temp_f",
+      "page": 13,
+      "bbox": [
+        560,
+        796,
+        600,
+        826
+      ],
+      "expected": "140.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            528
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "140.0",
+          "word_ids": [
+            502
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "leaving_water_temp_f",
+      "page": 13,
+      "bbox": [
+        600,
+        796,
+        640,
+        826
+      ],
+      "expected": "119.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "119.3",
+          "word_ids": [
+            529
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "119.3",
+          "word_ids": [
+            504
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "flow_gpm",
+      "page": 13,
+      "bbox": [
+        640,
+        796,
+        680,
+        826
+      ],
+      "expected": "4.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4.4",
+          "word_ids": [
+            530
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4.4",
+          "word_ids": [
+            506
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "fluid_pd_ft",
+      "page": 13,
+      "bbox": [
+        680,
+        796,
+        720,
+        826
+      ],
+      "expected": "6.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6.6",
+          "word_ids": [
+            531
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6.6",
+          "word_ids": [
+            508
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "rows",
+      "page": 13,
+      "bbox": [
+        720,
+        796,
+        750,
+        826
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            532
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            510
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "fpi",
+      "page": 13,
+      "bbox": [
+        750,
+        796,
+        790,
+        826
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            533
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            512
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "coil_width_in",
+      "page": 13,
+      "bbox": [
+        790,
+        796,
+        830,
+        826
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            534
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            514
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "coil_height_in",
+      "page": 13,
+      "bbox": [
+        830,
+        796,
+        875,
+        826
+      ],
+      "expected": "14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            535
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            516
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "piping_runout_size",
+      "page": 13,
+      "bbox": [
+        875,
+        796,
+        915,
+        826
+      ],
+      "expected": "1\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1\"",
+          "word_ids": [
+            536
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1\"",
+          "word_ids": [
+            518
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        915,
+        796,
+        1100,
+        826
+      ],
+      "expected": "DAIKIN 5BD1202B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAIKIN 5BD1202B",
+          "word_ids": [
+            537,
+            538
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAIKIN 5BD1202B",
+          "word_ids": [
+            681,
+            682
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "row": 9,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        1100,
+        796,
+        1280,
+        826
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            539,
+            540,
+            541,
+            542,
+            543,
+            544,
+            545,
+            546,
+            547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5",
+          "word_ids": [
+            686,
+            687,
+            688,
+            689,
+            690,
+            691,
+            692,
+            693,
+            694
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HUMIDIFIER",
+      "row": 1,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1300,
+        260,
+        1360,
+        290
+      ],
+      "expected": "HUM-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUM-1",
+          "word_ids": [
+            649
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUM-1",
+          "word_ids": [
+            50
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HUMIDIFIER",
+      "row": 1,
+      "column": "area_served",
+      "page": 13,
+      "bbox": [
+        1360,
+        260,
+        1480,
+        290
+      ],
+      "expected": "AIR HANDLING UNIT AHU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIR HANDLING UNIT AHU-1",
+          "word_ids": [
+            650,
+            651,
+            652,
+            653
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIR HANDLING UNIT AHU-1",
+          "word_ids": [
+            126,
+            127,
+            128,
+            129
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HUMIDIFIER",
+      "row": 1,
+      "column": "area_rh_temp",
+      "page": 13,
+      "bbox": [
+        1480,
+        260,
+        1550,
+        290
+      ],
+      "expected": "30% / 70°",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30% / 70°",
+          "word_ids": [
+            654,
+            655,
+            656
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30% / 70°",
+          "word_ids": [
+            123,
+            124,
+            125
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HUMIDIFIER",
+      "row": 1,
+      "column": "steam_capacity_lb_hr",
+      "page": 13,
+      "bbox": [
+        1550,
+        260,
+        1610,
+        290
+      ],
+      "expected": "330",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "330",
+          "word_ids": [
+            657
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "330",
+          "word_ids": [
+            116
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HUMIDIFIER",
+      "row": 1,
+      "column": "gas_input_mbh",
+      "page": 13,
+      "bbox": [
+        1610,
+        260,
+        1660,
+        290
+      ],
+      "expected": "368.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "368.5",
+          "word_ids": [
+            658
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "368.5",
+          "word_ids": [
+            117
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HUMIDIFIER",
+      "row": 1,
+      "column": "amps",
+      "page": 13,
+      "bbox": [
+        1660,
+        260,
+        1710,
+        290
+      ],
+      "expected": "2.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.7",
+          "word_ids": [
+            659
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.7",
+          "word_ids": [
+            118
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HUMIDIFIER",
+      "row": 1,
+      "column": "voltage_phase",
+      "page": 13,
+      "bbox": [
+        1710,
+        260,
+        1760,
+        290
+      ],
+      "expected": "115/1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115/1",
+          "word_ids": [
+            660
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115/1",
+          "word_ids": [
+            119
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HUMIDIFIER",
+      "row": 1,
+      "column": "outside_air_temp",
+      "page": 13,
+      "bbox": [
+        1760,
+        260,
+        1810,
+        290
+      ],
+      "expected": "3°F",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3°F",
+          "word_ids": [
+            661
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3°F",
+          "word_ids": [
+            120
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HUMIDIFIER",
+      "row": 1,
+      "column": "outside_air_rh",
+      "page": 13,
+      "bbox": [
+        1810,
+        260,
+        1860,
+        290
+      ],
+      "expected": "5%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5%",
+          "word_ids": [
+            662
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5%",
+          "word_ids": [
+            121
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HUMIDIFIER",
+      "row": 1,
+      "column": "distributor_air_temp",
+      "page": 13,
+      "bbox": [
+        1860,
+        260,
+        1910,
+        290
+      ],
+      "expected": "55°F",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55°F",
+          "word_ids": [
+            663
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55°F",
+          "word_ids": [
+            122
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HUMIDIFIER",
+      "row": 1,
+      "column": "distributor_air_rh",
+      "page": 13,
+      "bbox": [
+        1910,
+        260,
+        1960,
+        290
+      ],
+      "expected": "6%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6%",
+          "word_ids": [
+            664
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6%",
+          "word_ids": [
+            130
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HUMIDIFIER",
+      "row": 1,
+      "column": "duct_size",
+      "page": 13,
+      "bbox": [
+        1960,
+        260,
+        2030,
+        290
+      ],
+      "expected": "92\"X70\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "92\"X70\"",
+          "word_ids": [
+            665
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "92\"X70\"",
+          "word_ids": [
+            131
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HUMIDIFIER",
+      "row": 1,
+      "column": "duct_cfm",
+      "page": 13,
+      "bbox": [
+        2030,
+        260,
+        2075,
+        290
+      ],
+      "expected": "13,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13,000",
+          "word_ids": [
+            666
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13,000",
+          "word_ids": [
+            132
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HUMIDIFIER",
+      "row": 1,
+      "column": "water_system",
+      "page": 13,
+      "bbox": [
+        2075,
+        260,
+        2150,
+        290
+      ],
+      "expected": "CITY / SOFTENED WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CITY / SOFTENED WATER",
+          "word_ids": [
+            667,
+            668,
+            669,
+            670
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CITY / SOFTENED WATER",
+          "word_ids": [
+            133,
+            134,
+            135,
+            136
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HUMIDIFIER",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        2150,
+        260,
+        2310,
+        290
+      ],
+      "expected": "CAREL UG150H1105",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CAREL UG150H1105",
+          "word_ids": [
+            671,
+            672
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CAREL UG150H1105",
+          "word_ids": [
+            137,
+            138
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-HUMIDIFIER",
+      "row": 1,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        2310,
+        260,
+        2400,
+        290
+      ],
+      "expected": "1 , 2 , 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3",
+          "word_ids": [
+            673,
+            674,
+            675,
+            676,
+            677
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3",
+          "word_ids": [
+            140,
+            141,
+            142,
+            143,
+            144
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-LAB-EXHAUST-FAN",
+      "row": 1,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1300,
+        505,
+        1360,
+        540
+      ],
+      "expected": "LEF-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LEF-1",
+          "word_ids": [
+            883
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LEF-1",
+          "word_ids": [
+            365
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-LAB-EXHAUST-FAN",
+      "row": 1,
+      "column": "area_served",
+      "page": 13,
+      "bbox": [
+        1360,
+        505,
+        1460,
+        540
+      ],
+      "expected": "LAB AREA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LAB AREA",
+          "word_ids": [
+            884,
+            885
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LAB AREA",
+          "word_ids": [
+            1852,
+            1853
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-LAB-EXHAUST-FAN",
+      "row": 1,
+      "column": "unit_type",
+      "page": 13,
+      "bbox": [
+        1460,
+        505,
+        1580,
+        540
+      ],
+      "expected": "NEW FUME EXHAUST FAN (HIGH-PLUME DILUTION)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NEW FUME EXHAUST FAN (HIGH-PLUME DILUTION)",
+          "word_ids": [
+            886,
+            887,
+            888,
+            889,
+            890,
+            891
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NEW FUME EXHAUST FAN (HIGH-PLUME DILUTION)",
+          "word_ids": [
+            1846,
+            1847,
+            1848,
+            1849,
+            1850,
+            1851
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-LAB-EXHAUST-FAN",
+      "row": 1,
+      "column": "blower_design_cfm",
+      "page": 13,
+      "bbox": [
+        1580,
+        505,
+        1645,
+        540
+      ],
+      "expected": "15,000 (7,500 PER FAN)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15,000 (7,500 PER FAN)",
+          "word_ids": [
+            892,
+            893,
+            894,
+            895
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15,000 (7,500 PER FAN)",
+          "word_ids": [
+            459,
+            460,
+            461,
+            462
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-LAB-EXHAUST-FAN",
+      "row": 1,
+      "column": "blower_actual_cfm",
+      "page": 13,
+      "bbox": [
+        1645,
+        505,
+        1700,
+        540
+      ],
+      "expected": "12,310 (6,155 PER FAN)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12,310 (6,155 PER FAN)",
+          "word_ids": [
+            896,
+            897,
+            898,
+            899
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12,310 (6,155 PER FAN)",
+          "word_ids": [
+            463,
+            464,
+            465,
+            466
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-LAB-EXHAUST-FAN",
+      "row": 1,
+      "column": "esp_in_wc",
+      "page": 13,
+      "bbox": [
+        1700,
+        505,
+        1735,
+        540
+      ],
+      "expected": "4.0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4.0\"",
+          "word_ids": [
+            900
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4.0\"",
+          "word_ids": [
+            468
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-LAB-EXHAUST-FAN",
+      "row": 1,
+      "column": "maximum_rpm",
+      "page": 13,
+      "bbox": [
+        1735,
+        505,
+        1780,
+        540
+      ],
+      "expected": "1,800",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,800",
+          "word_ids": [
+            901
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,800",
+          "word_ids": [
+            469
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-LAB-EXHAUST-FAN",
+      "row": 1,
+      "column": "drive",
+      "page": 13,
+      "bbox": [
+        1780,
+        505,
+        1825,
+        540
+      ],
+      "expected": "BELT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BELT",
+          "word_ids": [
+            902
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BELT",
+          "word_ids": [
+            475
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-LAB-EXHAUST-FAN",
+      "row": 1,
+      "column": "fan_quantity",
+      "page": 13,
+      "bbox": [
+        1825,
+        505,
+        1860,
+        540
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            903
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            476
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-LAB-EXHAUST-FAN",
+      "row": 1,
+      "column": "hp_per_fan",
+      "page": 13,
+      "bbox": [
+        1860,
+        505,
+        1910,
+        540
+      ],
+      "expected": "15.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15.0",
+          "word_ids": [
+            904
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15.0",
+          "word_ids": [
+            477
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-LAB-EXHAUST-FAN",
+      "row": 1,
+      "column": "voltage_phase",
+      "page": 13,
+      "bbox": [
+        1910,
+        505,
+        1960,
+        540
+      ],
+      "expected": "208/3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208/3",
+          "word_ids": [
+            905
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208/3",
+          "word_ids": [
+            478
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-LAB-EXHAUST-FAN",
+      "row": 1,
+      "column": "maximum_sones",
+      "page": 13,
+      "bbox": [
+        1960,
+        505,
+        2005,
+        540
+      ],
+      "expected": "36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            906
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            1825
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-LAB-EXHAUST-FAN",
+      "row": 1,
+      "column": "operating_weight_lb",
+      "page": 13,
+      "bbox": [
+        2005,
+        505,
+        2060,
+        540
+      ],
+      "expected": "5,100",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5,100",
+          "word_ids": [
+            907
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5,100",
+          "word_ids": [
+            1773
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-LAB-EXHAUST-FAN",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 13,
+      "bbox": [
+        2060,
+        505,
+        2280,
+        540
+      ],
+      "expected": "MK PLASTICS MODEL AXIJET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MK PLASTICS MODEL AXIJET",
+          "word_ids": [
+            908,
+            909,
+            910,
+            911
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MK PLASTICS MODEL AXIJET",
+          "word_ids": [
+            1766,
+            1767,
+            1768,
+            1769
+          ]
+        }
+      }
+    },
+    {
+      "table": "M51-LAB-EXHAUST-FAN",
+      "row": 1,
+      "column": "remarks",
+      "page": 13,
+      "bbox": [
+        2280,
+        505,
+        2410,
+        540
+      ],
+      "expected": "1 , 2 , 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3",
+          "word_ids": [
+            912,
+            913,
+            914,
+            915,
+            916
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3",
+          "word_ids": [
+            1701,
+            1702,
+            1703,
+            1704,
+            1705
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-boiler-title",
+      "page": 13,
+      "bbox": [
+        420,
+        80,
+        1000,
+        115
+      ],
+      "expected": "CONDENSING HOT WATER BOILER SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONDENSING HOT WATER BOILER SCHEDULE",
+          "word_ids": [
+            109,
+            110,
+            111,
+            112,
+            113
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONDENSING HOT WATER BOILER SCHEDULE",
+          "word_ids": [
+            2105,
+            2106,
+            2107,
+            2108,
+            2109
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-coil-title",
+      "page": 13,
+      "bbox": [
+        480,
+        405,
+        930,
+        440
+      ],
+      "expected": "HOT WATER REHEAT COIL SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT WATER REHEAT COIL SCHEDULE",
+          "word_ids": [
+            225,
+            226,
+            227,
+            228,
+            229
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT WATER REHEAT COIL SCHEDULE",
+          "word_ids": [
+            1918,
+            1919,
+            1920,
+            1921,
+            1922
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-humidifier-title",
+      "page": 13,
+      "bbox": [
+        1650,
+        145,
+        2040,
+        180
+      ],
+      "expected": "HUMIDIFIER SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDIFIER SCHEDULE",
+          "word_ids": [
+            604,
+            605
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDIFIER SCHEDULE",
+          "word_ids": [
+            25,
+            26
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m51-lef-title",
+      "page": 13,
+      "bbox": [
+        1670,
+        385,
+        2070,
+        420
+      ],
+      "expected": "LAB EXHAUST FAN SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LAB EXHAUST FAN SCHEDULE",
+          "word_ids": [
+            849,
+            850,
+            851,
+            852
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LAB EXHAUST FAN SCHEDULE",
+          "word_ids": [
+            255,
+            256,
+            257,
+            258
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "rank04-m51-core-equipment-tables",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

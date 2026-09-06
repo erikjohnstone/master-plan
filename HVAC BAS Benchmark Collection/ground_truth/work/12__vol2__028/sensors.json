@@ -1,0 +1,26 @@
+{
+  "document_id": "12__vol2__028",
+  "status": "corroborated_document_component",
+  "scope": "Cross-sheet index of logical sensor and control-input roles from the independently verified controls-context modules. This is an index, not a physical device count: the supplied archive excerpt has no mechanical plans, sensor schedule, controller layout, or zone map.",
+  "tables": [],
+  "source_ledgers": [
+    {"source_module": "controls_context_m506", "logical_source_items": 5, "scope": "Mini-split, exhaust-fan, and global outdoor point-template roles."},
+    {"source_module": "controls_context_m509_hydronic", "logical_source_items": 4, "scope": "Chilled/heating-water differential-pressure, outdoor freeze, and mechanical-room CO roles."},
+    {"source_module": "controls_context_m510", "logical_source_items": 7, "scope": "FCU temperature, freeze, current, pressure, smoke, filter, and condensate roles."},
+    {"source_module": "controls_context_m511", "logical_source_items": 5, "scope": "DOAS-3 air-path/duct-static and VAV occupancy/duct-static roles."},
+    {"source_module": "controls_context_m512", "logical_source_items": 4, "scope": "DOAS-1/2 temperature and duct-static roles."}
+  ],
+  "logical_role_count": 25,
+  "counts": {
+    "physical_sensor_count": {"status": "not_stated_in_supplied_archive_excerpt", "value": null},
+    "space_sensors": {"status": "not_stated_in_supplied_archive_excerpt", "value": null},
+    "CO2_sensors": {"status": "not_stated_in_supplied_archive_excerpt", "value": null},
+    "smart_thermostats": {"status": "not_stated_in_supplied_archive_excerpt", "value": null},
+    "CO_sensors": {"status": "not_stated_in_supplied_archive_excerpt", "value": null}
+  },
+  "zone_mapping": {"status": "not_stated_in_supplied_archive_excerpt", "value": null, "note": "Narrative room/air-path references are retained in the cited component ledgers but cannot be transformed into plan-level zones."},
+  "all_document_pages_visually_reviewed": true,
+  "inventory_checks": [
+    {"id": "sensor-source-ledgers", "records_path": ["source_ledgers"], "expected": 5, "unique_key": "source_module"}
+  ]
+}

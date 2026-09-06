@@ -1,0 +1,160 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All printed entries in the two reusable DDC point-list templates on MI741 (source PDF page 68): computer room air handling (CRAH) units and series-fan powered VAV boxes. This records controller points and printed flags, not inferred installed-device quantities.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [68],
+    "render": "reviews/01__vol2__001/p68-p68-controls-poppler.png",
+    "dpi": 180,
+    "finding": "The complete MI741 page was visually reviewed at 180 DPI. The CRAH matrix is at lower left and the SFPVAV matrix is at lower right; their adjacent written sequences are intentionally captured separately."
+  },
+  "tables": [
+    {
+      "id": "CRAH-AI",
+      "page": 68,
+      "sheet": "MI741",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "CRAH DDC POINTS LIST - ANALOG INPUT",
+      "classification": "Analog input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [143, 185, 370, 418, 460],
+      "y_edges": [1025, 1044, 1062, 1079, 1097, 1115],
+      "rows": [
+        "AI01|SPACE TEMPERATURE|Yes|Yes",
+        "AI02|SUPPLY AIR TEMPERATURE|No|Yes",
+        "AI03|RA TEMPERATURE|No|Yes",
+        "AI04|FAN SPEED (FEEDBACK)|No|No",
+        "AI05|CONTROL VALVE (FEEDBACK)|No|No"
+      ],
+      "header_evidence": [
+        {"bbox": [140, 960, 465, 990], "expected": "CRAH DDC POINTS LIST"},
+        {"bbox": [140, 990, 465, 1012], "expected": "MARK DESCRIPTION ALARM TREND"},
+        {"bbox": [140, 1012, 240, 1025], "expected": "ANALOG INPUT"}
+      ]
+    },
+    {
+      "id": "CRAH-AO",
+      "page": 68,
+      "sheet": "MI741",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "CRAH DDC POINTS LIST - ANALOG OUTPUT",
+      "classification": "Analog output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [143, 185, 370, 418, 460],
+      "y_edges": [1146, 1163, 1182],
+      "rows": [
+        "AO01|CHW VALVE CONTROL|No|No",
+        "AO02|FAN SPEED CONTROL|No|No"
+      ],
+      "header_evidence": [{"bbox": [140, 1128, 240, 1146], "expected": "ANALOG OUTPUT"}]
+    },
+    {
+      "id": "CRAH-BI",
+      "page": 68,
+      "sheet": "MI741",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "CRAH DDC POINTS LIST - BINARY INPUT",
+      "classification": "Binary input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [143, 185, 370, 418, 460],
+      "y_edges": [1215, 1233, 1250, 1268, 1285, 1304],
+      "rows": [
+        "BI01|DIRTY FILTER SWITCH|Yes|No",
+        "BI02|DRAIN PAN OVERFLOW SWITCH|Yes|No",
+        "BI03|FAN STATUS|Yes|No",
+        "BI04|CONDENSATE PUMP STATUS|Yes|No",
+        "BI05|CRAH DDC RESET|No|No"
+      ],
+      "header_evidence": [{"bbox": [140, 1197, 240, 1215], "expected": "BINARY INPUT"}]
+    },
+    {
+      "id": "CRAH-BO",
+      "page": 68,
+      "sheet": "MI741",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "CRAH DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "Binary output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [143, 185, 370, 418, 460],
+      "y_edges": [1336, 1360],
+      "rows": ["BO01|FAN START/STOP|No|No"],
+      "header_evidence": [{"bbox": [140, 1318, 240, 1336], "expected": "BINARY OUTPUT"}]
+    },
+    {
+      "id": "SFPVAV-AI",
+      "page": 68,
+      "sheet": "MI741",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "SFPVAV DDC POINTS LIST - ANALOG INPUT",
+      "classification": "Analog input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1948, 1985, 2144, 2180, 2230],
+      "y_edges": [1149, 1168, 1185, 1203, 1236],
+      "rows": [
+        "AI01|SPACE TEMPERATURE|Yes|Yes",
+        "AI02|VELOCITY PRESSURE SENSOR|No|Yes",
+        "AI03|SUPPLY AIR TEMPERATURE|No|Yes",
+        "AI04|HHW VALVE CONTROL (FEEDBACK)|No|Yes"
+      ],
+      "header_evidence": [
+        {"bbox": [1945, 1085, 2235, 1115], "expected": "SFPVAV DDC POINTS LIST"},
+        {"bbox": [1945, 1115, 2235, 1138], "expected": "MARK DESCRIPTION ALARM TREND"},
+        {"bbox": [1945, 1130, 2030, 1149], "expected": "ANALOG INPUT"}
+      ]
+    },
+    {
+      "id": "SFPVAV-AO",
+      "page": 68,
+      "sheet": "MI741",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "SFPVAV DDC POINTS LIST - ANALOG OUTPUT",
+      "classification": "Analog output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1948, 1985, 2144, 2180, 2230],
+      "y_edges": [1268, 1286, 1304],
+      "rows": ["AO01|HW VALVE CONTROL|No|No", "AO02|DAMPER CONTROL|No|No"],
+      "header_evidence": [{"bbox": [1945, 1248, 2045, 1268], "expected": "ANALOG OUTPUT"}]
+    },
+    {
+      "id": "SFPVAV-BI",
+      "page": 68,
+      "sheet": "MI741",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "SFPVAV DDC POINTS LIST - BINARY INPUT",
+      "classification": "Binary input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1948, 1985, 2144, 2180, 2230],
+      "y_edges": [1337, 1355, 1373],
+      "rows": ["BI01|FAN STATUS|Yes|No", "BI02|VAV DDC RESET|No|No"],
+      "header_evidence": [{"bbox": [1945, 1318, 2045, 1337], "expected": "BINARY INPUT"}]
+    },
+    {
+      "id": "SFPVAV-BO",
+      "page": 68,
+      "sheet": "MI741",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "SFPVAV DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "Binary output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1948, 1985, 2144, 2180, 2230],
+      "y_edges": [1406, 1430],
+      "rows": ["BO01|FAN START/STOP|No|No"],
+      "header_evidence": [{"bbox": [1945, 1385, 2045, 1406], "expected": "BINARY OUTPUT"}]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "crah-ai-count", "records_path": ["tables", 0, "rows"], "expected": 5},
+    {"id": "crah-ao-count", "records_path": ["tables", 1, "rows"], "expected": 2},
+    {"id": "crah-bi-count", "records_path": ["tables", 2, "rows"], "expected": 5},
+    {"id": "crah-bo-count", "records_path": ["tables", 3, "rows"], "expected": 1},
+    {"id": "sfpvav-ai-count", "records_path": ["tables", 4, "rows"], "expected": 4},
+    {"id": "sfpvav-ao-count", "records_path": ["tables", 5, "rows"], "expected": 2},
+    {"id": "sfpvav-bi-count", "records_path": ["tables", 6, "rows"], "expected": 2},
+    {"id": "sfpvav-bo-count", "records_path": ["tables", 7, "rows"], "expected": 1}
+  ],
+  "source_conflicts": [
+    {"table": "SFPVAV-AI", "finding": "The printed feedback label is stacked below HHW VALVE CONTROL. It is one AI04 row and is transcribed as HHW VALVE CONTROL (FEEDBACK), without normalizing the source's HW/HHW wording difference between points and sequence."}
+  ],
+  "remaining_work": "Capture the adjacent written sequences as bounded text assertions, reconcile each template to actual applications, and continue the document-wide controls, network and plan-level sensor audit."
+}

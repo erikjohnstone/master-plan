@@ -1,0 +1,54 @@
+{
+  "document_id": "03__vol1__27",
+  "module_role": "Explicit source-row ownership ledger for the E-702 White Sturgeon PLC I/O list. Each literal source row remains a PLC-I/O declaration rather than an inferred terminal, field-device or generic BAS-template expansion.",
+  "ledger_mode": "source_matrix_templates_v1",
+  "applications": [
+    {
+      "id": "e702-white-sturgeon-plc-io",
+      "source_table": "E702-WHITE-STURGEON-PLC-IO-LIST",
+      "ownership_scope": "Literal E-702 White Sturgeon PLC I/O records, including printed I/O-channel quantities, protocol, display/action, cable and conduit fields.",
+      "source_sheet": "E-702",
+      "source_page": 38
+    }
+  ],
+  "listed_template_counts": {
+    "total": 52,
+    "source_rows": 52,
+    "AI": 20,
+    "AO": 16,
+    "DI": 27,
+    "DO": 21
+  },
+  "expanded_template_counts": {
+    "total": 52,
+    "source_rows": 52,
+    "AI": 20,
+    "AO": 16,
+    "DI": 27,
+    "DO": 21
+  },
+  "printed_assignment_summary": {
+    "literal_plc_io_records": 52,
+    "printed_channel_quantity_totals": {
+      "AI": 20,
+      "AO": 16,
+      "DI": 27,
+      "DO": 21
+    },
+    "semantics": "AI/AO/DI/DO totals sum the numeric text in the corresponding E-702 source columns, including source cells such as '1 RTD'. They are not a final card, terminal, field-device, wiring or installation quantity beyond this published PLC-I/O list."
+  },
+  "expanded_count_warning": "E-702 has 52 literal PLC-I/O records. Its printed channel values are retained under source-row scope; the record does not multiply a row into unprinted individual sensor, controller-card, termination, cable or field-wiring quantities.",
+  "ownership_binding_semantics": "A source-table row, its tag text and E-702 scope together identify a point occurrence. Similar tag text in M-603, M-702 or M-703 is not merged automatically into a separate physical-device count.",
+  "tables": [],
+  "assertions": [],
+  "inventory_checks": [
+    {
+      "id": "rank03-e702-application-scope",
+      "records_path": [
+        "applications"
+      ],
+      "expected": 1,
+      "unique_key": "id"
+    }
+  ]
+}

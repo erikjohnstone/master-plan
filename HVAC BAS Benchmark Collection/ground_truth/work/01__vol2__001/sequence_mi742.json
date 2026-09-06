@@ -1,0 +1,46 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "tables": [],
+  "scope": "Bounded source-text assertions from the humidifier, UPS battery exhaust fan, bathroom exhaust fan, and elevator machine room sequences of operation on MI742 (source PDF page 69). These assertions preserve explicit logic and source spellings; they do not claim the rest of the source document is sequence-audited.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [69],
+    "render": "reviews/01__vol2__001/p69-p69-controls-poppler.png",
+    "dpi": 180,
+    "finding": "MI742 was visually reviewed at 180 DPI. Four adjacent controls sections are separately bounded below, and its native point tables are preserved in a companion module."
+  },
+  "sequence_scopes": [
+    {"sheet": "MI742", "sequence_heading": "3.3.8 HUMIDIFIER CONTROLS", "equipment": "Humidifier", "coverage": ["enable", "safety", "reset", "control"]},
+    {"sheet": "MI742", "sequence_heading": "3.3.9 UPS BATTERY EXHAUST FAN CONTROLS", "equipment": "EF-A2, EF-A3, EF-M1", "coverage": ["indication", "continuous operation", "safety", "reset", "alarm"]},
+    {"sheet": "MI742", "sequence_heading": "3.3.11 BATHROOM EXHAUST FAN CONTROLS", "equipment": "Bathroom exhaust fan", "coverage": ["continuous operation", "safety", "reset", "alarm"]},
+    {"sheet": "MI742", "sequence_heading": "3.3.10 ELEVATOR MACHINE ROOM CONTROLS", "equipment": "FCU-A3, FCU-T12", "coverage": ["cooling/dehumidification", "humidification", "heating", "safety", "reset", "coil control", "load shed"]}
+  ],
+  "assertions": [
+    {"id": "humidifier-enable-deadband", "page": 69, "bbox": [115, 437, 650, 500], "mode": "contains", "expected": "WHEN ZN-RH DROPS BELOW ZN-RH-LL (WITH A 3% RH DEADBAND) ENABLE THE HUMIDIFIER (SYS-ENA) AND COMMAND TO RUN (H-SS) AND ENABLE THE HUMIDIFIER CONTROL LOOP"},
+    {"id": "humidifier-safety-response", "page": 69, "bbox": [115, 520, 650, 598], "mode": "contains", "expected": "FAILURE OF ANY PROOF OR ACTIVATION OF ANY SAFETY RESULT IN ALL CONTROL LOOPS BEING DISABLED AND HUMIDIFIER BEING COMMANDED OFF UNTIL RESET"},
+    {"id": "humidifier-reset-paths", "page": 69, "bbox": [115, 660, 650, 711], "mode": "contains", "expected": "DDC HARDWARE RESET OF ALL PROOFS AND SAFETIES SHALL BE VIA A LOCAL BINARY PUSH-BUTTON (RST-BUT) INPUT TO THE DDC HARDWARE, VIA A REMOTE COMMAND TO THE DDC HARDWARE"},
+    {"id": "humidifier-control", "page": 69, "bbox": [115, 730, 650, 780], "mode": "contains", "expected": "DDC HARDWARE SHALL ENABLE THE HUMIDIFIER TO MAINTAIN ZONE HUMIDITY (ZN-RH) AT SETPOINT (ZN-RH-LL) AS SHOWN. WHEN THIS LOOP IS DISABLED, THE HUMIDIFIER SHALL BE DISABLED"},
+    {"id": "ups-indicator-light", "page": 69, "bbox": [660, 320, 1180, 356], "mode": "contains", "expected": "INDICATOR LIGHT SHALL BE PLACED NEAR DOOR AND SHALL BE ILLUMINATED GREEN WHEN FAN IS OPERATIONAL. LIGHT SHALL TURN RED UPON FAN FAILURE"},
+    {"id": "ups-continuous-operation", "page": 69, "bbox": [660, 390, 915, 426], "mode": "contains", "expected": "THE UPS EXHAUST FAN IS TO OPERATE 24/7/365"},
+    {"id": "ups-safety-response", "page": 69, "bbox": [660, 460, 1210, 524], "mode": "contains", "expected": "FAILURE OF ANY PROOF OR ACTIVATION OF ANY SAFETY RESULT IN ALL CONTROL LOOPS BEING DISABLED AND THE FAN BEING COMMANDED OFF UNTIL RESET"},
+    {"id": "ups-reset-paths", "page": 69, "bbox": [660, 588, 1215, 636], "mode": "contains", "expected": "DDC HARDWARE RESET OF ALL PROOFS AND SAFETIES SHALL BE VIA A LOCAL BINARY PUSH-BUTTON (RST-BUT) INPUT TO THE DDC HARDWARE, VIA A REMOTE COMMAND TO THE DDC HARDWARE"},
+    {"id": "ups-explosive-concentration-alarm", "page": 69, "bbox": [660, 644, 1145, 679], "mode": "contains", "expected": "ALARM ON FAN FAILURE (CRITICAL - POTENTIAL FOR EXPLOSIVE CONCENTRATION OF H2 GAS)"},
+    {"id": "bathroom-continuous-operation", "page": 69, "bbox": [660, 1048, 955, 1084], "mode": "contains", "expected": "THE BATHROOM EXHAUST FAN IS TO OPERATE 24/7/365"},
+    {"id": "bathroom-safety-response", "page": 69, "bbox": [660, 1116, 1180, 1195], "mode": "contains", "expected": "FAILURE OF ANY PROOF OR ACTIVATION OF ANY SAFETY RESULT IN ALL CONTROL LOOPS BEING DISABLED AND THE FAN BEING COMMANDED OFF UNTIL RESET"},
+    {"id": "bathroom-reset-paths", "page": 69, "bbox": [660, 1244, 1140, 1308], "mode": "contains", "expected": "DDC HARDWARE RESET OF ALL PROOFS AND SAFETIES SHALL BE VIA A LOCAL BINARY PUSH-BUTTON (RST-BUT) INPUT TO THE DDC HARDWARE, VIA A REMOTE COMMAND TO THE DDC HARDWARE"},
+    {"id": "bathroom-fan-failure-alarm", "page": 69, "bbox": [660, 1315, 800, 1350], "mode": "contains", "expected": "ALARM ON FAN FAILURE"},
+    {"id": "elevator-cooling-dehumidification-enable", "page": 69, "bbox": [1290, 690, 2220, 755], "mode": "contains", "expected": "WHEN ZN-T RISES ABOVE ZN-T-HL (WITH A 2 DEGREES F DEADBAND) OR ZN-RH RISES ABOVE ZN-RH-HL (3% RH DEADBAND), ENABLE THE SUPPLY FAN (SYS-ENA) AND COMMAND TO RUN (SF-SS) AND ENABLE THE COOLING-AND-DEHUMIDIFICATION COIL CONTROL LOOP"},
+    {"id": "elevator-humidification-enable", "page": 69, "bbox": [1290, 774, 2200, 810], "mode": "contains", "expected": "WHEN ZN-RH DROPS BELOW ZN-RH-LL (WITH A 3% RH DEADBAND) ENABLE THE HUMIDIFIER CONTROL LOOP"},
+    {"id": "elevator-heating-fcu-t12", "page": 69, "bbox": [1290, 816, 2220, 865], "mode": "contains", "expected": "WHEN ZN-T FALLS BELOW ZN-T-LL (WITH A 2 DEGREES F DEADBAND), ENABLE THE HEATING CONTROL LOOP"},
+    {"id": "elevator-safety-response", "page": 69, "bbox": [1290, 886, 2220, 950], "mode": "contains", "expected": "FAILURE OF ANY PROOF OR ACTIVATION OF ANY SAFETY RESULT IN ALL CONTROL LOOPS BEING DISABLED AND THE FAN COIL UNIT FAN AND HUMIDIFIER BEING COMMANDED OFF UNTIL RESET"},
+    {"id": "elevator-reset-paths", "page": 69, "bbox": [1290, 1068, 2220, 1105], "mode": "contains", "expected": "DDC HARDWARE RESET OF ALL PROOFS AND SAFETIES SHALL BE VIA A LOCAL BINARY PUSH-BUTTON (RST-BUT) INPUT TO THE DDC HARDWARE, VIA A REMOTE COMMAND TO THE DDC HARDWARE"},
+    {"id": "elevator-chw-control", "page": 69, "bbox": [1290, 1124, 2220, 1162], "mode": "contains", "expected": "ONCE FAN STATUS IS CONFIRMED MODULATE CHW CONTROL VALVE TO MAINTAIN ZONE TEMPERATURE (ZN-T) AT SETPOINT (ZN-T-HL) OR RELATIVE HUMIDITY (ZN-RH) AT SETPOINT (ZN-RH-HL). WHEN THIS LOOP IS DISABLED, THE COIL VALVE SHALL BE CLOSED"},
+    {"id": "elevator-hhw-control", "page": 69, "bbox": [1290, 1180, 2220, 1218], "mode": "contains", "expected": "ONCE FAN STATUS IS CONFIRMED MODULATE HHW CONTROL VALVE TO MAINTAIN ZONE TEMPERATURE (ZN-T) AT SETPOINT (ZN-T-LL). WHEN THIS LOOP IS DISABLED, THE COIL VALVE SHALL BE CLOSED"},
+    {"id": "elevator-humidifier-control", "page": 69, "bbox": [1290, 1236, 2220, 1274], "mode": "contains", "expected": "DDC HARDWARE SHALL ENABLE THE HUMIDIFIER TO MAINTAIN ZONE HUMIDITY (ZN-RH) AT SETPOINT (ZN-RH-LL) AS SHOWN. WHEN THIS LOOP IS DISABLED, THE HUMIDIFIER SHALL BE DISABLED"},
+    {"id": "elevator-chilled-water-load-shed", "page": 69, "bbox": [1290, 1280, 1880, 1330], "mode": "contains", "expected": "FCU-A3, FCU-A12 UPON RECIEVING SIGNAL FROM DDC DISABLE COOLING MODE UNTIL FAILED CHILLER IS RESTORED TO SERVICE"},
+    {"id": "elevator-cooling-setpoint", "page": 69, "bbox": [1750, 1348, 1950, 1370], "mode": "contains", "expected": "COOLING SETPOINT (ZN-T-HL): 90°F"},
+    {"id": "elevator-humidity-setpoints", "page": 69, "bbox": [1750, 1378, 2040, 1415], "mode": "contains", "expected": "SPACE HIGH HUMIDITY SETPOINT (ZN-RH-HL): 60% RH"}
+  ],
+  "remaining_work": "Reconcile each MI742 template to actual planned/scheduled applications, transcribe the remaining controls sheets and complete the document-wide network, equipment, scale and sensor audit."
+}

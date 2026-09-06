@@ -1,0 +1,749 @@
+{
+  "document_id": "24__vol2__019",
+  "source_sha256": "b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10",
+  "annotation_sha256": "78e3a189799e4c451b36baaf041639ef1c9beeb75521530696c971c3cf0380f7",
+  "tables": 7,
+  "rows": 25,
+  "cell_assertions": 25,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M71-AHU",
+      "row": 1,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        1101.399,
+        162.431,
+        1139.579,
+        178.431
+      ],
+      "expected": "AHU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            163
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            5
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-AHU-FANS",
+      "row": 1,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        1442.919,
+        371.071,
+        1473.775,
+        384.031
+      ],
+      "expected": "RF-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RF-1",
+          "word_ids": [
+            219
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RF-1",
+          "word_ids": [
+            229
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-AHU-FANS",
+      "row": 2,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        1442.919,
+        384.031,
+        1473.775,
+        396.991
+      ],
+      "expected": "RF-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RF-2",
+          "word_ids": [
+            236
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RF-2",
+          "word_ids": [
+            230
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-AHU-FANS",
+      "row": 3,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        1442.919,
+        396.991,
+        1473.775,
+        409.951
+      ],
+      "expected": "SF-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SF-1",
+          "word_ids": [
+            253
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SF-1",
+          "word_ids": [
+            231
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-AHU-FANS",
+      "row": 4,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        1442.919,
+        409.951,
+        1473.775,
+        422.911
+      ],
+      "expected": "SF-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SF-2",
+          "word_ids": [
+            270
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SF-2",
+          "word_ids": [
+            232
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-CHILLER",
+      "row": 1,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        450.28,
+        772.391,
+        482.095,
+        788.391
+      ],
+      "expected": "CH-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-1",
+          "word_ids": [
+            463
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-1",
+          "word_ids": [
+            458
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-BOILER",
+      "row": 1,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        1226.199,
+        994.471,
+        1250.815,
+        1007.431
+      ],
+      "expected": "B-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B-1",
+          "word_ids": [
+            529
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B-1",
+          "word_ids": [
+            656
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-BOILER",
+      "row": 2,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        1226.199,
+        1007.431,
+        1250.815,
+        1020.391
+      ],
+      "expected": "B-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B-2",
+          "word_ids": [
+            544
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B-2",
+          "word_ids": [
+            657
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-PUMP",
+      "row": 1,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        468.64,
+        1153.711,
+        515.695,
+        1166.671
+      ],
+      "expected": "CP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-1",
+          "word_ids": [
+            595
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-1",
+          "word_ids": [
+            776
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-PUMP",
+      "row": 2,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        468.64,
+        1166.671,
+        515.695,
+        1179.631
+      ],
+      "expected": "CP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-2",
+          "word_ids": [
+            613
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-2",
+          "word_ids": [
+            777
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-PUMP",
+      "row": 3,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        468.64,
+        1179.631,
+        515.695,
+        1192.591
+      ],
+      "expected": "CP-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-3",
+          "word_ids": [
+            631
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-3",
+          "word_ids": [
+            778
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-PUMP",
+      "row": 4,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        468.64,
+        1192.591,
+        515.695,
+        1205.491
+      ],
+      "expected": "CP-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-4",
+          "word_ids": [
+            649
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-4",
+          "word_ids": [
+            779
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-PUMP",
+      "row": 5,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        468.64,
+        1205.491,
+        515.695,
+        1218.391
+      ],
+      "expected": "CP-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-5",
+          "word_ids": [
+            667
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-5",
+          "word_ids": [
+            780
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-PUMP",
+      "row": 6,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        468.64,
+        1218.391,
+        515.695,
+        1231.351
+      ],
+      "expected": "CP-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-6",
+          "word_ids": [
+            685
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-6",
+          "word_ids": [
+            781
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-PUMP",
+      "row": 7,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        468.64,
+        1231.351,
+        515.695,
+        1244.311
+      ],
+      "expected": "CWP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CWP-1",
+          "word_ids": [
+            703
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CWP-1",
+          "word_ids": [
+            782
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-PUMP",
+      "row": 8,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        468.64,
+        1244.311,
+        515.695,
+        1257.271
+      ],
+      "expected": "CWP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CWP-2",
+          "word_ids": [
+            730
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CWP-2",
+          "word_ids": [
+            783
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-PUMP",
+      "row": 9,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        468.64,
+        1257.271,
+        515.695,
+        1270.171
+      ],
+      "expected": "HWP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP-1",
+          "word_ids": [
+            757
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP-1",
+          "word_ids": [
+            784
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-PUMP",
+      "row": 10,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        468.64,
+        1270.171,
+        515.695,
+        1283.071
+      ],
+      "expected": "HWP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP-2",
+          "word_ids": [
+            784
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP-2",
+          "word_ids": [
+            785
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-PUMP",
+      "row": 11,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        468.64,
+        1283.071,
+        515.695,
+        1296.031
+      ],
+      "expected": "HWRP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWRP-1",
+          "word_ids": [
+            811
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWRP-1",
+          "word_ids": [
+            786
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-GENERAL-FAN",
+      "row": 1,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        427.0,
+        1481.25,
+        457.375,
+        1494.09
+      ],
+      "expected": "EF-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-1",
+          "word_ids": [
+            909
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-1",
+          "word_ids": [
+            1082
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-GENERAL-FAN",
+      "row": 2,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        427.0,
+        1494.09,
+        457.375,
+        1506.99
+      ],
+      "expected": "EF-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-2",
+          "word_ids": [
+            939
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-2",
+          "word_ids": [
+            1083
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-GENERAL-FAN",
+      "row": 3,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        427.0,
+        1506.99,
+        457.375,
+        1519.95
+      ],
+      "expected": "EF-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-3",
+          "word_ids": [
+            969
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-3",
+          "word_ids": [
+            1084
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-GENERAL-FAN",
+      "row": 4,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        427.0,
+        1519.95,
+        457.375,
+        1532.91
+      ],
+      "expected": "EF-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-4",
+          "word_ids": [
+            996
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-4",
+          "word_ids": [
+            1085
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-AIR-SEPARATOR",
+      "row": 1,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        1787.799,
+        1702.89,
+        1818.659,
+        1715.73
+      ],
+      "expected": "AS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AS-1",
+          "word_ids": [
+            1309
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AS-1",
+          "word_ids": [
+            1311
+          ]
+        }
+      }
+    },
+    {
+      "table": "M71-AIR-SEPARATOR",
+      "row": 2,
+      "column": "mark",
+      "page": 14,
+      "bbox": [
+        1787.799,
+        1715.73,
+        1818.659,
+        1728.57
+      ],
+      "expected": "AS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AS-2",
+          "word_ids": [
+            1322
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AS-2",
+          "word_ids": [
+            1312
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "schedules_m71-families",
+      "actual": 7,
+      "expected": 7,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

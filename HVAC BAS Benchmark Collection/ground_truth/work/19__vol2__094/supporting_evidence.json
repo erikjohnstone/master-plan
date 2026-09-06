@@ -1,0 +1,48 @@
+{
+  "document_id": "19__vol2__094",
+  "module_role": "Supporting phasing, museum-environment and source-limitation evidence for the supplied nine-page set. This module does not create BAS quantities from preservation criteria or temporary-work notes.",
+  "tables": [
+    {
+      "id": "M103-TEMPERATURE-HUMIDITY-GUIDELINES",
+      "page": 5,
+      "sheet": "M-103",
+      "title": "Temperature & Humidity Guidelines",
+      "classification": "Environmental preservation criteria table; not a BAS points list or verified control sequence",
+      "columns": "equipment|area_space|ideal_temperature|acceptable_temperature|ideal_humidity|acceptable_humidity",
+      "x_edges": [1199.64,1246.921,1370.039,1403.4,1444.2,1473.48,1514.4],
+      "y_edges": [1663.32,1683.48,1703.761,1724.641,1746.481,1766.641,1787.761],
+      "rows": [
+        "AHU-5|COURTROOM|70º|68º-72º|45%|40%-50%",
+        "AHU-6|THEATER|70º|60º-80º|45%|35%-55%",
+        "AHU-8|5TH FL. ARCHIVES|70º|68º-72º|35%|30%-45%",
+        "AHU-7|4TH FL. CHAPIN GALLERY|70º|68º-72º|45%|40%-50%",
+        "CH-2|TRAVELING EXHIBIT HALL|70º|68º-72º|45%|40%-50%",
+        "AHU-7|ALL OTHER MUSEUM GALLERIES|70º|68º-75º|55%|45%-60%"
+      ],
+      "header_evidence": [{"bbox": [1190,1610,1520,1660], "expected": "TEMPERATURE & HUMIDITY GUIDELINES EQUIP AREA/SPACE TEMPERATURE HUMIDITY IDEAL ACCEPT"}]
+    }
+  ],
+  "phasing_context": {
+    "temporary_chiller_requirement": "ON-GRADE SKID-MOUNT TEMP AIR-COOLED CHILLER AND CHW PUMP(S). CHILLER: 300 TONS COOLING CAP. / 11º DELTA T. PUMP: 550 GPM/106 FT. HEAD. ELEC: 480V/3 PH.",
+    "environment_requirement": "The Orange County Regional Historic Center temperature and humidity guidelines shall be maintained throughout construction.",
+    "interpretation_rule": "The table expresses project preservation criteria. It does not itself identify a sensor location, a BAS setpoint implementation, an alarm band, a control loop, or an acceptance-test result.",
+    "assertion_ids": ["m103-temp-chiller", "m103-guidelines-maintained"]
+  },
+  "source_limitations": [
+    {"id": "no-standalone-sequence", "finding": "The only sequence instruction on M-201 is to match an existing sequence of operations; the complete external sequence is not supplied."},
+    {"id": "no-formal-point-matrix", "finding": "M-201 uses typed bubbles on schematics but does not provide a formal, row-based BAS points list with physical I/O totals, controller assignment or wiring/transport."},
+    {"id": "no-control-valve-schedule", "finding": "M-201/M-301 contain individual existing 3-way valve callouts and M-401 refers to existing 3-way valves; no dedicated control-valve schedule is present."},
+    {"id": "no-damper-actuator-schedule", "finding": "M-201 uses DM labels and typed outputs in control templates; no dedicated damper-actuator schedule is present."},
+    {"id": "schedule-tags-versus-controls-caption-tags", "finding": "M-401 uses zero-padded AHU-04 through AHU-08 marks whereas M-201 captions use AHU-4 through AHU-8. Both forms are retained without inventing a new aliasing rule."},
+    {"id": "preservation-table-not-basis-for-device-count", "finding": "The M-103 temperature/humidity guidelines are environmental criteria; they do not provide a sensor/device schedule, point matrix or installed-device count."}
+  ],
+  "all_document_pages_visually_reviewed": {"status": "complete", "page_count": 9, "basis": "Full-page Poppler renders p1 through p9 were reviewed and page findings are stored in metadata/page_review."},
+  "assertions": [
+    {"id": "m103-temp-chiller", "page": 5, "bbox": [2350,520,2600,580], "expected": "ON-GRADE SKID-MOUNT TEMP AIR-COOLED CHILLER AND CHW PUMP(S). CHILLER: 300 TONS COOLING CAP. / 11º DELTA T PUMP: 550 GPM/106 FT. HEAD ELEC: 480V/3 PH", "mode": "contains"},
+    {"id": "m103-guidelines-maintained", "page": 5, "bbox": [1015,1580,1690,1620], "expected": "THE FOLLOWING ORANGE COUNTY REGIONAL HISTORIC CENTER TEMPERATURE AND HUMIDITY GUIDELINES SHALL BE MAINTAINED THROUGHOUT CONSTRUCTION:", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "m103-preservation-guidelines", "records_path": ["tables", 0, "rows"], "expected": 6},
+    {"id": "source-limitations", "records_path": ["source_limitations"], "expected": 6, "unique_key": "id"}
+  ]
+}

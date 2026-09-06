@@ -1,0 +1,38 @@
+{
+  "document_id": "07__vol2__061",
+  "module_role": "Explicit application scopes for every M-502 literal BAS point-matrix row.",
+  "tables": [],
+  "ledger_mode": "literal_source_row_matrices_v1",
+  "applications": [
+    {
+      "id": "ahu",
+      "source_table": "M502-AHU",
+      "ownership_scope": "Literal source-matrix context only; no final controller terminal, I/O card, field-device count, wire or physical owner is printed."
+    },
+    {
+      "id": "bid-alt-2-exhaust",
+      "source_table": "M502-BID-ALT-2-EXHAUST",
+      "ownership_scope": "Literal source-matrix context only; no final controller terminal, I/O card, field-device count, wire or physical owner is printed."
+    },
+    {
+      "id": "bid-alt-1-heat-recovery",
+      "source_table": "M502-BID-ALT-1-HEAT-RECOVERY",
+      "ownership_scope": "Literal source-matrix context only; no final controller terminal, I/O card, field-device count, wire or physical owner is printed."
+    },
+    {
+      "id": "typical-vav-zone",
+      "source_table": "M502-TYPICAL-VAV-ZONE",
+      "ownership_scope": "Literal source-matrix context only; no final controller terminal, I/O card, field-device count, wire or physical owner is printed."
+    },
+    {
+      "id": "heating-hot-water",
+      "source_table": "M502-HEATING-HOT-WATER",
+      "ownership_scope": "Literal source-matrix context only; no final controller terminal, I/O card, field-device count, wire or physical owner is printed."
+    }
+  ],
+  "expanded_template_counts": {
+    "source_rows": 180,
+    "total": 180
+  },
+  "expanded_count_warning": "180 is the count of literal published source-matrix rows, including source spelling/type-mark anomalies. It is not an installed BAS point, controller, I/O, terminal, cable, sensor, damper or device total."
+}

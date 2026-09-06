@@ -1,0 +1,53 @@
+{
+  "document_id": "04__vol2__062",
+  "module_role": "Explicit source limitations, parser/visual-review boundary statements and corroboration scope for this 29-page supplied set.",
+  "tables": [],
+  "source_limitations": [
+    "M5.1 supplies hot-water reheat and bypass control-valve schedule rows, but there is no standalone damper-actuator schedule with actuator make/model, torque, signal, fail action, tag and installed quantity.",
+    "M6.2/M6.3 published lists are functional points/access lists. They are not row-by-row AI/DI/AO/DO hardware schedules and are not a final installed I/O/card/terminal/wiring count.",
+    "M6.0 network/control graphics show BAS, BACnet and integration context, but do not establish a final address list, IP topology, MS/TP trunk, device count or protocol assignment beyond literal source labels.",
+    "The schedules are source schedule rows/types. This record does not infer plan placements, repeated instance quantities, sensor/thermostat totals, zones beyond explicit sequence bindings, damper-actuator totals, or takeoff quantities.",
+    "All 29 pages were visually reviewed using retained full-page renders. Visual review establishes the disposition; two parsers independently recheck every bounded text assertion and authored table cell in the record modules."
+  ],
+  "text_absence_assertions": [
+    {
+      "id": "rank04-no-standalone-damper-actuator-schedule-title",
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "covers_all_source_pages": true,
+      "patterns": [
+        "DAMPER\\\\s+ACTUATOR\\\\s+SCHEDULE"
+      ],
+      "visual_review_qualification": "Native-text absence is not by itself engineering proof. It is paired with completed visual review of all sheets; the finding is limited to no standalone schedule title/row set being supplied."
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "document_id": "12__vol2__028",
+  "module_role": "M-506 written-controls context: bounded source statements, network qualification, and sensor/zone limitations. It complements the exact M-506 I/O matrices; it does not create an installed-equipment or sensor count from typical diagrams.",
+  "source_sheet": "M-506",
+  "source_page": 2,
+  "parser_disclosures": [
+    {
+      "id": "zone-temperature-degree-glyph-order",
+      "status": "source-text-segmentation-difference",
+      "description": "The visual source uses degree glyphs in the occupied/unoccupied temperature statements. MuPDF and Poppler both expose the wording, but Poppler places the standalone 0/F glyph text in a different native word order. The human-readable source statement is retained exactly as displayed; independent assertions deliberately stop before the affected degree-glyph runs rather than fabricating parser agreement."
+    }
+  ],
+  "network_architecture": {
+    "protocols_as_printed": ["BACNET"],
+    "protocol_context": "The general notes say onboard BACNET controllers shall communicate with the BAS and be monitored and controlled from the GUI, with unimpeded two-way communication with all devices.",
+    "transport": {"status": "not_stated_in_supplied_excerpt", "value": null},
+    "addressing_baud_rate_controller_model": {"status": "not_stated_in_supplied_excerpt", "value": null},
+    "other_named_protocols": {"status": "not_present_on_M-506", "value": []},
+    "assertion_ids": ["m506-bacnet-communication", "m506-gui-alarms"]
+  },
+  "zone_temperature_control": {
+    "presence": "written sequence present on M-506",
+    "statements": [
+      {"id": "occupied", "text": "OCCUPIED MODE: THE BUILDING SHALL BE \"OCCUPIED\" FROM 8 A.M. (ADJ.) TO 6 P.M. (ADJ.), MONDAY THRU FRIDAY. TEMPERATURE SETPOINTS: COOLING: 78 0F (ADJ.), HEATING 68 0F (ADJ.).", "assertion_ids": ["zone-occupied"]},
+      {"id": "unoccupied", "text": "UNOCCUPIED MODE: THE BUILDING SHALL BE \"UNOCCUPIED\" FROM 6 P.M. (ADJ.) TO 8 A.M. (ADJ.) MONDAY THRU FRIDAY AND ENTIRE DAY ON SATURDAY AND SUNDAY. TEMPERATURE SETPOINTS: COOLING 80 0F (ADJ.) AND HEATING: 55 0F(ADJ).", "assertion_ids": ["zone-unoccupied"]},
+      {"id": "occupant-adjust", "text": "ZONE SETPOINT ADJUST: THE OCCUPANT SHALL BE ABLE TO ADJUST THE ZONE TEMPERATURE HEATING AND COOLING SETPOINTS AT THE ZONE SENSOR BY ±2°F.", "assertion_ids": ["zone-adjust"]},
+      {"id": "deadband", "text": "TEMPERATURE CONTROL DEVICES SHALL BE EQUIPPED WITH DEADBANDS THAT COMPLY WITH IECC 2015.", "assertion_ids": ["zone-deadband"]}
+    ],
+    "zone_mapping": {"status": "not_stated", "value": null, "note": "M-506 supplies operating requirements but no plan/room-zone map or installed zone-device count."}
+  },
+  "sequences": [
+    {
+      "id": "mini-split",
+      "title": "MINI-SPLIT CONTROL SEQUENCE",
+      "equipment_scope": "MINI-SPLIT SYSTEM; P&ID marked as template/two generic typical AHU/CU callouts, not an installed count",
+      "statements": [
+        {"number": "1", "text": "THE MINI-SPLIT SYSTEM SHALL REMAIN ENABLED DURING ALL HOURS.", "assertion_ids": ["mini-enabled"]},
+        {"number": "2", "text": "MINI-SPLIT CONTROL: THE MINI-SPLIT SYSTEM SHALL BE PROVIDED WITH A FACTORY FURNISHED ON-BOARD BACNET CONTROLLER. THE MANUFACTURER SHALL USE ITS PREFERRED SEQUENCE TO MEET THE FOLLOWING REQUIREMENTS:", "assertion_ids": ["mini-controller"]},
+        {"number": "2.A", "text": "THE SPACE AIR TEMPERATURE SETPOINT SHALL BE MONITORED", "assertion_ids": ["mini-setpoint-monitor"]},
+        {"number": "2.B", "text": "SYSTEM SHALL BE ENERGIZED TO MAINTAIN THE SETPOINTS 78°F (ADJ.).", "assertion_ids": ["mini-maintain"]},
+        {"number": "3", "text": "THE ONBOARD BACNET CONTROLLER SHALL COMMUNICATE WITH THE DDC TO ALLOW THE MONITORING AND CONTROL OF I/O POINTS LISTED HERE. THE SYSTEM SHALL BE ENABLED 24/7.", "assertion_ids": ["mini-ddc"]},
+        {"number": "4", "text": "ALARMS: THE ONBOARD BACNET CONTROLLER SHALL TRANSMIT SYSTEM ALARMS TO THE GUI. THE ONBOARD CONTROLLER SHALL, AT A MINIMUM, TRACK ALARMS LISTED IN THE I/O POINTS LIST.", "assertion_ids": ["mini-alarms"]}
+      ]
+    },
+    {
+      "id": "switch-controlled-exhaust-fan",
+      "title": "EXHAUST FAN CONTROL SEQUENCE",
+      "equipment_scope": "SWITCH CONTROLLED EXHAUST FAN P&ID; source does not enumerate a quantity of exhaust fans",
+      "statements": [
+        {"number": "1", "text": "THE SYSTEM SHALL BE CONTROLLED BY THE BAS AND SHALL OPERATE AS FOLLOWS:", "assertion_ids": ["ef-bas-control"]},
+        {"number": "1.1", "text": "EXHAUST FANS SHALL BE ENABLED WHEN THE LIGHT SWITCH IN THE WOMEN/MEN'S RESTROOM, SHOWER/LOCKER ROOM, OR JANITOR ROOM IS ON. EXHAUST FANS SHALL ENERGIZE WHEN OCCUPANCY SENSOR IN THESE ROOMS IS TRIGGERED.", "assertion_ids": ["ef-enable"]},
+        {"number": "1.2", "text": "EXHAUST FANS SHALL DE-ENERGIZE WHEN NO OCCUPANCY IS DETECTED BY THE OCCUPANCY SENSORS FOR 15 MINUTES (ADJ.).", "assertion_ids": ["ef-deenergize"]},
+        {"number": "2", "text": "ALARMS: THE ONBOARD BACNET CONTROLLER SHALL TRANSMIT SYSTEM ALARMS TO THE GRAPHIC USER INTERFACE (GUI). THE ONBOARD CONTROLLER SHALL, AT A MINIMUM, TRACK ALARMS LISTED IN THE I/O POINTS LIST.", "assertion_ids": ["ef-alarms"]}
+      ]
+    }
+  ],
+  "sensor_and_zone_ledger": {
+    "source_items": [
+      {"id": "MINI-SPACE-AIR-TEMPERATURE", "classification": "Space-air-temperature point template", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": {"status": "not_stated", "value": null}, "basis": "M-506 mini-split I/O row 7 and sequence statement 2.A."},
+      {"id": "EF-OCCUPANCY", "classification": "Occupancy input in exhaust-fan point template", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "WOMEN/MEN'S RESTROOM, SHOWER/LOCKER ROOM, OR JANITOR ROOM described as room types; no drawing-zone or installed-device count", "basis": "M-506 exhaust-fan sequence 1.1 and I/O row 6."},
+      {"id": "GLOBAL-OUTDOOR-CO2", "classification": "Global outdoor CO2 point", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "outdoor/global", "basis": "M-506 global matrix row 1."},
+      {"id": "GLOBAL-OUTDOOR-TEMPERATURE", "classification": "Global outdoor-temperature point", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "outdoor/global", "basis": "M-506 global matrix row 2."},
+      {"id": "GLOBAL-OUTDOOR-RH", "classification": "Global outdoor-relative-humidity named row without a printed I/O X", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "outdoor/global", "basis": "M-506 global matrix row 3."}
+    ],
+    "counts": {"space_sensors": {"status": "not_stated", "value": null}, "CO2_sensors": {"status": "not_stated", "value": null}, "smart_thermostats": {"status": "not_stated", "value": null}},
+    "limitation": "The supplied nine-sheet excerpt omits floor plans and any complete sensor/zone schedule. Logical I/O rows and sequence mentions are not physical device counts."
+  },
+  "tables": [],
+  "assertions": [
+    {"id": "m506-bacnet-communication", "page": 2, "bbox": [130,328,668,415], "expected": "THE ONBOARD BACNET CONTROLLERS SHALL COMMUNICATE WITH THE BAS TO ALLOW, AT A MINIMUM, MONITORING AND CONTROL OF I/O POINTS LISTED.", "mode": "contains"},
+    {"id": "m506-gui-alarms", "page": 2, "bbox": [130,430,668,500], "expected": "ALARMS: THE ONBOARD BACNET CONTROLLERS SHALL TRANSMIT SYSTEM ALARMS TO THE GRAPHIC USER INTERFACE (GUI).", "mode": "contains"},
+    {"id": "zone-occupied", "page": 2, "bbox": [130,522,640,576], "expected": "OCCUPIED MODE: THE BUILDING SHALL BE \"OCCUPIED\" FROM 8 A.M. (ADJ.) TO 6", "mode": "contains"},
+    {"id": "zone-unoccupied", "page": 2, "bbox": [130,574,640,644], "expected": "UNOCCUPIED MODE: THE BUILDING SHALL BE \"UNOCCUPIED\" FROM 6 P.M. (ADJ.) TO 8 A.M. (ADJ.) MONDAY THRU FRIDAY AND ENTIRE DAY ON SATURDAY AND", "mode": "contains"},
+    {"id": "zone-adjust", "page": 2, "bbox": [130,643,640,678], "expected": "ZONE SETPOINT ADJUST: THE OCCUPANT SHALL BE ABLE TO ADJUST THE ZONE TEMPERATURE HEATING AND COOLING SETPOINTS AT THE ZONE SENSOR BY ±2°F.", "mode": "contains"},
+    {"id": "zone-deadband", "page": 2, "bbox": [130,676,640,712], "expected": "TEMPERATURE CONTROL DEVICES SHALL BE EQUIPPED WITH DEADBANDS THAT COMPLY WITH IECC 2015.", "mode": "contains"},
+    {"id": "mini-enabled", "page": 2, "bbox": [680,574,1130,594], "expected": "THE MINI-SPLIT SYSTEM SHALL REMAIN ENABLED DURING ALL HOURS.", "mode": "contains"},
+    {"id": "mini-controller", "page": 2, "bbox": [680,590,1410,620], "expected": "MINI-SPLIT CONTROL: THE MINI-SPLIT SYSTEM SHALL BE PROVIDED WITH A FACTORY FURNISHED ON-BOARD BACNET CONTROLLER. THE MANUFACTURER SHALL USE ITS PREFERRED SEQUENCE TO MEET THE FOLLOWING REQUIREMENTS:", "mode": "contains"},
+    {"id": "mini-setpoint-monitor", "page": 2, "bbox": [710,615,1110,634], "expected": "THE SPACE AIR TEMPERATURE SETPOINT SHALL BE MONITORED", "mode": "contains"},
+    {"id": "mini-maintain", "page": 2, "bbox": [710,628,1160,648], "expected": "SYSTEM SHALL BE ENERGIZED TO MAINTAIN THE SETPOINTS 78°F (ADJ.).", "mode": "contains"},
+    {"id": "mini-ddc", "page": 2, "bbox": [680,640,1460,672], "expected": "THE ONBOARD BACNET CONTROLLER SHALL COMMUNICATE WITH THE DDC TO ALLOW THE MONITORING AND CONTROL OF I/O POINTS LISTED HERE. THE SYSTEM SHALL BE ENABLED 24/7.", "mode": "contains"},
+    {"id": "mini-alarms", "page": 2, "bbox": [680,666,1460,703], "expected": "ALARMS: THE ONBOARD BACNET CONTROLLER SHALL TRANSMIT SYSTEM ALARMS TO THE GUI. THE ONBOARD CONTROLLER SHALL, AT A MINIMUM, TRACK ALARMS LISTED IN THE I/O POINTS LIST.", "mode": "contains"},
+    {"id": "ef-bas-control", "page": 2, "bbox": [1510,482,2050,504], "expected": "THE SYSTEM SHALL BE CONTROLLED BY THE BAS AND SHALL OPERATE AS FOLLOWS:", "mode": "contains"},
+    {"id": "ef-enable", "page": 2, "bbox": [1510,502,2205,555], "expected": "EXHAUST FANS SHALL BE ENABLED WHEN THE LIGHT SWITCH IN THE WOMEN/MEN'S RESTROOM, SHOWER/LOCKER ROOM, OR JANITOR ROOM IS ON. EXHAUST FANS SHALL ENERGIZE WHEN OCCUPANCY SENSOR IN THESE ROOMS IS TRIGGERED.", "mode": "contains"},
+    {"id": "ef-deenergize", "page": 2, "bbox": [1510,552,2210,588], "expected": "EXHAUST FANS SHALL DE-ENERGIZE WHEN NO OCCUPANCY IS DETECTED BY THE OCCUPANCY SENSORS FOR 15 MINUTES (ADJ.).", "mode": "contains"},
+    {"id": "ef-alarms", "page": 2, "bbox": [1510,586,2210,640], "expected": "ALARMS: THE ONBOARD BACNET CONTROLLER SHALL TRANSMIT SYSTEM ALARMS TO THE GRAPHIC USER INTERFACE (GUI). THE ONBOARD CONTROLLER SHALL, AT A MINIMUM, TRACK ALARMS LISTED IN THE I/O POINTS LIST.", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "two-complete-written-sequences", "records_path": ["sequences"], "expected": 2, "unique_key": "id"},
+    {"id": "m506-sensor-logical-items", "records_path": ["sensor_and_zone_ledger", "source_items"], "expected": 5, "unique_key": "id"}
+  ]
+}

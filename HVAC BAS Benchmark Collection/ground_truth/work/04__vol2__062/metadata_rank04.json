@@ -1,0 +1,394 @@
+{
+  "document_id": "04__vol2__062",
+  "module_role": "Project/title-block, local-scale and full-page visual-review context. Schedule, point-list and control facts remain in their dedicated dual-engine-checked modules.",
+  "tables": [],
+  "project": {
+    "project_name_as_printed": "D-1 Testing Laboratory",
+    "project_location_as_printed": "600 W Prairie Ave, Coeur d'Alene, ID 83814",
+    "project_number_as_printed": "23-239",
+    "architect_firm_as_printed": "Miller Stauffer Architects",
+    "engineering_firm_as_printed": "Musgrove Engineering, P.A.",
+    "issue_as_printed": "BID SET",
+    "issue_date_as_printed": "5/13/2024",
+    "revision_date_status": "No populated revision-block date is asserted from the supplied title block. The issue date is not recast as a revision date.",
+    "assertion_ids": [
+      "rank04-project-title",
+      "rank04-project-address",
+      "rank04-project-number",
+      "rank04-bid-set",
+      "rank04-issue-date",
+      "rank04-architect-miller",
+      "rank04-architect-stauffer"
+    ]
+  },
+  "sheet_details": {
+    "sheet_ledger_semantics": "All 29 supplied PDF pages have a visual source-sheet/title disposition below.",
+    "revision_status": "No populated revision date is asserted from the reviewed title block."
+  },
+  "scale_semantics": {
+    "printed_local_view_scales_observed": [
+      {
+        "page": 2,
+        "sheet": "M0.1",
+        "view": "COMCHECK ZONE PLAN",
+        "scale_as_printed": "3/32\"=1'-0\""
+      },
+      {
+        "page": 3,
+        "sheet": "M1.0",
+        "view": "HVAC FLOOR PLAN",
+        "scale_as_printed": "3/16\"=1'-0\""
+      },
+      {
+        "page": 4,
+        "sheet": "M1.1",
+        "view": "EXHAUST FLOOR PLAN",
+        "scale_as_printed": "3/16\"=1'-0\""
+      },
+      {
+        "page": 5,
+        "sheet": "M1.2",
+        "view": "HYDRONIC FLOOR PLAN",
+        "scale_as_printed": "3/16\"=1'-0\""
+      },
+      {
+        "page": 6,
+        "sheet": "M2.0",
+        "view": "MECHANICAL ROOF PLAN",
+        "scale_as_printed": "3/16\"=1'-0\""
+      },
+      {
+        "page": 7,
+        "sheet": "M3.0",
+        "view": "ENLARGED MECHANICAL PLAN",
+        "scale_as_printed": "3/8\"=1'-0\""
+      },
+      {
+        "page": 22,
+        "sheet": "P1.0",
+        "view": "FOUNDATION PLUMBING PLAN",
+        "scale_as_printed": "3/16\"=1'-0\""
+      },
+      {
+        "page": 23,
+        "sheet": "P2.0",
+        "view": "PLUMBING FLOOR PLAN",
+        "scale_as_printed": "3/16\"=1'-0\""
+      },
+      {
+        "page": 24,
+        "sheet": "P3.0",
+        "view": "PLUMBING ROOF PLAN",
+        "scale_as_printed": "3/16\"=1'-0\""
+      },
+      {
+        "page": 25,
+        "sheet": "P4.0",
+        "view": "ENLARGED PLUMBING PLAN",
+        "scale_as_printed": "3/8\"=1'-0\""
+      },
+      {
+        "page": 29,
+        "sheet": "FS1.0",
+        "view": "FIRE SPRINKLER FLOOR PLAN",
+        "scale_as_printed": "3/16\"=1'-0\""
+      }
+    ],
+    "graphic_scale_bar_status": "No graphic scale bar is asserted. Printed scales are local to their named plan views and must not be generalized to details, schedules, controls, schematics, plumbing or sprinkler drawings.",
+    "takeoff_scale_status": "Use only a separately verified local scale for distance-based takeoff on the target view."
+  },
+  "visual_review_pages": [
+    {
+      "page": 1,
+      "sheet": "M0.0",
+      "title": "MECHANICAL/PLUMBING LEGEND, GENERAL NOTES",
+      "render": "reviews/04__vol2__062/p1-p1-full-poppler.png",
+      "finding": "Legend, general notes and commissioning/control-symbol context."
+    },
+    {
+      "page": 2,
+      "sheet": "M0.1",
+      "title": "MECHANICAL COMCHECK / ZONE PLAN",
+      "render": "reviews/04__vol2__062/p2-p2-full-poppler.png",
+      "finding": "Energy-code COMcheck information and zone-plan context."
+    },
+    {
+      "page": 3,
+      "sheet": "M1.0",
+      "title": "HVAC FLOOR PLAN",
+      "render": "reviews/04__vol2__062/p3-p3-full-poppler.png",
+      "finding": "HVAC floor plan with laboratory equipment, air distribution and equipment-tag context."
+    },
+    {
+      "page": 4,
+      "sheet": "M1.1",
+      "title": "EXHAUST FLOOR PLAN",
+      "render": "reviews/04__vol2__062/p4-p4-full-poppler.png",
+      "finding": "Exhaust floor plan and laboratory exhaust-routing context."
+    },
+    {
+      "page": 5,
+      "sheet": "M1.2",
+      "title": "HYDRONIC FLOOR PLAN",
+      "render": "reviews/04__vol2__062/p5-p5-full-poppler.png",
+      "finding": "Hydronic floor plan with heating-water equipment/piping context."
+    },
+    {
+      "page": 6,
+      "sheet": "M2.0",
+      "title": "MECHANICAL ROOF PLAN",
+      "render": "reviews/04__vol2__062/p6-p6-full-poppler.png",
+      "finding": "Mechanical roof plan with roof equipment and exhaust context."
+    },
+    {
+      "page": 7,
+      "sheet": "M3.0",
+      "title": "ENLARGED MECHANICAL PLAN / HEATING-WATER PIPING SCHEMATIC",
+      "render": "reviews/04__vol2__062/p7-p7-full-poppler.png",
+      "finding": "Enlarged mechanical plan and heating-water piping schematic."
+    },
+    {
+      "page": 8,
+      "sheet": "M4.0",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/04__vol2__062/p8-p8-full-poppler.png",
+      "finding": "Ductwork and mechanical-installation details."
+    },
+    {
+      "page": 9,
+      "sheet": "M4.1",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/04__vol2__062/p9-p9-full-poppler.png",
+      "finding": "Vent, boiler/furnace, duct and seismic mechanical details."
+    },
+    {
+      "page": 10,
+      "sheet": "M4.2",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/04__vol2__062/p10-p10-full-poppler.png",
+      "finding": "Boiler/hydronic details, including flow-meter BACnet context."
+    },
+    {
+      "page": 11,
+      "sheet": "M4.3",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/04__vol2__062/p11-p11-full-poppler.png",
+      "finding": "Roof-unit, penthouse, exhaust-fan and snorkel installation details."
+    },
+    {
+      "page": 12,
+      "sheet": "M5.0",
+      "title": "MECHANICAL SCHEDULES",
+      "render": "reviews/04__vol2__062/p12-p12-full-poppler.png",
+      "finding": "Canopy hood, air valve, pump, exhaust fan and snorkel-hood schedules."
+    },
+    {
+      "page": 13,
+      "sheet": "M5.1",
+      "title": "MECHANICAL SCHEDULES",
+      "render": "reviews/04__vol2__062/p13-p13-full-poppler.png",
+      "finding": "Boiler, reheat coil, humidifier, lab fan, air device and control-valve schedules."
+    },
+    {
+      "page": 14,
+      "sheet": "M5.2",
+      "title": "MECHANICAL SCHEDULES",
+      "render": "reviews/04__vol2__062/p14-p14-full-poppler.png",
+      "finding": "Electric-heater, specialty, split-system, attenuator, penthouse, louver and ductless schedules."
+    },
+    {
+      "page": 15,
+      "sheet": "M5.3",
+      "title": "MECHANICAL SCHEDULES",
+      "render": "reviews/04__vol2__062/p15-p15-full-poppler.png",
+      "finding": "AHU-1 schedule with airflow, coils, humidifier, filters and electrical fields."
+    },
+    {
+      "page": 16,
+      "sheet": "M6.0",
+      "title": "MECHANICAL CONTROLS",
+      "render": "reviews/04__vol2__062/p16-p16-full-poppler.png",
+      "finding": "Controls legend, BAS/network context and louver/fan/ductless sequences."
+    },
+    {
+      "page": 17,
+      "sheet": "M6.1",
+      "title": "MECHANICAL CONTROLS",
+      "render": "reviews/04__vol2__062/p17-p17-full-poppler.png",
+      "finding": "Laboratory exhaust and split-system control sequences."
+    },
+    {
+      "page": 18,
+      "sheet": "M6.2",
+      "title": "MECHANICAL CONTROLS",
+      "render": "reviews/04__vol2__062/p18-p18-full-poppler.png",
+      "finding": "Heating-water sequence/diagram and published boiler/VFD point lists."
+    },
+    {
+      "page": 19,
+      "sheet": "M6.3",
+      "title": "MECHANICAL CONTROLS",
+      "render": "reviews/04__vol2__062/p19-p19-full-poppler.png",
+      "finding": "VAV AHU-1 sequence/control diagram and published AHU point lists."
+    },
+    {
+      "page": 20,
+      "sheet": "M6.4",
+      "title": "MECHANICAL CONTROLS",
+      "render": "reviews/04__vol2__062/p20-p20-full-poppler.png",
+      "finding": "Laboratory hood and snorkel control sequences."
+    },
+    {
+      "page": 21,
+      "sheet": "M6.5",
+      "title": "MECHANICAL CONTROL",
+      "render": "reviews/04__vol2__062/p21-p21-full-poppler.png",
+      "finding": "General exhaust, electric-heater and general-fan control sequences."
+    },
+    {
+      "page": 22,
+      "sheet": "P1.0",
+      "title": "FOUNDATION PLUMBING PLAN",
+      "render": "reviews/04__vol2__062/p22-p22-full-poppler.png",
+      "finding": "Foundation-plumbing plan."
+    },
+    {
+      "page": 23,
+      "sheet": "P2.0",
+      "title": "PLUMBING FLOOR PLAN",
+      "render": "reviews/04__vol2__062/p23-p23-full-poppler.png",
+      "finding": "Plumbing floor plan with laboratory-equipment context."
+    },
+    {
+      "page": 24,
+      "sheet": "P3.0",
+      "title": "PLUMBING ROOF PLAN",
+      "render": "reviews/04__vol2__062/p24-p24-full-poppler.png",
+      "finding": "Plumbing roof plan."
+    },
+    {
+      "page": 25,
+      "sheet": "P4.0",
+      "title": "ENLARGED PLUMBING PLAN",
+      "render": "reviews/04__vol2__062/p25-p25-full-poppler.png",
+      "finding": "Enlarged plumbing plan."
+    },
+    {
+      "page": 26,
+      "sheet": "P5.0",
+      "title": "PLUMBING DETAILS",
+      "render": "reviews/04__vol2__062/p26-p26-full-poppler.png",
+      "finding": "Plumbing detail sheet."
+    },
+    {
+      "page": 27,
+      "sheet": "P5.1",
+      "title": "PLUMBING DETAILS",
+      "render": "reviews/04__vol2__062/p27-p27-full-poppler.png",
+      "finding": "Gas, compressor and water-softener detail sheet."
+    },
+    {
+      "page": 28,
+      "sheet": "P6.0",
+      "title": "PLUMBING SCHEDULES",
+      "render": "reviews/04__vol2__062/p28-p28-full-poppler.png",
+      "finding": "Plumbing fixtures, compressor and gas schedule information."
+    },
+    {
+      "page": 29,
+      "sheet": "FS1.0",
+      "title": "FIRE SPRINKLER FLOOR PLAN",
+      "render": "reviews/04__vol2__062/p29-p29-full-poppler.png",
+      "finding": "Fire-sprinkler floor plan."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "rank04-project-title",
+      "page": 3,
+      "bbox": [
+        2470,
+        1120,
+        2502,
+        1330
+      ],
+      "expected": "D-1 Testing Laboratory",
+      "mode": "exact",
+      "reading_direction": "up"
+    },
+    {
+      "id": "rank04-project-address",
+      "page": 3,
+      "bbox": [
+        2500,
+        1110,
+        2565,
+        1330
+      ],
+      "expected": "600 W Prairie Ave Coeur d'Alene, ID 83814",
+      "mode": "exact",
+      "reading_direction": "up"
+    },
+    {
+      "id": "rank04-project-number",
+      "page": 3,
+      "bbox": [
+        2350,
+        108,
+        2440,
+        132
+      ],
+      "expected": "Project No. 23-239",
+      "mode": "exact"
+    },
+    {
+      "id": "rank04-bid-set",
+      "page": 3,
+      "bbox": [
+        2505,
+        770,
+        2535,
+        860
+      ],
+      "expected": "BID SET",
+      "mode": "exact",
+      "reading_direction": "up"
+    },
+    {
+      "id": "rank04-issue-date",
+      "page": 3,
+      "bbox": [
+        2538,
+        770,
+        2565,
+        860
+      ],
+      "expected": "5/13/2024",
+      "mode": "exact"
+    },
+    {
+      "id": "rank04-architect-miller",
+      "page": 3,
+      "bbox": [
+        2464,
+        15,
+        2510,
+        182
+      ],
+      "expected": "MILLER",
+      "mode": "contains"
+    },
+    {
+      "id": "rank04-architect-stauffer",
+      "page": 3,
+      "bbox": [
+        2505,
+        15,
+        2552,
+        256
+      ],
+      "expected": "STAUFFER",
+      "mode": "contains"
+    }
+  ]
+}

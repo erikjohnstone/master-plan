@@ -1,0 +1,132 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All printed entries in the Air Ops heating-hot-water system point list on MI712 (source PDF page 58): 16 analog inputs, 5 analog outputs, 12 binary inputs and 6 binary outputs. This records controller points and printed flags, not inferred field-device counts.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [58],
+    "render": "reviews/01__vol2__001/p58-p58-controls-poppler.png",
+    "dpi": 180,
+    "finding": "The MI712 heating-hot-water schematic and its complete right-hand point-list panel were visually reviewed at 180 DPI. Printed descriptions, alarm flags and trend flags are transcribed literally."
+  },
+  "tables": [
+    {
+      "id": "AIR-OPS-HHW-AI",
+      "page": 58,
+      "sheet": "MI712",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS HHW SYSTEM POINT LIST - ANALOG INPUT",
+      "classification": "Analog input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1750, 1810, 2075, 2130, 2175],
+      "y_ranges": [[304, 325], [325, 342], [342, 359], [359, 393], [393, 411], [411, 428], [428, 445], [445, 462], [462, 479], [479, 496], [496, 514], [514, 531], [531, 548], [548, 565], [565, 582], [582, 600]],
+      "rows": [
+        "AI1|HHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI2|HHW FLOWRATE|No|Yes",
+        "AI3|HHWR TEMPERATURE|No|Yes",
+        "AI4|HHW BYPASS VALVE POSITION (FEEDBACK)|No|Yes",
+        "AI5|HHWS TEMPERATURE|No|Yes",
+        "AI6|SHHWP-A1 DIFFERENTIAL PRESSURE|No|Yes",
+        "AI7|SHHWP-A2 DIFFERENTIAL PRESSURE|No|Yes",
+        "AI8|B-A1 LWT|No|Yes",
+        "AI9|B-A2 LWT|No|Yes",
+        "AI10|B-A1 EWT|No|Yes",
+        "AI11|B-A2 EWT|No|Yes",
+        "AI12|SHHWP-A1 SPEED (FEEDBACK)|No|Yes",
+        "AI13|OA TEMPERATURE *GLOBAL POINT|No|Yes",
+        "AI14|SHHWP-A2 SPEED (FEEDBACK)|No|Yes",
+        "AI15|SHHWP-A1 SPEED (FEEDBACK)|No|Yes",
+        "AI16|PHHWP-A1 SPEED (FEEDBACK)|No|Yes"
+      ],
+      "header_evidence": [
+        {"bbox": [1875, 233, 2110, 268], "expected": "AIR OPS HHW SYSTEM POINT LIST"},
+        {"bbox": [1750, 268, 2175, 295], "expected": "MARK DESCRIPTION ALARM TREND"},
+        {"bbox": [1745, 286, 1840, 304], "expected": "ANALOG INPUT"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-HHW-AO",
+      "page": 58,
+      "sheet": "MI712",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS HHW SYSTEM POINT LIST - ANALOG OUTPUT",
+      "classification": "Analog output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1750, 1810, 2075, 2130, 2175],
+      "y_edges": [629, 646, 663, 680, 697, 720],
+      "rows": [
+        "AO1|HHW BYPASS VALVE CONTROL|No|Yes",
+        "AO2|SHHWP-A1 VFD SPEED CONTROL|No|Yes",
+        "AO3|SHHWP-A2 VFD SPEED CONTROL|No|Yes",
+        "AO4|PHHWP-A1 VFD SPEED CONTROL|No|Yes",
+        "AO5|PHHWP-A2 VFD SPEED CONTROL|No|Yes"
+      ],
+      "header_evidence": [
+        {"bbox": [1745, 603, 1840, 629], "expected": "ANALOG OUTPUT"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-HHW-BI",
+      "page": 58,
+      "sheet": "MI712",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS HHW SYSTEM POINT LIST - BINARY INPUT",
+      "classification": "Binary input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1750, 1810, 2075, 2130, 2175],
+      "y_edges": [750, 767, 784, 802, 819, 836, 853, 870, 888, 905, 922, 939, 960],
+      "rows": [
+        "BI1|BOILER B-A1 REMOTE SHUTDOWN SWITCH|Yes|No",
+        "BI2|SHHWP-A1 VFD STATUS|No|Yes",
+        "BI3|SHHWP-A1 VFD ALARM|Yes|No",
+        "BI4|SHHWP-A2 VFD STATUS|No|Yes",
+        "BI5|SHHWP-A2 VFD ALARM|Yes|No",
+        "BI6|B-A1 STATUS|No|No",
+        "BI7|B-A2 STATUS|No|No",
+        "BI8|PHHWP-A1 VFD STATUS|No|Yes",
+        "BI9|PHHWP-A1 VFD ALARM|Yes|No",
+        "BI10|PHHWP-A2 VFD ALARM|Yes|No",
+        "BI11|PHHWP-A2 VFD STATUS|No|Yes",
+        "BI12|AIR OPS BOILER DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {"bbox": [1745, 724, 1840, 750], "expected": "BINARY INPUT"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-HHW-BO",
+      "page": 58,
+      "sheet": "MI712",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS HHW SYSTEM POINT LIST - BINARY OUTPUT",
+      "classification": "Binary output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1750, 1810, 2075, 2130, 2175],
+      "y_edges": [991, 1008, 1026, 1043, 1060, 1077, 1100],
+      "rows": [
+        "BO1|SHHWP-A1 VFD ENABLE|No|No",
+        "BO2|SHHWP-A2 VFD ENABLE|No|No",
+        "BO3|B-A1 ON/OFF|No|No",
+        "BO4|B-A2 ON/OFF|No|No",
+        "BO5|PHHWP-A2 VFD ENABLE|No|No",
+        "BO6|PHHWP-A2 VFD ENABLE|No|No"
+      ],
+      "header_evidence": [
+        {"bbox": [1745, 965, 1840, 991], "expected": "BINARY OUTPUT"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "air-ops-hhw-ai-count", "records_path": ["tables", 0, "rows"], "expected": 16},
+    {"id": "air-ops-hhw-ao-count", "records_path": ["tables", 1, "rows"], "expected": 5},
+    {"id": "air-ops-hhw-bi-count", "records_path": ["tables", 2, "rows"], "expected": 12},
+    {"id": "air-ops-hhw-bo-count", "records_path": ["tables", 3, "rows"], "expected": 6}
+  ],
+  "source_conflicts": [
+    {
+      "table": "AIR-OPS-HHW-BO",
+      "finding": "BO5 and BO6 are both printed as PHHWP-A2 VFD ENABLE. The duplicate literal descriptions are retained rather than assigning an inferred PHHWP-A1 description to either row."
+    }
+  ],
+  "remaining_work": "Capture the remaining system point lists, control diagrams, sequences, DDC-network relationships and plan-level field-device reconciliation."
+}

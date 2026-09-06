@@ -1,0 +1,72 @@
+{
+  "document_id": "12__vol2__028",
+  "module_role": "M-512 written DOAS-1-and-2 controls context. This source sequence is recorded separately from M-511 DOAS-3; their different unoccupied behavior is not normalized into a single rule.",
+  "source_sheet": "M-512",
+  "source_page": 8,
+  "network_architecture": {
+    "protocols_as_printed": ["BACNET"],
+    "protocol_context": "The sequence calls for a factory-furnished onboard BACNET controller to communicate with the BAS. The BAS enables the system, and the printed I/O list is to be monitored and controlled from the GUI.",
+    "transport": {"status": "not_stated_in_supplied_excerpt", "value": null},
+    "addressing_baud_rate_controller_model": {"status": "not_stated_in_supplied_excerpt", "value": null},
+    "assertion_ids": ["doas12-factory-controller", "doas12-bas-gui"]
+  },
+  "sequences": [
+    {
+      "id": "doas12",
+      "title": "DEDICATED OUTSIDE AIR SYSTEM CONTROL SEQUENCE",
+      "equipment_scope": "DOAS 1&2 P&ID template; the supplied excerpt states no installed count, controller address, or individual device identity.",
+      "statements": [
+        {"number": "1.1", "text": "THE DOAS SHALL BE A PACKAGED UNIT WITH A SUPPLY FAN AND EXHAUST FAN.", "assertion_ids": ["doas12-packaged-fans"]},
+        {"number": "1.2", "text": "THE DOAS SHALL BE PROVIDED WITH A VFD FOR THE SUPPLY FAN, AND A VFD FOR THE EXHAUST FAN.", "assertion_ids": ["doas12-vfds"]},
+        {"number": "1.3", "text": "THE DOAS SHALL BE CONTROLLED BY THE BAS AND REMAIN ENABLED AT ALL TIMES.", "assertion_ids": ["doas12-bas-enabled"]},
+        {"number": "1.3.1", "text": "DURING OCCUPIED HOURS, THE DOAS SHALL RUN CONTINUOUSLY AND DELIVER A CONSTANT AIR VOLUME CALCULATED PER ASHRAE 62.1.", "assertion_ids": ["doas12-occupied"]},
+        {"number": "1.3.2", "text": "DURING UNOCCUPIED HOURS, THE DOAS SHALL NOT RUN UNLESS A ZONE OVERRIDE COMMAND IS RECEIVED.", "assertion_ids": ["doas12-unoccupied"]},
+        {"number": "1.3.3", "text": "OCCUPIED/UNOCCUPIED HOURS SHALL BE DETERMINED BY BUILDING SCHEDULE IN THE BAS.", "assertion_ids": ["doas12-schedule"]},
+        {"number": "2", "text": "DOAS CONTROL: THE DOAS SYSTEM SHALL BE PROVIDED WITH A FACTORY FURNISHED ON-BOARD BACNET CONTROLLER THE MANUFACTURER SHALL USE ITS PREFERRED SEQUENCE TO MEET THE FOLLOWING REQUIREMENTS:", "assertion_ids": ["doas12-factory-controller"]},
+        {"number": "2.1", "text": "IN COOLING, THE CONTROLLER SHALL MONITOR THE CHILLED WATER COIL LEAVING AIR TEMPERATURE AND MODULATE CHILLED WATER FLOW TO MAINTAIN THE CHILLED WATER COIL LEAVING AIR TEMPERATURE SET POINT OF 55°F.", "assertion_ids": ["doas12-cooling"]},
+        {"number": "2.2", "text": "IN HEATING, THE CONTROLLER SHALL MONITOR THE SUPPLY AIR TEMPERATURE AND MODULATE THE HOT WATER COIL TO MAINTAIN THE SUPPLY AIR TEMPERATURE SETPOINT OF 70°F.", "assertion_ids": ["doas12-heating"]},
+        {"number": "2.3", "text": "IN ECONOMIZER, THE UNIT SHALL RUN USING AN OUTSIDE AIR DRY-BULB BASED CONTROL STRATEGY.", "assertion_ids": ["doas12-economizer"]},
+        {"number": "3.1", "text": "SUPPLY AIR FAN: THE CONTROLLER SHALL MONITOR DUCT STATIC PRESSURE AND MODULATE SUPPLY AIR FLOW THROUGH THE VFD TO MAINTAIN DOWNSTREAM STATIC PRESSURE SET POINT. SENSOR LOCATION AND SETPOINT SHALL BE DETERMINED BY THE TAB FIRM.", "assertion_ids": ["doas12-supply-fan-static"]},
+        {"number": "3.2", "text": "EXHAUST AIR FAN: EXHAUST AIR SHALL MODULATE TO BE 200 CFM LESS THAN SUPPLY AIR TO MAINTAIN A POSITIVE STATIC PRESSURE FOR THE SPACE.", "assertion_ids": ["doas12-exhaust-offset"]},
+        {"number": "4.1", "text": "THE ONBOARD BACNET CONTROLLER SHALL COMMUNICATE WITH THE BAS TO ALLOW AT THE MINIMUM MONITORING AND CONTROL OF I/O POINTS LISTED HERE. THE SYSTEM SHALL BE ENABLED BY THE BAS. ALL CONTROL POINTS ON THE I/O POINTS LIST SHALL BE MONITORED AND CONTROLLED FROM THE GRAPHIC USER INTERFACE (GUI).", "assertion_ids": ["doas12-bas-gui"]},
+        {"number": "5.1", "text": "THE ONBOARD BACNET CONTROLLER SHALL TRANSMIT SYSTEM ALARMS TO THE GUI. THE ONBOARD CONTROLLER SHALL, AT A MINIMUM, TRACK ALARMS LISTED IN THE I/O POINTS LIST.", "assertion_ids": ["doas12-alarms"]}
+      ]
+    }
+  ],
+  "inter_system_qualification": {
+    "M511_DOAS3_unoccupied": "Runs at 30% full load and provides a minimum amount of OA at all times.",
+    "M512_DOAS12_unoccupied": "Does not run unless a zone override command is received.",
+    "interpretation": "These are separate named source sequences. The supplied excerpt provides no basis to substitute one sequence for the other or to collapse them into a generic DOAS template."
+  },
+  "sensor_and_zone_ledger": {
+    "source_items": [
+      {"id": "DOAS12-OAT", "classification": "Outside-air-temperature I/O template point", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "outdoor", "basis": "M-512 I/O row 2."},
+      {"id": "DOAS12-CHW-LEAVING-AIR", "classification": "Chilled-water-coil leaving-air-temperature control input", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "DOAS coil", "basis": "M-512 sequence 2.1 and I/O row 6."},
+      {"id": "DOAS12-SAT", "classification": "Supply-air-temperature control input", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "DOAS supply air", "basis": "M-512 sequence 2.2 and I/O row 4."},
+      {"id": "DOAS12-DUCT-STATIC", "classification": "Downstream duct-static-pressure control input", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "downstream supply duct; location to be determined by TAB firm", "basis": "M-512 sequence 3.1."}
+    ],
+    "counts": {"space_sensors": {"status": "not_stated", "value": null}, "CO2_sensors": {"status": "not_stated", "value": null}, "smart_thermostats": {"status": "not_stated", "value": null}},
+    "limitation": "No plan, zone schedule, controller-address schedule, or installed-device quantities are present in the supplied M-512 excerpt."
+  },
+  "tables": [],
+  "assertions": [
+    {"id": "doas12-packaged-fans", "page": 8, "bbox": [460,890,950,910], "expected": "THE DOAS SHALL BE A PACKAGED UNIT WITH A SUPPLY FAN AND EXHAUST FAN.", "mode": "contains"},
+    {"id": "doas12-vfds", "page": 8, "bbox": [460,907,1080,928], "expected": "THE DOAS SHALL BE PROVIDED WITH A VFD FOR THE SUPPLY FAN, AND A VFD FOR THE EXHAUST FAN.", "mode": "contains"},
+    {"id": "doas12-bas-enabled", "page": 8, "bbox": [460,925,970,945], "expected": "THE DOAS SHALL BE CONTROLLED BY THE BAS AND REMAIN ENABLED AT ALL TIMES.", "mode": "contains"},
+    {"id": "doas12-occupied", "page": 8, "bbox": [490,942,1340,962], "expected": "DURING OCCUPIED HOURS, THE DOAS SHALL RUN CONTINUOUSLY AND DELIVER A CONSTANT AIR VOLUME CALCULATED PER ASHRAE 62.1.", "mode": "contains"},
+    {"id": "doas12-unoccupied", "page": 8, "bbox": [490,959,1150,980], "expected": "DURING UNOCCUPIED HOURS, THE DOAS SHALL NOT RUN UNLESS A ZONE OVERRIDE COMMAND IS RECEIVED.", "mode": "contains"},
+    {"id": "doas12-schedule", "page": 8, "bbox": [490,976,1100,997], "expected": "OCCUPIED/UNOCCUPIED HOURS SHALL BE DETERMINED BY BUILDING SCHEDULE IN THE BAS.", "mode": "contains"},
+    {"id": "doas12-factory-controller", "page": 8, "bbox": [460,993,1650,1025], "expected": "DOAS CONTROL: THE DOAS SYSTEM SHALL BE PROVIDED WITH A FACTORY FURNISHED ON-BOARD BACNET CONTROLLER THE MANUFACTURER SHALL USE ITS PREFERRED SEQUENCE TO MEET THE FOLLOWING REQUIREMENTS:", "mode": "contains"},
+    {"id": "doas12-cooling", "page": 8, "bbox": [460,1026,1660,1059], "expected": "IN COOLING, THE CONTROLLER SHALL MONITOR THE CHILLED WATER COIL LEAVING AIR TEMPERATURE AND MODULATE CHILLED WATER FLOW TO MAINTAIN THE CHILLED WATER COIL LEAVING AIR TEMPERATURE SET POINT OF 55°F.", "mode": "contains"},
+    {"id": "doas12-heating", "page": 8, "bbox": [460,1060,1570,1077], "expected": "IN HEATING, THE CONTROLLER SHALL MONITOR THE SUPPLY AIR TEMPERATURE AND MODULATE THE HOT WATER COIL TO MAINTAIN THE SUPPLY AIR TEMPERATURE SETPOINT OF 70°F.", "mode": "contains"},
+    {"id": "doas12-economizer", "page": 8, "bbox": [460,1078,1060,1100], "expected": "IN ECONOMIZER, THE UNIT SHALL RUN USING AN OUTSIDE AIR DRY-BULB BASED CONTROL STRATEGY.", "mode": "contains"},
+    {"id": "doas12-supply-fan-static", "page": 8, "bbox": [460,1112,1630,1146], "expected": "SUPPLY AIR FAN: THE CONTROLLER SHALL MONITOR DUCT STATIC PRESSURE AND MODULATE SUPPLY AIR FLOW THROUGH THE VFD TO MAINTAIN DOWNSTREAM STATIC PRESSURE SET POINT. SENSOR LOCATION AND SETPOINT SHALL BE DETERMINED BY THE TAB FIRM.", "mode": "contains"},
+    {"id": "doas12-exhaust-offset", "page": 8, "bbox": [460,1145,1350,1170], "expected": "EXHAUST AIR FAN: EXHAUST AIR SHALL MODULATE TO BE 200 CFM LESS THAN SUPPLY AIR TO MAINTAIN A POSITIVE STATIC PRESSURE FOR THE SPACE.", "mode": "contains"},
+    {"id": "doas12-bas-gui", "page": 8, "bbox": [460,1180,1680,1213], "expected": "THE ONBOARD BACNET CONTROLLER SHALL COMMUNICATE WITH THE BAS TO ALLOW AT THE MINIMUM MONITORING AND CONTROL OF I/O POINTS LISTED HERE. THE SYSTEM SHALL BE ENABLED BY THE BAS. ALL CONTROL POINTS ON THE I/O POINTS LIST SHALL BE MONITORED AND CONTROLLED FROM THE GRAPHIC USER INTERFACE (GUI).", "mode": "contains"},
+    {"id": "doas12-alarms", "page": 8, "bbox": [460,1230,1560,1255], "expected": "THE ONBOARD BACNET CONTROLLER SHALL TRANSMIT SYSTEM ALARMS TO THE GUI. THE ONBOARD CONTROLLER SHALL, AT A MINIMUM, TRACK ALARMS LISTED IN THE I/O POINTS LIST.", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "one-m512-written-sequence", "records_path": ["sequences"], "expected": 1, "unique_key": "id"},
+    {"id": "m512-logical-sensor-items", "records_path": ["sensor_and_zone_ledger", "source_items"], "expected": 4, "unique_key": "id"}
+  ]
+}

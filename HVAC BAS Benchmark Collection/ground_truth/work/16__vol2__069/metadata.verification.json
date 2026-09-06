@@ -1,0 +1,565 @@
+{
+  "document_id": "16__vol2__069",
+  "source_sha256": "ce0c2bb973f87194f0f6ed8d68faaad2a5683129f9d0db1a73415f6051ed06f1",
+  "annotation_sha256": "445c8261b49cadb5906c428c48c2d5f299d1232d72c3386d1fd4ade62e7ea3f3",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 19,
+  "checks": [
+    {
+      "assertion": "p9-project-number",
+      "page": 9,
+      "bbox": [
+        2455,
+        1410,
+        2500,
+        1435
+      ],
+      "expected": "26-150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            387
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            439
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "p9-issue-date",
+      "page": 9,
+      "bbox": [
+        2455,
+        1472,
+        2520,
+        1500
+      ],
+      "expected": "AUGUST 2026",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            390,
+            391
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            442,
+            443
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "p1-project-title",
+      "page": 1,
+      "bbox": [
+        2425,
+        900,
+        2470,
+        1400
+      ],
+      "expected": "HEATING SYSTEM UPGRADES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HEATING SYSTEM UPGRADES",
+          "word_ids": [
+            3,
+            4,
+            5
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HEATING SYSTEM UPGRADES",
+          "word_ids": [
+            5,
+            6,
+            7
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "standard-title-block-fields-pages-1-8/p1/project-number",
+      "page": 1,
+      "bbox": [
+        2438,
+        1410,
+        2480,
+        1435
+      ],
+      "expected": "26-150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            21
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            18
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "standard-title-block-fields-pages-1-8/p1/issue-date",
+      "page": 1,
+      "bbox": [
+        2438,
+        1472,
+        2510,
+        1500
+      ],
+      "expected": "AUGUST 2026",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            24,
+            25
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            21,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "standard-title-block-fields-pages-1-8/p2/project-number",
+      "page": 2,
+      "bbox": [
+        2438,
+        1410,
+        2480,
+        1435
+      ],
+      "expected": "26-150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            1556
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            1358
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "standard-title-block-fields-pages-1-8/p2/issue-date",
+      "page": 2,
+      "bbox": [
+        2438,
+        1472,
+        2510,
+        1500
+      ],
+      "expected": "AUGUST 2026",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            1559,
+            1560
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            1361,
+            1362
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "standard-title-block-fields-pages-1-8/p3/project-number",
+      "page": 3,
+      "bbox": [
+        2438,
+        1410,
+        2480,
+        1435
+      ],
+      "expected": "26-150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            234
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            521
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "standard-title-block-fields-pages-1-8/p3/issue-date",
+      "page": 3,
+      "bbox": [
+        2438,
+        1472,
+        2510,
+        1500
+      ],
+      "expected": "AUGUST 2026",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            237,
+            238
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            524,
+            525
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "standard-title-block-fields-pages-1-8/p4/project-number",
+      "page": 4,
+      "bbox": [
+        2438,
+        1410,
+        2480,
+        1435
+      ],
+      "expected": "26-150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            523
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            551
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "standard-title-block-fields-pages-1-8/p4/issue-date",
+      "page": 4,
+      "bbox": [
+        2438,
+        1472,
+        2510,
+        1500
+      ],
+      "expected": "AUGUST 2026",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            526,
+            527
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            554,
+            555
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "standard-title-block-fields-pages-1-8/p5/project-number",
+      "page": 5,
+      "bbox": [
+        2438,
+        1410,
+        2480,
+        1435
+      ],
+      "expected": "26-150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            660
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            692
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "standard-title-block-fields-pages-1-8/p5/issue-date",
+      "page": 5,
+      "bbox": [
+        2438,
+        1472,
+        2510,
+        1500
+      ],
+      "expected": "AUGUST 2026",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            663,
+            664
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            695,
+            696
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "standard-title-block-fields-pages-1-8/p6/project-number",
+      "page": 6,
+      "bbox": [
+        2438,
+        1410,
+        2480,
+        1435
+      ],
+      "expected": "26-150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            1530
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            1558
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "standard-title-block-fields-pages-1-8/p6/issue-date",
+      "page": 6,
+      "bbox": [
+        2438,
+        1472,
+        2510,
+        1500
+      ],
+      "expected": "AUGUST 2026",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            1533,
+            1534
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            1561,
+            1562
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "standard-title-block-fields-pages-1-8/p7/project-number",
+      "page": 7,
+      "bbox": [
+        2438,
+        1410,
+        2480,
+        1435
+      ],
+      "expected": "26-150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            886
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            914
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "standard-title-block-fields-pages-1-8/p7/issue-date",
+      "page": 7,
+      "bbox": [
+        2438,
+        1472,
+        2510,
+        1500
+      ],
+      "expected": "AUGUST 2026",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            889,
+            890
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            917,
+            918
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "standard-title-block-fields-pages-1-8/p8/project-number",
+      "page": 8,
+      "bbox": [
+        2438,
+        1410,
+        2480,
+        1435
+      ],
+      "expected": "26-150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            1599
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "26-150",
+          "word_ids": [
+            1630
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "standard-title-block-fields-pages-1-8/p8/issue-date",
+      "page": 8,
+      "bbox": [
+        2438,
+        1472,
+        2510,
+        1500
+      ],
+      "expected": "AUGUST 2026",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            1602,
+            1603
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 2026",
+          "word_ids": [
+            1633,
+            1634
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "all-supplied-pages-visually-reviewed",
+      "actual": 9,
+      "expected": 9,
+      "pass": true
+    },
+    {
+      "id": "length-scaled-views",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

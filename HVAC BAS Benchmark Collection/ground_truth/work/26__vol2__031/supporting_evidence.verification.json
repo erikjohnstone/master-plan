@@ -1,0 +1,47 @@
+{
+  "document_id": "26__vol2__031",
+  "source_sha256": "db9141f6582831c37b3a18f55d862e0579b38cf1a702c24208e3030fd8dbeab2",
+  "annotation_sha256": "5d719eb492106f9c6c63f60d434a57063b661d13e864b03513fcd4b328e78854",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 0,
+  "checks": [],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [
+    {
+      "id": "no-control-valve-schedule",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "matches": [],
+          "search_scope": "Native parser lines, NFKC normalized; not global cross-column word concatenation. Wrapped/outlined text still requires visual review."
+        },
+        "poppler": {
+          "pass": true,
+          "matches": [],
+          "search_scope": "Native parser lines, NFKC normalized; not global cross-column word concatenation. Wrapped/outlined text still requires visual review."
+        }
+      }
+    },
+    {
+      "id": "no-damper-actuator-schedule",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "matches": [],
+          "search_scope": "Native parser lines, NFKC normalized; not global cross-column word concatenation. Wrapped/outlined text still requires visual review."
+        },
+        "poppler": {
+          "pass": true,
+          "matches": [],
+          "search_scope": "Native parser lines, NFKC normalized; not global cross-column word concatenation. Wrapped/outlined text still requires visual review."
+        }
+      }
+    }
+  ],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

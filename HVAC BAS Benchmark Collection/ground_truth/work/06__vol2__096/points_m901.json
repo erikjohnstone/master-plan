@@ -1,0 +1,364 @@
+{
+  "document_id": "06__vol2__096",
+  "module_role": "Complete literal M901 DDC point matrices for the chilled-water plant and heating-hot-water plant.",
+  "tables": [
+    {
+      "id": "M901-CHILLED-WATER-DDC",
+      "sheet": "M901",
+      "page": 31,
+      "title_as_printed": "SCHEDULE OF DDC POINTS",
+      "columns": "source_row_as_printed",
+      "x_edges": [
+        220,
+        640
+      ],
+      "y_ranges": [
+        [
+          111,
+          125
+        ],
+        [
+          125,
+          138
+        ],
+        [
+          138,
+          151
+        ],
+        [
+          151,
+          164
+        ],
+        [
+          164,
+          177
+        ],
+        [
+          177,
+          190
+        ],
+        [
+          190,
+          203
+        ],
+        [
+          203,
+          216
+        ],
+        [
+          216,
+          229
+        ],
+        [
+          229,
+          243
+        ],
+        [
+          243,
+          256
+        ],
+        [
+          256,
+          269
+        ],
+        [
+          269,
+          282
+        ],
+        [
+          282,
+          295
+        ],
+        [
+          295,
+          308
+        ],
+        [
+          308,
+          321
+        ],
+        [
+          321,
+          334
+        ],
+        [
+          334,
+          347
+        ],
+        [
+          347,
+          360
+        ],
+        [
+          360,
+          373
+        ],
+        [
+          373,
+          387
+        ],
+        [
+          387,
+          400
+        ],
+        [
+          400,
+          413
+        ],
+        [
+          413,
+          426
+        ],
+        [
+          426,
+          439
+        ],
+        [
+          439,
+          452
+        ],
+        [
+          452,
+          465
+        ],
+        [
+          465,
+          478
+        ],
+        [
+          478,
+          491
+        ],
+        [
+          491,
+          504
+        ],
+        [
+          504,
+          518
+        ],
+        [
+          518,
+          532
+        ]
+      ],
+      "rows": [
+        "AI-1 OUTDOOR AIR TEMPERATURE (GLOBAL) X X",
+        "AI-2 COMMON CHILLED WATER SUPPLY TEMPERATURE X X X",
+        "AI-3 COMMON CHILLED WATER RETURN TEMPERATURE X X",
+        "AI-4 CHILLER CH-1 DIFFERENTIAL PRESSURE X X X",
+        "AI-5 CHILLER CH-2 DIFFERENTIAL PRESSURE X X X",
+        "AI-7 SYSTEM DIFFERENTIAL PRESSURE X X X",
+        "AI-8 SYSTEM CHILLED WATER FLOW X X",
+        "AI-9 SYSTEM CHILLED WATER CALCULATED LOAD (VIRTUAL) X X",
+        "AO-1 CHILLED WATER PUMP CHWP-1A VFC X X",
+        "AO-2 CHILLED WATER PUMP CHWP-1B VFC X X",
+        "AO-3 CHILLED WATER PUMP CHWP-2A VFC X X",
+        "AO-4 CHILLED WATER PUMP CHWP-2B VFC X X",
+        "AO-7 CHILLED WATER SYSTEM PRESSURE BYPASS VALVE X X",
+        "AO-8 CHILLER CH-1 ISOLATION VALVE X X",
+        "AO-9 CHILLER CH-2 ISOLATION VALVE X X",
+        "AO-11 CHILLER CH-1 TEMPERATURE SETPOINT X X",
+        "AO-12 CHILLER CH-2 TEMPERATURE SETPOINT X X",
+        "BI-1 LOW LEVEL GLYCOL ALARM - CHILLED WATER X X",
+        "BI-2 CHILLED WATER PUMP CHWP-1A STATUS X X X",
+        "BI-3 CHILLED WATER PUMP CHWP-1B STATUS X X X",
+        "BI-4 CHILLED WATER PUMP CHWP-2A STATUS X X X",
+        "BI-5 CHILLED WATER PUMP CHWP-2B STATUS X X X",
+        "BI-8 CHILLER CH-1 GENERAL ALARM X X X",
+        "BI-9 CHILLER CH-2 GENERAL ALARM X X X",
+        "BI-11 UPS LOW BATTERY ALARM X X X",
+        "BI-12 UPS ON BATTERY ALARM X X X",
+        "BO-1 CHILLED WATER PUMP CHWP-1A START-STOP X",
+        "BO-2 CHILLED WATER PUMP CHWP-1B START-STOP X",
+        "BO-3 CHILLED WATER PUMP CHWP-2A START-STOP X",
+        "BO-4 CHILLED WATER PUMP CHWP-2B START-STOP X",
+        "BO-7 CHILLER CH-1 ENERGIZE/DEENERGIZE X X",
+        "BO-8 CHILLER CH-2 ENERGIZE/DEENERGIZE X X"
+      ],
+      "row_reading_order": "left_to_right",
+      "header_evidence": [
+        {
+          "bbox": [
+            350,
+            75,
+            500,
+            95
+          ],
+          "expected": "SCHEDULE OF DDC POINTS"
+        }
+      ],
+      "source_row_semantics": "Complete literal DDC point-list row, including its published trend/alarm/graphic marks. It is not projected into controller terminals, hardware I/O or duplicated plant instances."
+    },
+    {
+      "id": "M901-HEATING-HOT-WATER-DDC",
+      "sheet": "M901",
+      "page": 31,
+      "title_as_printed": "SCHEDULE OF DDC POINTS",
+      "columns": "source_row_as_printed",
+      "x_edges": [
+        910,
+        1300
+      ],
+      "y_ranges": [
+        [
+          1723,
+          1736
+        ],
+        [
+          1736,
+          1749
+        ],
+        [
+          1749,
+          1762
+        ],
+        [
+          1762,
+          1776
+        ],
+        [
+          1776,
+          1789
+        ],
+        [
+          1789,
+          1802
+        ],
+        [
+          1802,
+          1815
+        ],
+        [
+          1815,
+          1828
+        ],
+        [
+          1828,
+          1841
+        ],
+        [
+          1841,
+          1854
+        ],
+        [
+          1854,
+          1867
+        ],
+        [
+          1867,
+          1880
+        ],
+        [
+          1880,
+          1893
+        ],
+        [
+          1893,
+          1907
+        ],
+        [
+          1907,
+          1920
+        ],
+        [
+          1920,
+          1933
+        ],
+        [
+          1933,
+          1946
+        ],
+        [
+          1946,
+          1959
+        ],
+        [
+          1959,
+          1972
+        ],
+        [
+          1972,
+          1985
+        ],
+        [
+          1985,
+          1998
+        ],
+        [
+          1998,
+          2011
+        ],
+        [
+          2011,
+          2025
+        ],
+        [
+          2025,
+          2038
+        ],
+        [
+          2038,
+          2051
+        ],
+        [
+          2051,
+          2064
+        ],
+        [
+          2064,
+          2077
+        ],
+        [
+          2077,
+          2091
+        ]
+      ],
+      "rows": [
+        "AI-1 OUTDOOR TEMPERATURE (GLOBAL) X X",
+        "AI-2 SYSTEM HOT WATER SUPPLY TEMPERATURE X X X",
+        "AI-3 SYSTEM HOT WATER RETURN TEMPERATURE X X",
+        "AI-4 SYSTEM HOT WATER FLOW X X",
+        "AI-5 SYSTEM HOT WATER CALCULATED LOAD X X",
+        "AI-6 SYSTEM DIFFERENTIAL PRESSURE X X X",
+        "AI-7 BOILER B-1 SUPPLY TEMPERATURE X X X",
+        "AI-8 BOILER B-2 SUPPLY TEMPERATURE X X X",
+        "AI-10 CARBON MONOXIDE LEVEL X X X",
+        "AO-1 HOT WATER PUMP HWP-1 VFC X X",
+        "AO-2 HOT WATER PUMP HWP-2 VFC X X",
+        "AO-4 BOILER B-1 FIRING RATE X X",
+        "AO-5 BOILER B-2 FIRING RATE X X",
+        "AO-7 SYSTEM BYPASS VALVE X X",
+        "BI-1 HOT WATER PUMP HWP-1 STATUS X X X",
+        "BI-2 HOT WATER PUMP HWP-2 STATUS X X X",
+        "BI-4 EMERGENCY BOILER SHUTDOWN X X",
+        "BI-5 BOILER B-1 GENERAL ALARM X X X",
+        "BI-6 BOILER B-2 GENERAL ALARM X X X",
+        "BI-8 BOILER ROOM WATER DETECTOR ALARM X X",
+        "BI-9 UPS LOW BATTERY ALARM X X X",
+        "BI-10 UPS ON BATTERY ALARM X X X",
+        "BO-1 HOT WATER PUMP HWP-1 START-STOP X X",
+        "BO-2 HOT WATER PUMP HWP-2 START-STOP X X",
+        "BO-4 BOILER B-1 START/STOP X X",
+        "BO-5 BOILER B-2 START/STOP X X",
+        "BO-7 BOILER B-1 HEATING WATER ISOLATION VALVE X X",
+        "BO-8 BOILER B-2 HEATING WATER ISOLATION VALVE X X"
+      ],
+      "row_reading_order": "left_to_right",
+      "header_evidence": [
+        {
+          "bbox": [
+            1040,
+            1685,
+            1190,
+            1705
+          ],
+          "expected": "SCHEDULE OF DDC POINTS"
+        }
+      ],
+      "source_row_semantics": "Complete literal DDC point-list row, including its published trend/alarm/graphic marks. It is not projected into controller terminals, hardware I/O or duplicated plant instances."
+    }
+  ],
+  "assertions": [],
+  "point_scope": "The 60 rows are literal schedule-of-DDC-points templates for the printed chilled- and heating-water contexts. They do not establish final controller-card, terminal, wire, address, device or physical plant point totals."
+}

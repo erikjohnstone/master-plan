@@ -1,0 +1,214 @@
+{
+  "document_id": "06__vol2__096",
+  "module_role": "Complete literal M603 Motorized Damper Schedule capture. The 24 source rows retain damper tag, size, voltage, normal state, quantity, design reference and printed remarks; they are not expanded into unprinted controller I/O or actuator torque/signal data.",
+  "tables": [
+    {
+      "id": "M603-MOTORIZED-DAMPERS",
+      "sheet": "M603",
+      "page": 22,
+      "title_as_printed": "MOTORIZED DAMPER SCHEDULE",
+      "columns": "tag|dimensions|voltage|normally_open_or_closed|quantity|manufacturer|model|remarks",
+      "x_edges": [
+        350,
+        435,
+        535,
+        605,
+        735,
+        825,
+        940,
+        1030,
+        1110
+      ],
+      "y_ranges": [
+        [
+          1373,
+          1389
+        ],
+        [
+          1389,
+          1404
+        ],
+        [
+          1404,
+          1419
+        ],
+        [
+          1419,
+          1434
+        ],
+        [
+          1434,
+          1449
+        ],
+        [
+          1449,
+          1464
+        ],
+        [
+          1464,
+          1479
+        ],
+        [
+          1479,
+          1494
+        ],
+        [
+          1494,
+          1509
+        ],
+        [
+          1509,
+          1524
+        ],
+        [
+          1524,
+          1539
+        ],
+        [
+          1539,
+          1554
+        ],
+        [
+          1554,
+          1568
+        ],
+        [
+          1568,
+          1583
+        ],
+        [
+          1583,
+          1598
+        ],
+        [
+          1598,
+          1613
+        ],
+        [
+          1613,
+          1628
+        ],
+        [
+          1628,
+          1643
+        ],
+        [
+          1643,
+          1658
+        ],
+        [
+          1658,
+          1673
+        ],
+        [
+          1673,
+          1688
+        ],
+        [
+          1688,
+          1703
+        ],
+        [
+          1703,
+          1718
+        ],
+        [
+          1718,
+          1733
+        ]
+      ],
+      "rows": [
+        "JED-1-1|18\"X14\"|24V|NO|1|POTTORFF|SD-151|1,3,4",
+        "JED-2-1|18\"X14\"|24V|NO|1|POTTORFF|SD-151|1,3,4",
+        "JED-3-1|18\"X14\"|24V|NO|1|POTTORFF|SD-151|1,3,4",
+        "JED-4-1|18\"X14\"|24V|NO|1|POTTORFF|SD-151|1,3,4",
+        "JED-5-1|18\"X14\"|24V|NO|1|POTTORFF|SD-151|1,3,4",
+        "JED-6-1|18\"X14\"|24V|NO|1|POTTORFF|SD-151|1,3,4",
+        "JED-1-2|18\"X14\"|24V|NC|1|POTTORFF|SD-151|1,2,4",
+        "JED-2-2|18\"X14\"|24V|NC|1|POTTORFF|SD-151|1,2,4",
+        "JED-3-2|18\"X14\"|24V|NC|1|POTTORFF|SD-151|1,2,4",
+        "JED-4-2|18\"X14\"|24V|NC|1|POTTORFF|SD-151|1,2,4",
+        "JED-5-2|18\"X14\"|24V|NC|1|POTTORFF|SD-151|1,2,4",
+        "JED-6-2|18\"X14\"|24V|NC|1|POTTORFF|SD-151|1,2,4",
+        "PED-1-1|20\"X16\"|24V|NO|1|POTTORFF|SD-151|1,3,4",
+        "PED-2-1|20\"X16\"|24V|NO|1|POTTORFF|SD-151|1,3,4",
+        "PED-3-1|20\"X16\"|24V|NO|1|POTTORFF|SD-151|1,3,4",
+        "PED-4-1|20\"X16\"|24V|NO|1|POTTORFF|SD-151|1,3,4",
+        "PED-5-1|20\"X16\"|24V|NO|1|POTTORFF|SD-151|1,3,4",
+        "PED-6-1|20\"X16\"|24V|NO|1|POTTORFF|SD-151|1,3,4",
+        "PED-1-2|18\"X18\"|24V|NC|1|POTTORFF|SD-151|1,2,4",
+        "PED-2-2|18\"X18\"|24V|NC|1|POTTORFF|SD-151|1,2,4",
+        "PED-3-2|18\"X18\"|24V|NC|1|POTTORFF|SD-151|1,2,4",
+        "PED-4-2|18\"X18\"|24V|NC|1|POTTORFF|SD-151|1,2,4",
+        "PED-5-2|18\"X18\"|24V|NC|1|POTTORFF|SD-151|1,2,4",
+        "PED-6-2|18\"X18\"|24V|NC|1|POTTORFF|SD-151|1,2,4"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            460,
+            1300,
+            1020,
+            1345
+          ],
+          "expected": "MOTORIZED DAMPER SCHEDULE"
+        }
+      ],
+      "source_row_semantics": "Each row is a schedule identity. The source note requires plan-location/quantity coordination, so this table is not recast as an independently surveyed plan takeoff."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "m603-damper-note-1",
+      "page": 22,
+      "bbox": [
+        350,
+        1760,
+        950,
+        1778
+      ],
+      "expected": "1. VERIFY LOCATION AND QUANITIY WITH TAG LOCATIONS ON DUCTWORK PLANS. VERIFY SIZE WITH MECHANICAL CONTRACTOR.",
+      "mode": "exact"
+    },
+    {
+      "id": "m603-damper-note-2",
+      "page": 22,
+      "bbox": [
+        350,
+        1773,
+        610,
+        1790
+      ],
+      "expected": "2. MOTORIZED DAMPER FOR POD/JAIL EXHAUST FANS.",
+      "mode": "exact"
+    },
+    {
+      "id": "m603-damper-note-3",
+      "page": 22,
+      "bbox": [
+        350,
+        1785,
+        630,
+        1802
+      ],
+      "expected": "3. OTORIZED DAMPER FOR POD/JAIL ZONE RETURN MAINS.",
+      "mode": "exact"
+    },
+    {
+      "id": "m603-damper-note-4",
+      "page": 22,
+      "bbox": [
+        350,
+        1798,
+        465,
+        1815
+      ],
+      "expected": "4. PROVIDED BY TCC.",
+      "mode": "exact"
+    }
+  ],
+  "schedule_scope": {
+    "control_valve_schedule": "Not represented by this table.",
+    "damper_actuator_schedule": "Present as a motorized-damper schedule with tag, size, 24V requirement, normal state, quantity, manufacturer and model. The printed schedule does not state actuator torque, modulating/on-off signal type, spring return or BACnet/controller terminal assignment."
+  }
+}

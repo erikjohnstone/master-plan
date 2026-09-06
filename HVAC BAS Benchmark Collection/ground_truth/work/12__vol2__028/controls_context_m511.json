@@ -1,0 +1,89 @@
+{
+  "document_id": "12__vol2__028",
+  "module_role": "M-511 written DOAS-3 and non-fan-powered VAV controls context. This module retains source-bounded sequences, protocol context, and logical sensor roles without converting reusable P&ID rows into installed-device counts.",
+  "source_sheet": "M-511",
+  "source_page": 7,
+  "network_architecture": {
+    "protocols_as_printed": ["BACNET"],
+    "protocol_context": "The source requires a factory-furnished onboard BACNET controller for DOAS control. It must communicate with the BAS; the BAS enables the system and all listed I/O is to be monitored and controlled from the GUI.",
+    "transport": {"status": "not_stated_in_supplied_excerpt", "value": null},
+    "addressing_baud_rate_controller_model": {"status": "not_stated_in_supplied_excerpt", "value": null},
+    "assertion_ids": ["doas-factory-controller", "doas-bas-gui"]
+  },
+  "sequences": [
+    {
+      "id": "doas3",
+      "title": "DEDICATED OUTSIDE AIR SYSTEM CONTROL SEQUENCE",
+      "equipment_scope": "DOAS 3 P&ID template; the source does not state an installed DOAS-3 controller count or address.",
+      "statements": [
+        {"number": "1.1", "text": "THE DOAS SHALL BE A PACKAGED UNIT WITH A SUPPLY FAN AND EXHAUST FAN.", "assertion_ids": ["doas-packaged-fans"]},
+        {"number": "1.2", "text": "THE DOAS SHALL BE PROVIDED WITH A VFD FOR THE SUPPLY FAN, AND A VFD FOR THE EXHAUST FAN.", "assertion_ids": ["doas-vfds"]},
+        {"number": "1.3", "text": "THE DOAS SHALL BE CONTROLLED BY THE BAS AND REMAIN ENABLED AT ALL TIMES.", "assertion_ids": ["doas-bas-enabled"]},
+        {"number": "1.3.1", "text": "DURING UNOCCUPIED HOURS: THE DOAS SHALL RUN AT 30% OF ITS FULL LOAD AND PROVIDE A MINIMUM AMOUNT OF OA AT ALL TIMES.", "assertion_ids": ["doas-unoccupied"]},
+        {"number": "1.3.2", "text": "DURING OCCUPIED HOURS: WHEN OCCUPANCY IS DETECTED FOR MORE THAN 5 MINUTES, THE DOAS SHALL RUN AT A FULL LOAD CONTINUOUSLY.", "assertion_ids": ["doas-occupied"]},
+        {"number": "1.3.3", "text": "SUPPLY AND EXHAUST AIR VOLUME SHALL BE BASED ON THE FEEDBACK FROM AIR FLOW MEASURE STATIONS.", "assertion_ids": ["doas-airflow-feedback"]},
+        {"number": "2", "text": "DOAS CONTROL: THE DOAS SYSTEM SHALL BE PROVIDED WITH A FACTORY FURNISHED ON-BOARD BACNET CONTROLLER. THE MANUFACTURER SHALL USE ITS PREFERRED SEQUENCE TO MEET THE FOLLOWING REQUIREMENTS:", "assertion_ids": ["doas-factory-controller"]},
+        {"number": "2.1", "text": "IN COOLING, THE CONTROLLER SHALL MONITOR THE CHILLED WATER COIL LEAVING AIR TEMPERATURE AND MODULATE CHILLED WATER FLOW TO MAINTAIN THE CHILLED WATER COIL LEAVING AIR TEMPERATURE SET POINT OF 55°F.", "assertion_ids": ["doas-cooling"]},
+        {"number": "2.2", "text": "IN HEATING, THE CONTROLLER SHALL MONITOR THE SUPPLY AIR TEMPERATURE AND MODULATE THE HOT WATER COIL TO MAINTAIN THE SUPPLY AIR TEMPERATURE SETPOINT OF 70°F.", "assertion_ids": ["doas-heating"]},
+        {"number": "2.3", "text": "IN ECONOMIZER, THE UNIT SHALL RUN USING AN OUTSIDE AIR DRY-BULB BASED CONTROL STRATEGY.", "assertion_ids": ["doas-economizer"]},
+        {"number": "3.1", "text": "SUPPLY AIR FAN: THE CONTROLLER SHALL MONITOR DUCT STATIC PRESSURE AND MODULATE SUPPLY AIR FLOW THROUGH THE VFD TO MAINTAIN DOWNSTREAM STATIC PRESSURE SET POINT. SENSOR LOCATION AND SETPOINT SHALL BE DETERMINED BY THE TAB FIRM.", "assertion_ids": ["doas-supply-fan-static"]},
+        {"number": "3.2", "text": "EXHAUST AIR FAN: EXHAUST AIR SHALL MODULATE TO BE 200 CFM LESS THAN SUPPLY AIR TO MAINTAIN A POSITIVE STATIC PRESSURE FOR THE SPACE.", "assertion_ids": ["doas-exhaust-offset"]},
+        {"number": "4.1", "text": "THE ONBOARD BACNET CONTROLLER SHALL COMMUNICATE WITH THE BAS TO ALLOW AT THE MINIMUM MONITORING AND CONTROL OF I/O POINTS LISTED HERE. THE SYSTEM SHALL BE ENABLED BY THE BAS. ALL CONTROL POINTS ON THE I/O POINTS LIST SHALL BE MONITORED AND CONTROLLED FROM THE GRAPHIC USER INTERFACE (GUI).", "assertion_ids": ["doas-bas-gui"]},
+        {"number": "5.1", "text": "THE ONBOARD BACNET CONTROLLER SHALL TRANSMIT SYSTEM ALARMS TO THE GUI. THE ONBOARD CONTROLLER SHALL, AT A MINIMUM, TRACK ALARMS LISTED IN THE I/O POINTS LIST.", "assertion_ids": ["doas-alarms"]}
+      ]
+    },
+    {
+      "id": "vav-terminal",
+      "title": "SEQUENCE OF OPERATION VAV TERMINAL UNIT (NON-FAN POWERED)",
+      "equipment_scope": "VAV-terminal P&ID template; no installed VAV quantity, controller address, or room-zone mapping is printed on this sheet.",
+      "statements": [
+        {"number": "1", "text": "EACH VAV TERMINAL UNIT WILL BE PROVIDED WITH A BACNET COMPATIBLE TERMINAL EQUIPMENT CONTROLLER (TEC), A DUAL TECHNOLOGY OCCUPANCY SENSOR, A DOWNSTREAM STATIC PRESSURE SENSOR, AND A PRIMARY MODULATING SUPPLY AIR DAMPER.", "assertion_ids": ["vav-components"]},
+        {"number": "2", "text": "THE VAV SYSTEM SHALL BE CONTROLLED BY THE BAS AS FOLLOWS:", "assertion_ids": ["vav-bas-control"]},
+        {"number": "2.1", "text": "EACH VAV SHALL MONITOR ITS ASSOCIATED OCCUPANCY SENSOR IN THEIR RESPECTIVE AREA. THE GUI SHALL DISPLAY THE STATUS OF THE OCCUPANCY SENSOR IN THE BOX'S RESPECTIVE ZONE.", "assertion_ids": ["vav-occupancy-gui"]},
+        {"number": "2.2", "text": "SUPPLY AIR DAMPER WILL MODULATE TO BE AT AN OPEN POSITION FOR 30% OF TOTAL OUTSIDE AIR VOLUME (CALCULATED PER ASHRAE 62.1) AT ALL TIMES.", "assertion_ids": ["vav-minimum-oa"]},
+        {"number": "2.3", "text": "SUPPLY AIR DAMPER WILL MODULATE 100% OPEN WHEN OCCUPANCY IS DETECTED FOR MORE THAN 5 MINUTES (ADJ.).", "assertion_ids": ["vav-occupied-open"]},
+        {"number": "2.4", "text": "SUPPLY AIR WILL BE DELIVERED BASED ON DOWNSTREAM STATIC PRESSURE.", "assertion_ids": ["vav-static"]},
+        {"number": "3.1", "text": "VAV FAILURE: AN ALARM SHALL BE GENERATED WHEN THERE IS A DISCREPANCY BETWEEN DAMPER POSITION AND OCCUPANCY.", "assertion_ids": ["vav-failure"]}
+      ]
+    }
+  ],
+  "sensor_and_zone_ledger": {
+    "source_items": [
+      {"id": "DOAS3-OAT", "classification": "Outside-air-temperature I/O template point", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "outdoor", "basis": "M-511 DOAS-3 I/O row 2."},
+      {"id": "DOAS3-AIRFLOW", "classification": "Supply and exhaust airflow measurement-station feedback", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "DOAS air paths", "basis": "M-511 DOAS sequence 1.3.3."},
+      {"id": "DOAS3-DUCT-STATIC", "classification": "Downstream duct-static-pressure control input", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "downstream supply duct; location to be determined by TAB firm", "basis": "M-511 DOAS sequence 3.1 and I/O row 19."},
+      {"id": "VAV-OCCUPANCY", "classification": "Dual-technology occupancy sensor for each VAV terminal unit", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "each VAV's respective area/zone, not mapped in supplied excerpt", "basis": "M-511 VAV sequence 1 and 2.1."},
+      {"id": "VAV-DOWNSTREAM-STATIC", "classification": "Downstream-static-pressure sensor for each VAV terminal unit", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "downstream of each VAV; no plan location", "basis": "M-511 VAV sequence 1 and I/O row 4."}
+    ],
+    "counts": {"space_sensors": {"status": "not_stated", "value": null}, "CO2_sensors": {"status": "not_stated", "value": null}, "smart_thermostats": {"status": "not_stated", "value": null}},
+    "limitation": "The supplied archive excerpt has no floor plan or room-zone schedule. Repeated words such as EACH identify design intent but do not establish a count of installed controllers or sensors."
+  },
+  "tables": [],
+  "assertions": [
+    {"id": "doas-packaged-fans", "page": 7, "bbox": [190,905,690,925], "expected": "THE DOAS SHALL BE A PACKAGED UNIT WITH A SUPPLY FAN AND EXHAUST FAN.", "mode": "contains"},
+    {"id": "doas-vfds", "page": 7, "bbox": [190,922,800,943], "expected": "THE DOAS SHALL BE PROVIDED WITH A VFD FOR THE SUPPLY FAN, AND A VFD FOR THE EXHAUST FAN.", "mode": "contains"},
+    {"id": "doas-bas-enabled", "page": 7, "bbox": [190,940,700,960], "expected": "THE DOAS SHALL BE CONTROLLED BY THE BAS AND REMAIN ENABLED AT ALL TIMES.", "mode": "contains"},
+    {"id": "doas-unoccupied", "page": 7, "bbox": [210,957,1080,977], "expected": "DURING UNOCCUPIED HOURS: THE DOAS SHALL RUN AT 30% OF ITS FULL LOAD AND PROVIDE A MINIMUM AMOUNT OF OA AT ALL TIMES.", "mode": "contains"},
+    {"id": "doas-occupied", "page": 7, "bbox": [210,974,1120,994], "expected": "DURING OCCUPIED HOURS: WHEN OCCUPANCY IS DETECTED FOR MORE THAN 5 MINUTES, THE DOAS SHALL RUN AT A FULL LOAD CONTINUOUSLY.", "mode": "contains"},
+    {"id": "doas-airflow-feedback", "page": 7, "bbox": [210,990,870,1012], "expected": "SUPPLY AND EXHAUST AIR VOLUME SHALL BE BASED ON THE FEEDBACK FROM AIR FLOW MEASURE STATIONS.", "mode": "contains"},
+    {"id": "doas-factory-controller", "page": 7, "bbox": [190,1006,1370,1039], "expected": "DOAS CONTROL: THE DOAS SYSTEM SHALL BE PROVIDED WITH A FACTORY FURNISHED ON-BOARD BACNET CONTROLLER. THE MANUFACTURER SHALL USE ITS PREFERRED SEQUENCE TO MEET THE FOLLOWING REQUIREMENTS:", "mode": "contains"},
+    {"id": "doas-cooling", "page": 7, "bbox": [190,1040,1380,1073], "expected": "IN COOLING, THE CONTROLLER SHALL MONITOR THE CHILLED WATER COIL LEAVING AIR TEMPERATURE AND MODULATE CHILLED WATER FLOW TO MAINTAIN THE CHILLED WATER COIL LEAVING AIR TEMPERATURE SET POINT OF 55°F.", "mode": "contains"},
+    {"id": "doas-heating", "page": 7, "bbox": [190,1076,1300,1090], "expected": "IN HEATING, THE CONTROLLER SHALL MONITOR THE SUPPLY AIR TEMPERATURE AND MODULATE THE HOT WATER COIL TO MAINTAIN THE SUPPLY AIR TEMPERATURE SETPOINT OF 70°F.", "mode": "contains"},
+    {"id": "doas-economizer", "page": 7, "bbox": [190,1093,825,1114], "expected": "IN ECONOMIZER, THE UNIT SHALL RUN USING AN OUTSIDE AIR DRY-BULB BASED CONTROL STRATEGY.", "mode": "contains"},
+    {"id": "doas-supply-fan-static", "page": 7, "bbox": [190,1126,1360,1160], "expected": "SUPPLY AIR FAN: THE CONTROLLER SHALL MONITOR DUCT STATIC PRESSURE AND MODULATE SUPPLY AIR FLOW THROUGH THE VFD TO MAINTAIN DOWNSTREAM STATIC PRESSURE SET POINT. SENSOR LOCATION AND SETPOINT SHALL BE DETERMINED BY THE TAB FIRM.", "mode": "contains"},
+    {"id": "doas-exhaust-offset", "page": 7, "bbox": [190,1160,1080,1182], "expected": "EXHAUST AIR FAN: EXHAUST AIR SHALL MODULATE TO BE 200 CFM LESS THAN SUPPLY AIR TO MAINTAIN A POSITIVE STATIC PRESSURE FOR THE SPACE.", "mode": "contains"},
+    {"id": "doas-bas-gui", "page": 7, "bbox": [190,1195,1410,1227], "expected": "THE ONBOARD BACNET CONTROLLER SHALL COMMUNICATE WITH THE BAS TO ALLOW AT THE MINIMUM MONITORING AND CONTROL OF I/O POINTS LISTED HERE. THE SYSTEM SHALL BE ENABLED BY THE BAS. ALL CONTROL POINTS ON THE I/O POINTS LIST SHALL BE MONITORED AND CONTROLLED FROM THE GRAPHIC USER INTERFACE (GUI).", "mode": "contains"},
+    {"id": "doas-alarms", "page": 7, "bbox": [190,1245,1290,1270], "expected": "THE ONBOARD BACNET CONTROLLER SHALL TRANSMIT SYSTEM ALARMS TO THE GUI. THE ONBOARD CONTROLLER SHALL, AT A MINIMUM, TRACK ALARMS LISTED IN THE I/O POINTS LIST.", "mode": "contains"},
+    {"id": "vav-components", "page": 7, "bbox": [1525,625,2220,678], "expected": "EACH VAV TERMINAL UNIT WILL BE PROVIDED WITH A BACNET COMPATIBLE TERMINAL EQUIPMENT CONTROLLER (TEC), A DUAL TECHNOLOGY OCCUPANCY SENSOR, A DOWNSTREAM STATIC PRESSURE SENSOR, AND A PRIMARY MODULATING SUPPLY AIR DAMPER.", "mode": "contains"},
+    {"id": "vav-bas-control", "page": 7, "bbox": [1525,676,1945,695], "expected": "THE VAV SYSTEM SHALL BE CONTROLLED BY THE BAS AS FOLLOWS:", "mode": "contains"},
+    {"id": "vav-occupancy-gui", "page": 7, "bbox": [1550,694,2200,730], "expected": "EACH VAV SHALL MONITOR ITS ASSOCIATED OCCUPANCY SENSOR IN THEIR RESPECTIVE AREA. THE GUI SHALL DISPLAY THE STATUS OF THE OCCUPANCY SENSOR IN THE BOX'S RESPECTIVE ZONE.", "mode": "contains"},
+    {"id": "vav-minimum-oa", "page": 7, "bbox": [1550,728,2200,765], "expected": "SUPPLY AIR DAMPER WILL MODULATE TO BE AT AN OPEN POSITION FOR 30% OF TOTAL OUTSIDE AIR VOLUME (CALCULATED PER ASHRAE 62.1) AT ALL TIMES.", "mode": "contains"},
+    {"id": "vav-occupied-open", "page": 7, "bbox": [1550,762,2200,797], "expected": "SUPPLY AIR DAMPER WILL MODULATE 100% OPEN WHEN OCCUPANCY IS DETECTED FOR MORE THAN 5 MINUTES (ADJ.).", "mode": "contains"},
+    {"id": "vav-static", "page": 7, "bbox": [1550,797,2000,815], "expected": "SUPPLY AIR WILL BE DELIVERED BASED ON DOWNSTREAM STATIC PRESSURE.", "mode": "contains"},
+    {"id": "vav-failure", "page": 7, "bbox": [1550,830,2200,870], "expected": "VAV FAILURE: AN ALARM SHALL BE GENERATED WHEN THERE IS A DISCREPANCY BETWEEN DAMPER POSITION AND OCCUPANCY.", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "two-m511-sequences", "records_path": ["sequences"], "expected": 2, "unique_key": "id"},
+    {"id": "m511-logical-sensor-items", "records_path": ["sensor_and_zone_ledger", "source_items"], "expected": 5, "unique_key": "id"}
+  ]
+}

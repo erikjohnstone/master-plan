@@ -1,0 +1,88 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "tables": [],
+  "scope": "Conservative, source-bounded DDC network architecture transcription from MI701 (source PDF page 51). It records the printed protocol legend, named controllers, cabinet locations and external interfaces. Source-drawn linework is visually reviewed but is not converted into unstated device counts, port counts or inferred network addressing.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [51],
+    "render": "reviews/01__vol2__001/p51-p51-controls-poppler.png",
+    "dpi": 180,
+    "finding": "The MI701 DDC system network diagram was visually reviewed at 180 DPI. It is organized into Air Operations, MTRACON and ATCT sections with distinct printed line-style legend entries, NAEs and controller boxes."
+  },
+  "network_architecture": {
+    "sheet": "MI701",
+    "sheet_title": "DDC System Network Diagram",
+    "protocol_legend": [
+      {"protocol": "BACNET IP", "assertion_ids": ["legend-bacnet-ip"]},
+      {"protocol": "BACNET MS/TP", "assertion_ids": ["legend-bacnet-mstp"]},
+      {"protocol": "BACNET MS/TP - UUKL NETWORK", "assertion_ids": ["legend-uukl"]},
+      {"protocol": "GENERIC NETWORK AS REQUIRED FOR SYSTEM", "assertion_ids": ["legend-generic-network"]}
+    ],
+    "nae_cabinet_locations": [
+      {"building_scope": "ATCT", "location": "DDC control cabinet in mechanical room 2102", "assertion_ids": ["atct-nae-location"]},
+      {"building_scope": "MTRACON", "location": "DDC control cabinet in mechanical room 171", "assertion_ids": ["mtracon-nae-location"]},
+      {"building_scope": "Air Operations", "location": "DDC control cabinet in mechanical room 152", "assertion_ids": ["air-ops-nae-location"]}
+    ],
+    "named_controller_nodes": [
+      {"building_scope": "Air Operations", "node": "BOILER PLANT MASTER CONTROLLER (B-AAC)", "assertion_ids": ["air-ops-boiler-master"]},
+      {"building_scope": "Air Operations", "node": "CHILLER PLANT MASTER CONTROLLER (B-AAC)", "assertion_ids": ["air-ops-chiller-master"]},
+      {"building_scope": "Air Operations", "node": "AHU-A1 CONTROLLER (B-AAC)", "assertion_ids": ["air-ops-ahu-a1"]},
+      {"building_scope": "Air Operations", "node": "DOAH-A1 CONTROLLER (B-AAC)", "assertion_ids": ["air-ops-doah-a1"]},
+      {"building_scope": "Air Operations", "node": "AHU-A2 CONTROLLER (B-AAC)", "assertion_ids": ["air-ops-ahu-a2"]},
+      {"building_scope": "Air Operations", "node": "DOAH-A2 CONTROLLER (B-AAC)", "assertion_ids": ["air-ops-doah-a2"]},
+      {"building_scope": "MTRACON", "node": "BOILER PLANT MASTER CONTROLLER (B-AAC)", "assertion_ids": ["mtracon-boiler-master"]},
+      {"building_scope": "MTRACON", "node": "CHILLER PLANT MASTER CONTROLLER (B-AAC)", "assertion_ids": ["mtracon-chiller-master"]},
+      {"building_scope": "MTRACON", "node": "AHU-M1 CONTROLLER (B-AAC)", "assertion_ids": ["mtracon-ahu-m1"]},
+      {"building_scope": "MTRACON", "node": "DOAH-M1 CONTROLLER (B-AAC)", "assertion_ids": ["mtracon-doah-m1"]},
+      {"building_scope": "ATCT", "node": "BOILER PLANT MASTER CONTROLLER (B-AAC)", "assertion_ids": ["atct-boiler-master"]},
+      {"building_scope": "ATCT", "node": "ATCT CHW PUMP MASTER CONTROLLER (B-AAC)", "assertion_ids": ["atct-chw-pump-master"]},
+      {"building_scope": "ATCT", "node": "AHU MASTER CONTROLLER (B-AAC)", "assertion_ids": ["atct-ahu-master"]},
+      {"building_scope": "ATCT", "node": "DOAH-T1 CONTROLLER (B-AAC)", "assertion_ids": ["atct-doah-t1"]},
+      {"building_scope": "ATCT", "node": "STAIR PRESS. CONTROLLER (B-AAC)", "assertion_ids": ["atct-stair-press"]}
+    ],
+    "explicit_external_interfaces": [
+      {"interface": "Fiber patch cable to fiber patch panel in telemetry panel (by MCAS Cherry Point)", "assertion_ids": ["fiber-patch-interface"]},
+      {"interface": "Energy meter network connection (by MCAS Cherry Point)", "assertion_ids": ["energy-meter-interface"]},
+      {"interface": "Control-box tamper alarm to DDC via NAE", "assertion_ids": ["tamper-alarm"]},
+      {"interface": "MSTP NAE connection conveys heating-plant status to enable heat-recovery chiller", "assertion_ids": ["heat-recovery-interface"]},
+      {"interface": "Stair pressurization sequence is directed to fire protection; TO FACP is printed", "assertion_ids": ["fire-protection-reference", "to-facp"]}
+    ],
+    "interpretation_limits": [
+      "The labels B-AAC and B-ASC are source-printed controller designations; this annotation does not expand them into unprinted model numbers or address counts.",
+      "Repeated TYP devices and 'TO REMAINING' callouts are recorded as diagrammatic scope only; they are not installed-device counts.",
+      "Line styles are reported from the printed legend. No unprinted IP/MS/TP association is inferred for a particular controller solely from geometric proximity."
+    ]
+  },
+  "assertions": [
+    {"id": "legend-bacnet-ip", "page": 51, "bbox": [1600, 130, 1710, 155], "mode": "contains", "expected": "BACNET IP"},
+    {"id": "legend-bacnet-mstp", "page": 51, "bbox": [1600, 158, 1715, 183], "mode": "contains", "expected": "BACNET MS/TP"},
+    {"id": "legend-uukl", "page": 51, "bbox": [1600, 185, 1800, 212], "mode": "contains", "expected": "BACNET MS/TP - UUKL NETWORK"},
+    {"id": "legend-generic-network", "page": 51, "bbox": [1600, 215, 1800, 252], "mode": "contains", "expected": "GENERIC NETWORK AS REQUIRED FOR SYSTEM"},
+    {"id": "atct-nae-location", "page": 51, "bbox": [885, 105, 1090, 145], "mode": "contains", "expected": "LOCATE NAE IN DDC CONTROL CABINET IN MECHANICAL ROOM 2102"},
+    {"id": "mtracon-nae-location", "page": 51, "bbox": [1100, 535, 1290, 580], "mode": "contains", "expected": "LOCATE NAE IN DDC CONTROL CABINET IN MECHANICAL ROOM 171"},
+    {"id": "air-ops-nae-location", "page": 51, "bbox": [965, 1045, 1170, 1090], "mode": "contains", "expected": "LOCATE NAE IN DDC CONTROL CABINET IN MECHANICAL ROOM 152"},
+    {"id": "air-ops-boiler-master", "page": 51, "bbox": [825, 1410, 960, 1470], "mode": "contains", "expected": "BOILER PLANT MASTER CONTROLLER (B-AAC)"},
+    {"id": "air-ops-chiller-master", "page": 51, "bbox": [970, 1410, 1120, 1470], "mode": "contains", "expected": "CHILLER PLANT MASTER CONTROLLER (B-AAC)"},
+    {"id": "air-ops-ahu-a1", "page": 51, "bbox": [1150, 1410, 1235, 1470], "mode": "contains", "expected": "AHU-A1 CONTROLLER (B-AAC)"},
+    {"id": "air-ops-doah-a1", "page": 51, "bbox": [1300, 1410, 1380, 1470], "mode": "contains", "expected": "DOAH-A1 CONTROLLER (B-AAC)"},
+    {"id": "air-ops-ahu-a2", "page": 51, "bbox": [1450, 1410, 1530, 1470], "mode": "contains", "expected": "AHU-A2 CONTROLLER (B-AAC)"},
+    {"id": "air-ops-doah-a2", "page": 51, "bbox": [1600, 1410, 1685, 1470], "mode": "contains", "expected": "DOAH-A2 CONTROLLER (B-AAC)"},
+    {"id": "mtracon-boiler-master", "page": 51, "bbox": [960, 910, 1100, 970], "mode": "contains", "expected": "BOILER PLANT MASTER CONTROLLER (B-AAC)"},
+    {"id": "mtracon-chiller-master", "page": 51, "bbox": [1110, 910, 1250, 970], "mode": "contains", "expected": "CHILLER PLANT MASTER CONTROLLER (B-AAC)"},
+    {"id": "mtracon-ahu-m1", "page": 51, "bbox": [1290, 910, 1370, 970], "mode": "contains", "expected": "AHU-M1 CONTROLLER (B-AAC)"},
+    {"id": "mtracon-doah-m1", "page": 51, "bbox": [1440, 910, 1520, 970], "mode": "contains", "expected": "DOAH-M1 CONTROLLER (B-AAC)"},
+    {"id": "atct-boiler-master", "page": 51, "bbox": [720, 410, 850, 470], "mode": "contains", "expected": "BOILER PLANT MASTER CONTROLLER (B-AAC)"},
+    {"id": "atct-chw-pump-master", "page": 51, "bbox": [880, 410, 1025, 470], "mode": "contains", "expected": "ATCT CHW PUMP MASTER CONTROLLER (B-AAC)"},
+    {"id": "atct-ahu-master", "page": 51, "bbox": [1075, 410, 1165, 470], "mode": "contains", "expected": "AHU MASTER CONTROLLER (B-AAC)"},
+    {"id": "atct-doah-t1", "page": 51, "bbox": [1230, 410, 1310, 470], "mode": "contains", "expected": "DOAH-T1 CONTROLLER (B-AAC)"},
+    {"id": "atct-stair-press", "page": 51, "bbox": [1370, 410, 1460, 470], "mode": "contains", "expected": "STAIR PRESS. CONTROLLER (B-AAC)"},
+    {"id": "fiber-patch-interface", "page": 51, "bbox": [245, 65, 600, 120], "mode": "contains", "expected": "FIBER PATCH CABLE TO FIBER PATCH PANEL IN TELEMETRY PANEL. (BY MCAS CHERRY POINT)"},
+    {"id": "energy-meter-interface", "page": 51, "bbox": [270, 195, 420, 248], "mode": "contains", "expected": "CONNECT TO ENERGY METER NETWORK. (BY MCAS CHERRY POINT)"},
+    {"id": "tamper-alarm", "page": 51, "bbox": [885, 55, 1105, 108], "mode": "contains", "expected": "TAMPER SWITCH SHALL GENERATE ALARM TO DDC VIA NAE THAT CONTROL BOX HAS BEEN OPENED"},
+    {"id": "heat-recovery-interface", "page": 51, "bbox": [605, 880, 810, 935], "mode": "contains", "expected": "MSTP NAE CONNECTION TO CONVEY HEATING PLANT STATUS TO ENABLE HEAT RECOVERY CHILLER"},
+    {"id": "fire-protection-reference", "page": 51, "bbox": [1485, 345, 1685, 390], "mode": "contains", "expected": "SEE FIRE PROTECTION FOR FIRE STAIR PRESSURIZATION SEQUENCE"},
+    {"id": "to-facp", "page": 51, "bbox": [1475, 275, 1540, 303], "mode": "contains", "expected": "TO FACP"}
+  ],
+  "remaining_work": "Reconcile this source-drawn network diagram with the MI700-series controller points and each equipment application, then complete the remaining document-wide schedules, plan anchors, scales and sensor mapping."
+}

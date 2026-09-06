@@ -1,0 +1,384 @@
+{
+  "document_id": "03__vol1__27",
+  "module_role": "Project, title-block, local scale and complete full-page visual-review context for the White Sturgeon Fish Hatchery source set. Schedule, point and controls facts remain in their dedicated source modules.",
+  "project": {
+    "project_name_as_printed": "WHITE STURGEON FISH HATCHERY",
+    "building_type_source_bounded": "Fish hatchery (from the printed project name).",
+    "location_as_printed": null,
+    "location_status": "A project location is not explicitly printed in the reviewed title block; the Coffman Spokane address is not treated as the project location.",
+    "engineering_firm_as_printed": "COFFMAN ENGINEERS INC.",
+    "issue_as_printed": "ISSUED FOR CONSTRUCTION",
+    "title_block_date_as_printed": "06/07/2024",
+    "revision_date_status": "No populated revision date is asserted from the supplied title block; the printed 06/07/2024 field is retained as a title-block date, not recast as a revision date.",
+    "project_number_as_printed": "232667"
+  },
+  "sheet_details": {
+    "sheet_ledger_semantics": "All 38 supplied PDF pages have a source-sheet/title visual disposition below. Page 25 and page 26 both print P-101 and are retained separately.",
+    "revision_status": "No independently asserted populated revision date is available from the reviewed title block."
+  },
+  "scale_semantics": {
+    "printed_view_scales_observed": [
+      {
+        "page": 1,
+        "sheet": "M-101",
+        "view": "MECHANICAL HVAC FLOOR PLAN",
+        "scale_as_printed": "3/16\"=1'-0\""
+      }
+    ],
+    "graphic_scale_bar_status": "No graphic scale bar is asserted for this record. The stated M-101 scale is local to that view and is not generalized to plans, details, schedules, controls, P&IDs, isometrics or electrical sheets.",
+    "takeoff_scale_status": "A stated local plan scale is recorded for M-101 only. Distance-based takeoff requires a separate local visual check for the target view."
+  },
+  "visual_review_pages": [
+    {
+      "page": 1,
+      "sheet": "M-101",
+      "title": "MECHANICAL HVAC FLOOR PLAN",
+      "render": "reviews/03__vol1__27/p1-p1-full-poppler.png",
+      "finding": "Mechanical HVAC floor plan: ERV, split-system, unit-heater, exhaust/louver and ductwork context; local stated plan scale is visible."
+    },
+    {
+      "page": 2,
+      "sheet": "M-102",
+      "title": "MECHANICAL PIPING FLOOR PLAN",
+      "render": "reviews/03__vol1__27/p2-p2-full-poppler.png",
+      "finding": "Mechanical piping floor plan: hydronic, wastewater and aerated-water piping context."
+    },
+    {
+      "page": 3,
+      "sheet": "M-103",
+      "title": "MECHANICAL PIPING SUPPORT PLAN",
+      "render": "reviews/03__vol1__27/p3-p3-full-poppler.png",
+      "finding": "Mechanical piping support plan and support/brace coordination context."
+    },
+    {
+      "page": 4,
+      "sheet": "M-301",
+      "title": "MECHANICAL SECTIONS",
+      "render": "reviews/03__vol1__27/p4-p4-full-poppler.png",
+      "finding": "Mechanical sections with HVAC/piping elevation and routing context."
+    },
+    {
+      "page": 5,
+      "sheet": "M-302",
+      "title": "MECHANICAL SECTIONS",
+      "render": "reviews/03__vol1__27/p5-p5-full-poppler.png",
+      "finding": "Mechanical sections with equipment and piping elevation context."
+    },
+    {
+      "page": 6,
+      "sheet": "M-401",
+      "title": "ENLARGED MECHANICAL PIPING PLANS",
+      "render": "reviews/03__vol1__27/p6-p6-full-poppler.png",
+      "finding": "Enlarged mechanical piping plans for main-room systems."
+    },
+    {
+      "page": 7,
+      "sheet": "M-402",
+      "title": "ENLARGED AERATED WATER PLAN",
+      "render": "reviews/03__vol1__27/p7-p7-full-poppler.png",
+      "finding": "Enlarged aerated-water plan with process/HVAC coordination context."
+    },
+    {
+      "page": 8,
+      "sheet": "M-501",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/03__vol1__27/p8-p8-full-poppler.png",
+      "finding": "Mechanical detail sheet."
+    },
+    {
+      "page": 9,
+      "sheet": "M-502",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/03__vol1__27/p9-p9-full-poppler.png",
+      "finding": "Mechanical detail sheet."
+    },
+    {
+      "page": 10,
+      "sheet": "M-503",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/03__vol1__27/p10-p10-full-poppler.png",
+      "finding": "Mechanical detail sheet."
+    },
+    {
+      "page": 11,
+      "sheet": "M-504",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/03__vol1__27/p11-p11-full-poppler.png",
+      "finding": "Mechanical detail sheet."
+    },
+    {
+      "page": 12,
+      "sheet": "M-505",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/03__vol1__27/p12-p12-full-poppler.png",
+      "finding": "Mechanical detail sheet."
+    },
+    {
+      "page": 13,
+      "sheet": "M-601",
+      "title": "MECHANICAL SCHEDULES",
+      "render": "reviews/03__vol1__27/p13-p13-full-poppler.png",
+      "finding": "M-601 schedules: seismic/vibration ledger, ERV, exhaust fans and grille/register/diffuser types."
+    },
+    {
+      "page": 14,
+      "sheet": "M-602",
+      "title": "MECHANICAL SCHEDULES",
+      "render": "reviews/03__vol1__27/p14-p14-full-poppler.png",
+      "finding": "M-602 schedules: expansion tanks, modular WSHP assembly/modules/accessories and filters/strainers."
+    },
+    {
+      "page": 15,
+      "sheet": "M-603",
+      "title": "MECHANICAL SCHEDULES",
+      "render": "reviews/03__vol1__27/p15-p15-full-poppler.png",
+      "finding": "M-603 schedules: instrumentation, control valves, pumps, chemical feeders, air separators and louvers."
+    },
+    {
+      "page": 16,
+      "sheet": "M-604",
+      "title": "MECHANICAL SCHEDULES",
+      "render": "reviews/03__vol1__27/p16-p16-full-poppler.png",
+      "finding": "M-604 schedules: hydronic unit heaters, buffer tanks, heat exchangers and split-system AC."
+    },
+    {
+      "page": 17,
+      "sheet": "M-701",
+      "title": "AERATED WATER P&ID",
+      "render": "reviews/03__vol1__27/p17-p17-full-poppler.png",
+      "finding": "Aerated-water P&ID with process equipment, instruments and control-valve context."
+    },
+    {
+      "page": 18,
+      "sheet": "M-702",
+      "title": "MECHANICAL CONTROL DIAGRAMS",
+      "render": "reviews/03__vol1__27/p18-p18-full-poppler.png",
+      "finding": "Control diagrams and written sequences for exhaust fans, unit heaters and HWP-5/HWP-6."
+    },
+    {
+      "page": 19,
+      "sheet": "M-703",
+      "title": "AERATED WATER SEQUENCE OF OPERATIONS",
+      "render": "reviews/03__vol1__27/p19-p19-full-poppler.png",
+      "finding": "White Sturgeon rearing-water written sequence of operations."
+    },
+    {
+      "page": 20,
+      "sheet": "M-901",
+      "title": "PIPING ISOMETRICS",
+      "render": "reviews/03__vol1__27/p20-p20-full-poppler.png",
+      "finding": "Piping isometric sheet."
+    },
+    {
+      "page": 21,
+      "sheet": "M-902",
+      "title": "PIPING ISOMETRICS",
+      "render": "reviews/03__vol1__27/p21-p21-full-poppler.png",
+      "finding": "Piping isometric sheet."
+    },
+    {
+      "page": 22,
+      "sheet": "M-903",
+      "title": "PIPING ISOMETRICS",
+      "render": "reviews/03__vol1__27/p22-p22-full-poppler.png",
+      "finding": "Piping isometric sheet."
+    },
+    {
+      "page": 23,
+      "sheet": "M-904",
+      "title": "PIPING ISOMETRICS",
+      "render": "reviews/03__vol1__27/p23-p23-full-poppler.png",
+      "finding": "Piping isometric sheet."
+    },
+    {
+      "page": 24,
+      "sheet": "M-905",
+      "title": "PIPING ISOMETRICS",
+      "render": "reviews/03__vol1__27/p24-p24-full-poppler.png",
+      "finding": "Piping isometric sheet."
+    },
+    {
+      "page": 25,
+      "sheet": "P-101",
+      "title": "PLUMBING UNDER-SLAB PLAN",
+      "render": "reviews/03__vol1__27/p25-p25-full-poppler.png",
+      "finding": "Plumbing under-slab plan."
+    },
+    {
+      "page": 26,
+      "sheet": "P-101",
+      "title": "PLUMBING UNDER-SLAB PLAN",
+      "render": "reviews/03__vol1__27/p26-p26-full-poppler.png",
+      "finding": "Second supplied P-101 plumbing under-slab-plan page; retained as a separate source PDF page."
+    },
+    {
+      "page": 27,
+      "sheet": "P-501",
+      "title": "PLUMBING DETAILS",
+      "render": "reviews/03__vol1__27/p27-p27-full-poppler.png",
+      "finding": "Plumbing detail sheet."
+    },
+    {
+      "page": 28,
+      "sheet": "P-601",
+      "title": "PLUMBING SCHEDULES",
+      "render": "reviews/03__vol1__27/p28-p28-full-poppler.png",
+      "finding": "Plumbing schedule sheet."
+    },
+    {
+      "page": 29,
+      "sheet": "E-001",
+      "title": "ELECTRICAL SYMBOLS AND INDEX",
+      "render": "reviews/03__vol1__27/p29-p29-full-poppler.png",
+      "finding": "Electrical symbols, abbreviations and drawing index."
+    },
+    {
+      "page": 30,
+      "sheet": "E-101",
+      "title": "ELECTRICAL SITE PLAN",
+      "render": "reviews/03__vol1__27/p30-p30-full-poppler.png",
+      "finding": "Electrical site plan."
+    },
+    {
+      "page": 31,
+      "sheet": "E-201",
+      "title": "ELECTRICAL LIGHTING PLAN",
+      "render": "reviews/03__vol1__27/p31-p31-full-poppler.png",
+      "finding": "Electrical lighting plan."
+    },
+    {
+      "page": 32,
+      "sheet": "E-301",
+      "title": "ELECTRICAL POWER / SYSTEM PLAN",
+      "render": "reviews/03__vol1__27/p32-p32-full-poppler.png",
+      "finding": "Electrical power and system plan."
+    },
+    {
+      "page": 33,
+      "sheet": "E-501",
+      "title": "ELECTRICAL DIAGRAMS",
+      "render": "reviews/03__vol1__27/p33-p33-full-poppler.png",
+      "finding": "Electrical control-network, pump and lift-station diagram context."
+    },
+    {
+      "page": 34,
+      "sheet": "E-502",
+      "title": "ELECTRICAL WIRING DIAGRAMS",
+      "render": "reviews/03__vol1__27/p34-p34-full-poppler.png",
+      "finding": "Electrical wiring diagrams."
+    },
+    {
+      "page": 35,
+      "sheet": "E-503",
+      "title": "ELECTRICAL DETAILS",
+      "render": "reviews/03__vol1__27/p35-p35-full-poppler.png",
+      "finding": "Electrical detail sheet."
+    },
+    {
+      "page": 36,
+      "sheet": "E-601",
+      "title": "ELECTRICAL ONE-LINE DIAGRAM",
+      "render": "reviews/03__vol1__27/p36-p36-full-poppler.png",
+      "finding": "Electrical one-line diagram."
+    },
+    {
+      "page": 37,
+      "sheet": "E-701",
+      "title": "ELECTRICAL SCHEDULES",
+      "render": "reviews/03__vol1__27/p37-p37-full-poppler.png",
+      "finding": "Electrical schedule sheet."
+    },
+    {
+      "page": 38,
+      "sheet": "E-702",
+      "title": "PLC I/O LIST",
+      "render": "reviews/03__vol1__27/p38-p38-full-poppler.png",
+      "finding": "White Sturgeon PLC I/O list with I/O channels, protocol, display/action, cable and conduit columns."
+    }
+  ],
+  "tables": [],
+  "assertions": [
+    {
+      "id": "rank03-title-project",
+      "page": 1,
+      "bbox": [
+        2215,
+        605,
+        2410,
+        660
+      ],
+      "expected": "WHITE STURGEON FISH HATCHERY",
+      "mode": "exact"
+    },
+    {
+      "id": "rank03-title-firm",
+      "page": 1,
+      "bbox": [
+        2250,
+        1210,
+        2320,
+        1235
+      ],
+      "expected": "COFFMAN",
+      "mode": "exact"
+    },
+    {
+      "id": "rank03-title-date",
+      "page": 1,
+      "bbox": [
+        2350,
+        1175,
+        2420,
+        1205
+      ],
+      "expected": "06/07/2024",
+      "mode": "exact"
+    },
+    {
+      "id": "rank03-title-issue",
+      "page": 1,
+      "bbox": [
+        2225,
+        668,
+        2400,
+        722
+      ],
+      "expected": "ISSUED FOR CONSTRUCTION",
+      "mode": "exact"
+    },
+    {
+      "id": "rank03-m101-sheet",
+      "page": 1,
+      "bbox": [
+        2245,
+        1455,
+        2380,
+        1520
+      ],
+      "expected": "M-101",
+      "mode": "exact"
+    },
+    {
+      "id": "rank03-m101-local-scale",
+      "page": 1,
+      "bbox": [
+        1545,
+        1435,
+        1645,
+        1465
+      ],
+      "expected": "SCALE: 3/16\"=1'-0\"",
+      "mode": "exact"
+    }
+  ],
+  "inventory_checks": [
+    {
+      "id": "rank03-full-page-review-ledger",
+      "records_path": [
+        "visual_review_pages"
+      ],
+      "expected": 38,
+      "unique_key": "page"
+    }
+  ]
+}

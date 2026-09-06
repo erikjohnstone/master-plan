@@ -1,0 +1,41 @@
+{
+  "document_id": "15__vol2__067",
+  "module_role": "Bounded M6.3 sequence, integration, ownership and alarm context for the new NEH PCW skid.",
+  "source_sheet": "M6.3",
+  "source_page": 6,
+  "network_architecture": {
+    "literal_context": "CAT6 ETHERNET FOR MODBUS TCP TO IGNITION SCADA; all controls shall be mirrored into EPICS program.",
+    "ownership": "I&C contractor integrates the PLC system, including sequence, controls P&ID, points list, PLC and I/O hardware. Ignition SCADA development is in-house by the SLAC SCADA engineer.",
+    "source_boundaries": "The drawing requires 100% Allen Bradley compatible PLC/I/O and CAT6 to the nearest SLAC network switch but states no controller model, I/O card/channel count, IP address, BACnet/IP topology, Modbus register map, polling rate, or individual device network address."
+  },
+  "sequences": [
+    {"id": "monitoring", "finding": "The control system monitors system temperatures, flow and pressures."},
+    {"id": "continuous-pumps", "finding": "Both pumps run continuously, 24 hours/day, 7 days/week."},
+    {"id": "dp-control", "finding": "PLC controls pump speed to maintain 42 PSIG adjustable differential pressure, supply versus return pressure."},
+    {"id": "pump-failure", "finding": "If one pump fails, the other ramps up to maintain pressure."},
+    {"id": "chilled-water-valve", "finding": "Process-water-loop supply-temperature sensor modulates the chilled-water control valve to maintain 63°F adjustable process-water-loop temperature."},
+    {"id": "makeup-water", "finding": "Makeup-water solenoid valve is normally open; the sequence supplies a 15-second adjustable abnormal-meter-run condition and a closed-solenoid alarm."},
+    {"id": "max-speed-low-dp", "finding": "An alarm condition covers system-return DP below setpoint while pump is at 100% speed."},
+    {"id": "alarms", "finding": "BMS alarms are named for PCW supply temperature ±5°F adjustable from setpoint, differential pressure ±5 PSI adjustable, VFD failed, pump failed, makeup water running more than 15 seconds adjustable, solenoid valve closed, and system pressure above 90 PSIG adjustable."}
+  ],
+  "sensor_and_zone_ledger": {
+    "physical_space_sensor_count": {"status": "not_stated", "value": null, "note": "This is a process-water skid P&ID, not a room thermostat/sensor plan."},
+    "process_instrument_context": "M6.3 prints temperature, pressure, differential-pressure, flow, pump alarm/current, start/stop and VFD-speed callouts. Quantities above are diagram callouts only."
+  },
+  "factory_vs_field": "M6.3 explicitly assigns all I&C components within the PCW-skid boundary to the factory, not field installation. Existing ALC I/O/control panel/WebCTRL screen and logic are demolished or rewired as specified; this is not enough to assert exact existing-device quantities.",
+  "tables": [],
+  "assertions": [
+    {"id": "m63-continuous-pumps", "page": 6, "bbox": [2527,1416,2925,1438], "expected": "BOTH PUMPS SHALL BE RUNNING ALL THE TIME, 24 HOURS/DAY, 7 DAYS/WEEK.", "mode": "contains"},
+    {"id": "m63-dp-setpoint", "page": 6, "bbox": [2527,1428,2965,1460], "expected": "THE PLC SYSTEM CONTROLS THE PUMP SPEED TO MAINTAIN 42 PSIG (ADJUSTABLE) DIFFERENTIAL PRESSURE", "mode": "contains"},
+    {"id": "m63-pump-failure", "page": 6, "bbox": [2527,1458,2925,1485], "expected": "IF ONE PUMP FAILS, THE OTHER PUMP RAMPS UP TO MAINTAIN PRESSURE.", "mode": "contains"},
+    {"id": "m63-temperature-control", "page": 6, "bbox": [2527,1476,2965,1510], "expected": "THE CONTROL VALVE AT THE CHILLED WATER SYSTEM TO MAINTAIN 63 °F (ADJUSTABLE)", "mode": "contains"},
+    {"id": "m63-makeup-normal", "page": 6, "bbox": [2527,1500,2960,1545], "expected": "THE MAKE-UP WATER SOLENOID VALVE IS NORMALLY OPEN. THE SOLENOID VALVE CLOSES WHEN", "mode": "contains"},
+    {"id": "m63-alarm-limits", "page": 6, "bbox": [2527,1570,2960,1665], "expected": "THE PCW SUPPLY TEMPERATURE 5°F (ADJUSTABLE) ABOVE/BELOW THE SETPOINT. 2) DIFFERENTIAL PRESSURE 5 PSI (ADJUSTABLE) ABOVE/BELOW THE SETPOINT. 3) VFD FAILED. 4) PUMP FAILED.", "mode": "contains"},
+    {"id": "m63-ignition-scope", "page": 6, "bbox": [2527,1725,2965,1770], "expected": "I&C CONTRACTOR TO INTEGRATE PLC SYSTEM INCLUDING: SEQUENCE OF OPERATIONS, CONTROLS DRAWINGS INCLUDING CONTROLS P&ID, POINTS LIST, PLC AND IO HARDWARE. EXCEPTION: IGNITION SCADA DEVELOPMENT WILL BE IN-HOUSE", "mode": "contains"},
+    {"id": "m63-epics", "page": 6, "bbox": [2527,1810,2850,1835], "expected": "ALL CONTROLS SHALL BE MIRRORED INTO EPICS PROGRAM.", "mode": "contains"},
+    {"id": "m63-factory-i-and-c", "page": 6, "bbox": [2527,1825,2940,1860], "expected": "ALL I&C COMPONENTS SHOWN WITHIN THE BOUNDS OF THE PCW SKID SHALL BE PROVIDED BY THE FACTORY, NOT FIELD INSTALLED.", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "m63-sequence-contexts", "records_path": ["sequences"], "expected": 8, "unique_key": "id"}
+  ]
+}

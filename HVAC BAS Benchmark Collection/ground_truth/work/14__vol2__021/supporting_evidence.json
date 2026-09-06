@@ -1,0 +1,25 @@
+{
+  "document_id": "14__vol2__021",
+  "module_role": "Full-set qualification and explicit source limitations for use of the USDA ARS Technology Center laboratory set as HVAC/BAS takeoff ground truth.",
+  "source_limitations": [
+    "No city/state or street address is established by the supplied sheets. The project location is intentionally recorded as not stated rather than inferred from the owner name.",
+    "The M-803 through M-805 DDC matrices expressly say not all virtual points are shown. Their category circles are retained as matrix assignments, not converted to final installed controller cards, terminals, field wiring, point quantities, or a system-wide device count.",
+    "M-803's hot-water-boiler point matrix is graphically/outlines encoded rather than accessible as normal text in either retained raw-text engine. Its 19 rows are transcribed from matching MuPDF and Poppler review renders and are explicitly marked visual-transcription evidence.",
+    "The set states BAS/DDC/BACnet interoperability and one communications-failure behavior but supplies no network topology, panel/controller count, make/model, IP/addressing, BACnet instance map, router/switch layout, or final controller-terminal schedule.",
+    "The source shows valve modulation and pressure/air devices but has no tabular control-valve schedule giving tag, Cv, actuator model/torque, signal, fail position, or installed valve quantity. Those unprovided details remain unknown.",
+    "M-601's SAV/HEV/EAV tables and air-device schedule are not damper-actuator schedules. No actuator tag, torque, manufacturer, control signal, or fail action is present, so the 157 air-valve application rows are not relabelled as 157 actuators.",
+    "M-601's detailed fan-coil/fan/air-terminal/tank inventories broaden coverage beyond the six strict cell-bounded tables; their printed schedule scope is preserved but not falsely represented as a universal installed-equipment total."
+  ],
+  "visual_evidence": [
+    {"purpose":"outline-text boiler point-matrix transcription","render":"reviews/14__vol2__021/p17-p17-boiler-points-poppler-poppler.png","engine":"poppler"},
+    {"purpose":"independent outline-text boiler point-matrix transcription","render":"reviews/14__vol2__021/p17-boiler-points-mupdf-mupdf.png","engine":"mupdf"},
+    {"purpose":"M-804 matrix-cell visual review","render":"reviews/14__vol2__021/p18-m804-lab-vav-io-poppler.png","engine":"poppler"},
+    {"purpose":"M-805 administration/VAV matrix-cell visual review","render":"reviews/14__vol2__021/p19-m805-admin-vav-io-poppler.png","engine":"poppler"}
+  ],
+  "tables": [],
+  "assertions": [
+    {"id":"m803-virtual-points-scope","page":17,"bbox":[1650,2370,3050,2440],"expected":"NOT ALL VIRTUAL POINTS ARE SHOWN. PROVIDE ALL POINTS REQUIRED FOR SOFTWARE OPERATION."},
+    {"id":"m601-air-valve-schedule-scope","page":13,"bbox":[100,450,1100,490],"expected":"SUPPLY AIR VALVE (SAV), HOOD EXHAUST AIR VALVE (HEV), AND GENERAL EXHAUST AIR VALVE (EAV) SCHEDULE"}
+  ],
+  "inventory_checks": [{"id":"source-limitations","records_path":["source_limitations"],"expected":7},{"id":"supporting-visual-evidence","records_path":["visual_evidence"],"expected":4}]
+}

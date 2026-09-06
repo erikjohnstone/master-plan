@@ -1,0 +1,11 @@
+{
+  "document_id": "09__vol2__014",
+  "module_role": "Explicit point-list finding for the supplied Rank 09 source set.",
+  "tables": [],
+  "assertions": [],
+  "point_list_status": {
+    "formal_row_matrix": "not_published_in_supplied_drawings",
+    "finding": "The drawings reference a control-points list but do not publish a conventional tabular point-list row matrix within the supplied 28 pages. Symbol definitions, DDC-diagram labels and exact control clauses are retained in controls_context instead.",
+    "boundary": "No source row, logical point, controller I/O, terminal, wire, sensor, valve, damper or actuator count is invented from diagram symbols or references to external specifications."
+  }
+}

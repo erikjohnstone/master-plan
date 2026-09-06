@@ -1,0 +1,16 @@
+{
+  "document_id": "07__vol2__061",
+  "module_role": "Presentation registry for the complete literal M-601 schedule-row corpus. It does not manufacture clean installed equipment identities, placements or quantities from the schedules.",
+  "tables": [],
+  "ledger_mode": "literal_schedule_rows_v1",
+  "schedule_counts": {
+    "tables": 13,
+    "rows": 36,
+    "interpretation": "13 complete printed M-601 schedule tables and 36 literal schedule rows are retained. Blank, merged and vertical source headers are not converted to unprinted facts."
+  },
+  "control_valve_and_damper_schedule_status": {
+    "control_valve_schedule": "No standalone control-valve schedule is published. M-601 VAV/fan-coil notes and M-501 sequences refer to BAS valves, but no tag/specification/quantity control-valve matrix is inferred.",
+    "damper_actuator_schedule": "No standalone damper-actuator schedule is published. The record retains AHU damper point/sequence context without inventing actuator tags, manufacturer, torque, signal, fail action or quantities."
+  },
+  "source_boundary": "Schedule content is a source reference, not proof of plan placement/multiplicity or an installed equipment takeoff."
+}

@@ -1,0 +1,4218 @@
+{
+  "id": "17__vol1__16",
+  "rank": 17,
+  "title": "Carson Valley Middle School Phase 1 HVAC Replacement",
+  "source_pdf": "pdf/17__vol1__16__Carson_Valley_Middle_School_Phase_1_HVAC_Replacement.pdf",
+  "source_sha256": "96782a6f81077df39c2eb87f4d04e08c7e353483b596bcd97d534938593612a1",
+  "page_count": 47,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete source-bounded Rank 17 ground truth: full 47-page visual review; project/sheet/local-scale boundaries; all 86 M0.02/M0.03 literal equipment-schedule rows; M0.03 control-damper, reference-only and bid-alternate boundaries; the formal 12-row M6.02 BACnet Inputs to BMS list; M6.01/M6.02 BACnet architecture and symbol context; M6.02/M6.03 ERV, furnace, exhaust-fan and outdoor-air-unit sequences; and explicit physical-count, topology, ownership and alternative-scope limits. Nothing is inferred as a final physical BAS takeoff.",
+  "reading_notes": [
+    "M0.02/M0.03 are dense vector schedule sheets with furnaces, condensing units, evaporator coils, ERVs, outdoor-air units, hoods, control dampers, exhaust fans, duct furnace and alternate/reference rooftop equipment, retaining models, capacities, airflow, electrical and other printed specification fields in literal rows.",
+    "M6.01–M6.03 are strong BAS source pages: BACnet IP/MSTP architecture/notes, BTL and 32-device trunk limits, controller diagrams, a rare 12-row BACnet Inputs to BMS list, and sequences for ERV, furnace/condensing, exhaust fan, Building B outdoor-air units and bid-alternate rooftop units.",
+    "The formal BACnet list is source-scoped to its M6.02 control diagram and has no printed hardwired I/O type/card/terminal mapping; all device-count and final-topology interpretation remains expressly limited."
+  ],
+  "verification_semantics": "The bundle verifier rechecks every retained row and assertion against independent MuPDF and Poppler evidence and hashes source/renders. It does not infer plan quantities, selected alternates, controller topology or physical installations.",
+  "module_order": [
+    "metadata",
+    "schedules",
+    "points",
+    "controls_context",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "metadata": [
+      "metadata_rank17"
+    ],
+    "schedules": [
+      "schedules_m002_m003"
+    ],
+    "points": [
+      "points_m602"
+    ],
+    "controls_context": [
+      "controls_context_rank17"
+    ],
+    "equipment_reconciliation": [
+      "equipment_reconciliation_rank17"
+    ],
+    "point_applications": [
+      "point_applications_rank17"
+    ],
+    "supporting_evidence": [
+      "supporting_evidence_rank17"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Cover source bounds project name, Gardnerville location and issued date; consultant role is visually reviewed title-block context.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every supplied page has a source sheet ID and retained full-page visual-review finding.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Local stated 1/8-inch plan-view scale witnesses are retained without global-scale or distance-takeoff claims.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 86 literal M0.02/M0.03 schedule rows are retained across 12 printed schedule tables, including control-damper, reference-only and bid-alternate scope boundaries.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "schedule_counts"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 12 printed equipment schedules have source-bounded literal rows and columns.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The explicit 12-row BACnet Inputs to BMS list is retained with source-matrix ownership limits and without invented physical I/O classification.",
+      "evidence": [
+        [
+          "modules",
+          "points",
+          "tables"
+        ],
+        [
+          "modules",
+          "point_applications",
+          "expanded_template_counts"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M6.01/M6.02 BACnet IP, MSTP/trunk, shielding, 32-device and BTL contexts are bounded without inventing final topology.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M6.02/M6.03 ERV, furnace, exhaust-fan and outdoor-air-unit sequence clauses are retained as bounded text.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sequence_inventory"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Published sensor and actuator legend/sequence contexts are retained without derived zone or physical-device counts.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sensors_and_control_symbol_context"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Point-list, schedule-title, topology, alternative-scope, controller-label and physical-count limits are stated explicitly.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 47 supplied pages have retained full-page Poppler renders and visual-review findings.",
+      "evidence": [
+        [
+          "page_review"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every authored module is rechecked against both MuPDF and Poppler during bundle construction and record verification.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p1-p1-full-poppler.png",
+      "finding": "Cover/title sheet and drawing index visually reviewed; project, location, issue date and consultant title-block context retained."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p2-p2-full-poppler.png",
+      "finding": "Mechanical abbreviations, legend and calculation/general-note sheet visually reviewed."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p3-p3-full-poppler.png",
+      "finding": "M0.02 dense mechanical schedule sheet visually reviewed; all 69 literal schedule rows are retained separately."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p4-p4-full-poppler.png",
+      "finding": "M0.03 dense mechanical schedule sheet visually reviewed; all 17 literal schedule rows, including control dampers, reference-only rooftop units and bid alternate, are retained separately."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p5-p5-full-poppler.png",
+      "finding": "Building B HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p6-p6-full-poppler.png",
+      "finding": "Building B HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p7-p7-full-poppler.png",
+      "finding": "Building B HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p8-p8-full-poppler.png",
+      "finding": "Building B HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p9-p9-full-poppler.png",
+      "finding": "Building C HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 10,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p10-p10-full-poppler.png",
+      "finding": "Building C HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 11,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p11-p11-full-poppler.png",
+      "finding": "Building C HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 12,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p12-p12-full-poppler.png",
+      "finding": "Building B new HVAC plan visually reviewed."
+    },
+    {
+      "page": 13,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p13-p13-full-poppler.png",
+      "finding": "Building B new HVAC plan visually reviewed."
+    },
+    {
+      "page": 14,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p14-p14-full-poppler.png",
+      "finding": "Building B new HVAC plan visually reviewed."
+    },
+    {
+      "page": 15,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p15-p15-full-poppler.png",
+      "finding": "Building B new HVAC plan visually reviewed."
+    },
+    {
+      "page": 16,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p16-p16-full-poppler.png",
+      "finding": "Building B new HVAC plan visually reviewed."
+    },
+    {
+      "page": 17,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p17-p17-full-poppler.png",
+      "finding": "Building C new HVAC plan visually reviewed."
+    },
+    {
+      "page": 18,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p18-p18-full-poppler.png",
+      "finding": "Building C new HVAC plan visually reviewed."
+    },
+    {
+      "page": 19,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p19-p19-full-poppler.png",
+      "finding": "Building C new HVAC plan visually reviewed."
+    },
+    {
+      "page": 20,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p20-p20-full-poppler.png",
+      "finding": "Building C new HVAC plan visually reviewed."
+    },
+    {
+      "page": 21,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p21-p21-full-poppler.png",
+      "finding": "Mechanical isometric/detail sheet visually reviewed."
+    },
+    {
+      "page": 22,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p22-p22-full-poppler.png",
+      "finding": "Mechanical isometric/detail sheet visually reviewed."
+    },
+    {
+      "page": 23,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p23-p23-full-poppler.png",
+      "finding": "Mechanical isometric/detail sheet visually reviewed."
+    },
+    {
+      "page": 24,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p24-p24-full-poppler.png",
+      "finding": "Mechanical isometric/detail sheet visually reviewed."
+    },
+    {
+      "page": 25,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p25-p25-full-poppler.png",
+      "finding": "M5.01 mechanical detail sheet visually reviewed, including duct-smoke-detector detail context."
+    },
+    {
+      "page": 26,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p26-p26-full-poppler.png",
+      "finding": "M5.02 equipment-support detail sheet visually reviewed."
+    },
+    {
+      "page": 27,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p27-p27-full-poppler.png",
+      "finding": "M6.01 BAS system architecture, legend and controls notes visually reviewed; BACnet IP/MSTP and system requirements are retained separately."
+    },
+    {
+      "page": 28,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p28-p28-full-poppler.png",
+      "finding": "M6.02 BAS controller diagrams, C-Wing ERV/furnace/exhaust sequences and formal 12-row BACnet Inputs to BMS list visually reviewed and retained separately."
+    },
+    {
+      "page": 29,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p29-p29-full-poppler.png",
+      "finding": "M6.03 Building B outdoor-air-unit and bid-alternate rooftop-unit sequences/control diagrams visually reviewed; source-bounded clauses are retained separately."
+    },
+    {
+      "page": 30,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p30-p30-full-poppler.png",
+      "finding": "Electrical mechanical-equipment connection schedule visually reviewed."
+    },
+    {
+      "page": 31,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p31-p31-full-poppler.png",
+      "finding": "Electrical panel schedules visually reviewed."
+    },
+    {
+      "page": 32,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p32-p32-full-poppler.png",
+      "finding": "Electrical one-line/panel sheet visually reviewed."
+    },
+    {
+      "page": 33,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p33-p33-full-poppler.png",
+      "finding": "Electrical specifications/general sheet visually reviewed."
+    },
+    {
+      "page": 34,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p34-p34-full-poppler.png",
+      "finding": "Building B electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 35,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p35-p35-full-poppler.png",
+      "finding": "Building B electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 36,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p36-p36-full-poppler.png",
+      "finding": "Building B electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 37,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p37-p37-full-poppler.png",
+      "finding": "Building C electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 38,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p38-p38-full-poppler.png",
+      "finding": "Building C electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 39,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p39-p39-full-poppler.png",
+      "finding": "Building B electrical new-work plan visually reviewed."
+    },
+    {
+      "page": 40,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p40-p40-full-poppler.png",
+      "finding": "Building B electrical new-work plan visually reviewed."
+    },
+    {
+      "page": 41,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p41-p41-full-poppler.png",
+      "finding": "Building B electrical new-work plan visually reviewed."
+    },
+    {
+      "page": 42,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p42-p42-full-poppler.png",
+      "finding": "Building C electrical new-work plan visually reviewed."
+    },
+    {
+      "page": 43,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p43-p43-full-poppler.png",
+      "finding": "Building C electrical new-work plan visually reviewed."
+    },
+    {
+      "page": 44,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p44-p44-full-poppler.png",
+      "finding": "Structural general-notes sheet visually reviewed."
+    },
+    {
+      "page": 45,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p45-p45-full-poppler.png",
+      "finding": "Building B structural floor plan visually reviewed."
+    },
+    {
+      "page": 46,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p46-p46-full-poppler.png",
+      "finding": "Building B structural roof plan visually reviewed."
+    },
+    {
+      "page": 47,
+      "review_status": "complete",
+      "render": "reviews/17__vol1__16/p47-p47-full-poppler.png",
+      "finding": "Building C structural roof plan visually reviewed."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "pages",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 47
+    },
+    {
+      "id": "schedules",
+      "path": [
+        "modules",
+        "schedules",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 12
+    },
+    {
+      "id": "points",
+      "path": [
+        "modules",
+        "points",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 1
+    }
+  ],
+  "completion_checks": {
+    "all_47_pages_visually_reviewed": true,
+    "all_authoring_modules_dual_engine_verified_at_build": true,
+    "source_limitations_explicit": true,
+    "required_objectives_covered": true
+  },
+  "schema_version": "authored-module-bundle-v1",
+  "bundle_manifest": "work/17__vol1__16/document_manifest.json",
+  "bundle_manifest_sha256": "ba8a3cbe585e8b095053480f9c53686cae280d4f346be94c6ca091fb44a4ffaa",
+  "review_render_sha256": {
+    "reviews/17__vol1__16/p1-p1-full-poppler.png": "ac9e9ac90b5d0ff812a3d70efedf962921e368f996f34f962dea1d8ab5cc2cfd",
+    "reviews/17__vol1__16/p2-p2-full-poppler.png": "25e26f825e00767dd107a26a70d07d402945011993a501b78c064071ef27bb80",
+    "reviews/17__vol1__16/p3-p3-full-poppler.png": "b002857e992902d5efcaa283314e3d18939a3216f62dc2f7be9cbf88d43b11a1",
+    "reviews/17__vol1__16/p4-p4-full-poppler.png": "56a2b593f919a3ab7ec191bb8bd9c6389536f60dce88dc2b842795ac610fabcc",
+    "reviews/17__vol1__16/p5-p5-full-poppler.png": "5e9ad329ea0095042b17761440021327d136330d6d63e5b9a70b3524f8f8356e",
+    "reviews/17__vol1__16/p6-p6-full-poppler.png": "193d1998c1968107feb1f72e8cf67aea3f3b0638e7ebfe8b1a9e4a0457ff4091",
+    "reviews/17__vol1__16/p7-p7-full-poppler.png": "e52c65febb1db2a300da33713377d5799f57a29266b923b6e28c02a3f51ae5c1",
+    "reviews/17__vol1__16/p8-p8-full-poppler.png": "5387eb6e2600374738c1d880d3cb52e0245f76b8d286f8892220732e897f4c8d",
+    "reviews/17__vol1__16/p9-p9-full-poppler.png": "52b6d18ae9589172cf6b0b31f8ec7f1ccea68140621a356d9a1a86ea8bf0478a",
+    "reviews/17__vol1__16/p10-p10-full-poppler.png": "15612d05d5f51bfc3574fba29984a26da9ef3812b60fbb012bd8169a18c6393b",
+    "reviews/17__vol1__16/p11-p11-full-poppler.png": "b66feec076f0e6f1a45aa382140d67552eade93c6cc7fb7fc91bf55853e197c3",
+    "reviews/17__vol1__16/p12-p12-full-poppler.png": "5895e0847bab5f23bcc9433c117831e3bae302ea5b36dccd6364bc7955df8ce8",
+    "reviews/17__vol1__16/p13-p13-full-poppler.png": "163eef79ed2265c3f01ea4b7a3994ae8f069f30b62fb8c0753c622ecfea09f31",
+    "reviews/17__vol1__16/p14-p14-full-poppler.png": "afabce101471bbcb32f0eab0d57a95d6aeefbd1525d9745020cbc29dd2acaa95",
+    "reviews/17__vol1__16/p15-p15-full-poppler.png": "f254656a4674ec24bfec1f8efa1930955cdd5ffeb0f01588bf1f7832492491c1",
+    "reviews/17__vol1__16/p16-p16-full-poppler.png": "d585aa594c2ea839195dbdb378d810294a72b883c0610efa0fdd952b5d5b8211",
+    "reviews/17__vol1__16/p17-p17-full-poppler.png": "613d242b05dc30b4923cd606797d0b910c28d08f7cb2d4c72e5f886762390438",
+    "reviews/17__vol1__16/p18-p18-full-poppler.png": "5baaba807b2e3648c5dfb32017ef7790c0e93a2cc22963219efad078cdf6bf2a",
+    "reviews/17__vol1__16/p19-p19-full-poppler.png": "484e4cb39c1c61cad190aed756205ea61ff4ceebe0d21ff08ed36cd0b089bd3a",
+    "reviews/17__vol1__16/p20-p20-full-poppler.png": "dfa49a20d3af75feff3e295540e52462dbb95f327c285480885dce33e8d6926b",
+    "reviews/17__vol1__16/p21-p21-full-poppler.png": "87b43170fa4aa96b2467e33f39a6f17843ae396e5eeaaac2663f232ced7ff65e",
+    "reviews/17__vol1__16/p22-p22-full-poppler.png": "b6028f4572b37742abfd58308ae75e0718dc849c8fa726de8941c777400b306c",
+    "reviews/17__vol1__16/p23-p23-full-poppler.png": "d25993327ba5ec304e9d3d408636bfdb7ea64fc99dfe53afecf455a42deec3dc",
+    "reviews/17__vol1__16/p24-p24-full-poppler.png": "ab36d08678bc4a0495c4baeee6df15731b234fe2e26a30382d28583383e9b822",
+    "reviews/17__vol1__16/p25-p25-full-poppler.png": "97ba7be3cf67f657a97a7fb7eb319e7335dfd54a83f99b4ef1d9ff836904dd9e",
+    "reviews/17__vol1__16/p26-p26-full-poppler.png": "a15fdedc9841b75ebafca441b70118ec656cb1dea207683d0cb78853b2d4d595",
+    "reviews/17__vol1__16/p27-p27-full-poppler.png": "c6b2cac360f5b3e6537e2f32e6080978e2b78251b5eac414cfadc2dc4405119e",
+    "reviews/17__vol1__16/p28-p28-full-poppler.png": "3d088b2ef733b14282f90f27c76852948160eecca6da082799282f70646ab36a",
+    "reviews/17__vol1__16/p29-p29-full-poppler.png": "0e59a0e3b49068589c5f779bb5f5c04a5c2c607ac32c4d160b6f342c67c90878",
+    "reviews/17__vol1__16/p30-p30-full-poppler.png": "e758b8345cced8b1e09fc3f77a95303c3894f32d043b98057c2155ed354e99e3",
+    "reviews/17__vol1__16/p31-p31-full-poppler.png": "0a661044fbac33c636d0bfd7db35c561572e16a478d27021571e6e64d3ea817d",
+    "reviews/17__vol1__16/p32-p32-full-poppler.png": "408a11ca755c3b1abc25565750f371fb468f71911cc6c9da856c41bcd86eada4",
+    "reviews/17__vol1__16/p33-p33-full-poppler.png": "5ef1877c3a8984170651a40fb374b5fab0ba433f254064efaebe6e7b511bbf34",
+    "reviews/17__vol1__16/p34-p34-full-poppler.png": "895d81941ca02ee5eb030afa9c6a8a82644199729ef50e450dd29f9b9f3906b4",
+    "reviews/17__vol1__16/p35-p35-full-poppler.png": "d9828728cb6f521c4f303e381d475becf40b4c90ea71be53252c81f295dfe591",
+    "reviews/17__vol1__16/p36-p36-full-poppler.png": "ce840860f034e8c317267fa98d32eb4f7a5e7b7b92c03e27108f661bead3d101",
+    "reviews/17__vol1__16/p37-p37-full-poppler.png": "bf8db0f489c6938f41406827ef3f532ae20b8616a445b89affe6c055f70ff38e",
+    "reviews/17__vol1__16/p38-p38-full-poppler.png": "fa82c5c2d2217c045aed35b948eb728b8fac2988cb3a64ce433d9638500fe1e3",
+    "reviews/17__vol1__16/p39-p39-full-poppler.png": "f1fec18e01195bed705568f0050d498e8a844469bbae443e3796ce3e4bd0887d",
+    "reviews/17__vol1__16/p40-p40-full-poppler.png": "0993720b6bbd4c25fb814a9c25ea49b5633db1e62e5b25f2db2a0074821878a6",
+    "reviews/17__vol1__16/p41-p41-full-poppler.png": "d60b5474160ba607804e0408e7f39edb0bba2e80e36eea7165ee0065119c9a66",
+    "reviews/17__vol1__16/p42-p42-full-poppler.png": "50f74ace693dfb1ac57a2129b3b7179d13afc6b39229816983ed5b44409a5042",
+    "reviews/17__vol1__16/p43-p43-full-poppler.png": "e6728313320fb771780dd315e56e2d0a07f848e16d2391d561a66f3582b98b7e",
+    "reviews/17__vol1__16/p44-p44-full-poppler.png": "15602909a5fc2479181bb8a4c0bda160e2a3be03e07178dc638cf67f392a119f",
+    "reviews/17__vol1__16/p45-p45-full-poppler.png": "74aa7b4cf619ea53ede979a6eb640a213318e2d265527f80e5da70f255388fef",
+    "reviews/17__vol1__16/p46-p46-full-poppler.png": "808c2b7f03ca678eab01ed4908f94f5b3d6039281c73b0da008a2fd17e345151",
+    "reviews/17__vol1__16/p47-p47-full-poppler.png": "e81efb9b36399d9c029eafaf959accba3040e565756bc93f0d143f3610f34019"
+  },
+  "modules": {
+    "metadata": {
+      "document_id": "17__vol1__16",
+      "module_role": "Cover/title-sheet project facts, all-page sheet ledger, local stated-scale witnesses and visual-review disposition.",
+      "tables": [],
+      "project": {
+        "project_name_as_printed": "CARSON VALLEY MIDDLE SCHOOL PHASE 1 HVAC REPLACEMENT",
+        "facility_as_printed": "CARSON VALLEY MIDDLE SCHOOL",
+        "location_as_printed": "1477 US HIGHWAY 395N, GARDNERVILLE, NEVADA 89410",
+        "building_type_as_printed": "Middle school (from printed facility name; no more specific occupancy/use classification is asserted).",
+        "mechanical_engineering_consultant_as_printed": "CR ENGINEERING (firm identified in title-block graphics/copyright; its reading order is not used as a scalar parser assertion).",
+        "issue_date_as_printed": "11/10/23",
+        "assertion_ids": [
+          "cover-project",
+          "cover-location",
+          "cover-issue-date"
+        ]
+      },
+      "scale_semantics": {
+        "stated_scale_records": [
+          {
+            "page": 12,
+            "sheet": "M2.11",
+            "printed_scale": "1/8\" = 1'-0\"",
+            "assertion_id": "m211-scale"
+          },
+          {
+            "page": 13,
+            "sheet": "M2.12",
+            "printed_scale": "1/8\" = 1'-0\"",
+            "assertion_id": "m212-scale"
+          },
+          {
+            "page": 17,
+            "sheet": "M2.21",
+            "printed_scale": "1/8\" = 1'-0\"",
+            "assertion_id": "m221-scale"
+          }
+        ],
+        "graphic_scale_bar_status": "No graphic scale bar is asserted as a measurement source. Stated scales are local to individual plan views; schedules, controls diagrams, schematics, one-lines and details are not made distance-takeoff sources.",
+        "takeoff_scale_status": "No global scale, distance, area, duct length, pipe length or physical quantity is derived from the mixed 47-page source set."
+      },
+      "visual_review_pages": [
+        {
+          "page": 1,
+          "sheet": "T0.01",
+          "render": "reviews/17__vol1__16/p1-p1-full-poppler.png",
+          "finding": "Cover/title sheet and drawing index visually reviewed; project, location, issue date and consultant title-block context retained."
+        },
+        {
+          "page": 2,
+          "sheet": "M0.01",
+          "render": "reviews/17__vol1__16/p2-p2-full-poppler.png",
+          "finding": "Mechanical abbreviations, legend and calculation/general-note sheet visually reviewed."
+        },
+        {
+          "page": 3,
+          "sheet": "M0.02",
+          "render": "reviews/17__vol1__16/p3-p3-full-poppler.png",
+          "finding": "M0.02 dense mechanical schedule sheet visually reviewed; all 69 literal schedule rows are retained separately."
+        },
+        {
+          "page": 4,
+          "sheet": "M0.03",
+          "render": "reviews/17__vol1__16/p4-p4-full-poppler.png",
+          "finding": "M0.03 dense mechanical schedule sheet visually reviewed; all 17 literal schedule rows, including control dampers, reference-only rooftop units and bid alternate, are retained separately."
+        },
+        {
+          "page": 5,
+          "sheet": "M1.11",
+          "render": "reviews/17__vol1__16/p5-p5-full-poppler.png",
+          "finding": "Building B HVAC demolition plan visually reviewed."
+        },
+        {
+          "page": 6,
+          "sheet": "M1.12",
+          "render": "reviews/17__vol1__16/p6-p6-full-poppler.png",
+          "finding": "Building B HVAC demolition plan visually reviewed."
+        },
+        {
+          "page": 7,
+          "sheet": "M1.13",
+          "render": "reviews/17__vol1__16/p7-p7-full-poppler.png",
+          "finding": "Building B HVAC demolition plan visually reviewed."
+        },
+        {
+          "page": 8,
+          "sheet": "M1.14",
+          "render": "reviews/17__vol1__16/p8-p8-full-poppler.png",
+          "finding": "Building B HVAC demolition plan visually reviewed."
+        },
+        {
+          "page": 9,
+          "sheet": "M1.21",
+          "render": "reviews/17__vol1__16/p9-p9-full-poppler.png",
+          "finding": "Building C HVAC demolition plan visually reviewed."
+        },
+        {
+          "page": 10,
+          "sheet": "M1.22",
+          "render": "reviews/17__vol1__16/p10-p10-full-poppler.png",
+          "finding": "Building C HVAC demolition plan visually reviewed."
+        },
+        {
+          "page": 11,
+          "sheet": "M1.23",
+          "render": "reviews/17__vol1__16/p11-p11-full-poppler.png",
+          "finding": "Building C HVAC demolition plan visually reviewed."
+        },
+        {
+          "page": 12,
+          "sheet": "M2.11",
+          "render": "reviews/17__vol1__16/p12-p12-full-poppler.png",
+          "finding": "Building B new HVAC plan visually reviewed."
+        },
+        {
+          "page": 13,
+          "sheet": "M2.12",
+          "render": "reviews/17__vol1__16/p13-p13-full-poppler.png",
+          "finding": "Building B new HVAC plan visually reviewed."
+        },
+        {
+          "page": 14,
+          "sheet": "M2.13",
+          "render": "reviews/17__vol1__16/p14-p14-full-poppler.png",
+          "finding": "Building B new HVAC plan visually reviewed."
+        },
+        {
+          "page": 15,
+          "sheet": "M2.14",
+          "render": "reviews/17__vol1__16/p15-p15-full-poppler.png",
+          "finding": "Building B new HVAC plan visually reviewed."
+        },
+        {
+          "page": 16,
+          "sheet": "M2.15",
+          "render": "reviews/17__vol1__16/p16-p16-full-poppler.png",
+          "finding": "Building B new HVAC plan visually reviewed."
+        },
+        {
+          "page": 17,
+          "sheet": "M2.21",
+          "render": "reviews/17__vol1__16/p17-p17-full-poppler.png",
+          "finding": "Building C new HVAC plan visually reviewed."
+        },
+        {
+          "page": 18,
+          "sheet": "M2.22",
+          "render": "reviews/17__vol1__16/p18-p18-full-poppler.png",
+          "finding": "Building C new HVAC plan visually reviewed."
+        },
+        {
+          "page": 19,
+          "sheet": "M2.23",
+          "render": "reviews/17__vol1__16/p19-p19-full-poppler.png",
+          "finding": "Building C new HVAC plan visually reviewed."
+        },
+        {
+          "page": 20,
+          "sheet": "M2.24",
+          "render": "reviews/17__vol1__16/p20-p20-full-poppler.png",
+          "finding": "Building C new HVAC plan visually reviewed."
+        },
+        {
+          "page": 21,
+          "sheet": "M3.01",
+          "render": "reviews/17__vol1__16/p21-p21-full-poppler.png",
+          "finding": "Mechanical isometric/detail sheet visually reviewed."
+        },
+        {
+          "page": 22,
+          "sheet": "M3.02",
+          "render": "reviews/17__vol1__16/p22-p22-full-poppler.png",
+          "finding": "Mechanical isometric/detail sheet visually reviewed."
+        },
+        {
+          "page": 23,
+          "sheet": "M3.03",
+          "render": "reviews/17__vol1__16/p23-p23-full-poppler.png",
+          "finding": "Mechanical isometric/detail sheet visually reviewed."
+        },
+        {
+          "page": 24,
+          "sheet": "M3.04",
+          "render": "reviews/17__vol1__16/p24-p24-full-poppler.png",
+          "finding": "Mechanical isometric/detail sheet visually reviewed."
+        },
+        {
+          "page": 25,
+          "sheet": "M5.01",
+          "render": "reviews/17__vol1__16/p25-p25-full-poppler.png",
+          "finding": "M5.01 mechanical detail sheet visually reviewed, including duct-smoke-detector detail context."
+        },
+        {
+          "page": 26,
+          "sheet": "M5.02",
+          "render": "reviews/17__vol1__16/p26-p26-full-poppler.png",
+          "finding": "M5.02 equipment-support detail sheet visually reviewed."
+        },
+        {
+          "page": 27,
+          "sheet": "M6.01",
+          "render": "reviews/17__vol1__16/p27-p27-full-poppler.png",
+          "finding": "M6.01 BAS system architecture, legend and controls notes visually reviewed; BACnet IP/MSTP and system requirements are retained separately."
+        },
+        {
+          "page": 28,
+          "sheet": "M6.02",
+          "render": "reviews/17__vol1__16/p28-p28-full-poppler.png",
+          "finding": "M6.02 BAS controller diagrams, C-Wing ERV/furnace/exhaust sequences and formal 12-row BACnet Inputs to BMS list visually reviewed and retained separately."
+        },
+        {
+          "page": 29,
+          "sheet": "M6.03",
+          "render": "reviews/17__vol1__16/p29-p29-full-poppler.png",
+          "finding": "M6.03 Building B outdoor-air-unit and bid-alternate rooftop-unit sequences/control diagrams visually reviewed; source-bounded clauses are retained separately."
+        },
+        {
+          "page": 30,
+          "sheet": "E0.1",
+          "render": "reviews/17__vol1__16/p30-p30-full-poppler.png",
+          "finding": "Electrical mechanical-equipment connection schedule visually reviewed."
+        },
+        {
+          "page": 31,
+          "sheet": "E0.2",
+          "render": "reviews/17__vol1__16/p31-p31-full-poppler.png",
+          "finding": "Electrical panel schedules visually reviewed."
+        },
+        {
+          "page": 32,
+          "sheet": "E0.3",
+          "render": "reviews/17__vol1__16/p32-p32-full-poppler.png",
+          "finding": "Electrical one-line/panel sheet visually reviewed."
+        },
+        {
+          "page": 33,
+          "sheet": "E0.4",
+          "render": "reviews/17__vol1__16/p33-p33-full-poppler.png",
+          "finding": "Electrical specifications/general sheet visually reviewed."
+        },
+        {
+          "page": 34,
+          "sheet": "E1.11",
+          "render": "reviews/17__vol1__16/p34-p34-full-poppler.png",
+          "finding": "Building B electrical demolition plan visually reviewed."
+        },
+        {
+          "page": 35,
+          "sheet": "E1.12",
+          "render": "reviews/17__vol1__16/p35-p35-full-poppler.png",
+          "finding": "Building B electrical demolition plan visually reviewed."
+        },
+        {
+          "page": 36,
+          "sheet": "E1.13",
+          "render": "reviews/17__vol1__16/p36-p36-full-poppler.png",
+          "finding": "Building B electrical demolition plan visually reviewed."
+        },
+        {
+          "page": 37,
+          "sheet": "E1.21",
+          "render": "reviews/17__vol1__16/p37-p37-full-poppler.png",
+          "finding": "Building C electrical demolition plan visually reviewed."
+        },
+        {
+          "page": 38,
+          "sheet": "E1.22",
+          "render": "reviews/17__vol1__16/p38-p38-full-poppler.png",
+          "finding": "Building C electrical demolition plan visually reviewed."
+        },
+        {
+          "page": 39,
+          "sheet": "E2.11",
+          "render": "reviews/17__vol1__16/p39-p39-full-poppler.png",
+          "finding": "Building B electrical new-work plan visually reviewed."
+        },
+        {
+          "page": 40,
+          "sheet": "E2.12",
+          "render": "reviews/17__vol1__16/p40-p40-full-poppler.png",
+          "finding": "Building B electrical new-work plan visually reviewed."
+        },
+        {
+          "page": 41,
+          "sheet": "E2.13",
+          "render": "reviews/17__vol1__16/p41-p41-full-poppler.png",
+          "finding": "Building B electrical new-work plan visually reviewed."
+        },
+        {
+          "page": 42,
+          "sheet": "E2.21",
+          "render": "reviews/17__vol1__16/p42-p42-full-poppler.png",
+          "finding": "Building C electrical new-work plan visually reviewed."
+        },
+        {
+          "page": 43,
+          "sheet": "E2.22",
+          "render": "reviews/17__vol1__16/p43-p43-full-poppler.png",
+          "finding": "Building C electrical new-work plan visually reviewed."
+        },
+        {
+          "page": 44,
+          "sheet": "S0.1",
+          "render": "reviews/17__vol1__16/p44-p44-full-poppler.png",
+          "finding": "Structural general-notes sheet visually reviewed."
+        },
+        {
+          "page": 45,
+          "sheet": "S1.0",
+          "render": "reviews/17__vol1__16/p45-p45-full-poppler.png",
+          "finding": "Building B structural floor plan visually reviewed."
+        },
+        {
+          "page": 46,
+          "sheet": "S2.0",
+          "render": "reviews/17__vol1__16/p46-p46-full-poppler.png",
+          "finding": "Building B structural roof plan visually reviewed."
+        },
+        {
+          "page": 47,
+          "sheet": "S2.1",
+          "render": "reviews/17__vol1__16/p47-p47-full-poppler.png",
+          "finding": "Building C structural roof plan visually reviewed."
+        }
+      ],
+      "assertions": [
+        {
+          "id": "cover-project",
+          "page": 1,
+          "bbox": [
+            850,
+            70,
+            2050,
+            240
+          ],
+          "expected": "CARSON VALLEY MIDDLE SCHOOL PHASE 1 HVAC REPLACEMENT",
+          "mode": "contains"
+        },
+        {
+          "id": "cover-location",
+          "page": 1,
+          "bbox": [
+            1100,
+            250,
+            1800,
+            360
+          ],
+          "expected": "1477 US HIGHWAY 395N GARDNERVILLE, NEVADA 89410",
+          "mode": "contains"
+        },
+        {
+          "id": "cover-issue-date",
+          "page": 1,
+          "bbox": [
+            2890,
+            1940,
+            2980,
+            1990
+          ],
+          "expected": "11/10/23",
+          "mode": "contains"
+        },
+        {
+          "id": "m211-scale",
+          "page": 12,
+          "bbox": [
+            1100,
+            1235,
+            1300,
+            1275
+          ],
+          "expected": "SCALE: 1/8\" = 1'-0\"",
+          "mode": "exact"
+        },
+        {
+          "id": "m212-scale",
+          "page": 13,
+          "bbox": [
+            1325,
+            1320,
+            1520,
+            1360
+          ],
+          "expected": "SCALE: 1/8\" = 1'-0\"",
+          "mode": "exact"
+        },
+        {
+          "id": "m221-scale",
+          "page": 17,
+          "bbox": [
+            1320,
+            1500,
+            1520,
+            1545
+          ],
+          "expected": "SCALE: 1/8\" = 1'-0\"",
+          "mode": "exact"
+        }
+      ]
+    },
+    "schedules": {
+      "document_id": "17__vol1__16",
+      "module_role": "All 86 literal equipment schedule rows from M0.02 and M0.03, including the printed reference-only and bid-alternate schedules.",
+      "tables": [
+        {
+          "id": "M002-2-STAGE-GAS-FIRED-FURNACE",
+          "sheet": "M0.02",
+          "page": 3,
+          "title_as_printed": "2-STAGE, GAS FIRED FURNACE SCHEDULE",
+          "columns": "literal_source_row_as_printed",
+          "x_edges": [
+            1050,
+            2710
+          ],
+          "y_ranges": [
+            [
+              180,
+              198
+            ],
+            [
+              198,
+              216
+            ],
+            [
+              216,
+              234
+            ],
+            [
+              234,
+              252
+            ],
+            [
+              252,
+              270
+            ],
+            [
+              270,
+              288
+            ],
+            [
+              288,
+              306
+            ],
+            [
+              306,
+              324
+            ],
+            [
+              324,
+              342
+            ],
+            [
+              342,
+              360
+            ],
+            [
+              360,
+              378
+            ],
+            [
+              378,
+              396
+            ],
+            [
+              396,
+              414
+            ],
+            [
+              414,
+              432
+            ],
+            [
+              432,
+              450
+            ],
+            [
+              450,
+              468
+            ],
+            [
+              468,
+              486
+            ],
+            [
+              486,
+              504
+            ],
+            [
+              504,
+              522
+            ],
+            [
+              522,
+              540
+            ],
+            [
+              540,
+              558
+            ]
+          ],
+          "rows": [
+            "B1 CLASSROOM 23 RHEEM R962V0705A21 175 1,600 450 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+            "B2 CLASSROOM 24 RHEEM R962V0705A21 175 1,600 475 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+            "B3 CLASSROOM 25, CORRIDOR B101 RHEEM R962V0705A21 175 1,600 550 0.5 21 115/1/60 15 20 70/49 60/42 59 100 0 A,B,C",
+            "B4 CLASSROOM 26 RHEEM R962V0705A21 175 1,600 475 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+            "B5 CLASSROOM 27 RHEEM R962V0705A21 175 1,600 600 0.5 21 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+            "B6 CLS CLASSROOM 29 RHEEM R962V0705A21 175 1,600 675 0.5 21 115/1/60 15 20 70/49 60/42 56 97 0 A,B,C",
+            "B7 CLASROOM 28 RHEEM R962V0705A21 175 1,600 475 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+            "B8 CORRIDOR B101, UNISEX RR 29A, BOYS RR 30A, GIRLS RR 30B, WOMENS RR 30C, MENS RR 30D FRASER JOHNSTON TM9Y080C16MP11 140 1,050 700 0.5 21 115/1/60 8.7 15 80/52 63/50 48 113 0 A,B,C,F",
+            "B9 STORAGE ROOM 21, OFFICE ROOM 22, ROOM B3, OFFICE ROOM 22A, OFFICE ROOM 22B, VESTIBULE B100, STORAGE ROOM 22 RHEEM R962V0705A21 175 1,600 150 0.5 21 115/1/60 15 20 70/49 60/42 59 100 0 A,B,D,E",
+            "C1 CLASSROOM 41, CORRIDOR 40A RHEEM R962V0705A21 175 1,600 600 0.5 23 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+            "C2 CLASSROOM 40 RHEEM R962V0705A21 175 1,600 450 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+            "C3 CLASSROOM 43, CORRIDOR 40A RHEEM R962V0705A21 175 1,600 600 0.5 27 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+            "C4 CLASSROOM 42 RHEEM R962V0705A21 175 1,600 450 0.5 23 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+            "C5 CLASSROOM 45, RESTROOM 47A RHEEM R962V0705A21 175 1,600 600 0.5 21 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+            "C6 CLASSROOM 44, MECHANICAL 44A, MECHANICAL 44B RHEEM R962V0705A21 175 1,600 600 0.5 27 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+            "C7 CLASSROOM 47, RESTROOM 47B RHEEM R962V0705A21 175 1,600 600 0.5 23 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+            "C8 CLASSROOM 46, ROOM 46A, ROOM 46B RHEEM R962V0705A21 175 1,600 625 0.5 21 115/1/60 15 20 70/49 60/42 57 98 0 A,B,C",
+            "C9 CLASSROOM 49, CORRIDOR 40A RHEEM R962V0705A21 175 1,600 600 0.5 27 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+            "C10 CLASSROOM 48 RHEEM R962V0705A21 175 1,600 450 0.5 23 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+            "C11 CLASSROOM 51 RHEEM R962V0705A21 175 1,600 450 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+            "C12 CLASSROOM 50, CORRIDOR 40A RHEEM R962V0705A21 175 1,600 600 0.5 27 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C"
+          ],
+          "row_reading_order": "left_to_right",
+          "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+        },
+        {
+          "id": "M002-CONDENSING-UNIT",
+          "sheet": "M0.02",
+          "page": 3,
+          "title_as_printed": "CONDENSING UNIT SCHEDULE",
+          "columns": "literal_source_row_as_printed",
+          "x_edges": [
+            650,
+            1580
+          ],
+          "y_ranges": [
+            [
+              822,
+              840
+            ],
+            [
+              840,
+              858
+            ],
+            [
+              858,
+              876
+            ],
+            [
+              876,
+              894
+            ],
+            [
+              894,
+              912
+            ],
+            [
+              912,
+              930
+            ],
+            [
+              930,
+              948
+            ],
+            [
+              948,
+              966
+            ],
+            [
+              966,
+              984
+            ],
+            [
+              984,
+              1002
+            ],
+            [
+              1002,
+              1020
+            ],
+            [
+              1020,
+              1038
+            ],
+            [
+              1038,
+              1056
+            ],
+            [
+              1056,
+              1074
+            ],
+            [
+              1074,
+              1092
+            ],
+            [
+              1092,
+              1110
+            ],
+            [
+              1110,
+              1128
+            ],
+            [
+              1128,
+              1146
+            ],
+            [
+              1146,
+              1164
+            ],
+            [
+              1164,
+              1182
+            ],
+            [
+              1182,
+              1200
+            ],
+            [
+              1200,
+              1218
+            ],
+            [
+              1218,
+              1236
+            ]
+          ],
+          "rows": [
+            "B1 F-B1 AND EC-B1 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 30.9 30.9 A,B",
+            "B2 F-B2 AND EC-B2 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+            "B3 F-B3 AND EC-B3 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 35.3 35.3 A,B",
+            "B4 F-B4 AND EC-B4 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 30.9 30.9 A,B",
+            "B5 F-B5 AND EC-B5 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 36.8 36.8 A,B",
+            "B6 F-B6 AND EC-B6 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 36.8 36.8 A,B,D",
+            "B7 F-B7 AND EC-B7 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 30.9 30.9 A,B",
+            "B8 F-B8 AND EC-B8 FRASER JOHNSTON AL19B3621S 270 208/1/60 21.4 35 100/61 16 N/A 24.2 24.2 A,C,D",
+            "B9 F-B9 AND EC-B9 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 35.3 35.3 A,B",
+            "BO1 OAU-B1 FRASER JOHNSTON AL19B6021S 300 208/1/60 31.4 50 100/61 19 N/A 50 50 A,C",
+            "BO2 OAU-B2 FRASER JOHNSTON AL19B6021S 300 208/1/60 31.4 50 100/61 19 N/A 50 50 A,C",
+            "C1 F-C1 AND EC-C1 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 33.9 33.9 A,B",
+            "C2 F-C2 AND EC-C2 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 29.5 29.5 A,B",
+            "C3 F-C3 AND EC-C3 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+            "C4 F-C4 AND EC-C4 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 29.5 29.5 A,B",
+            "C5 F-C5 AND EC-C5 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+            "C6 F-C6 AND EC-C6 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+            "C7 F-C7 AND EC-C7 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+            "C8 F-C8 AND EC-C8 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 38.3 38.3 A,B",
+            "C9 F-C9 AND EC-C9 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+            "C10 F-C10 AND EC-C10 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 29.5 29.5 A,B",
+            "C11 F-C11 AND EC-C11 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 29.5 29.5 A,B",
+            "C12 F-C12 AND EC-C12 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 33.9 33.9 A,B"
+          ],
+          "row_reading_order": "left_to_right",
+          "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+        },
+        {
+          "id": "M002-EVAPORATOR-COIL",
+          "sheet": "M0.02",
+          "page": 3,
+          "title_as_printed": "EVAPORATOR COIL SCHEDULE",
+          "columns": "literal_source_row_as_printed",
+          "x_edges": [
+            1750,
+            2620
+          ],
+          "y_ranges": [
+            [
+              813,
+              831
+            ],
+            [
+              831,
+              849
+            ],
+            [
+              849,
+              867
+            ],
+            [
+              867,
+              885
+            ],
+            [
+              885,
+              903
+            ],
+            [
+              903,
+              921
+            ],
+            [
+              921,
+              939
+            ],
+            [
+              939,
+              957
+            ],
+            [
+              957,
+              975
+            ],
+            [
+              975,
+              993
+            ],
+            [
+              993,
+              1011
+            ],
+            [
+              1011,
+              1029
+            ],
+            [
+              1029,
+              1047
+            ],
+            [
+              1047,
+              1065
+            ],
+            [
+              1065,
+              1083
+            ],
+            [
+              1083,
+              1101
+            ],
+            [
+              1101,
+              1119
+            ],
+            [
+              1119,
+              1137
+            ],
+            [
+              1137,
+              1155
+            ],
+            [
+              1155,
+              1173
+            ],
+            [
+              1173,
+              1191
+            ]
+          ],
+          "rows": [
+            "B1 F-B1 AND CU-B1 RHEEM RCFZ4921ST 80 21 30.9 30.9 1,600 0.25 76/56 55 A,B",
+            "B2 F-B2 AND CU-B2 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/56 55 A,B",
+            "B3 F-B3 AND CU-B3 RHEEM RCFZ4921ST 80 21 35.3 35.3 1,600 0.25 79/56 55 A,B",
+            "B4 F-B4 AND CU-B4 RHEEM RCFZ4921ST 80 21 30.9 30.9 1,600 0.25 76/56 55 A,B",
+            "B5 F-B5 AND CU-B5 RHEEM RCFZ4921ST 80 21 36.8 36.8 1,600 0.25 80/57 55 A,B",
+            "B6 F-B6 AND CU-B6 RHEEM RCFZ4921ST 80 21 36.8 36.8 1,600 0.25 80/57 55 A,B",
+            "B7 F-B7 AND CU-B7 RHEEM RCFZ4921ST 80 21 30.9 30.9 1,600 0.25 76/56 55 A,B",
+            "B8 F-B8 AND CU-B8 FRASER JOHNSTON XAHC36DBCN1 60 21 24.2 24.2 1,050 0.25 80/55 55 A,B",
+            "B9 F-B9 AND CU-B9 RHEEM RCFZ4921ST 80 21 35.3 35.3 1,600 0.25 79/55 55 A,B",
+            "C1 F-C1 AND CU-C1 RHEEM RCFZ4921ST 80 21 33.9 33.9 1,600 0.25 78/56 55 A,B",
+            "C2 F-C2 AND CU-C2 RHEEM RCFZ4921ST 80 21 29.5 29.5 1,600 0.25 75/56 55 A,B",
+            "C3 F-C3 AND CU-C3 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/55 55 A,B",
+            "C4 F-C4 AND CU-C4 RHEEM RCFZ4921ST 80 21 29.5 29.5 1,600 0.25 75/56 55 A,B",
+            "C5 F-C5 AND CU-C5 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/55 55 A,B",
+            "C6 F-C6 AND CU-C6 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/55 55 A,B",
+            "C7 F-C7 AND CU-C7 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/55 55 A,B",
+            "C8 F-C8 AND CU-C8 RHEEM RCFZ4921ST 80 21 38.3 38.3 1,600 0.25 81/57 55 A,B",
+            "C9 F-C9 AND CU-C9 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/55 55 A,B",
+            "C10 F-C10 AND CU-C10 RHEEM RCFZ4921ST 80 21 29.5 29.5 1,600 0.25 75/56 55 A,B",
+            "C11 F-C11 AND CU-C11 RHEEM RCFZ4921ST 80 21 29.5 29.5 1,600 0.25 75/56 55 A,B",
+            "C12 F-C12 AND CU-C12 RHEEM RCFZ4921ST 80 21 33.9 33.9 1,600 0.25 78/56 55 A,B"
+          ],
+          "row_reading_order": "left_to_right",
+          "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+        },
+        {
+          "id": "M002-ENERGY-RECOVERY-VENTILATOR",
+          "sheet": "M0.02",
+          "page": 3,
+          "title_as_printed": "ENERGY RECOVERY VENTILATOR SCHEDULE",
+          "columns": "literal_source_row_as_printed",
+          "x_edges": [
+            650,
+            2710
+          ],
+          "y_ranges": [
+            [
+              1473,
+              1491
+            ],
+            [
+              1491,
+              1509
+            ]
+          ],
+          "rows": [
+            "C1 SWEGON NAGOLD020FRX INDOOR 1,600 460/3/60 8.8 15 3,300 0.75 1 3.2 2,950 0.75 1 3.2 100/61 76 10 0 66 80 3,300 82 56.2 85 3,300 50 152.1 85 A,B,C,D,E,F,G",
+            "C2 SWEGON NAGOLD020FRX INDOOR 1,600 460/3/60 8.8 15 3,325 0.75 1 3.2 2,750 0.75 1 3.2 100/61 76 10 0 66 80 3,325 82 53.8 87 3,325 48 145.9 87 A,B,C,D,E,F,G"
+          ],
+          "row_reading_order": "left_to_right",
+          "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+        },
+        {
+          "id": "M002-OUTDOOR-AIR-UNIT",
+          "sheet": "M0.02",
+          "page": 3,
+          "title_as_printed": "OUTDOOR AIR UNIT SCHEDULE",
+          "columns": "literal_source_row_as_printed",
+          "x_edges": [
+            1160,
+            2710
+          ],
+          "y_ranges": [
+            [
+              1828,
+              1846
+            ],
+            [
+              1846,
+              1864
+            ]
+          ],
+          "rows": [
+            "B1 BUILDING B OUTSIDE AIR ENVIRO-TEC HDD20 300 208/3/60 5.5 15 2,200 1.0 1.5 N/A N/A N/A N/A N/A N/A N/A N/A N/A N/A N/A 50.0 50.0 2,200 0.25 100/61 75 3 10 A,B,C,D",
+            "B2 BUILDING B OUTSIDE AIR ENVIRO-TEC HDD20 300 208/3/60 5.5 15 2,200 1.0 1.5 N/A N/A N/A N/A N/A N/A N/A N/A N/A N/A N/A 50.0 50.0 2,200 0.25 100/61 75 3 10 A,B,C,D"
+          ],
+          "row_reading_order": "left_to_right",
+          "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+        },
+        {
+          "id": "M003-RELIEF-HOOD",
+          "sheet": "M0.03",
+          "page": 4,
+          "title_as_printed": "RELIEF HOOD SCHEDULE",
+          "columns": "literal_source_row_as_printed",
+          "x_edges": [
+            630,
+            1490
+          ],
+          "y_ranges": [
+            [
+              189,
+              207
+            ],
+            [
+              207,
+              225
+            ]
+          ],
+          "rows": [
+            "C1 ERV-C1 GREENHECK FGR-24x24 125 N/A 24 24 2,950 750 4.0 0.08 A,B,C,D",
+            "C2 ERV-C2 GREENHECK FGR-24x24 125 N/A 24 24 2,750 700 4.0 0.07 A,B,C,D"
+          ],
+          "row_reading_order": "left_to_right",
+          "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+        },
+        {
+          "id": "M003-INTAKE-HOOD",
+          "sheet": "M0.03",
+          "page": 4,
+          "title_as_printed": "INTAKE HOOD SCHEDULE",
+          "columns": "literal_source_row_as_printed",
+          "x_edges": [
+            1700,
+            2600
+          ],
+          "y_ranges": [
+            [
+              189,
+              207
+            ],
+            [
+              207,
+              225
+            ]
+          ],
+          "rows": [
+            "B9 F-B9 OUTSIDE AIR GREENHECK GRSI-8 50 8.25 N/A N/A 150 405 0.37 0.03 A,B,C,D,E,G,",
+            "B OAU-B1 AND OAU-B2 GREENHECK FGI-28x40 200 N/A 28 40 4,400 575 7.78 0.04 A,B,C,D,F"
+          ],
+          "row_reading_order": "left_to_right",
+          "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+        },
+        {
+          "id": "M003-CONTROL-DAMPER",
+          "sheet": "M0.03",
+          "page": 4,
+          "title_as_printed": "CONTROL DAMPER SCHEDULE",
+          "columns": "literal_source_row_as_printed",
+          "x_edges": [
+            280,
+            1335
+          ],
+          "y_ranges": [
+            [
+              532,
+              550
+            ],
+            [
+              550,
+              568
+            ],
+            [
+              568,
+              586
+            ]
+          ],
+          "rows": [
+            "B1 OAU-B1 AND OAU-B2 GREENHECK VCD-33 AIRFOIL PARALLEL CLOSED 1 25 30 4,400 845 0.01 A,B",
+            "OA1 OAU-B1 GREENHECK VCD-33 AIRFOIL PARALLEL CLOSED 1 24 24 2,200 550 0.004 A,B",
+            "OA2 OAU-B2 GREENHECK VCD-33 AIRFOIL PARALLEL CLOSED 1 24 24 2,200 550 0.004 A,B"
+          ],
+          "row_reading_order": "left_to_right",
+          "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+        },
+        {
+          "id": "M003-EXHAUST-FAN",
+          "sheet": "M0.03",
+          "page": 4,
+          "title_as_printed": "EXHAUST FAN SCHEDULE",
+          "columns": "literal_source_row_as_printed",
+          "x_edges": [
+            1400,
+            2700
+          ],
+          "y_ranges": [
+            [
+              515,
+              541
+            ]
+          ],
+          "rows": [
+            "B1 BUILDING B CLASSROOMS GREENHECK CUE-160-VG UPBLAST 2,350 0.75 DIRECT 1170 73,80,78,76,70,67,63,60,77,66 14 115 1 60 3/4 HP 80 A,B,C"
+          ],
+          "row_reading_order": "left_to_right",
+          "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+        },
+        {
+          "id": "M003-EXISTING-RTU-REFERENCE",
+          "sheet": "M0.03",
+          "page": 4,
+          "title_as_printed": "EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY)",
+          "columns": "literal_source_row_as_printed",
+          "x_edges": [
+            650,
+            1335
+          ],
+          "y_ranges": [
+            [
+              840,
+              867
+            ],
+            [
+              867,
+              894
+            ],
+            [
+              894,
+              921
+            ],
+            [
+              921,
+              948
+            ]
+          ],
+          "rows": [
+            "2 CARRIER 48HJE005---551-- 115 655 208/3/60 22 22 30 82/115",
+            "3 CARRIER 48HJE004---541-- 115 645 208/3/60 18 18 25 50/72",
+            "4 CARRIER 48HJE004---541-- 115 645 208/3/60 18 18 25 50/72",
+            "5 CARRIER 48HJE004---541-- 115 645 208/3/60 18 18 25 50/72"
+          ],
+          "row_reading_order": "left_to_right",
+          "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+        },
+        {
+          "id": "M003-GAS-FIRED-INDOOR-DUCT-FURNACE",
+          "sheet": "M0.03",
+          "page": 4,
+          "title_as_printed": "GAS-FIRED INDOOR DUCT FURNACE SCHEDULE",
+          "columns": "literal_source_row_as_printed",
+          "x_edges": [
+            1400,
+            2700
+          ],
+          "y_ranges": [
+            [
+              795,
+              825
+            ]
+          ],
+          "rows": [
+            "B1 OAU-B1 AND OAU-B2 MODINE DFP250TM--N40A 250 120/1/60 2.4 15 4,375 0.25 INDIRECT NATURAL 0 41 250 170 81 A,B,C,D,E"
+          ],
+          "row_reading_order": "left_to_right",
+          "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+        },
+        {
+          "id": "M003-RTU-BID-ALTERNATE-1",
+          "sheet": "M0.03",
+          "page": 4,
+          "title_as_printed": "GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (BID ALTERNATE 1)",
+          "columns": "literal_source_row_as_printed",
+          "x_edges": [
+            1240,
+            2700
+          ],
+          "y_ranges": [
+            [
+              1098,
+              1125
+            ],
+            [
+              1125,
+              1152
+            ],
+            [
+              1152,
+              1179
+            ],
+            [
+              1179,
+              1206
+            ]
+          ],
+          "rows": [
+            "B2 CARRIER 48GCRJ05A2M5 940 1,600 100 500 0.75 17.4 SEER 410A 208/3/60 26 30 40.4 40.4 80/57 52 100/61 82/110 70.4 50 98 0 A,B,C,D,E,F,G,H,I,J,K,L",
+            "B3 CARRIER 48GCRJ05A2M5 940 1,500 100 575 0.75 17.4 SEER 410A 208/3/60 26 30 40.4 40.4 82/58 54 100/61 82/110 70.4 45 93 0 A,B,C,D,E,F,G,H,I,J,K,L",
+            "B4 CARRIER 48GCRJ05A2M5 940 1,600 100 450 0.75 17.4 SEER 410A 208/3/60 26 30 38.1 37 80/57 55 100/61 82/110 70.4 52 100 0 A,B,C,D,E,F,G,H,I,J,K,L",
+            "B5 CARRIER 48GCSJ04A2M5 850 1,200 100 175 0.75 17.4 SEER 410A 208/3/60 21 30 28.7 28.7 79/58 53 100/61 50/67 43.2 60 100 0 A,B,C,D,E,F,G,H,I,J,K,L"
+          ],
+          "row_reading_order": "left_to_right",
+          "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+        }
+      ],
+      "assertions": [],
+      "schedule_scope": "The 86 rows are coordinate-bounded literal schedule evidence only. Existing rooftop-unit rows are explicitly marked for reference only; bid-alternate rows are explicitly retained as alternate scope. No plan placement, selected alternative, installed quantity, BAS ownership, field wiring, controller I/O, or physical-device count is inferred."
+    },
+    "points": {
+      "document_id": "17__vol1__16",
+      "module_role": "Published 12-row BACnet Inputs to BMS list within the M6.02 C-Wing energy-recovery-ventilator control diagram.",
+      "tables": [
+        {
+          "id": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+          "sheet": "M6.02",
+          "page": 28,
+          "title_as_printed": "BACNET POINTS INPUTS TO BMS",
+          "columns": "tag|point_name",
+          "x_edges": [
+            1060,
+            1097,
+            1235
+          ],
+          "y_ranges": [
+            [
+              1671.5,
+              1692.85
+            ],
+            [
+              1692.85,
+              1714.2
+            ],
+            [
+              1714.2,
+              1735.55
+            ],
+            [
+              1735.55,
+              1756.9
+            ],
+            [
+              1756.9,
+              1778.25
+            ],
+            [
+              1778.25,
+              1799.6
+            ],
+            [
+              1799.6,
+              1820.95
+            ],
+            [
+              1820.95,
+              1842.3
+            ],
+            [
+              1842.3,
+              1863.65
+            ],
+            [
+              1863.65,
+              1885.0
+            ],
+            [
+              1885.0,
+              1906.35
+            ],
+            [
+              1906.35,
+              1927.7
+            ]
+          ],
+          "rows": [
+            "1.|SA TEMPERATURE SETPOINT",
+            "2.|SA AIRFLOW",
+            "3.|OA DAMPER POSITION",
+            "4.|EA DAMPER POSITION",
+            "5.|SA FAN LEVEL",
+            "6.|SA FILTER PRESSURE DROP",
+            "7.|EA FILTER PRESSURE DROP",
+            "8.|EA AIRFLOW",
+            "9.|EA FAN LEVEL",
+            "10.|ALARMS",
+            "11.|SA MINIMUM SETPOINT",
+            "12.|SA MAXIMUM SETPOINT"
+          ],
+          "source_row_semantics": "Complete literal source list labeled BACnet Points Inputs to BMS. The source does not classify the rows as physical AI/AO/BI/BO, assign a final controller/card/terminal, or establish field-device ownership."
+        }
+      ],
+      "assertions": [
+        {
+          "id": "m602-bacnet-inputs-title",
+          "page": 28,
+          "bbox": [
+            1065,
+            1600,
+            1260,
+            1640
+          ],
+          "expected": "BACNET POINTS",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-furnace-diagram-ai2",
+          "page": 28,
+          "bbox": [
+            555,
+            267,
+            582,
+            285
+          ],
+          "expected": "AI-2",
+          "mode": "exact"
+        },
+        {
+          "id": "m602-furnace-diagram-supply-air-temp",
+          "page": 28,
+          "bbox": [
+            400,
+            269,
+            485,
+            288
+          ],
+          "expected": "SUPPLY AIR TEMP",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-furnace-diagram-ai3",
+          "page": 28,
+          "bbox": [
+            555,
+            310,
+            582,
+            328
+          ],
+          "expected": "AI-3",
+          "mode": "exact"
+        },
+        {
+          "id": "m602-furnace-diagram-return-air-temp",
+          "page": 28,
+          "bbox": [
+            398,
+            310,
+            485,
+            330
+          ],
+          "expected": "RETURN AIR TEMP",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-furnace-diagram-ai4",
+          "page": 28,
+          "bbox": [
+            555,
+            352,
+            582,
+            369
+          ],
+          "expected": "AI-4",
+          "mode": "exact"
+        },
+        {
+          "id": "m602-furnace-diagram-mixed-air-temp",
+          "page": 28,
+          "bbox": [
+            390,
+            360,
+            470,
+            379
+          ],
+          "expected": "MIXED AIR TEMP",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-furnace-diagram-bi6",
+          "page": 28,
+          "bbox": [
+            555,
+            418,
+            582,
+            436
+          ],
+          "expected": "BI-6",
+          "mode": "exact"
+        },
+        {
+          "id": "m602-furnace-diagram-supply-fan-status",
+          "page": 28,
+          "bbox": [
+            430,
+            409,
+            535,
+            428
+          ],
+          "expected": "SUPPLY FAN STATUS",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-furnace-diagram-ao1",
+          "page": 28,
+          "bbox": [
+            1135,
+            460,
+            1170,
+            481
+          ],
+          "expected": "AO-1",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-furnace-diagram-economizer",
+          "page": 28,
+          "bbox": [
+            1220,
+            485,
+            1300,
+            505
+          ],
+          "expected": "ECONOMIZER",
+          "mode": "contains"
+        }
+      ],
+      "diagram_label_context": "The retained AI/BI/BO/AO labels are bounded diagram-local controller-label context. They are intentionally not expanded into a projectwide point list, final terminal/card count, or physical device inventory."
+    },
+    "controls_context": {
+      "document_id": "17__vol1__16",
+      "module_role": "Source-bounded M6.01–M6.03 BAS network, symbols, sequences, alarms and damper-control context.",
+      "tables": [],
+      "assertions": [
+        {
+          "id": "m601-bacnet-standard",
+          "page": 27,
+          "bbox": [
+            1365,
+            174,
+            1730,
+            192
+          ],
+          "expected": "BACNET COMPONENTS ARE TO BE IN ACCORDANCE WITH ASHRAE STANDARD 2016.",
+          "mode": "contains"
+        },
+        {
+          "id": "m601-complete-ddc-system",
+          "page": 27,
+          "bbox": [
+            1365,
+            198,
+            1775,
+            238
+          ],
+          "expected": "CONTROL SYSTEM CONTRACTOR SHALL PROVIDE A COMPLETE DIRECT DIGITAL CONTROL SYSTEM. PROVIDE AND INSTALL ALL NECESSARY WIRING TO MAKE SYSTEM OPERATIONAL REFER TO CONTROL DIAGRAMS AND SEQUENCE OF OPERATION ON DRAWINGS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m601-controller-network",
+          "page": 27,
+          "bbox": [
+            1365,
+            241,
+            1760,
+            260
+          ],
+          "expected": "CONTROLS CONTRACTOR SHALL CONNECT CONTROLLERS TO THE CONTROL NETWORK",
+          "mode": "contains"
+        },
+        {
+          "id": "m601-thermographic-plan",
+          "page": 27,
+          "bbox": [
+            1365,
+            276,
+            1755,
+            295
+          ],
+          "expected": "CONTROLS CONTRACTOR SHALL PROVIDE A THERMOGRAPHIC FLOOR PLAN INDICATING",
+          "mode": "contains"
+        },
+        {
+          "id": "m601-32-device-trunk",
+          "page": 27,
+          "bbox": [
+            1365,
+            306,
+            1710,
+            325
+          ],
+          "expected": "NO MORE THAN 32 DEVICES ALLOWED ON SINGLE COMMUNICATION TRUNK.",
+          "mode": "contains"
+        },
+        {
+          "id": "m601-btl-listed",
+          "page": 27,
+          "bbox": [
+            1365,
+            352,
+            1790,
+            371
+          ],
+          "expected": "ALL CONTROL DEVICES AND CONTROLLERS SHALL BE BTL LISTED (BACNET TESTING LABORATORY).",
+          "mode": "contains"
+        },
+        {
+          "id": "m601-bacnet-ip",
+          "page": 27,
+          "bbox": [
+            275,
+            494,
+            335,
+            515
+          ],
+          "expected": "BACNET IP",
+          "mode": "contains"
+        },
+        {
+          "id": "m601-mstp-trunk-1",
+          "page": 27,
+          "bbox": [
+            425,
+            476,
+            520,
+            496
+          ],
+          "expected": "MSTP TRUNK XXXX1",
+          "mode": "contains"
+        },
+        {
+          "id": "m601-mstp-trunk-2",
+          "page": 27,
+          "bbox": [
+            425,
+            652,
+            520,
+            672
+          ],
+          "expected": "MSTP TRUNK XXXX2",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-bacnet-mstp-network",
+          "page": 28,
+          "bbox": [
+            915,
+            500,
+            1040,
+            536
+          ],
+          "expected": "BACNET/MSTP NETWORK CONNECTION",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-network-wire",
+          "page": 28,
+          "bbox": [
+            915,
+            537,
+            1035,
+            556
+          ],
+          "expected": "*22AWG/2C SHIELDED*",
+          "mode": "contains"
+        },
+        {
+          "id": "m601-co2-sensor-legend",
+          "page": 27,
+          "bbox": [
+            2430,
+            191,
+            2560,
+            211
+          ],
+          "expected": "CARBON DIOXIDE SENSOR",
+          "mode": "contains"
+        },
+        {
+          "id": "m601-room-temperature-sensor-legend",
+          "page": 27,
+          "bbox": [
+            2430,
+            608,
+            2575,
+            628
+          ],
+          "expected": "ROOM TEMPERATURE SENSOR",
+          "mode": "contains"
+        },
+        {
+          "id": "m601-motorized-actuator-legend",
+          "page": 27,
+          "bbox": [
+            2430,
+            454,
+            2550,
+            474
+          ],
+          "expected": "MOTORIZED ACTUATOR",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-erv-occupied",
+          "page": 28,
+          "bbox": [
+            2290,
+            204,
+            2735,
+            222
+          ],
+          "expected": "ENERGY RECOVERY VENTILATOR (ERV) SHALL BE ENERGIZED DURING OCCUPIED HOURS. ERV SHALL BE",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-erv-leaving-air-alarm",
+          "page": 28,
+          "bbox": [
+            2290,
+            236,
+            2735,
+            254
+          ],
+          "expected": "BMS SHALL MONITOR LEAVING AIR TEMPERATURE AND SHALL ALARM IF SUPPLY TEMPERATURE IS BELOW",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-erv-defrost",
+          "page": 28,
+          "bbox": [
+            2290,
+            268,
+            2725,
+            286
+          ],
+          "expected": "UNIT INTERNAL CONTROLLER SHALL CONTROL DEFROST CYCLE BASED ON DIFFERENTIAL PRESSURE",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-erv-economizer",
+          "page": 28,
+          "bbox": [
+            2290,
+            300,
+            2735,
+            318
+          ],
+          "expected": "UNIT CONTROLLER SHALL CONTROL ECONOMIZER CYCLE. ECONOMIZER CYCLE SHALL STOP WHEEL.",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-erv-filter-alarm",
+          "page": 28,
+          "bbox": [
+            2290,
+            332,
+            2670,
+            350
+          ],
+          "expected": "WHEN FILTER RESISTANCE IS GREATER THAN 0.50\" W.C. (ADJUSTABLE) BMS TO ALARM.",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-furnace-supply-fan",
+          "page": 28,
+          "bbox": [
+            2255,
+            473,
+            2725,
+            492
+          ],
+          "expected": "THE SUPPLY FAN SHALL RUN ANYTIME THE UNIT IS COMMANDED TO RUN, UNLESS SHUTDOWN ON SAFETIES.",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-furnace-cooling-zone-temperature",
+          "page": 28,
+          "bbox": [
+            2255,
+            519,
+            2720,
+            538
+          ],
+          "expected": "THE CONTROLLER SHALL MEASURE THE ZONE TEMPERATURE AND THE UNIT SHALL STAGE THE COOLING TO",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-furnace-cooling-oat-enable",
+          "page": 28,
+          "bbox": [
+            2275,
+            578,
+            2530,
+            597
+          ],
+          "expected": "OUTSIDE AIR TEMPERATURE IS GREATER THAN 60°F (ADJ.).",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-furnace-heating-zone-temperature",
+          "page": 28,
+          "bbox": [
+            2255,
+            709,
+            2715,
+            728
+          ],
+          "expected": "THE CONTROLLER SHALL MEASURE THE ZONE TEMPERATURE AND THE UNIT SHALL STAGE THE HEATING TO",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-furnace-heating-oat-enable",
+          "page": 28,
+          "bbox": [
+            2275,
+            779,
+            2515,
+            799
+          ],
+          "expected": "OUTSIDE AIR TEMPERATURE IS LESS THAN 65°F (ADJ.).",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-furnace-mixed-air",
+          "page": 28,
+          "bbox": [
+            2255,
+            887,
+            2545,
+            906
+          ],
+          "expected": "THE CONTROLLER SHALL MONITOR THE MIXED AIR TEMPERATURE.",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-furnace-supply-air",
+          "page": 28,
+          "bbox": [
+            2255,
+            921,
+            2550,
+            941
+          ],
+          "expected": "THE CONTROLLER SHALL MONITOR THE SUPPLY AIR TEMPERATURE.",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-furnace-optimal-start",
+          "page": 28,
+          "bbox": [
+            2255,
+            990,
+            2705,
+            1010
+          ],
+          "expected": "THE UNIT SHALL USE AN OPTIMAL START ALGORITHM FOR MORNING START-UP. THIS ALGORITHM SHALL",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-furnace-override",
+          "page": 28,
+          "bbox": [
+            2255,
+            1048,
+            2730,
+            1067
+          ],
+          "expected": "A TIMED LOCAL OVERRIDE CONTROL SHALL ALLOW AN OCCUPANT TO OVERRIDE THE SCHEDULE AND PLACE",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-furnace-high-supply-temp-alarm",
+          "page": 28,
+          "bbox": [
+            2275,
+            1118,
+            2655,
+            1137
+          ],
+          "expected": "HIGH SUPPLY AIR TEMP: IF THE SUPPLY AIR TEMPERATURE IS GREATER THAN 120°F (ADJ.).",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-furnace-filter-change-alarm",
+          "page": 28,
+          "bbox": [
+            2275,
+            1238,
+            2710,
+            1257
+          ],
+          "expected": "FINAL FILTER CHANGE REQUIRED: FINAL FILTER HAS BEEN IN USE FOR MORE THAN 2200 HRS. (ADJ.).",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-exhaust-fan-off-warmup",
+          "page": 28,
+          "bbox": [
+            1765,
+            170,
+            2135,
+            189
+          ],
+          "expected": "EXHAUST FAN SHALL REMAIN OFF DURING MORNING WARM UP AND COOL DOWN.",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-exhaust-fan-occupied",
+          "page": 28,
+          "bbox": [
+            1765,
+            188,
+            2205,
+            207
+          ],
+          "expected": "EXHAUST FANS SHALL BE ENABLED THROUGH BUILDING AUTOMATION SYSTEM DURING OCCUPIED",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-exhaust-fan-status",
+          "page": 28,
+          "bbox": [
+            1765,
+            215,
+            2145,
+            234
+          ],
+          "expected": "EXHAUST FAN STATUS SHALL BE MONITORED BY THE BUILDING AUTOMATION SYSTEM.",
+          "mode": "contains"
+        },
+        {
+          "id": "m602-exhaust-fan-current-alarm",
+          "page": 28,
+          "bbox": [
+            1765,
+            272,
+            2180,
+            291
+          ],
+          "expected": "AN ALARM CONDITION SHALL BE INDICATED WHENEVER THE EXHAUST FAN CURRENT SENSOR",
+          "mode": "contains"
+        },
+        {
+          "id": "m603-oau-occupied",
+          "page": 29,
+          "bbox": [
+            1700,
+            179,
+            2150,
+            198
+          ],
+          "expected": "THE SUPPLY FANS ON OUTSIDE AIR UNITS (OAU-B1 AND OAU-B2) SHALL ENERGIZE DURING OCCUPIED",
+          "mode": "contains"
+        },
+        {
+          "id": "m603-oau-warmup-off",
+          "page": 29,
+          "bbox": [
+            1720,
+            214,
+            2085,
+            233
+          ],
+          "expected": "SUPPLY FAN SHALL REMAIN OFF DURING MORNING WARM UP AND COOL DOWN.",
+          "mode": "contains"
+        },
+        {
+          "id": "m603-oau-heating-oat",
+          "page": 29,
+          "bbox": [
+            1700,
+            249,
+            2155,
+            268
+          ],
+          "expected": "WHENEVER OUTSIDE AIR TEMPERATURE IS BELOW 35°F (ADJUSTABLE), HEATING MODE SHALL BE ENABLED",
+          "mode": "contains"
+        },
+        {
+          "id": "m603-oau-gas-valve",
+          "page": 29,
+          "bbox": [
+            1720,
+            284,
+            2145,
+            303
+          ],
+          "expected": "DUCT FURNACE GAS VALVE SHALL MODULATE TO MAINTAIN LEAVING AIR TEMPERATURE OF 35°F",
+          "mode": "contains"
+        },
+        {
+          "id": "m603-oau-cooling-enable",
+          "page": 29,
+          "bbox": [
+            1700,
+            329,
+            2165,
+            349
+          ],
+          "expected": "WHENEVER OUTSIDE AIR TEMPERATURE IS ABOVE 85°F, COOLING SHALL BE ENABLED ON OUTSIDE AIR FANS",
+          "mode": "contains"
+        },
+        {
+          "id": "m603-oau-filter-alarm",
+          "page": 29,
+          "bbox": [
+            1720,
+            423,
+            2040,
+            442
+          ],
+          "expected": "FILTER DIFFERENTIAL PRESSURE GREATER THAN 0.25\" W.C. (ADJUSTABLE).",
+          "mode": "contains"
+        },
+        {
+          "id": "m603-oau-low-leaving-air",
+          "page": 29,
+          "bbox": [
+            1720,
+            448,
+            1995,
+            467
+          ],
+          "expected": "LOW LEAVING AIR TEMPERATURE, BELOW 20°F (ADJUSTABLE).",
+          "mode": "contains"
+        },
+        {
+          "id": "m603-oau-high-duct-static",
+          "page": 29,
+          "bbox": [
+            1720,
+            496,
+            2140,
+            515
+          ],
+          "expected": "HIGH DUCT STATIC SHALL SHUT DOWN UNIT WHENEVER DUCT STATIC IS GREATER THAN 3\" W.C.",
+          "mode": "contains"
+        },
+        {
+          "id": "m603-oau-damper-open",
+          "page": 29,
+          "bbox": [
+            2245,
+            203,
+            2730,
+            222
+          ],
+          "expected": "THE SUPPLY FAN IS ON, CONTROL DAMPERS (CD-B1, CD-OA1, AND CD-OA2) SHALL BE FULLY OPEN.",
+          "mode": "contains"
+        }
+      ],
+      "network_architecture": {
+        "published_integration": [
+          "M6.01 calls for BACnet components compliant with the cited ASHRAE standard, BTL-listed control devices/controllers, and a complete DDC system.",
+          "M6.01 depicts BACnet IP plus two labeled MSTP trunk paths; M6.02 depicts a BACnet/MSTP network connection and shielded cable note.",
+          "M6.01 limits a single communication trunk to no more than 32 devices."
+        ],
+        "assertion_ids": [
+          "m601-bacnet-standard",
+          "m601-complete-ddc-system",
+          "m601-controller-network",
+          "m601-32-device-trunk",
+          "m601-btl-listed",
+          "m601-bacnet-ip",
+          "m601-mstp-trunk-1",
+          "m601-mstp-trunk-2",
+          "m602-bacnet-mstp-network",
+          "m602-network-wire"
+        ],
+        "boundary": "These diagrams and notes do not publish final IP addresses, BACnet device/object IDs, controller-card or terminal assignments, a router/media/termination schedule, cable lengths, or a final installed controller/device total."
+      },
+      "sequence_inventory": [
+        {
+          "id": "m602-c-wing-erv",
+          "sheet": "M6.02",
+          "assertion_ids": [
+            "m602-erv-occupied",
+            "m602-erv-leaving-air-alarm",
+            "m602-erv-defrost",
+            "m602-erv-economizer",
+            "m602-erv-filter-alarm"
+          ]
+        },
+        {
+          "id": "m602-furnace-and-condensing-unit",
+          "sheet": "M6.02",
+          "assertion_ids": [
+            "m602-furnace-supply-fan",
+            "m602-furnace-cooling-zone-temperature",
+            "m602-furnace-cooling-oat-enable",
+            "m602-furnace-heating-zone-temperature",
+            "m602-furnace-heating-oat-enable",
+            "m602-furnace-mixed-air",
+            "m602-furnace-supply-air",
+            "m602-furnace-optimal-start",
+            "m602-furnace-override",
+            "m602-furnace-high-supply-temp-alarm",
+            "m602-furnace-filter-change-alarm"
+          ]
+        },
+        {
+          "id": "m602-exhaust-fan",
+          "sheet": "M6.02",
+          "assertion_ids": [
+            "m602-exhaust-fan-off-warmup",
+            "m602-exhaust-fan-occupied",
+            "m602-exhaust-fan-status",
+            "m602-exhaust-fan-current-alarm"
+          ]
+        },
+        {
+          "id": "m603-building-b-outdoor-air-unit",
+          "sheet": "M6.03",
+          "assertion_ids": [
+            "m603-oau-occupied",
+            "m603-oau-warmup-off",
+            "m603-oau-heating-oat",
+            "m603-oau-gas-valve",
+            "m603-oau-cooling-enable",
+            "m603-oau-filter-alarm",
+            "m603-oau-low-leaving-air",
+            "m603-oau-high-duct-static",
+            "m603-oau-damper-open"
+          ]
+        }
+      ],
+      "sensors_and_control_symbol_context": {
+        "published_context": "M6.01’s legend publishes carbon-dioxide, room-temperature and smoke-detector symbols, motorized-actuator and two-position-actuator symbols. M6.02/M6.03 sequences reference temperature, differential-pressure, current and duct-static conditions.",
+        "assertion_ids": [
+          "m601-co2-sensor-legend",
+          "m601-room-temperature-sensor-legend",
+          "m601-motorized-actuator-legend",
+          "m602-erv-leaving-air-alarm",
+          "m602-erv-filter-alarm",
+          "m602-exhaust-fan-current-alarm",
+          "m603-oau-filter-alarm",
+          "m603-oau-high-duct-static"
+        ],
+        "boundary": "Legends, diagrams and sequence references are retained as device/control context only; they are not expanded into exhaustive zone, sensor, actuator, damper, valve, controller, terminal, wiring, or physical-device counts."
+      },
+      "control_boundaries": [
+        "Every retained sequence clause is text-bound to the supplied drawings. Setpoints marked adjustable remain published design intent, not commissioned settings.",
+        "Control-damper schedule rows are retained separately in M0.03. The M6.03 sequence establishes the quoted operating state for CD-B1, CD-OA1 and CD-OA2, but does not make a physical actuator count."
+      ]
+    },
+    "equipment_reconciliation": {
+      "document_id": "17__vol1__16",
+      "module_role": "M0.02/M0.03 literal schedule-row ledger and physical-count boundary.",
+      "tables": [],
+      "ledger_mode": "literal_schedule_rows_v1",
+      "schedule_counts": {
+        "tables": 12,
+        "rows": 86,
+        "interpretation": "86 complete literal source rows across five M0.02 and seven M0.03 schedules. The schedule corpus includes 3 control-damper rows, 4 existing rooftop-unit rows marked for reference only, and 4 rooftop-unit rows marked Bid Alternate 1; it is not an inferred installed or selected-alternative quantity."
+      },
+      "control_valve_and_damper_schedule_status": {
+        "control_valve_schedule": "No standalone CONTROL VALVE SCHEDULE title is published in the supplied 47 pages.",
+        "damper_actuator_schedule": "No standalone DAMPER ACTUATOR SCHEDULE title is published in the supplied 47 pages. M0.03 does publish a separate CONTROL DAMPER SCHEDULE with three literal rows; that is retained without deriving actuator quantity."
+      },
+      "source_boundary": "Literal schedule rows do not prove plan placement, installed multiplicity, selected bid alternative, BAS control ownership, final controller/card binding, field wiring, physical-device count or a complete takeoff."
+    },
+    "point_applications": {
+      "document_id": "17__vol1__16",
+      "module_role": "Formal M6.02 BACnet Inputs to BMS source-matrix scope and ownership boundary.",
+      "tables": [],
+      "ledger_mode": "source_matrix_templates_v1",
+      "applications": [
+        {
+          "id": "m602-c-wing-erv-bacnet-inputs",
+          "source_table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+          "ownership_scope": "Published BACnet Inputs to BMS table within the C-Wing ERV control diagram; final physical-device owner, controller/card/terminal binding and field wiring are not stated."
+        }
+      ],
+      "expanded_template_counts": {
+        "source_rows": 12,
+        "total": 12
+      },
+      "expanded_count_warning": "12 is the count of literal published BACnet Inputs to BMS rows. It is not a count of installed sensors, actuators, controllers, terminals, I/O cards, wires, BACnet objects or physical devices; the source does not publish DI/DO/AI/AO classification for these rows.",
+      "inventory_checks": [
+        {
+          "id": "formal-bacnet-inputs-source-table",
+          "records_path": [
+            "applications"
+          ],
+          "expected": 1,
+          "unique_key": "source_table"
+        }
+      ]
+    },
+    "supporting_evidence": {
+      "document_id": "17__vol1__16",
+      "module_role": "Explicit source limits, omitted-scope disclosure and standalone-schedule-title checks.",
+      "tables": [],
+      "source_limitations": [
+        "All 47 pages have retained full-page visual review. This record captures the complete 86-row M0.02/M0.03 schedule corpus, the explicit 12-row M6.02 BACnet Inputs to BMS table, and bounded M6.01–M6.03 BAS architecture/sequence context; other reviewed drawings remain context rather than inferred inventory.",
+        "The M6.02 formal BACnet table publishes point names but no DI/DO/AI/AO classification, physical owner, controller/card/terminal, device address or field-wiring assignment. Diagram-local AI/BI/BO/AO labels are retained as limited controller-diagram context, not expanded into a projectwide I/O count.",
+        "The source does not publish a controller-address list, BACnet device/object list, router/media design, controller/card/terminal schedule, final network topology, wiring/termination schedule, final physical point ownership, final field-device count or selected bid-alternate confirmation.",
+        "No standalone Control Valve Schedule or Damper Actuator Schedule title appears in this full source set. M0.03's three-row Control Damper Schedule and M6.03 damper-operating clause are retained, but diagram symbols and sequences are not converted to damper/actuator/valve/device quantities.",
+        "Existing-rooftop-unit schedule entries are printed FOR REFERENCE ONLY and rooftop-unit entries in the named bid-alternate table remain alternative scope. Neither category is converted into a selected installed quantity.",
+        "Stated plan scales are local to the individual plan views. No global scale, graphic-scale measurement, length, area or derived physical takeoff quantity is asserted."
+      ],
+      "text_absence_assertions": [
+        {
+          "id": "no-control-valve-schedule",
+          "pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ],
+          "covers_all_source_pages": true,
+          "patterns": [
+            "CONTROL\\\\s+VALVE\\\\s+SCHEDULE"
+          ],
+          "visual_review_qualification": "Native text plus full-page visual review support only the limited absence of this standalone title."
+        },
+        {
+          "id": "no-damper-actuator-schedule",
+          "pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ],
+          "covers_all_source_pages": true,
+          "patterns": [
+            "DAMPER\\\\s+ACTUATOR\\\\s+SCHEDULE"
+          ],
+          "visual_review_qualification": "Native text plus full-page visual review support only the limited absence of this standalone title."
+        }
+      ]
+    }
+  },
+  "module_sha256": {
+    "metadata": "790ae17e841418ada6fa794d1f812e5566f1b125d8fc2012625983b412ed7250",
+    "schedules": "2fd361a4d9434964644ddb00cce312982d4bd00508ed87122b3135a8a2fa05c9",
+    "points": "36a4973da0563e8d4055c8308f11be193de0315107ecde8e0dcbc2c625a097a8",
+    "controls_context": "7f3ab74f80c3a7bc0466e3a521261648ab59009ddccccbf38353c4fe76ae45c2",
+    "equipment_reconciliation": "f51744374329d02c8f66ab62c794e5f2637b318b19bd94efa07ffee758055194",
+    "point_applications": "3d76e06478db47ee1dd2dcb103b90b65a32cf69850d80ba1e670ee7a5245ff6e",
+    "supporting_evidence": "71867c772fb8ad3b15e1e182d99fb6205e824ecbabac32c4e75da91fda20dc8b"
+  },
+  "module_source_sha256": {
+    "metadata": {
+      "metadata_rank17": "790ae17e841418ada6fa794d1f812e5566f1b125d8fc2012625983b412ed7250"
+    },
+    "schedules": {
+      "schedules_m002_m003": "2fd361a4d9434964644ddb00cce312982d4bd00508ed87122b3135a8a2fa05c9"
+    },
+    "points": {
+      "points_m602": "36a4973da0563e8d4055c8308f11be193de0315107ecde8e0dcbc2c625a097a8"
+    },
+    "controls_context": {
+      "controls_context_rank17": "7f3ab74f80c3a7bc0466e3a521261648ab59009ddccccbf38353c4fe76ae45c2"
+    },
+    "equipment_reconciliation": {
+      "equipment_reconciliation_rank17": "f51744374329d02c8f66ab62c794e5f2637b318b19bd94efa07ffee758055194"
+    },
+    "point_applications": {
+      "point_applications_rank17": "3d76e06478db47ee1dd2dcb103b90b65a32cf69850d80ba1e670ee7a5245ff6e"
+    },
+    "supporting_evidence": {
+      "supporting_evidence_rank17": "71867c772fb8ad3b15e1e182d99fb6205e824ecbabac32c4e75da91fda20dc8b"
+    }
+  },
+  "equipment_inventory": [
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/1",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 1,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        180,
+        2710,
+        198
+      ],
+      "literal_schedule_row_as_printed": "B1 CLASSROOM 23 RHEEM R962V0705A21 175 1,600 450 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/2",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 2,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        198,
+        2710,
+        216
+      ],
+      "literal_schedule_row_as_printed": "B2 CLASSROOM 24 RHEEM R962V0705A21 175 1,600 475 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/3",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 3,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        216,
+        2710,
+        234
+      ],
+      "literal_schedule_row_as_printed": "B3 CLASSROOM 25, CORRIDOR B101 RHEEM R962V0705A21 175 1,600 550 0.5 21 115/1/60 15 20 70/49 60/42 59 100 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/4",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 4,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        234,
+        2710,
+        252
+      ],
+      "literal_schedule_row_as_printed": "B4 CLASSROOM 26 RHEEM R962V0705A21 175 1,600 475 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/5",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 5,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        252,
+        2710,
+        270
+      ],
+      "literal_schedule_row_as_printed": "B5 CLASSROOM 27 RHEEM R962V0705A21 175 1,600 600 0.5 21 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/6",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 6,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        270,
+        2710,
+        288
+      ],
+      "literal_schedule_row_as_printed": "B6 CLS CLASSROOM 29 RHEEM R962V0705A21 175 1,600 675 0.5 21 115/1/60 15 20 70/49 60/42 56 97 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/7",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 7,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        288,
+        2710,
+        306
+      ],
+      "literal_schedule_row_as_printed": "B7 CLASROOM 28 RHEEM R962V0705A21 175 1,600 475 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/8",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 8,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        306,
+        2710,
+        324
+      ],
+      "literal_schedule_row_as_printed": "B8 CORRIDOR B101, UNISEX RR 29A, BOYS RR 30A, GIRLS RR 30B, WOMENS RR 30C, MENS RR 30D FRASER JOHNSTON TM9Y080C16MP11 140 1,050 700 0.5 21 115/1/60 8.7 15 80/52 63/50 48 113 0 A,B,C,F",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/9",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 9,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        324,
+        2710,
+        342
+      ],
+      "literal_schedule_row_as_printed": "B9 STORAGE ROOM 21, OFFICE ROOM 22, ROOM B3, OFFICE ROOM 22A, OFFICE ROOM 22B, VESTIBULE B100, STORAGE ROOM 22 RHEEM R962V0705A21 175 1,600 150 0.5 21 115/1/60 15 20 70/49 60/42 59 100 0 A,B,D,E",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/10",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 10,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        342,
+        2710,
+        360
+      ],
+      "literal_schedule_row_as_printed": "C1 CLASSROOM 41, CORRIDOR 40A RHEEM R962V0705A21 175 1,600 600 0.5 23 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/11",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 11,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        360,
+        2710,
+        378
+      ],
+      "literal_schedule_row_as_printed": "C2 CLASSROOM 40 RHEEM R962V0705A21 175 1,600 450 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/12",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 12,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        378,
+        2710,
+        396
+      ],
+      "literal_schedule_row_as_printed": "C3 CLASSROOM 43, CORRIDOR 40A RHEEM R962V0705A21 175 1,600 600 0.5 27 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/13",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 13,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        396,
+        2710,
+        414
+      ],
+      "literal_schedule_row_as_printed": "C4 CLASSROOM 42 RHEEM R962V0705A21 175 1,600 450 0.5 23 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/14",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 14,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        414,
+        2710,
+        432
+      ],
+      "literal_schedule_row_as_printed": "C5 CLASSROOM 45, RESTROOM 47A RHEEM R962V0705A21 175 1,600 600 0.5 21 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/15",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 15,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        432,
+        2710,
+        450
+      ],
+      "literal_schedule_row_as_printed": "C6 CLASSROOM 44, MECHANICAL 44A, MECHANICAL 44B RHEEM R962V0705A21 175 1,600 600 0.5 27 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/16",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 16,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        450,
+        2710,
+        468
+      ],
+      "literal_schedule_row_as_printed": "C7 CLASSROOM 47, RESTROOM 47B RHEEM R962V0705A21 175 1,600 600 0.5 23 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/17",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 17,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        468,
+        2710,
+        486
+      ],
+      "literal_schedule_row_as_printed": "C8 CLASSROOM 46, ROOM 46A, ROOM 46B RHEEM R962V0705A21 175 1,600 625 0.5 21 115/1/60 15 20 70/49 60/42 57 98 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/18",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 18,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        486,
+        2710,
+        504
+      ],
+      "literal_schedule_row_as_printed": "C9 CLASSROOM 49, CORRIDOR 40A RHEEM R962V0705A21 175 1,600 600 0.5 27 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/19",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 19,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        504,
+        2710,
+        522
+      ],
+      "literal_schedule_row_as_printed": "C10 CLASSROOM 48 RHEEM R962V0705A21 175 1,600 450 0.5 23 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/20",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 20,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        522,
+        2710,
+        540
+      ],
+      "literal_schedule_row_as_printed": "C11 CLASSROOM 51 RHEEM R962V0705A21 175 1,600 450 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE/21",
+      "source_table": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "source_row": 21,
+      "source_page": 3,
+      "row_bbox": [
+        1050,
+        540,
+        2710,
+        558
+      ],
+      "literal_schedule_row_as_printed": "C12 CLASSROOM 50, CORRIDOR 40A RHEEM R962V0705A21 175 1,600 600 0.5 27 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/1",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 1,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        822,
+        1580,
+        840
+      ],
+      "literal_schedule_row_as_printed": "B1 F-B1 AND EC-B1 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 30.9 30.9 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/2",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 2,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        840,
+        1580,
+        858
+      ],
+      "literal_schedule_row_as_printed": "B2 F-B2 AND EC-B2 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/3",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 3,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        858,
+        1580,
+        876
+      ],
+      "literal_schedule_row_as_printed": "B3 F-B3 AND EC-B3 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 35.3 35.3 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/4",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 4,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        876,
+        1580,
+        894
+      ],
+      "literal_schedule_row_as_printed": "B4 F-B4 AND EC-B4 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 30.9 30.9 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/5",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 5,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        894,
+        1580,
+        912
+      ],
+      "literal_schedule_row_as_printed": "B5 F-B5 AND EC-B5 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 36.8 36.8 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/6",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 6,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        912,
+        1580,
+        930
+      ],
+      "literal_schedule_row_as_printed": "B6 F-B6 AND EC-B6 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 36.8 36.8 A,B,D",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/7",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 7,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        930,
+        1580,
+        948
+      ],
+      "literal_schedule_row_as_printed": "B7 F-B7 AND EC-B7 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 30.9 30.9 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/8",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 8,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        948,
+        1580,
+        966
+      ],
+      "literal_schedule_row_as_printed": "B8 F-B8 AND EC-B8 FRASER JOHNSTON AL19B3621S 270 208/1/60 21.4 35 100/61 16 N/A 24.2 24.2 A,C,D",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/9",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 9,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        966,
+        1580,
+        984
+      ],
+      "literal_schedule_row_as_printed": "B9 F-B9 AND EC-B9 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 35.3 35.3 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/10",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 10,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        984,
+        1580,
+        1002
+      ],
+      "literal_schedule_row_as_printed": "BO1 OAU-B1 FRASER JOHNSTON AL19B6021S 300 208/1/60 31.4 50 100/61 19 N/A 50 50 A,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/11",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 11,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        1002,
+        1580,
+        1020
+      ],
+      "literal_schedule_row_as_printed": "BO2 OAU-B2 FRASER JOHNSTON AL19B6021S 300 208/1/60 31.4 50 100/61 19 N/A 50 50 A,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/12",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 12,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        1020,
+        1580,
+        1038
+      ],
+      "literal_schedule_row_as_printed": "C1 F-C1 AND EC-C1 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 33.9 33.9 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/13",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 13,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        1038,
+        1580,
+        1056
+      ],
+      "literal_schedule_row_as_printed": "C2 F-C2 AND EC-C2 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 29.5 29.5 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/14",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 14,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        1056,
+        1580,
+        1074
+      ],
+      "literal_schedule_row_as_printed": "C3 F-C3 AND EC-C3 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/15",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 15,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        1074,
+        1580,
+        1092
+      ],
+      "literal_schedule_row_as_printed": "C4 F-C4 AND EC-C4 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 29.5 29.5 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/16",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 16,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        1092,
+        1580,
+        1110
+      ],
+      "literal_schedule_row_as_printed": "C5 F-C5 AND EC-C5 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/17",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 17,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        1110,
+        1580,
+        1128
+      ],
+      "literal_schedule_row_as_printed": "C6 F-C6 AND EC-C6 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/18",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 18,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        1128,
+        1580,
+        1146
+      ],
+      "literal_schedule_row_as_printed": "C7 F-C7 AND EC-C7 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/19",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 19,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        1146,
+        1580,
+        1164
+      ],
+      "literal_schedule_row_as_printed": "C8 F-C8 AND EC-C8 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 38.3 38.3 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/20",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 20,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        1164,
+        1580,
+        1182
+      ],
+      "literal_schedule_row_as_printed": "C9 F-C9 AND EC-C9 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/21",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 21,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        1182,
+        1580,
+        1200
+      ],
+      "literal_schedule_row_as_printed": "C10 F-C10 AND EC-C10 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 29.5 29.5 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/22",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 22,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        1200,
+        1580,
+        1218
+      ],
+      "literal_schedule_row_as_printed": "C11 F-C11 AND EC-C11 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 29.5 29.5 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT/23",
+      "source_table": "M002-CONDENSING-UNIT",
+      "source_row": 23,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        1218,
+        1580,
+        1236
+      ],
+      "literal_schedule_row_as_printed": "C12 F-C12 AND EC-C12 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 33.9 33.9 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/1",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 1,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        813,
+        2620,
+        831
+      ],
+      "literal_schedule_row_as_printed": "B1 F-B1 AND CU-B1 RHEEM RCFZ4921ST 80 21 30.9 30.9 1,600 0.25 76/56 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/2",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 2,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        831,
+        2620,
+        849
+      ],
+      "literal_schedule_row_as_printed": "B2 F-B2 AND CU-B2 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/56 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/3",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 3,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        849,
+        2620,
+        867
+      ],
+      "literal_schedule_row_as_printed": "B3 F-B3 AND CU-B3 RHEEM RCFZ4921ST 80 21 35.3 35.3 1,600 0.25 79/56 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/4",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 4,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        867,
+        2620,
+        885
+      ],
+      "literal_schedule_row_as_printed": "B4 F-B4 AND CU-B4 RHEEM RCFZ4921ST 80 21 30.9 30.9 1,600 0.25 76/56 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/5",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 5,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        885,
+        2620,
+        903
+      ],
+      "literal_schedule_row_as_printed": "B5 F-B5 AND CU-B5 RHEEM RCFZ4921ST 80 21 36.8 36.8 1,600 0.25 80/57 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/6",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 6,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        903,
+        2620,
+        921
+      ],
+      "literal_schedule_row_as_printed": "B6 F-B6 AND CU-B6 RHEEM RCFZ4921ST 80 21 36.8 36.8 1,600 0.25 80/57 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/7",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 7,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        921,
+        2620,
+        939
+      ],
+      "literal_schedule_row_as_printed": "B7 F-B7 AND CU-B7 RHEEM RCFZ4921ST 80 21 30.9 30.9 1,600 0.25 76/56 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/8",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 8,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        939,
+        2620,
+        957
+      ],
+      "literal_schedule_row_as_printed": "B8 F-B8 AND CU-B8 FRASER JOHNSTON XAHC36DBCN1 60 21 24.2 24.2 1,050 0.25 80/55 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/9",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 9,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        957,
+        2620,
+        975
+      ],
+      "literal_schedule_row_as_printed": "B9 F-B9 AND CU-B9 RHEEM RCFZ4921ST 80 21 35.3 35.3 1,600 0.25 79/55 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/10",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 10,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        975,
+        2620,
+        993
+      ],
+      "literal_schedule_row_as_printed": "C1 F-C1 AND CU-C1 RHEEM RCFZ4921ST 80 21 33.9 33.9 1,600 0.25 78/56 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/11",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 11,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        993,
+        2620,
+        1011
+      ],
+      "literal_schedule_row_as_printed": "C2 F-C2 AND CU-C2 RHEEM RCFZ4921ST 80 21 29.5 29.5 1,600 0.25 75/56 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/12",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 12,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        1011,
+        2620,
+        1029
+      ],
+      "literal_schedule_row_as_printed": "C3 F-C3 AND CU-C3 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/55 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/13",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 13,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        1029,
+        2620,
+        1047
+      ],
+      "literal_schedule_row_as_printed": "C4 F-C4 AND CU-C4 RHEEM RCFZ4921ST 80 21 29.5 29.5 1,600 0.25 75/56 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/14",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 14,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        1047,
+        2620,
+        1065
+      ],
+      "literal_schedule_row_as_printed": "C5 F-C5 AND CU-C5 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/55 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/15",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 15,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        1065,
+        2620,
+        1083
+      ],
+      "literal_schedule_row_as_printed": "C6 F-C6 AND CU-C6 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/55 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/16",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 16,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        1083,
+        2620,
+        1101
+      ],
+      "literal_schedule_row_as_printed": "C7 F-C7 AND CU-C7 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/55 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/17",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 17,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        1101,
+        2620,
+        1119
+      ],
+      "literal_schedule_row_as_printed": "C8 F-C8 AND CU-C8 RHEEM RCFZ4921ST 80 21 38.3 38.3 1,600 0.25 81/57 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/18",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 18,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        1119,
+        2620,
+        1137
+      ],
+      "literal_schedule_row_as_printed": "C9 F-C9 AND CU-C9 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/55 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/19",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 19,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        1137,
+        2620,
+        1155
+      ],
+      "literal_schedule_row_as_printed": "C10 F-C10 AND CU-C10 RHEEM RCFZ4921ST 80 21 29.5 29.5 1,600 0.25 75/56 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/20",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 20,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        1155,
+        2620,
+        1173
+      ],
+      "literal_schedule_row_as_printed": "C11 F-C11 AND CU-C11 RHEEM RCFZ4921ST 80 21 29.5 29.5 1,600 0.25 75/56 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL/21",
+      "source_table": "M002-EVAPORATOR-COIL",
+      "source_row": 21,
+      "source_page": 3,
+      "row_bbox": [
+        1750,
+        1173,
+        2620,
+        1191
+      ],
+      "literal_schedule_row_as_printed": "C12 F-C12 AND CU-C12 RHEEM RCFZ4921ST 80 21 33.9 33.9 1,600 0.25 78/56 55 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-ENERGY-RECOVERY-VENTILATOR/1",
+      "source_table": "M002-ENERGY-RECOVERY-VENTILATOR",
+      "source_row": 1,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        1473,
+        2710,
+        1491
+      ],
+      "literal_schedule_row_as_printed": "C1 SWEGON NAGOLD020FRX INDOOR 1,600 460/3/60 8.8 15 3,300 0.75 1 3.2 2,950 0.75 1 3.2 100/61 76 10 0 66 80 3,300 82 56.2 85 3,300 50 152.1 85 A,B,C,D,E,F,G",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-ENERGY-RECOVERY-VENTILATOR/2",
+      "source_table": "M002-ENERGY-RECOVERY-VENTILATOR",
+      "source_row": 2,
+      "source_page": 3,
+      "row_bbox": [
+        650,
+        1491,
+        2710,
+        1509
+      ],
+      "literal_schedule_row_as_printed": "C2 SWEGON NAGOLD020FRX INDOOR 1,600 460/3/60 8.8 15 3,325 0.75 1 3.2 2,750 0.75 1 3.2 100/61 76 10 0 66 80 3,325 82 53.8 87 3,325 48 145.9 87 A,B,C,D,E,F,G",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-OUTDOOR-AIR-UNIT/1",
+      "source_table": "M002-OUTDOOR-AIR-UNIT",
+      "source_row": 1,
+      "source_page": 3,
+      "row_bbox": [
+        1160,
+        1828,
+        2710,
+        1846
+      ],
+      "literal_schedule_row_as_printed": "B1 BUILDING B OUTSIDE AIR ENVIRO-TEC HDD20 300 208/3/60 5.5 15 2,200 1.0 1.5 N/A N/A N/A N/A N/A N/A N/A N/A N/A N/A N/A 50.0 50.0 2,200 0.25 100/61 75 3 10 A,B,C,D",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M002-OUTDOOR-AIR-UNIT/2",
+      "source_table": "M002-OUTDOOR-AIR-UNIT",
+      "source_row": 2,
+      "source_page": 3,
+      "row_bbox": [
+        1160,
+        1846,
+        2710,
+        1864
+      ],
+      "literal_schedule_row_as_printed": "B2 BUILDING B OUTSIDE AIR ENVIRO-TEC HDD20 300 208/3/60 5.5 15 2,200 1.0 1.5 N/A N/A N/A N/A N/A N/A N/A N/A N/A N/A N/A 50.0 50.0 2,200 0.25 100/61 75 3 10 A,B,C,D",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M003-RELIEF-HOOD/1",
+      "source_table": "M003-RELIEF-HOOD",
+      "source_row": 1,
+      "source_page": 4,
+      "row_bbox": [
+        630,
+        189,
+        1490,
+        207
+      ],
+      "literal_schedule_row_as_printed": "C1 ERV-C1 GREENHECK FGR-24x24 125 N/A 24 24 2,950 750 4.0 0.08 A,B,C,D",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M003-RELIEF-HOOD/2",
+      "source_table": "M003-RELIEF-HOOD",
+      "source_row": 2,
+      "source_page": 4,
+      "row_bbox": [
+        630,
+        207,
+        1490,
+        225
+      ],
+      "literal_schedule_row_as_printed": "C2 ERV-C2 GREENHECK FGR-24x24 125 N/A 24 24 2,750 700 4.0 0.07 A,B,C,D",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M003-INTAKE-HOOD/1",
+      "source_table": "M003-INTAKE-HOOD",
+      "source_row": 1,
+      "source_page": 4,
+      "row_bbox": [
+        1700,
+        189,
+        2600,
+        207
+      ],
+      "literal_schedule_row_as_printed": "B9 F-B9 OUTSIDE AIR GREENHECK GRSI-8 50 8.25 N/A N/A 150 405 0.37 0.03 A,B,C,D,E,G,",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M003-INTAKE-HOOD/2",
+      "source_table": "M003-INTAKE-HOOD",
+      "source_row": 2,
+      "source_page": 4,
+      "row_bbox": [
+        1700,
+        207,
+        2600,
+        225
+      ],
+      "literal_schedule_row_as_printed": "B OAU-B1 AND OAU-B2 GREENHECK FGI-28x40 200 N/A 28 40 4,400 575 7.78 0.04 A,B,C,D,F",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M003-CONTROL-DAMPER/1",
+      "source_table": "M003-CONTROL-DAMPER",
+      "source_row": 1,
+      "source_page": 4,
+      "row_bbox": [
+        280,
+        532,
+        1335,
+        550
+      ],
+      "literal_schedule_row_as_printed": "B1 OAU-B1 AND OAU-B2 GREENHECK VCD-33 AIRFOIL PARALLEL CLOSED 1 25 30 4,400 845 0.01 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M003-CONTROL-DAMPER/2",
+      "source_table": "M003-CONTROL-DAMPER",
+      "source_row": 2,
+      "source_page": 4,
+      "row_bbox": [
+        280,
+        550,
+        1335,
+        568
+      ],
+      "literal_schedule_row_as_printed": "OA1 OAU-B1 GREENHECK VCD-33 AIRFOIL PARALLEL CLOSED 1 24 24 2,200 550 0.004 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M003-CONTROL-DAMPER/3",
+      "source_table": "M003-CONTROL-DAMPER",
+      "source_row": 3,
+      "source_page": 4,
+      "row_bbox": [
+        280,
+        568,
+        1335,
+        586
+      ],
+      "literal_schedule_row_as_printed": "OA2 OAU-B2 GREENHECK VCD-33 AIRFOIL PARALLEL CLOSED 1 24 24 2,200 550 0.004 A,B",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M003-EXHAUST-FAN/1",
+      "source_table": "M003-EXHAUST-FAN",
+      "source_row": 1,
+      "source_page": 4,
+      "row_bbox": [
+        1400,
+        515,
+        2700,
+        541
+      ],
+      "literal_schedule_row_as_printed": "B1 BUILDING B CLASSROOMS GREENHECK CUE-160-VG UPBLAST 2,350 0.75 DIRECT 1170 73,80,78,76,70,67,63,60,77,66 14 115 1 60 3/4 HP 80 A,B,C",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M003-EXISTING-RTU-REFERENCE/1",
+      "source_table": "M003-EXISTING-RTU-REFERENCE",
+      "source_row": 1,
+      "source_page": 4,
+      "row_bbox": [
+        650,
+        840,
+        1335,
+        867
+      ],
+      "literal_schedule_row_as_printed": "2 CARRIER 48HJE005---551-- 115 655 208/3/60 22 22 30 82/115",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M003-EXISTING-RTU-REFERENCE/2",
+      "source_table": "M003-EXISTING-RTU-REFERENCE",
+      "source_row": 2,
+      "source_page": 4,
+      "row_bbox": [
+        650,
+        867,
+        1335,
+        894
+      ],
+      "literal_schedule_row_as_printed": "3 CARRIER 48HJE004---541-- 115 645 208/3/60 18 18 25 50/72",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M003-EXISTING-RTU-REFERENCE/3",
+      "source_table": "M003-EXISTING-RTU-REFERENCE",
+      "source_row": 3,
+      "source_page": 4,
+      "row_bbox": [
+        650,
+        894,
+        1335,
+        921
+      ],
+      "literal_schedule_row_as_printed": "4 CARRIER 48HJE004---541-- 115 645 208/3/60 18 18 25 50/72",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M003-EXISTING-RTU-REFERENCE/4",
+      "source_table": "M003-EXISTING-RTU-REFERENCE",
+      "source_row": 4,
+      "source_page": 4,
+      "row_bbox": [
+        650,
+        921,
+        1335,
+        948
+      ],
+      "literal_schedule_row_as_printed": "5 CARRIER 48HJE004---541-- 115 645 208/3/60 18 18 25 50/72",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M003-GAS-FIRED-INDOOR-DUCT-FURNACE/1",
+      "source_table": "M003-GAS-FIRED-INDOOR-DUCT-FURNACE",
+      "source_row": 1,
+      "source_page": 4,
+      "row_bbox": [
+        1400,
+        795,
+        2700,
+        825
+      ],
+      "literal_schedule_row_as_printed": "B1 OAU-B1 AND OAU-B2 MODINE DFP250TM--N40A 250 120/1/60 2.4 15 4,375 0.25 INDIRECT NATURAL 0 41 250 170 81 A,B,C,D,E",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M003-RTU-BID-ALTERNATE-1/1",
+      "source_table": "M003-RTU-BID-ALTERNATE-1",
+      "source_row": 1,
+      "source_page": 4,
+      "row_bbox": [
+        1240,
+        1098,
+        2700,
+        1125
+      ],
+      "literal_schedule_row_as_printed": "B2 CARRIER 48GCRJ05A2M5 940 1,600 100 500 0.75 17.4 SEER 410A 208/3/60 26 30 40.4 40.4 80/57 52 100/61 82/110 70.4 50 98 0 A,B,C,D,E,F,G,H,I,J,K,L",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M003-RTU-BID-ALTERNATE-1/2",
+      "source_table": "M003-RTU-BID-ALTERNATE-1",
+      "source_row": 2,
+      "source_page": 4,
+      "row_bbox": [
+        1240,
+        1125,
+        2700,
+        1152
+      ],
+      "literal_schedule_row_as_printed": "B3 CARRIER 48GCRJ05A2M5 940 1,500 100 575 0.75 17.4 SEER 410A 208/3/60 26 30 40.4 40.4 82/58 54 100/61 82/110 70.4 45 93 0 A,B,C,D,E,F,G,H,I,J,K,L",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M003-RTU-BID-ALTERNATE-1/3",
+      "source_table": "M003-RTU-BID-ALTERNATE-1",
+      "source_row": 3,
+      "source_page": 4,
+      "row_bbox": [
+        1240,
+        1152,
+        2700,
+        1179
+      ],
+      "literal_schedule_row_as_printed": "B4 CARRIER 48GCRJ05A2M5 940 1,600 100 450 0.75 17.4 SEER 410A 208/3/60 26 30 38.1 37 80/57 55 100/61 82/110 70.4 52 100 0 A,B,C,D,E,F,G,H,I,J,K,L",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    },
+    {
+      "id": "M003-RTU-BID-ALTERNATE-1/4",
+      "source_table": "M003-RTU-BID-ALTERNATE-1",
+      "source_row": 4,
+      "source_page": 4,
+      "row_bbox": [
+        1240,
+        1179,
+        2700,
+        1206
+      ],
+      "literal_schedule_row_as_printed": "B5 CARRIER 48GCSJ04A2M5 850 1,200 100 175 0.75 17.4 SEER 410A 208/3/60 21 30 28.7 28.7 79/58 53 100/61 50/67 43.2 60 100 0 A,B,C,D,E,F,G,H,I,J,K,L",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    }
+  ],
+  "point_application_ledger": [
+    {
+      "id": "m602-c-wing-erv-bacnet-inputs/1.",
+      "application": "m602-c-wing-erv-bacnet-inputs",
+      "source_table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "source_row": 1,
+      "page": 28,
+      "sheet": "M6.02",
+      "row_bbox": [
+        1060,
+        1671.5,
+        1235,
+        1692.85
+      ],
+      "tag_as_printed": "1.",
+      "point_name_as_printed": "SA TEMPERATURE SETPOINT",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "1.",
+        "point_name": "SA TEMPERATURE SETPOINT"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Published BACnet Inputs to BMS table within the C-Wing ERV control diagram; final physical-device owner, controller/card/terminal binding and field wiring are not stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "m602-c-wing-erv-bacnet-inputs/2.",
+      "application": "m602-c-wing-erv-bacnet-inputs",
+      "source_table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "source_row": 2,
+      "page": 28,
+      "sheet": "M6.02",
+      "row_bbox": [
+        1060,
+        1692.85,
+        1235,
+        1714.2
+      ],
+      "tag_as_printed": "2.",
+      "point_name_as_printed": "SA AIRFLOW",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "2.",
+        "point_name": "SA AIRFLOW"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Published BACnet Inputs to BMS table within the C-Wing ERV control diagram; final physical-device owner, controller/card/terminal binding and field wiring are not stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "m602-c-wing-erv-bacnet-inputs/3.",
+      "application": "m602-c-wing-erv-bacnet-inputs",
+      "source_table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "source_row": 3,
+      "page": 28,
+      "sheet": "M6.02",
+      "row_bbox": [
+        1060,
+        1714.2,
+        1235,
+        1735.55
+      ],
+      "tag_as_printed": "3.",
+      "point_name_as_printed": "OA DAMPER POSITION",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "3.",
+        "point_name": "OA DAMPER POSITION"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Published BACnet Inputs to BMS table within the C-Wing ERV control diagram; final physical-device owner, controller/card/terminal binding and field wiring are not stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "m602-c-wing-erv-bacnet-inputs/4.",
+      "application": "m602-c-wing-erv-bacnet-inputs",
+      "source_table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "source_row": 4,
+      "page": 28,
+      "sheet": "M6.02",
+      "row_bbox": [
+        1060,
+        1735.55,
+        1235,
+        1756.9
+      ],
+      "tag_as_printed": "4.",
+      "point_name_as_printed": "EA DAMPER POSITION",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "4.",
+        "point_name": "EA DAMPER POSITION"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Published BACnet Inputs to BMS table within the C-Wing ERV control diagram; final physical-device owner, controller/card/terminal binding and field wiring are not stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "m602-c-wing-erv-bacnet-inputs/5.",
+      "application": "m602-c-wing-erv-bacnet-inputs",
+      "source_table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "source_row": 5,
+      "page": 28,
+      "sheet": "M6.02",
+      "row_bbox": [
+        1060,
+        1756.9,
+        1235,
+        1778.25
+      ],
+      "tag_as_printed": "5.",
+      "point_name_as_printed": "SA FAN LEVEL",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "5.",
+        "point_name": "SA FAN LEVEL"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Published BACnet Inputs to BMS table within the C-Wing ERV control diagram; final physical-device owner, controller/card/terminal binding and field wiring are not stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "m602-c-wing-erv-bacnet-inputs/6.",
+      "application": "m602-c-wing-erv-bacnet-inputs",
+      "source_table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "source_row": 6,
+      "page": 28,
+      "sheet": "M6.02",
+      "row_bbox": [
+        1060,
+        1778.25,
+        1235,
+        1799.6
+      ],
+      "tag_as_printed": "6.",
+      "point_name_as_printed": "SA FILTER PRESSURE DROP",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "6.",
+        "point_name": "SA FILTER PRESSURE DROP"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Published BACnet Inputs to BMS table within the C-Wing ERV control diagram; final physical-device owner, controller/card/terminal binding and field wiring are not stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "m602-c-wing-erv-bacnet-inputs/7.",
+      "application": "m602-c-wing-erv-bacnet-inputs",
+      "source_table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "source_row": 7,
+      "page": 28,
+      "sheet": "M6.02",
+      "row_bbox": [
+        1060,
+        1799.6,
+        1235,
+        1820.95
+      ],
+      "tag_as_printed": "7.",
+      "point_name_as_printed": "EA FILTER PRESSURE DROP",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "7.",
+        "point_name": "EA FILTER PRESSURE DROP"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Published BACnet Inputs to BMS table within the C-Wing ERV control diagram; final physical-device owner, controller/card/terminal binding and field wiring are not stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "m602-c-wing-erv-bacnet-inputs/8.",
+      "application": "m602-c-wing-erv-bacnet-inputs",
+      "source_table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "source_row": 8,
+      "page": 28,
+      "sheet": "M6.02",
+      "row_bbox": [
+        1060,
+        1820.95,
+        1235,
+        1842.3
+      ],
+      "tag_as_printed": "8.",
+      "point_name_as_printed": "EA AIRFLOW",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "8.",
+        "point_name": "EA AIRFLOW"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Published BACnet Inputs to BMS table within the C-Wing ERV control diagram; final physical-device owner, controller/card/terminal binding and field wiring are not stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "m602-c-wing-erv-bacnet-inputs/9.",
+      "application": "m602-c-wing-erv-bacnet-inputs",
+      "source_table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "source_row": 9,
+      "page": 28,
+      "sheet": "M6.02",
+      "row_bbox": [
+        1060,
+        1842.3,
+        1235,
+        1863.65
+      ],
+      "tag_as_printed": "9.",
+      "point_name_as_printed": "EA FAN LEVEL",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "9.",
+        "point_name": "EA FAN LEVEL"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Published BACnet Inputs to BMS table within the C-Wing ERV control diagram; final physical-device owner, controller/card/terminal binding and field wiring are not stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "m602-c-wing-erv-bacnet-inputs/10.",
+      "application": "m602-c-wing-erv-bacnet-inputs",
+      "source_table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "source_row": 10,
+      "page": 28,
+      "sheet": "M6.02",
+      "row_bbox": [
+        1060,
+        1863.65,
+        1235,
+        1885.0
+      ],
+      "tag_as_printed": "10.",
+      "point_name_as_printed": "ALARMS",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "10.",
+        "point_name": "ALARMS"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Published BACnet Inputs to BMS table within the C-Wing ERV control diagram; final physical-device owner, controller/card/terminal binding and field wiring are not stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "m602-c-wing-erv-bacnet-inputs/11.",
+      "application": "m602-c-wing-erv-bacnet-inputs",
+      "source_table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "source_row": 11,
+      "page": 28,
+      "sheet": "M6.02",
+      "row_bbox": [
+        1060,
+        1885.0,
+        1235,
+        1906.35
+      ],
+      "tag_as_printed": "11.",
+      "point_name_as_printed": "SA MINIMUM SETPOINT",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "11.",
+        "point_name": "SA MINIMUM SETPOINT"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Published BACnet Inputs to BMS table within the C-Wing ERV control diagram; final physical-device owner, controller/card/terminal binding and field wiring are not stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "m602-c-wing-erv-bacnet-inputs/12.",
+      "application": "m602-c-wing-erv-bacnet-inputs",
+      "source_table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "source_row": 12,
+      "page": 28,
+      "sheet": "M6.02",
+      "row_bbox": [
+        1060,
+        1906.35,
+        1235,
+        1927.7
+      ],
+      "tag_as_printed": "12.",
+      "point_name_as_printed": "SA MAXIMUM SETPOINT",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "12.",
+        "point_name": "SA MAXIMUM SETPOINT"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Published BACnet Inputs to BMS table within the C-Wing ERV control diagram; final physical-device owner, controller/card/terminal binding and field wiring are not stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    }
+  ]
+}

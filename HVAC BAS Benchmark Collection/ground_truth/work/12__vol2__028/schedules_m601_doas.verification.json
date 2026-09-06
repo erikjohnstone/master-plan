@@ -1,0 +1,2836 @@
+{
+  "document_id": "12__vol2__028",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "annotation_sha256": "581a0ef2e2e6a7160ed3c150565e82ba7fe7e57b3ae07760813f54c64873835e",
+  "tables": 1,
+  "rows": 3,
+  "cell_assertions": 96,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "mark",
+      "page": 9,
+      "bbox": [
+        125,
+        744,
+        190,
+        760
+      ],
+      "expected": "DOAS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAS-1",
+          "word_ids": [
+            406
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAS-1",
+          "word_ids": [
+            1061
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "max_supply_fan_cfm",
+      "page": 9,
+      "bbox": [
+        190,
+        744,
+        240,
+        760
+      ],
+      "expected": "1,200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,200",
+          "word_ids": [
+            407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,200",
+          "word_ids": [
+            1062
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "supply_fan_esp_in_wg",
+      "page": 9,
+      "bbox": [
+        240,
+        744,
+        300,
+        760
+      ],
+      "expected": "0.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            408
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            1063
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "exhaust_fan_esp_in_wg",
+      "page": 9,
+      "bbox": [
+        300,
+        744,
+        360,
+        760
+      ],
+      "expected": "0.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.8",
+          "word_ids": [
+            409
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.8",
+          "word_ids": [
+            1064
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "airside_eer",
+      "page": 9,
+      "bbox": [
+        360,
+        744,
+        395,
+        760
+      ],
+      "expected": "11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            410
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            1065
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "airside_pressure_drop_in_wg",
+      "page": 9,
+      "bbox": [
+        395,
+        744,
+        455,
+        760
+      ],
+      "expected": "0.48",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.48",
+          "word_ids": [
+            411
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.48",
+          "word_ids": [
+            1066
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "coil_fouling_factor_hr_sq_ft_f_btu",
+      "page": 9,
+      "bbox": [
+        455,
+        744,
+        535,
+        760
+      ],
+      "expected": "0.001",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.001",
+          "word_ids": [
+            412
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.001",
+          "word_ids": [
+            1067
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "cooling_eat_db_wb_f",
+      "page": 9,
+      "bbox": [
+        535,
+        744,
+        610,
+        760
+      ],
+      "expected": "101.5/73.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "101.5/73.9",
+          "word_ids": [
+            413
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "101.5/73.9",
+          "word_ids": [
+            1068
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "cooling_lat_db_wb_f",
+      "page": 9,
+      "bbox": [
+        610,
+        744,
+        675,
+        760
+      ],
+      "expected": "51.3/51.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "51.3/51.1",
+          "word_ids": [
+            414
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "51.3/51.1",
+          "word_ids": [
+            1069
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "cooling_ewt_lwt_f",
+      "page": 9,
+      "bbox": [
+        675,
+        744,
+        740,
+        760
+      ],
+      "expected": "42.0/56.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "42.0/56.0",
+          "word_ids": [
+            415
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "42.0/56.0",
+          "word_ids": [
+            1070
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "cooling_total_cap_mbh",
+      "page": 9,
+      "bbox": [
+        740,
+        744,
+        800,
+        760
+      ],
+      "expected": "88.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "88.5",
+          "word_ids": [
+            416
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "88.5",
+          "word_ids": [
+            1071
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "cooling_sensible_cap_mbh",
+      "page": 9,
+      "bbox": [
+        800,
+        744,
+        870,
+        760
+      ],
+      "expected": "65.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "65.8",
+          "word_ids": [
+            417
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "65.8",
+          "word_ids": [
+            1072
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "cooling_flow_rate_gpm",
+      "page": 9,
+      "bbox": [
+        870,
+        744,
+        920,
+        760
+      ],
+      "expected": "12.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12.6",
+          "word_ids": [
+            418
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12.6",
+          "word_ids": [
+            1073
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "cooling_water_side_pressure_drop_ft_wg",
+      "page": 9,
+      "bbox": [
+        920,
+        744,
+        1000,
+        760
+      ],
+      "expected": "12.24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12.24",
+          "word_ids": [
+            419
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12.24",
+          "word_ids": [
+            1074
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "heating_eat_db_f",
+      "page": 9,
+      "bbox": [
+        1000,
+        744,
+        1050,
+        760
+      ],
+      "expected": "33.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "33.8",
+          "word_ids": [
+            420
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "33.8",
+          "word_ids": [
+            1075
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "heating_lat_db_f",
+      "page": 9,
+      "bbox": [
+        1050,
+        744,
+        1110,
+        760
+      ],
+      "expected": "109.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "109.1",
+          "word_ids": [
+            421
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "109.1",
+          "word_ids": [
+            1076
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "heating_total_heat_cap_mbh",
+      "page": 9,
+      "bbox": [
+        1110,
+        744,
+        1170,
+        760
+      ],
+      "expected": "51.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "51.3",
+          "word_ids": [
+            422
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "51.3",
+          "word_ids": [
+            1077
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "heating_flow_rate_gpm",
+      "page": 9,
+      "bbox": [
+        1170,
+        744,
+        1240,
+        760
+      ],
+      "expected": "5.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.2",
+          "word_ids": [
+            423
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.2",
+          "word_ids": [
+            1078
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "heating_water_side_pressure_drop_ft_wg",
+      "page": 9,
+      "bbox": [
+        1240,
+        744,
+        1320,
+        760
+      ],
+      "expected": "10.77",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.77",
+          "word_ids": [
+            424
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.77",
+          "word_ids": [
+            1079
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "volt_ph",
+      "page": 9,
+      "bbox": [
+        1320,
+        744,
+        1360,
+        760
+      ],
+      "expected": "208/1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208/1",
+          "word_ids": [
+            425
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208/1",
+          "word_ids": [
+            1080
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "mca",
+      "page": 9,
+      "bbox": [
+        1360,
+        744,
+        1400,
+        760
+      ],
+      "expected": "13.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13.4",
+          "word_ids": [
+            426
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13.4",
+          "word_ids": [
+            1081
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "mocp",
+      "page": 9,
+      "bbox": [
+        1400,
+        744,
+        1445,
+        760
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            427
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            1082
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "supply_fan_motor_hp",
+      "page": 9,
+      "bbox": [
+        1445,
+        744,
+        1500,
+        760
+      ],
+      "expected": "3/4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            428
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            1083
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "exhaust_fan_motor_hp",
+      "page": 9,
+      "bbox": [
+        1500,
+        744,
+        1560,
+        760
+      ],
+      "expected": "3/4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            429
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            1084
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "fan_rpm",
+      "page": 9,
+      "bbox": [
+        1560,
+        744,
+        1610,
+        760
+      ],
+      "expected": "1309",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1309",
+          "word_ids": [
+            430
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1309",
+          "word_ids": [
+            1085
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "supply_fan_nema_size",
+      "page": 9,
+      "bbox": [
+        1610,
+        744,
+        1667,
+        760
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            431
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            1086
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "exhaust_fan_nema_size",
+      "page": 9,
+      "bbox": [
+        1667,
+        744,
+        1730,
+        760
+      ],
+      "expected": "00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "00",
+          "word_ids": [
+            432
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "00",
+          "word_ids": [
+            1087
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "length_in",
+      "page": 9,
+      "bbox": [
+        1730,
+        744,
+        1770,
+        760
+      ],
+      "expected": "46.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            433
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            1088
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "width_in",
+      "page": 9,
+      "bbox": [
+        1770,
+        744,
+        1820,
+        760
+      ],
+      "expected": "54.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "54.0",
+          "word_ids": [
+            434
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "54.0",
+          "word_ids": [
+            1089
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "height_in",
+      "page": 9,
+      "bbox": [
+        1820,
+        744,
+        1870,
+        760
+      ],
+      "expected": "18.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18.0",
+          "word_ids": [
+            435
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18.0",
+          "word_ids": [
+            1090
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 9,
+      "bbox": [
+        1870,
+        744,
+        1970,
+        760
+      ],
+      "expected": "DAIKIN/BCHD0181",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAIKIN/BCHD0181",
+          "word_ids": [
+            436
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAIKIN/BCHD0181",
+          "word_ids": [
+            1091
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 1,
+      "column": "notes",
+      "page": 9,
+      "bbox": [
+        1970,
+        744,
+        2105,
+        760
+      ],
+      "expected": "1,2,3,4,5,6,7,8,9,10,12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6,7,8,9,10,12",
+          "word_ids": [
+            437
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6,7,8,9,10,12",
+          "word_ids": [
+            1092
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "mark",
+      "page": 9,
+      "bbox": [
+        125,
+        760,
+        190,
+        776
+      ],
+      "expected": "DOAS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAS-2",
+          "word_ids": [
+            374
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAS-2",
+          "word_ids": [
+            1093
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "max_supply_fan_cfm",
+      "page": 9,
+      "bbox": [
+        190,
+        760,
+        240,
+        776
+      ],
+      "expected": "1,850",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,850",
+          "word_ids": [
+            375
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,850",
+          "word_ids": [
+            1094
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "supply_fan_esp_in_wg",
+      "page": 9,
+      "bbox": [
+        240,
+        760,
+        300,
+        776
+      ],
+      "expected": "0.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.9",
+          "word_ids": [
+            376
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.9",
+          "word_ids": [
+            1095
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "exhaust_fan_esp_in_wg",
+      "page": 9,
+      "bbox": [
+        300,
+        760,
+        360,
+        776
+      ],
+      "expected": "1.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.1",
+          "word_ids": [
+            377
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.1",
+          "word_ids": [
+            1096
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "airside_eer",
+      "page": 9,
+      "bbox": [
+        360,
+        760,
+        395,
+        776
+      ],
+      "expected": "11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            378
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            1097
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "airside_pressure_drop_in_wg",
+      "page": 9,
+      "bbox": [
+        395,
+        760,
+        455,
+        776
+      ],
+      "expected": "0.91",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.91",
+          "word_ids": [
+            379
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.91",
+          "word_ids": [
+            1098
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "coil_fouling_factor_hr_sq_ft_f_btu",
+      "page": 9,
+      "bbox": [
+        455,
+        760,
+        535,
+        776
+      ],
+      "expected": "0.001",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.001",
+          "word_ids": [
+            380
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.001",
+          "word_ids": [
+            1099
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "cooling_eat_db_wb_f",
+      "page": 9,
+      "bbox": [
+        535,
+        760,
+        610,
+        776
+      ],
+      "expected": "101.5/73.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "101.5/73.9",
+          "word_ids": [
+            381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "101.5/73.9",
+          "word_ids": [
+            1100
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "cooling_lat_db_wb_f",
+      "page": 9,
+      "bbox": [
+        610,
+        760,
+        675,
+        776
+      ],
+      "expected": "54.8/53.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "54.8/53.2",
+          "word_ids": [
+            382
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "54.8/53.2",
+          "word_ids": [
+            1101
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "cooling_ewt_lwt_f",
+      "page": 9,
+      "bbox": [
+        675,
+        760,
+        740,
+        776
+      ],
+      "expected": "42.0/56.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "42.0/56.0",
+          "word_ids": [
+            383
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "42.0/56.0",
+          "word_ids": [
+            1102
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "cooling_total_cap_mbh",
+      "page": 9,
+      "bbox": [
+        740,
+        760,
+        800,
+        776
+      ],
+      "expected": "126.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "126.0",
+          "word_ids": [
+            384
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "126.0",
+          "word_ids": [
+            1103
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "cooling_sensible_cap_mbh",
+      "page": 9,
+      "bbox": [
+        800,
+        760,
+        870,
+        776
+      ],
+      "expected": "95.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "95.6",
+          "word_ids": [
+            385
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "95.6",
+          "word_ids": [
+            1104
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "cooling_flow_rate_gpm",
+      "page": 9,
+      "bbox": [
+        870,
+        760,
+        920,
+        776
+      ],
+      "expected": "18.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18.0",
+          "word_ids": [
+            386
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18.0",
+          "word_ids": [
+            1105
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "cooling_water_side_pressure_drop_ft_wg",
+      "page": 9,
+      "bbox": [
+        920,
+        760,
+        1000,
+        776
+      ],
+      "expected": "22.16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "22.16",
+          "word_ids": [
+            387
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "22.16",
+          "word_ids": [
+            1106
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "heating_eat_db_f",
+      "page": 9,
+      "bbox": [
+        1000,
+        760,
+        1050,
+        776
+      ],
+      "expected": "33.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "33.8",
+          "word_ids": [
+            388
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "33.8",
+          "word_ids": [
+            1107
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "heating_lat_db_f",
+      "page": 9,
+      "bbox": [
+        1050,
+        760,
+        1110,
+        776
+      ],
+      "expected": "108.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "108.4",
+          "word_ids": [
+            389
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "108.4",
+          "word_ids": [
+            1108
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "heating_total_heat_cap_mbh",
+      "page": 9,
+      "bbox": [
+        1110,
+        760,
+        1170,
+        776
+      ],
+      "expected": "77.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "77.7",
+          "word_ids": [
+            390
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "77.7",
+          "word_ids": [
+            1109
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "heating_flow_rate_gpm",
+      "page": 9,
+      "bbox": [
+        1170,
+        760,
+        1240,
+        776
+      ],
+      "expected": "7.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "7.9",
+          "word_ids": [
+            391
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "7.9",
+          "word_ids": [
+            1110
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "heating_water_side_pressure_drop_ft_wg",
+      "page": 9,
+      "bbox": [
+        1240,
+        760,
+        1320,
+        776
+      ],
+      "expected": "15.58",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15.58",
+          "word_ids": [
+            392
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15.58",
+          "word_ids": [
+            1111
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "volt_ph",
+      "page": 9,
+      "bbox": [
+        1320,
+        760,
+        1360,
+        776
+      ],
+      "expected": "208/1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208/1",
+          "word_ids": [
+            393
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208/1",
+          "word_ids": [
+            1112
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "mca",
+      "page": 9,
+      "bbox": [
+        1360,
+        760,
+        1400,
+        776
+      ],
+      "expected": "10.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.3",
+          "word_ids": [
+            394
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.3",
+          "word_ids": [
+            1113
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "mocp",
+      "page": 9,
+      "bbox": [
+        1400,
+        760,
+        1445,
+        776
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            395
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            1114
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "supply_fan_motor_hp",
+      "page": 9,
+      "bbox": [
+        1445,
+        760,
+        1500,
+        776
+      ],
+      "expected": "1.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            396
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            1115
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "exhaust_fan_motor_hp",
+      "page": 9,
+      "bbox": [
+        1500,
+        760,
+        1560,
+        776
+      ],
+      "expected": "1.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            397
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            1116
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "fan_rpm",
+      "page": 9,
+      "bbox": [
+        1560,
+        760,
+        1610,
+        776
+      ],
+      "expected": "1486",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1486",
+          "word_ids": [
+            398
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1486",
+          "word_ids": [
+            1117
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "supply_fan_nema_size",
+      "page": 9,
+      "bbox": [
+        1610,
+        760,
+        1667,
+        776
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            399
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            1118
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "exhaust_fan_nema_size",
+      "page": 9,
+      "bbox": [
+        1667,
+        760,
+        1730,
+        776
+      ],
+      "expected": "00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "00",
+          "word_ids": [
+            400
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "00",
+          "word_ids": [
+            1119
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "length_in",
+      "page": 9,
+      "bbox": [
+        1730,
+        760,
+        1770,
+        776
+      ],
+      "expected": "46.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            401
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            1120
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "width_in",
+      "page": 9,
+      "bbox": [
+        1770,
+        760,
+        1820,
+        776
+      ],
+      "expected": "54.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "54.0",
+          "word_ids": [
+            402
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "54.0",
+          "word_ids": [
+            1121
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "height_in",
+      "page": 9,
+      "bbox": [
+        1820,
+        760,
+        1870,
+        776
+      ],
+      "expected": "18.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18.0",
+          "word_ids": [
+            403
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18.0",
+          "word_ids": [
+            1122
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 9,
+      "bbox": [
+        1870,
+        760,
+        1970,
+        776
+      ],
+      "expected": "DAIKIN/BCHD0201",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAIKIN/BCHD0201",
+          "word_ids": [
+            404
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAIKIN/BCHD0201",
+          "word_ids": [
+            1123
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 2,
+      "column": "notes",
+      "page": 9,
+      "bbox": [
+        1970,
+        760,
+        2105,
+        776
+      ],
+      "expected": "1,2,3,4,5,6,7,8,9,10,12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6,7,8,9,10,12",
+          "word_ids": [
+            405
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6,7,8,9,10,12",
+          "word_ids": [
+            1124
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "mark",
+      "page": 9,
+      "bbox": [
+        125,
+        776,
+        190,
+        792
+      ],
+      "expected": "DOAS-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAS-3",
+          "word_ids": [
+            342
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAS-3",
+          "word_ids": [
+            1125
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "max_supply_fan_cfm",
+      "page": 9,
+      "bbox": [
+        190,
+        776,
+        240,
+        792
+      ],
+      "expected": "2,550",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,550",
+          "word_ids": [
+            343
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,550",
+          "word_ids": [
+            1126
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "supply_fan_esp_in_wg",
+      "page": 9,
+      "bbox": [
+        240,
+        776,
+        300,
+        792
+      ],
+      "expected": "0.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.3",
+          "word_ids": [
+            344
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.3",
+          "word_ids": [
+            1127
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "exhaust_fan_esp_in_wg",
+      "page": 9,
+      "bbox": [
+        300,
+        776,
+        360,
+        792
+      ],
+      "expected": "0.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.9",
+          "word_ids": [
+            345
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.9",
+          "word_ids": [
+            1128
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "airside_eer",
+      "page": 9,
+      "bbox": [
+        360,
+        776,
+        395,
+        792
+      ],
+      "expected": "11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            346
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            1129
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "airside_pressure_drop_in_wg",
+      "page": 9,
+      "bbox": [
+        395,
+        776,
+        455,
+        792
+      ],
+      "expected": "0.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            347
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            1130
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "coil_fouling_factor_hr_sq_ft_f_btu",
+      "page": 9,
+      "bbox": [
+        455,
+        776,
+        535,
+        792
+      ],
+      "expected": "0.001",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.001",
+          "word_ids": [
+            348
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.001",
+          "word_ids": [
+            1131
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "cooling_eat_db_wb_f",
+      "page": 9,
+      "bbox": [
+        535,
+        776,
+        610,
+        792
+      ],
+      "expected": "101.5/73.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "101.5/73.9",
+          "word_ids": [
+            349
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "101.5/73.9",
+          "word_ids": [
+            1132
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "cooling_lat_db_wb_f",
+      "page": 9,
+      "bbox": [
+        610,
+        776,
+        675,
+        792
+      ],
+      "expected": "52.2/51.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "52.2/51.9",
+          "word_ids": [
+            350
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "52.2/51.9",
+          "word_ids": [
+            1133
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "cooling_ewt_lwt_f",
+      "page": 9,
+      "bbox": [
+        675,
+        776,
+        740,
+        792
+      ],
+      "expected": "42.0/56.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "42.0/56.0",
+          "word_ids": [
+            351
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "42.0/56.0",
+          "word_ids": [
+            1134
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "cooling_total_cap_mbh",
+      "page": 9,
+      "bbox": [
+        740,
+        776,
+        800,
+        792
+      ],
+      "expected": "137.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "137.5",
+          "word_ids": [
+            352
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "137.5",
+          "word_ids": [
+            1135
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "cooling_sensible_cap_mbh",
+      "page": 9,
+      "bbox": [
+        800,
+        776,
+        870,
+        792
+      ],
+      "expected": "182.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "182.9",
+          "word_ids": [
+            353
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "182.9",
+          "word_ids": [
+            1136
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "cooling_flow_rate_gpm",
+      "page": 9,
+      "bbox": [
+        870,
+        776,
+        920,
+        792
+      ],
+      "expected": "28.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "28.0",
+          "word_ids": [
+            354
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "28.0",
+          "word_ids": [
+            1137
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "cooling_water_side_pressure_drop_ft_wg",
+      "page": 9,
+      "bbox": [
+        920,
+        776,
+        1000,
+        792
+      ],
+      "expected": "11.50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11.50",
+          "word_ids": [
+            355
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11.50",
+          "word_ids": [
+            1138
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "heating_eat_db_f",
+      "page": 9,
+      "bbox": [
+        1000,
+        776,
+        1050,
+        792
+      ],
+      "expected": "33.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "33.8",
+          "word_ids": [
+            356
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "33.8",
+          "word_ids": [
+            1139
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "heating_lat_db_f",
+      "page": 9,
+      "bbox": [
+        1050,
+        776,
+        1110,
+        792
+      ],
+      "expected": "100.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100.8",
+          "word_ids": [
+            357
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100.8",
+          "word_ids": [
+            1140
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "heating_total_heat_cap_mbh",
+      "page": 9,
+      "bbox": [
+        1110,
+        776,
+        1170,
+        792
+      ],
+      "expected": "40.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "40.4",
+          "word_ids": [
+            358
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "40.4",
+          "word_ids": [
+            1141
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "heating_flow_rate_gpm",
+      "page": 9,
+      "bbox": [
+        1170,
+        776,
+        1240,
+        792
+      ],
+      "expected": "2.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.6",
+          "word_ids": [
+            359
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.6",
+          "word_ids": [
+            1142
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "heating_water_side_pressure_drop_ft_wg",
+      "page": 9,
+      "bbox": [
+        1240,
+        776,
+        1320,
+        792
+      ],
+      "expected": "0.90",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.90",
+          "word_ids": [
+            360
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.90",
+          "word_ids": [
+            1143
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "volt_ph",
+      "page": 9,
+      "bbox": [
+        1320,
+        776,
+        1360,
+        792
+      ],
+      "expected": "208/3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208/3",
+          "word_ids": [
+            361
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208/3",
+          "word_ids": [
+            1144
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "mca",
+      "page": 9,
+      "bbox": [
+        1360,
+        776,
+        1400,
+        792
+      ],
+      "expected": "5.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.9",
+          "word_ids": [
+            362
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.9",
+          "word_ids": [
+            1145
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "mocp",
+      "page": 9,
+      "bbox": [
+        1400,
+        776,
+        1445,
+        792
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            363
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            1146
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "supply_fan_motor_hp",
+      "page": 9,
+      "bbox": [
+        1445,
+        776,
+        1500,
+        792
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            364
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            1147
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "exhaust_fan_motor_hp",
+      "page": 9,
+      "bbox": [
+        1500,
+        776,
+        1560,
+        792
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            365
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            1148
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "fan_rpm",
+      "page": 9,
+      "bbox": [
+        1560,
+        776,
+        1610,
+        792
+      ],
+      "expected": "2319",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2319",
+          "word_ids": [
+            366
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2319",
+          "word_ids": [
+            1149
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "supply_fan_nema_size",
+      "page": 9,
+      "bbox": [
+        1610,
+        776,
+        1667,
+        792
+      ],
+      "expected": "00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "00",
+          "word_ids": [
+            367
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "00",
+          "word_ids": [
+            1150
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "exhaust_fan_nema_size",
+      "page": 9,
+      "bbox": [
+        1667,
+        776,
+        1730,
+        792
+      ],
+      "expected": "00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "00",
+          "word_ids": [
+            368
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "00",
+          "word_ids": [
+            1151
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "length_in",
+      "page": 9,
+      "bbox": [
+        1730,
+        776,
+        1770,
+        792
+      ],
+      "expected": "84.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "84.4",
+          "word_ids": [
+            369
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "84.4",
+          "word_ids": [
+            1152
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "width_in",
+      "page": 9,
+      "bbox": [
+        1770,
+        776,
+        1820,
+        792
+      ],
+      "expected": "56.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "56.5",
+          "word_ids": [
+            370
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "56.5",
+          "word_ids": [
+            1153
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "height_in",
+      "page": 9,
+      "bbox": [
+        1820,
+        776,
+        1870,
+        792
+      ],
+      "expected": "32.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "32.3",
+          "word_ids": [
+            371
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "32.3",
+          "word_ids": [
+            1154
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "manufacturer_model",
+      "page": 9,
+      "bbox": [
+        1870,
+        776,
+        1970,
+        792
+      ],
+      "expected": "DAIKIN/LAH007A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAIKIN/LAH007A",
+          "word_ids": [
+            372
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAIKIN/LAH007A",
+          "word_ids": [
+            1155
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "row": 3,
+      "column": "notes",
+      "page": 9,
+      "bbox": [
+        1970,
+        776,
+        2105,
+        792
+      ],
+      "expected": "1,2,3,4,5,6,7,8,9,10,11,13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6,7,8,9,10,11,13",
+          "word_ids": [
+            373
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6,7,8,9,10,11,13",
+          "word_ids": [
+            1156
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-DOAS",
+      "header": "DEDICATED OUTSIDE AIR SYSTEM SCHEDULE",
+      "page": 9,
+      "bbox": [
+        125,
+        658,
+        500,
+        686
+      ],
+      "engine": "mupdf",
+      "actual": "DEDICATED OUTSIDE AIR SYSTEM SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-DOAS",
+      "header": "DEDICATED OUTSIDE AIR SYSTEM SCHEDULE",
+      "page": 9,
+      "bbox": [
+        125,
+        658,
+        500,
+        686
+      ],
+      "engine": "poppler",
+      "actual": "DEDICATED OUTSIDE AIR SYSTEM SCHEDULE",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m601-doas-schedule-row-count",
+      "actual": 3,
+      "expected": 3,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

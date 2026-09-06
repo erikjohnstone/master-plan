@@ -1,0 +1,61 @@
+{
+  "id": "18__vol2__092",
+  "rank": 18,
+  "title": "Guaranteed Rate Field HVAC / AHU Renovation - Phase IX",
+  "source_pdf": "pdf/18__vol2__092__Guaranteed_Rate_Field_HVAC_Phase_IX.pdf",
+  "source_sha256": "85613e85e63e6e3e527a722dc93a9797b2b1edd57a8ec22fc96b4a808bc0f0a5",
+  "page_count": 13,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete ground truth for all thirteen supplied Guaranteed Rate Field HVAC/AHU Renovation Phase IX sheets: exact title-block/project/sheet review; all twenty rows and 421 cells in M3.01's eight schedules; all eleven explicitly printed M4.02 typical-points rows; specific BAS wiring, integration, safety and limited sequence text; M2.01's valve-chart sample distinction; and source conflict/reconciliation ledgers. No unprinted installed I/O total, controller terminal count, protocol, network topology, control-valve schedule, individual FCU-5 identities or unresolved tag/location alias is invented.",
+  "reading_notes": [
+    "All thirteen supplied pages were reviewed as full-page 180 DPI Poppler renders. MuPDF and Poppler independently corroborate each authored schedule/points cell and bounded text assertion.",
+    "M3.01 has eight populated schedules / 20 rows. FCU-5's literal QTY cell is 11; it remains one source schedule row plus an explicit source quantity rather than eleven fabricated location tags.",
+    "The populated Automatic Control Damper Schedule has exactly ACD 1 and ACD 2. Both print fail CLOSED. Its note assigns dampers to MC and listed-fail-position actuators to BASC.",
+    "M4.02's fan-coil and air-handling-unit lists are expressly TYPICAL. Their 11 source rows are preserved as templates, not multiplied by schedule or plan items into an installed I/O count.",
+    "M2.01's VALVE TAG AND VALVE CHART SAMPLE is deliberately excluded as a populated project control-valve schedule. The M3.01 Refrigeration Schedule's CH 1 versus the Chiller Schedule's CH 2, and FCU-1's source-location conflict, remain unresolved source discrepancies."
+  ],
+  "module_order": ["metadata", "schedules", "points", "controls_context", "equipment_reconciliation", "point_applications", "supporting_evidence"],
+  "module_sources": {
+    "schedules": ["schedules_m301"],
+    "points": ["points_m402"],
+    "controls_context": ["controls_context_m402"]
+  },
+  "requirement_audit": [
+    {"id": "project_identity", "result": "reviewed_with_source_limitations_recorded", "finding": "Project name, Chicago site, project number and issued-for-bid date are captured from repeated title blocks; blank revision-log structure is not treated as an event.", "evidence": [["modules", "metadata", "project"]]},
+    {"id": "sheet_details", "result": "reviewed_with_source_limitations_recorded", "finding": "Every supplied page has exact title and sheet-number witnesses plus a full-page visual finding.", "evidence": [["modules", "metadata", "visual_review_pages"]]},
+    {"id": "scale_verification", "result": "reviewed_with_source_limitations_recorded", "finding": "M0.02/M0.03/M0.04 print 1/32\" = 1'-0\"; M1 sheets are VARIES and details/schedules/specifications are AS NOTED, so title-block scale is not treated as a global conversion where it is non-specific.", "evidence": [["modules", "metadata", "scale_semantics"]]},
+    {"id": "equipment_tags_and_classification", "result": "reviewed_with_source_limitations_recorded", "finding": "All 20 schedule-row identities are classified, with 12 non-reference physical/assembly anchors. Outlet types, coordination categories and refrigeration cross-references remain outside a field-device total.", "evidence": [["modules", "equipment_reconciliation", "scheduled_families"], ["modules", "equipment_reconciliation", "primary_anchors"]]},
+    {"id": "schedule_rows_and_specs", "result": "reviewed_with_source_limitations_recorded", "finding": "All cells of the 20 rows in eight M3.01 schedules are retained: chiller, FCU, automatic-control damper, condensing unit, outlet, DX coil, coordination and refrigeration schedules.", "evidence": [["modules", "schedules", "tables"], ["modules", "equipment_reconciliation", "schedule_counts"]]},
+    {"id": "point_lists_and_equipment_ownership", "result": "reviewed_with_source_limitations_recorded", "finding": "Eleven exact source rows in two TYPICAL M4.02 points lists are retained. Prose-level BASC/EC/MC obligations are captured but no per-row physical owner, terminal, controller or installed I/O multiplication is supplied.", "evidence": [["modules", "points", "tables"], ["modules", "point_applications", "installed_IO_total"], ["modules", "controls_context", "ownership_and_wiring"]]},
+    {"id": "network_architecture", "result": "reviewed_with_source_limitations_recorded", "finding": "All work is incorporated into the existing Siemens BAS and graphically represented there; protocol, transport, controller model, addressing and topology are not stated.", "evidence": [["modules", "controls_context", "network_architecture"]]},
+    {"id": "sequences_and_diagrams", "result": "reviewed_with_source_limitations_recorded", "finding": "Specific FCU-1 OA-damper, fire/smoke shutdown and water-coil freeze-protection behaviors are retained. No universal standalone sequence is inferred for every scheduled unit.", "evidence": [["modules", "controls_context", "sequence_of_operations"]]},
+    {"id": "space_sensors_and_zones", "result": "reviewed_with_source_limitations_recorded", "finding": "Typical temperature/wall-switch/thermostat roles and BASC sensor-placement requirements are recorded; neither physical count nor location-tagged zone mapping is stated.", "evidence": [["modules", "controls_context", "sensor_and_zone_ledger"]]},
+    {"id": "source_limitations_and_conflicts", "result": "reviewed_with_source_limitations_recorded", "finding": "The M2.01 valve chart is a sample, not a populated control-valve schedule. M3.01 contains a two-row ACD schedule; schedule tag/location discrepancies are preserved without aliasing.", "evidence": [["modules", "supporting_evidence", "source_limitations"], ["modules", "equipment_reconciliation", "source_conflicts"], ["modules", "equipment_reconciliation", "control_valve_and_damper_schedule_status"]]},
+    {"id": "all_page_visual_review", "result": "reviewed_with_source_limitations_recorded", "finding": "All thirteen supplied pages were reviewed at full-page resolution; saved Poppler renders and concise page dispositions are embedded and hash-checked.", "evidence": [["page_review"], ["modules", "metadata", "visual_review_pages"]]},
+    {"id": "independent_corroboration", "result": "reviewed_with_source_limitations_recorded", "finding": "Bundle build and validation rerun every authored module against retained MuPDF and Poppler captures, then record current source/manifest/module digests.", "evidence": [["module_source_sha256"], ["module_sha256"]]}
+  ],
+  "page_review": [
+    {"page": 1, "review_status": "complete", "render": "reviews/18__vol2__092/p1-p1-full-poppler-poppler.png", "finding": "M0.01 cover/index: project identity and supplied thirteen-sheet index; no schedule or formal points list."},
+    {"page": 2, "review_status": "complete", "render": "reviews/18__vol2__092/p2-p2-full-poppler-poppler.png", "finding": "M0.02 service-level overall mechanical plan at 1/32\" = 1'-0\"; plan context."},
+    {"page": 3, "review_status": "complete", "render": "reviews/18__vol2__092/p3-p3-full-poppler-poppler.png", "finding": "M0.03 level-200 overall mechanical plan at 1/32\" = 1'-0\"; plan context."},
+    {"page": 4, "review_status": "complete", "render": "reviews/18__vol2__092/p4-p4-full-poppler-poppler.png", "finding": "M0.04 level-400 overall mechanical plan at 1/32\" = 1'-0\"; plan context."},
+    {"page": 5, "review_status": "complete", "render": "reviews/18__vol2__092/p5-p5-full-poppler-poppler.png", "finding": "M1.01 service-level mechanical work plan; title-block scale VARIES."},
+    {"page": 6, "review_status": "complete", "render": "reviews/18__vol2__092/p6-p6-full-poppler-poppler.png", "finding": "M1.02 service-level mechanical work plan; title-block scale VARIES."},
+    {"page": 7, "review_status": "complete", "render": "reviews/18__vol2__092/p7-p7-full-poppler-poppler.png", "finding": "M1.03 service-level mechanical work plan; title-block scale VARIES."},
+    {"page": 8, "review_status": "complete", "render": "reviews/18__vol2__092/p8-p8-full-poppler-poppler.png", "finding": "M1.21 200-level mechanical work plan; title-block scale VARIES."},
+    {"page": 9, "review_status": "complete", "render": "reviews/18__vol2__092/p9-p9-full-poppler-poppler.png", "finding": "M1.41 400-level mechanical work plan; title-block scale VARIES."},
+    {"page": 10, "review_status": "complete", "render": "reviews/18__vol2__092/p10-p10-full-poppler-poppler.png", "finding": "M2.01 mechanical details, including the explicitly marked VALVE TAG AND VALVE CHART SAMPLE."},
+    {"page": 11, "review_status": "complete", "render": "reviews/18__vol2__092/p11-p11-full-poppler-poppler.png", "finding": "M3.01 mechanical schedules: eight populated tables / 20 rows, transcribed cell-for-cell."},
+    {"page": 12, "review_status": "complete", "render": "reviews/18__vol2__092/p12-p12-full-poppler-poppler.png", "finding": "M4.01 mechanical specifications/general requirements; title-block scale AS NOTED."},
+    {"page": 13, "review_status": "complete", "render": "reviews/18__vol2__092/p13-p13-full-poppler-poppler.png", "finding": "M4.02 mechanical specifications: typical FCU/AHU points lists and BAS integration/wiring/safety/sequence requirements."}
+  ],
+  "declared_checks": [
+    {"id": "supplied-pages", "path": ["modules", "metadata", "visual_review_pages"], "operation": "length", "expected": 13},
+    {"id": "full-page-review", "path": ["page_review"], "operation": "length", "expected": 13},
+    {"id": "schedule-tables", "path": ["modules", "equipment_reconciliation", "schedule_counts", "tables"], "expected": 8},
+    {"id": "schedule-rows", "path": ["modules", "equipment_reconciliation", "schedule_counts", "rows"], "expected": 20},
+    {"id": "typical-source-point-rows", "path": ["modules", "point_applications", "listed_template_counts", "source_rows"], "expected": 11}
+  ],
+  "completion_checks": {"every_source_page_reviewed": true, "all_explicit_objective_categories_reviewed": true, "all_populated_schedule_and_points_rows_captured": true, "source_conflicts_and_unavailable_fields_preserved": true, "two_engine_checks_current": true, "final_assembly_audit_complete": true},
+  "verification_semantics": "MuPDF and Poppler independently captured all thirteen supplied vector-PDF pages. Current authored schedule/points cells and bounded text assertions are rechecked by both engines at build and validation time. Parser agreement corroborates literal source text/cells and their declared bounds; full-page Poppler review establishes page disposition, visual table/detail context and source limitations. Neither process creates missing device quantities, point/terminal counts, controller/panel details, network attributes, valve schedules, aliases or zone mappings."
+}

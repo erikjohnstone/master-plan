@@ -1,0 +1,44 @@
+{
+  "document_id": "25__vol2__053",
+  "module_role": "Exact MH502 VAV terminal-unit point-list matrix. This preserves the printed hardware/software/alarm/trend/graphic flags; it does not turn the template into an installed controller-terminal total.",
+  "source_sheet": "MH502",
+  "source_page": 11,
+  "tables": [
+    {
+      "id": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "page": 11,
+      "sheet": "MH502",
+      "title": "VAV TERMINAL UNIT POINT LIST",
+      "classification": "VAV terminal-unit points matrix",
+      "columns": "point_name|AI|AO|BI|BO|AV|BV|LOOP|SCHED|TREND|ALARM|show_on_graphic",
+      "x_edges": [2194.802,2430.352,2455.192,2479.928,2504.643,2530.802,2555.641,2578.811,2612.514,2654.524,2696.514,2745.368,2868.369],
+      "y_edges": [638.88,654.239,669.601,684.84,700.08,715.319,729.6,743.879,758.16,772.439,786.72,801.119,815.4,829.679,843.96,857.52,871.801,886.08,900.361,914.759],
+      "rows": [
+        "ZONE TEMPERATURE|X||||||||X||X",
+        "ZONE TEMPERATURE SETPOINT|X||||||||||X",
+        "AIRFLOW|X||||||||X||X",
+        "DISCHARGE AIR TEMPERATURE|X||||||||X||X",
+        "ZONE DAMPER||X|||||||||X",
+        "REHEATING VALVE||X|||||||X||X",
+        "MAXIMUM OCCUPIED AIRFLOW SETPOINT|||||X||||X||X",
+        "HEATING MODE||||||X|||X||",
+        "HEATING SETPOINT|||||||||X||X",
+        "COOLING SETPOINT|||||||||X||X",
+        "HIGH ZONE TEMPERATURE||||||||||X|",
+        "LOW ZONE TEMPERATURE||||||||||X|",
+        "HIGH DISCHARGE TEMPERATURE||||||||||X|",
+        "LOW DISCHARGE TEMPERATURE||||||||||X|",
+        "HIGH ZONE HUMIDITY||||||||||X|",
+        "MINIMUM OCCUPIED AIR FLOW SETPOINT|||||X||||X||X",
+        "MINIMUM UNOCCUPIED AIRFLOW SETPOINT|||||X||||X||X",
+        "ZONE HUMIDITY|X||||||||X||",
+        "ZONE HUMIDITY SETPOINT|X||||||||X||"
+      ],
+      "header_evidence": [{"bbox": [2180,980,2530,1005], "expected": "VAV TERMINAL UNIT POINT LIST"}]
+    }
+  ],
+  "assertions": [],
+  "inventory_checks": [
+    {"id": "mh502-vav-point-list-rows", "records_path": ["tables"], "expected": 1, "unique_key": "id"}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "document_id": "12__vol2__028",
+  "status": "corroborated_document_component",
+  "scope": "Completion and limitation ledger for the supplied nine-sheet archive excerpt. It records what the visual review and authored modules establish, and what the absent remainder of the 191-sheet design set cannot establish.",
+  "tables": [],
+  "source_limitations": [
+    {"id": "archive-excerpt-only", "finding": "The supplied PDF contains nine mechanical sheets M-505 through M-512 and M-601 from an original 191-sheet project. This record is complete only for these nine supplied pages."},
+    {"id": "no-mechanical-plans", "finding": "No mechanical floor/roof plan is supplied. Schedule rows, P&ID labels, templates, sensor roles and written sequences are not expanded into an installed equipment, sensor, actuator, controller, terminal, wire, or zone count."},
+    {"id": "no-separate-valve-or-actuator-schedules", "finding": "The reviewed excerpt contains no separately printed control-valve schedule or damper-actuator schedule. P&ID/sequence valve and bypass references remain in their own source contexts rather than becoming schedule rows."},
+    {"id": "p507-p508-sequence-scope", "finding": "M-507 and M-508 provide P&IDs and point matrices but no written sequence-of-operations block; M-509 provides the written hydronic sequences and is not retroactively treated as printed on the adjacent P&ID sheets."},
+    {"id": "physical-counts", "finding": "Repeated template matrix rows, source schedule-row marks, and P&ID local numeric tags are distinct units of evidence. They do not prove a physical quantity without missing plan/controller evidence."}
+  ],
+  "visual_relationship_scope": "Every supplied source page was rendered and visually reviewed. Visual review confirms page/table/diagram disposition and page-level absence limits; dual-engine text corroboration proves the bounded authored table cells and text assertions. Neither mechanism is described as an automatic engineering interpretation.",
+  "schedule_note_scope": "All exact printed schedule cells, including notes fields and blank cells, are preserved in the M-505/M-601 source modules embedded by the schedules composite.",
+  "inventory_checks": [
+    {"id": "source-limitations", "records_path": ["source_limitations"], "expected": 5, "unique_key": "id"}
+  ]
+}

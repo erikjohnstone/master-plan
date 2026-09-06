@@ -1,0 +1,160 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All printed entries in the Air Ops DOAH DDC points list on MI702 (source PDF page 52): 27 analog inputs, 7 analog outputs, 24 binary inputs and 9 binary outputs. This records controller points and flags, not inferred field-device counts.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [52],
+    "render": "reviews/01__vol2__001/p52-p52-controls-poppler.png",
+    "dpi": 180,
+    "finding": "The MI702 schematic and its full right-hand points-list panel were visually reviewed at 180 DPI. Point descriptions, alarm and trend flags are transcribed below exactly as printed."
+  },
+  "tables": [
+    {
+      "id": "AIR-OPS-DOAH-AI",
+      "page": 52,
+      "sheet": "MI702",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS DOAH DDC POINTS LIST - ANALOG INPUT",
+      "classification": "Analog input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1750, 1790, 2100, 2160, 2210],
+      "y_edges": [254, 272, 289, 306, 324, 341, 358, 375, 393, 410, 427, 444, 461, 479, 496, 513, 530, 548, 565, 582, 599, 617, 634, 651, 668, 685, 703, 720],
+      "rows": [
+        "AI01|HIGH LIMIT STATIC PRESSURE|Yes|No",
+        "AI02|HIGH LIMIT STATIC PRESSURE|Yes|No",
+        "AI03|ERW DIFFERENTIAL PRESSURE - OA SIDE|No|Yes",
+        "AI04|ERW BYPASS DAMPER POSITION (FEEDBACK) - OA SIDE|No|Yes",
+        "AI05|ERW LEAVING AIR HUMIDITY - OA SIDE|No|Yes",
+        "AI06|ERW LAT - OA SIDE|No|Yes",
+        "AI07|HWR VALVE POSITION (FEEDBACK)|No|Yes",
+        "AI08|HEATING COIL LAT|No|Yes",
+        "AI09|CHW VALVE POSITION (FEEDBACK)|No|Yes",
+        "AI10|COOLING COIL LAT|No|Yes",
+        "AI11|TOA FAN DIFFERENTIAL PRESSURE|No|Yes",
+        "AI12|TOA TEMPERATURE|No|Yes",
+        "AI13|TOA HUMIDITY|No|Yes",
+        "AI14|TOA AIRFLOW|No|Yes",
+        "AI15|EA FAN DIFFERENTIAL PRESSURE|No|Yes",
+        "AI16|EA AIRFLOW|No|Yes",
+        "AI17|ERW LEAVING AIR HUMIDITY - EA SIDE|No|Yes",
+        "AI18|ERW LAT - EA SIDE|No|Yes",
+        "AI19|ERW DIFFERENTIAL PRESSURE - EA SIDE|No|Yes",
+        "AI20|ERW BYPASS DAMPER POSITION (FEEDBACK) - EA SIDE|No|Yes",
+        "AI21|ERW ENTERING AIR HUMIDITY - EA SIDE|No|Yes",
+        "AI22|ERW EAT - EA SIDE|No|Yes",
+        "AI23|DOAH SF SPEED (FEEDBACK)|No|No",
+        "AI24|DOAH EF SPEED (FEEDBACK)|No|No",
+        "AI25|BATHROOM EXHAUST AIRFLOW|No|Yes",
+        "AI26|RELIEF DAMPER POSITION (FEEDBACK)|No|No",
+        "AI27|RELIEF AIRFLOW|No|Yes"
+      ],
+      "header_evidence": [
+        {"bbox": [1890, 185, 2100, 220], "expected": "AIR OPS DOAH DDC POINTS LIST"},
+        {"bbox": [1750, 220, 2210, 246], "expected": "MARK DESCRIPTION ALARM TREND"},
+        {"bbox": [1730, 235, 1840, 254], "expected": "ANALOG INPUT"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-DOAH-AO",
+      "page": 52,
+      "sheet": "MI702",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS DOAH DDC POINTS LIST - ANALOG OUTPUT",
+      "classification": "Analog output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1750, 1790, 2100, 2160, 2210],
+      "y_edges": [754, 772, 789, 806, 823, 841, 858, 875],
+      "rows": [
+        "AO01|ERW BYPASS DAMPER CONTROL - OA SIDE|No|Yes",
+        "AO02|HHW VALVE CONTROL|No|Yes",
+        "AO03|CHW VALVE CONTROL|No|Yes",
+        "AO04|ERW BYPASS DAMPER CONTROL - EA SIDE|No|Yes",
+        "AO05|DOAH SF SPEED (FEEDBACK)|No|Yes",
+        "AO06|DOAH EF SPEED (FEEDBACK)|No|Yes",
+        "AO07|RELIEF DAMPER CONTROL|No|Yes"
+      ],
+      "header_evidence": [
+        {"bbox": [1730, 735, 1840, 754], "expected": "ANALOG OUTPUT"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-DOAH-BI",
+      "page": 52,
+      "sheet": "MI702",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS DOAH DDC POINTS LIST - BINARY INPUT",
+      "classification": "Binary input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1750, 1790, 2100, 2160, 2210],
+      "y_edges": [909, 927, 944, 961, 979, 996, 1013, 1030, 1048, 1065, 1082, 1099, 1117, 1134, 1151, 1168, 1186, 1203, 1220, 1237, 1255, 1272, 1289, 1306, 1324],
+      "rows": [
+        "BI01|DOAH OA DAMPER POSITION OPEN (FEEDBACK)|Yes|No",
+        "BI02|DOAH OA DAMPER POSITION CLOSED (FEEDBACK)|Yes|No",
+        "BI03|MERV 8 UOA FILTER STATUS|Yes|No",
+        "BI04|MERV 13 UOA FILTER STATUS|Yes|No",
+        "BI06|FREEZESTAT|Yes|No",
+        "BI07|HIGH LIMIT STATIC PRESSURE|Yes|No",
+        "BI08|TOA DUCT SMOKE DETECTOR|Yes|No",
+        "BI09|DOAH EA DISCHARGE DAMPER POSITION OPEN (FEEDBACK)|Yes|Yes",
+        "BI10|DOAH EA DISCHARGE DAMPER POSITION CLOSED (FEEDBACK)|Yes|Yes",
+        "BI11|MERV 8 EA FILTER STATUS|Yes|No",
+        "BI12|TREATED OA DAMPER POSITION OPEN (FEEDBACK)|Yes|Yes",
+        "BI13|TREATED OA DAMPER POSITION CLOSED (FEEDBACK)|Yes|Yes",
+        "BI14|EA INLET DAMPER POSITION OPEN (FEEDBACK)|Yes|Yes",
+        "BI15|EA INLET DAMPER POSITION CLOSED (FEEDBACK)|Yes|Yes",
+        "BI16|DOAH SF STATUS|No|Yes",
+        "BI17|DOAH SF ALARM|Yes|No",
+        "BI18|ERW STATUS (FEEDBACK)|Yes|Yes",
+        "BI19|DOAH EF ALARM|Yes|No",
+        "BI20|DOAH EF STATUS|No|Yes",
+        "BI21|ESS (ATFP EMERGENCY SHUTDOWN) *GLOBAL POINT|Yes|No",
+        "BI22|HHWP-DOAH-X CIRCULATOR PUMP STATUS|No|Yes",
+        "BI23|DOAH DDC HARDWARE RESET|No|No",
+        "BI24|24/7 EA ISOLATION DAMPER POSITION OPEN (FEEDBACK)|Yes|Yes",
+        "BI25|24/7 EA DAMPER POSITION CLOSED (FEEDBACK)|Yes|Yes"
+      ],
+      "header_evidence": [
+        {"bbox": [1730, 890, 1840, 909], "expected": "BINARY INPUT"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-DOAH-BO",
+      "page": 52,
+      "sheet": "MI702",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS DOAH DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "Binary output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1750, 1790, 2100, 2160, 2210],
+      "y_edges": [1358, 1376, 1393, 1410, 1427, 1444, 1462, 1479, 1496, 1514],
+      "rows": [
+        "BO01|DOAH OA DAMPER CONTROL|No|Yes",
+        "BO02|DOAH SF ENABLE|No|No",
+        "BO03|DOAH EA DAMPER CONTROL|No|Yes",
+        "BO04|TREATED OA DAMPER CONTROL|No|Yes",
+        "BO05|EA INLET DAMPER CONTROL|No|Yes",
+        "BO06|ERW CONTROL|No|Yes",
+        "BO07|DOAH EF ENABLE|No|No",
+        "BO08|HHWP-DOAH-X CIRCULATOR PUMP ON/OFF|No|Yes",
+        "BO09|24/7 EA DAMPER CONTROL|No|Yes"
+      ],
+      "header_evidence": [
+        {"bbox": [1730, 1338, 1840, 1358], "expected": "BINARY OUTPUT"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "air-ops-doah-ai-count", "records_path": ["tables", 0, "rows"], "expected": 27},
+    {"id": "air-ops-doah-ao-count", "records_path": ["tables", 1, "rows"], "expected": 7},
+    {"id": "air-ops-doah-bi-count", "records_path": ["tables", 2, "rows"], "expected": 24},
+    {"id": "air-ops-doah-bo-count", "records_path": ["tables", 3, "rows"], "expected": 9}
+  ],
+  "source_conflicts": [
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "finding": "BI24 is printed as 24/7 EA ISOLATION DAMPER POSITION OPEN (FEEDBACK), while BI25 is printed without the word ISOLATION. The literal pair is retained rather than normalized."
+    }
+  ],
+  "remaining_work": "Capture the remaining system point lists, control diagrams, sequences, DDC-network relationships and plan-level field-device reconciliation."
+}

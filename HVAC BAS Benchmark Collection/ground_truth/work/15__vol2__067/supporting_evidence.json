@@ -1,0 +1,18 @@
+{
+  "document_id": "15__vol2__067",
+  "module_role": "Full-set qualification and source limitations for use of this compact process-cooling-water skid set as HVAC/BAS takeoff ground truth.",
+  "source_limitations": [
+    "M6.3 is a typed I/O P&ID, not a standalone final points list. It directs the I&C contractor to integrate the PLC system including a points list; the supplied drawing set contains no actual PLC I/O-card, terminal or wiring schedule.",
+    "Modbus TCP to Ignition SCADA and mirrored EPICS context are stated, but no register map, address, device topology, IP information, controller model or polling detail is published.",
+    "The M6.3 P&ID shows AO TCV MODULATION and AO MAKEUP ACTUATOR. There is no supplied control-valve schedule with valve tag/Cv, actuator model/torque, control-signal range or fail position, so no such attributes are inferred.",
+    "M7.0's existing AHU note references adjustment of motorized dampers, but no source damper/actuator schedule or installed damper quantity appears in the supplied set.",
+    "M7.0's demand totals separate existing and new PCW demands; a demand table must not be mistaken for a new-equipment quantity schedule or physical point multiplier."
+  ],
+  "tables": [],
+  "assertions": [
+    {"id": "m63-points-list-contractor-scope", "page": 6, "bbox": [2527,1725,2965,1770], "expected": "POINTS LIST, PLC AND IO HARDWARE", "mode": "contains"},
+    {"id": "m70-pump-n-plus-one", "page": 8, "bbox": [180,260,800,280], "expected": "(1) N+1 PUMPS.", "mode": "contains"},
+    {"id": "m70-flow-demand-title", "page": 8, "bbox": [2500,2240,2800,2300], "expected": "NEH PCW FLOW DEMAND", "mode": "contains"}
+  ],
+  "inventory_checks": [{"id": "supporting-source-limitations", "records_path": ["source_limitations"], "expected": 5}]
+}

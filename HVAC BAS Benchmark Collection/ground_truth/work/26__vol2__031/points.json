@@ -1,0 +1,129 @@
+{
+  "document_id": "26__vol2__031",
+  "module_role": "M-400 published controls-symbol point/function matrix, retained literally.",
+  "tables": [
+    {
+      "id": "M400-CONTROLS-SYMBOLS",
+      "page": 68,
+      "sheet": "M-400",
+      "title_as_printed": "CONTROLS SYMBOLS",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        945,
+        1340
+      ],
+      "y_ranges": [
+        [
+          1097,
+          1114
+        ],
+        [
+          1133,
+          1150
+        ],
+        [
+          1170,
+          1187
+        ],
+        [
+          1206,
+          1223
+        ],
+        [
+          1238,
+          1255
+        ],
+        [
+          1270,
+          1287
+        ],
+        [
+          1302,
+          1319
+        ],
+        [
+          1333,
+          1350
+        ],
+        [
+          1365,
+          1382
+        ],
+        [
+          1395,
+          1412
+        ],
+        [
+          1425,
+          1442
+        ],
+        [
+          1455,
+          1472
+        ],
+        [
+          1485,
+          1502
+        ],
+        [
+          1520,
+          1537
+        ],
+        [
+          1550,
+          1567
+        ],
+        [
+          1584,
+          1601
+        ],
+        [
+          1617,
+          1634
+        ],
+        [
+          1647,
+          1664
+        ],
+        [
+          1676,
+          1693
+        ],
+        [
+          1710,
+          1727
+        ],
+        [
+          1746,
+          1763
+        ]
+      ],
+      "rows": [
+        "T ROOM THERMOSTAT/TRANSMITTER - WALL MOUNT",
+        "M ROOM HUMIDISTAT (MOISTURE)/TRANSMITTER - WALL MOUNT",
+        "TT TEMPERATURE TRANSMITTER",
+        "TT TEMPERATURE TRANSMITTER, AVERAGING ELEMENT",
+        "MT MOISTURE (HUMIDITY) TRANSMITTER",
+        "PT PRESSURE TRANSMITTER",
+        "SPS STATIC PRESSURE SENSOR",
+        "FT FLOW TRANSMITTER",
+        "IT CURRENT TRANSMITTER",
+        "SD SMOKE DETECTOR",
+        "PDT PRESSURE DIFFERENTIAL TRANSMITTER",
+        "PDS PRESSURE DIFFERENTIAL SWITCH",
+        "HS HAND SWITCH (HAND-OFF-AUTO SWITCH)",
+        "ZC VALVE OR DAMPER POSITION CONTROLLER",
+        "TSL TEMPERATURE SWITCH, LOW (FREEZESTAT)",
+        "PSH PRESSURE SWITCH HIGH",
+        "PSL PRESSURE SWITCH LOW",
+        "HVAC HVAC CONTROL PANEL",
+        "VSMC VARIABLE SPEED MOTOR CONTROLLER",
+        "ECC INTEGRATE WORKSTATION AT CONTROL ENERGY POINT ON CONTROL REMOTE CENTER GRAPHICS",
+        "TC TEMPERATURE CONTROLLER. SEE SEQUENCE OF OPERATION"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Complete literal printed schedule or matrix row. It is source evidence only and is not converted into installed multiplicity, wiring, controller, ownership or physical-takeoff claims."
+    }
+  ],
+  "assertions": []
+}

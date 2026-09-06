@@ -1,0 +1,16 @@
+{
+  "document_id": "09__vol2__014",
+  "module_role": "Presentation registry for the complete literal schedule-row corpus selected from M0.2-M0.4. It does not infer installed multiplicity, procurement, plan placement or physical equipment identity beyond printed rows.",
+  "tables": [],
+  "ledger_mode": "literal_schedule_rows_v1",
+  "schedule_counts": {
+    "tables": 5,
+    "rows": 27,
+    "interpretation": "Five selected high-value schedule tables and 27 literal rows are retained: condensing units, control dampers, condensing boilers, steam generators and hot-water pumps."
+  },
+  "control_valve_and_damper_schedule_status": {
+    "damper_actuator_schedule": "M0.3 explicitly publishes a 17-row CONTROL DAMPER SCHEDULE, including printed control/failure-state fields. It is completely captured in the literal schedule module.",
+    "control_valve_schedule": "No standalone schedule titled CONTROL VALVE SCHEDULE is asserted. Control-valve symbols and bounded boiler/coil control language are retained as legend/diagram/source context, not expanded into a schedule row inventory."
+  },
+  "source_boundary": "The selected schedule tables are source references, not proof of plan placement, installed quantity, final purchasing scope, actuator count, physical BAS I/O, controllers, terminals or wiring."
+}

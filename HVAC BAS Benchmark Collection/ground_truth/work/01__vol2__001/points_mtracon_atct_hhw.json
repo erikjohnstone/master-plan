@@ -1,0 +1,213 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All printed entries in the MTRACON/ATCT heating-hot-water system point list on MI722 (source PDF page 62): 43 analog inputs, 12 analog outputs split across the two printed panels, 29 binary inputs and 18 binary outputs. This records controller points and printed flags, not inferred field-device counts.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [62],
+    "render": "reviews/01__vol2__001/p62-p62-controls-poppler.png",
+    "dpi": 180,
+    "finding": "The MI722 MTRACON/ATCT heating-hot-water schematic and both printed points-list panels were visually reviewed at 180 DPI. The continuation of analog outputs from the left panel into the top of the right panel is recorded explicitly."
+  },
+  "tables": [
+    {
+      "id": "MTRACON-ATCT-HHW-AI",
+      "page": 62,
+      "sheet": "MI722",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT HHW SYSTEM POINT LIST - ANALOG INPUT",
+      "classification": "Analog input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1560, 1600, 1780, 1835, 1880],
+      "y_ranges": [[286, 306], [306, 323], [323, 354], [354, 385], [385, 402], [402, 420], [420, 438], [438, 455], [455, 472], [472, 504], [504, 521], [521, 539], [539, 556], [556, 587], [587, 604], [604, 622], [622, 640], [640, 657], [657, 674], [674, 691], [691, 708], [708, 726], [726, 743], [743, 760], [760, 792], [792, 809], [809, 841], [841, 873], [873, 905], [905, 922], [922, 954], [954, 986], [986, 1003], [1003, 1020], [1020, 1037], [1037, 1054], [1054, 1071], [1071, 1088], [1088, 1105], [1105, 1123], [1123, 1141], [1141, 1158], [1158, 1175]],
+      "rows": [
+        "AI01|HHWS TEMPERATURE - MTRACON|Yes|Yes",
+        "AI02|HHW FLOWRATE - MTRACON|No|Yes",
+        "AI03|HHW DIFFERENTIAL PRESSURE - MTRACON|No|No",
+        "AI04|HHW BYPASS VALVE POSITION (FEEDBACK) - MTRACON|No|No",
+        "AI05|HHWR TEMPERATURE - MTRACON|No|No",
+        "AI06|SHHWP-M1 DIFFERENTIAL PRESSURE|No|No",
+        "AI07|B-M2 LWT|No|No",
+        "AI08|B-M1 LWT|No|No",
+        "AI09|B-M2 EWT|No|No",
+        "AI10|HHW BYPASS VALVE POSITION - ATCT (FEEDBACK) - ATCT|No|No",
+        "AI11|B-M1 EWT|No|No",
+        "AI12|HHWS TEMPERATURE - ATCT|No|No",
+        "AI13|HHW FLOWRATE - ATCT|No|No",
+        "AI14|HHW DIFFERENTIAL PRESSURE - ATCT|No|No",
+        "AI15|HHWR TEMPERATURE - ATCT|No|No",
+        "AI16|SHHWP-T1 DIFFERENTIAL PRESSURE|No|No",
+        "AI17|SHHWP-T2 DIFFERENTIAL PRESSURE|No|No",
+        "AI18|B-T2 LWT|No|No",
+        "AI19|B-T1 LWT|No|No",
+        "AI20|B-T2 EWT|No|No",
+        "AI21|B-T1 EWT|No|No",
+        "AI22|SHHWP-M2 DIFFERENTIAL PRESSURE|No|No",
+        "AI23|HRHWP-MT1 SPEED (FEEDBACK)|No|No",
+        "AI24|HRHWP-MT1 SPEED (FEEDBACK)|No|No",
+        "AI25|CH-MT1 HRHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI26|CH-MT1 HR FLOW|Yes|Yes",
+        "AI27|CH-MT1 HRHW SUPPLY TEMPERATURE|Yes|Yes",
+        "AI28|CH-MT1 HRHW RETURN TEMPERATURE|Yes|Yes",
+        "AI29|CH-MT1 HRHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI30|CH-MT1 HR FLOW|Yes|Yes",
+        "AI31|CH-MT1 HRHW SUPPLY TEMPERATURE|Yes|Yes",
+        "AI32|CH-MT1 HRHW RETURN TEMPERATURE|Yes|Yes",
+        "AI33|SHHWP-M1 SPEED (FEEDBACK)|No|No",
+        "AI34|SHHWP-M2 SPEED (FEEDBACK)|No|No",
+        "AI35|PHHWP-M1 SPEED (FEEDBACK)|No|No",
+        "AI36|PHHWP-M2 SPEED (FEEDBACK)|No|No",
+        "AI37|PHHWP-T1 SPEED (FEEDBACK)|No|No",
+        "AI38|PHHWP-T2 SPEED (FEEDBACK)|No|No",
+        "AI39|SHHWP-T1 SPEED (FEEDBACK)|No|No",
+        "AI40|SHHWP-T2 SPEED (FEEDBACK)|No|No",
+        "AI41|OA TEMPERATURE *GLOBAL POINT|No|Yes",
+        "AI42|HRHWS TEMPERATURE|No|Yes",
+        "AI43|HRHWR TEMPERATURE|No|Yes"
+      ],
+      "header_evidence": [
+        {"bbox": [1600, 227, 1840, 252], "expected": "MTRACON ATCT HHW SYSTEM POINT LIST"},
+        {"bbox": [1560, 251, 1880, 274], "expected": "MARK DESCRIPTION ALARM TREND"},
+        {"bbox": [1560, 268, 1650, 286], "expected": "ANALOG INPUT"}
+      ]
+    },
+    {
+      "id": "MTRACON-ATCT-HHW-AO-LEFT",
+      "page": 62,
+      "sheet": "MI722",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT HHW SYSTEM POINT LIST - ANALOG OUTPUT LEFT PANEL",
+      "classification": "Analog output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1560, 1600, 1780, 1835, 1880],
+      "y_edges": [1207, 1227, 1244, 1262, 1279, 1296, 1313, 1330, 1348, 1365],
+      "rows": [
+        "AO01|HRHWP-MT1 SPEED CONTROL|No|Yes",
+        "AO02|HRHWP-MT2 SPEED CONTROL|No|Yes",
+        "AO03|SHHWP-M1 SPEED CONTROL|No|Yes",
+        "AO04|SHHWP-M2 SPEED CONTROL|No|Yes",
+        "AO05|SHHWP-T1 SPEED CONTROL|No|Yes",
+        "AO06|SHHWP-T2 SPEED CONTROL|No|Yes",
+        "AO07|PHHWP-T1 SPEED CONTROL|No|Yes",
+        "AO08|PHHWP-T2 SPEED CONTROL|No|Yes",
+        "AO09|PHHWP-M1 SPEED CONTROL|No|Yes"
+      ],
+      "header_evidence": [
+        {"bbox": [1560, 1178, 1650, 1207], "expected": "ANALOG OUTPUT"}
+      ]
+    },
+    {
+      "id": "MTRACON-ATCT-HHW-AO-RIGHT",
+      "page": 62,
+      "sheet": "MI722",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT HHW SYSTEM POINT LIST - ANALOG OUTPUT RIGHT PANEL CONTINUATION",
+      "classification": "Analog output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1900, 1940, 2130, 2175, 2220],
+      "y_ranges": [[268, 288], [288, 320], [320, 350]],
+      "rows": [
+        "AO10|PHHWP-M2 SPEED CONTROL|No|Yes",
+        "AO11|HHW BYPASS VALVE POSITION - MTRACON|No|No",
+        "AO12|HHW BYPASS VALVE POSITION - ATCT|No|No"
+      ],
+      "header_evidence": [
+        {"bbox": [1950, 227, 2180, 252], "expected": "MTRACON ATCT HHW SYSTEM POINT LIST"},
+        {"bbox": [1900, 251, 2220, 274], "expected": "MARK DESCRIPTION ALARM TREND"}
+      ]
+    },
+    {
+      "id": "MTRACON-ATCT-HHW-BI",
+      "page": 62,
+      "sheet": "MI722",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT HHW SYSTEM POINT LIST - BINARY INPUT",
+      "classification": "Binary input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1900, 1940, 2130, 2175, 2220],
+      "y_ranges": [[383, 404], [404, 421], [421, 438], [438, 455], [455, 472], [472, 490], [490, 507], [507, 524], [524, 541], [541, 558], [558, 575], [575, 592], [592, 610], [610, 627], [627, 644], [644, 661], [661, 679], [679, 696], [696, 713], [713, 730], [730, 748], [748, 765], [765, 782], [782, 799], [799, 816], [816, 833], [833, 863], [863, 895], [895, 930]],
+      "rows": [
+        "BI01|CV-HR-MT1 POSITION (FEEDBACK)|Yes|No",
+        "BI02|CV-HR-MT2 POSITION (FEEDBACK)|Yes|No",
+        "BI03|HRHWP-MT2 VFD STATUS|No|Yes",
+        "BI04|HRHWP-MT2 VFD ALARM|Yes|No",
+        "BI05|HRHWP-MT1 VFD ALARM|Yes|No",
+        "BI06|HRHWP-MT1 VFD STATUS|No|Yes",
+        "BI07|SHHWP-M1 VFD STATUS|No|Yes",
+        "BI08|SHHWP-M1 VFD ALARM|Yes|No",
+        "BI09|SHHWP-M2 VFD STATUS|No|Yes",
+        "BI10|SHHWP-M2 VFD ALARM|Yes|No",
+        "BI11|B-M1 STATUS|No|No",
+        "BI12|PHHWP-M1 VFD STATUS|No|Yes",
+        "BI13|PHHWP-M1 VFD ALARM|Yes|No",
+        "BI14|B-M2 STATUS|No|No",
+        "BI15|PHHWP-M2 VFD STATUS|No|Yes",
+        "BI16|PHHWP-M2 VFD ALARM|Yes|No",
+        "BI17|B-T1 STATUS|No|No",
+        "BI18|PHHWP-T1 VFD STATUS|No|Yes",
+        "BI19|PHHWP-T1 VFD ALARM|Yes|No",
+        "BI20|B-T2 STATUS|No|No",
+        "BI21|PHHWP-T2 VFD STATUS|No|Yes",
+        "BI22|PHHWP-T2 VFD ALARM|Yes|No",
+        "BI23|SHHWP-T1 VFD STATUS|No|Yes",
+        "BI24|SHHWP-T1 VFD ALARM|Yes|No",
+        "BI25|SHHWP-T2 VFD STATUS|No|Yes",
+        "BI26|SHHWP-T2 VFD ALARM|Yes|No",
+        "BI27|BOILER B-T1/T2 REMOTE SHUTDOWN SWITCH|Yes|No",
+        "BI28|BOILER B-M1/M2 REMOTE SHUTDOWN SWITCH|Yes|No",
+        "BI29|MTRACON/ATCT BOILER PLANT DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {"bbox": [1900, 350, 1990, 389], "expected": "BINARY INPUT"}
+      ]
+    },
+    {
+      "id": "MTRACON-ATCT-HHW-BO",
+      "page": 62,
+      "sheet": "MI722",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT HHW SYSTEM POINT LIST - BINARY OUTPUT",
+      "classification": "Binary output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1900, 1940, 2130, 2175, 2220],
+      "y_edges": [961, 982, 999, 1016, 1033, 1051, 1068, 1085, 1102, 1119, 1137, 1154, 1171, 1188, 1205, 1223, 1240, 1257, 1275],
+      "rows": [
+        "BO01|HRHWP-MT1 START/STOP|No|No",
+        "BO02|CH-MT1 CHILLER HEAT RECOVERY|No|No",
+        "BO03|CV-HR-MT1 VALVE CONTROL|No|No",
+        "BO04|CV-HR-MT2 VALVE CONTROL|No|No",
+        "BO05|CH-MT2 CHILLER HEAT RECOVERY|No|No",
+        "BO06|HRHWP-MT2 START/STOP|No|No",
+        "BO07|SHHWP-M1 START/STOP|No|No",
+        "BO08|SHHWP-M2 START/STOP|No|No",
+        "BO09|B-M1 ON/OFF|No|No",
+        "BO10|PHHWP-M1 START/STOP|No|No",
+        "BO11|B-M2 ON/OFF|No|No",
+        "BO12|PHHWP-M2 START/STOP|No|No",
+        "BO13|B-T1 ON/OFF|No|No",
+        "BO14|PHHWP-T1 START/STOP|No|No",
+        "BO15|B-T2 ON/OFF|No|No",
+        "BO16|PHHWP-T2 START/STOP|No|No",
+        "BO17|SHHWP-T1 START/STOP|No|No",
+        "BO18|SHHWP-T2 START/STOP|No|No"
+      ],
+      "header_evidence": [
+        {"bbox": [1900, 930, 1990, 961], "expected": "BINARY OUTPUT"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "mtracon-atct-hhw-ai-count", "records_path": ["tables", 0, "rows"], "expected": 43},
+    {"id": "mtracon-atct-hhw-ao-left-count", "records_path": ["tables", 1, "rows"], "expected": 9},
+    {"id": "mtracon-atct-hhw-ao-right-count", "records_path": ["tables", 2, "rows"], "expected": 3},
+    {"id": "mtracon-atct-hhw-bi-count", "records_path": ["tables", 3, "rows"], "expected": 29},
+    {"id": "mtracon-atct-hhw-bo-count", "records_path": ["tables", 4, "rows"], "expected": 18}
+  ],
+  "source_conflicts": [
+    {
+      "table": "MTRACON-ATCT-HHW-AI",
+      "finding": "The source repeats HRHWP-MT1 for AI23/AI24 and repeats CH-MT1 descriptions across AI25-AI32; AI10 also prints ATCT twice in its two-line description. All are retained literally rather than normalized to inferred companion equipment."
+    }
+  ],
+  "remaining_work": "Capture the remaining system point lists, control diagrams, sequences, DDC-network relationships and plan-level field-device reconciliation."
+}

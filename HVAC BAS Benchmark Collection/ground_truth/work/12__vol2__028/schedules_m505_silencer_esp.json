@@ -1,0 +1,82 @@
+{
+  "document_id": "12__vol2__028",
+  "status": "partial_document_audit",
+  "scope": "All printed M-505 Noise Control Duct Silencer and External Static Pressure schedule rows (source PDF page 1).",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [1],
+    "render": "reviews/12__vol2__028/p1-p1-full-poppler.png",
+    "dpi": 144,
+    "finding": "Both schedule grids and their printed hyphen cells were visually reviewed. All three details on M-505 are explicitly marked NOT TO SCALE; no graphic scale bar is represented here."
+  },
+  "tables": [
+    {
+      "id": "M505-DUCT-SILENCER",
+      "page": 1,
+      "sheet": "M-505",
+      "title": "NOISE CONTROL DUCT SILENCER SCHEDULE",
+      "classification": "Noise-control duct silencers",
+      "columns": "quantity|location_serves|duct_width_in|duct_height_in|airflow_cfm|air_velocity_fpm|pressure_drop_in_wg|dynamic_insertion_loss_db_at_125hz|generated_noise_db_at_125hz|manufacturer_model|notes",
+      "x_edges": [120,175,525,620,720,810,930,1040,1180,1335,1460,1560],
+      "y_ranges": [[900,920],[920,940],[940,960],[960,981],[981,1001],[1001,1021],[1021,1041],[1041,1062],[1062,1082],[1082,1102],[1102,1122],[1122,1143],[1143,1163],[1163,1183],[1213,1233],[1233,1253]],
+      "rows": [
+        "2|GROUP REHEARSAL 123 - SUPPLY/RETURN|18|14|745|426|0.16|36|21|PRICE/STC-55|1,2,3,4,5,6",
+        "1|GROUP REHEARSAL 123 - RETURN|10|8|160|288|0.06|37|20|PRICE/STC-55|1,2,3,4,5,6",
+        "1|GROUP REHEARSAL 123 - SUPPLY|12|8|220|330|0.08|37|20|PRICE/STC-55|1,2,3,4,5,6",
+        "1|GROUP REHEARSAL 123 - SUPPLY|12|8|60|90|0.01|38|20|PRICE/STC-55|1,2,3,4,5,6",
+        "1|GROUP REHEARSAL 123 - RETURN|18|14|585|334|0.08|36|20|PRICE/STC-55|1,2,3,4,5,6",
+        "1|GROUP REHEARSAL 123 - SUPPLY|18|14|745|426|0.16|36|20|PRICE/STC-55|1,2,3,4,5,6",
+        "2|GROUP REHEARSAL 112/111 - SUPPLY/RETURN|16|10|535|482|0.17|36|20|PRICE/STC-55|1,2,3,4,5,6",
+        "1|GROUP REHEARSAL 112/113 - RETURN|16|10|385|347|0.18|36|20|PRICE/STC-55|1,2,3,4,5,6",
+        "1|GROUP REHEARSAL 112/113 - SUPPLY|16|10|535|482|0.17|36|20|PRICE/STC-55|1,2,3,4,5,6",
+        "1|GROUP REHEARSAL 114/113 - SUPPLY|16|10|245|221|0.06|36|20|PRICE/STC-55|1,2,3,4,5,6",
+        "1|GROUP REHEARSAL 114/113 - RETURN|16|10|385|347|0.08|36|20|PRICE/STC-55|1,2,3,4,5,6",
+        "2|GROUP REHEARSAL 112/111 - SUPPLY/RETURN|18|14|800|457|0.16|36|21|PRICE/STC-55|1,2,3,4,5,6",
+        "2|GROUP REHEARSAL 112/113 - SUPPLY/RETURN|16|10|520|468|0.16|36|20|PRICE/STC-55|1,2,3,4,5,6",
+        "2|GROUP REHEARSAL 114/113 - SUPPLY/RETURN|12|8|260|390|0.1|36|21|PRICE/STC-55|1,2,3,4,5,6",
+        "2|ROCK REHEARSAL 218 - SUPPLY/RETURN|14|14|540|397|0.1|36|21|PRICE/STC-55|1,2,3,4,5,6",
+        "2|VEST 212 - SUPPLY/RETURN|12|12|330|330|0.08|36|20|PRICE/STC-55|1,2,3,4,5,6"
+      ],
+      "header_evidence": [
+        {"bbox": [120,780,470,805], "expected": "NOISE CONTROL DUCT SILENCER SCHEDULE"}
+      ]
+    },
+    {
+      "id": "M505-EXTERNAL-STATIC-PRESSURE",
+      "page": 1,
+      "sheet": "M-505",
+      "title": "EXTERNAL STATIC PRESSURE SCHEDULE",
+      "classification": "Equipment external static pressure",
+      "columns": "mark|fan_type|ducts_esp_in_wg|duct_silencer_pressure_drop_in_wg|total_esp_in_wg|notes",
+      "x_edges": [1570,1660,1770,1885,2025,2160,2240],
+      "y_ranges": [[878,897],[899,918],[920,939],[941,960],[962,981],[983,1002],[1004,1023],[1046,1064],[1067,1085],[1088,1106],[1109,1127],[1152,1168],[1173,1189],[1194,1210],[1215,1231],[1236,1252],[1257,1274]],
+      "rows": [
+        "FCU 1-3|-|0.33|-|0.33|1,2",
+        "FCU 1-4|-|0.51|-|0.51|1,2",
+        "FCU 1-5|-|0.45|0.84|1.29|1,2",
+        "FCU 1-6|-|0.09|0.15|0.24|1,2",
+        "FCU 1-7|-|0.31|-|0.31|1,2",
+        "FCU 1-8|-|0.38|-|0.38|1,2",
+        "FCU 1-9|-|0.32|-|0.32|1,2",
+        "FCU 2-1|-|0.22|-|0.22|1,2",
+        "FCU 2-8|-|0.56|0.16|0.72|1,2",
+        "FCU 2-13|-|0.67|-|0.67|1,2",
+        "FCU 2-14|-|0.25|-|0.25|1,2",
+        "DOAS-1|SUPPLY|0.42|-|0.42|1,2",
+        "DOAS-2|SUPPLY|0.18|0.72|0.90|1,2",
+        "DOAS-3|SUPPLY|0.34|-|0.34|1,2",
+        "DOAS-1|EXHAUST|0.79|-|0.79|1,2",
+        "DOAS-2|EXHAUST|0.39|0.67|1.06|1,2",
+        "DOAS-3|EXHAUST|0.88|-|0.88|1,2"
+      ],
+      "header_evidence": [
+        {"bbox": [1570,780,1900,805], "expected": "EXTERNAL STATIC PRESSURE SCHEDULE"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "m505-duct-silencer-row-count", "records_path": ["tables", 0, "rows"], "expected": 16},
+    {"id": "m505-external-static-pressure-row-count", "records_path": ["tables", 1, "rows"], "expected": 17}
+  ],
+  "remaining_work": "Reconcile scheduled FCU/DOAS static-pressure rows with P&ID templates and plan anchors without inferring a controller count from the schedule."
+}

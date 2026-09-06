@@ -1,0 +1,88 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All printed HHW control-valve schedule rows on Air Operations sheet M-603 (source PDF page 44). Rows preserve literal unit and valve marks, including apparent mark conflicts; they are not reconciled installed quantities.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [44],
+    "render": "reviews/01__vol2__001/p44-schedules-poppler.png",
+    "dpi": 180,
+    "finding": "The M-603 HHW valve grid was visually reviewed at 180 DPI separately from the two native-text captures. This module exhausts the 46 printed body rows and retains displayed source literals."
+  },
+  "tables": [
+    {
+      "id": "AIR-OPS-HHW-CONTROL-VALVE",
+      "page": 44,
+      "sheet": "M-603",
+      "building_scope": "Air Operations",
+      "title": "HHW CONTROL VALVE SCHEDULE",
+      "classification": "Heating-hot-water control valves",
+      "columns": "unit_mark|valve_mark|flowrate_GPM|valve_size_in|configuration|Cv|notes",
+      "x_edges": [1200, 1280, 1385, 1450, 1505, 1600, 1660, 1720],
+      "y_edges": [305, 324, 341, 358, 375, 392, 409, 426, 444, 461, 478, 495, 512, 530, 547, 564, 581, 598, 616, 633, 650, 668, 685, 702, 719, 736, 754, 771, 788, 805, 822, 840, 857, 874, 891, 908, 926, 943, 960, 977, 994, 1012, 1029, 1046, 1063, 1080, 1098],
+      "rows": [
+        "CUH-A1|CV-CUH-A1-HHW|0.5|1/2|2 WAY|0.2|1",
+        "CUH-A2|CV-CUH-A1-HHW|0.5|1/2|2 WAY|0.2|1",
+        "CV-HHW-BP-A1|CV-HHW-BP-A1|16.7|1|2 WAY|7.5|1",
+        "DOAH-A1|CV-DOAH-A1-HHW|6.7|3/4|2 WAY|3.0|1",
+        "DOAH-A2|CV-DOAH-A2-HHW|4.6|1/2|2 WAY|2.1|1",
+        "FCU-A1|CV-FCU-A1-HHW|0.5|1/2|2 WAY|0.2|1",
+        "FCU-A2|CV-FCU-A2-HHW|0.6|1/2|2 WAY|0.3|1",
+        "FCU-A6|CV-FCU-A6-HHW|0.6|1/2|2 WAY|0.3|1",
+        "FCU-A7|CV-FCU-A7-HHW|1.1|1/2|2 WAY|0.5|1",
+        "FCU-A8A|CV-FCU-A8-A-HHW|1.5|1/2|2 WAY|0.7|1",
+        "FCU-A8B|CV-FCU-A8-B-HHW|1.5|1/2|2 WAY|0.7|1",
+        "FCU-A9|CV-FCU-A10-HHW|0.5|1/2|2 WAY|0.2|1",
+        "FCU-A12|CV-FCU-A12-HHW|1.0|1/2|2 WAY|0.4|1",
+        "FCU-A13|CV-FCU-A13-HHW|1.1|1/2|2 WAY|0.5|1",
+        "UH-A1|CV-UH-A1-HHW|1.1|1/2|2 WAY|0.5|1",
+        "UH-A2|CV-UH-A2-HHW|1.1|1/2|2 WAY|0.5|1",
+        "UH-A3|CV-UH-A1-HHW|1.0|1/2|2 WAY|0.4|1",
+        "UH-A4|CV-UH-A1-HHW|1.0|1/2|2 WAY|0.4|1",
+        "UH-A5|CV-UH-A1-HHW|1.0|1/2|2 WAY|0.4|1",
+        "VAV-A101|CV-VAV-A101-HHW|1.6|1/2|2 WAY|0.7|1",
+        "VAV-A102|CV-VAV-102-HHW|1.0|1/2|2 WAY|0.4|1",
+        "VAV-A103|CV-VAV-A103-HHW|0.9|1/2|2 WAY|0.4|1",
+        "VAV-A104|CV-VAV-A104-HHW|0.7|1/2|2 WAY|0.3|1",
+        "VAV-A105|CV-VAV-A105-HHW|0.5|1/2|2 WAY|0.2|1",
+        "VAV-A106A|CV-VAV-A106A-HHW|2.4|1/2|2 WAY|1.1|1",
+        "VAV-A106B|CV-VAV-A106B-HHW|1.5|1/2|2 WAY|0.7|1",
+        "VAV-A107|CV-VAV-A107-HHW|2.8|1/2|2 WAY|1.3|1",
+        "VAV-A108A|CV-VAV-A108A-HHW|1.7|1/2|2 WAY|0.8|1",
+        "VAV-A108B|CV-VAV-A108B-HHW|1.4|1/2|2 WAY|0.6|1",
+        "VAV-A109|CV-VAV-A109-HHW|1.1|1/2|2 WAY|0.5|1",
+        "VAV-A110|CV-VAV-A110-HHW|0.7|1/2|2 WAY|0.3|1",
+        "VAV-A111|CV-VAV-A111-HHW|1.0|1/2|2 WAY|0.4|1",
+        "VAV-A112|CV-VAV-A112-HHW|1.7|1/2|2 WAY|0.8|1",
+        "VAV-A113|CV-VAV-A113-HHW|1.1|1/2|2 WAY|0.5|1",
+        "VAV-A114|CV-VAV-A114-HHW|0.6|1/2|2 WAY|0.3|1",
+        "VAV-A115|CV-VAV-A115-HHW|2.5|1/2|2 WAY|1.1|1",
+        "VAV-A116|CV-VAV-A116-HHW|1.1|1/2|2 WAY|0.5|1",
+        "VAV-A117|CV-VAV-A117-HHW|0.7|1/2|2 WAY|0.3|1",
+        "VAV-A118|CV-VAV-A118-HHW|3.0|1/2|2 WAY|1.3|1",
+        "VAV-A201|CV-VAV-A201-HHW|1.2|1/2|2 WAY|0.5|1",
+        "VAV-A202|CV-VAV-A202-HHW|1.0|1/2|2 WAY|0.4|1",
+        "VAV-A203A|CV-VAV-A203A-HHW|1.5|1/2|2 WAY|0.7|1",
+        "VAV-A203B|CV-VAV-A203B-HHW|2.6|1/2|2 WAY|1.2|1",
+        "VAV-A204|CV-VAV-A204-HHW|1.2|1/2|2 WAY|0.5|1",
+        "VAV-A205|CV-VAV-A205-HHW|0.8|1/2|2 WAY|0.4|1",
+        "VAV-A206|CV-VAV-A206-HHW|0.7|1/2|2 WAY|0.3|1"
+      ],
+      "notes": ["1. VALVES SHALL BE MODULATING TYPE."],
+      "header_evidence": [
+        {"bbox": [1280, 246, 1625, 274], "expected": "HHW CONTROL VALVE SCHEDULE"},
+        {"bbox": [1200, 274, 1720, 305], "expected": "UNIT MARK VALVE MARK FLOWRATE GPM VALVE SIZE IN CONFIGURATION CV NOTES"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "air-ops-hhw-control-valve-row-count", "records_path": ["tables", 0, "rows"], "expected": 46}
+  ],
+  "source_conflicts": [
+    {
+      "table": "AIR-OPS-HHW-CONTROL-VALVE",
+      "finding": "Literal printed valve marks conflict with their unit marks for CUH-A2 (CV-CUH-A1-HHW), FCU-A9 (CV-FCU-A10-HHW), UH-A3 through UH-A5 (each CV-UH-A1-HHW), and VAV-A102 (CV-VAV-102-HHW). These are retained, not normalized."
+    }
+  ],
+  "remaining_work": "Transcribe the other M-603 schedules and reconcile both valve tables against the M-601/M-602 equipment tables, piping schematics, plan callouts and BAS sequences without silently correcting source conflicts."
+}

@@ -1,0 +1,29 @@
+{
+  "document_id": "29__vol2__030",
+  "module_role": "Literal control-symbol row.",
+  "tables": [
+    {
+      "id": "M603-TIME-CLOCK",
+      "page": 87,
+      "sheet": "M-603",
+      "title_as_printed": "CONTROLS SYMBOLS",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        1165,
+        1540
+      ],
+      "y_ranges": [
+        [
+          1045,
+          1080
+        ]
+      ],
+      "rows": [
+        "TIME CLOCK CONTROLLING EQUIPMENT ON A SCHEDULE"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Literal control-symbol functionality only; no physical count or final ownership is implied."
+    }
+  ],
+  "assertions": []
+}

@@ -1,0 +1,6459 @@
+{
+  "document_id": "12__vol2__028",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "annotation_sha256": "997f077d968e9bb2cc45a016e3caa06f4decf2102a40caf415a0aa4c113f218e",
+  "tables": 2,
+  "rows": 33,
+  "cell_assertions": 231,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M511-DOAS3",
+      "row": 1,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        224,
+        900,
+        245
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            911
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            871
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 1,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        224,
+        1165,
+        245
+      ],
+      "expected": "EMERGENCY SHUTDOWN (GLOBAL)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EMERGENCY SHUTDOWN (GLOBAL)",
+          "word_ids": [
+            912,
+            913,
+            914
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EMERGENCY SHUTDOWN (GLOBAL)",
+          "word_ids": [
+            895,
+            896,
+            897
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 1,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        224,
+        1218,
+        245
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 1,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        224,
+        1260,
+        245
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 1,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        224,
+        1310,
+        245
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 1,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        224,
+        1360,
+        245
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 1,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        224,
+        1445,
+        245
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            915
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            839
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 2,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        245,
+        900,
+        266
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            906
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            872
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 2,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        245,
+        1165,
+        266
+      ],
+      "expected": "OUTSIDE AIR TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMPERATURE",
+          "word_ids": [
+            907,
+            908,
+            909
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMPERATURE",
+          "word_ids": [
+            898,
+            899,
+            900
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 2,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        245,
+        1218,
+        266
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            910
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            901
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 2,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        245,
+        1260,
+        266
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 2,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        245,
+        1310,
+        266
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 2,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        245,
+        1360,
+        266
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 2,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        245,
+        1445,
+        266
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 3,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        266,
+        900,
+        287
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            901
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            873
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 3,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        266,
+        1165,
+        287
+      ],
+      "expected": "SUPPLY AIR FLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR FLOW",
+          "word_ids": [
+            902,
+            903,
+            904
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR FLOW",
+          "word_ids": [
+            902,
+            903,
+            904
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 3,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        266,
+        1218,
+        287
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            905
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            905
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 3,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        266,
+        1260,
+        287
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 3,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        266,
+        1310,
+        287
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 3,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        266,
+        1360,
+        287
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 3,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        266,
+        1445,
+        287
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 4,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        287,
+        900,
+        308
+      ],
+      "expected": "4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            896
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            874
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 4,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        287,
+        1165,
+        308
+      ],
+      "expected": "SUPPLY AIR TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE",
+          "word_ids": [
+            897,
+            898,
+            899
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE",
+          "word_ids": [
+            906,
+            907,
+            908
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 4,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        287,
+        1218,
+        308
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            900
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            909
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 4,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        287,
+        1260,
+        308
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 4,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        287,
+        1310,
+        308
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 4,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        287,
+        1360,
+        308
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 4,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        287,
+        1445,
+        308
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 5,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        308,
+        900,
+        329
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            890
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            875
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 5,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        308,
+        1165,
+        329
+      ],
+      "expected": "SUPPLY AIR TEMPERATURE SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE SETPOINT",
+          "word_ids": [
+            891,
+            892,
+            893,
+            894
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE SETPOINT",
+          "word_ids": [
+            910,
+            911,
+            912,
+            913
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 5,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        308,
+        1218,
+        329
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 5,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        308,
+        1260,
+        329
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 5,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        308,
+        1310,
+        329
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 5,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        308,
+        1360,
+        329
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            895
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            719
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 5,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        308,
+        1445,
+        329
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 6,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        329,
+        900,
+        350
+      ],
+      "expected": "6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            883
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            876
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 6,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        329,
+        1165,
+        350
+      ],
+      "expected": "CHW COIL LEAVING AIR TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHW COIL LEAVING AIR TEMPERATURE",
+          "word_ids": [
+            884,
+            885,
+            886,
+            887,
+            888
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHW COIL LEAVING AIR TEMPERATURE",
+          "word_ids": [
+            914,
+            915,
+            916,
+            917,
+            918
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 6,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        329,
+        1218,
+        350
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            889
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            919
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 6,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        329,
+        1260,
+        350
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 6,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        329,
+        1310,
+        350
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 6,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        329,
+        1360,
+        350
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 6,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        329,
+        1445,
+        350
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 7,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        350,
+        900,
+        371
+      ],
+      "expected": "7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "7",
+          "word_ids": [
+            875
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "7",
+          "word_ids": [
+            877
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 7,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        350,
+        1165,
+        371
+      ],
+      "expected": "CHW COIL LEAVING AIR TEMP. SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHW COIL LEAVING AIR TEMP. SETPOINT",
+          "word_ids": [
+            876,
+            877,
+            878,
+            879,
+            880,
+            881
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHW COIL LEAVING AIR TEMP. SETPOINT",
+          "word_ids": [
+            920,
+            921,
+            922,
+            923,
+            924,
+            925
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 7,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        350,
+        1218,
+        371
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 7,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        350,
+        1260,
+        371
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 7,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        350,
+        1310,
+        371
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 7,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        350,
+        1360,
+        371
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            882
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            328
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 7,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        350,
+        1445,
+        371
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 8,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        371,
+        900,
+        392
+      ],
+      "expected": "8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            870
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            878
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 8,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        371,
+        1165,
+        392
+      ],
+      "expected": "FILTER DIFFERENTIAL PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FILTER DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            871,
+            872,
+            873
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FILTER DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            926,
+            927,
+            928
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 8,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        371,
+        1218,
+        392
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 8,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        371,
+        1260,
+        392
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 8,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        371,
+        1310,
+        392
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 8,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        371,
+        1360,
+        392
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 8,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        371,
+        1445,
+        392
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            874
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            93
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 9,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        392,
+        900,
+        413
+      ],
+      "expected": "9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9",
+          "word_ids": [
+            865
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9",
+          "word_ids": [
+            879
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 9,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        392,
+        1165,
+        413
+      ],
+      "expected": "SUPPLY FAN ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN ON/OFF",
+          "word_ids": [
+            866,
+            867,
+            868
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN ON/OFF",
+          "word_ids": [
+            929,
+            930,
+            931
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 9,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        392,
+        1218,
+        413
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 9,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        392,
+        1260,
+        413
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 9,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        392,
+        1310,
+        413
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 9,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        392,
+        1360,
+        413
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            869
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            94
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 9,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        392,
+        1445,
+        413
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 10,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        413,
+        900,
+        434
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            860
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            880
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 10,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        413,
+        1165,
+        434
+      ],
+      "expected": "SUPPLY FAN STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN STATUS",
+          "word_ids": [
+            861,
+            862,
+            863
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN STATUS",
+          "word_ids": [
+            932,
+            933,
+            934
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 10,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        413,
+        1218,
+        434
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 10,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        413,
+        1260,
+        434
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 10,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        413,
+        1310,
+        434
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            864
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            95
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 10,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        413,
+        1360,
+        434
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 10,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        413,
+        1445,
+        434
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 11,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        434,
+        900,
+        455
+      ],
+      "expected": "11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            855
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            881
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 11,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        434,
+        1165,
+        455
+      ],
+      "expected": "SUPPLY FAN FAILURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN FAILURE",
+          "word_ids": [
+            856,
+            857,
+            858
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN FAILURE",
+          "word_ids": [
+            935,
+            936,
+            937
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 11,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        434,
+        1218,
+        455
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 11,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        434,
+        1260,
+        455
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 11,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        434,
+        1310,
+        455
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 11,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        434,
+        1360,
+        455
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 11,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        434,
+        1445,
+        455
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            859
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            96
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 12,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        455,
+        900,
+        476
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            851
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            882
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 12,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        455,
+        1165,
+        476
+      ],
+      "expected": "CONDENSATE OVERFLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONDENSATE OVERFLOW",
+          "word_ids": [
+            852,
+            853
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONDENSATE OVERFLOW",
+          "word_ids": [
+            938,
+            939
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 12,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        455,
+        1218,
+        476
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 12,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        455,
+        1260,
+        476
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 12,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        455,
+        1310,
+        476
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 12,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        455,
+        1360,
+        476
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 12,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        455,
+        1445,
+        476
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            854
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            97
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 13,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        476,
+        900,
+        497
+      ],
+      "expected": "13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13",
+          "word_ids": [
+            847
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13",
+          "word_ids": [
+            883
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 13,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        476,
+        1165,
+        497
+      ],
+      "expected": "SYSTEM ENABLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SYSTEM ENABLE",
+          "word_ids": [
+            848,
+            849
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SYSTEM ENABLE",
+          "word_ids": [
+            940,
+            941
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 13,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        476,
+        1218,
+        497
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 13,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        476,
+        1260,
+        497
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 13,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        476,
+        1310,
+        497
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 13,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        476,
+        1360,
+        497
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            850
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            98
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 13,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        476,
+        1445,
+        497
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 14,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        497,
+        900,
+        518
+      ],
+      "expected": "14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            842
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            884
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 14,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        497,
+        1165,
+        518
+      ],
+      "expected": "RELIEF DAMPER OPEN/CLOSE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RELIEF DAMPER OPEN/CLOSE",
+          "word_ids": [
+            843,
+            844,
+            845
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RELIEF DAMPER OPEN/CLOSE",
+          "word_ids": [
+            942,
+            943,
+            944
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 14,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        497,
+        1218,
+        518
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 14,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        497,
+        1260,
+        518
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 14,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        497,
+        1310,
+        518
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 14,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        497,
+        1360,
+        518
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            846
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            99
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 14,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        497,
+        1445,
+        518
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 15,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        518,
+        900,
+        540
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            837
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            885
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 15,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        518,
+        1165,
+        540
+      ],
+      "expected": "EMERGENCY SHUTDOWN (GLOBAL)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EMERGENCY SHUTDOWN (GLOBAL)",
+          "word_ids": [
+            838,
+            839,
+            840
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EMERGENCY SHUTDOWN (GLOBAL)",
+          "word_ids": [
+            945,
+            946,
+            947
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 15,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        518,
+        1218,
+        540
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 15,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        518,
+        1260,
+        540
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 15,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        518,
+        1310,
+        540
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 15,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        518,
+        1360,
+        540
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 15,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        518,
+        1445,
+        540
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            841
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            100
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 16,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        540,
+        900,
+        561
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            832
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            886
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 16,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        540,
+        1165,
+        561
+      ],
+      "expected": "EXHAUST FAN ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST FAN ON/OFF",
+          "word_ids": [
+            833,
+            834,
+            835
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST FAN ON/OFF",
+          "word_ids": [
+            703,
+            704,
+            705
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 16,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        540,
+        1218,
+        561
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 16,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        540,
+        1260,
+        561
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 16,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        540,
+        1310,
+        561
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 16,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        540,
+        1360,
+        561
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            836
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            702
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 16,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        540,
+        1445,
+        561
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 17,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        561,
+        900,
+        582
+      ],
+      "expected": "17",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "17",
+          "word_ids": [
+            827
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "17",
+          "word_ids": [
+            712
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 17,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        561,
+        1165,
+        582
+      ],
+      "expected": "EXHAUST FAN STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST FAN STATUS",
+          "word_ids": [
+            828,
+            829,
+            830
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST FAN STATUS",
+          "word_ids": [
+            706,
+            707,
+            708
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 17,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        561,
+        1218,
+        582
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 17,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        561,
+        1260,
+        582
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 17,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        561,
+        1310,
+        582
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            831
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            131
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 17,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        561,
+        1360,
+        582
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 17,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        561,
+        1445,
+        582
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 18,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        582,
+        900,
+        603
+      ],
+      "expected": "18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            822
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            713
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 18,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        582,
+        1165,
+        603
+      ],
+      "expected": "EXHAUST FAN FAILURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST FAN FAILURE",
+          "word_ids": [
+            823,
+            824,
+            825
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST FAN FAILURE",
+          "word_ids": [
+            709,
+            710,
+            711
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 18,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        582,
+        1218,
+        603
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 18,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        582,
+        1260,
+        603
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 18,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        582,
+        1310,
+        603
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 18,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        582,
+        1360,
+        603
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 18,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        582,
+        1445,
+        603
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            826
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            132
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 19,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        603,
+        900,
+        624
+      ],
+      "expected": "19",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "19",
+          "word_ids": [
+            817
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "19",
+          "word_ids": [
+            714
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 19,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        603,
+        1165,
+        624
+      ],
+      "expected": "DUCT STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT STATIC PRESSURE",
+          "word_ids": [
+            818,
+            819,
+            820
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT STATIC PRESSURE",
+          "word_ids": [
+            46,
+            47,
+            48
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 19,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        603,
+        1218,
+        624
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 19,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        603,
+        1260,
+        624
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 19,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        603,
+        1310,
+        624
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            821
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            141
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 19,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        603,
+        1360,
+        624
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 19,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        603,
+        1445,
+        624
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 20,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        624,
+        900,
+        645
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            811
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            715
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 20,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        624,
+        1165,
+        645
+      ],
+      "expected": "DUCT STATIC PRESSURE SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT STATIC PRESSURE SETPOINT",
+          "word_ids": [
+            812,
+            813,
+            814,
+            815
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT STATIC PRESSURE SETPOINT",
+          "word_ids": [
+            49,
+            50,
+            51,
+            52
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 20,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        624,
+        1218,
+        645
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 20,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        624,
+        1260,
+        645
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 20,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        624,
+        1310,
+        645
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 20,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        624,
+        1360,
+        645
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            816
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            142
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 20,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        624,
+        1445,
+        645
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 21,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        645,
+        900,
+        666
+      ],
+      "expected": "21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            806
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            716
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 21,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        645,
+        1165,
+        666
+      ],
+      "expected": "DUCT SMOKE DETECTOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT SMOKE DETECTOR",
+          "word_ids": [
+            807,
+            808,
+            809
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT SMOKE DETECTOR",
+          "word_ids": [
+            53,
+            54,
+            55
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 21,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        645,
+        1218,
+        666
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 21,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        645,
+        1260,
+        666
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 21,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        645,
+        1310,
+        666
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 21,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        645,
+        1360,
+        666
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 21,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        645,
+        1445,
+        666
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            810
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            143
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 22,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        666,
+        900,
+        687
+      ],
+      "expected": "22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            799
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            717
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 22,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        666,
+        1165,
+        687
+      ],
+      "expected": "HW COIL LEAVING AIR TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HW COIL LEAVING AIR TEMPERATURE",
+          "word_ids": [
+            800,
+            801,
+            802,
+            803,
+            804
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HW COIL LEAVING AIR TEMPERATURE",
+          "word_ids": [
+            56,
+            57,
+            58,
+            59,
+            60
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 22,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        666,
+        1218,
+        687
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            805
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            144
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 22,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        666,
+        1260,
+        687
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 22,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        666,
+        1310,
+        687
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 22,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        666,
+        1360,
+        687
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 22,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        666,
+        1445,
+        687
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 23,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        687,
+        900,
+        708
+      ],
+      "expected": "23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            791
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            718
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 23,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        687,
+        1165,
+        708
+      ],
+      "expected": "HW COIL LEAVING AIR TEMP. SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HW COIL LEAVING AIR TEMP. SETPOINT",
+          "word_ids": [
+            792,
+            793,
+            794,
+            795,
+            796,
+            797
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HW COIL LEAVING AIR TEMP. SETPOINT",
+          "word_ids": [
+            61,
+            62,
+            63,
+            64,
+            65,
+            66
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 23,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        687,
+        1218,
+        708
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 23,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        687,
+        1260,
+        708
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 23,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        687,
+        1310,
+        708
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 23,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        687,
+        1360,
+        708
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            798
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            145
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 23,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        687,
+        1445,
+        708
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 24,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        708,
+        900,
+        729
+      ],
+      "expected": "24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            785
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            67
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 24,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        708,
+        1165,
+        729
+      ],
+      "expected": "HOT WATER VALVE POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT WATER VALVE POSITION",
+          "word_ids": [
+            786,
+            787,
+            788,
+            789
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT WATER VALVE POSITION",
+          "word_ids": [
+            73,
+            74,
+            75,
+            76
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 24,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        708,
+        1218,
+        729
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 24,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        708,
+        1260,
+        729
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            790
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            146
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 24,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        708,
+        1310,
+        729
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 24,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        708,
+        1360,
+        729
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 24,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        708,
+        1445,
+        729
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 25,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        729,
+        900,
+        750
+      ],
+      "expected": "25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            779
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            68
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 25,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        729,
+        1165,
+        750
+      ],
+      "expected": "CHILLED WATER VALVE POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLED WATER VALVE POSITION",
+          "word_ids": [
+            780,
+            781,
+            782,
+            783
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLED WATER VALVE POSITION",
+          "word_ids": [
+            77,
+            78,
+            79,
+            80
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 25,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        729,
+        1218,
+        750
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 25,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        729,
+        1260,
+        750
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            784
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            147
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 25,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        729,
+        1310,
+        750
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 25,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        729,
+        1360,
+        750
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 25,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        729,
+        1445,
+        750
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 26,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        750,
+        900,
+        771
+      ],
+      "expected": "26",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "26",
+          "word_ids": [
+            774
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "26",
+          "word_ids": [
+            69
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 26,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        750,
+        1165,
+        771
+      ],
+      "expected": "SUPPLY VFD SPEED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY VFD SPEED",
+          "word_ids": [
+            775,
+            776,
+            777
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY VFD SPEED",
+          "word_ids": [
+            81,
+            82,
+            83
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 26,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        750,
+        1218,
+        771
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 26,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        750,
+        1260,
+        771
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            778
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            148
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 26,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        750,
+        1310,
+        771
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 26,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        750,
+        1360,
+        771
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 26,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        750,
+        1445,
+        771
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 27,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        771,
+        900,
+        792
+      ],
+      "expected": "27",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "27",
+          "word_ids": [
+            769
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "27",
+          "word_ids": [
+            70
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 27,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        771,
+        1165,
+        792
+      ],
+      "expected": "EXHAUST VFD SPEED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST VFD SPEED",
+          "word_ids": [
+            770,
+            771,
+            772
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST VFD SPEED",
+          "word_ids": [
+            84,
+            85,
+            86
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 27,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        771,
+        1218,
+        792
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 27,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        771,
+        1260,
+        792
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            773
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            149
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 27,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        771,
+        1310,
+        792
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 27,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        771,
+        1360,
+        792
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 27,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        771,
+        1445,
+        792
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 28,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        792,
+        900,
+        813
+      ],
+      "expected": "28",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "28",
+          "word_ids": [
+            764
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "28",
+          "word_ids": [
+            71
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 28,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        792,
+        1165,
+        813
+      ],
+      "expected": "RA DAMPER OPEN/CLOSE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RA DAMPER OPEN/CLOSE",
+          "word_ids": [
+            765,
+            766,
+            767
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RA DAMPER OPEN/CLOSE",
+          "word_ids": [
+            87,
+            88,
+            89
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 28,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        792,
+        1218,
+        813
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 28,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        792,
+        1260,
+        813
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 28,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        792,
+        1310,
+        813
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 28,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        792,
+        1360,
+        813
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            768
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            150
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 28,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        792,
+        1445,
+        813
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 29,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        850,
+        813,
+        900,
+        835
+      ],
+      "expected": "29",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "29",
+          "word_ids": [
+            759
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "29",
+          "word_ids": [
+            72
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 29,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        900,
+        813,
+        1165,
+        835
+      ],
+      "expected": "OA DAMPER OPEN/CLOSE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OA DAMPER OPEN/CLOSE",
+          "word_ids": [
+            760,
+            761,
+            762
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OA DAMPER OPEN/CLOSE",
+          "word_ids": [
+            90,
+            91,
+            92
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 29,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1165,
+        813,
+        1218,
+        835
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 29,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1218,
+        813,
+        1260,
+        835
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 29,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1260,
+        813,
+        1310,
+        835
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 29,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1310,
+        813,
+        1360,
+        835
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            763
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            151
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "row": 29,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        1360,
+        813,
+        1445,
+        835
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-DOAS3",
+      "header": "BAS INPUT/OUTPUT POINT LIST",
+      "page": 7,
+      "bbox": [
+        1040,
+        180,
+        1250,
+        205
+      ],
+      "engine": "mupdf",
+      "actual": "BAS INPUT/OUTPUT POINT LIST",
+      "pass": true
+    },
+    {
+      "table": "M511-DOAS3",
+      "header": "BAS INPUT/OUTPUT POINT LIST",
+      "page": 7,
+      "bbox": [
+        1040,
+        180,
+        1250,
+        205
+      ],
+      "engine": "poppler",
+      "actual": "BAS INPUT/OUTPUT POINT LIST",
+      "pass": true
+    },
+    {
+      "table": "M511-DOAS3",
+      "header": "TAG POINT NAME AI AO DI DO ALARM",
+      "page": 7,
+      "bbox": [
+        850,
+        200,
+        1445,
+        225
+      ],
+      "engine": "mupdf",
+      "actual": "TAG POINT NAME AI AO DI DO ALARM",
+      "pass": true
+    },
+    {
+      "table": "M511-DOAS3",
+      "header": "TAG POINT NAME AI AO DI DO ALARM",
+      "page": 7,
+      "bbox": [
+        850,
+        200,
+        1445,
+        225
+      ],
+      "engine": "poppler",
+      "actual": "TAG POINT NAME AI AO DI DO ALARM",
+      "pass": true
+    },
+    {
+      "table": "M511-VAV",
+      "row": 1,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        1550,
+        447,
+        1600,
+        469
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            942
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            102
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 1,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        1600,
+        447,
+        1845,
+        469
+      ],
+      "expected": "DAMPER POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAMPER POSITION",
+          "word_ids": [
+            943,
+            944
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAMPER POSITION",
+          "word_ids": [
+            114,
+            115
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 1,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1845,
+        447,
+        1905,
+        469
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 1,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1905,
+        447,
+        1955,
+        469
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 1,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1955,
+        447,
+        1995,
+        469
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 1,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1995,
+        447,
+        2045,
+        469
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            945
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            126
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 1,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        2045,
+        447,
+        2110,
+        469
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 2,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        1550,
+        469,
+        1600,
+        490
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            938
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            103
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 2,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        1600,
+        469,
+        1845,
+        490
+      ],
+      "expected": "VAV FAILURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV FAILURE",
+          "word_ids": [
+            939,
+            940
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV FAILURE",
+          "word_ids": [
+            116,
+            117
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 2,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1845,
+        469,
+        1905,
+        490
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 2,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1905,
+        469,
+        1955,
+        490
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 2,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1955,
+        469,
+        1995,
+        490
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 2,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1995,
+        469,
+        2045,
+        490
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 2,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        2045,
+        469,
+        2110,
+        490
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            941
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            128
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 3,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        1550,
+        490,
+        1600,
+        511
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            933
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            104
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 3,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        1600,
+        490,
+        1845,
+        511
+      ],
+      "expected": "DUAL OCCUPANCY SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUAL OCCUPANCY SENSOR",
+          "word_ids": [
+            934,
+            935,
+            936
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUAL OCCUPANCY SENSOR",
+          "word_ids": [
+            118,
+            119,
+            120
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 3,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1845,
+        490,
+        1905,
+        511
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 3,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1905,
+        490,
+        1955,
+        511
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 3,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1955,
+        490,
+        1995,
+        511
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            937
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            129
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 3,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1995,
+        490,
+        2045,
+        511
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 3,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        2045,
+        490,
+        2110,
+        511
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 4,
+      "column": "tag",
+      "page": 7,
+      "bbox": [
+        1550,
+        511,
+        1600,
+        533
+      ],
+      "expected": "4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            928
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            105
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 4,
+      "column": "point_name",
+      "page": 7,
+      "bbox": [
+        1600,
+        511,
+        1845,
+        533
+      ],
+      "expected": "DOWNSTREAM STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOWNSTREAM STATIC PRESSURE",
+          "word_ids": [
+            929,
+            930,
+            931
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOWNSTREAM STATIC PRESSURE",
+          "word_ids": [
+            121,
+            122,
+            123
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 4,
+      "column": "AI",
+      "page": 7,
+      "bbox": [
+        1845,
+        511,
+        1905,
+        533
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 4,
+      "column": "AO",
+      "page": 7,
+      "bbox": [
+        1905,
+        511,
+        1955,
+        533
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 4,
+      "column": "DI",
+      "page": 7,
+      "bbox": [
+        1955,
+        511,
+        1995,
+        533
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            932
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            130
+          ]
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 4,
+      "column": "DO",
+      "page": 7,
+      "bbox": [
+        1995,
+        511,
+        2045,
+        533
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "row": 4,
+      "column": "ALARM",
+      "page": 7,
+      "bbox": [
+        2045,
+        511,
+        2110,
+        533
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M511-VAV",
+      "header": "BAS INPUT/OUTPUT POINT LIST",
+      "page": 7,
+      "bbox": [
+        1725,
+        405,
+        1930,
+        429
+      ],
+      "engine": "mupdf",
+      "actual": "BAS INPUT/OUTPUT POINT LIST",
+      "pass": true
+    },
+    {
+      "table": "M511-VAV",
+      "header": "BAS INPUT/OUTPUT POINT LIST",
+      "page": 7,
+      "bbox": [
+        1725,
+        405,
+        1930,
+        429
+      ],
+      "engine": "poppler",
+      "actual": "BAS INPUT/OUTPUT POINT LIST",
+      "pass": true
+    },
+    {
+      "table": "M511-VAV",
+      "header": "TAG POINT NAME AI AO DI DO ALARM",
+      "page": 7,
+      "bbox": [
+        1550,
+        425,
+        2110,
+        447
+      ],
+      "engine": "mupdf",
+      "actual": "TAG POINT NAME AI AO DI DO ALARM",
+      "pass": true
+    },
+    {
+      "table": "M511-VAV",
+      "header": "TAG POINT NAME AI AO DI DO ALARM",
+      "page": 7,
+      "bbox": [
+        1550,
+        425,
+        2110,
+        447
+      ],
+      "engine": "poppler",
+      "actual": "TAG POINT NAME AI AO DI DO ALARM",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m511-doas3-and-vav-matrices",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

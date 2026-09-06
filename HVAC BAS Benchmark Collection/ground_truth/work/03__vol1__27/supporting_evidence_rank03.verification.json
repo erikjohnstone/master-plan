@@ -1,0 +1,29 @@
+{
+  "document_id": "03__vol1__27",
+  "source_sha256": "2e123db08407f97acd6bc6387ecab6e08ad8204971fb5c24a3668bbd34dec0cf",
+  "annotation_sha256": "820c4b473369b41d40e323aa82b3e8d134684af2f5fdc2f9d91017b1c86e27ee",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 0,
+  "checks": [],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "rank03-source-limitations",
+      "actual": 7,
+      "expected": 7,
+      "pass": true
+    },
+    {
+      "id": "rank03-supporting-visual-evidence",
+      "actual": 6,
+      "expected": 6,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

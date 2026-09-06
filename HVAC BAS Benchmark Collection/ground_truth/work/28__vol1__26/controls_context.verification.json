@@ -1,0 +1,120 @@
+{
+  "document_id": "28__vol1__26",
+  "source_sha256": "6873dbdbf3fa2e364c7daf5dfebceb98ab00cb34aab3b2468cac62832771ab43",
+  "annotation_sha256": "4fdb5639e11d0d8f95c46d8fbc87578700e8a07af660a15d153fd393f5acaf19",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 3,
+  "checks": [
+    {
+      "assertion": "m001-controls-legend",
+      "page": 1,
+      "bbox": [
+        1545,
+        645,
+        1725,
+        680
+      ],
+      "expected": "CONTROLS LEGEND",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONTROLS LEGEND",
+          "word_ids": [
+            819,
+            820
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONTROLS LEGEND",
+          "word_ids": [
+            1542,
+            1543
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m001-auto-control-damper",
+      "page": 1,
+      "bbox": [
+        350,
+        235,
+        510,
+        265
+      ],
+      "expected": "AUTOMATIC CONTROL DAMPER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUTOMATIC CONTROL DAMPER",
+          "word_ids": [
+            14,
+            15,
+            16
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUTOMATIC CONTROL DAMPER",
+          "word_ids": [
+            38,
+            39,
+            40
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m010-fpt-schedule",
+      "page": 10,
+      "bbox": [
+        550,
+        1215,
+        1130,
+        1250
+      ],
+      "expected": "FAN POWERED TERMINAL UNIT SCHEDULE (SECTION 23 36 00)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN POWERED TERMINAL UNIT SCHEDULE (SECTION 23 36 00)",
+          "word_ids": [
+            339,
+            340,
+            341,
+            342,
+            343,
+            344,
+            345,
+            346,
+            347
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN POWERED TERMINAL UNIT SCHEDULE (SECTION 23 36 00)",
+          "word_ids": [
+            2937,
+            2938,
+            2939,
+            2940,
+            2941,
+            2942,
+            2943,
+            2944,
+            2945
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

@@ -1,0 +1,11 @@
+{
+  "document_id": "30__vol2__058",
+  "module_role": "Explicit limits and visual-only schedule disclosure.",
+  "tables": [],
+  "source_limitations": [
+    "All 311 pages have full-page visual review. Retained verifiable text evidence includes six CWGP-1 VFD map rows, cover facts, J601 network/architecture labels and J608/J610 valve/controller I/O contexts.",
+    "J002 is visually reviewed and identifies TCP-M15/TCP-M16 control panels, but its rendered table does not provide usable native text row geometry for a dual-engine literal-row table; only bounded visual assertions are retained.",
+    "No final physical device count, field-device owner, controller/card/terminal count, full point database, device-address set, wiring/termination takeoff or commissioned as-built is inferred.",
+    "No global scale or plan-derived quantity is asserted."
+  ]
+}

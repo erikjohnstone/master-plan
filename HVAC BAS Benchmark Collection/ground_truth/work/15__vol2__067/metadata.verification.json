@@ -1,0 +1,201 @@
+{
+  "document_id": "15__vol2__067",
+  "source_sha256": "254931f1c37ac5afb3b9ad70d21ae7c2001c2f645c29ca8d92c4aefdc294fa1d",
+  "annotation_sha256": "bc97378e2a13317e370e2693c35f430d5d6ef4cf96048451247ef79dd91e5b62",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 6,
+  "checks": [
+    {
+      "assertion": "p1-project-family",
+      "page": 1,
+      "bbox": [
+        2920,
+        2365,
+        3090,
+        2410
+      ],
+      "expected": "B950/NEH LCLS-II-HE:EI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B950/NEH LCLS-II-HE:EI",
+          "word_ids": [
+            2040,
+            2062
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B950/NEH LCLS-II-HE:EI",
+          "word_ids": [
+            2232,
+            2233
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "p1-sheet-title",
+      "page": 1,
+      "bbox": [
+        2920,
+        2418,
+        3320,
+        2465
+      ],
+      "expected": "SYM, LEGENDS, AND GEN. NOTES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SYM, LEGENDS, AND GEN. NOTES",
+          "word_ids": [
+            2063,
+            2064,
+            2065,
+            2066,
+            2067
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL SYM, LEGENDS, AND GEN. NOTES",
+          "word_ids": [
+            2234,
+            2235,
+            2236,
+            2237,
+            2238,
+            2239
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "p6-sheet-number",
+      "page": 6,
+      "bbox": [
+        3205,
+        2318,
+        3265,
+        2355
+      ],
+      "expected": "M6.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M6.3",
+          "word_ids": [
+            779
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M6.3",
+          "word_ids": [
+            1270
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "p8-sheet-title",
+      "page": 8,
+      "bbox": [
+        2920,
+        2418,
+        3240,
+        2470
+      ],
+      "expected": "MECHANICAL MECHANICAL SCHEDULES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL MECHANICAL SCHEDULES",
+          "word_ids": [
+            1796,
+            1793,
+            1794
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL MECHANICAL SCHEDULES",
+          "word_ids": [
+            2240,
+            2241,
+            2242
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "p8-sheet-number",
+      "page": 8,
+      "bbox": [
+        3205,
+        2318,
+        3265,
+        2355
+      ],
+      "expected": "M7.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M7.0",
+          "word_ids": [
+            1805
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M7.0",
+          "word_ids": [
+            2111
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "p9-sheet-number",
+      "page": 9,
+      "bbox": [
+        3205,
+        2315,
+        3265,
+        2355
+      ],
+      "expected": "S0.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S0.1",
+          "word_ids": [
+            1621
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S0.1",
+          "word_ids": [
+            1681
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "full-page-visual-review",
+      "actual": 13,
+      "expected": 13,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

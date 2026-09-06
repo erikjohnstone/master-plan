@@ -1,0 +1,4606 @@
+{
+  "document_id": "15__vol2__067",
+  "source_sha256": "254931f1c37ac5afb3b9ad70d21ae7c2001c2f645c29ca8d92c4aefdc294fa1d",
+  "annotation_sha256": "dfbd5a41a51a82e19c6d5418bee87d74da7bc4dc5945acf3b467c7c38806b944",
+  "tables": 8,
+  "rows": 10,
+  "cell_assertions": 146,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 1,
+      "column": "mark",
+      "page": 8,
+      "bbox": [
+        170,
+        196,
+        306,
+        229
+      ],
+      "expected": "B950A-PCWP-1001",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B950A-PCWP-1001",
+          "word_ids": [
+            580
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B950A-PCWP-1001",
+          "word_ids": [
+            25
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 8,
+      "bbox": [
+        306,
+        196,
+        423,
+        229
+      ],
+      "expected": "GOULDS 125SV-55BGT-4C60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GOULDS 125SV-55BGT-4C60",
+          "word_ids": [
+            581,
+            582
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GOULDS 125SV-55BGT-4C60",
+          "word_ids": [
+            66,
+            67
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 1,
+      "column": "location",
+      "page": 8,
+      "bbox": [
+        423,
+        196,
+        500,
+        229
+      ],
+      "expected": "MECH ROOM 4 60B24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECH ROOM 4 60B24",
+          "word_ids": [
+            583,
+            584,
+            585,
+            586
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECH ROOM 4 60B24",
+          "word_ids": [
+            68,
+            69,
+            70,
+            71
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 1,
+      "column": "service",
+      "page": 8,
+      "bbox": [
+        500,
+        196,
+        565,
+        229
+      ],
+      "expected": "NEH/XPP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NEH/XPP",
+          "word_ids": [
+            587
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NEH/XPP",
+          "word_ids": [
+            48
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 1,
+      "column": "type",
+      "page": 8,
+      "bbox": [
+        565,
+        196,
+        627,
+        229
+      ],
+      "expected": "INLINE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INLINE",
+          "word_ids": [
+            588
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INLINE",
+          "word_ids": [
+            49
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 1,
+      "column": "design_flow_gpm",
+      "page": 8,
+      "bbox": [
+        627,
+        196,
+        682,
+        229
+      ],
+      "expected": "581.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "581.9",
+          "word_ids": [
+            589
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "581.9",
+          "word_ids": [
+            50
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 1,
+      "column": "selection_flow_gpm",
+      "page": 8,
+      "bbox": [
+        682,
+        196,
+        745,
+        229
+      ],
+      "expected": "650",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "650",
+          "word_ids": [
+            746
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "650",
+          "word_ids": [
+            51
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 1,
+      "column": "design_head_ftwg_psi",
+      "page": 8,
+      "bbox": [
+        745,
+        196,
+        806,
+        229
+      ],
+      "expected": "277/120",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "277/120",
+          "word_ids": [
+            590
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "277/120",
+          "word_ids": [
+            52
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 1,
+      "column": "max_flow_gpm",
+      "page": 8,
+      "bbox": [
+        806,
+        196,
+        859,
+        229
+      ],
+      "expected": "677",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "677",
+          "word_ids": [
+            722
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "677",
+          "word_ids": [
+            53
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 1,
+      "column": "max_head_ftwg_psi",
+      "page": 8,
+      "bbox": [
+        859,
+        196,
+        921,
+        229
+      ],
+      "expected": "300/130",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "300/130",
+          "word_ids": [
+            723
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "300/130",
+          "word_ids": [
+            54
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 1,
+      "column": "bhp",
+      "page": 8,
+      "bbox": [
+        921,
+        196,
+        965,
+        229
+      ],
+      "expected": "73.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "73.9",
+          "word_ids": [
+            731
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "73.9",
+          "word_ids": [
+            55
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 1,
+      "column": "hp",
+      "page": 8,
+      "bbox": [
+        965,
+        196,
+        994,
+        229
+      ],
+      "expected": "75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "75",
+          "word_ids": [
+            592
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "75",
+          "word_ids": [
+            88
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 1,
+      "column": "rpm",
+      "page": 8,
+      "bbox": [
+        994,
+        196,
+        1024,
+        229
+      ],
+      "expected": "3500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3500",
+          "word_ids": [
+            593
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3500",
+          "word_ids": [
+            89
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 1,
+      "column": "electrical_v_ph_hz",
+      "page": 8,
+      "bbox": [
+        1024,
+        196,
+        1090,
+        229
+      ],
+      "expected": "480/3/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "480/3/60",
+          "word_ids": [
+            595
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "480/3/60",
+          "word_ids": [
+            90
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 1,
+      "column": "total_operating_weight_lb",
+      "page": 8,
+      "bbox": [
+        1090,
+        196,
+        1184,
+        229
+      ],
+      "expected": "1386",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1386",
+          "word_ids": [
+            594
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1386",
+          "word_ids": [
+            91
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 1,
+      "column": "remarks",
+      "page": 8,
+      "bbox": [
+        1184,
+        196,
+        1262,
+        229
+      ],
+      "expected": "(1)-(9)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1)-(9)",
+          "word_ids": [
+            596
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1)-(9)",
+          "word_ids": [
+            92
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 2,
+      "column": "mark",
+      "page": 8,
+      "bbox": [
+        170,
+        229,
+        306,
+        258
+      ],
+      "expected": "B950A-PCWP-1002",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B950A-PCWP-1002",
+          "word_ids": [
+            742
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B950A-PCWP-1002",
+          "word_ids": [
+            26
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 8,
+      "bbox": [
+        306,
+        229,
+        423,
+        258
+      ],
+      "expected": "GOULDS 125SV-55BGT-4C60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GOULDS 125SV-55BGT-4C60",
+          "word_ids": [
+            724,
+            725
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GOULDS 125SV-55BGT-4C60",
+          "word_ids": [
+            72,
+            73
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 2,
+      "column": "location",
+      "page": 8,
+      "bbox": [
+        423,
+        229,
+        500,
+        258
+      ],
+      "expected": "MECH ROOM 4 60B24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECH ROOM 4 60B24",
+          "word_ids": [
+            726,
+            727,
+            728,
+            729
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECH ROOM 4 60B24",
+          "word_ids": [
+            74,
+            75,
+            76,
+            77
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 2,
+      "column": "service",
+      "page": 8,
+      "bbox": [
+        500,
+        229,
+        565,
+        258
+      ],
+      "expected": "NEH/XPP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NEH/XPP",
+          "word_ids": [
+            730
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NEH/XPP",
+          "word_ids": [
+            56
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 2,
+      "column": "type",
+      "page": 8,
+      "bbox": [
+        565,
+        229,
+        627,
+        258
+      ],
+      "expected": "INLINE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INLINE",
+          "word_ids": [
+            591
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INLINE",
+          "word_ids": [
+            57
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 2,
+      "column": "design_flow_gpm",
+      "page": 8,
+      "bbox": [
+        627,
+        229,
+        682,
+        258
+      ],
+      "expected": "581.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "581.9",
+          "word_ids": [
+            732
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "581.9",
+          "word_ids": [
+            58
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 2,
+      "column": "selection_flow_gpm",
+      "page": 8,
+      "bbox": [
+        682,
+        229,
+        745,
+        258
+      ],
+      "expected": "650",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "650",
+          "word_ids": [
+            747
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "650",
+          "word_ids": [
+            59
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 2,
+      "column": "design_head_ftwg_psi",
+      "page": 8,
+      "bbox": [
+        745,
+        229,
+        806,
+        258
+      ],
+      "expected": "277/120",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "277/120",
+          "word_ids": [
+            733
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "277/120",
+          "word_ids": [
+            60
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 2,
+      "column": "max_flow_gpm",
+      "page": 8,
+      "bbox": [
+        806,
+        229,
+        859,
+        258
+      ],
+      "expected": "677",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "677",
+          "word_ids": [
+            738
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "677",
+          "word_ids": [
+            61
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 2,
+      "column": "max_head_ftwg_psi",
+      "page": 8,
+      "bbox": [
+        859,
+        229,
+        921,
+        258
+      ],
+      "expected": "300/130",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "300/130",
+          "word_ids": [
+            739
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "300/130",
+          "word_ids": [
+            62
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 2,
+      "column": "bhp",
+      "page": 8,
+      "bbox": [
+        921,
+        229,
+        965,
+        258
+      ],
+      "expected": "73.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "73.9",
+          "word_ids": [
+            740
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "73.9",
+          "word_ids": [
+            63
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 2,
+      "column": "hp",
+      "page": 8,
+      "bbox": [
+        965,
+        229,
+        994,
+        258
+      ],
+      "expected": "75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "75",
+          "word_ids": [
+            734
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "75",
+          "word_ids": [
+            101
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 2,
+      "column": "rpm",
+      "page": 8,
+      "bbox": [
+        994,
+        229,
+        1024,
+        258
+      ],
+      "expected": "3500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3500",
+          "word_ids": [
+            735
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3500",
+          "word_ids": [
+            102
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 2,
+      "column": "electrical_v_ph_hz",
+      "page": 8,
+      "bbox": [
+        1024,
+        229,
+        1090,
+        258
+      ],
+      "expected": "480/3/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "480/3/60",
+          "word_ids": [
+            737
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "480/3/60",
+          "word_ids": [
+            103
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 2,
+      "column": "total_operating_weight_lb",
+      "page": 8,
+      "bbox": [
+        1090,
+        229,
+        1184,
+        258
+      ],
+      "expected": "1386",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1386",
+          "word_ids": [
+            736
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1386",
+          "word_ids": [
+            104
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "row": 2,
+      "column": "remarks",
+      "page": 8,
+      "bbox": [
+        1184,
+        229,
+        1262,
+        258
+      ],
+      "expected": "(1)-(9)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1)-(9)",
+          "word_ids": [
+            741
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1)-(9)",
+          "word_ids": [
+            105
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "header": "(N) PUMP SCHEDULE MARK MANUFACTURER AND MODEL NUMBER LOCATION SERVICE TYPE DESIGN FLOW SELECTION FLOW DESIGN HEAD MAX FLOW MAX HEAD MOTOR ELECTRICAL TOTAL OPERATING WEIGHT REMARKS",
+      "page": 8,
+      "bbox": [
+        170,
+        131,
+        1262,
+        195
+      ],
+      "engine": "mupdf",
+      "actual": "(N) PUMP SCHEDULE DESIGN SELECTION MAX MOTOR TOTAL MANUFACTURER AND DESIGN HEAD MAX HEAD ELECTRICAL SERVICE FLOW FLOW FLOW MARK LOCATION TYPE OPERATING REMARKS MODEL NUMBER (FT WG/PSI) (FT WG/PSI) V/PH/HZ BHP HP RPM (GPM) (GPM) (GPM) WEIGHT",
+      "pass": true
+    },
+    {
+      "table": "M70-NEW-PCW-PUMPS",
+      "header": "(N) PUMP SCHEDULE MARK MANUFACTURER AND MODEL NUMBER LOCATION SERVICE TYPE DESIGN FLOW SELECTION FLOW DESIGN HEAD MAX FLOW MAX HEAD MOTOR ELECTRICAL TOTAL OPERATING WEIGHT REMARKS",
+      "page": 8,
+      "bbox": [
+        170,
+        131,
+        1262,
+        195
+      ],
+      "engine": "poppler",
+      "actual": "(N) PUMP SCHEDULE DESIGN SELECTION MAX MOTOR TOTAL MANUFACTURER AND DESIGN HEAD MAX HEAD ELECTRICAL SERVICE FLOW FLOW FLOW MARK LOCATION TYPE OPERATING REMARKS MODEL NUMBER (FT WG/PSI) (FT WG/PSI) V/PH/HZ BHP HP RPM (GPM) (GPM) (GPM) WEIGHT",
+      "pass": true
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "mark",
+      "page": 8,
+      "bbox": [
+        1334,
+        738,
+        1411,
+        772
+      ],
+      "expected": "B950A-HX-PCWP-1001",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B950A-HX- PCWP-1001",
+          "word_ids": [
+            876,
+            877
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B950A-HX- PCWP-1001",
+          "word_ids": [
+            497,
+            498
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 8,
+      "bbox": [
+        1411,
+        738,
+        1505,
+        772
+      ],
+      "expected": "BELL & GOSSETT AP47",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BELL & GOSSETT AP47",
+          "word_ids": [
+            922,
+            923,
+            924,
+            925
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BELL & GOSSETT AP47",
+          "word_ids": [
+            500,
+            501,
+            502,
+            504
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "location",
+      "page": 8,
+      "bbox": [
+        1505,
+        738,
+        1574,
+        772
+      ],
+      "expected": "B950A MECHANICAL ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B950A MECHANICAL ROOM",
+          "word_ids": [
+            879,
+            880,
+            881
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B950A MECHANICAL ROOM",
+          "word_ids": [
+            499,
+            503,
+            505
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "service",
+      "page": 8,
+      "bbox": [
+        1574,
+        738,
+        1641,
+        772
+      ],
+      "expected": "B950A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B950A",
+          "word_ids": [
+            878
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B950A",
+          "word_ids": [
+            516
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "design_capacity_mbh",
+      "page": 8,
+      "bbox": [
+        1641,
+        738,
+        1705,
+        772
+      ],
+      "expected": "3462",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3462",
+          "word_ids": [
+            903
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3462",
+          "word_ids": [
+            517
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "max_capacity_mbh",
+      "page": 8,
+      "bbox": [
+        1705,
+        738,
+        1765,
+        772
+      ],
+      "expected": "3905",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3905",
+          "word_ids": [
+            994
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3905",
+          "word_ids": [
+            518
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "high_design_gpm",
+      "page": 8,
+      "bbox": [
+        1765,
+        738,
+        1835,
+        772
+      ],
+      "expected": "581.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "581.9",
+          "word_ids": [
+            987
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "581.9",
+          "word_ids": [
+            519
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "high_max_gpm",
+      "page": 8,
+      "bbox": [
+        1835,
+        738,
+        1894,
+        772
+      ],
+      "expected": "650",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "650",
+          "word_ids": [
+            910
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "650",
+          "word_ids": [
+            526
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "high_ewt_f",
+      "page": 8,
+      "bbox": [
+        1894,
+        738,
+        1928,
+        772
+      ],
+      "expected": "74°",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "74°",
+          "word_ids": [
+            911
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "74°",
+          "word_ids": [
+            527
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "high_lwt_f",
+      "page": 8,
+      "bbox": [
+        1928,
+        738,
+        1965,
+        772
+      ],
+      "expected": "62°",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "62°",
+          "word_ids": [
+            913
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "62°",
+          "word_ids": [
+            542
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "high_dp_psi",
+      "page": 8,
+      "bbox": [
+        1965,
+        738,
+        2004,
+        772
+      ],
+      "expected": "4.97",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4.97",
+          "word_ids": [
+            912
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4.97",
+          "word_ids": [
+            543
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "high_fluid",
+      "page": 8,
+      "bbox": [
+        2004,
+        738,
+        2035,
+        772
+      ],
+      "expected": "PCW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCW",
+          "word_ids": [
+            914
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCW",
+          "word_ids": [
+            546
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "low_design_gpm",
+      "page": 8,
+      "bbox": [
+        2035,
+        738,
+        2110,
+        772
+      ],
+      "expected": "349.12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "349.12",
+          "word_ids": [
+            915
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "349.12",
+          "word_ids": [
+            552
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "low_max_gpm",
+      "page": 8,
+      "bbox": [
+        2110,
+        738,
+        2167,
+        772
+      ],
+      "expected": "389.16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "389.16",
+          "word_ids": [
+            990
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "389.16",
+          "word_ids": [
+            553
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "low_ewt_f",
+      "page": 8,
+      "bbox": [
+        2167,
+        738,
+        2204,
+        772
+      ],
+      "expected": "45",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            916
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            554
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "low_lwt_f",
+      "page": 8,
+      "bbox": [
+        2204,
+        738,
+        2242,
+        772
+      ],
+      "expected": "65",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "65",
+          "word_ids": [
+            918
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "65",
+          "word_ids": [
+            555
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "low_dp_psi",
+      "page": 8,
+      "bbox": [
+        2242,
+        738,
+        2290,
+        772
+      ],
+      "expected": "1.92",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.92",
+          "word_ids": [
+            917
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.92",
+          "word_ids": [
+            556
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "low_fluid",
+      "page": 8,
+      "bbox": [
+        2290,
+        738,
+        2325,
+        772
+      ],
+      "expected": "CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHW",
+          "word_ids": [
+            919
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHW",
+          "word_ids": [
+            532
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "design_plates",
+      "page": 8,
+      "bbox": [
+        2325,
+        738,
+        2380,
+        772
+      ],
+      "expected": "186",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "186",
+          "word_ids": [
+            980
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "186",
+          "word_ids": [
+            533
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "max_plates",
+      "page": 8,
+      "bbox": [
+        2380,
+        738,
+        2423,
+        772
+      ],
+      "expected": "228",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "228",
+          "word_ids": [
+            984
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "228",
+          "word_ids": [
+            563
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "total_operating_weight",
+      "page": 8,
+      "bbox": [
+        2423,
+        738,
+        2497,
+        772
+      ],
+      "expected": "1648 LBS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1648 LBS",
+          "word_ids": [
+            920,
+            921
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1648 LBS",
+          "word_ids": [
+            565,
+            566
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "row": 1,
+      "column": "remarks",
+      "page": 8,
+      "bbox": [
+        2497,
+        738,
+        2560,
+        772
+      ],
+      "expected": "(1)-(3)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1)-(3)",
+          "word_ids": [
+            976
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1)-(3)",
+          "word_ids": [
+            567
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "header": "(N) HEAT EXCHANGER SCHEDULE MARK MANUFACTURER AND MODEL NUMBER LOCATION SERVICE DESIGN CAPACITY MAX CAPACITY HIGH TEMP WATER SIDE LOW TEMP WATER SIDE DESIGN PLATES MAX PLATES TOTAL OPERATING WEIGHT REMARKS",
+      "page": 8,
+      "bbox": [
+        1334,
+        671,
+        2560,
+        737
+      ],
+      "engine": "mupdf",
+      "actual": "(N) HEAT EXCHANGER SCHEDULE TOTAL MANUFACTURER DESIGN MAX HIGH TEMP WATER SIDE LOW TEMP WATER SIDE DESIGN MAX CAPACITY CAPACITY OPERATING MARK AND MODEL LOCATION SERVICE PLATES PLATES REMARKS DESIGN GPM MAX GPM EWT(F) LWT(F) PD(PSI) FLUID DESIGN GPM MAX GPM EWT(F) LWT(F) PD(PSI) FLUID NUMBER (MBH) (MBH) (QTY) (QTY) WEIGHT",
+      "pass": true
+    },
+    {
+      "table": "M70-NEW-HEAT-EXCHANGER",
+      "header": "(N) HEAT EXCHANGER SCHEDULE MARK MANUFACTURER AND MODEL NUMBER LOCATION SERVICE DESIGN CAPACITY MAX CAPACITY HIGH TEMP WATER SIDE LOW TEMP WATER SIDE DESIGN PLATES MAX PLATES TOTAL OPERATING WEIGHT REMARKS",
+      "page": 8,
+      "bbox": [
+        1334,
+        671,
+        2560,
+        737
+      ],
+      "engine": "poppler",
+      "actual": "(N) HEAT EXCHANGER SCHEDULE TOTAL MANUFACTURER DESIGN MAX HIGH TEMP WATER SIDE LOW TEMP WATER SIDE DESIGN MAX CAPACITY CAPACITY OPERATING MARK AND MODEL LOCATION SERVICE PLATES PLATES REMARKS DESIGN GPM MAX GPM EWT(F) LWT(F) PD(PSI) FLUID DESIGN GPM MAX GPM EWT(F) LWT(F) PD(PSI) FLUID (MBH) (MBH) (QTY) (QTY) WEIGHT NUMBER",
+      "pass": true
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "row": 1,
+      "column": "mark",
+      "page": 8,
+      "bbox": [
+        1570,
+        1018,
+        1665,
+        1050
+      ],
+      "expected": "B950A-VFD-PCWP-1001",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B950A-VFD- PCWP-1001",
+          "word_ids": [
+            1007,
+            1008
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B950A-VFD- PCWP-1001",
+          "word_ids": [
+            1194,
+            1195
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 8,
+      "bbox": [
+        1665,
+        1018,
+        1790,
+        1050
+      ],
+      "expected": "PUMP SMART ABB ACH580-PCR-096A-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP SMART ABB ACH580-PCR-096A-4",
+          "word_ids": [
+            1009,
+            1010,
+            1011,
+            1012
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP SMART ABB ACH580-PCR-096A-4",
+          "word_ids": [
+            1196,
+            1197,
+            1198,
+            1199
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "row": 1,
+      "column": "hp",
+      "page": 8,
+      "bbox": [
+        1790,
+        1018,
+        1825,
+        1050
+      ],
+      "expected": "75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "75",
+          "word_ids": [
+            1013
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "75",
+          "word_ids": [
+            1200
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "row": 1,
+      "column": "fla",
+      "page": 8,
+      "bbox": [
+        1825,
+        1018,
+        1870,
+        1050
+      ],
+      "expected": "96",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "96",
+          "word_ids": [
+            1103
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "96",
+          "word_ids": [
+            1201
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "row": 1,
+      "column": "volts",
+      "page": 8,
+      "bbox": [
+        1870,
+        1018,
+        1930,
+        1050
+      ],
+      "expected": "480",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "480",
+          "word_ids": [
+            1106
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "480",
+          "word_ids": [
+            1202
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "row": 1,
+      "column": "weight",
+      "page": 8,
+      "bbox": [
+        1930,
+        1018,
+        1998,
+        1050
+      ],
+      "expected": "359 LBS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "359 LBS",
+          "word_ids": [
+            1014,
+            1015
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "359 LBS",
+          "word_ids": [
+            1203,
+            1204
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "row": 1,
+      "column": "enclosure",
+      "page": 8,
+      "bbox": [
+        1998,
+        1018,
+        2075,
+        1050
+      ],
+      "expected": "NEMA 3R",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NEMA 3R",
+          "word_ids": [
+            1109,
+            1110
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NEMA 3R",
+          "word_ids": [
+            1205,
+            1206
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "row": 1,
+      "column": "remarks",
+      "page": 8,
+      "bbox": [
+        2075,
+        1018,
+        2150,
+        1050
+      ],
+      "expected": "(1)-(5)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1)-(5)",
+          "word_ids": [
+            1016
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1)-(5)",
+          "word_ids": [
+            1207
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "row": 2,
+      "column": "mark",
+      "page": 8,
+      "bbox": [
+        1570,
+        1050,
+        1665,
+        1082
+      ],
+      "expected": "B950A-VFD-PCWP-1002",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B950A-VFD- PCWP-1002",
+          "word_ids": [
+            1115,
+            1116
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B950A-VFD- PCWP-1002",
+          "word_ids": [
+            1208,
+            1209
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 8,
+      "bbox": [
+        1665,
+        1050,
+        1790,
+        1082
+      ],
+      "expected": "PUMP SMART ABB ACH580-PCR-096A-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP SMART ABB ACH580-PCR-096A-4",
+          "word_ids": [
+            1098,
+            1099,
+            1100,
+            1101
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP SMART ABB ACH580-PCR-096A-4",
+          "word_ids": [
+            1210,
+            1211,
+            1212,
+            1213
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "row": 2,
+      "column": "hp",
+      "page": 8,
+      "bbox": [
+        1790,
+        1050,
+        1825,
+        1082
+      ],
+      "expected": "75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "75",
+          "word_ids": [
+            1096
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "75",
+          "word_ids": [
+            1214
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "row": 2,
+      "column": "fla",
+      "page": 8,
+      "bbox": [
+        1825,
+        1050,
+        1870,
+        1082
+      ],
+      "expected": "96",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "96",
+          "word_ids": [
+            1104
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "96",
+          "word_ids": [
+            1215
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "row": 2,
+      "column": "volts",
+      "page": 8,
+      "bbox": [
+        1870,
+        1050,
+        1930,
+        1082
+      ],
+      "expected": "480",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "480",
+          "word_ids": [
+            1107
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "480",
+          "word_ids": [
+            1216
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "row": 2,
+      "column": "weight",
+      "page": 8,
+      "bbox": [
+        1930,
+        1050,
+        1998,
+        1082
+      ],
+      "expected": "359 LBS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "359 LBS",
+          "word_ids": [
+            1113,
+            1114
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "359 LBS",
+          "word_ids": [
+            1217,
+            1218
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "row": 2,
+      "column": "enclosure",
+      "page": 8,
+      "bbox": [
+        1998,
+        1050,
+        2075,
+        1082
+      ],
+      "expected": "NEMA 3R",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NEMA 3R",
+          "word_ids": [
+            1111,
+            1112
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NEMA 3R",
+          "word_ids": [
+            1219,
+            1220
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "row": 2,
+      "column": "remarks",
+      "page": 8,
+      "bbox": [
+        2075,
+        1050,
+        2150,
+        1082
+      ],
+      "expected": "(1)-(5)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1)-(5)",
+          "word_ids": [
+            1097
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1)-(5)",
+          "word_ids": [
+            1225
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "header": "(N) VFD SCHEDULE MARK MANUFACTURER AND MODEL NUMBER HP FLA VOLTS WEIGHT ENCLOSURE REMARKS",
+      "page": 8,
+      "bbox": [
+        1570,
+        956,
+        2150,
+        1017
+      ],
+      "engine": "mupdf",
+      "actual": "(N) VFD SCHEDULE MANUFACTURER AND MARK HP FLA VOLTS WEIGHT ENCLOSURE REMARKS MODEL NUMBER",
+      "pass": true
+    },
+    {
+      "table": "M70-NEW-VFDS",
+      "header": "(N) VFD SCHEDULE MARK MANUFACTURER AND MODEL NUMBER HP FLA VOLTS WEIGHT ENCLOSURE REMARKS",
+      "page": 8,
+      "bbox": [
+        1570,
+        956,
+        2150,
+        1017
+      ],
+      "engine": "poppler",
+      "actual": "(N) VFD SCHEDULE MANUFACTURER AND MARK HP FLA VOLTS WEIGHT ENCLOSURE REMARKS MODEL NUMBER",
+      "pass": true
+    },
+    {
+      "table": "M70-COMPRESSED-AIR-REGULATOR",
+      "row": 1,
+      "column": "mark",
+      "page": 8,
+      "bbox": [
+        2225,
+        1045,
+        2320,
+        1080
+      ],
+      "expected": "(N) REG-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(N) REG-1",
+          "word_ids": [
+            1162,
+            1163
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(N) REG-1",
+          "word_ids": [
+            1353,
+            1354
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-COMPRESSED-AIR-REGULATOR",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 8,
+      "bbox": [
+        2320,
+        1045,
+        2425,
+        1080
+      ],
+      "expected": "CONOFLOW GH30-XTHMXSXG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONOFLOW GH30-XTHMXSXG",
+          "word_ids": [
+            1164,
+            1165
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONOFLOW GH30-XTHMXSXG",
+          "word_ids": [
+            1355,
+            1356
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-COMPRESSED-AIR-REGULATOR",
+      "row": 1,
+      "column": "location",
+      "page": 8,
+      "bbox": [
+        2425,
+        1045,
+        2500,
+        1080
+      ],
+      "expected": "HUTCH 1.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUTCH 1.3",
+          "word_ids": [
+            1166,
+            1167
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUTCH 1.3",
+          "word_ids": [
+            1357,
+            1358
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-COMPRESSED-AIR-REGULATOR",
+      "row": 1,
+      "column": "outlet_pressure",
+      "page": 8,
+      "bbox": [
+        2500,
+        1045,
+        2560,
+        1080
+      ],
+      "expected": "125 PSIG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "125 PSIG",
+          "word_ids": [
+            1168,
+            1169
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "125 PSIG",
+          "word_ids": [
+            1359,
+            1360
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-COMPRESSED-AIR-REGULATOR",
+      "row": 1,
+      "column": "diaphragm",
+      "page": 8,
+      "bbox": [
+        2560,
+        1045,
+        2660,
+        1080
+      ],
+      "expected": "BUNA \"N\" (WITH RELIEF, NO BLEED)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BUNA \"N\" (WITH RELIEF, NO BLEED)",
+          "word_ids": [
+            1176,
+            1177,
+            1178,
+            1179,
+            1180,
+            1181
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BUNA \"N\" (WITH RELIEF, NO BLEED)",
+          "word_ids": [
+            1361,
+            1362,
+            1363,
+            1364,
+            1365,
+            1366
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-COMPRESSED-AIR-REGULATOR",
+      "row": 1,
+      "column": "inlet_outlet_size",
+      "page": 8,
+      "bbox": [
+        2660,
+        1045,
+        2740,
+        1080
+      ],
+      "expected": "1/4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/4\"",
+          "word_ids": [
+            1170
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/4\"",
+          "word_ids": [
+            1367
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-COMPRESSED-AIR-REGULATOR",
+      "row": 1,
+      "column": "wall_mountable",
+      "page": 8,
+      "bbox": [
+        2740,
+        1045,
+        2825,
+        1080
+      ],
+      "expected": "YES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "YES",
+          "word_ids": [
+            1171
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "YES",
+          "word_ids": [
+            1368
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-COMPRESSED-AIR-REGULATOR",
+      "row": 1,
+      "column": "shipping_weight",
+      "page": 8,
+      "bbox": [
+        2825,
+        1045,
+        2900,
+        1080
+      ],
+      "expected": "2 LB",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2 LB",
+          "word_ids": [
+            1172,
+            1173
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2 LB",
+          "word_ids": [
+            1369,
+            1370
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-COMPRESSED-AIR-REGULATOR",
+      "row": 1,
+      "column": "remarks",
+      "page": 8,
+      "bbox": [
+        2900,
+        1045,
+        2980,
+        1080
+      ],
+      "expected": "1-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-4",
+          "word_ids": [
+            1174
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-4",
+          "word_ids": [
+            1371
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-COMPRESSED-AIR-REGULATOR",
+      "header": "(N) COMPRESSED AIR REGULATOR MARK MANUFACTURER AND MODEL NUMBER LOCATION OUTLET PRESSURE DIAPHRAGM INLET OUTLET SIZE WALL MOUNTABLE SHIPPING WEIGHT REMARKS",
+      "page": 8,
+      "bbox": [
+        2225,
+        990,
+        3035,
+        1044
+      ],
+      "engine": "mupdf",
+      "actual": "(N) COMPRESSED AIR REGULATOR MANUFACTURER AND OUTLET INLET/OUTLET WALL SHIPPING MARK LOCATION DIAPHRAGM REMARKS MODEL NUMBER PRESSURE SIZE MOUNTABLE WEIGHT",
+      "pass": true
+    },
+    {
+      "table": "M70-COMPRESSED-AIR-REGULATOR",
+      "header": "(N) COMPRESSED AIR REGULATOR MARK MANUFACTURER AND MODEL NUMBER LOCATION OUTLET PRESSURE DIAPHRAGM INLET OUTLET SIZE WALL MOUNTABLE SHIPPING WEIGHT REMARKS",
+      "page": 8,
+      "bbox": [
+        2225,
+        990,
+        3035,
+        1044
+      ],
+      "engine": "poppler",
+      "actual": "(N) COMPRESSED AIR REGULATOR MANUFACTURER AND OUTLET INLET/OUTLET WALL SHIPPING MARK LOCATION DIAPHRAGM REMARKS MODEL NUMBER PRESSURE SIZE MOUNTABLE WEIGHT",
+      "pass": true
+    },
+    {
+      "table": "M70-GRILLE",
+      "row": 1,
+      "column": "mark",
+      "page": 8,
+      "bbox": [
+        180,
+        875,
+        245,
+        912
+      ],
+      "expected": "RG-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-1",
+          "word_ids": [
+            1927
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-1",
+          "word_ids": [
+            251
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-GRILLE",
+      "row": 1,
+      "column": "maximum_airflow_cfm",
+      "page": 8,
+      "bbox": [
+        245,
+        875,
+        310,
+        912
+      ],
+      "expected": "1555",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1555",
+          "word_ids": [
+            1928
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1555",
+          "word_ids": [
+            252
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-GRILLE",
+      "row": 1,
+      "column": "design_airflow_cfm",
+      "page": 8,
+      "bbox": [
+        310,
+        875,
+        400,
+        912
+      ],
+      "expected": "1410/1415",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1410/1415",
+          "word_ids": [
+            1929
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1410/1415",
+          "word_ids": [
+            253
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-GRILLE",
+      "row": 1,
+      "column": "air_velocity_fpm",
+      "page": 8,
+      "bbox": [
+        400,
+        875,
+        510,
+        912
+      ],
+      "expected": "450",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "450",
+          "word_ids": [
+            1930
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "450",
+          "word_ids": [
+            254
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-GRILLE",
+      "row": 1,
+      "column": "face_size_in",
+      "page": 8,
+      "bbox": [
+        510,
+        875,
+        600,
+        912
+      ],
+      "expected": "30x16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30x16",
+          "word_ids": [
+            1931
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30x16",
+          "word_ids": [
+            255
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-GRILLE",
+      "row": 1,
+      "column": "connection_size_in",
+      "page": 8,
+      "bbox": [
+        600,
+        875,
+        700,
+        912
+      ],
+      "expected": "30x16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30x16",
+          "word_ids": [
+            1932
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30x16",
+          "word_ids": [
+            256
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-GRILLE",
+      "row": 1,
+      "column": "max_static_pressure_drop_inwg",
+      "page": 8,
+      "bbox": [
+        700,
+        875,
+        790,
+        912
+      ],
+      "expected": "0.08",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.08",
+          "word_ids": [
+            1933
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.08",
+          "word_ids": [
+            257
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-GRILLE",
+      "row": 1,
+      "column": "max_nc",
+      "page": 8,
+      "bbox": [
+        790,
+        875,
+        845,
+        912
+      ],
+      "expected": "25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            1934
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            258
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-GRILLE",
+      "row": 1,
+      "column": "mounting_location",
+      "page": 8,
+      "bbox": [
+        845,
+        875,
+        920,
+        912
+      ],
+      "expected": "DUCT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT",
+          "word_ids": [
+            1935
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT",
+          "word_ids": [
+            264
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-GRILLE",
+      "row": 1,
+      "column": "material",
+      "page": 8,
+      "bbox": [
+        920,
+        875,
+        985,
+        912
+      ],
+      "expected": "STEEL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STEEL",
+          "word_ids": [
+            1936
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STEEL",
+          "word_ids": [
+            265
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-GRILLE",
+      "row": 1,
+      "column": "finish",
+      "page": 8,
+      "bbox": [
+        985,
+        875,
+        1075,
+        912
+      ],
+      "expected": "#26 WHITE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "#26 WHITE",
+          "word_ids": [
+            1937,
+            1938
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "#26 WHITE",
+          "word_ids": [
+            620,
+            621
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-GRILLE",
+      "row": 1,
+      "column": "basis_of_design",
+      "page": 8,
+      "bbox": [
+        1075,
+        875,
+        1175,
+        912
+      ],
+      "expected": "TITUS 350RL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TITUS 350RL",
+          "word_ids": [
+            1939,
+            1940
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TITUS 350RL",
+          "word_ids": [
+            622,
+            623
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-GRILLE",
+      "row": 1,
+      "column": "notes",
+      "page": 8,
+      "bbox": [
+        1175,
+        875,
+        1240,
+        912
+      ],
+      "expected": "(1)-(2)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1)-(2)",
+          "word_ids": [
+            1941
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1)-(2)",
+          "word_ids": [
+            624
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-GRILLE",
+      "header": "GRILLE SCHEDULE MARK NUMBER MAX AIRFLOW DESIGN AIRFLOW AIR VELOCITY FACE SIZE CONNECTION SIZE MAX STATIC PRESS DROP MAX NC MOUNTING LOCATION MATERIAL FINISH BASIS OF DESIGN NOTES",
+      "page": 8,
+      "bbox": [
+        180,
+        793,
+        1240,
+        875
+      ],
+      "engine": "mupdf",
+      "actual": "GRILLE SCHEDULE MARK MAX DESIGN AIR VELOCITY FACE SIZE CONNECTION MAX STATIC MAX MOUNTING BASIS NOTES NUMBER AIRFLOW AIRFLOW (FPM) IN SIZE, IN PRESS DROP NC LOCATION MATERIAL FINISH OF (CFM) (CFM) (WxH) (WxH) (IN WG) DESIGN",
+      "pass": true
+    },
+    {
+      "table": "M70-GRILLE",
+      "header": "GRILLE SCHEDULE MARK NUMBER MAX AIRFLOW DESIGN AIRFLOW AIR VELOCITY FACE SIZE CONNECTION SIZE MAX STATIC PRESS DROP MAX NC MOUNTING LOCATION MATERIAL FINISH BASIS OF DESIGN NOTES",
+      "page": 8,
+      "bbox": [
+        180,
+        793,
+        1240,
+        875
+      ],
+      "engine": "poppler",
+      "actual": "GRILLE SCHEDULE MARK MAX DESIGN AIR VELOCITY FACE SIZE CONNECTION MAX STATIC MAX MOUNTING BASIS NOTES NUMBER AIRFLOW AIRFLOW (FPM) IN SIZE, IN PRESS DROP NC LOCATION MATERIAL FINISH OF (CFM) (CFM) (WxH) (WxH) (IN WG) DESIGN",
+      "pass": true
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "row": 1,
+      "column": "mark",
+      "page": 8,
+      "bbox": [
+        175,
+        1092,
+        260,
+        1135
+      ],
+      "expected": "B950-RHC-1002",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B950-RHC-1002",
+          "word_ids": [
+            1836
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B950-RHC-1002",
+          "word_ids": [
+            664
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "row": 1,
+      "column": "room_number",
+      "page": 8,
+      "bbox": [
+        260,
+        1092,
+        440,
+        1135
+      ],
+      "expected": "100H3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100H3",
+          "word_ids": [
+            1837
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100H3",
+          "word_ids": [
+            665
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "row": 1,
+      "column": "room_name",
+      "page": 8,
+      "bbox": [
+        440,
+        1092,
+        600,
+        1135
+      ],
+      "expected": "HUTCH 1.3 XPP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUTCH 1.3 XPP",
+          "word_ids": [
+            1838,
+            1839,
+            1840
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUTCH 1.3 XPP",
+          "word_ids": [
+            259,
+            260,
+            261
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "row": 1,
+      "column": "maximum_airflow_cfm",
+      "page": 8,
+      "bbox": [
+        600,
+        1092,
+        675,
+        1135
+      ],
+      "expected": "6,050",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6,050",
+          "word_ids": [
+            1841
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6,050",
+          "word_ids": [
+            262
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "row": 1,
+      "column": "capacity_mbh",
+      "page": 8,
+      "bbox": [
+        675,
+        1092,
+        738,
+        1135
+      ],
+      "expected": "126",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "126",
+          "word_ids": [
+            1842
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "126",
+          "word_ids": [
+            657
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "row": 1,
+      "column": "air_pd_inwg",
+      "page": 8,
+      "bbox": [
+        738,
+        1092,
+        795,
+        1135
+      ],
+      "expected": "0.10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.10",
+          "word_ids": [
+            1843
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.10",
+          "word_ids": [
+            650
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "row": 1,
+      "column": "eat_f",
+      "page": 8,
+      "bbox": [
+        795,
+        1092,
+        850,
+        1135
+      ],
+      "expected": "55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55",
+          "word_ids": [
+            1844
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55",
+          "word_ids": [
+            651
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "row": 1,
+      "column": "lat_f",
+      "page": 8,
+      "bbox": [
+        850,
+        1092,
+        910,
+        1135
+      ],
+      "expected": "73",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "73",
+          "word_ids": [
+            1845
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "73",
+          "word_ids": [
+            652
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "row": 1,
+      "column": "flow_gpm",
+      "page": 8,
+      "bbox": [
+        910,
+        1092,
+        960,
+        1135
+      ],
+      "expected": "9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9",
+          "word_ids": [
+            1846
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9",
+          "word_ids": [
+            653
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "row": 1,
+      "column": "water_pd_ftwg",
+      "page": 8,
+      "bbox": [
+        960,
+        1092,
+        1035,
+        1135
+      ],
+      "expected": "16.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16.3",
+          "word_ids": [
+            1847
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16.3",
+          "word_ids": [
+            654
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "row": 1,
+      "column": "ewt_f",
+      "page": 8,
+      "bbox": [
+        1035,
+        1092,
+        1093,
+        1135
+      ],
+      "expected": "180",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "180",
+          "word_ids": [
+            1848
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "180",
+          "word_ids": [
+            655
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "row": 1,
+      "column": "lwt_f",
+      "page": 8,
+      "bbox": [
+        1093,
+        1092,
+        1155,
+        1135
+      ],
+      "expected": "155",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "155",
+          "word_ids": [
+            1849
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "155",
+          "word_ids": [
+            656
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "row": 1,
+      "column": "pipe_connection_in",
+      "page": 8,
+      "bbox": [
+        1155,
+        1092,
+        1220,
+        1135
+      ],
+      "expected": "1 1/4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 1/4",
+          "word_ids": [
+            1850,
+            1851
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 1/4",
+          "word_ids": [
+            1175,
+            1176
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "row": 1,
+      "column": "coil_dimension_hxw_in",
+      "page": 8,
+      "bbox": [
+        1220,
+        1092,
+        1285,
+        1135
+      ],
+      "expected": "24x48",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24x48",
+          "word_ids": [
+            1852
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24x48",
+          "word_ids": [
+            1177
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "row": 1,
+      "column": "basis_of_design",
+      "page": 8,
+      "bbox": [
+        1285,
+        1092,
+        1340,
+        1135
+      ],
+      "expected": "HEATCRAFT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HEATCRAFT",
+          "word_ids": [
+            1853
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HEATCRAFT",
+          "word_ids": [
+            1182
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "row": 1,
+      "column": "note",
+      "page": 8,
+      "bbox": [
+        1340,
+        1092,
+        1400,
+        1135
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "header": "REHEAT COIL SCHEDULES RELOCATED ID TAG ROOM NUMBER ROOM NAME MAXIMUM AIRFLOW CAPACITY AIR PD EAT LAT FLOW WATER PD EWT LWT PIPE CONN COIL DIMENSION BASIS OF DESIGN",
+      "page": 8,
+      "bbox": [
+        175,
+        1025,
+        1400,
+        1092
+      ],
+      "engine": "mupdf",
+      "actual": "REHEAT COIL SCHEDULES (RELOCATED) ID TAG ROOM ROOM MAXIMUM COIL BASIS NUMBER NAME AIRFLOW CAPACITY AIR PD EAT LAT FLOW WATER PD EWT LWT PIPE CONN DIMENSION OF CFM MBH IN W.G. DEG F DEG F GPM FT WG DEG F DEG F IN HxW (IN) DESIGN",
+      "pass": true
+    },
+    {
+      "table": "M70-RELOCATED-REHEAT-COIL",
+      "header": "REHEAT COIL SCHEDULES RELOCATED ID TAG ROOM NUMBER ROOM NAME MAXIMUM AIRFLOW CAPACITY AIR PD EAT LAT FLOW WATER PD EWT LWT PIPE CONN COIL DIMENSION BASIS OF DESIGN",
+      "page": 8,
+      "bbox": [
+        175,
+        1025,
+        1400,
+        1092
+      ],
+      "engine": "poppler",
+      "actual": "REHEAT COIL SCHEDULES (RELOCATED) ID TAG ROOM ROOM MAXIMUM COIL BASIS NUMBER NAME AIRFLOW CAPACITY AIR PD EAT LAT FLOW WATER PD EWT LWT PIPE CONN DIMENSION OF CFM MBH IN W.G. DEG F DEG F GPM FT WG DEG F DEG F IN HxW (IN) DESIGN",
+      "pass": true
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "mark",
+      "page": 8,
+      "bbox": [
+        175,
+        1320,
+        295,
+        1365
+      ],
+      "expected": "B950-AHU-3001",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B950-AHU-3001",
+          "word_ids": [
+            2028
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B950-AHU-3001",
+          "word_ids": [
+            1405
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "location",
+      "page": 8,
+      "bbox": [
+        295,
+        1320,
+        410,
+        1365
+      ],
+      "expected": "MECH RM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECH RM",
+          "word_ids": [
+            2029,
+            2030
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECH RM",
+          "word_ids": [
+            1407,
+            1408
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "capacity_designed_cfm",
+      "page": 8,
+      "bbox": [
+        410,
+        1320,
+        510,
+        1365
+      ],
+      "expected": "60,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "60,000",
+          "word_ids": [
+            2031
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "60,000",
+          "word_ids": [
+            1417
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "outside_air_cfm",
+      "page": 8,
+      "bbox": [
+        510,
+        1320,
+        585,
+        1365
+      ],
+      "expected": "5,445",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5,445",
+          "word_ids": [
+            2032
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5,445",
+          "word_ids": [
+            1418
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "fan_type",
+      "page": 8,
+      "bbox": [
+        585,
+        1320,
+        685,
+        1365
+      ],
+      "expected": "DIRECT DRIVE PLENUM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIRECT DRIVE PLENUM",
+          "word_ids": [
+            2033,
+            2034,
+            2035
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIRECT DRIVE PLENUM",
+          "word_ids": [
+            1452,
+            1453,
+            1454
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "fan_count",
+      "page": 8,
+      "bbox": [
+        685,
+        1320,
+        750,
+        1365
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            2036
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            1445
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "design_total_sp_inwg",
+      "page": 8,
+      "bbox": [
+        750,
+        1320,
+        825,
+        1365
+      ],
+      "expected": "9.36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.36",
+          "word_ids": [
+            2037
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.36",
+          "word_ids": [
+            1446
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "bhp_per_fan",
+      "page": 8,
+      "bbox": [
+        825,
+        1320,
+        880,
+        1365
+      ],
+      "expected": "12.54",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12.54",
+          "word_ids": [
+            2038
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12.54",
+          "word_ids": [
+            1447
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "motor_hp_per_fan",
+      "page": 8,
+      "bbox": [
+        880,
+        1320,
+        960,
+        1365
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2039
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            1448
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "electrical_power_vphz",
+      "page": 8,
+      "bbox": [
+        960,
+        1320,
+        1035,
+        1365
+      ],
+      "expected": "460/3/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "460/3/60",
+          "word_ids": [
+            2040
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "460/3/60",
+          "word_ids": [
+            1449
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "fla_amps",
+      "page": 8,
+      "bbox": [
+        1035,
+        1320,
+        1095,
+        1365
+      ],
+      "expected": "146",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "146",
+          "word_ids": [
+            2041
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "146",
+          "word_ids": [
+            1450
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "mca_amps",
+      "page": 8,
+      "bbox": [
+        1095,
+        1320,
+        1150,
+        1365
+      ],
+      "expected": "164",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "164",
+          "word_ids": [
+            2042
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "164",
+          "word_ids": [
+            1451
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "cooling_capacity_mbh",
+      "page": 8,
+      "bbox": [
+        1150,
+        1320,
+        1210,
+        1365
+      ],
+      "expected": "1,195",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,195",
+          "word_ids": [
+            2043
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,195",
+          "word_ids": [
+            1463
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "eat_fdb_fwb",
+      "page": 8,
+      "bbox": [
+        1210,
+        1320,
+        1270,
+        1365
+      ],
+      "expected": "68.5/58.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "68.5/58.2",
+          "word_ids": [
+            2044
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "68.5/58.2",
+          "word_ids": [
+            1464
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "lat_fdb_fwb",
+      "page": 8,
+      "bbox": [
+        1270,
+        1320,
+        1350,
+        1365
+      ],
+      "expected": "48.6/48.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "48.6/48.5",
+          "word_ids": [
+            2045
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "48.6/48.5",
+          "word_ids": [
+            1465
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "ewt_f",
+      "page": 8,
+      "bbox": [
+        1350,
+        1320,
+        1415,
+        1365
+      ],
+      "expected": "44",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "44",
+          "word_ids": [
+            2046
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "44",
+          "word_ids": [
+            1475
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "lwt_f",
+      "page": 8,
+      "bbox": [
+        1415,
+        1320,
+        1480,
+        1365
+      ],
+      "expected": "55.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.5",
+          "word_ids": [
+            2047
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.5",
+          "word_ids": [
+            1476
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "apd_inwg",
+      "page": 8,
+      "bbox": [
+        1480,
+        1320,
+        1540,
+        1365
+      ],
+      "expected": "1.03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.03",
+          "word_ids": [
+            2048
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.03",
+          "word_ids": [
+            1477
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "wpd_ft",
+      "page": 8,
+      "bbox": [
+        1540,
+        1320,
+        1615,
+        1365
+      ],
+      "expected": "15.26",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15.26",
+          "word_ids": [
+            2049
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15.26",
+          "word_ids": [
+            1478
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "pre_filter",
+      "page": 8,
+      "bbox": [
+        1615,
+        1320,
+        1700,
+        1365
+      ],
+      "expected": "MERV 8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MERV 8",
+          "word_ids": [
+            2050,
+            2051
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MERV 8",
+          "word_ids": [
+            1489,
+            1490
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "final_filter",
+      "page": 8,
+      "bbox": [
+        1700,
+        1320,
+        1790,
+        1365
+      ],
+      "expected": "99.97 HEPA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "99.97 HEPA",
+          "word_ids": [
+            2052,
+            2053
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "99.97 HEPA",
+          "word_ids": [
+            1491,
+            1492
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "weight_lb",
+      "page": 8,
+      "bbox": [
+        1790,
+        1320,
+        1865,
+        1365
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "basis_of_design",
+      "page": 8,
+      "bbox": [
+        1865,
+        1320,
+        2000,
+        1365
+      ],
+      "expected": "TEMTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMTROL",
+          "word_ids": [
+            2054
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMTROL",
+          "word_ids": [
+            1494
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "row": 1,
+      "column": "note",
+      "page": 8,
+      "bbox": [
+        2000,
+        1320,
+        2100,
+        1365
+      ],
+      "expected": "1, 2, 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1, 2, 3",
+          "word_ids": [
+            2055,
+            2056,
+            2057
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1, 2, 3",
+          "word_ids": [
+            1495,
+            1496,
+            1497
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "header": "AIR HANDLING UNIT SCHEDULE EXISTING MARK NUMBER LOCATION CAPACITY DESIGNED OUTSIDE AIR FANS COILS FILTERS WEIGHT BASIS OF DESIGN NOTE",
+      "page": 8,
+      "bbox": [
+        175,
+        1231,
+        2100,
+        1320
+      ],
+      "engine": "mupdf",
+      "actual": "AIR HANDLING UNIT SCHEDULE (EXISTING) MARK LOCATION CAPACITY OUTSIDE FANS COILS FILTERS WEIGHT BASIS NOTE NUMBER DESIGNED AIR TYPE NUMBER DESIGN BHP MOTOR HP ELEC FLA MCA COOLING EAT LAT EWT LWT APD WPD PRE- FINAL OF (NOTE 3) OF TOTAL SP PER FAN PER FAN POWER CAPACITY FILTER FILTER CFM CFM FANS IN W.G. BHP HP V/P/Hz AMPS AMPS MBH °Fdb/°Fwb °Fdb/°Fwb °F °F IN W.G. FT LBS DESIGN",
+      "pass": true
+    },
+    {
+      "table": "M70-EXISTING-AHU",
+      "header": "AIR HANDLING UNIT SCHEDULE EXISTING MARK NUMBER LOCATION CAPACITY DESIGNED OUTSIDE AIR FANS COILS FILTERS WEIGHT BASIS OF DESIGN NOTE",
+      "page": 8,
+      "bbox": [
+        175,
+        1231,
+        2100,
+        1320
+      ],
+      "engine": "poppler",
+      "actual": "AIR HANDLING UNIT SCHEDULE (EXISTING) MARK LOCATION CAPACITY OUTSIDE FANS COILS FILTERS WEIGHT BASIS NOTE NUMBER DESIGNED AIR TYPE NUMBER DESIGN BHP MOTOR HP ELEC FLA MCA COOLING EAT LAT EWT LWT APD WPD PRE- FINAL OF (NOTE 3) OF TOTAL SP PER FAN PER FAN POWER CAPACITY FILTER FILTER CFM CFM FANS IN W.G. BHP HP V/P/Hz AMPS AMPS MBH °Fdb/°Fwb °Fdb/°Fwb °F °F IN W.G. FT LBS DESIGN",
+      "pass": true
+    },
+    {
+      "table": "M70-PCW-AIR-SEPARATOR",
+      "row": 1,
+      "column": "mark",
+      "page": 8,
+      "bbox": [
+        1050,
+        1538,
+        1165,
+        1575
+      ],
+      "expected": "(N) B950A-AS-1001",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(N) B950A-AS-1001",
+          "word_ids": [
+            1192,
+            1193
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(N) B950A-AS-1001",
+          "word_ids": [
+            1579,
+            1580
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-PCW-AIR-SEPARATOR",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 8,
+      "bbox": [
+        1165,
+        1538,
+        1260,
+        1575
+      ],
+      "expected": "ROLAIRTROL RL-6FB",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ROLAIRTROL RL-6FB",
+          "word_ids": [
+            1194,
+            1195
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ROLAIRTROL RL-6FB",
+          "word_ids": [
+            1581,
+            1582
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-PCW-AIR-SEPARATOR",
+      "row": 1,
+      "column": "location",
+      "page": 8,
+      "bbox": [
+        1260,
+        1538,
+        1370,
+        1575
+      ],
+      "expected": "B950A MECH ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B950A MECH ROOM",
+          "word_ids": [
+            1196,
+            1197,
+            1198
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B950A MECH ROOM",
+          "word_ids": [
+            1583,
+            1584,
+            1585
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-PCW-AIR-SEPARATOR",
+      "row": 1,
+      "column": "service",
+      "page": 8,
+      "bbox": [
+        1370,
+        1538,
+        1450,
+        1575
+      ],
+      "expected": "AIR SEPARATOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIR SEPARATOR",
+          "word_ids": [
+            1200,
+            1201
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIR SEPARATOR",
+          "word_ids": [
+            1586,
+            1587
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-PCW-AIR-SEPARATOR",
+      "row": 1,
+      "column": "inlet_connection",
+      "page": 8,
+      "bbox": [
+        1450,
+        1538,
+        1530,
+        1575
+      ],
+      "expected": "6\" FLANGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6\" FLANGE",
+          "word_ids": [
+            1304,
+            1305
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6\" FLANGE",
+          "word_ids": [
+            1588,
+            1589
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-PCW-AIR-SEPARATOR",
+      "row": 1,
+      "column": "outlet_connection",
+      "page": 8,
+      "bbox": [
+        1530,
+        1538,
+        1605,
+        1575
+      ],
+      "expected": "6\" FLANGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6\" FLANGE",
+          "word_ids": [
+            1308,
+            1309
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6\" FLANGE",
+          "word_ids": [
+            1590,
+            1591
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-PCW-AIR-SEPARATOR",
+      "row": 1,
+      "column": "tank_volume",
+      "page": 8,
+      "bbox": [
+        1605,
+        1538,
+        1680,
+        1575
+      ],
+      "expected": "34 GAL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "34 GAL",
+          "word_ids": [
+            1293,
+            1294
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "34 GAL",
+          "word_ids": [
+            1592,
+            1593
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-PCW-AIR-SEPARATOR",
+      "row": 1,
+      "column": "max_capacity",
+      "page": 8,
+      "bbox": [
+        1680,
+        1538,
+        1735,
+        1575
+      ],
+      "expected": "850 GPM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "850 GPM",
+          "word_ids": [
+            1312,
+            1313
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "850 GPM",
+          "word_ids": [
+            1594,
+            1595
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-PCW-AIR-SEPARATOR",
+      "row": 1,
+      "column": "max_pressure",
+      "page": 8,
+      "bbox": [
+        1735,
+        1538,
+        1800,
+        1575
+      ],
+      "expected": "125 PSIG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "125 PSIG",
+          "word_ids": [
+            1297,
+            1298
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "125 PSIG",
+          "word_ids": [
+            1596,
+            1597
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-PCW-AIR-SEPARATOR",
+      "row": 1,
+      "column": "max_temperature",
+      "page": 8,
+      "bbox": [
+        1800,
+        1538,
+        1865,
+        1575
+      ],
+      "expected": "350°F",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "350°F",
+          "word_ids": [
+            1301
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "350°F",
+          "word_ids": [
+            1598
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-PCW-AIR-SEPARATOR",
+      "row": 1,
+      "column": "dimensions",
+      "page": 8,
+      "bbox": [
+        1865,
+        1538,
+        1950,
+        1575
+      ],
+      "expected": "44-1/16\"H x 21-1/4\"Ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "44-1/16\"H x 21-1/4\"Ø",
+          "word_ids": [
+            1203,
+            1204,
+            1205
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "44-1/16\"H x 21-1/4\"Ø",
+          "word_ids": [
+            1599,
+            1600,
+            1601
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-PCW-AIR-SEPARATOR",
+      "row": 1,
+      "column": "tank_weight_dry",
+      "page": 8,
+      "bbox": [
+        1950,
+        1538,
+        2040,
+        1575
+      ],
+      "expected": "280 LBS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "280 LBS",
+          "word_ids": [
+            1289,
+            1290
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "280 LBS",
+          "word_ids": [
+            1602,
+            1603
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-PCW-AIR-SEPARATOR",
+      "row": 1,
+      "column": "tank_weight_wetted",
+      "page": 8,
+      "bbox": [
+        2040,
+        1538,
+        2130,
+        1575
+      ],
+      "expected": "564 LBS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "564 LBS",
+          "word_ids": [
+            1209,
+            1210
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "564 LBS",
+          "word_ids": [
+            1604,
+            1605
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-PCW-AIR-SEPARATOR",
+      "row": 1,
+      "column": "notes",
+      "page": 8,
+      "bbox": [
+        2130,
+        1538,
+        2225,
+        1575
+      ],
+      "expected": "(1)-(6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1)-(6)",
+          "word_ids": [
+            1285
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1)-(6)",
+          "word_ids": [
+            1606
+          ]
+        }
+      }
+    },
+    {
+      "table": "M70-PCW-AIR-SEPARATOR",
+      "header": "PCW AIR SEPARATOR SCHEDULE MARK MFR AND MODEL NUMBER LOCATION SERVICE INLET CONNECTION OUTLET CONNECTION TANK VOLUME MAX CAPACITY MAX PRESSURE MAX TEMP DIMENSIONS TANK WEIGHT DRY WETTED NOTES",
+      "page": 8,
+      "bbox": [
+        1050,
+        1488,
+        2225,
+        1538
+      ],
+      "engine": "mupdf",
+      "actual": "PCW AIR SEPARATOR SCHEDULE MFR AND MODEL INLET OUTLET MAX MAX TANK WEIGHT TANK WEIGHT MARK LOCATION SERVICE TANK VOLUME MAX TEMP DIMENSIONS NOTES NUMBER CONNECTION CONNECTION CAPACITY PRESSURE (DRY) (WETTED)",
+      "pass": true
+    },
+    {
+      "table": "M70-PCW-AIR-SEPARATOR",
+      "header": "PCW AIR SEPARATOR SCHEDULE MARK MFR AND MODEL NUMBER LOCATION SERVICE INLET CONNECTION OUTLET CONNECTION TANK VOLUME MAX CAPACITY MAX PRESSURE MAX TEMP DIMENSIONS TANK WEIGHT DRY WETTED NOTES",
+      "page": 8,
+      "bbox": [
+        1050,
+        1488,
+        2225,
+        1538
+      ],
+      "engine": "poppler",
+      "actual": "PCW AIR SEPARATOR SCHEDULE MFR AND MODEL INLET OUTLET MAX MAX TANK WEIGHT TANK WEIGHT MARK LOCATION SERVICE TANK VOLUME MAX TEMP DIMENSIONS NOTES NUMBER CONNECTION CONNECTION CAPACITY PRESSURE (DRY) (WETTED)",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m70-transcribed-equipment-schedule-tables",
+      "actual": 8,
+      "expected": 8,
+      "pass": true
+    },
+    {
+      "id": "m70-transcribed-equipment-schedule-rows",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

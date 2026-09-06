@@ -1,0 +1,776 @@
+{
+  "document_id": "06__vol2__096",
+  "source_sha256": "72da836a803740382b319b718c1f10d8daeff6e5dbe869f1e68ff173ea4092ec",
+  "annotation_sha256": "5c538d364eac6b94ae44cae75ba0c31b113ee32d69fe9c3bc927ab9abb874f6d",
+  "tables": 1,
+  "rows": 17,
+  "cell_assertions": 17,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 36,
+      "bbox": [
+        295,
+        1810,
+        800,
+        1823
+      ],
+      "expected": "AI-1 HRC-1 CHILLED WATER ENTERING TEMPERATURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-1 HRC-1 CHILLED WATER ENTERING TEMPERATURE X X X",
+          "word_ids": [
+            1743,
+            1744,
+            1745,
+            1746,
+            1747,
+            1748,
+            1749,
+            1750,
+            1751
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-1 HRC-1 CHILLED WATER ENTERING TEMPERATURE X X X",
+          "word_ids": [
+            1490,
+            1510,
+            1511,
+            1512,
+            1513,
+            1514,
+            1597,
+            1608,
+            1617
+          ]
+        }
+      }
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 36,
+      "bbox": [
+        295,
+        1823,
+        800,
+        1836
+      ],
+      "expected": "AI-2 HRC CHILLED WATER LEAVING TEMPERATURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-2 HRC CHILLED WATER LEAVING TEMPERATURE X X X",
+          "word_ids": [
+            1752,
+            1753,
+            1754,
+            1755,
+            1756,
+            1757,
+            1758,
+            1759,
+            1760
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-2 HRC CHILLED WATER LEAVING TEMPERATURE X X X",
+          "word_ids": [
+            1491,
+            1515,
+            1516,
+            1517,
+            1518,
+            1519,
+            1598,
+            1609,
+            1618
+          ]
+        }
+      }
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 36,
+      "bbox": [
+        295,
+        1836,
+        800,
+        1850
+      ],
+      "expected": "AI-3 HRC-1 SYSTEM CHILLED WATER FLOW X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-3 HRC-1 SYSTEM CHILLED WATER FLOW X X",
+          "word_ids": [
+            1761,
+            1762,
+            1763,
+            1764,
+            1765,
+            1766,
+            1767,
+            1768
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-3 HRC-1 SYSTEM CHILLED WATER FLOW X X",
+          "word_ids": [
+            1492,
+            1520,
+            1521,
+            1522,
+            1523,
+            1524,
+            1599,
+            1619
+          ]
+        }
+      }
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 36,
+      "bbox": [
+        295,
+        1850,
+        800,
+        1863
+      ],
+      "expected": "AI-4 HRC-1 SYSTEM CHILLED WATER CALCULATED LOAD X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-4 HRC-1 SYSTEM CHILLED WATER CALCULATED LOAD X X",
+          "word_ids": [
+            1769,
+            1770,
+            1771,
+            1772,
+            1773,
+            1774,
+            1775,
+            1776,
+            1777
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-4 HRC-1 SYSTEM CHILLED WATER CALCULATED LOAD X X",
+          "word_ids": [
+            1493,
+            1525,
+            1526,
+            1527,
+            1528,
+            1529,
+            1530,
+            1600,
+            1620
+          ]
+        }
+      }
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 36,
+      "bbox": [
+        295,
+        1863,
+        800,
+        1876
+      ],
+      "expected": "AI-5 HRC-1 ENTERING HOT WATER TEMPERATURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-5 HRC-1 ENTERING HOT WATER TEMPERATURE X X X",
+          "word_ids": [
+            1778,
+            1779,
+            1780,
+            1781,
+            1782,
+            1783,
+            1784,
+            1785,
+            1786
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-5 HRC-1 ENTERING HOT WATER TEMPERATURE X X X",
+          "word_ids": [
+            1494,
+            1531,
+            1532,
+            1533,
+            1534,
+            1535,
+            1601,
+            1610,
+            1621
+          ]
+        }
+      }
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "row": 6,
+      "column": "source_row_as_printed",
+      "page": 36,
+      "bbox": [
+        295,
+        1876,
+        800,
+        1889
+      ],
+      "expected": "AI-6 HRC-1 LEAVING HOT WATER TEMPERATURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-6 HRC-1 LEAVING HOT WATER TEMPERATURE X X X",
+          "word_ids": [
+            1787,
+            1788,
+            1789,
+            1790,
+            1791,
+            1792,
+            1793,
+            1794,
+            1795
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-6 HRC-1 LEAVING HOT WATER TEMPERATURE X X X",
+          "word_ids": [
+            1495,
+            1536,
+            1537,
+            1538,
+            1539,
+            1540,
+            1602,
+            1611,
+            1622
+          ]
+        }
+      }
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "row": 7,
+      "column": "source_row_as_printed",
+      "page": 36,
+      "bbox": [
+        295,
+        1889,
+        800,
+        1902
+      ],
+      "expected": "AI-7 HRC-1 SYSTEM HOT WATER FLOW X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-7 HRC-1 SYSTEM HOT WATER FLOW X X",
+          "word_ids": [
+            1796,
+            1797,
+            1798,
+            1799,
+            1800,
+            1801,
+            1802,
+            1803
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-7 HRC-1 SYSTEM HOT WATER FLOW X X",
+          "word_ids": [
+            1496,
+            1541,
+            1542,
+            1543,
+            1544,
+            1545,
+            1603,
+            1623
+          ]
+        }
+      }
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "row": 8,
+      "column": "source_row_as_printed",
+      "page": 36,
+      "bbox": [
+        295,
+        1902,
+        800,
+        1915
+      ],
+      "expected": "AI-8 HRC-1 SYSTEM HOT WATER CALCULATED LOAD X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-8 HRC-1 SYSTEM HOT WATER CALCULATED LOAD X X",
+          "word_ids": [
+            1804,
+            1805,
+            1806,
+            1807,
+            1808,
+            1809,
+            1810,
+            1811,
+            1812
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-8 HRC-1 SYSTEM HOT WATER CALCULATED LOAD X X",
+          "word_ids": [
+            1497,
+            1546,
+            1547,
+            1548,
+            1549,
+            1550,
+            1551,
+            1604,
+            1624
+          ]
+        }
+      }
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "row": 9,
+      "column": "source_row_as_printed",
+      "page": 36,
+      "bbox": [
+        295,
+        1915,
+        800,
+        1928
+      ],
+      "expected": "AO-1 HRC-1 FIRING RATE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-1 HRC-1 FIRING RATE X X",
+          "word_ids": [
+            1813,
+            1814,
+            1815,
+            1816,
+            1817,
+            1818
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-1 HRC-1 FIRING RATE X X",
+          "word_ids": [
+            1498,
+            1552,
+            1553,
+            1554,
+            1605,
+            1625
+          ]
+        }
+      }
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "row": 10,
+      "column": "source_row_as_printed",
+      "page": 36,
+      "bbox": [
+        295,
+        1928,
+        800,
+        1941
+      ],
+      "expected": "BI-1 HRC-1 GENERAL ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-1 HRC-1 GENERAL ALARM X X X",
+          "word_ids": [
+            1819,
+            1820,
+            1821,
+            1822,
+            1823,
+            1824,
+            1825
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-1 HRC-1 GENERAL ALARM X X X",
+          "word_ids": [
+            1499,
+            1555,
+            1556,
+            1557,
+            1606,
+            1612,
+            1626
+          ]
+        }
+      }
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "row": 11,
+      "column": "source_row_as_printed",
+      "page": 36,
+      "bbox": [
+        295,
+        1941,
+        800,
+        1954
+      ],
+      "expected": "BI-2 HEAT RECOVERY CHILLED WATER PUMP STATUS X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-2 HEAT RECOVERY CHILLED WATER PUMP STATUS X",
+          "word_ids": [
+            1826,
+            1827,
+            1828,
+            1829,
+            1830,
+            1831,
+            1832,
+            1833
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-2 HEAT RECOVERY CHILLED WATER PUMP STATUS X",
+          "word_ids": [
+            1500,
+            1558,
+            1559,
+            1560,
+            1561,
+            1562,
+            1563,
+            1627
+          ]
+        }
+      }
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "row": 12,
+      "column": "source_row_as_printed",
+      "page": 36,
+      "bbox": [
+        295,
+        1954,
+        800,
+        1967
+      ],
+      "expected": "BI-3 HEAT RECOVERY HOT WATER PUMP STATUS X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-3 HEAT RECOVERY HOT WATER PUMP STATUS X",
+          "word_ids": [
+            1834,
+            1835,
+            1836,
+            1837,
+            1838,
+            1839,
+            1840,
+            1841
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-3 HEAT RECOVERY HOT WATER PUMP STATUS X",
+          "word_ids": [
+            1501,
+            1564,
+            1565,
+            1566,
+            1567,
+            1568,
+            1569,
+            1628
+          ]
+        }
+      }
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "row": 13,
+      "column": "source_row_as_printed",
+      "page": 36,
+      "bbox": [
+        295,
+        1967,
+        800,
+        1980
+      ],
+      "expected": "BO-1 HRC-1 START/STOP X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-1 HRC-1 START/STOP X X",
+          "word_ids": [
+            1842,
+            1843,
+            1844,
+            1845,
+            1846
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-1 HRC-1 START/STOP X X",
+          "word_ids": [
+            1502,
+            1570,
+            1571,
+            1613,
+            1629
+          ]
+        }
+      }
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "row": 14,
+      "column": "source_row_as_printed",
+      "page": 36,
+      "bbox": [
+        295,
+        1980,
+        800,
+        1994
+      ],
+      "expected": "BO-2 HEAT RECOVERY CHILLED WATER PUMP START-STOP X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-2 HEAT RECOVERY CHILLED WATER PUMP START-STOP X",
+          "word_ids": [
+            1847,
+            1848,
+            1849,
+            1850,
+            1851,
+            1852,
+            1853,
+            1854
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-2 HEAT RECOVERY CHILLED WATER PUMP START-STOP X",
+          "word_ids": [
+            1503,
+            1572,
+            1573,
+            1574,
+            1575,
+            1576,
+            1577,
+            1630
+          ]
+        }
+      }
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "row": 15,
+      "column": "source_row_as_printed",
+      "page": 36,
+      "bbox": [
+        295,
+        1994,
+        800,
+        2007
+      ],
+      "expected": "BO-3 HRC-1 CHILLED WATER ISOLATION VALVE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-3 HRC-1 CHILLED WATER ISOLATION VALVE X X",
+          "word_ids": [
+            1855,
+            1856,
+            1857,
+            1858,
+            1859,
+            1860,
+            1861,
+            1862
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-3 HRC-1 CHILLED WATER ISOLATION VALVE X X",
+          "word_ids": [
+            1504,
+            1578,
+            1579,
+            1580,
+            1581,
+            1582,
+            1614,
+            1631
+          ]
+        }
+      }
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "row": 16,
+      "column": "source_row_as_printed",
+      "page": 36,
+      "bbox": [
+        295,
+        2007,
+        800,
+        2020
+      ],
+      "expected": "BO-4 HEAT RECOVERY HOT WATER PUMP START-STOP X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-4 HEAT RECOVERY HOT WATER PUMP START-STOP X",
+          "word_ids": [
+            1863,
+            1864,
+            1865,
+            1866,
+            1867,
+            1868,
+            1869,
+            1870
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-4 HEAT RECOVERY HOT WATER PUMP START-STOP X",
+          "word_ids": [
+            1505,
+            1583,
+            1584,
+            1585,
+            1586,
+            1587,
+            1588,
+            1632
+          ]
+        }
+      }
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "row": 17,
+      "column": "source_row_as_printed",
+      "page": 36,
+      "bbox": [
+        295,
+        2020,
+        800,
+        2034
+      ],
+      "expected": "BO-5 HRC-1 HEATING WATER ISOLATION VALVE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-5 HRC-1 HEATING WATER ISOLATION VALVE X X",
+          "word_ids": [
+            1871,
+            1872,
+            1873,
+            1874,
+            1875,
+            1876,
+            1877,
+            1878
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-5 HRC-1 HEATING WATER ISOLATION VALVE X X",
+          "word_ids": [
+            1506,
+            1589,
+            1590,
+            1591,
+            1592,
+            1593,
+            1615,
+            1633
+          ]
+        }
+      }
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "header": "SCHEDULE OF DDC POINTS",
+      "page": 36,
+      "bbox": [
+        425,
+        1770,
+        565,
+        1792
+      ],
+      "engine": "mupdf",
+      "actual": "SCHEDULE OF DDC POINTS",
+      "pass": true
+    },
+    {
+      "table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "header": "SCHEDULE OF DDC POINTS",
+      "page": 36,
+      "bbox": [
+        425,
+        1770,
+        565,
+        1792
+      ],
+      "engine": "poppler",
+      "actual": "SCHEDULE OF DDC POINTS",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

@@ -1,0 +1,28 @@
+{
+  "document_id": "26__vol2__031",
+  "module_role": "Published M-400 control symbol source-matrix scope and physical-count boundary.",
+  "tables": [],
+  "ledger_mode": "literal_source_row_matrices_v1",
+  "applications": [
+    {
+      "id": "m400-controls-symbols",
+      "source_table": "M400-CONTROLS-SYMBOLS",
+      "ownership_scope": "Published control-symbol/function context only; physical field-device ownership, controller/card/terminal assignment, address, wiring and installed multiplicity are not stated."
+    }
+  ],
+  "expanded_template_counts": {
+    "source_rows": 21,
+    "total": 21
+  },
+  "expanded_count_warning": "The 21 rows are literal published function/symbol rows, not a count of installed sensors, controllers, actuators, valves, dampers, relays, BACnet objects, terminals or cables.",
+  "inventory_checks": [
+    {
+      "id": "rank26-point-symbol-application",
+      "records_path": [
+        "applications"
+      ],
+      "expected": 1,
+      "unique_key": "source_table"
+    }
+  ]
+}

@@ -1,0 +1,1074 @@
+{
+  "document_id": "17__vol1__16",
+  "source_sha256": "96782a6f81077df39c2eb87f4d04e08c7e353483b596bcd97d534938593612a1",
+  "annotation_sha256": "36a4973da0563e8d4055c8308f11be193de0315107ecde8e0dcbc2c625a097a8",
+  "tables": 1,
+  "rows": 12,
+  "cell_assertions": 24,
+  "text_assertions": 11,
+  "checks": [
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 1,
+      "column": "tag",
+      "page": 28,
+      "bbox": [
+        1060,
+        1671.5,
+        1097,
+        1692.85
+      ],
+      "expected": "1.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.",
+          "word_ids": [
+            25
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.",
+          "word_ids": [
+            1108
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 1,
+      "column": "point_name",
+      "page": 28,
+      "bbox": [
+        1097,
+        1671.5,
+        1235,
+        1692.85
+      ],
+      "expected": "SA TEMPERATURE SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SA TEMPERATURE SETPOINT",
+          "word_ids": [
+            26,
+            27,
+            28
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SA TEMPERATURE SETPOINT",
+          "word_ids": [
+            1100,
+            1101,
+            1102
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 2,
+      "column": "tag",
+      "page": 28,
+      "bbox": [
+        1060,
+        1692.85,
+        1097,
+        1714.2
+      ],
+      "expected": "2.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.",
+          "word_ids": [
+            29
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.",
+          "word_ids": [
+            1091
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 2,
+      "column": "point_name",
+      "page": 28,
+      "bbox": [
+        1097,
+        1692.85,
+        1235,
+        1714.2
+      ],
+      "expected": "SA AIRFLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SA AIRFLOW",
+          "word_ids": [
+            30,
+            31
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SA AIRFLOW",
+          "word_ids": [
+            1085,
+            1086
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 3,
+      "column": "tag",
+      "page": 28,
+      "bbox": [
+        1060,
+        1714.2,
+        1097,
+        1735.55
+      ],
+      "expected": "3.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.",
+          "word_ids": [
+            32
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.",
+          "word_ids": [
+            1077
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 3,
+      "column": "point_name",
+      "page": 28,
+      "bbox": [
+        1097,
+        1714.2,
+        1235,
+        1735.55
+      ],
+      "expected": "OA DAMPER POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OA DAMPER POSITION",
+          "word_ids": [
+            33,
+            34,
+            35
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OA DAMPER POSITION",
+          "word_ids": [
+            1071,
+            1072,
+            1073
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 4,
+      "column": "tag",
+      "page": 28,
+      "bbox": [
+        1060,
+        1735.55,
+        1097,
+        1756.9
+      ],
+      "expected": "4.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4.",
+          "word_ids": [
+            36
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4.",
+          "word_ids": [
+            1062
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 4,
+      "column": "point_name",
+      "page": 28,
+      "bbox": [
+        1097,
+        1735.55,
+        1235,
+        1756.9
+      ],
+      "expected": "EA DAMPER POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EA DAMPER POSITION",
+          "word_ids": [
+            37,
+            38,
+            39
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EA DAMPER POSITION",
+          "word_ids": [
+            1056,
+            1057,
+            1058
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 5,
+      "column": "tag",
+      "page": 28,
+      "bbox": [
+        1060,
+        1756.9,
+        1097,
+        1778.25
+      ],
+      "expected": "5.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.",
+          "word_ids": [
+            40
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.",
+          "word_ids": [
+            1050
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 5,
+      "column": "point_name",
+      "page": 28,
+      "bbox": [
+        1097,
+        1756.9,
+        1235,
+        1778.25
+      ],
+      "expected": "SA FAN LEVEL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SA FAN LEVEL",
+          "word_ids": [
+            41,
+            42,
+            43
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SA FAN LEVEL",
+          "word_ids": [
+            1035,
+            1036,
+            1037
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 6,
+      "column": "tag",
+      "page": 28,
+      "bbox": [
+        1060,
+        1778.25,
+        1097,
+        1799.6
+      ],
+      "expected": "6.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6.",
+          "word_ids": [
+            44
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6.",
+          "word_ids": [
+            1031
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 6,
+      "column": "point_name",
+      "page": 28,
+      "bbox": [
+        1097,
+        1778.25,
+        1235,
+        1799.6
+      ],
+      "expected": "SA FILTER PRESSURE DROP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SA FILTER PRESSURE DROP",
+          "word_ids": [
+            45,
+            46,
+            47,
+            48
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SA FILTER PRESSURE DROP",
+          "word_ids": [
+            902,
+            903,
+            904,
+            905
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 7,
+      "column": "tag",
+      "page": 28,
+      "bbox": [
+        1060,
+        1799.6,
+        1097,
+        1820.95
+      ],
+      "expected": "7.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "7.",
+          "word_ids": [
+            49
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "7.",
+          "word_ids": [
+            906
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 7,
+      "column": "point_name",
+      "page": 28,
+      "bbox": [
+        1097,
+        1799.6,
+        1235,
+        1820.95
+      ],
+      "expected": "EA FILTER PRESSURE DROP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EA FILTER PRESSURE DROP",
+          "word_ids": [
+            50,
+            51,
+            52,
+            53
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EA FILTER PRESSURE DROP",
+          "word_ids": [
+            907,
+            908,
+            909,
+            910
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 8,
+      "column": "tag",
+      "page": 28,
+      "bbox": [
+        1060,
+        1820.95,
+        1097,
+        1842.3
+      ],
+      "expected": "8.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8.",
+          "word_ids": [
+            54
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8.",
+          "word_ids": [
+            911
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 8,
+      "column": "point_name",
+      "page": 28,
+      "bbox": [
+        1097,
+        1820.95,
+        1235,
+        1842.3
+      ],
+      "expected": "EA AIRFLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EA AIRFLOW",
+          "word_ids": [
+            55,
+            56
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EA AIRFLOW",
+          "word_ids": [
+            912,
+            913
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 9,
+      "column": "tag",
+      "page": 28,
+      "bbox": [
+        1060,
+        1842.3,
+        1097,
+        1863.65
+      ],
+      "expected": "9.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.",
+          "word_ids": [
+            57
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.",
+          "word_ids": [
+            914
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 9,
+      "column": "point_name",
+      "page": 28,
+      "bbox": [
+        1097,
+        1842.3,
+        1235,
+        1863.65
+      ],
+      "expected": "EA FAN LEVEL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EA FAN LEVEL",
+          "word_ids": [
+            58,
+            59,
+            60
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EA FAN LEVEL",
+          "word_ids": [
+            915,
+            916,
+            917
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 10,
+      "column": "tag",
+      "page": 28,
+      "bbox": [
+        1060,
+        1863.65,
+        1097,
+        1885.0
+      ],
+      "expected": "10.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.",
+          "word_ids": [
+            61
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.",
+          "word_ids": [
+            918
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 10,
+      "column": "point_name",
+      "page": 28,
+      "bbox": [
+        1097,
+        1863.65,
+        1235,
+        1885.0
+      ],
+      "expected": "ALARMS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARMS",
+          "word_ids": [
+            62
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARMS",
+          "word_ids": [
+            919
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 11,
+      "column": "tag",
+      "page": 28,
+      "bbox": [
+        1060,
+        1885.0,
+        1097,
+        1906.35
+      ],
+      "expected": "11.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11.",
+          "word_ids": [
+            63
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11.",
+          "word_ids": [
+            920
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 11,
+      "column": "point_name",
+      "page": 28,
+      "bbox": [
+        1097,
+        1885.0,
+        1235,
+        1906.35
+      ],
+      "expected": "SA MINIMUM SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SA MINIMUM SETPOINT",
+          "word_ids": [
+            64,
+            65,
+            66
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SA MINIMUM SETPOINT",
+          "word_ids": [
+            921,
+            922,
+            923
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 12,
+      "column": "tag",
+      "page": 28,
+      "bbox": [
+        1060,
+        1906.35,
+        1097,
+        1927.7
+      ],
+      "expected": "12.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12.",
+          "word_ids": [
+            67
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12.",
+          "word_ids": [
+            924
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-BACNET-POINTS-INPUTS-TO-BMS",
+      "row": 12,
+      "column": "point_name",
+      "page": 28,
+      "bbox": [
+        1097,
+        1906.35,
+        1235,
+        1927.7
+      ],
+      "expected": "SA MAXIMUM SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SA MAXIMUM SETPOINT",
+          "word_ids": [
+            68,
+            69,
+            70
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SA MAXIMUM SETPOINT",
+          "word_ids": [
+            925,
+            926,
+            927
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-bacnet-inputs-title",
+      "page": 28,
+      "bbox": [
+        1065,
+        1600,
+        1260,
+        1640
+      ],
+      "expected": "BACNET POINTS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BACNET POINTS",
+          "word_ids": [
+            20,
+            21
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BACNET POINTS",
+          "word_ids": [
+            1114,
+            1115
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-diagram-ai2",
+      "page": 28,
+      "bbox": [
+        555,
+        267,
+        582,
+        285
+      ],
+      "expected": "AI-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-2",
+          "word_ids": [
+            869
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-2",
+          "word_ids": [
+            56
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-diagram-supply-air-temp",
+      "page": 28,
+      "bbox": [
+        400,
+        269,
+        485,
+        288
+      ],
+      "expected": "SUPPLY AIR TEMP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMP",
+          "word_ids": [
+            866,
+            867,
+            868
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMP",
+          "word_ids": [
+            1411,
+            1412,
+            1413
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-diagram-ai3",
+      "page": 28,
+      "bbox": [
+        555,
+        310,
+        582,
+        328
+      ],
+      "expected": "AI-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-3",
+          "word_ids": [
+            947
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-3",
+          "word_ids": [
+            1390
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-diagram-return-air-temp",
+      "page": 28,
+      "bbox": [
+        398,
+        310,
+        485,
+        330
+      ],
+      "expected": "RETURN AIR TEMP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN AIR TEMP",
+          "word_ids": [
+            944,
+            945,
+            946
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN AIR TEMP",
+          "word_ids": [
+            1399,
+            1400,
+            1401
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-diagram-ai4",
+      "page": 28,
+      "bbox": [
+        555,
+        352,
+        582,
+        369
+      ],
+      "expected": "AI-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-4",
+          "word_ids": [
+            873
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-4",
+          "word_ids": [
+            125
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-diagram-mixed-air-temp",
+      "page": 28,
+      "bbox": [
+        390,
+        360,
+        470,
+        379
+      ],
+      "expected": "MIXED AIR TEMP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MIXED AIR TEMP",
+          "word_ids": [
+            870,
+            871,
+            872
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MIXED AIR TEMP",
+          "word_ids": [
+            126,
+            127,
+            128
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-diagram-bi6",
+      "page": 28,
+      "bbox": [
+        555,
+        418,
+        582,
+        436
+      ],
+      "expected": "BI-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-6",
+          "word_ids": [
+            885
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-6",
+          "word_ids": [
+            181
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-diagram-supply-fan-status",
+      "page": 28,
+      "bbox": [
+        430,
+        409,
+        535,
+        428
+      ],
+      "expected": "SUPPLY FAN STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN STATUS",
+          "word_ids": [
+            882,
+            883,
+            884
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN STATUS",
+          "word_ids": [
+            1359,
+            1360,
+            1361
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-diagram-ao1",
+      "page": 28,
+      "bbox": [
+        1135,
+        460,
+        1170,
+        481
+      ],
+      "expected": "AO-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-1 SIG",
+          "word_ids": [
+            847,
+            776
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-1 SIG",
+          "word_ids": [
+            1287,
+            402
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-furnace-diagram-economizer",
+      "page": 28,
+      "bbox": [
+        1220,
+        485,
+        1300,
+        505
+      ],
+      "expected": "ECONOMIZER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ECONOMIZER",
+          "word_ids": [
+            846
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ECONOMIZER",
+          "word_ids": [
+            437
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

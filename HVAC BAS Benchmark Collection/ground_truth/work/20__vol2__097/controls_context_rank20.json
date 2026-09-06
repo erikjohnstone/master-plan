@@ -1,0 +1,363 @@
+{
+  "document_id": "20__vol2__097",
+  "module_role": "Source-bounded H-601 control sequences and E-603 wiring-diagram context.",
+  "tables": [],
+  "assertions": [
+    {
+      "id": "h601-controls-discipline-split",
+      "page": 13,
+      "bbox": [
+        1726,
+        160,
+        2115,
+        182
+      ],
+      "expected": "CONTROL WORK IS DIVIDED BETWEEN THE PROJECT ELECTRICIAN (DIV. 26)",
+      "mode": "contains"
+    },
+    {
+      "id": "h601-labeled-terminal-strips",
+      "page": 13,
+      "bbox": [
+        1726,
+        688,
+        2020,
+        709
+      ],
+      "expected": "ALL WIRING SHALL TERMINATE AT LABELED TERMINAL STRIPS.",
+      "mode": "contains"
+    },
+    {
+      "id": "h601-mau-enables-exf",
+      "page": 13,
+      "bbox": [
+        1726,
+        799,
+        2158,
+        820
+      ],
+      "expected": "WHENEVER MAU-1 RUNS, EXF-1 IS ENABLED TO RUN IN LOW OR HIGH MODE TO MATCH",
+      "mode": "contains"
+    },
+    {
+      "id": "h601-mau-low-mode",
+      "page": 13,
+      "bbox": [
+        1726,
+        829,
+        2110,
+        850
+      ],
+      "expected": "IN AUTO, MAU-1 IS ENABLED TO RUN IN LOW MODE (2,000 CFM) WHENEVER:",
+      "mode": "contains"
+    },
+    {
+      "id": "h601-mau-factory-thermostat",
+      "page": 13,
+      "bbox": [
+        1735,
+        844,
+        2060,
+        865
+      ],
+      "expected": "COOLING/HEATING IS CALLED FOR BY THE FACTORY THERMOSTAT.",
+      "mode": "contains"
+    },
+    {
+      "id": "h601-mau-tork-timer",
+      "page": 13,
+      "bbox": [
+        1735,
+        874,
+        1952,
+        895
+      ],
+      "expected": "A TORK TIMER (STYLE 8009A) IS ENABLED.",
+      "mode": "contains"
+    },
+    {
+      "id": "h601-mau-high-mode",
+      "page": 13,
+      "bbox": [
+        1726,
+        889,
+        2070,
+        910
+      ],
+      "expected": "MAU-1 IS ENABLED TO RUN IN HIGH MODE (4,000 CFM) WHENEVER:",
+      "mode": "contains"
+    },
+    {
+      "id": "h601-mau-vfd-safety",
+      "page": 13,
+      "bbox": [
+        1726,
+        1009,
+        2125,
+        1031
+      ],
+      "expected": "INTERLOCK THE SUPPLY VARIABLE FREQUENCY DRIVE TO THE SAFETIES RELAY TO",
+      "mode": "contains"
+    },
+    {
+      "id": "h601-mau-smoke-freeze",
+      "page": 13,
+      "bbox": [
+        1726,
+        1024,
+        2145,
+        1046
+      ],
+      "expected": "SHUTDOWN THE UNIT UPON SMOKE DETECTION OR FREEZING CONDITIONS",
+      "mode": "contains"
+    },
+    {
+      "id": "h601-hv-enables-fans",
+      "page": 13,
+      "bbox": [
+        1726,
+        1094,
+        2040,
+        1115
+      ],
+      "expected": "WHENEVER HV-1 RUNS, EF-1 AND EF-2 ARE ENABLED TO RUN.",
+      "mode": "contains"
+    },
+    {
+      "id": "h601-hv-auto",
+      "page": 13,
+      "bbox": [
+        1726,
+        1110,
+        1972,
+        1131
+      ],
+      "expected": "IN AUTO, HV-1 IS ENABLED TO RUN WHENEVER:",
+      "mode": "contains"
+    },
+    {
+      "id": "h601-hv-smoke-freeze",
+      "page": 13,
+      "bbox": [
+        1726,
+        1214,
+        2125,
+        1236
+      ],
+      "expected": "INTERLOCK THE SUPPLY VARIABLE FREQUENCY DRIVE TO THE SAFETIES RELAY TO",
+      "mode": "contains"
+    },
+    {
+      "id": "h601-louvers-powered-open",
+      "page": 13,
+      "bbox": [
+        1726,
+        1305,
+        2060,
+        1327
+      ],
+      "expected": "WHENEVER EF-3 AND EF-4 RUN, L-1 AND L-2 ARE POWERED OPEN.",
+      "mode": "contains"
+    },
+    {
+      "id": "h601-ef3ef4-auto",
+      "page": 13,
+      "bbox": [
+        1726,
+        1320,
+        2027,
+        1342
+      ],
+      "expected": "IN AUTO, EF-3 AND EF-4 ARE ENABLED TO RUN WHENEVER:",
+      "mode": "contains"
+    },
+    {
+      "id": "h601-ef3ef4-cooling",
+      "page": 13,
+      "bbox": [
+        1735,
+        1335,
+        1975,
+        1357
+      ],
+      "expected": "COOLING IS CALLED FOR BY THE THERMOSTAT.",
+      "mode": "contains"
+    },
+    {
+      "id": "h601-unit-heater-sequence",
+      "page": 13,
+      "bbox": [
+        1726,
+        1456,
+        2158,
+        1478
+      ],
+      "expected": "WHEN THE THERMOSTAT CALLS FOR HEATING, UNIT HEATERS UH-1 AND UH-2 SHALL BE",
+      "mode": "contains"
+    },
+    {
+      "id": "h601-unit-heater-setpoint",
+      "page": 13,
+      "bbox": [
+        1726,
+        1501,
+        2145,
+        1523
+      ],
+      "expected": "SET THERMOSTAT SET POINT TO 45°F (ADJUSTABLE).",
+      "mode": "contains"
+    },
+    {
+      "id": "e603-factory-thermostat",
+      "page": 25,
+      "bbox": [
+        525,
+        210,
+        600,
+        243
+      ],
+      "expected": "FACTORY THERMOSTAT",
+      "mode": "contains"
+    },
+    {
+      "id": "e603-chlorine-tork-timer",
+      "page": 25,
+      "bbox": [
+        528,
+        360,
+        596,
+        382
+      ],
+      "expected": "TORK TIMER",
+      "mode": "contains"
+    },
+    {
+      "id": "e603-chlorine-run-low",
+      "page": 25,
+      "bbox": [
+        810,
+        248,
+        865,
+        271
+      ],
+      "expected": "RUN LOW",
+      "mode": "contains"
+    },
+    {
+      "id": "e603-chlorine-run-high",
+      "page": 25,
+      "bbox": [
+        810,
+        528,
+        855,
+        550
+      ],
+      "expected": "RUN HI",
+      "mode": "contains"
+    },
+    {
+      "id": "e603-hf-controller-links",
+      "page": 25,
+      "bbox": [
+        1823,
+        233,
+        1938,
+        255
+      ],
+      "expected": "TO HV-1 CONTROLLER",
+      "mode": "contains"
+    },
+    {
+      "id": "e603-hf-ef1-controller",
+      "page": 25,
+      "bbox": [
+        1823,
+        323,
+        1938,
+        345
+      ],
+      "expected": "TO EF-1 CONTROLLER",
+      "mode": "contains"
+    }
+  ],
+  "network_architecture": {
+    "published_integration": [
+      "H-601 divides control work between the project electrician and specialty controls contractor and says wiring terminates at labeled terminal strips.",
+      "E-603 visibly names factory thermostats, Tork timers, high/low-speed commands, and controller link destinations in its wiring diagrams."
+    ],
+    "boundary": "The supplied set does not publish a BAS protocol, controller-address list, point-to-controller binding, I/O-card layout, LAN topology, network-media specification, final terminal count, or field-device count.",
+    "assertion_ids": [
+      "h601-controls-discipline-split",
+      "h601-labeled-terminal-strips",
+      "e603-hf-controller-links",
+      "e603-hf-ef1-controller"
+    ]
+  },
+  "sequence_inventory": [
+    {
+      "id": "mau-1-and-exf-1-low-high-control",
+      "sheet": "H-601",
+      "assertion_ids": [
+        "h601-mau-enables-exf",
+        "h601-mau-low-mode",
+        "h601-mau-factory-thermostat",
+        "h601-mau-tork-timer",
+        "h601-mau-high-mode",
+        "h601-mau-vfd-safety",
+        "h601-mau-smoke-freeze"
+      ]
+    },
+    {
+      "id": "hv-1-ef-1-ef-2-control",
+      "sheet": "H-601",
+      "assertion_ids": [
+        "h601-hv-enables-fans",
+        "h601-hv-auto",
+        "h601-hv-smoke-freeze"
+      ]
+    },
+    {
+      "id": "ef-3-ef-4-louver-control",
+      "sheet": "H-601",
+      "assertion_ids": [
+        "h601-louvers-powered-open",
+        "h601-ef3ef4-auto",
+        "h601-ef3ef4-cooling"
+      ]
+    },
+    {
+      "id": "unit-heater-control",
+      "sheet": "H-601",
+      "assertion_ids": [
+        "h601-unit-heater-sequence",
+        "h601-unit-heater-setpoint"
+      ]
+    },
+    {
+      "id": "speed-controller-wiring-context",
+      "sheet": "E-603",
+      "assertion_ids": [
+        "e603-factory-thermostat",
+        "e603-chlorine-tork-timer",
+        "e603-chlorine-run-low",
+        "e603-chlorine-run-high",
+        "e603-hf-controller-links",
+        "e603-hf-ef1-controller"
+      ]
+    }
+  ],
+  "sensors_and_control_symbol_context": {
+    "published_context": "H-601 sequences explicitly use factory thermostats, a Tork timer, smoke/freezing safeties, and VFD safety interlocks; E-603 depicts the related controller-wiring labels.",
+    "assertion_ids": [
+      "h601-mau-factory-thermostat",
+      "h601-mau-tork-timer",
+      "h601-mau-smoke-freeze",
+      "e603-factory-thermostat"
+    ],
+    "boundary": "The published control functions and wiring labels are not expanded into counted sensors, timers, relays, actuators, controllers, terminals, conductors, I/O or zone quantities."
+  },
+  "control_boundaries": [
+    "Control language is preserved as printed. No source clause is transformed into a physical device/actuator/valve/damper/controller/card/wire count.",
+    "The wiring drawings show functional relationships but are not a final controller bill of materials, connection schedule, field termination schedule or BAS network design."
+  ]
+}

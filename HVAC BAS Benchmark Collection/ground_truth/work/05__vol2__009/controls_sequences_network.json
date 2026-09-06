@@ -1,0 +1,626 @@
+{
+  "document_id": "05__vol2__009",
+  "module_role": "Source-bounded controls architecture and sequence-of-operation index for M-801 through M-804. A sequence occurrence identifies a printed narrative and its directly checked operational clauses; it is not a claim that the prose has been converted into a physical I/O count or every possible engineering parameter.",
+  "tables": [],
+  "network_architecture": {
+    "printed_protocol_or_network_terms": [
+      "BACNET",
+      "DDC",
+      "EMS",
+      "HMI",
+      "HTML5",
+      "VPN",
+      "VLAN",
+      "MFA",
+      "RBAC"
+    ],
+    "existing_system": {
+      "platform": "Delta Controls platform",
+      "maintainer_as_printed": "South Florida Controls",
+      "main_controller_location_as_printed": "Mechanical Room",
+      "access_boundary": "The printed existing HMI is limited view-only access for maintenance personnel and permits only room and discharge-air-temperature setpoint modifications; the source says no full system access.",
+      "assertion_ids": [
+        "m801-existing-delta",
+        "m801-existing-limited-hmi"
+      ]
+    },
+    "new_system": {
+      "requirement": "Complete new fully accessible BACnet-native DDC system to assume control of the facility mechanical equipment; new front end and HMI screen at the main panel; all new sensors and associated control wiring except explicitly reused items.",
+      "assertion_ids": [
+        "m801-new-bacnet-native",
+        "m801-new-front-end-hmi",
+        "m801-new-sensors-wiring"
+      ]
+    },
+    "vav_reuse_and_sensors": {
+      "requirement": "Existing VAV box controllers remain and are reused; provide new space-temperature sensors (thermostats) and discharge-air-temperature sensors for all existing VAV boxes for integration with the new system.",
+      "assertion_ids": [
+        "m801-vav-reuse-and-new-sensors"
+      ]
+    },
+    "remote_access_requirement": {
+      "requirement": "Secure remote monitoring/control capability and web-based HTML5 system-graphics access are required. The source calls for coordination with USDA IT for dedicated IP addresses, network drops, firewall port exceptions and approved secure access protocols including VPN routing, VLAN integration and MFA; it also requires RBAC.",
+      "assertion_ids": [
+        "m801-remote-web-access",
+        "m801-it-network-coordination",
+        "m801-rbac"
+      ]
+    },
+    "boundary": "The requirements above do not state a selected BACnet transport (IP versus MS/TP), network topology, final IP values, device addresses, controller/card count, subnet, VLAN number, firewall rule, physical port count, credential configuration or installed endpoint count."
+  },
+  "sequence_inventory": [
+    {
+      "id": "m802-chilled-water-plant",
+      "sheet": "M-802",
+      "page": 20,
+      "title_as_printed": "CHILLED WATER PLANT: SEQUENCE OF OPERATION",
+      "subject": "one air-cooled chiller with two chilled-water pumps",
+      "assertion_ids": [
+        "m802-chiller-sequence-title",
+        "m802-chiller-overview",
+        "m802-chiller-enable-call",
+        "m802-chiller-lead-pump",
+        "m802-chiller-stop-delay",
+        "m802-chiller-weekly-alternation"
+      ]
+    },
+    {
+      "id": "m802-ahu1-vav",
+      "sheet": "M-802",
+      "page": 20,
+      "title_as_printed": "AHU-1 (VAV SYSTEM) SEQUENCE OF OPERATIONS",
+      "subject": "existing AHU-1 and VAV system",
+      "assertion_ids": [
+        "m802-ahu1-sequence-title",
+        "m802-ahu1-occupancy",
+        "m802-ahu1-exhaust-interlock",
+        "m802-ahu1-static-trim-respond",
+        "m802-ahu1-coil-sat"
+      ]
+    },
+    {
+      "id": "m803-laboratory-exhaust",
+      "sheet": "M-803",
+      "page": 21,
+      "title_as_printed": "LABORATORY EXHAUST FANS SEQUENCE OF OPERATIONS",
+      "subject": "laboratory exhaust fans",
+      "assertion_ids": [
+        "m803-lab-exhaust-title",
+        "m803-lab-exhaust-continuous",
+        "m803-lab-exhaust-vfd"
+      ]
+    },
+    {
+      "id": "m803-scheduled-exhaust",
+      "sheet": "M-803",
+      "page": 21,
+      "title_as_printed": "SEQUENCE OF OPERATIONS:",
+      "subject": "scheduled exhaust fan controls (EF-5 & 6 context on the same source panel)",
+      "assertion_ids": [
+        "m803-scheduled-exhaust-title",
+        "m803-scheduled-exhaust-start-stop"
+      ]
+    },
+    {
+      "id": "m803-ahu2-lab",
+      "sheet": "M-803",
+      "page": 21,
+      "title_as_printed": "AHU-2 (CONSTANT VOLUME LAB SYSTEM) RECOMMENDED SEQUENCE OF OPERATIONS",
+      "subject": "AHU-2 constant-volume laboratory system",
+      "assertion_ids": [
+        "m803-ahu2-sequence-title",
+        "m803-ahu2-interlock",
+        "m803-ahu2-occupied",
+        "m803-ahu2-unoccupied",
+        "m803-ahu2-negative-pressure"
+      ]
+    },
+    {
+      "id": "m804-electric-duct-heater",
+      "sheet": "M-804",
+      "page": 22,
+      "title_as_printed": "SEQUENCE OF OPERATIONS:",
+      "subject": "electric duct heater control narrative",
+      "assertion_ids": [
+        "m804-electric-heater-sequence-title",
+        "m804-electric-heater-general",
+        "m804-electric-heater-safeties",
+        "m804-electric-heater-scr-signal"
+      ]
+    },
+    {
+      "id": "m804-vav-terminal",
+      "sheet": "M-804",
+      "page": 22,
+      "title_as_printed": "SEQUENCE OF OPERATION:",
+      "subject": "VAV terminal unit control narrative",
+      "assertion_ids": [
+        "m804-vav-sequence-title",
+        "m804-vav-deadband",
+        "m804-vav-occupied-setpoints",
+        "m804-vav-unoccupied-setpoints",
+        "m804-vav-override"
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "id": "m801-existing-delta",
+      "page": 19,
+      "bbox": [
+        1900,
+        946,
+        2275,
+        1019
+      ],
+      "expected": "EXISTING CONDITIONS: THE FACILITY CURRENTLY UTILIZES A DIRECT DIGITAL CONTROL (DDC) SYSTEM OPERATING ON A DELTA CONTROLS PLATFORM (INSTALLED AND MAINTAINED BY SOUTH FLORIDA CONTROLS), WITH THE MAIN CONTROLLER LOCATED IN THE MECHANICAL ROOM.",
+      "mode": "contains"
+    },
+    {
+      "id": "m801-existing-limited-hmi",
+      "page": 19,
+      "bbox": [
+        1900,
+        1002,
+        2275,
+        1076
+      ],
+      "expected": "THE EXISTING SETUP PROVIDES LIMITED VIEW-ONLY ACCESS FOR MAINTENANCE PERSONNEL VIA AN HUMAN-MACHINE INTERFACE (HMI), ALLOWING ONLY MODIFICATIONS TO ROOM AND DISCHARGE AIR TEMPERATURE SETPOINTS WITH NO FULL SYSTEM ACCESS.",
+      "mode": "contains"
+    },
+    {
+      "id": "m801-new-bacnet-native",
+      "page": 19,
+      "bbox": [
+        1900,
+        1072,
+        2275,
+        1132
+      ],
+      "expected": "NEW DDC SYSTEM: THE CONTROLS CONTRACTOR SHALL PROVIDE AND INSTALL A COMPLETE, NEW, FULLY ACCESSIBLE BACNET-NATIVE DDC SYSTEM TO ASSUME CONTROL OF THE FACILITY'S MECHANICAL EQUIPMENT.",
+      "mode": "contains"
+    },
+    {
+      "id": "m801-new-front-end-hmi",
+      "page": 19,
+      "bbox": [
+        1900,
+        1128,
+        2275,
+        1175
+      ],
+      "expected": "FRONT END AND HMI: PROVIDE A NEW SYSTEM FRONT-END. A NEW HMI SCREEN SHALL BE PROVIDED AND MOUNTED DIRECTLY ON THE FRONT OF THE MAIN CONTROL PANEL.",
+      "mode": "contains"
+    },
+    {
+      "id": "m801-new-sensors-wiring",
+      "page": 19,
+      "bbox": [
+        1900,
+        1173,
+        2275,
+        1230
+      ],
+      "expected": "SENSORS AND WIRING: PROVIDE AND INSTALL ALL NEW CONTROL SENSORS AND ASSOCIATED CONTROL WIRING REQUIRED FOR A COMPLETE, OPERATIONAL SYSTEM, EXCEPT WHERE EXPLICITLY NOTED FOR REUSE.",
+      "mode": "contains"
+    },
+    {
+      "id": "m801-vav-reuse-and-new-sensors",
+      "page": 19,
+      "bbox": [
+        1900,
+        1228,
+        2275,
+        1317
+      ],
+      "expected": "VAV BOX CONTROLS: EXISTING VAV BOX CONTROLLERS SHALL REMAIN AND BE REUSED. THE CONTROLS CONTRACTOR SHALL PROVIDE AND INSTALL NEW SPACE TEMPERATURE SENSORS (THERMOSTATS) AND NEW DISCHARGE AIR TEMPERATURE SENSORS FOR ALL EXISTING VAV BOXES TO INTEGRATE WITH THE NEW SYSTEM.",
+      "mode": "contains"
+    },
+    {
+      "id": "m801-remote-web-access",
+      "page": 19,
+      "bbox": [
+        1900,
+        1315,
+        2275,
+        1401
+      ],
+      "expected": "NETWORK ARCHITECTURE: THE NEW DDC SYSTEM SHALL BE ENGINEERED, CONFIGURED, AND SET UP WITH THE CAPABILITY FOR SECURE REMOTE MONITORING AND CONTROL. PROVIDE WEB-BASED REMOTE ACCESS TO SYSTEM GRAPHICS (HTML5 COMPLIANT, ACCESSIBLE VIA STANDARD WEB BROWSERS WITHOUT REQUIRING ADDITIONAL PLUGINS).",
+      "mode": "contains"
+    },
+    {
+      "id": "m801-it-network-coordination",
+      "page": 19,
+      "bbox": [
+        1900,
+        1383,
+        2275,
+        1500
+      ],
+      "expected": "THE CONTROLS CONTRACTOR SHALL COORDINATE EXTENSIVELY WITH USDA IT PERSONNEL TO ESTABLISH DEDICATED IP ADDRESSES, NETWORK DROPS, FIREWALL PORT EXCEPTIONS, AND APPROVED SECURE ACCESS PROTOCOLS (E.G., VPN ROUTING, VIRTUAL LOCAL AREA NETWORK (VLAN) INTEGRATION, AND MULTI-FACTOR AUTHENTICATION (MFA)).",
+      "mode": "contains"
+    },
+    {
+      "id": "m801-rbac",
+      "page": 19,
+      "bbox": [
+        1900,
+        1455,
+        2275,
+        1555
+      ],
+      "expected": "THE REMOTE ACCESS ARCHITECTURE MUST COMPLY WITH ALL CURRENT USDA AND FEDERAL CYBERSECURITY GUIDELINES. ADDITIONALLY, THE CONTRACTOR SHALL CONFIGURE ROLE-BASED ACCESS CONTROL (RBAC) TO ENSURE SPECIFIC PERMISSIONS AND SECURITY LEVELS ARE ESTABLISHED FOR VARIOUS USERS (E.G., VIEW-ONLY, MAINTENANCE, AND ADMINISTRATOR).",
+      "mode": "contains"
+    },
+    {
+      "id": "m802-chiller-sequence-title",
+      "page": 20,
+      "bbox": [
+        515,
+        1570,
+        790,
+        1595
+      ],
+      "expected": "CHILLED WATER PLANT: SEQUENCE OF OPERATION",
+      "mode": "exact"
+    },
+    {
+      "id": "m802-chiller-overview",
+      "page": 20,
+      "bbox": [
+        515,
+        1588,
+        1915,
+        1607
+      ],
+      "expected": "SYSTEM OVERVIEW: THE CHILLER PLANT, CONSISTING OF ONE AIR-COOLED CHILLER AND TWO CHILLED WATER PUMPS. THE SYSTEM IS DESIGNED AS A PRIMARY-ONLY CONFIGURATION WHERE ONE PUMP ACTS AS THE LEAD AND THE OTHER ALWAYS ACTS AS STANDBY (LAG).",
+      "mode": "exact"
+    },
+    {
+      "id": "m802-chiller-enable-call",
+      "page": 20,
+      "bbox": [
+        515,
+        1705,
+        1570,
+        1725
+      ],
+      "expected": "THE CHILLED WATER PLANT SHALL BE INDEXED TO RUN BY THE ENERGY MANAGEMENT SYSTEM (EMS) IF ANY AIR HANDLING UNIT (AHU) IS CALLING FOR COOLING FOR 5 MINUTES (ADJUSTABLE) OR LONGER.",
+      "mode": "exact"
+    },
+    {
+      "id": "m802-chiller-lead-pump",
+      "page": 20,
+      "bbox": [
+        545,
+        1720,
+        1250,
+        1740
+      ],
+      "expected": "START SEQUENCE: WITH THE HOA SWITCH IN THE \"AUTO\" POSITION, THE LEAD CHILLED WATER PUMP SHALL START TO ESTABLISH FLOW.",
+      "mode": "exact"
+    },
+    {
+      "id": "m802-chiller-stop-delay",
+      "page": 20,
+      "bbox": [
+        530,
+        1735,
+        1590,
+        1760
+      ],
+      "expected": "STOP SEQUENCE: THE PUMP SHALL BE TURNED OFF WHEN NONE OF THE COOLING COILS/AHUS ARE CALLING FOR COOLING FOR 15 MINUTES (ADJUSTABLE) OR LONGER.",
+      "mode": "contains"
+    },
+    {
+      "id": "m802-chiller-weekly-alternation",
+      "page": 20,
+      "bbox": [
+        530,
+        1750,
+        1875,
+        1785
+      ],
+      "expected": "ALTERNATION: THE EMS CONTROL SYSTEM SHALL ALTERNATE THE TWO PUMPS AS LEAD AND STANDBY (LAG) ON A WEEKLY BASIS (ADJUSTABLE) TO ENSURE EVEN WEAR.",
+      "mode": "contains"
+    },
+    {
+      "id": "m802-ahu1-sequence-title",
+      "page": 20,
+      "bbox": [
+        515,
+        408,
+        780,
+        432
+      ],
+      "expected": "AHU-1 (VAV SYSTEM) SEQUENCE OF OPERATIONS",
+      "mode": "exact"
+    },
+    {
+      "id": "m802-ahu1-occupancy",
+      "page": 20,
+      "bbox": [
+        515,
+        430,
+        1730,
+        465
+      ],
+      "expected": "SYSTEM STATUS: THE EXISTING AHU-1 SHALL BE INDEXED TO RUN BY THE ENERGY MANAGEMENT SYSTEM (EMS/DDC) ACCORDING TO THE OWNER’S OCCUPANCY SCHEDULE.",
+      "mode": "contains"
+    },
+    {
+      "id": "m802-ahu1-exhaust-interlock",
+      "page": 20,
+      "bbox": [
+        515,
+        458,
+        1710,
+        482
+      ],
+      "expected": "EXHAUST INTERLOCK: TOILET EXHAUST FAN EF-5 SHALL BE STRICTLY INTERLOCKED TO RUN WHENEVER AHU-1 IS OPERATING.",
+      "mode": "contains"
+    },
+    {
+      "id": "m802-ahu1-static-trim-respond",
+      "page": 20,
+      "bbox": [
+        515,
+        640,
+        1790,
+        740
+      ],
+      "expected": "STATIC PRESSURE RESET (TRIM & RESPOND): EVERY 15 MINUTES (ADJUSTABLE), THE DDC SYSTEM SHALL POLL THE VAV BOXES AND ADJUST THE STATIC PRESSURE SETPOINT TO OPTIMIZE FAN ENERGY:",
+      "mode": "contains"
+    },
+    {
+      "id": "m802-ahu1-coil-sat",
+      "page": 20,
+      "bbox": [
+        545,
+        780,
+        1350,
+        797
+      ],
+      "expected": "THE DDC SYSTEM SHALL MODULATE THE EXISTING CHILLED WATER VALVE TO MAINTAIN A SUPPLY AIR TEMPERATURE (SAT) SETPOINT OF 55°F (ADJUSTABLE).",
+      "mode": "exact"
+    },
+    {
+      "id": "m803-lab-exhaust-title",
+      "page": 21,
+      "bbox": [
+        240,
+        572,
+        545,
+        598
+      ],
+      "expected": "LABORATORY EXHAUST FANS SEQUENCE OF OPERATIONS",
+      "mode": "exact"
+    },
+    {
+      "id": "m803-lab-exhaust-continuous",
+      "page": 21,
+      "bbox": [
+        240,
+        590,
+        755,
+        651
+      ],
+      "expected": "SYSTEM STATUS: WITH THE SAFETY CONTROLS IN THE NORMAL POSITION AND THE VARIABLE FREQUENCY DRIVE (VFD) IN THE \"AUTO\" POSITION, THE EXHAUST FAN MOTOR SHALL OPERATE CONTINUOUSLY TO MAINTAIN REQUIRED LABORATORY EXHAUST AND PRESSURIZATION.",
+      "mode": "contains"
+    },
+    {
+      "id": "m803-lab-exhaust-vfd",
+      "page": 21,
+      "bbox": [
+        240,
+        735,
+        810,
+        779
+      ],
+      "expected": "VFD SPEED CONTROL: THE DDC SYSTEM SHALL MODULATE THE EXHAUST FAN MOTOR SPEED ACCORDING TO THE ACTIVE OCCUPANCY MODE (AS COMMANDED BY THE SYSTEM SCHEDULE AND TIED TO AHU-2).",
+      "mode": "contains"
+    },
+    {
+      "id": "m803-scheduled-exhaust-title",
+      "page": 21,
+      "bbox": [
+        1525,
+        748,
+        1680,
+        768
+      ],
+      "expected": "SEQUENCE OF OPERATIONS:",
+      "mode": "exact"
+    },
+    {
+      "id": "m803-scheduled-exhaust-start-stop",
+      "page": 21,
+      "bbox": [
+        1525,
+        803,
+        1918,
+        855
+      ],
+      "expected": "UPON BEING ENTERING OCCUPIED MODE, THE EXHAUST FAN SHALL START. UPON BEING ENTERING UNOCCUPIED MODE, THE EXHAUST FAN SHALL STOP .",
+      "mode": "exact"
+    },
+    {
+      "id": "m803-ahu2-sequence-title",
+      "page": 21,
+      "bbox": [
+        875,
+        1448,
+        1325,
+        1470
+      ],
+      "expected": "AHU-2 (CONSTANT VOLUME LAB SYSTEM) RECOMMENDED SEQUENCE OF OPERATIONS",
+      "mode": "exact"
+    },
+    {
+      "id": "m803-ahu2-interlock",
+      "page": 21,
+      "bbox": [
+        895,
+        1493,
+        1915,
+        1524
+      ],
+      "expected": "EXHAUST/SUPPLY INTERLOCK: TOILET EXHAUST FAN EF-6, MAIN EXHAUST FAN EF-1, AND FUME HOOD EXHAUST FANS EF-2 AND EF-3 SHALL BE INTERLOCKED TO RUN WITH AHU-2 AS DICTATED BY THE ACTIVE OPERATING MODE.",
+      "mode": "contains"
+    },
+    {
+      "id": "m803-ahu2-occupied",
+      "page": 21,
+      "bbox": [
+        905,
+        1593,
+        1480,
+        1608
+      ],
+      "expected": "DAMPER CONTROL: UPON INDEXING TO OCCUPIED MODE, THE OUTSIDE AIR INTAKE DAMPER SHALL OPEN FULLY.",
+      "mode": "exact"
+    },
+    {
+      "id": "m803-ahu2-unoccupied",
+      "page": 21,
+      "bbox": [
+        905,
+        1690,
+        1735,
+        1708
+      ],
+      "expected": "THIS MODE SAFELY REDUCES AIRFLOW TO 50% DURING SCHEDULED UNOCCUPIED HOURS TO SAVE ENERGY WHILE MAINTAINING NEGATIVE LAB PRESSURIZATION.",
+      "mode": "exact"
+    },
+    {
+      "id": "m803-ahu2-negative-pressure",
+      "page": 21,
+      "bbox": [
+        900,
+        1748,
+        1835,
+        1778
+      ],
+      "expected": "MUST ENSURE THE RESULTING EXHAUST AIRFLOW IS NO LESS THAN 110% OF THE REDUCED AHU-2 SUPPLY AIRFLOW INTO THE LABS TO MAINTAIN CONTINUOUS NEGATIVE PRESSURE.",
+      "mode": "contains"
+    },
+    {
+      "id": "m804-electric-heater-sequence-title",
+      "page": 22,
+      "bbox": [
+        1212,
+        270,
+        1370,
+        290
+      ],
+      "expected": "SEQUENCE OF OPERATIONS:",
+      "mode": "exact"
+    },
+    {
+      "id": "m804-electric-heater-general",
+      "page": 22,
+      "bbox": [
+        1212,
+        285,
+        2015,
+        317
+      ],
+      "expected": "1. GENERAL OPERATION THE ELECTRIC DUCT HEATER SHALL BE CONTROLLED BY THE DDC SYSTEM TO MAINTAIN THE LOCAL ZONE TEMPERATURE SETPOINT. HEATER SHALL BE AUTOMATICALLY SCHEDULED FOR OPERATION BASED ON THE ASSOCIATED AIR HANDLING UNIT (AHU) OCCUPANCY SCHEDULE.",
+      "mode": "exact"
+    },
+    {
+      "id": "m804-electric-heater-safeties",
+      "page": 22,
+      "bbox": [
+        1212,
+        315,
+        2060,
+        345
+      ],
+      "expected": "2. SAFETY INTERLOCKS (HARDWIRED) THE ELECTRIC DUCT HEATER SHALL BE EQUIPPED WITH THE FOLLOWING HARDWIRED SAFETIES. IF ANY OF THESE CONDITIONS NOT MET, THE HEATER SHALL BE INSTANTLY AND COMPLETELY DISABLED, REGARDLESS OF THE DDC COMMAND:",
+      "mode": "exact"
+    },
+    {
+      "id": "m804-electric-heater-scr-signal",
+      "page": 22,
+      "bbox": [
+        1212,
+        505,
+        2065,
+        535
+      ],
+      "expected": "THE DDC SYSTEM SHALL SEND A 0-10 VDC (OR 4-20 MA) SIGNAL TO THE SILICON CONTROLLED RECTIFIER (SCR) CONTROLLER. THE SCR SHALL MODULATE THE ELECTRIC HEATER FROM 0% TO 100% CAPACITY TO PRECISELY MAINTAIN THE ACTIVE ZONE TEMPERATURE SETPOINT.",
+      "mode": "contains"
+    },
+    {
+      "id": "m804-vav-sequence-title",
+      "page": 22,
+      "bbox": [
+        1128,
+        1464,
+        1278,
+        1483
+      ],
+      "expected": "SEQUENCE OF OPERATION:",
+      "mode": "exact"
+    },
+    {
+      "id": "m804-vav-deadband",
+      "page": 22,
+      "bbox": [
+        1128,
+        1478,
+        2000,
+        1510
+      ],
+      "expected": "GENERAL OPERATION THE VAV TERMINAL UNIT SHALL BE CONTROLLED BY THE DDC SYSTEM AND SHALL BE AUTOMATICALLY SCHEDULED FOR OPERATION BASED ON AN OWNER PROVIDED ADJUSTABLE OCCUPANCY SCHEDULE. A MINIMUM 5°F (ADJ.) DEAD-BAND BETWEEN HEATING AND COOLING MODES MUST BE MAINTAINED AT ALL TIMES.",
+      "mode": "contains"
+    },
+    {
+      "id": "m804-vav-occupied-setpoints",
+      "page": 22,
+      "bbox": [
+        1130,
+        1510,
+        1390,
+        1566
+      ],
+      "expected": "2. OCCUPIED MODE UPON ENTERING OCCUPIED BE INDEXED TO THEIR OCCUPIED VALUES: • OCCUPIED COOLING SETPOINT: 75°F (ADJ.) • OCCUPIED HEATING SETPOINT: 70°F (ADJ.)",
+      "mode": "exact"
+    },
+    {
+      "id": "m804-vav-unoccupied-setpoints",
+      "page": 22,
+      "bbox": [
+        1130,
+        1562,
+        1405,
+        1624
+      ],
+      "expected": "3. UNOCCUPIED MODE UPON ENTERING UNOCCUPIED SHALL BE INDEXED TO THEIR UNOCCUPIED VALUES: • UNOCCUPIED COOLING SETPOINT: 85°F (ADJ.) • UNOCCUPIED HEATING SETPOINT: 60°F (ADJ.)",
+      "mode": "exact"
+    },
+    {
+      "id": "m804-vav-override",
+      "page": 22,
+      "bbox": [
+        1128,
+        1888,
+        2015,
+        1935
+      ],
+      "expected": "UNOCCUPIED OVERRIDE WHEN THE UNOCCUPIED OVERRIDE BUTTON IS DEPRESSED ON THE ZONE TEMPERATURE SENSOR, THE ZONE TEMPERATURE SETPOINTS SHALL BE INDEXED TO THEIR OCCUPIED VALUES FOR 60 MINUTES (ADJ.), AFTER WHICH NORMAL UNOCCUPIED OPERATION SHALL RESUME.",
+      "mode": "contains"
+    }
+  ],
+  "inventory_checks": [
+    {
+      "id": "rank05-sequence-inventory",
+      "records_path": [
+        "sequence_inventory"
+      ],
+      "expected": 7,
+      "unique_key": "id"
+    }
+  ]
+}

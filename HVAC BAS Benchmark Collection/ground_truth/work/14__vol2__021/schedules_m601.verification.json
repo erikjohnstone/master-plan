@@ -1,0 +1,1385 @@
+{
+  "document_id": "14__vol2__021",
+  "source_sha256": "4d883afdd3b2d94ea2e14621dc49df77bc10ca0548bfd077c436420c43ae75f8",
+  "annotation_sha256": "5261061bedfb9d27aa4ae2dd3269c8160749295893baf476649814afb657ac69",
+  "tables": 6,
+  "rows": 30,
+  "cell_assertions": 30,
+  "text_assertions": 5,
+  "checks": [
+    {
+      "table": "M601-AHU-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        115,
+        171,
+        165,
+        191
+      ],
+      "expected": "AHU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            102
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            69
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AHU-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        115,
+        199,
+        165,
+        219
+      ],
+      "expected": "AHU-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-2",
+          "word_ids": [
+            143
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-2",
+          "word_ids": [
+            87
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AHU-MARKS",
+      "row": 3,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        115,
+        227,
+        165,
+        247
+      ],
+      "expected": "AHU-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-3",
+          "word_ids": [
+            184
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-3",
+          "word_ids": [
+            105
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AHU-MARKS",
+      "row": 4,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        115,
+        255,
+        165,
+        275
+      ],
+      "expected": "AHU-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-4",
+          "word_ids": [
+            226
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-4",
+          "word_ids": [
+            147
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AHU-MARKS",
+      "row": 5,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        115,
+        283,
+        165,
+        303
+      ],
+      "expected": "AHU-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-5",
+          "word_ids": [
+            267
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-5",
+          "word_ids": [
+            188
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AHU-MARKS",
+      "row": 6,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        115,
+        311,
+        165,
+        331
+      ],
+      "expected": "AHU-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-6",
+          "word_ids": [
+            308
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-6",
+          "word_ids": [
+            229
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AHU-MARKS",
+      "header": "AIR HANDLING UNIT SCHEDULE SUPPLY FAN DATA RETURN FAN DATA COOLING COIL DATA HEATING COIL DATA SILENCER DATA ELECTRICAL DATA",
+      "page": 13,
+      "bbox": [
+        100,
+        75,
+        2000,
+        155
+      ],
+      "engine": "mupdf",
+      "actual": "AIR HANDLING UNIT SCHEDULE SUPPLY FAN DATA RETURN FAN DATA COOLING COIL DATA HEATING COIL DATA SILENCER DATA ELECTRICAL DATA MIN OUTDOOR SENSIBLE TOTAL MAX PD AIR AIR FLOW MOTOR HP ESP TSP ESP TOTAL CAPACITY CAPACITY FLOW ($7 ) /$7 ) CAPACITY FLOW ($7 ) /$7 ) AIR FLOW (IN. UNIT WEIGHT",
+      "pass": true
+    },
+    {
+      "table": "M601-AHU-MARKS",
+      "header": "AIR HANDLING UNIT SCHEDULE SUPPLY FAN DATA RETURN FAN DATA COOLING COIL DATA HEATING COIL DATA SILENCER DATA ELECTRICAL DATA",
+      "page": 13,
+      "bbox": [
+        100,
+        75,
+        2000,
+        155
+      ],
+      "engine": "poppler",
+      "actual": "AIR HANDLING UNIT SCHEDULE SUPPLY FAN DATA RETURN FAN DATA COOLING COIL DATA HEATING COIL DATA SILENCER DATA ELECTRICAL DATA MIN OUTDOOR SENSIBLE TOTAL MAX PD AIR AIR FLOW MOTOR HP ESP TSP ESP TOTAL CAPACITY CAPACITY FLOW CAPACITY FLOW AIR FLOW (IN. UNIT WEIGHT",
+      "pass": true
+    },
+    {
+      "table": "M601-BOILER-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2090,
+        139,
+        2128,
+        156
+      ],
+      "expected": "B-1A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B-1A",
+          "word_ids": [
+            484
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B-1A",
+          "word_ids": [
+            1450
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2090,
+        157,
+        2128,
+        174
+      ],
+      "expected": "B-1B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B-1B",
+          "word_ids": [
+            509
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B-1B",
+          "word_ids": [
+            842
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER-MARKS",
+      "row": 3,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2090,
+        175,
+        2128,
+        192
+      ],
+      "expected": "B-2A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B-2A",
+          "word_ids": [
+            534
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B-2A",
+          "word_ids": [
+            867
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER-MARKS",
+      "row": 4,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2090,
+        193,
+        2128,
+        210
+      ],
+      "expected": "B-2B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B-2B",
+          "word_ids": [
+            559
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B-2B",
+          "word_ids": [
+            892
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER-MARKS",
+      "header": "BOILER SCHEDULE UNIT NO LOCATION SERVICE TYPE RATED PRESSURE MAXIMUM PD INPUT OUTPUT NG PRESSURE FLOW RATE MIN EFFICIENCY ELECTRICAL DATA UNIT WEIGHT REMARKS",
+      "page": 13,
+      "bbox": [
+        2075,
+        75,
+        3350,
+        140
+      ],
+      "engine": "mupdf",
+      "actual": "BOILER SCHEDULE MIN / MAX UNIT ELECTRICAL DATA RATED PRESSURE MAXIMUM INPUT OUTPUT NG PRESSURE FLOW RATE MIN EFFICIENCY WEIGHT UNIT NO LOCATION SERVICE TYPE (PSI) PD (PSI) (MBH) (MBH) (IN WC) (GPM) (:7 ) ¬ /:7 ) ¬ (%) V/PH/HZ HP (LBS) REMARKS",
+      "pass": true
+    },
+    {
+      "table": "M601-BOILER-MARKS",
+      "header": "BOILER SCHEDULE UNIT NO LOCATION SERVICE TYPE RATED PRESSURE MAXIMUM PD INPUT OUTPUT NG PRESSURE FLOW RATE MIN EFFICIENCY ELECTRICAL DATA UNIT WEIGHT REMARKS",
+      "page": 13,
+      "bbox": [
+        2075,
+        75,
+        3350,
+        140
+      ],
+      "engine": "poppler",
+      "actual": "BOILER SCHEDULE MIN / MAX UNIT ELECTRICAL DATA RATED PRESSURE MAXIMUM INPUT OUTPUT NG PRESSURE FLOW RATE MIN EFFICIENCY WEIGHT UNIT NO LOCATION SERVICE TYPE (PSI) PD (PSI) (MBH) (MBH) (IN WC) (GPM) (%) V/PH/HZ HP (LBS) REMARKS",
+      "pass": true
+    },
+    {
+      "table": "M601-PUMP-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2110,
+        1104,
+        2160,
+        1120
+      ],
+      "expected": "P-1A,B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "P-1A,B",
+          "word_ids": [
+            1582
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "P-1A,B",
+          "word_ids": [
+            1931
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMP-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2110,
+        1122,
+        2160,
+        1138
+      ],
+      "expected": "P-2A,B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "P-2A,B",
+          "word_ids": [
+            1598
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "P-2A,B",
+          "word_ids": [
+            1947
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMP-MARKS",
+      "row": 3,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2110,
+        1140,
+        2160,
+        1156
+      ],
+      "expected": "P-3A,B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "P-3A,B",
+          "word_ids": [
+            1614
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "P-3A,B",
+          "word_ids": [
+            1963
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMP-MARKS",
+      "row": 4,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2110,
+        1158,
+        2160,
+        1174
+      ],
+      "expected": "P-4A,B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "P-4A,B",
+          "word_ids": [
+            1627
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "P-4A,B",
+          "word_ids": [
+            1976
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMP-MARKS",
+      "row": 5,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2110,
+        1175,
+        2160,
+        1191
+      ],
+      "expected": "P-5A,B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "P-5A,B",
+          "word_ids": [
+            1643
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "P-5A,B",
+          "word_ids": [
+            1992
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMP-MARKS",
+      "row": 6,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2110,
+        1193,
+        2160,
+        1209
+      ],
+      "expected": "P-6A,B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "P-6A,B",
+          "word_ids": [
+            1659
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "P-6A,B",
+          "word_ids": [
+            2008
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMP-MARKS",
+      "row": 7,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2110,
+        1211,
+        2160,
+        1227
+      ],
+      "expected": "CP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-1",
+          "word_ids": [
+            1672
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-1",
+          "word_ids": [
+            2037
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMP-MARKS",
+      "row": 8,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2110,
+        1229,
+        2160,
+        1245
+      ],
+      "expected": "CP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-2",
+          "word_ids": [
+            1683
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-2",
+          "word_ids": [
+            2056
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMP-MARKS",
+      "row": 9,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2110,
+        1247,
+        2160,
+        1263
+      ],
+      "expected": "CP-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-3",
+          "word_ids": [
+            1694
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-3",
+          "word_ids": [
+            2075
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMP-MARKS",
+      "row": 10,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2110,
+        1265,
+        2160,
+        1281
+      ],
+      "expected": "CP-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-4",
+          "word_ids": [
+            1705
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-4",
+          "word_ids": [
+            2094
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMP-MARKS",
+      "row": 11,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2110,
+        1283,
+        2160,
+        1299
+      ],
+      "expected": "CP-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-5",
+          "word_ids": [
+            1716
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-5",
+          "word_ids": [
+            2105
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMP-MARKS",
+      "row": 12,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2110,
+        1301,
+        2160,
+        1317
+      ],
+      "expected": "CP-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-6",
+          "word_ids": [
+            1727
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-6",
+          "word_ids": [
+            2116
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMP-MARKS",
+      "header": "PUMP SCHEDULE UNIT MARK LOCATION FLUID GPM FT OF HEAD EFF RPM HP VOLT PH REMARKS",
+      "page": 13,
+      "bbox": [
+        2080,
+        1045,
+        3350,
+        1105
+      ],
+      "engine": "mupdf",
+      "actual": "PUMP SCHEDULE FLOW HEAD MOTOR EFF (%) UNIT MARK LOCATION FLUID GPM FT OF HEAD RPM HP VOLT PH REMARKS",
+      "pass": true
+    },
+    {
+      "table": "M601-PUMP-MARKS",
+      "header": "PUMP SCHEDULE UNIT MARK LOCATION FLUID GPM FT OF HEAD EFF RPM HP VOLT PH REMARKS",
+      "page": 13,
+      "bbox": [
+        2080,
+        1045,
+        3350,
+        1105
+      ],
+      "engine": "poppler",
+      "actual": "PUMP SCHEDULE FLOW HEAD MOTOR EFF (%) UNIT MARK LOCATION FLUID GPM FT OF HEAD RPM HP VOLT PH REMARKS",
+      "pass": true
+    },
+    {
+      "table": "M601-CHILLER-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2105,
+        1469,
+        2145,
+        1490
+      ],
+      "expected": "CH-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-1",
+          "word_ids": [
+            2095
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-1",
+          "word_ids": [
+            2835
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHILLER-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2105,
+        1504,
+        2145,
+        1525
+      ],
+      "expected": "CH-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-2",
+          "word_ids": [
+            2123
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-2",
+          "word_ids": [
+            2837
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHILLER-MARKS",
+      "row": 3,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2105,
+        1540,
+        2145,
+        1560
+      ],
+      "expected": "CH-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-3",
+          "word_ids": [
+            2151
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-3",
+          "word_ids": [
+            2839
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHILLER-MARKS",
+      "row": 4,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2105,
+        1575,
+        2145,
+        1595
+      ],
+      "expected": "CH-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-4",
+          "word_ids": [
+            2179
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-4",
+          "word_ids": [
+            2841
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHILLER-MARKS",
+      "header": "AIR COOLED CHILLER SCHEDULE UNIT MARK TYPE CAP EWT LWT GPM PD EAT FANS TOTAL KW KW VOLT PH REMARKS",
+      "page": 13,
+      "bbox": [
+        2075,
+        1390,
+        3350,
+        1455
+      ],
+      "engine": "mupdf",
+      "actual": "AIR COOLED CHILLER SCHEDULE CHILLED WATER CONDENSER COMPRESSORS CAP (MBH) EWT (DEG F) LWT (DEG F) PD (FT OF HEAD) EAT (DEG F) FANS (EA) UNIT MARK TYPE GPM TOTAL KW KW VOLT PH REMARKS",
+      "pass": true
+    },
+    {
+      "table": "M601-CHILLER-MARKS",
+      "header": "AIR COOLED CHILLER SCHEDULE UNIT MARK TYPE CAP EWT LWT GPM PD EAT FANS TOTAL KW KW VOLT PH REMARKS",
+      "page": 13,
+      "bbox": [
+        2075,
+        1390,
+        3350,
+        1455
+      ],
+      "engine": "poppler",
+      "actual": "AIR COOLED CHILLER SCHEDULE CHILLED WATER CONDENSER COMPRESSORS CAP (MBH) EWT (DEG F) LWT (DEG F) PD (FT OF HEAD) EAT (DEG F) FANS (EA) UNIT MARK TYPE GPM TOTAL KW KW VOLT PH REMARKS",
+      "pass": true
+    },
+    {
+      "table": "M601-ICE-STORAGE-TANK-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2125,
+        1745,
+        2160,
+        1760
+      ],
+      "expected": "T-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T-5",
+          "word_ids": [
+            2006
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T-5",
+          "word_ids": [
+            3104
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ICE-STORAGE-TANK-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        2125,
+        1763,
+        2160,
+        1780
+      ],
+      "expected": "T-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T-6",
+          "word_ids": [
+            2018
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T-6",
+          "word_ids": [
+            3116
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ICE-STORAGE-TANK-MARKS",
+      "header": "ICE STORAGE TANK SCHEDULE UNIT MARK LOCATION APPLICATION NET USABLE MBH EACH TANK DIAMETER HEIGHT MOUNTING REMARKS",
+      "page": 13,
+      "bbox": [
+        2075,
+        1685,
+        3350,
+        1740
+      ],
+      "engine": "mupdf",
+      "actual": "ICE STORAGE TANK SCHEDULE SIZE UNIT MARK LOCATION APPLICATION NET USABLE MBH EACH TANK DIAMETER (FT) HEIGHT (FT) MOUNTING REMARKS",
+      "pass": true
+    },
+    {
+      "table": "M601-ICE-STORAGE-TANK-MARKS",
+      "header": "ICE STORAGE TANK SCHEDULE UNIT MARK LOCATION APPLICATION NET USABLE MBH EACH TANK DIAMETER HEIGHT MOUNTING REMARKS",
+      "page": 13,
+      "bbox": [
+        2075,
+        1685,
+        3350,
+        1740
+      ],
+      "engine": "poppler",
+      "actual": "ICE STORAGE TANK SCHEDULE SIZE UNIT MARK LOCATION APPLICATION NET USABLE MBH EACH TANK DIAMETER (FT) HEIGHT (FT) MOUNTING REMARKS",
+      "pass": true
+    },
+    {
+      "table": "M601-PRV-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        1070,
+        1800,
+        1120,
+        1817
+      ],
+      "expected": "PRV-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRV-1",
+          "word_ids": [
+            2265
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRV-1",
+          "word_ids": [
+            3071
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PRV-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 13,
+      "bbox": [
+        1070,
+        1818,
+        1120,
+        1836
+      ],
+      "expected": "PRV-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRV-2",
+          "word_ids": [
+            2274
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRV-2",
+          "word_ids": [
+            3080
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PRV-MARKS",
+      "header": "PRESSURE REDUCING VALVE SCHEDULE UNIT MARK LOCATION MEDIA PRESSURE IN OUT GPM REMARKS",
+      "page": 13,
+      "bbox": [
+        1000,
+        1740,
+        2000,
+        1800
+      ],
+      "engine": "mupdf",
+      "actual": "PRESSURE REDUCING VALVE SCHEDULE PRESSURE IN (PSI) OUT (PSI) UNIT MARK LOCATION MEDIA GPM REMARKS",
+      "pass": true
+    },
+    {
+      "table": "M601-PRV-MARKS",
+      "header": "PRESSURE REDUCING VALVE SCHEDULE UNIT MARK LOCATION MEDIA PRESSURE IN OUT GPM REMARKS",
+      "page": 13,
+      "bbox": [
+        1000,
+        1740,
+        2000,
+        1800
+      ],
+      "engine": "poppler",
+      "actual": "PRESSURE REDUCING VALVE SCHEDULE PRESSURE IN (PSI) OUT (PSI) UNIT MARK LOCATION MEDIA GPM REMARKS",
+      "pass": true
+    },
+    {
+      "assertion": "m601-air-valve-application-schedule-title",
+      "page": 13,
+      "bbox": [
+        100,
+        450,
+        1100,
+        490
+      ],
+      "expected": "SUPPLY AIR VALVE (SAV), HOOD EXHAUST AIR VALVE (HEV), AND GENERAL EXHAUST AIR VALVE (EAV) SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR VALVE (SAV), HOOD EXHAUST AIR VALVE (HEV), AND GENERAL EXHAUST AIR VALVE (EAV) SCHEDULE",
+          "word_ids": [
+            3030,
+            3031,
+            3032,
+            3033,
+            3034,
+            3035,
+            3036,
+            3037,
+            3038,
+            3039,
+            3040,
+            3041,
+            3042,
+            3043,
+            3044,
+            3045
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR VALVE (SAV), HOOD EXHAUST AIR VALVE (HEV), AND GENERAL EXHAUST AIR VALVE (EAV) SCHEDULE",
+          "word_ids": [
+            1662,
+            1663,
+            1664,
+            1665,
+            1666,
+            1667,
+            1668,
+            1669,
+            1670,
+            1671,
+            1672,
+            1673,
+            1674,
+            1675,
+            1676,
+            1677
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-east-air-valve-application-title",
+      "page": 13,
+      "bbox": [
+        600,
+        810,
+        1020,
+        850
+      ],
+      "expected": "EAST WING LAB AND LAB SUPPORT AIR VALVES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EAST WING LAB AND LAB SUPPORT AIR VALVES",
+          "word_ids": [
+            2291,
+            2292,
+            2293,
+            2294,
+            2295,
+            2296,
+            2297,
+            2298
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EAST WING LAB AND LAB SUPPORT AIR VALVES",
+          "word_ids": [
+            1585,
+            1586,
+            1587,
+            1588,
+            1589,
+            1590,
+            1591,
+            1592
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-west-air-valve-application-title",
+      "page": 13,
+      "bbox": [
+        120,
+        810,
+        570,
+        850
+      ],
+      "expected": "WEST WING LAB AND LAB SUPPORT AIR VALVES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WEST WING LAB AND LAB SUPPORT AIR VALVES",
+          "word_ids": [
+            2630,
+            2631,
+            2632,
+            2633,
+            2634,
+            2635,
+            2636,
+            2637
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WEST WING LAB AND LAB SUPPORT AIR VALVES",
+          "word_ids": [
+            1612,
+            1613,
+            1614,
+            1615,
+            1616,
+            1617,
+            1618,
+            1619
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-chiller-two-mode-note",
+      "page": 13,
+      "bbox": [
+        2070,
+        1600,
+        3350,
+        1640
+      ],
+      "expected": "CHILLER INFORMATION IS PROVIDED FOR CHILLERS IN BOTH THE NORMAL CHILLED WATER MAKING MODE AND ICE MAKING MODE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTES: 1. CHILLER INFORMATION IS PROVIDED FOR CHILLERS IN BOTH THE NORMAL CHILLED WATER MAKING MODE AND ICE MAKING MODE AS INDICATED SCHEDULE BASED ON 30% ETHYLENE GLYCOL 2. WEIGHT OF CH-1 THROUGH CH-4 APPROXIMATELY 5838 LBS EACH",
+          "word_ids": [
+            2205,
+            2206,
+            2207,
+            2208,
+            2209,
+            2210,
+            2211,
+            2212,
+            2213,
+            2214,
+            2215,
+            2216,
+            2217,
+            2218,
+            2219,
+            2220,
+            2221,
+            2222,
+            2223,
+            2224,
+            2225,
+            2226,
+            2227,
+            2228,
+            2229,
+            2230,
+            2231,
+            2232,
+            2233,
+            2234,
+            2235,
+            2236,
+            2237,
+            2238,
+            2239,
+            2240,
+            2241,
+            2242
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTES: 1. CHILLER INFORMATION IS PROVIDED FOR CHILLERS IN BOTH THE NORMAL CHILLED WATER MAKING MODE AND ICE MAKING MODE AS INDICATED SCHEDULE BASED ON 30% ETHYLENE GLYCOL 2. WEIGHT OF CH-1 THROUGH CH-4 APPROXIMATELY 5838 LBS EACH",
+          "word_ids": [
+            2999,
+            3000,
+            3001,
+            3002,
+            3003,
+            3004,
+            3005,
+            3006,
+            3007,
+            3008,
+            3009,
+            3010,
+            3011,
+            3012,
+            3013,
+            3014,
+            3015,
+            3016,
+            3017,
+            3018,
+            3019,
+            3020,
+            3021,
+            3022,
+            3023,
+            3024,
+            3025,
+            3026,
+            3027,
+            3028,
+            3029,
+            3030,
+            3031,
+            3032,
+            3033,
+            3034,
+            3035,
+            3036
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-ice-three-tank-note",
+      "page": 13,
+      "bbox": [
+        2070,
+        1780,
+        3350,
+        1815
+      ],
+      "expected": "1. PROVIDE THREE TANKS, 30% ETHYLENE GLYCOL COILS. DILUTED GLYCOL IN TANKS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTES: 1. PROVIDE THREE TANKS, 30% ETHYLENE GLYCOL COILS. DILUTED GLYCOL IN TANKS 2. SEE SPECIFICATIONS FOR LISTED MANUFACTURERS AND SPECIFIC SIZING REQUIREMENTS",
+          "word_ids": [
+            2030,
+            2031,
+            2032,
+            2033,
+            2034,
+            2035,
+            2036,
+            2037,
+            2038,
+            2039,
+            2040,
+            2041,
+            2042,
+            2043,
+            2044,
+            2045,
+            2046,
+            2047,
+            2048,
+            2049,
+            2050,
+            2051,
+            2052
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTES: 1. PROVIDE THREE TANKS, 30% ETHYLENE GLYCOL COILS. DILUTED GLYCOL IN TANKS 2. SEE SPECIFICATIONS FOR LISTED MANUFACTURERS AND SPECIFIC SIZING REQUIREMENTS",
+          "word_ids": [
+            3128,
+            3129,
+            3130,
+            3131,
+            3132,
+            3133,
+            3134,
+            3135,
+            3136,
+            3137,
+            3138,
+            3139,
+            3140,
+            3141,
+            3142,
+            3143,
+            3144,
+            3145,
+            3146,
+            3147,
+            3148,
+            3149,
+            3150
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m601-verified-primary-schedule-tables",
+      "actual": 6,
+      "expected": 6,
+      "pass": true
+    },
+    {
+      "id": "m601-west-air-valve-applications",
+      "actual": 85,
+      "expected": 85,
+      "pass": true
+    },
+    {
+      "id": "m601-east-air-valve-applications",
+      "actual": 72,
+      "expected": 72,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

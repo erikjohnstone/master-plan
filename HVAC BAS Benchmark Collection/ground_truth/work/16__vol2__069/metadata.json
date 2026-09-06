@@ -1,0 +1,61 @@
+{
+  "document_id": "16__vol2__069",
+  "module_role": "Project, sheet, issue-date, scale and complete visual-review ledger for the supplied nine-sheet ITD District 2 heating-upgrades rebid set.",
+  "scope": "All nine supplied pages are covered. The title-block sheet-ID and sheet-name lettering is visually legible in the source renders but outlined rather than exposed as normal vector text by either retained parser; that limitation is retained rather than converted into a false parser assertion.",
+  "project": {
+    "name": "IDAHO TRANSPORTATION DEPARTMENT HEATING SYSTEM UPGRADES - DISTRICT 2",
+    "location": "2606 FRONTAGE RD, LEWISTON, ID 83501",
+    "building_type": "District 2 materials laboratory / heating-system upgrade as printed in project and electrical panel labels",
+    "owner_or_agency": "IDAHO TRANSPORTATION DEPARTMENT",
+    "design_firm_as_printed": "MUSGROVE ENGINEERING, P.A.",
+    "project_number": "26-150",
+    "issue": "REBID",
+    "issue_date": "AUGUST 2026",
+    "revision_date": {"status": "not_stated", "value": null, "note": "The visible revision grids are blank. The repeated AUGUST 2026 field is retained as the drawing date/issue date, not recast as a revision date."}
+  },
+  "scale_semantics": {
+    "finding": "Pages M1.0 and E1.0 show 1/4\" = 1'-0\" for their demolition and new-work plans. M2.0 details are NOT TO SCALE; the controls/schedule/cover sheets are not distance-takeoff plan views. No graphic scale bar is present on any supplied page.",
+    "graphic_scale_bar_total": 0,
+    "measurable_length_scaled_view_total": 4,
+    "views": [
+      {"id": "M1.0-1", "page": 3, "sheet": "M1.0", "view": "1", "title": "LOFT MECHANICAL DEMOLITION PLAN", "scale": "1/4\" = 1'-0\"", "graphic_scale_bar": false},
+      {"id": "M1.0-2", "page": 3, "sheet": "M1.0", "view": "2", "title": "LOFT MECHANICAL NEW WORK PLAN", "scale": "1/4\" = 1'-0\"", "graphic_scale_bar": false},
+      {"id": "E1.0-1", "page": 9, "sheet": "E1.0", "view": "1", "title": "ELECTRICAL LOFT DEMO PLAN", "scale": "1/4\" = 1'-0\"", "graphic_scale_bar": false},
+      {"id": "E1.0-2", "page": 9, "sheet": "E1.0", "view": "2", "title": "ELECTRICAL LOFT NEW PLAN", "scale": "1/4\" = 1'-0\"", "graphic_scale_bar": false}
+    ]
+  },
+  "visual_review_pages": [
+    {"page": 1, "sheet": "G0.0", "title": "GENERAL COVER SHEET", "revision_date": {"status": "not_stated", "value": null}, "review_status": "complete", "finding": "Cover, project identity, map and drawing index. Sheet ID/name are visible outlined title-block graphics; two unscaled map views only.", "render": "reviews/16__vol2__069/p1-p1-full-poppler.png"},
+    {"page": 2, "sheet": "M0.0", "title": "MECHANICAL COVER SHEET", "revision_date": {"status": "not_stated", "value": null}, "review_status": "complete", "finding": "Mechanical abbreviations, legends, general notes and energy-code compliance notes. Symbol legend is not treated as installed-equipment inventory.", "render": "reviews/16__vol2__069/p2-p2-full-poppler.png"},
+    {"page": 3, "sheet": "M1.0", "title": "MECHANICAL FLOOR PLANS", "revision_date": {"status": "not_stated", "value": null}, "review_status": "complete", "finding": "Loft mechanical demolition/new-work plans and keyed notes. The new-work view is the only supplied mechanical plan-level installed-equipment context.", "render": "reviews/16__vol2__069/p3-p3-full-poppler.png"},
+    {"page": 4, "sheet": "M2.0", "title": "MECHANICAL DETAILS", "revision_date": {"status": "not_stated", "value": null}, "review_status": "complete", "finding": "Existing/new hot-water piping schematics and boiler/heating-coil details, all captioned NOT TO SCALE.", "render": "reviews/16__vol2__069/p4-p4-full-poppler.png"},
+    {"page": 5, "sheet": "M3.0", "title": "MECHANICAL SCHEDULES", "revision_date": {"status": "not_stated", "value": null}, "review_status": "complete", "finding": "Existing AHU and condensing-hot-water-boiler schedules plus new pump and variable-frequency-drive schedules; also an inline-pump detail.", "render": "reviews/16__vol2__069/p5-p5-full-poppler.png"},
+    {"page": 6, "sheet": "M4.0", "title": "MECHANICAL CONTROLS", "revision_date": {"status": "not_stated", "value": null}, "review_status": "complete", "finding": "Controls legends/architecture, existing heating-water-system schematic and written sequence. Source color/weight distinguishes existing text from bold updated sequences.", "render": "reviews/16__vol2__069/p6-p6-full-poppler.png"},
+    {"page": 7, "sheet": "M4.1", "title": "MECHANICAL CONTROLS", "revision_date": {"status": "not_stated", "value": null}, "review_status": "complete", "finding": "Existing chilled-water-system schematic and written sequence. Source color/weight distinguishes existing text from bold updated sequences.", "render": "reviews/16__vol2__069/p7-p7-full-poppler.png"},
+    {"page": 8, "sheet": "E0.0", "title": "ELECTRICAL COVER SHEET", "revision_date": {"status": "not_stated", "value": null}, "review_status": "complete", "finding": "Electrical legends, device notes, panel schedules and general notes. It supplies related electrical context, not a mechanical schedule/point list.", "render": "reviews/16__vol2__069/p8-p8-full-poppler.png"},
+    {"page": 9, "sheet": "E1.0", "title": "MECHANICAL POWER PLAN", "revision_date": {"status": "not_stated", "value": null}, "review_status": "complete", "finding": "Electrical loft demolition/new plans, including new pump/VFD power and mechanical equipment callouts; not a BAS point list.", "render": "reviews/16__vol2__069/p9-p9-full-poppler.png"}
+  ],
+  "tables": [],
+  "assertion_groups": [
+    {
+      "id": "standard-title-block-fields-pages-1-8",
+      "defaults": {"project_number": "26-150", "issue_date": "AUGUST 2026"},
+      "templates": [
+        {"id": "project-number", "field": "project_number", "bbox": [2438,1410,2480,1435], "mode": "exact"},
+        {"id": "issue-date", "field": "issue_date", "bbox": [2438,1472,2510,1500], "mode": "exact"}
+      ],
+      "records": [
+        {"id": "p1", "page": 1}, {"id": "p2", "page": 2}, {"id": "p3", "page": 3}, {"id": "p4", "page": 4}, {"id": "p5", "page": 5}, {"id": "p6", "page": 6}, {"id": "p7", "page": 7}, {"id": "p8", "page": 8}
+      ]
+    }
+  ],
+  "assertions": [
+    {"id": "p9-project-number", "page": 9, "bbox": [2455,1410,2500,1435], "expected": "26-150", "mode": "exact"},
+    {"id": "p9-issue-date", "page": 9, "bbox": [2455,1472,2520,1500], "expected": "AUGUST 2026", "mode": "exact"},
+    {"id": "p1-project-title", "page": 1, "bbox": [2425,900,2470,1400], "expected": "HEATING SYSTEM UPGRADES", "reading_direction": "up", "mode": "exact"}
+  ],
+  "inventory_checks": [
+    {"id": "all-supplied-pages-visually-reviewed", "records_path": ["visual_review_pages"], "expected": 9, "unique_key": "page"},
+    {"id": "length-scaled-views", "records_path": ["scale_semantics", "views"], "expected": 4, "unique_key": "id"}
+  ]
+}

@@ -1,0 +1,3030 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "335b50e55964680e12232c9c6bdbdca8e313cfd58b031c2ba8c0bc19efcf4274",
+  "tables": 8,
+  "rows": 22,
+  "cell_assertions": 88,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "CRAH-AI",
+      "row": 1,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        143,
+        1025,
+        185,
+        1044
+      ],
+      "expected": "AI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            1269
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            964
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 1,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        185,
+        1025,
+        370,
+        1044
+      ],
+      "expected": "SPACE TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPACE TEMPERATURE",
+          "word_ids": [
+            1270,
+            1271
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPACE TEMPERATURE",
+          "word_ids": [
+            965,
+            966
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 1,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        370,
+        1025,
+        418,
+        1044
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1272
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            100
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 1,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        418,
+        1025,
+        460,
+        1044
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1273
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            105
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 2,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        143,
+        1044,
+        185,
+        1062
+      ],
+      "expected": "AI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            1274
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            967
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 2,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        185,
+        1044,
+        370,
+        1062
+      ],
+      "expected": "SUPPLY AIR TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE",
+          "word_ids": [
+            1275,
+            1276,
+            1277
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE",
+          "word_ids": [
+            968,
+            969,
+            970
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 2,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        370,
+        1044,
+        418,
+        1062
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1278
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            101
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 2,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        418,
+        1044,
+        460,
+        1062
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1279
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            106
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 3,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        143,
+        1062,
+        185,
+        1079
+      ],
+      "expected": "AI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            1280
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            971
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 3,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        185,
+        1062,
+        370,
+        1079
+      ],
+      "expected": "RA TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RA TEMPERATURE",
+          "word_ids": [
+            1281,
+            1282
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RA TEMPERATURE",
+          "word_ids": [
+            972,
+            973
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 3,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        370,
+        1062,
+        418,
+        1079
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1283
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            102
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 3,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        418,
+        1062,
+        460,
+        1079
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1284
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            107
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 4,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        143,
+        1079,
+        185,
+        1097
+      ],
+      "expected": "AI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI04",
+          "word_ids": [
+            1285
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI04",
+          "word_ids": [
+            974
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 4,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        185,
+        1079,
+        370,
+        1097
+      ],
+      "expected": "FAN SPEED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN SPEED (FEEDBACK)",
+          "word_ids": [
+            1286,
+            1287,
+            1288
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN SPEED (FEEDBACK)",
+          "word_ids": [
+            975,
+            976,
+            977
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 4,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        370,
+        1079,
+        418,
+        1097
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1289
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            103
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 4,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        418,
+        1079,
+        460,
+        1097
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1290
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            108
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 5,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        143,
+        1097,
+        185,
+        1115
+      ],
+      "expected": "AI05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI05",
+          "word_ids": [
+            1291
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI05",
+          "word_ids": [
+            978
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 5,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        185,
+        1097,
+        370,
+        1115
+      ],
+      "expected": "CONTROL VALVE (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONTROL VALVE (FEEDBACK)",
+          "word_ids": [
+            1292,
+            1293,
+            1294
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONTROL VALVE (FEEDBACK)",
+          "word_ids": [
+            979,
+            980,
+            981
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 5,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        370,
+        1097,
+        418,
+        1115
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1295
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            104
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "row": 5,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        418,
+        1097,
+        460,
+        1115
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1296
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            109
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AI",
+      "header": "CRAH DDC POINTS LIST",
+      "page": 68,
+      "bbox": [
+        140,
+        960,
+        465,
+        990
+      ],
+      "engine": "mupdf",
+      "actual": "CRAH DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "CRAH-AI",
+      "header": "CRAH DDC POINTS LIST",
+      "page": 68,
+      "bbox": [
+        140,
+        960,
+        465,
+        990
+      ],
+      "engine": "poppler",
+      "actual": "CRAH DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "CRAH-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 68,
+      "bbox": [
+        140,
+        990,
+        465,
+        1012
+      ],
+      "engine": "mupdf",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "CRAH-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 68,
+      "bbox": [
+        140,
+        990,
+        465,
+        1012
+      ],
+      "engine": "poppler",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "CRAH-AI",
+      "header": "ANALOG INPUT",
+      "page": 68,
+      "bbox": [
+        140,
+        1012,
+        240,
+        1025
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "CRAH-AI",
+      "header": "ANALOG INPUT",
+      "page": 68,
+      "bbox": [
+        140,
+        1012,
+        240,
+        1025
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "CRAH-AO",
+      "row": 1,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        143,
+        1146,
+        185,
+        1163
+      ],
+      "expected": "AO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            1299
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            112
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AO",
+      "row": 1,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        185,
+        1146,
+        370,
+        1163
+      ],
+      "expected": "CHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL",
+          "word_ids": [
+            1300,
+            1301,
+            1302
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL",
+          "word_ids": [
+            113,
+            114,
+            115
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AO",
+      "row": 1,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        370,
+        1146,
+        418,
+        1163
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1303
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            120
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AO",
+      "row": 1,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        418,
+        1146,
+        460,
+        1163
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1304
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            122
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AO",
+      "row": 2,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        143,
+        1163,
+        185,
+        1182
+      ],
+      "expected": "AO02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            1305
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            116
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AO",
+      "row": 2,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        185,
+        1163,
+        370,
+        1182
+      ],
+      "expected": "FAN SPEED CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN SPEED CONTROL",
+          "word_ids": [
+            1306,
+            1307,
+            1308
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN SPEED CONTROL",
+          "word_ids": [
+            117,
+            118,
+            119
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AO",
+      "row": 2,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        370,
+        1163,
+        418,
+        1182
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1309
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            121
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AO",
+      "row": 2,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        418,
+        1163,
+        460,
+        1182
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1310
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            123
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 68,
+      "bbox": [
+        140,
+        1128,
+        240,
+        1146
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "CRAH-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 68,
+      "bbox": [
+        140,
+        1128,
+        240,
+        1146
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 1,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        143,
+        1215,
+        185,
+        1233
+      ],
+      "expected": "BI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            1313
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            126
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 1,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        185,
+        1215,
+        370,
+        1233
+      ],
+      "expected": "DIRTY FILTER SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIRTY FILTER SWITCH",
+          "word_ids": [
+            1314,
+            1315,
+            1316
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIRTY FILTER SWITCH",
+          "word_ids": [
+            127,
+            128,
+            129
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 1,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        370,
+        1215,
+        418,
+        1233
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1317
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            146
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 1,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        418,
+        1215,
+        460,
+        1233
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1318
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            151
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 2,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        143,
+        1233,
+        185,
+        1250
+      ],
+      "expected": "BI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            1319
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            130
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 2,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        185,
+        1233,
+        370,
+        1250
+      ],
+      "expected": "DRAIN PAN OVERFLOW SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DRAIN PAN OVERFLOW SWITCH",
+          "word_ids": [
+            1320,
+            1321,
+            1322,
+            1323
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DRAIN PAN OVERFLOW SWITCH",
+          "word_ids": [
+            131,
+            132,
+            133,
+            134
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 2,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        370,
+        1233,
+        418,
+        1250
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1324
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            147
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 2,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        418,
+        1233,
+        460,
+        1250
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1325
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            152
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 3,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        143,
+        1250,
+        185,
+        1268
+      ],
+      "expected": "BI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            1326
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            135
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 3,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        185,
+        1250,
+        370,
+        1268
+      ],
+      "expected": "FAN STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN STATUS",
+          "word_ids": [
+            1327,
+            1328
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN STATUS",
+          "word_ids": [
+            136,
+            137
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 3,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        370,
+        1250,
+        418,
+        1268
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1329
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            148
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 3,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        418,
+        1250,
+        460,
+        1268
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1330
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            153
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 4,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        143,
+        1268,
+        185,
+        1285
+      ],
+      "expected": "BI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            1331
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            138
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 4,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        185,
+        1268,
+        370,
+        1285
+      ],
+      "expected": "CONDENSATE PUMP STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONDENSATE PUMP STATUS",
+          "word_ids": [
+            1332,
+            1333,
+            1334
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONDENSATE PUMP STATUS",
+          "word_ids": [
+            139,
+            140,
+            141
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 4,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        370,
+        1268,
+        418,
+        1285
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1335
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            149
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 4,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        418,
+        1268,
+        460,
+        1285
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1336
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            154
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 5,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        143,
+        1285,
+        185,
+        1304
+      ],
+      "expected": "BI05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI05",
+          "word_ids": [
+            1337
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI05",
+          "word_ids": [
+            142
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 5,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        185,
+        1285,
+        370,
+        1304
+      ],
+      "expected": "CRAH DDC RESET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CRAH DDC RESET",
+          "word_ids": [
+            1338,
+            1339,
+            1340
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CRAH DDC RESET",
+          "word_ids": [
+            143,
+            144,
+            145
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 5,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        370,
+        1285,
+        418,
+        1304
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1341
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            150
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "row": 5,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        418,
+        1285,
+        460,
+        1304
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1342
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            155
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BI",
+      "header": "BINARY INPUT",
+      "page": 68,
+      "bbox": [
+        140,
+        1197,
+        240,
+        1215
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "CRAH-BI",
+      "header": "BINARY INPUT",
+      "page": 68,
+      "bbox": [
+        140,
+        1197,
+        240,
+        1215
+      ],
+      "engine": "poppler",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "CRAH-BO",
+      "row": 1,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        143,
+        1336,
+        185,
+        1360
+      ],
+      "expected": "BO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            1345
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            158
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BO",
+      "row": 1,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        185,
+        1336,
+        370,
+        1360
+      ],
+      "expected": "FAN START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN START/STOP",
+          "word_ids": [
+            1346,
+            1347
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN START/STOP",
+          "word_ids": [
+            159,
+            160
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BO",
+      "row": 1,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        370,
+        1336,
+        418,
+        1360
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1348
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            167
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BO",
+      "row": 1,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        418,
+        1336,
+        460,
+        1360
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1349
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            168
+          ]
+        }
+      }
+    },
+    {
+      "table": "CRAH-BO",
+      "header": "BINARY OUTPUT",
+      "page": 68,
+      "bbox": [
+        140,
+        1318,
+        240,
+        1336
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "CRAH-BO",
+      "header": "BINARY OUTPUT",
+      "page": 68,
+      "bbox": [
+        140,
+        1318,
+        240,
+        1336
+      ],
+      "engine": "poppler",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "SFPVAV-AI",
+      "row": 1,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        1948,
+        1149,
+        1985,
+        1168
+      ],
+      "expected": "AI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            1367
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            760
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AI",
+      "row": 1,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        1985,
+        1149,
+        2144,
+        1168
+      ],
+      "expected": "SPACE TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPACE TEMPERATURE",
+          "word_ids": [
+            1368,
+            1369
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPACE TEMPERATURE",
+          "word_ids": [
+            761,
+            762
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AI",
+      "row": 1,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        2144,
+        1149,
+        2180,
+        1168
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1370
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            778
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AI",
+      "row": 1,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        2180,
+        1149,
+        2230,
+        1168
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1371
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            782
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AI",
+      "row": 2,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        1948,
+        1168,
+        1985,
+        1185
+      ],
+      "expected": "AI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            1372
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            763
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AI",
+      "row": 2,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        1985,
+        1168,
+        2144,
+        1185
+      ],
+      "expected": "VELOCITY PRESSURE SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VELOCITY PRESSURE SENSOR",
+          "word_ids": [
+            1373,
+            1374,
+            1375
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VELOCITY PRESSURE SENSOR",
+          "word_ids": [
+            764,
+            765,
+            766
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AI",
+      "row": 2,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        2144,
+        1168,
+        2180,
+        1185
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1376
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            779
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AI",
+      "row": 2,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        2180,
+        1168,
+        2230,
+        1185
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1377
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            783
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AI",
+      "row": 3,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        1948,
+        1185,
+        1985,
+        1203
+      ],
+      "expected": "AI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            1378
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            767
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AI",
+      "row": 3,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        1985,
+        1185,
+        2144,
+        1203
+      ],
+      "expected": "SUPPLY AIR TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE",
+          "word_ids": [
+            1379,
+            1380,
+            1381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE",
+          "word_ids": [
+            768,
+            769,
+            770
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AI",
+      "row": 3,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        2144,
+        1185,
+        2180,
+        1203
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1382
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            780
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AI",
+      "row": 3,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        2180,
+        1185,
+        2230,
+        1203
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1383
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            784
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AI",
+      "row": 4,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        1948,
+        1203,
+        1985,
+        1236
+      ],
+      "expected": "AI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI04",
+          "word_ids": [
+            1384
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI04",
+          "word_ids": [
+            771
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AI",
+      "row": 4,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        1985,
+        1203,
+        2144,
+        1236
+      ],
+      "expected": "HHW VALVE CONTROL (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL (FEEDBACK)",
+          "word_ids": [
+            1385,
+            1386,
+            1387,
+            1388
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL (FEEDBACK)",
+          "word_ids": [
+            772,
+            773,
+            774,
+            775
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AI",
+      "row": 4,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        2144,
+        1203,
+        2180,
+        1236
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1389
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            781
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AI",
+      "row": 4,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        2180,
+        1203,
+        2230,
+        1236
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1390
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            785
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AI",
+      "header": "SFPVAV DDC POINTS LIST",
+      "page": 68,
+      "bbox": [
+        1945,
+        1085,
+        2235,
+        1115
+      ],
+      "engine": "mupdf",
+      "actual": "SFPVAV DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "SFPVAV-AI",
+      "header": "SFPVAV DDC POINTS LIST",
+      "page": 68,
+      "bbox": [
+        1945,
+        1085,
+        2235,
+        1115
+      ],
+      "engine": "poppler",
+      "actual": "SFPVAV DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "SFPVAV-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 68,
+      "bbox": [
+        1945,
+        1115,
+        2235,
+        1138
+      ],
+      "engine": "mupdf",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "SFPVAV-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 68,
+      "bbox": [
+        1945,
+        1115,
+        2235,
+        1138
+      ],
+      "engine": "poppler",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "SFPVAV-AI",
+      "header": "ANALOG INPUT",
+      "page": 68,
+      "bbox": [
+        1945,
+        1130,
+        2030,
+        1149
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "SFPVAV-AI",
+      "header": "ANALOG INPUT",
+      "page": 68,
+      "bbox": [
+        1945,
+        1130,
+        2030,
+        1149
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "SFPVAV-AO",
+      "row": 1,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        1948,
+        1268,
+        1985,
+        1286
+      ],
+      "expected": "AO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            1393
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            788
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AO",
+      "row": 1,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        1985,
+        1268,
+        2144,
+        1286
+      ],
+      "expected": "HW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HW VALVE CONTROL",
+          "word_ids": [
+            1394,
+            1395,
+            1396
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HW VALVE CONTROL",
+          "word_ids": [
+            789,
+            790,
+            791
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AO",
+      "row": 1,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        2144,
+        1268,
+        2180,
+        1286
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1397
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            795
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AO",
+      "row": 1,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        2180,
+        1268,
+        2230,
+        1286
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1398
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            797
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AO",
+      "row": 2,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        1948,
+        1286,
+        1985,
+        1304
+      ],
+      "expected": "AO02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            1399
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            792
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AO",
+      "row": 2,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        1985,
+        1286,
+        2144,
+        1304
+      ],
+      "expected": "DAMPER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAMPER CONTROL",
+          "word_ids": [
+            1400,
+            1401
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAMPER CONTROL",
+          "word_ids": [
+            793,
+            794
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AO",
+      "row": 2,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        2144,
+        1286,
+        2180,
+        1304
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1402
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            796
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AO",
+      "row": 2,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        2180,
+        1286,
+        2230,
+        1304
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1403
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            798
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 68,
+      "bbox": [
+        1945,
+        1248,
+        2045,
+        1268
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "SFPVAV-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 68,
+      "bbox": [
+        1945,
+        1248,
+        2045,
+        1268
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "SFPVAV-BI",
+      "row": 1,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        1948,
+        1337,
+        1985,
+        1355
+      ],
+      "expected": "BI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            1406
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            801
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-BI",
+      "row": 1,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        1985,
+        1337,
+        2144,
+        1355
+      ],
+      "expected": "FAN STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN STATUS",
+          "word_ids": [
+            1407,
+            1408
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN STATUS",
+          "word_ids": [
+            802,
+            803
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-BI",
+      "row": 1,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        2144,
+        1337,
+        2180,
+        1355
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1409
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            808
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-BI",
+      "row": 1,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        2180,
+        1337,
+        2230,
+        1355
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1410
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            810
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-BI",
+      "row": 2,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        1948,
+        1355,
+        1985,
+        1373
+      ],
+      "expected": "BI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            1411
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            804
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-BI",
+      "row": 2,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        1985,
+        1355,
+        2144,
+        1373
+      ],
+      "expected": "VAV DDC RESET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV DDC RESET",
+          "word_ids": [
+            1412,
+            1413,
+            1414
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV DDC RESET",
+          "word_ids": [
+            805,
+            806,
+            807
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-BI",
+      "row": 2,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        2144,
+        1355,
+        2180,
+        1373
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1415
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            809
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-BI",
+      "row": 2,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        2180,
+        1355,
+        2230,
+        1373
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1416
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            811
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-BI",
+      "header": "BINARY INPUT",
+      "page": 68,
+      "bbox": [
+        1945,
+        1318,
+        2045,
+        1337
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "SFPVAV-BI",
+      "header": "BINARY INPUT",
+      "page": 68,
+      "bbox": [
+        1945,
+        1318,
+        2045,
+        1337
+      ],
+      "engine": "poppler",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "SFPVAV-BO",
+      "row": 1,
+      "column": "mark",
+      "page": 68,
+      "bbox": [
+        1948,
+        1406,
+        1985,
+        1430
+      ],
+      "expected": "BO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            1419
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            814
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-BO",
+      "row": 1,
+      "column": "description",
+      "page": 68,
+      "bbox": [
+        1985,
+        1406,
+        2144,
+        1430
+      ],
+      "expected": "FAN START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN START/STOP",
+          "word_ids": [
+            1420,
+            1421
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN START/STOP",
+          "word_ids": [
+            815,
+            816
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-BO",
+      "row": 1,
+      "column": "alarm",
+      "page": 68,
+      "bbox": [
+        2144,
+        1406,
+        2180,
+        1430
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1422
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            817
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-BO",
+      "row": 1,
+      "column": "trend",
+      "page": 68,
+      "bbox": [
+        2180,
+        1406,
+        2230,
+        1430
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1423
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            818
+          ]
+        }
+      }
+    },
+    {
+      "table": "SFPVAV-BO",
+      "header": "BINARY OUTPUT",
+      "page": 68,
+      "bbox": [
+        1945,
+        1385,
+        2045,
+        1406
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "SFPVAV-BO",
+      "header": "BINARY OUTPUT",
+      "page": 68,
+      "bbox": [
+        1945,
+        1385,
+        2045,
+        1406
+      ],
+      "engine": "poppler",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "crah-ai-count",
+      "actual": 5,
+      "expected": 5,
+      "pass": true
+    },
+    {
+      "id": "crah-ao-count",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    },
+    {
+      "id": "crah-bi-count",
+      "actual": 5,
+      "expected": 5,
+      "pass": true
+    },
+    {
+      "id": "crah-bo-count",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "id": "sfpvav-ai-count",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    },
+    {
+      "id": "sfpvav-ao-count",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    },
+    {
+      "id": "sfpvav-bi-count",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    },
+    {
+      "id": "sfpvav-bo-count",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

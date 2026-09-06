@@ -1,0 +1,78 @@
+{
+  "document_id": "29__vol2__030",
+  "module_role": "Literal two-pipe fan-coil schedule rows plus bounded schedule context.",
+  "tables": [
+    {
+      "id": "M601-TWO-PIPE-FCU",
+      "page": 84,
+      "sheet": "M-601",
+      "title_as_printed": "TWO-PIPE FAN COIL UNIT SCHEDULE",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        150,
+        2900
+      ],
+      "y_ranges": [
+        [
+          260,
+          270
+        ]
+      ],
+      "rows": [
+        "25,700 30,000 1,2"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Literal schedule row fragment only; not plan counts, ownership, controller binding or wiring claims."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "m601-fcu-title",
+      "page": 84,
+      "bbox": [
+        1310,
+        105,
+        1790,
+        155
+      ],
+      "expected": "TWO-PIPE FAN COIL UNIT SCHEDULE",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-doas-hw",
+      "page": 85,
+      "bbox": [
+        550,
+        400,
+        1140,
+        440
+      ],
+      "expected": "DOAS HOT WATER HEATING COIL SCHEDULE",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-damper",
+      "page": 85,
+      "bbox": [
+        550,
+        985,
+        1120,
+        1020
+      ],
+      "expected": "PRESSURE RELIEF DAMPER SCHEDULE",
+      "mode": "contains"
+    },
+    {
+      "id": "m603-fire-smoke-damper",
+      "page": 86,
+      "bbox": [
+        600,
+        335,
+        1100,
+        375
+      ],
+      "expected": "FIRE AND SMOKE DAMPER SCHEDULE",
+      "mode": "contains"
+    }
+  ]
+}

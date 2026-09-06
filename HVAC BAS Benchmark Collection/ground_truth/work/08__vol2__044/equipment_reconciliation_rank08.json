@@ -1,0 +1,18 @@
+{
+  "document_id": "08__vol2__044",
+  "module_role": "Presentation registry for the complete literal schedule-row corpus selected from MI-503 and MI-504. It does not infer plan placement, installed multiplicity, procurement, or clean physical identities beyond printed rows.",
+  "tables": [],
+  "ledger_mode": "literal_schedule_rows_v1",
+  "schedule_counts": {
+    "tables": 9,
+    "rows": 56,
+    "interpretation": "Nine selected high-value MI-503/MI-504 schedule tables and 56 literal rows are retained, including printed continuation and NO USE rows."
+  },
+  "control_valve_and_damper_schedule_status": {
+    "steam_pressure_reducing_valves": "MI-503 publishes seven literal steam pressure-reducing-valve schedule rows, including continuation rows for PRV-25 and PRV-26.",
+    "isolation_valves": "MI-504 publishes 29 literal isolation-valve schedule rows, including two printed NO USE rows and four non-return stop/check valve rows.",
+    "control_valve_schedule": "No standalone schedule titled CONTROL VALVE SCHEDULE is asserted. Fuel-oil control-valve commands/position/alarm are captured from MI-605, while MI-503 separately publishes steam pressure-reducing valve data.",
+    "damper_actuator_schedule": "No standalone damper-actuator schedule is asserted from the supplied source pages."
+  },
+  "source_boundary": "The selected schedule tables are source references, not proof of plan placement/multiplicity, outlet/inlet quantities, installed equipment totals or final procurement scope."
+}

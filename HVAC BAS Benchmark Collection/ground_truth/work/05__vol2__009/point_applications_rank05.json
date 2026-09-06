@@ -1,0 +1,57 @@
+{
+  "document_id": "05__vol2__009",
+  "module_role": "Explicit source-table application scopes for the 75 published M-801 through M-804 point-list rows. Each remains a literal source occurrence rather than a projected hardware I/O count.",
+  "tables": [],
+  "ledger_mode": "source_matrix_templates_v1",
+  "applications": [
+    {
+      "id": "vfd-bacnet-interface",
+      "source_table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "ownership_scope": "Published M-801 template stated typical for each VFD; no individual VFD asset is assigned by this matrix."
+    },
+    {
+      "id": "ahu1-ddc",
+      "source_table": "M802-AHU1-DDC-LEDGER",
+      "ownership_scope": "Published AHU-1 DDC point-list rows; repeated printed AI3 is retained and no controller terminal owner is inferred."
+    },
+    {
+      "id": "chiller-plant-ddc",
+      "source_table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "ownership_scope": "Published chilled-water-plant DDC rows for the source plant context; no final physical I/O/card or per-pump expansion is inferred."
+    },
+    {
+      "id": "ahu2-ddc",
+      "source_table": "M803-AHU2-DDC-LEDGER",
+      "ownership_scope": "Published AHU-2 DDC point-list rows; repeated printed AI4 and BI2 are retained."
+    },
+    {
+      "id": "laboratory-exhaust-ddc",
+      "source_table": "M803-LAB-EXHAUST-DDC-LEDGER",
+      "ownership_scope": "Published laboratory-exhaust-fan source matrix for EF-1, EF-2 and EF-3 context; no one-row-per-fan expansion is invented."
+    },
+    {
+      "id": "scheduled-exhaust-ddc",
+      "source_table": "M803-SCHEDULED-EXHAUST-DDC-LEDGER",
+      "ownership_scope": "Published scheduled-exhaust source matrix for EF-5 and EF-6 context; the rows are not duplicated per fan."
+    },
+    {
+      "id": "electric-unit-heater-ddc",
+      "source_table": "M804-ELECTRIC-UNIT-HEATER-DDC-LEDGER",
+      "ownership_scope": "Published electric-unit-heater DDC source rows, including repeated BI1 labels; no equipment-tag mapping is printed."
+    },
+    {
+      "id": "vav-terminal-ddc",
+      "source_table": "M804-VAV-TERMINAL-DDC-LEDGER",
+      "ownership_scope": "Published VAV terminal DDC source rows; these do not establish a one-row-per-scheduled-VAV physical point count."
+    }
+  ],
+  "listed_template_counts": {
+    "source_rows": 75,
+    "total": 75
+  },
+  "expanded_template_counts": {
+    "source_rows": 75,
+    "total": 75
+  },
+  "expanded_count_warning": "75 is the count of literal published point-list rows, including repeated identifiers and typical matrices. It is not an installed BAS point, controller-card, terminal, wiring, device or VFD total."
+}

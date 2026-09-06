@@ -1,0 +1,23 @@
+{
+  "document_id": "24__vol2__019",
+  "source_sha256": "b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10",
+  "annotation_sha256": "7d7bf6f0dcfe1e5c43c89e941013121bfc8931bdffedc84b2f7b3e4cc58b555e",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 0,
+  "checks": [],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "rank24-matrix-application-scopes",
+      "actual": 5,
+      "expected": 5,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

@@ -1,0 +1,18 @@
+{
+  "document_id": "30__vol2__058",
+  "module_role": "Published CWGP-1 VFD point-mapping source scope.",
+  "tables": [],
+  "ledger_mode": "literal_source_row_matrices_v1",
+  "applications": [
+    {
+      "id": "j604-cwgp1-vfd",
+      "source_table": "J604-CWGP1-VFD-POINTS",
+      "ownership_scope": "Published CWGP-1 VFD point mapping only; final field owner, controller/card/terminal assignment, device address and wiring are not inferred."
+    }
+  ],
+  "expanded_template_counts": {
+    "source_rows": 6,
+    "total": 6
+  },
+  "expanded_count_warning": "Six source rows are point-map entries, not physical device, I/O, controller, cable or terminal counts."
+}

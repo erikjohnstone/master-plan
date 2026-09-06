@@ -1,0 +1,182 @@
+{
+  "document_id": "14__vol2__021",
+  "module_role": "M-601 schedule ground truth. The small cell-by-cell matrices retain literal schedule marks; the structured source inventory preserves all printed equipment schedule families and every east/west laboratory air-valve application row. A scheduled air valve is not relabelled as a damper actuator.",
+  "source_sheet": "M-601",
+  "source_page": 13,
+  "tables": [
+    {
+      "id": "M601-AHU-MARKS",
+      "page": 13,
+      "sheet": "M-601",
+      "title": "AIR HANDLING UNIT SCHEDULE",
+      "classification": "Six scheduled air-handling units; detailed design values are retained in schedule_detail_records.",
+      "columns": "mark",
+      "x_edges": [115, 165],
+      "y_ranges": [[171,191],[199,219],[227,247],[255,275],[283,303],[311,331]],
+      "rows": ["AHU-1","AHU-2","AHU-3","AHU-4","AHU-5","AHU-6"],
+      "header_evidence": [{"bbox": [100,75,2000,155], "expected": "AIR HANDLING UNIT SCHEDULE SUPPLY FAN DATA RETURN FAN DATA COOLING COIL DATA HEATING COIL DATA SILENCER DATA ELECTRICAL DATA"}]
+    },
+    {
+      "id": "M601-BOILER-MARKS",
+      "page": 13,
+      "sheet": "M-601",
+      "title": "BOILER SCHEDULE",
+      "classification": "Four flexible-water-tube boilers, two in each wing boiler room.",
+      "columns": "mark",
+      "x_edges": [2090, 2128],
+      "y_ranges": [[139,156],[157,174],[175,192],[193,210]],
+      "rows": ["B-1A","B-1B","B-2A","B-2B"],
+      "header_evidence": [{"bbox": [2075,75,3350,140], "expected": "BOILER SCHEDULE UNIT NO LOCATION SERVICE TYPE RATED PRESSURE MAXIMUM PD INPUT OUTPUT NG PRESSURE FLOW RATE MIN EFFICIENCY ELECTRICAL DATA UNIT WEIGHT REMARKS"}]
+    },
+    {
+      "id": "M601-PUMP-MARKS",
+      "page": 13,
+      "sheet": "M-601",
+      "title": "PUMP SCHEDULE",
+      "classification": "Six paired VFD pump schedule rows plus six AHU circulator-pump rows. Pair notation is retained literally, not expanded to an invented serial-number count.",
+      "columns": "mark",
+      "x_edges": [2110, 2160],
+      "y_ranges": [[1104,1120],[1122,1138],[1140,1156],[1158,1174],[1175,1191],[1193,1209],[1211,1227],[1229,1245],[1247,1263],[1265,1281],[1283,1299],[1301,1317]],
+      "rows": ["P-1A,B","P-2A,B","P-3A,B","P-4A,B","P-5A,B","P-6A,B","CP-1","CP-2","CP-3","CP-4","CP-5","CP-6"],
+      "header_evidence": [{"bbox": [2080,1045,3350,1105], "expected": "PUMP SCHEDULE UNIT MARK LOCATION FLUID GPM FT OF HEAD EFF RPM HP VOLT PH REMARKS"}]
+    },
+    {
+      "id": "M601-CHILLER-MARKS",
+      "page": 13,
+      "sheet": "M-601",
+      "title": "AIR COOLED CHILLER SCHEDULE",
+      "classification": "Four scroll chillers. Each has a normal chilled-water-making row and an ice-making row in schedule_detail_records.",
+      "columns": "mark",
+      "x_edges": [2105, 2145],
+      "y_ranges": [[1469,1490],[1504,1525],[1540,1560],[1575,1595]],
+      "rows": ["CH-1","CH-2","CH-3","CH-4"],
+      "header_evidence": [{"bbox": [2075,1390,3350,1455], "expected": "AIR COOLED CHILLER SCHEDULE UNIT MARK TYPE CAP EWT LWT GPM PD EAT FANS TOTAL KW KW VOLT PH REMARKS"}]
+    },
+    {
+      "id": "M601-ICE-STORAGE-TANK-MARKS",
+      "page": 13,
+      "sheet": "M-601",
+      "title": "ICE STORAGE TANK SCHEDULE",
+      "classification": "Two locations are scheduled; each printed schedule row requires three tanks and 30% ethylene-glycol coils under note 1.",
+      "columns": "mark",
+      "x_edges": [2125, 2160],
+      "y_ranges": [[1745,1760],[1763,1780]],
+      "rows": ["T-5","T-6"],
+      "header_evidence": [{"bbox": [2075,1685,3350,1740], "expected": "ICE STORAGE TANK SCHEDULE UNIT MARK LOCATION APPLICATION NET USABLE MBH EACH TANK DIAMETER HEIGHT MOUNTING REMARKS"}]
+    },
+    {
+      "id": "M601-PRV-MARKS",
+      "page": 13,
+      "sheet": "M-601",
+      "title": "PRESSURE REDUCING VALVE SCHEDULE",
+      "classification": "Two HWS pressure-reducing valves. This is a pressure-reducing valve schedule, not an actuator/control-valve schedule.",
+      "columns": "mark",
+      "x_edges": [1070, 1120],
+      "y_ranges": [[1800,1817],[1818,1836]],
+      "rows": ["PRV-1","PRV-2"],
+      "header_evidence": [{"bbox": [1000,1740,2000,1800], "expected": "PRESSURE REDUCING VALVE SCHEDULE UNIT MARK LOCATION MEDIA PRESSURE IN OUT GPM REMARKS"}]
+    }
+  ],
+  "schedule_detail_records": {
+    "air_handling_units": [
+      "AHU-1|East Wing Penthouse/Roof|Labs|100% OA|1 supply fan|13,436 CFM|25 hp|4.03 in wg ESP|7.3 in wg TSP|636/497 MBH cooling total/sensible|44/56 EWT/LWT|106.2 GPM|467 MBH heating|150/120 EWT/LWT|31.7 GPM|13,436 CFM return|0.35 hp/W|45 STC|460/3/60|34.2 FLA|42.7 MCA|70 MOP|10,230 lb|ALL",
+      "AHU-2|East Wing Penthouse/Roof|Labs|100% OA|1 supply fan|13,097 CFM|25 hp|4.13 in wg ESP|7.3 in wg TSP|620/484 MBH cooling total/sensible|44/56 EWT/LWT|106.2 GPM|455 MBH heating|150/120 EWT/LWT|31.7 GPM|13,097 CFM return|0.35 hp/W|45 STC|461/3/60|34.2 FLA|42.7 MCA|70 MOP|10,210 lb|ALL",
+      "AHU-3|East Wing Penthouse/Roof|Admin Offices|7,984 CFM minimum outdoor air|1 supply fan|16,206 CFM|25 hp|6 in wg TSP|1 return fan|14,047 CFM|10 hp|2.3 in wg ESP|561/493 MBH cooling total/sensible|44/56 EWT/LWT|97 GPM|428 MBH heating|150/120 EWT/LWT|23.8 GPM|16,206 CFM return|0.35 hp/W|45 STC|462/3/60|48.4 FLA|60.4 MCA|100 MOP|13,010 lb|ALL",
+      "AHU-4|West Wing Penthouse/Roof|Labs|100% OA|1 supply fan|14,068 CFM|25 hp|3.66 in wg ESP|7.1 in wg TSP|666/520 MBH cooling total/sensible|44/56 EWT/LWT|111 GPM|489 MBH heating|150/120 EWT/LWT|31.7 GPM|14,068 CFM return|0.35 hp/W|45 STC|463/3/60|34.2 FLA|42.7 MCA|70 MOP|10,240 lb|ALL",
+      "AHU-5|West Wing Penthouse/Roof|Labs|100% OA|1 supply fan|15,778 CFM|25 hp|4.03 in wg ESP|7.3 in wg TSP|747/584 MBH cooling total/sensible|44/56 EWT/LWT|125.2 GPM|548 MBH heating|150/120 EWT/LWT|36.5 GPM|15,778 CFM return|0.35 hp/W|45 STC|464/3/60|34.2 FLA|42.7 MCA|70 MOP|10,770 lb|ALL",
+      "AHU-6|West Wing Penthouse/Roof|Admin Offices|2,525 CFM minimum outdoor air|1 supply fan|9,167 CFM|15 hp|6 in wg TSP|1 return fan|8,369 CFM|7.5 hp|2.5 in wg ESP|273/255 MBH cooling total/sensible|44/56 EWT/LWT|47.5 GPM|218 MBH heating|150/120 EWT/LWT|12.7 GPM|9,167 CFM return|0.35 hp/W|45 STC|465/3/60|32.4 FLA|40.5 MCA|65 MOP|7,800 lb|ALL"
+    ],
+    "boilers": [
+      "B-1A|East Boiler Room|AHUs & ATUs|Flexible Water Tube|30 psi rated|1.3 psi max PD|1,500/1,200 MBH input/output|7/14 in wc NG pressure|95.1 GPM|120/150 min/max efficiency|80 hp|120/1/60|1/2 hp|3,000 lb|ALL",
+      "B-1B|East Boiler Room|AHUs & ATUs|Flexible Water Tube|30 psi rated|1.3 psi max PD|1,500/1,200 MBH input/output|7/14 in wc NG pressure|95.1 GPM|120/150 min/max efficiency|80 hp|120/1/60|1/2 hp|3,000 lb|ALL",
+      "B-2A|West Boiler Room|AHUs & ATUs|Flexible Water Tube|30 psi rated|1.3 psi max PD|1,500/1,200 MBH input/output|7/14 in wc NG pressure|95.1 GPM|120/150 min/max efficiency|80 hp|120/1/60|1/2 hp|3,000 lb|ALL",
+      "B-2B|West Boiler Room|AHUs & ATUs|Flexible Water Tube|30 psi rated|1.3 psi max PD|1,500/1,200 MBH input/output|7/14 in wc NG pressure|95.1 GPM|120/150 min/max efficiency|80 hp|120/1/60|1/2 hp|3,000 lb|ALL"
+    ],
+    "fan_coil_units": [
+      "FCU-1|922 CFM|31.5/23.7 MBH cooling total/sensible|6 GPM|5 ft PD|55.4 EAT|149 EWT|38 MBH heating|2.73 GPM|0 Pa ESP|1,092 RPM|0.22 hp|115/1|ALL",
+      "FCU-2|922 CFM|31.5/23.7 MBH cooling total/sensible|6 GPM|5 ft PD|55.4 EAT|149 EWT|38 MBH heating|2.73 GPM|0 Pa ESP|1,092 RPM|0.22 hp|115/1|ALL",
+      "FCU-3|339 CFM|10.7/8.2 MBH cooling total/sensible|1.75 GPM|3.5 ft PD|55.4 EAT|149 EWT|12.6 MBH heating|0.95 GPM|0 Pa ESP|1,092 RPM|0.13 hp|115/1|ALL"
+    ],
+    "fans": [
+      "SF-7|East Mechanical Room|Propeller|6,498 CFM|0.3 in H2O|793 RPM|1 hp|460/3|2-speed motor",
+      "SF-8|West Mechanical Room|Propeller|6,498 CFM|0.3 in H2O|793 RPM|1 hp|460/3|2-speed motor",
+      "EF-1|2nd Floor East Hoods|Centrifugal|3,960 CFM|2.5 in H2O|1,431 RPM|5 hp|460/3|future 5,280 CFM",
+      "EF-2|2nd Floor East Hoods|Centrifugal|3,960 CFM|2.5 in H2O|1,431 RPM|5 hp|460/3|future 5,280 CFM standby",
+      "EF-3|2nd Floor East Labs|Centrifugal|9,814 CFM|2.4 in H2O|826 RPM|7.5 hp|460/3",
+      "EF-4|1st Floor East Hoods|Centrifugal|3,960 CFM|2.5 in H2O|1,431 RPM|5 hp|460/3|future 5,280 CFM",
+      "EF-5|1st Floor East Hoods|Centrifugal|3,960 CFM|2.5 in H2O|1,431 RPM|5 hp|460/3|future 5,280 CFM standby",
+      "EF-6|1st Floor East Labs|Centrifugal|9,855 CFM|2.4 in H2O|827 RPM|7.5 hp|460/3",
+      "EF-7|East Janitor Closet|PRV|80 CFM|0.5 in H2O|1,249 RPM|0.2 hp|110/1",
+      "EF-8|East Toilets|PRV|1,100 CFM|0.9 in H2O|1,482 RPM|0.3 hp|110/1",
+      "EF-9|East Mailroom|PRV|261 CFM|0.5 in H2O|1,703 RPM|0.2 hp|110/1",
+      "EF-10|1st Floor West Hoods|Centrifugal|4,619 CFM|2.5 in H2O|1,533 RPM|5 hp|460/3|future 5,280 CFM",
+      "EF-11|1st Floor West Hoods|Centrifugal|4,619 CFM|2.5 in H2O|1,533 RPM|5 hp|460/3|future 5,280 CFM standby",
+      "EF-12|2nd Floor West Hoods|Centrifugal|3,579 CFM|2.5 in H2O|1,385 RPM|5 hp|460/3|future 5,280 CFM",
+      "EF-13|2nd Floor West Hoods|Centrifugal|3,579 CFM|2.5 in H2O|1,385 RPM|5 hp|460/3|future 5,280 CFM standby",
+      "EF-14|2nd Floor West Labs|Centrifugal|10,895 CFM|2.4 in H2O|856 RPM|7.5 hp|460/3",
+      "EF-15|1st Floor West Labs|Centrifugal|10,616 CFM|2.4 in H2O|847 RPM|7.5 hp|460/3",
+      "EF-16|West Toilets|PRV|934 CFM|0.7 in H2O|1,430 RPM|0.3 hp|110/1",
+      "EF-17|East Perchloric Hood|FRP centrifugal|780 CFM|0.5 in H2O|1,800 RPM|3 hp|460/3|notes 4,5"
+    ],
+    "pumps": [
+      "P-1A,B|Penthouse East|CHS|269.9 GPM|118 ft head|68%|1,750 RPM|15 hp|460/3|VFD",
+      "P-2A,B|Penthouse East|SCHS|190 GPM|75 ft head|73%|1,750 RPM|7.5 hp|460/3|VFD",
+      "P-3A,B|Penthouse East|HWS|95 GPM|83 ft head|61%|1,750 RPM|5 hp|460/3|VFD",
+      "P-4A,B|Penthouse West|CHS|238.8 GPM|110 ft head|74%|1,750 RPM|15 hp|460/3|VFD",
+      "P-5A,B|Penthouse West|SCHS|174 GPM|67 ft head|74%|1,750 RPM|7.5 hp|460/3|VFD",
+      "P-6A,B|Penthouse West|HWS|95 GPM|80 ft head|61%|1,750 RPM|5 hp|460/3|VFD",
+      "CP-1|AHU-1|HWS|31.7 GPM|12 ft head|3,300 RPM|0.17 hp|120/3",
+      "CP-2|AHU-2|HWS|31.7 GPM|12 ft head|3,300 RPM|0.17 hp|120/3",
+      "CP-3|AHU-3|HWS|23.8 GPM|12 ft head|3,300 RPM|0.17 hp|120/3",
+      "CP-4|AHU-4|HWS|31.7 GPM|12 ft head|3,300 RPM|0.17 hp|120/3",
+      "CP-5|AHU-5|HWS|36.5 GPM|12 ft head|3,300 RPM|0.17 hp|120/3",
+      "CP-6|AHU-6|HWS|12.7 GPM|12 ft head|3,300 RPM|0.17 hp|120/3"
+    ],
+    "chillers": [
+      "CH-1|scroll|chilled-water mode: 1,177 MBH, 53.6/44 F EWT/LWT, 269.6 GPM, 18.4 ft PD, 90 F EAT, 8 fans, 95.5 total kW, 9.75 kW/fan, 460/3; ice-making mode: 849 MBH, 30/23 F EWT/LWT, 265.9 GPM, 18.4 ft PD, 75 F EAT, 8 fans, 74.5 total kW, 10.1 kW/fan, 460/3",
+      "CH-2|scroll|chilled-water mode: 1,177 MBH, 53.6/44 F EWT/LWT, 269.6 GPM, 18.4 ft PD, 90 F EAT, 8 fans, 95.5 total kW, 9.75 kW/fan, 460/3; ice-making mode: 849 MBH, 30/23 F EWT/LWT, 265.9 GPM, 18.4 ft PD, 75 F EAT, 8 fans, 74.5 total kW, 10.1 kW/fan, 460/3",
+      "CH-3|scroll|chilled-water mode: 1,181 MBH, 54.9/44 F EWT/LWT, 238.8 GPM, 14.6 ft PD, 90 F EAT, 8 fans, 95.4 total kW, 9.75 kW/fan, 460/3; ice-making mode: 851 MBH, 31/23 F EWT/LWT, 236.2 GPM, 14.6 ft PD, 75 F EAT, 8 fans, 74.6 total kW, 10.1 kW/fan, 460/3",
+      "CH-4|scroll|chilled-water mode: 1,181 MBH, 54.9/44 F EWT/LWT, 238.8 GPM, 14.6 ft PD, 90 F EAT, 8 fans, 95.4 total kW, 9.75 kW/fan, 460/3; ice-making mode: 851 MBH, 31/23 F EWT/LWT, 236.2 GPM, 14.6 ft PD, 75 F EAT, 8 fans, 74.6 total kW, 10.1 kW/fan, 460/3"
+    ],
+    "ice_storage": [
+      "T-5|East Wing South|ice storage/CHWS|1,945 net usable MBH each tank|7.5 ft diameter|8.5 ft high|on grade|ALL|note 1: provide three tanks, 30% ethylene-glycol coils; diluted glycol in tanks",
+      "T-6|West Wing South|ice storage/CHWS|1,945 net usable MBH each tank|7.5 ft diameter|8.5 ft high|on grade|ALL|note 1: provide three tanks, 30% ethylene-glycol coils; diluted glycol in tanks"
+    ],
+    "other_schedule_families": [
+      {"title": "SUPPLY AIR VALVE (SAV), HOOD EXHAUST AIR VALVE (HEV), AND GENERAL EXHAUST AIR VALVE (EAV) SCHEDULE", "rows": 13, "critical_detail": "SAV sizes 6, 8, 10, 12, 20x10, 24x12 and 36x12 include reheat-coil data; EAV sizes 6, 8, 10, 20x10 and 24x12 and HEV size 12 are stainless steel. This type schedule gives no actuator manufacturer, torque, fail position, or control signal."},
+      {"title": "SOUND ATTENUATOR SCHEDULE", "rows": 10, "marks": ["SA-1","SA-2","SA-4","SA-6","SA-8","SA-10","SA-12","SA-14","SA-16","SA-18"]},
+      {"title": "UNIT HEATER SCHEDULE", "rows": 2, "marks": ["UH-1","CUH-1"], "critical_detail": "UH-1: HWS, 280 CFM, 21 MBH, 1.4 GPM; CUH-1: HWS, 210 CFM, 13.9 MBH, 0.95 GPM."},
+      {"title": "AIR TERMINAL UNIT SCHEDULE", "rows": 8, "marks": ["VVR1 - 5","VVR2 - 6","VVR2 - 7","VVR2 - 8","VVR2 - 10","VVR2 - 12","VVR2 - 14","VVR2 - 16"], "critical_detail": "Maximum CFM range is 250 to 2,400; all listed terminals are reheat-capable water units. VVR2-12/14/16 link to SA-12/14/16 attenuators."},
+      {"title": "TANK SCHEDULE", "rows": 8, "marks": ["T-1","T-2","T-3","T-4","T-7","T-8","AS-1","AS-2"], "critical_detail": "T-1/T-3 CWS expansion; T-2/T-4 HWS expansion; T-7/T-8 CWS storage; AS-1/AS-2 HWS air separators."},
+      {"title": "AIR DEVICE SCHEDULE", "rows": 6, "marks": ["CD-1","LD-1","LD-2","SR-1","R-1","R-2"], "critical_detail": "All printed volume dampers are accessories; this is not a damper-actuator schedule."},
+      {"title": "PRESSURE REDUCING VALVE SCHEDULE", "rows": 2, "marks": ["PRV-1","PRV-2"], "critical_detail": "Both are 30 psi in / 25 psi out / 6 GPM HWS valves."}
+    ]
+  },
+  "air_valve_application_rows": {
+    "columns": "room_no|air_valve_service_size|occupied_design_cfm|unoccupied_design_cfm|hood_transfer_cfm",
+    "west_wing": [
+      "163|SAV-12|940|470|-100","163|EV-12|940|470|","163|HEV-12|670|100|","163A|SAV-8|200|100|","163A|EV-8|200|100|","161|SAV-12|1100|550|-100","161|EV-12|1100|550|","161|HEV-12|670|100|","161A|SAV-8|200|100|","161A|EV-8|200|100|","157|SAV-8|380|190|","157|EV-8|380|190|","159|SAV-12|1100|550|-100","159|EV-12|1100|550|","159|HEV-12|670|100|","159A|SAV-8|200|100|","159A|EV-8|200|100|","155|SAV-20-10|1475|735|-100","155|EV-20-10|1475|735|","155|HEV-12|670|100|","145|SAV-12|900|450|-100","145|EV-12|950|500|","145|HEV-12|670|100|","145A|SAV-8|250|150|50","145A|EV-8|200|100|","149|SAV-36-12|2520|1260|-100","149|EV-20-10|1200|600|","149|EV-20-10|1315|655|","149A|SAV-8|265|130|","149A|EV-8|265|130|","149B|SAV-6|85|50|","149B|EV-6|85|50|","147|SAV-8|300|125|-50","147|EV-8|350|175|","143|SAV-12|900|450|-100","143|EV-12|900|450|","143|HEV-12|670|100|","143A|SAV-8|225|110|","143A|EV-8|225|110|","141|SAV-12|900|450|-100","141|EV-12|900|450|","141|HEV-12|670|100|","141A|SAV-8|220|110|","141A|EV-8|220|110|","139|SAV-8|420|250|","139|EV-8|420|250|","164|SAV-8|320|320|530","164|SAV-8|320|320|","164|SAV-8|320|320|","164|SAV-8|320|320|","136|SAV-12|785|200|","136|EV-12|785|200|","253|SAV-24-12|2060|1030|-100","253|EV-20-10|1960|930|","253|HEV-12|670|100|","253|HEV-12|670|100|","253A|SAV-10|235|120|","253A|EV-10|235|120|","253B|SAV-10|275|150|","253B|EV-10|275|150|","245|SAV-24-12|2060|1030|-100","245|EV-20-10|1960|930|","245|HEV-12|670|100|","245|HEV-12|670|100|","245A|SAV-10|275|150|","245A|EV-10|275|150|","245B|SAV-10|285|150|","245B|EV-10|285|150|","243|SAV-24-12|2280|1140|-100","243|EV-24-12|2380|1240|","238|SAV-24-12|2220|1110|","238|EV-24-12|2220|1110|","236|SAV-12|1080|540|-100","236|EV-12|1080|540|","236|HEV-12|670|100|","236A|SAV-8|235|115|","236A|EV-8|235|115|","250|SAV-10|600|600|600","250|SAV-8|300|300|","250|SAV-8|300|300|","234|SAV-12|1080|540|-100","234|EV-12|1080|540|","234|HEV-12|670|100|","234A|SAV-8|235|115|","234A|EV-8|235|115|"
+    ],
+    "east_wing": [
+      "115|SAV-24-12|1720|860|-100","115|EV-20-10|1620|760|","115|HEV-12|670|100|","115|HEV-12|670|100|","112|SAV-12|785|200|","112|EV-12|785|200|","115A|SAV-8|275|135|","115A|EV-8|275|135|","120/122|SAV-12|860|430|-100","120/122|EV-12|860|430|","120/122|HEV-12|670|100|","120A|SAV-8|210|105|","120A|EV-8|210|105|","126|SAV-20-10|1260|630|-200","126|SAV-20-10|1260|630|","126|EV-12|1260|630|","126|EV-12|1260|630|","126|HEV-12|670|100|","126|HEV-12|670|100|","122A|SAV-8|210|105|","122A|EV-8|210|105|","126A|SAV-8|215|110|","126A|EV-8|215|110|","133|SAV-8|300|300|400","133|SAV-8|300|300|","133|SAV-8|300|300|","113|SAV-8|350|115|","113|EV-8|350|115|","126B|SAV-8|215|110|","126B|EV-8|215|110|","126C|SAV-8|295|150|","126C|EV-8|295|150|","126E|SAV-8|400|200|","126E|EV-8|400|200|","117|SAV-24-12|2160|1080|-100","117|EV-20-10|845|425|","117|EV-20-10|1315|655|","208/210|SAV-12|1020|510|-100","208/210|EV-12|1020|510|","208/210|HEV-12|670|100|","208A|SAV-8|230|115|","208A|EV-8|230|115|","210A|SAV-8|280|140|","210A|EV-8|280|140|","212|SAV-36-12|2600|1300|","212|EV-36-12|2600|1300|","212A|SAV-8|230|115|","212A|EV-8|330|115|","214|SAV-24-12|1960|980|-200","214|SAV-24-12|1960|980|","214|EV-24-12|1910|930|","214|EV-24-12|1910|930|","214|HEV-12|670|100|","214|HEV-12|670|100|","214|HEV-12|670|100|","214|HEV-12|670|100|","214A|SAV-8|310|155|","214A|EV-8|310|155|","214B|SAV-8|310|155|","214B|EV-8|310|155|","214C|SAV-8|370|185|100","214C|EV-8|270|135|","214D|SAV-8|230|115|","214D|EV-8|230|115|","222|SAV-12|1020|510|-100","222|EV-12|1120|610|","222|-|780|0|","222A|SAV-10|510|255|","222A|EV-8|255|130|","222A|EV-8|255|130|","227|SAV-10|600|600|400","227|SAV-8|300|300|"
+    ],
+    "interpretation": "A repeated room/air-valve line is a distinct printed schedule application. A blank or dash value is retained as printed; no actuator, motor, fail position or BAS I/O is inferred from this schedule.",
+    "notes": ["(-) is transfer into the space; (+) is transfer out of the space; no value is neutral.", "The east/west application lists total 157 printed schedule rows (85 west, 72 east)."]
+  },
+  "control_valve_and_damper_schedule_status": {
+    "control_valve_schedule": {"status": "not_present_as_a_tabular_control_valve_schedule", "value": null, "note": "M-601 provides a pressure-reducing-valve schedule and air-valve/reheat data, but no CV/tag/Cv/actuator/signal/fail-position control-valve schedule."},
+    "damper_actuator_schedule": {"status": "not_present_as_a_tabular_actuator_schedule", "value": null, "note": "M-001/M-801 distinguish dampers and motor-operated dampers, while M-601 lists air valves and volume-damper accessories. No damper actuator tags, torque, model, control signal or fail position are tabulated."}
+  },
+  "assertions": [
+    {"id": "m601-air-valve-application-schedule-title", "page": 13, "bbox": [100,450,1100,490], "expected": "SUPPLY AIR VALVE (SAV), HOOD EXHAUST AIR VALVE (HEV), AND GENERAL EXHAUST AIR VALVE (EAV) SCHEDULE"},
+    {"id": "m601-east-air-valve-application-title", "page": 13, "bbox": [600,810,1020,850], "expected": "EAST WING LAB AND LAB SUPPORT AIR VALVES"},
+    {"id": "m601-west-air-valve-application-title", "page": 13, "bbox": [120,810,570,850], "expected": "WEST WING LAB AND LAB SUPPORT AIR VALVES"},
+    {"id": "m601-chiller-two-mode-note", "page": 13, "bbox": [2070,1600,3350,1640], "expected": "CHILLER INFORMATION IS PROVIDED FOR CHILLERS IN BOTH THE NORMAL CHILLED WATER MAKING MODE AND ICE MAKING MODE"},
+    {"id": "m601-ice-three-tank-note", "page": 13, "bbox": [2070,1780,3350,1815], "expected": "1. PROVIDE THREE TANKS, 30% ETHYLENE GLYCOL COILS. DILUTED GLYCOL IN TANKS"}
+  ],
+  "inventory_checks": [
+    {"id": "m601-verified-primary-schedule-tables", "records_path": ["tables"], "expected": 6, "unique_key": "id"},
+    {"id": "m601-west-air-valve-applications", "records_path": ["air_valve_application_rows","west_wing"], "expected": 85},
+    {"id": "m601-east-air-valve-applications", "records_path": ["air_valve_application_rows","east_wing"], "expected": 72}
+  ]
+}

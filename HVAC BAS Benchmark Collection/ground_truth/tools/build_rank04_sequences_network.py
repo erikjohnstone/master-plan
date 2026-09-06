@@ -1,0 +1,65 @@
+"""Record bounded sequence-of-operation and BAS-network evidence for rank 04."""
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+WORK = ROOT / "ground_truth" / "work" / "04__vol2__062"
+IDENT = "04__vol2__062"
+
+
+def main():
+    data = {
+        "document_id": IDENT,
+        "module_role": "Source-bounded sequence and network-context index. A listed sequence means a printed written sequence or named logic schematic is present on that source sheet; the index does not assert that every narrative condition was exhaustively converted to points or field counts.",
+        "tables": [],
+        "network_architecture": {
+            "printed_protocol_or_network_terms": ["BACnet", "BAS", "INTERNET"],
+            "bounded_claims": [
+                {"claim": "M6.0 depicts a global controller connected to the existing control system and labels an INTERNET / operator-interface path.", "assertion_ids": ["m60-control-system-architecture"]},
+                {"claim": "M6.2 labels a Bacnet connection to the building automation system.", "assertion_ids": ["m62-bacnet-connection"]},
+                {"claim": "M6.4 and M6.5 prose name an integration gateway for air-valve manufacturer communication; protocol naming is not supplied in those sentence bounds.", "assertion_ids": ["m64-integration-gateway", "m65-integration-gateway"]},
+            ],
+            "boundary": "No BACnet MS/TP, BACnet/IP, Modbus, LonWorks, IP address, trunk count, controller count, or device count is inferred where the source only says BACnet/BAS/integration gateway.",
+        },
+        "sequence_inventory": [
+            {"id": "m60-heat-relief-louver", "sheet": "M6.0", "page": 16, "title_as_printed": "HEAT RELIEF FAN W/ LOUVER SEQUENCE OF OPERATION", "assertion_ids": ["m60-heat-relief-louver"]},
+            {"id": "m60-heat-relief-fan", "sheet": "M6.0", "page": 16, "title_as_printed": "HEAT RELIEF FAN SEQUENCE OF OPERATION", "assertion_ids": ["m60-heat-relief-fan"]},
+            {"id": "m60-ductless-split", "sheet": "M6.0", "page": 16, "title_as_printed": "DUCTLESS SPLIT SYSTEM SEQUENCE OF OPERATION", "assertion_ids": ["m60-ductless-split"]},
+            {"id": "m60-outdoor-air-temperature", "sheet": "M6.0", "page": 16, "title_as_printed": "OUTSIDE AIR TEMPERATURE SEQUENCE OF OPERATION", "assertion_ids": ["m60-outdoor-air-temperature"]},
+            {"id": "m61-lab-exhaust", "sheet": "M6.1", "page": 17, "title_as_printed": "LAB EXHAUST SYSTEM SEQUENCE OF OPERATION", "assertion_ids": ["m61-lab-exhaust"]},
+            {"id": "m61-split-system", "sheet": "M6.1", "page": 17, "title_as_printed": "SPLIT SYSTEM SEQUENCE OF OPERATION", "assertion_ids": ["m61-split-system"]},
+            {"id": "m62-heating-water", "sheet": "M6.2", "page": 18, "title_as_printed": "HEATING WATER SYSTEM SEQUENCE OF OPERATION", "assertion_ids": ["m62-heating-water"]},
+            {"id": "m63-vav-ahu", "sheet": "M6.3", "page": 19, "title_as_printed": "VARIABLE AIR VOLUME AIR HANDLING UNIT SEQUENCE OF OPERATION", "assertion_ids": ["m63-vav-ahu"]},
+            {"id": "m64-multiple-hoods", "sheet": "M6.4", "page": 20, "title_as_printed": "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION", "assertion_ids": ["m64-multiple-hoods"]},
+            {"id": "m64-snorkel", "sheet": "M6.4", "page": 20, "title_as_printed": "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION", "assertion_ids": ["m64-snorkel"]},
+            {"id": "m65-general-exhaust", "sheet": "M6.5", "page": 21, "title_as_printed": "LAB VENTILATION WITH GENERAL EXHAUST SYSTEM SEQUENCE OF OPERATION", "assertion_ids": ["m65-general-exhaust"]},
+            {"id": "m65-electric-unit-heater", "sheet": "M6.5", "page": 21, "title_as_printed": "ELECTRIC UNIT HEATER SEQUENCE OF OPERATION", "assertion_ids": ["m65-electric-unit-heater"]},
+            {"id": "m65-general-exhaust-fan", "sheet": "M6.5", "page": 21, "title_as_printed": "GENERAL EXHAUST FAN SEQUENCE OF OPERATION", "assertion_ids": ["m65-general-exhaust-fan"]},
+        ],
+        "assertions": [
+            {"id": "m60-control-system-architecture", "page": 16, "bbox": [1680, 495, 2050, 535], "expected": "CONTROL SYSTEM ARCHITECTURE", "mode": "exact"},
+            {"id": "m60-heat-relief-louver", "page": 16, "bbox": [270, 1220, 610, 1300], "expected": "HEAT RELIEF FAN W/ LOUVER SEQUENCE OF OPERATION", "mode": "contains"},
+            {"id": "m60-heat-relief-fan", "page": 16, "bbox": [780, 1145, 1255, 1185], "expected": "HEAT RELIEF FAN SEQUENCE OF OPERATION", "mode": "contains"},
+            {"id": "m60-ductless-split", "page": 16, "bbox": [1380, 945, 1940, 980], "expected": "DUCTLESS SPLIT SYSTEM SEQUENCE OF OPERATION", "mode": "contains"},
+            {"id": "m60-outdoor-air-temperature", "page": 16, "bbox": [1960, 750, 2400, 810], "expected": "OUTSIDE AIR TEMPERATURE SEQUENCE OF OPERATION", "mode": "contains"},
+            {"id": "m61-lab-exhaust", "page": 17, "bbox": [430, 800, 1100, 845], "expected": "LAB EXHAUST SYSTEM SEQUENCE OF OPERATION", "mode": "contains"},
+            {"id": "m61-split-system", "page": 17, "bbox": [1480, 830, 2150, 875], "expected": "SPLIT SYSTEM SEQUENCE OF OPERATION", "mode": "contains"},
+            {"id": "m62-heating-water", "page": 18, "bbox": [1020, 750, 1480, 790], "expected": "HEATING WATER SYSTEM SEQUENCE OF OPERATION", "mode": "contains"},
+            {"id": "m62-bacnet-connection", "page": 18, "bbox": [540, 1398, 650, 1460], "expected": "Bacnet CONNECTION TO BUILDING AUTOMATION SYSTEM (BAS)", "mode": "contains"},
+            {"id": "m63-vav-ahu", "page": 19, "bbox": [925, 1055, 1660, 1100], "expected": "VARIABLE AIR VOLUME AIR HANDLING UNIT SEQUENCE OF OPERATION", "mode": "contains"},
+            {"id": "m64-multiple-hoods", "page": 20, "bbox": [280, 940, 1085, 980], "expected": "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION", "mode": "contains"},
+            {"id": "m64-snorkel", "page": 20, "bbox": [1340, 970, 2130, 1010], "expected": "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION", "mode": "contains"},
+            {"id": "m64-integration-gateway", "page": 20, "bbox": [170, 130, 660, 152], "expected": "THE AIR VALVE MANUFACTURER SHALL PROVIDE AN INTEGRATION GATEWAY TO FACILITATE COMMUNICATION BETWEEN", "mode": "exact"},
+            {"id": "m65-general-exhaust", "page": 21, "bbox": [525, 1030, 1350, 1070], "expected": "LAB VENTILATION WITH GENERAL EXHAUST SYSTEM SEQUENCE OF OPERATION", "mode": "contains"},
+            {"id": "m65-electric-unit-heater", "page": 21, "bbox": [1630, 1165, 2170, 1210], "expected": "ELECTRIC UNIT HEATER SEQUENCE OF OPERATION", "mode": "contains"},
+            {"id": "m65-general-exhaust-fan", "page": 21, "bbox": [1680, 310, 2400, 355], "expected": "GENERAL EXHAUST FAN SEQUENCE OF OPERATION", "mode": "contains"},
+            {"id": "m65-integration-gateway", "page": 21, "bbox": [450, 150, 930, 170], "expected": "THE AIR VALVE MANUFACTURER SHALL PROVIDE AN INTEGRATION GATEWAY TO FACILITATE COMMUNICATION BETWEEN", "mode": "exact"},
+        ],
+        "inventory_checks": [{"id": "rank04-sequence-inventory", "records_path": ["sequence_inventory"], "expected": 13, "unique_key": "id"}],
+    }
+    WORK.mkdir(parents=True, exist_ok=True)
+    (WORK / "controls_sequences_network.json").write_text(json.dumps(data, indent=2) + "\n")
+
+
+if __name__ == "__main__":
+    main()

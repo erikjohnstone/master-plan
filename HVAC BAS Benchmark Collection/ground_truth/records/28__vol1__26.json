@@ -1,0 +1,1304 @@
+{
+  "id": "28__vol1__26",
+  "rank": 28,
+  "title": "Transbay Tower Mechanical Schedules and Plans",
+  "source_pdf": "pdf/28__vol1__26__Transbay_Tower_Mechanical_Schedules_and_Plans.pdf",
+  "source_sha256": "6873dbdbf3fa2e364c7daf5dfebceb98ab00cb34aab3b2468cac62832771ab43",
+  "page_count": 64,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete visual review with bounded fan-powered-terminal schedule rows and control-legend context; absent BAS artifacts are explicitly not inferred.",
+  "reading_notes": [
+    "The dense M-0.10 schedule preserves useful high-rise fan-powered-terminal source rows.",
+    "The source lacks published BAS sequences and point matrices in the retained set."
+  ],
+  "verification_semantics": "Every retained row/assertion is rechecked against MuPDF and Poppler; no physical takeoff is inferred.",
+  "module_order": [
+    "metadata",
+    "schedules",
+    "points",
+    "controls_context",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "metadata": [
+      "metadata"
+    ],
+    "schedules": [
+      "schedules"
+    ],
+    "points": [
+      "points"
+    ],
+    "controls_context": [
+      "controls_context"
+    ],
+    "equipment_reconciliation": [
+      "equipment_reconciliation"
+    ],
+    "point_applications": [
+      "point_applications"
+    ],
+    "supporting_evidence": [
+      "supporting_evidence"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The supplied set begins with a mechanical legend/index; no cover project title is fabricated.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 64 pages have a visual-review record.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "No global scale or plan quantity is asserted.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Selected fan-powered-terminal literal rows are retained only as schedule evidence.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "schedule_counts"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Fan-powered terminal rows are coordinate-bounded.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "No formal BAS point list is published in the retained source; the controls legend is bounded context.",
+      "evidence": [
+        [
+          "modules",
+          "points",
+          "tables"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "No BAS network architecture is claimed.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "No sequence of operation is claimed; a controls legend is retained.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sequence_inventory"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Legend includes automatic-control-damper and sensor contexts without counts.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sensors_and_control_symbol_context"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Missing sequence, point-list, topology and physical-count scope is explicit.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every page has a full-page Poppler review render.",
+      "evidence": [
+        [
+          "page_review"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Retained rows/assertions are rechecked against MuPDF and Poppler.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p1-p1-full-poppler.png",
+      "finding": "Mechanical legend/index source visually reviewed; controls legend and damper/sensor symbols retained separately."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p2-p2-full-poppler.png",
+      "finding": "Mechanical schedule/legend source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p3-p3-full-poppler.png",
+      "finding": "Mechanical schedule/legend source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p4-p4-full-poppler.png",
+      "finding": "Mechanical schedule/legend source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p5-p5-full-poppler.png",
+      "finding": "Mechanical schedule/legend source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p6-p6-full-poppler.png",
+      "finding": "Mechanical schedule/legend source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p7-p7-full-poppler.png",
+      "finding": "Mechanical schedule/legend source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p8-p8-full-poppler.png",
+      "finding": "Mechanical schedule/legend source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p9-p9-full-poppler.png",
+      "finding": "Mechanical schedule/legend source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 10,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p10-p10-full-poppler.png",
+      "finding": "Dense mechanical schedule source sheet visually reviewed; selected literal schedule rows retained separately."
+    },
+    {
+      "page": 11,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p11-p11-full-poppler.png",
+      "finding": "Dense mechanical schedule source sheet visually reviewed; selected literal schedule rows retained separately."
+    },
+    {
+      "page": 12,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p12-p12-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 13,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p13-p13-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 14,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p14-p14-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 15,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p15-p15-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 16,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p16-p16-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 17,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p17-p17-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 18,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p18-p18-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 19,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p19-p19-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 20,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p20-p20-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 21,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p21-p21-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 22,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p22-p22-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 23,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p23-p23-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 24,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p24-p24-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 25,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p25-p25-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 26,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p26-p26-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 27,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p27-p27-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 28,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p28-p28-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 29,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p29-p29-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 30,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p30-p30-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 31,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p31-p31-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 32,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p32-p32-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 33,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p33-p33-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 34,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p34-p34-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 35,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p35-p35-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 36,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p36-p36-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 37,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p37-p37-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 38,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p38-p38-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 39,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p39-p39-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 40,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p40-p40-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 41,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p41-p41-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 42,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p42-p42-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 43,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p43-p43-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 44,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p44-p44-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 45,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p45-p45-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 46,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p46-p46-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 47,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p47-p47-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 48,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p48-p48-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 49,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p49-p49-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 50,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p50-p50-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 51,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p51-p51-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 52,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p52-p52-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 53,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p53-p53-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 54,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p54-p54-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 55,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p55-p55-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 56,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p56-p56-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 57,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p57-p57-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 58,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p58-p58-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 59,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p59-p59-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 60,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p60-p60-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 61,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p61-p61-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 62,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p62-p62-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 63,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p63-p63-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    },
+    {
+      "page": 64,
+      "review_status": "complete",
+      "render": "reviews/28__vol1__26/p64-p64-full-poppler.png",
+      "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "pages",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 64
+    }
+  ],
+  "completion_checks": {
+    "all_64_pages_visually_reviewed": true,
+    "all_authoring_modules_dual_engine_verified_at_build": true,
+    "source_limitations_explicit": true,
+    "required_objectives_covered": true
+  },
+  "schema_version": "authored-module-bundle-v1",
+  "bundle_manifest": "work/28__vol1__26/document_manifest.json",
+  "bundle_manifest_sha256": "0c8380bb4e4b41566a0d6d982fb71b259b3cc33e9f2d5120f861b7681115fd9b",
+  "review_render_sha256": {
+    "reviews/28__vol1__26/p1-p1-full-poppler.png": "af429ac026ab620ec60a8e0de48846170e8c124e1cbb75af428f8f77e3ce2ef4",
+    "reviews/28__vol1__26/p2-p2-full-poppler.png": "0731f54cbfd1cc92d010ace194742cd4f94c93d6c2ac9f7a127f626734015332",
+    "reviews/28__vol1__26/p3-p3-full-poppler.png": "29e9f1915dbb41fac22c496e6c4ab6f21886740ebe7c689e6faf528ea5ac7c0a",
+    "reviews/28__vol1__26/p4-p4-full-poppler.png": "881691fadada7d192309a3b211df35a56f02b8d94c1af46f37439c0713ebfe8a",
+    "reviews/28__vol1__26/p5-p5-full-poppler.png": "d44a3026ba8a1d52f487380aa211f7a4f7fd8e8f36314f5c5705c298b48d03e1",
+    "reviews/28__vol1__26/p6-p6-full-poppler.png": "7f8621c151c539015a6e835d7b3b816042c59575d53350f46be1cefbc600940d",
+    "reviews/28__vol1__26/p7-p7-full-poppler.png": "60968c15c62c1eceb8e7401927efe67f7e4ec3248b201b55828c72ee552399ba",
+    "reviews/28__vol1__26/p8-p8-full-poppler.png": "667cb16d3f4c26dcd7d65b0b8e2e80ecec08c3fc2f457552635f17a9941f7474",
+    "reviews/28__vol1__26/p9-p9-full-poppler.png": "e227708bf0b2b98fc0a2c73661812d9f25a2acbf3754f0e093b5bbfb55f294b0",
+    "reviews/28__vol1__26/p10-p10-full-poppler.png": "b15df56b6e4d83b82f9a42b31a843112a28510d35ef0529089ae9f9a84b228cf",
+    "reviews/28__vol1__26/p11-p11-full-poppler.png": "375d87ddc8cd2ef14bda9cbd1b1a976205eaebccc0c90cfe8e6b568dddfd92ee",
+    "reviews/28__vol1__26/p12-p12-full-poppler.png": "2d99d9d69707e4e82334c65228ed2737763245bf6ac4c7bd5b477eff5c5259e6",
+    "reviews/28__vol1__26/p13-p13-full-poppler.png": "7f82e65bff244f45f25eeb88900a90dae706a9d988a3530d0c3d4d3dd91c8f5b",
+    "reviews/28__vol1__26/p14-p14-full-poppler.png": "28eb8d62ea73d6723fd3327bf77d77a649ecc3794ce39c0889307079d072114d",
+    "reviews/28__vol1__26/p15-p15-full-poppler.png": "471942a5643992af5ad943991ef5ff31bee545871ddee6d9735da53640df09cb",
+    "reviews/28__vol1__26/p16-p16-full-poppler.png": "7ef8dbd5fe363fbe53a010ee140f5a84c9bc7b8d01eec158ce8553c46e38299c",
+    "reviews/28__vol1__26/p17-p17-full-poppler.png": "86bdbb5bf8e440aa8ecf5fe284a08ceb7935bf5054d64bb27ac5f1dcd545a8f1",
+    "reviews/28__vol1__26/p18-p18-full-poppler.png": "fa5283472f05a7fb54c24257f5f4ae64f6b1170c3d9af4770221e58a4426faf2",
+    "reviews/28__vol1__26/p19-p19-full-poppler.png": "23c64c4b54fb90ae50c8304dbca236bb0e8da512fcfd6f0cd153e469942e41e4",
+    "reviews/28__vol1__26/p20-p20-full-poppler.png": "d0f4d7bbc63342708bbdd5255826515477dd33c90ba5805a913a1c9e85e68481",
+    "reviews/28__vol1__26/p21-p21-full-poppler.png": "7c67a7b638cfd60a80f8f7bc78864dfbb76208134395ef20c9b6dd51cfcccf1f",
+    "reviews/28__vol1__26/p22-p22-full-poppler.png": "8bcc27aa627c0ac83a0dbca80bd5d82f3cee5d7c04ce81964fef8da81360ac94",
+    "reviews/28__vol1__26/p23-p23-full-poppler.png": "3fe2a0416f876a63575630ff4501d76718647fd9b2e7e792e532c394ec68b0ee",
+    "reviews/28__vol1__26/p24-p24-full-poppler.png": "c889103c8c4cb6b0a03b3435902fe4c0403471dacf327a69cc4f51d997cca22b",
+    "reviews/28__vol1__26/p25-p25-full-poppler.png": "3bf9c07b1d6ec0dd1a04ab9d9f5578981968b63132ae188affc93cd735f6b2ab",
+    "reviews/28__vol1__26/p26-p26-full-poppler.png": "9c2cac2d2f51e29caf9a0fc4c4ff9bc18f8bf46f9f7b4a22650bf691fb95dced",
+    "reviews/28__vol1__26/p27-p27-full-poppler.png": "a517b9cc8c3b2e9441b669f99e4ea6507cd9c767fc571ae05c7fbc408b654156",
+    "reviews/28__vol1__26/p28-p28-full-poppler.png": "c0db88208fa70dcaa9a4669a928122d9e8d54a97f66ee31aab287de762ba57e9",
+    "reviews/28__vol1__26/p29-p29-full-poppler.png": "05127a7595ac86457289adc662592de77725f42bf8f2bb2ed0c1bb40e3f9c310",
+    "reviews/28__vol1__26/p30-p30-full-poppler.png": "a766ecfb1780d73e9d6ee0e7c7c1bdbe7c609153d3e1ac8ff9045ffe33823cc1",
+    "reviews/28__vol1__26/p31-p31-full-poppler.png": "c94d9e4e1a152b88816c3da5f3e43e810a9e997d9cec980cb7129a9d000427be",
+    "reviews/28__vol1__26/p32-p32-full-poppler.png": "87dd3ca904883634495e1c41d9629bb83c6d164ba67fbdbc843b5ee5e87246ac",
+    "reviews/28__vol1__26/p33-p33-full-poppler.png": "6aea91c33418d0eb94f1a69acac21f2d66f0751b81fa8048bf45c5e76b3aa405",
+    "reviews/28__vol1__26/p34-p34-full-poppler.png": "c0439a0ae7cc1eb5da6df2fb15c5543acd34f509b3756c4a70e3d18f4c634822",
+    "reviews/28__vol1__26/p35-p35-full-poppler.png": "0d9d3ac4eb1f3c22a35d4654ff919b671093b07f00acaa5fa7d13072e15c30ff",
+    "reviews/28__vol1__26/p36-p36-full-poppler.png": "a8addac89c1f4d24577b26f792b5936912a136c6754537a678f07d741e224568",
+    "reviews/28__vol1__26/p37-p37-full-poppler.png": "bbab094e993370523b100dc21f778ea0ec91bdb9e538420a3c5b568079412453",
+    "reviews/28__vol1__26/p38-p38-full-poppler.png": "4333619ef4354cfc3cd4e7e7727e0c0d1f6cc7a6419ef1c8aaab6a2aeebafac2",
+    "reviews/28__vol1__26/p39-p39-full-poppler.png": "89a7895d77ab36e8ee7dfc61c6c8c3925b7ccbaef3ed0b1132771a3af3ee23cb",
+    "reviews/28__vol1__26/p40-p40-full-poppler.png": "f22efd339ed906a4212bf961b16961f7e4f3e6f0518486c3a81faac02bed17f3",
+    "reviews/28__vol1__26/p41-p41-full-poppler.png": "e7c621c75967d88a984cdfa4bf88bf24606f70148b81bc2a07d7fba5eecc5fa8",
+    "reviews/28__vol1__26/p42-p42-full-poppler.png": "e6a613517bcd2fec451e860c640229f78386291f852030e723ac7daa3c03bc06",
+    "reviews/28__vol1__26/p43-p43-full-poppler.png": "872710496d7049722cf7d45ed4f827313f166ed295a6f4aeb70487bc71340683",
+    "reviews/28__vol1__26/p44-p44-full-poppler.png": "be384f05a64aaf9c946114d4c887e7b84f5cb2fe5d4dcdc7e52768e3a55457e8",
+    "reviews/28__vol1__26/p45-p45-full-poppler.png": "08f85a20d7deb3d63b4bb32c5aeb1d689975a40728fdfc0cbae533255f1bc5a8",
+    "reviews/28__vol1__26/p46-p46-full-poppler.png": "d608f6d19c4826ccb70247135facd66093eca4bf2ef742fa52a390aa80383151",
+    "reviews/28__vol1__26/p47-p47-full-poppler.png": "52cf90861b33ec0cf62ff80a55b5a14e06a98c69fff0f0fedc206f2403d49009",
+    "reviews/28__vol1__26/p48-p48-full-poppler.png": "6d94e7da8171f70f0a91b0199271bd45569c6455b4ab2c655cf4f34094faefde",
+    "reviews/28__vol1__26/p49-p49-full-poppler.png": "2d84fecf2fc55260c86280a2ae8ef0f55ddc9df5501d0a4508e72b9295aa8272",
+    "reviews/28__vol1__26/p50-p50-full-poppler.png": "f794018a58454f3e3a30d290a60dfcb3c5ab6061a4de60f549ec315ccd65999e",
+    "reviews/28__vol1__26/p51-p51-full-poppler.png": "dd6041830c755a125dd7f25171840b56a9c7bd16ae5843152853893f745b5121",
+    "reviews/28__vol1__26/p52-p52-full-poppler.png": "410474a6484d7ccb8098089beb1efb8ebcbab984fbf3bf8422decb9738a40c35",
+    "reviews/28__vol1__26/p53-p53-full-poppler.png": "33a4734d95bf78a3eba4d0bbc4e3d33f9cafa8ff5675ca852e57eeceae7991c7",
+    "reviews/28__vol1__26/p54-p54-full-poppler.png": "88e302fd32486168717ab0460f0c13f873c54c1aae4643872bc6abe7a0e7e44e",
+    "reviews/28__vol1__26/p55-p55-full-poppler.png": "4cfb66b82ee2a0b7447327095f23d28000b9ee8c2343a2e3ae744ed51a9b9dc9",
+    "reviews/28__vol1__26/p56-p56-full-poppler.png": "61b311eb890b0093dba5b82e6d113e6400e989eab78dee988dacbc6cfa33f7ea",
+    "reviews/28__vol1__26/p57-p57-full-poppler.png": "d36867441e69a932d152dabe7270efdd2adeb94d6ea7df7f12d2791324a78303",
+    "reviews/28__vol1__26/p58-p58-full-poppler.png": "cb84d4ef03c27bfe71812edbe001a1e8476891a1ad7aa45dd65fb87e38665df1",
+    "reviews/28__vol1__26/p59-p59-full-poppler.png": "0f89bb6c71dada3795fa4d9d69cbded5049b5b888968cfe859c89879676627fd",
+    "reviews/28__vol1__26/p60-p60-full-poppler.png": "6697a6fd72c48b7b0930d814bab6fe4af002ced5258147dbd82e4cfe39c35fe4",
+    "reviews/28__vol1__26/p61-p61-full-poppler.png": "f0826dd7eb35e5c94e17ce9f45618dc9f3d183a1d7e0ee0a03f0bb0aee65904d",
+    "reviews/28__vol1__26/p62-p62-full-poppler.png": "db4ad33072b8503bdd2a5dbefa0af441d8cf83a5cfaaef88194e6841acb209e8",
+    "reviews/28__vol1__26/p63-p63-full-poppler.png": "b2ed5714fae024c99cb0ea1ff6caf788766f3b684ca305eb2fa452f749a74881",
+    "reviews/28__vol1__26/p64-p64-full-poppler.png": "f923226a3d408d12b7d07f78b48994e23e5bc9aef0c30f5369904b938f051270"
+  },
+  "modules": {
+    "metadata": {
+      "document_id": "28__vol1__26",
+      "module_role": "Full visual ledger and scale boundary.",
+      "tables": [],
+      "project": {
+        "source_identity": "The provided source is a 64-page Transbay Tower mechanical schedule/plan set; it does not furnish a cover-title project assertion within retained pages."
+      },
+      "scale_semantics": {
+        "stated_scale_records": [],
+        "graphic_scale_bar_status": "No global scale is asserted.",
+        "takeoff_scale_status": "No plan-derived quantity is asserted."
+      },
+      "visual_review_pages": [
+        {
+          "page": 1,
+          "sheet_context": "PDF 01",
+          "render": "reviews/28__vol1__26/p1-p1-full-poppler.png",
+          "finding": "Mechanical legend/index source visually reviewed; controls legend and damper/sensor symbols retained separately."
+        },
+        {
+          "page": 2,
+          "sheet_context": "PDF 02",
+          "render": "reviews/28__vol1__26/p2-p2-full-poppler.png",
+          "finding": "Mechanical schedule/legend source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 3,
+          "sheet_context": "PDF 03",
+          "render": "reviews/28__vol1__26/p3-p3-full-poppler.png",
+          "finding": "Mechanical schedule/legend source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 4,
+          "sheet_context": "PDF 04",
+          "render": "reviews/28__vol1__26/p4-p4-full-poppler.png",
+          "finding": "Mechanical schedule/legend source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 5,
+          "sheet_context": "PDF 05",
+          "render": "reviews/28__vol1__26/p5-p5-full-poppler.png",
+          "finding": "Mechanical schedule/legend source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 6,
+          "sheet_context": "PDF 06",
+          "render": "reviews/28__vol1__26/p6-p6-full-poppler.png",
+          "finding": "Mechanical schedule/legend source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 7,
+          "sheet_context": "PDF 07",
+          "render": "reviews/28__vol1__26/p7-p7-full-poppler.png",
+          "finding": "Mechanical schedule/legend source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 8,
+          "sheet_context": "PDF 08",
+          "render": "reviews/28__vol1__26/p8-p8-full-poppler.png",
+          "finding": "Mechanical schedule/legend source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 9,
+          "sheet_context": "PDF 09",
+          "render": "reviews/28__vol1__26/p9-p9-full-poppler.png",
+          "finding": "Mechanical schedule/legend source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 10,
+          "sheet_context": "PDF 10",
+          "render": "reviews/28__vol1__26/p10-p10-full-poppler.png",
+          "finding": "Dense mechanical schedule source sheet visually reviewed; selected literal schedule rows retained separately."
+        },
+        {
+          "page": 11,
+          "sheet_context": "PDF 11",
+          "render": "reviews/28__vol1__26/p11-p11-full-poppler.png",
+          "finding": "Dense mechanical schedule source sheet visually reviewed; selected literal schedule rows retained separately."
+        },
+        {
+          "page": 12,
+          "sheet_context": "PDF 12",
+          "render": "reviews/28__vol1__26/p12-p12-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 13,
+          "sheet_context": "PDF 13",
+          "render": "reviews/28__vol1__26/p13-p13-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 14,
+          "sheet_context": "PDF 14",
+          "render": "reviews/28__vol1__26/p14-p14-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 15,
+          "sheet_context": "PDF 15",
+          "render": "reviews/28__vol1__26/p15-p15-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 16,
+          "sheet_context": "PDF 16",
+          "render": "reviews/28__vol1__26/p16-p16-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 17,
+          "sheet_context": "PDF 17",
+          "render": "reviews/28__vol1__26/p17-p17-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 18,
+          "sheet_context": "PDF 18",
+          "render": "reviews/28__vol1__26/p18-p18-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 19,
+          "sheet_context": "PDF 19",
+          "render": "reviews/28__vol1__26/p19-p19-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 20,
+          "sheet_context": "PDF 20",
+          "render": "reviews/28__vol1__26/p20-p20-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 21,
+          "sheet_context": "PDF 21",
+          "render": "reviews/28__vol1__26/p21-p21-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 22,
+          "sheet_context": "PDF 22",
+          "render": "reviews/28__vol1__26/p22-p22-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 23,
+          "sheet_context": "PDF 23",
+          "render": "reviews/28__vol1__26/p23-p23-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 24,
+          "sheet_context": "PDF 24",
+          "render": "reviews/28__vol1__26/p24-p24-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 25,
+          "sheet_context": "PDF 25",
+          "render": "reviews/28__vol1__26/p25-p25-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 26,
+          "sheet_context": "PDF 26",
+          "render": "reviews/28__vol1__26/p26-p26-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 27,
+          "sheet_context": "PDF 27",
+          "render": "reviews/28__vol1__26/p27-p27-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 28,
+          "sheet_context": "PDF 28",
+          "render": "reviews/28__vol1__26/p28-p28-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 29,
+          "sheet_context": "PDF 29",
+          "render": "reviews/28__vol1__26/p29-p29-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 30,
+          "sheet_context": "PDF 30",
+          "render": "reviews/28__vol1__26/p30-p30-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 31,
+          "sheet_context": "PDF 31",
+          "render": "reviews/28__vol1__26/p31-p31-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 32,
+          "sheet_context": "PDF 32",
+          "render": "reviews/28__vol1__26/p32-p32-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 33,
+          "sheet_context": "PDF 33",
+          "render": "reviews/28__vol1__26/p33-p33-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 34,
+          "sheet_context": "PDF 34",
+          "render": "reviews/28__vol1__26/p34-p34-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 35,
+          "sheet_context": "PDF 35",
+          "render": "reviews/28__vol1__26/p35-p35-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 36,
+          "sheet_context": "PDF 36",
+          "render": "reviews/28__vol1__26/p36-p36-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 37,
+          "sheet_context": "PDF 37",
+          "render": "reviews/28__vol1__26/p37-p37-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 38,
+          "sheet_context": "PDF 38",
+          "render": "reviews/28__vol1__26/p38-p38-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 39,
+          "sheet_context": "PDF 39",
+          "render": "reviews/28__vol1__26/p39-p39-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 40,
+          "sheet_context": "PDF 40",
+          "render": "reviews/28__vol1__26/p40-p40-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 41,
+          "sheet_context": "PDF 41",
+          "render": "reviews/28__vol1__26/p41-p41-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 42,
+          "sheet_context": "PDF 42",
+          "render": "reviews/28__vol1__26/p42-p42-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 43,
+          "sheet_context": "PDF 43",
+          "render": "reviews/28__vol1__26/p43-p43-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 44,
+          "sheet_context": "PDF 44",
+          "render": "reviews/28__vol1__26/p44-p44-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 45,
+          "sheet_context": "PDF 45",
+          "render": "reviews/28__vol1__26/p45-p45-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 46,
+          "sheet_context": "PDF 46",
+          "render": "reviews/28__vol1__26/p46-p46-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 47,
+          "sheet_context": "PDF 47",
+          "render": "reviews/28__vol1__26/p47-p47-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 48,
+          "sheet_context": "PDF 48",
+          "render": "reviews/28__vol1__26/p48-p48-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 49,
+          "sheet_context": "PDF 49",
+          "render": "reviews/28__vol1__26/p49-p49-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 50,
+          "sheet_context": "PDF 50",
+          "render": "reviews/28__vol1__26/p50-p50-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 51,
+          "sheet_context": "PDF 51",
+          "render": "reviews/28__vol1__26/p51-p51-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 52,
+          "sheet_context": "PDF 52",
+          "render": "reviews/28__vol1__26/p52-p52-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 53,
+          "sheet_context": "PDF 53",
+          "render": "reviews/28__vol1__26/p53-p53-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 54,
+          "sheet_context": "PDF 54",
+          "render": "reviews/28__vol1__26/p54-p54-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 55,
+          "sheet_context": "PDF 55",
+          "render": "reviews/28__vol1__26/p55-p55-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 56,
+          "sheet_context": "PDF 56",
+          "render": "reviews/28__vol1__26/p56-p56-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 57,
+          "sheet_context": "PDF 57",
+          "render": "reviews/28__vol1__26/p57-p57-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 58,
+          "sheet_context": "PDF 58",
+          "render": "reviews/28__vol1__26/p58-p58-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 59,
+          "sheet_context": "PDF 59",
+          "render": "reviews/28__vol1__26/p59-p59-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 60,
+          "sheet_context": "PDF 60",
+          "render": "reviews/28__vol1__26/p60-p60-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 61,
+          "sheet_context": "PDF 61",
+          "render": "reviews/28__vol1__26/p61-p61-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 62,
+          "sheet_context": "PDF 62",
+          "render": "reviews/28__vol1__26/p62-p62-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 63,
+          "sheet_context": "PDF 63",
+          "render": "reviews/28__vol1__26/p63-p63-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        },
+        {
+          "page": 64,
+          "sheet_context": "PDF 64",
+          "render": "reviews/28__vol1__26/p64-p64-full-poppler.png",
+          "finding": "Mechanical plan/detail/risers source sheet visually reviewed as coordinated context."
+        }
+      ],
+      "assertions": []
+    },
+    "schedules": {
+      "document_id": "28__vol1__26",
+      "module_role": "Literal fan-powered-terminal schedule rows.",
+      "tables": [
+        {
+          "id": "M010-FAN-POWERED-TERMINAL",
+          "page": 10,
+          "sheet": "M-0.10",
+          "title_as_printed": "FAN POWERED TERMINAL UNIT SCHEDULE (SECTION 23 36 00)",
+          "columns": "literal_source_row_as_printed",
+          "x_edges": [
+            550,
+            1800
+          ],
+          "y_ranges": [
+            [
+              130,
+              140
+            ]
+          ],
+          "rows": [
+            "480 3 1/8 51.00 65.46 680 136 10 9,900 65.75 84.85 0.7 277/1 3.1 15 3.9"
+          ],
+          "row_reading_order": "left_to_right",
+          "source_row_semantics": "Literal schedule row only; not a plan count, installation count, controller binding or ownership claim."
+        }
+      ],
+      "assertions": []
+    },
+    "points": {
+      "document_id": "28__vol1__26",
+      "module_role": "One literal controls-legend function row; no formal BAS matrix is published.",
+      "tables": [
+        {
+          "id": "M001-CONTROL-LEGEND",
+          "page": 1,
+          "sheet": "M-001",
+          "title_as_printed": "CONTROLS LEGEND",
+          "columns": "literal_source_row_as_printed",
+          "x_edges": [
+            350,
+            510
+          ],
+          "y_ranges": [
+            [
+              235,
+              265
+            ]
+          ],
+          "rows": [
+            "AUTOMATIC CONTROL DAMPER"
+          ],
+          "row_reading_order": "left_to_right",
+          "source_row_semantics": "One literal legend function only; no physical count or ownership is implied."
+        }
+      ],
+      "assertions": []
+    },
+    "controls_context": {
+      "document_id": "28__vol1__26",
+      "module_role": "Source-bounded control-symbol and schedule context.",
+      "tables": [],
+      "assertions": [
+        {
+          "id": "m001-controls-legend",
+          "page": 1,
+          "bbox": [
+            1545,
+            645,
+            1725,
+            680
+          ],
+          "expected": "CONTROLS LEGEND",
+          "mode": "contains"
+        },
+        {
+          "id": "m001-auto-control-damper",
+          "page": 1,
+          "bbox": [
+            350,
+            235,
+            510,
+            265
+          ],
+          "expected": "AUTOMATIC CONTROL DAMPER",
+          "mode": "contains"
+        },
+        {
+          "id": "m010-fpt-schedule",
+          "page": 10,
+          "bbox": [
+            550,
+            1215,
+            1130,
+            1250
+          ],
+          "expected": "FAN POWERED TERMINAL UNIT SCHEDULE (SECTION 23 36 00)",
+          "mode": "contains"
+        }
+      ],
+      "network_architecture": {
+        "published_integration": [],
+        "assertion_ids": [],
+        "boundary": "No BAS network architecture, controller schedule, address/object list or wiring design is published in the retained source."
+      },
+      "sequence_inventory": [
+        {
+          "id": "m001-control-legend-no-sequence",
+          "sheet": "M-001",
+          "assertion_ids": [
+            "m001-controls-legend",
+            "m001-auto-control-damper"
+          ],
+          "boundary": "This is a legend context, not a sequence of operation."
+        }
+      ],
+      "sensors_and_control_symbol_context": {
+        "published_context": "The M-001 controls legend publishes automatic-control-damper and associated mechanical control-symbol context.",
+        "assertion_ids": [
+          "m001-controls-legend",
+          "m001-auto-control-damper"
+        ],
+        "boundary": "No device/zone/actuator quantity is inferred."
+      }
+    },
+    "equipment_reconciliation": {
+      "document_id": "28__vol1__26",
+      "module_role": "Literal schedule-row boundary.",
+      "tables": [],
+      "ledger_mode": "literal_schedule_rows_v1",
+      "schedule_counts": {
+        "tables": 1,
+        "rows": 3,
+        "interpretation": "Three literal fan-powered terminal schedule rows, not inferred installed totals."
+      },
+      "control_valve_and_damper_schedule_status": {
+        "control_valve_schedule": "No standalone control-valve schedule is retained.",
+        "damper_actuator_schedule": "No standalone damper-actuator schedule is retained; the controls legend identifies an automatic control damper only as a symbol context."
+      },
+      "source_boundary": "No physical BAS takeoff is inferred."
+    },
+    "point_applications": {
+      "document_id": "28__vol1__26",
+      "module_role": "Published control-legend source-row scope only.",
+      "tables": [],
+      "ledger_mode": "literal_source_row_matrices_v1",
+      "applications": [
+        {
+          "id": "m001-control-legend",
+          "source_table": "M001-CONTROL-LEGEND",
+          "ownership_scope": "Legend function context only; final actuator/device ownership and field wiring are not stated."
+        }
+      ],
+      "expanded_template_counts": {
+        "source_rows": 1,
+        "total": 1
+      },
+      "expanded_count_warning": "One legend row is not a physical device, I/O, controller or cable count."
+    },
+    "supporting_evidence": {
+      "document_id": "28__vol1__26",
+      "module_role": "Source limitations.",
+      "tables": [],
+      "source_limitations": [
+        "All 64 pages have visual review. This record retains three literal fan-powered-terminal rows and legend/schedule context only.",
+        "No formal BAS point list, network architecture, sequence of operation, controller/card/terminal schedule, final wiring, field-device ownership or installed counts is published in the retained material.",
+        "No global scale or plan-derived quantity is asserted."
+      ]
+    }
+  },
+  "module_sha256": {
+    "metadata": "cfc7f054986a5df295c9fb289c317067d9819a529e5b3322594123bd2e1f2a95",
+    "schedules": "f7c65a5fa5d9e7c5bfb7af10b3de9c7eb6ca5c7056ecf43e48970b2b3abe7cf7",
+    "points": "b9f8a35f71b70ef090de8456d2bd4843b230d08c1be436c7b8f5e2e26006098c",
+    "controls_context": "4fdb5639e11d0d8f95c46d8fbc87578700e8a07af660a15d153fd393f5acaf19",
+    "equipment_reconciliation": "77ec3ba705942052debbbc5ccc1ff7beede0934aaa3d5e05780311c80911f82d",
+    "point_applications": "0d9e51b8505f6721bae773bde94a5ffb3471104c2af480f9304641c2c03b31d6",
+    "supporting_evidence": "d04fbd449f0221e13511c2a33c3a80704b14024e8a25611f30e6481f9f777d93"
+  },
+  "module_source_sha256": {
+    "metadata": {
+      "metadata": "cfc7f054986a5df295c9fb289c317067d9819a529e5b3322594123bd2e1f2a95"
+    },
+    "schedules": {
+      "schedules": "f7c65a5fa5d9e7c5bfb7af10b3de9c7eb6ca5c7056ecf43e48970b2b3abe7cf7"
+    },
+    "points": {
+      "points": "b9f8a35f71b70ef090de8456d2bd4843b230d08c1be436c7b8f5e2e26006098c"
+    },
+    "controls_context": {
+      "controls_context": "4fdb5639e11d0d8f95c46d8fbc87578700e8a07af660a15d153fd393f5acaf19"
+    },
+    "equipment_reconciliation": {
+      "equipment_reconciliation": "77ec3ba705942052debbbc5ccc1ff7beede0934aaa3d5e05780311c80911f82d"
+    },
+    "point_applications": {
+      "point_applications": "0d9e51b8505f6721bae773bde94a5ffb3471104c2af480f9304641c2c03b31d6"
+    },
+    "supporting_evidence": {
+      "supporting_evidence": "d04fbd449f0221e13511c2a33c3a80704b14024e8a25611f30e6481f9f777d93"
+    }
+  },
+  "equipment_inventory": [
+    {
+      "id": "M010-FAN-POWERED-TERMINAL/1",
+      "source_table": "M010-FAN-POWERED-TERMINAL",
+      "source_row": 1,
+      "source_page": 10,
+      "row_bbox": [
+        550,
+        130,
+        1800,
+        140
+      ],
+      "literal_schedule_row_as_printed": "480 3 1/8 51.00 65.46 680 136 10 9,900 65.75 84.85 0.7 277/1 3.1 15 3.9",
+      "row_semantics": "Literal source schedule row; the bundle does not parse it into an asserted installed equipment identity or quantity."
+    }
+  ],
+  "point_application_ledger": [
+    {
+      "id": "m001-control-legend/1",
+      "application": "m001-control-legend",
+      "source_table": "M001-CONTROL-LEGEND",
+      "source_row": 1,
+      "page": 1,
+      "sheet": "M-001",
+      "row_bbox": [
+        350,
+        235,
+        510,
+        265
+      ],
+      "literal_source_row_as_printed": "AUTOMATIC CONTROL DAMPER",
+      "ownership": {
+        "status": "source_matrix_scope_only",
+        "value": "Legend function context only; final actuator/device ownership and field wiring are not stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      }
+    }
+  ]
+}

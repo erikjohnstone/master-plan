@@ -1,0 +1,740 @@
+{
+  "id": "01__vol2__001",
+  "rank": 1,
+  "title": "MCAS Cherry Point Air Traffic Tower and Air Operations HVAC/BAS",
+  "source_pdf": "pdf/01__vol2__001__Cherry_Point_Air_Traffic_Tower_and_Air_Operations.pdf",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "page_count": 75,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete ground truth for the supplied 75-page Cherry Point HVAC/BAS source set: all pages visually reviewed; verified title-block/sheet/scale context; 53 literal schedule/valve/construction tables (440 rows); a nonduplicated 243-mark primary equipment registry; 167 literal control-valve schedule rows; 546 dual-engine-checked BAS point-template rows across 77 tables; BACnet network topology; written sequences and control diagrams; sensor/thermostat context; four piping schematics; and source limitations. The record does not fabricate installed plan quantities, final I/O/controller-card/wiring counts, addresses, or damper-actuator schedule specifications absent from the source.",
+  "reading_notes": [
+    "Every supplied page has a retained full-page Poppler render and a completed visual finding. All strict schedule, point and source-text assertion cells are rechecked against retained MuPDF and Poppler captures during build/verify.",
+    "The full schedule assembly preserves 53 source tables / 440 literal rows. The primary identity registry resolves 243 scheduled marks without treating schedule-only device-type tables as installed instance counts.",
+    "The BAS source ledger preserves 546 typed template occurrences: 210 AI, 189 DI, 66 AO and 81 DO. Reused tag names remain distinct by printed source row and scope; this is not an installed terminal total.",
+    "MI701 publishes BACnet IP, BACnet MS/TP, BACnet MS/TP UUKL and generic-network legend entries alongside three building DDC/cabinet contexts and named controllers. Network addressing and final panel/card/terminal design are not published.",
+    "Cherry Point has 167 literal control-valve schedule rows with GPM/size/configuration/Cv fields. It has no standalone damper-actuator schedule; its damper construction/details and BAS behavior are retained without inventing actuator specifics."
+  ],
+  "verification_semantics": "The bundle verifier independently reruns MuPDF and Poppler checks for every authored literal table/assertion module and hashes all linked modules, the source PDF, manifest and cited full-page renders. It validates source evidence and annotation integrity; it does not automatically infer physical quantities or prove engineering suitability.",
+  "module_order": [
+    "metadata",
+    "metadata_evidence",
+    "schedules",
+    "schedule_identities",
+    "points",
+    "controls_context",
+    "controls_evidence",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "metadata": [
+      "metadata_rank01_final"
+    ],
+    "metadata_evidence": [
+      "metadata"
+    ],
+    "schedules": [
+      "schedules_rank01_assembled"
+    ],
+    "schedule_identities": [
+      "schedule_identities_rank01"
+    ],
+    "points": [
+      "points_rank01_assembled"
+    ],
+    "controls_context": [
+      "controls_context_rank01"
+    ],
+    "controls_evidence": [
+      "controls_legend_mi700",
+      "network_mi701",
+      "sequence_air_ops_mtracon_doah",
+      "sequences_air_ops_and_shared_hydronics",
+      "sequence_atct_doah_t1",
+      "sequence_crah_sfpvav",
+      "sequence_mi742",
+      "sequence_air_ops_heating_ventilating",
+      "sequence_mi744_fcu_sfpvav"
+    ],
+    "equipment_reconciliation": [
+      "equipment_reconciliation_rank01"
+    ],
+    "point_applications": [
+      "point_applications_rank01"
+    ],
+    "supporting_evidence": [
+      "supporting_evidence_rank01"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The printed project, location, NAVFAC command, title-block firm, issue, date and project number are retained.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 75 supplied pages have a sheet identifier/title from the existing title-block ledger and a complete final visual disposition.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ],
+        [
+          "modules",
+          "metadata_evidence",
+          "assertion_groups"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The observed 1/16, 3/32, 1/8, 1/4 and 1/2 inch view scales plus limited graphic-bar context are retained without asserting a global scale.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The equipment registry source-bounds 243 non-duplicated primary scheduled marks and separately identifies non-instance air-device/type schedule tables.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "scheduled_families"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "primary_anchors"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The full schedule assembly preserves 53 source tables and 440 literal rows; the identity module preserves a nonduplicated 243-mark registry and control-valve details are retained in full source tables.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "schedule_counts"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 546 source rows remain source-table scoped with typed AI/DI/AO/DO semantics and explicit application ownership; repeated tags remain source-row scoped.",
+      "evidence": [
+        [
+          "modules",
+          "point_applications",
+          "applications"
+        ],
+        [
+          "modules",
+          "points",
+          "tables"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Network protocol legends, DDC cabinet locations, named B-AAC/B-ASC nodes and external interfaces are retained with unavailable addressing/card data explicit.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Source-bounded DOAH, AHU, CHW, HHW, CRAH, VAV, FCU, humidifier, exhaust and heating/ventilating sequences plus diagrams are cited by source sheet.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sequence_of_operations"
+        ],
+        [
+          "modules",
+          "controls_context",
+          "control_diagram_bindings"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The sensor/thermostat ledger retains template scope and literal row counts rather than claiming a facility-wide installed count.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sensor_and_zone_ledger"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Plan quantities, field I/O, addressing, actuator schedule fields and facility-wide sensor counts are constrained to the printed source; valve schedule evidence is distinguished from unavailable damper-actuator schedule data.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "control_valve_and_damper_schedule_status"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Each of the 75 supplied pages has one completed visual finding and a retained full-page Poppler render.",
+      "evidence": [
+        [
+          "page_review"
+        ],
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Build/verify reruns both raw-capture parsers over each authoring module and hashes the modules, manifest and cited renders.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ],
+        [
+          "modules",
+          "controls_evidence",
+          "source_components"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p1-p1-full-poppler.png",
+      "finding": "M-001 mechanical abbreviations, symbols, notes and controls cross-references."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p2-p2-full-poppler.png",
+      "finding": "M-002 mechanical information and general drawing notes."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p3-p3-full-poppler.png",
+      "finding": "MS101 Air Operations mechanical site plan; chilled-water plant and site-routing context."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p4-p4-full-poppler.png",
+      "finding": "MS102 MTRACON/ATCT mechanical site plan; site chilled-water equipment and routing context."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p5-p5-full-poppler.png",
+      "finding": "MH100 Air Operations first-floor overall ductwork plan with graphic bar and system layout."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p6-p6-full-poppler.png",
+      "finding": "MH101 Air Operations first-floor Area A ductwork plan; VAV/FCU, supply/return/exhaust and motorized-damper context."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p7-p7-full-poppler.png",
+      "finding": "MH102 Air Operations first-floor Area B ductwork plan."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p8-p8-full-poppler.png",
+      "finding": "MH103 Air Operations first-floor Area C ductwork plan."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p9-p9-full-poppler.png",
+      "finding": "MH104 Air Operations second-floor Area A ductwork plan."
+    },
+    {
+      "page": 10,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p10-p10-full-poppler.png",
+      "finding": "MH105 overall mechanical roof plan with printed scale and graphic bar."
+    },
+    {
+      "page": 11,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p11-p11-full-poppler.png",
+      "finding": "MH106 Air Operations roof ductwork plan, Area B."
+    },
+    {
+      "page": 12,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p12-p12-full-poppler.png",
+      "finding": "MH111 MTRACON ductwork plan; dense MTRACON AHU/VAV/FCU/CRAH context."
+    },
+    {
+      "page": 13,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p13-p13-full-poppler.png",
+      "finding": "MH112 MTRACON roof ductwork plan."
+    },
+    {
+      "page": 14,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p14-p14-full-poppler.png",
+      "finding": "MH121 ATCT ductwork plan for floors 1, 2, 3 and 5."
+    },
+    {
+      "page": 15,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p15-p15-full-poppler.png",
+      "finding": "MH122 ATCT ductwork plan for floors 7 through 10."
+    },
+    {
+      "page": 16,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p16-p16-full-poppler.png",
+      "finding": "MH123 ATCT ductwork plan for floors 11 and 12."
+    },
+    {
+      "page": 17,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p17-p17-full-poppler.png",
+      "finding": "MP100 Air Operations first-floor overall piping plan."
+    },
+    {
+      "page": 18,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p18-p18-full-poppler.png",
+      "finding": "MP101 Air Operations first-floor Area A piping plan."
+    },
+    {
+      "page": 19,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p19-p19-full-poppler.png",
+      "finding": "MP102 Air Operations first-floor Area B piping plan."
+    },
+    {
+      "page": 20,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p20-p20-full-poppler.png",
+      "finding": "MP103 Air Operations first-floor Area C piping plan."
+    },
+    {
+      "page": 21,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p21-p21-full-poppler.png",
+      "finding": "MP104 Air Operations second-floor Area A piping plan."
+    },
+    {
+      "page": 22,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p22-p22-full-poppler.png",
+      "finding": "MP111 MTRACON piping plan."
+    },
+    {
+      "page": 23,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p23-p23-full-poppler.png",
+      "finding": "MP121 ATCT piping plan for floors 1, 3 and 5."
+    },
+    {
+      "page": 24,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p24-p24-full-poppler.png",
+      "finding": "MP122 ATCT piping plan for floors 7 through 10."
+    },
+    {
+      "page": 25,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p25-p25-full-poppler.png",
+      "finding": "MP123 ATCT piping plan for floors 11 and 12."
+    },
+    {
+      "page": 26,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p26-p26-full-poppler.png",
+      "finding": "M-301 sections through Air Operations mechanical rooms, AHU/DOAH, boilers, pumps and piping."
+    },
+    {
+      "page": 27,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p27-p27-full-poppler.png",
+      "finding": "M-311 MTRACON mechanical-room sections with AHU-M1, DOAH-M1, boilers, pumps and piping."
+    },
+    {
+      "page": 28,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p28-p28-full-poppler.png",
+      "finding": "M-321 ATCT sections through AHU-T1A/T1B and floor-11 HVAC systems."
+    },
+    {
+      "page": 29,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p29-p29-full-poppler.png",
+      "finding": "M-401 enlarged Air Operations duct and piping mechanical-room plans."
+    },
+    {
+      "page": 30,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p30-p30-full-poppler.png",
+      "finding": "M-411 enlarged MTRACON duct and piping mechanical-room plans."
+    },
+    {
+      "page": 31,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p31-p31-full-poppler.png",
+      "finding": "M-421 enlarged ATCT mechanical-room duct and piping plans."
+    },
+    {
+      "page": 32,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p32-p32-full-poppler.png",
+      "finding": "M-501 hydronic service details: separators, vents, tank, shutdown, strainers and drains."
+    },
+    {
+      "page": 33,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p33-p33-full-poppler.png",
+      "finding": "M-502 hydronic piping, heat-trace, coil and penetration details."
+    },
+    {
+      "page": 34,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p34-p34-full-poppler.png",
+      "finding": "M-503 duct takeoff and FCU/CUH hydronic connection details."
+    },
+    {
+      "page": 35,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p35-p35-full-poppler.png",
+      "finding": "M-504 FCU/CRAH, series fan-powered VAV, humidifier and computer-room air-handler details."
+    },
+    {
+      "page": 36,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p36-p36-full-poppler.png",
+      "finding": "M-505 ATFP seismic cable-bracing details for suspended mechanical equipment and inline pumps."
+    },
+    {
+      "page": 37,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p37-p37-full-poppler.png",
+      "finding": "M-506 low-velocity ductwork, elbows, diffuser and manual-balancing-damper details."
+    },
+    {
+      "page": 38,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p38-p38-full-poppler.png",
+      "finding": "M-507 condensate traps, minimum drain-size table, inline-fan and below-grade piping details."
+    },
+    {
+      "page": 39,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p39-p39-full-poppler.png",
+      "finding": "M-508 air-cooled chiller, heat-recovery chiller and condensing-boiler connection details."
+    },
+    {
+      "page": 40,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p40-p40-full-poppler.png",
+      "finding": "M-509 DOAH/AHU configuration, pump and upblast centrifugal-fan details."
+    },
+    {
+      "page": 41,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p41-p41-full-poppler.png",
+      "finding": "M-510 fire/smoke/control damper and inline-pump details; source contains damper construction, not an actuator schedule."
+    },
+    {
+      "page": 42,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p42-p42-full-poppler.png",
+      "finding": "M-601 Air Operations schedules: AHU, DOAH, FCU, pumps and boilers."
+    },
+    {
+      "page": 43,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p43-p43-full-poppler.png",
+      "finding": "M-602 Air Operations schedules: unit heaters, duct/piping construction, humidifier and 27 VAV terminal rows."
+    },
+    {
+      "page": 44,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p44-p44-full-poppler.png",
+      "finding": "M-603 Air Operations schedules: chiller, fan, air-device, HHW/CHW control-valve, dehumidifier and related schedules."
+    },
+    {
+      "page": 45,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p45-p45-full-poppler.png",
+      "finding": "M-611 MTRACON schedules: AHU, FCU, pumps, boilers, heat-recovery chillers and CRAHs."
+    },
+    {
+      "page": 46,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p46-p46-full-poppler.png",
+      "finding": "M-612 MTRACON schedules: VAV, DOAH, duct/piping construction, vibration isolation and range hoods."
+    },
+    {
+      "page": 47,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p47-p47-full-poppler.png",
+      "finding": "M-613 MTRACON HHW/CHW valve, air-device, humidifier, dehumidifier, fan and expansion-tank schedules."
+    },
+    {
+      "page": 48,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p48-p48-full-poppler.png",
+      "finding": "M-621 ATCT schedules: AHU, FCU, CRAH, humidifier, fan, boiler, cabinet heater and pumps."
+    },
+    {
+      "page": 49,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p49-p49-full-poppler.png",
+      "finding": "M-622 ATCT schedules: DOAH, HHW/CHW valve, vibration isolation, air separator, silencer and air-device tables."
+    },
+    {
+      "page": 50,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p50-p50-full-poppler.png",
+      "finding": "MI700 controls symbols/abbreviations: AI/AO/BI/BO, motorized/control/fire-smoke damper, sensor and thermostat semantics."
+    },
+    {
+      "page": 51,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p51-p51-full-poppler.png",
+      "finding": "MI701 DDC system network diagram with BACnet IP, BACnet MS/TP, UUKL and generic network legend plus controllers/cabinets."
+    },
+    {
+      "page": 52,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p52-p52-full-poppler.png",
+      "finding": "MI702 Air Ops/MTRACON DOAH schematic and typed points list."
+    },
+    {
+      "page": 53,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p53-p53-full-poppler.png",
+      "finding": "MI703 Air Ops/MTRACON DOAH written sequence of operation."
+    },
+    {
+      "page": 54,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p54-p54-full-poppler.png",
+      "finding": "MI704 Air Ops/MTRACON AHU schematic and typed points list."
+    },
+    {
+      "page": 55,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p55-p55-full-poppler.png",
+      "finding": "MI705 Air Ops/MTRACON AHU written sequence of operation."
+    },
+    {
+      "page": 56,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p56-p56-full-poppler.png",
+      "finding": "MI710 Air Operations chilled-water system control schematic and typed points list."
+    },
+    {
+      "page": 57,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p57-p57-full-poppler.png",
+      "finding": "MI711 Air Operations chilled-water written sequence of operation."
+    },
+    {
+      "page": 58,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p58-p58-full-poppler.png",
+      "finding": "MI712 Air Operations heating-hot-water system control schematic and typed points list."
+    },
+    {
+      "page": 59,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p59-p59-full-poppler.png",
+      "finding": "MI713 Air Operations heating-hot-water written sequence of operation."
+    },
+    {
+      "page": 60,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p60-p60-full-poppler.png",
+      "finding": "MI720 MTRACON/ATCT chilled-water control schematic and typed points list."
+    },
+    {
+      "page": 61,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p61-p61-full-poppler.png",
+      "finding": "MI721 MTRACON/ATCT chilled-water written sequence of operation."
+    },
+    {
+      "page": 62,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p62-p62-full-poppler.png",
+      "finding": "MI722 MTRACON/ATCT heating-hot-water schematic and typed points lists."
+    },
+    {
+      "page": 63,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p63-p63-full-poppler.png",
+      "finding": "MI723 MTRACON/ATCT heating-hot-water written sequence of operation."
+    },
+    {
+      "page": 64,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p64-p64-full-poppler.png",
+      "finding": "MI730 ATCT DOAH-T1 schematic, typed points list and full written sequence."
+    },
+    {
+      "page": 65,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p65-p65-full-poppler.png",
+      "finding": "MI731 ATCT AHU schematic, typed points list and sequence including thermostat/humidity context."
+    },
+    {
+      "page": 66,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p66-p66-full-poppler.png",
+      "finding": "MI732 ATCT stairwell-pressurization schematic and typed points list."
+    },
+    {
+      "page": 67,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p67-p67-full-poppler.png",
+      "finding": "MI740 FCU (cooling/heating) and unit-heater templates, point lists and sequences."
+    },
+    {
+      "page": 68,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p68-p68-full-poppler.png",
+      "finding": "MI741 CRAH and series-fan-powered VAV schematics, point lists and sequences."
+    },
+    {
+      "page": 69,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p69-p69-full-poppler.png",
+      "finding": "MI742 humidifier, exhaust, bathroom exhaust and elevator-machine-room control templates/point lists/sequences."
+    },
+    {
+      "page": 70,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p70-p70-full-poppler.png",
+      "finding": "MI743 Air Operations heating and ventilating controls, typed points list and sequence."
+    },
+    {
+      "page": 71,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p71-p71-full-poppler.png",
+      "finding": "MI744 occupied FCU and SFPVAV/redundant-FCU templates, point lists and sequence."
+    },
+    {
+      "page": 72,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p72-p72-full-poppler.png",
+      "finding": "M-801 Air Operations chilled-water piping schematic."
+    },
+    {
+      "page": 73,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p73-p73-full-poppler.png",
+      "finding": "M-802 Air Operations heating-hot-water piping schematic."
+    },
+    {
+      "page": 74,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p74-p74-full-poppler.png",
+      "finding": "M-803 MTRACON/ATCT chilled-water piping schematic."
+    },
+    {
+      "page": 75,
+      "review_status": "complete",
+      "render": "reviews/01__vol2__001/p75-p75-full-poppler.png",
+      "finding": "M-804 MTRACON/ATCT heating-hot-water piping schematic."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "rank01-full-page-review",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 75
+    },
+    {
+      "id": "rank01-schedule-table-count",
+      "path": [
+        "modules",
+        "schedules",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 53
+    },
+    {
+      "id": "rank01-point-table-count",
+      "path": [
+        "modules",
+        "points",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 77
+    }
+  ],
+  "completion_checks": {
+    "all_75_pages_visually_reviewed": true,
+    "all_authoring_modules_dual_engine_verified_at_build": true,
+    "source_limitations_explicit": true,
+    "required_objectives_covered": true
+  }
+}

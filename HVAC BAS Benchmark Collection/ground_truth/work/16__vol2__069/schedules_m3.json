@@ -1,0 +1,65 @@
+{
+  "document_id": "16__vol2__069",
+  "module_role": "Exact M3.0 mechanical schedule cells. Existing equipment labels and new pump/VFD rows remain in their printed scopes; a schedule row is not silently converted to a plan-installed quantity.",
+  "source_sheet": "M3.0",
+  "source_page": 5,
+  "tables": [
+    {
+      "id": "M3-EXISTING-AHU",
+      "page": 5,
+      "sheet": "M3.0",
+      "title": "EXISTING AIR HANDLING UNIT SCHEDULE",
+      "classification": "Existing air-handling unit reference schedule",
+      "columns": "mark|type|area_served|fan_type|supply_fan_cfm|supply_fan_esp_in_wg|supply_fan_tsp_in_wg|supply_fan_hp_qty|supply_fan_volts_ph|supply_fan_rpm|cooling_fluid_type|cooling_sensible_capacity_mbh|cooling_total_capacity_mbh|cooling_cfm|cooling_eat_db_f|cooling_eat_wb_f|cooling_lat_db_f|cooling_lat_wb_f|cooling_max_face_velocity_fpm|cooling_air_pd_in_wg|cooling_fluid_ewt_f|cooling_fluid_lwt_f|cooling_fluid_gpm|cooling_fluid_pd_ft|cooling_max_rh|heating_fluid_type|heating_capacity_mbh|heating_cfm|heating_eat_db_f|heating_lat_db_f|heating_max_face_velocity_fpm|heating_air_pd_in_wg|heating_fluid_ewt_f|heating_fluid_lwt_f|heating_fluid_gpm|heating_fluid_pd_ft|humidification_coil_air_pd_ft|humidification_finned_height_in|humidification_finned_width_in|humidification_face_area_ft_sq|humidification_face_velocity_fpm|prefilter_efficiency|prefilter_depth_in|final_filter_efficiency|final_filter_depth_in|combination_filter_max_face_velocity_fpm|min_osa_cfm|operating_weight_lbs|manufacturer_model|remarks",
+      "x_edges": [157.38,202.38,274.38,346.38,386.88,422.88,458.88,494.88,530.88,566.88,602.88,643.38,688.38,733.38,769.44,805.44,841.44,877.44,913.44,967.44,1003.44,1039.44,1075.44,1111.44,1147.44,1183.44,1228.44,1273.58,1309.44,1345.44,1381.44,1435.44,1471.58,1507.44,1543.44,1579.44,1615.58,1651.44,1687.44,1723.58,1759.44,1795.44,1831.39,1867.44,1897.331,1939.58,1994.242,2029.44,2081.507,2197.08,2251.29],
+      "y_edges": [250.14,286.14],
+      "rows": ["AHU-1(E)|SEMI-CUSTOM|LABORATORIES|ECM|16,400|2.0|5.1|3.2 \\ 6|460/3|3,169|30% PG|842.7|842.7|16,400|98.7|65.5|50.2|46.9|500|0.8|45|55.0|177.0|18.0|50%|30% PG|960.0|16,400|12.9|66.9|500|0.11|140|98.1|48.0|5.1|0.01|24.0|109.0|36.33|451|MERV 8|2\"|MERV 13|4\"|500|2,150|7,000|DAIKIN CAH044GDCM|1 , 2"],
+      "header_evidence": [{"bbox": [150,130,2260,180], "expected": "EXISTING AIR HANDLING UNIT SCHEDULE"}]
+    },
+    {
+      "id": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "page": 5,
+      "sheet": "M3.0",
+      "title": "EXISTING CONDENSING HOT WATER BOILER SCHEDULE",
+      "classification": "Existing condensing hot-water boiler reference schedule",
+      "columns": "mark|area_served|thermal_efficiency|fuel|ewt_f|lwt_f|boiler_flow_gpm|max_pd_ft_h2o|input_mbh|output_mbh|manufacturer_model|remarks",
+      "x_edges": [157.38,211.38,319.38,391.47,463.47,535.47,607.56,679.56,751.5,808.74,865.92,1165.35,1237.65],
+      "y_edges": [481.978,515.67,554.34],
+      "rows": ["B-1(E)|HOT WATER LOOP|98.3%|NATURAL GAS|100.0|150.0|40.0|3.5|1,000|982|LOCHINVAR FTX1000 (EXISTING)|1 , 2", "B-2(E)|HOT WATER LOOP|98.3%|NATURAL GAS|100.0|150.0|40.0|3.5|1,000|982|LOCHINVAR FTX1000 (EXISTING)|1 , 2"],
+      "header_evidence": [{"bbox": [150,365,1250,420], "expected": "EXISTING CONDENSING HOT WATER BOILER SCHEDULE"}]
+    },
+    {
+      "id": "M3-NEW-PUMP",
+      "page": 5,
+      "sheet": "M3.0",
+      "title": "NEW PUMP SCHEDULE",
+      "classification": "New hydronic pump schedule",
+      "columns": "mark|area_served|type|flow_gpm|head_ft|min_efficiency_percent|motor_hp|motor_rpm|motor_volts_ph|operating_weight_lbs|manufacturer_model|remarks",
+      "x_edges": [1273.58,1327.86,1471.58,1561.86,1615.58,1669.86,1723.58,1777.86,1831.39,1885.86,1939.58,2180.16,2251.29],
+      "y_edges": [481.978,515.67,554.34,589.2,625.2,661.2,697.2],
+      "rows": ["HWP-1|HOT WATER LOOP|INLINE VARIABLE SECONDARY|80|40|71|2|1,725|460/3|60|B&G E-90 2AB|1 , 2 , 3 , 4", "HWP-2|HOT WATER LOOP|INLINE VARIABLE SECONDARY|80|40|71|2|1,725|460/3|60|B&G E-90 2AB|1 , 2 , 3 , 4", "BP-1|BOILER PUMP (B-1)|INLINE PRIMARY|40|15|-|1/3|4,350|115/1|35|GRUNDFOS MAGNA3 40-80|1 , 2 , 3 , 4", "BP-2|BOILER PUMP (B-1)|INLINE PRIMARY|40|15|-|1/3|4,350|115/1|35|GRUNDFOS MAGNA3 40-80|1 , 2 , 3 , 4", "CWP-1|CHILLED WATER LOOP|INLINE PRIMARY|185|55|67|5|3325|460/3|85|B&G E-90 2AAB|1 , 2 , 3", "CWP-2|CHILLED WATER LOOP|INLINE PRIMARY|185|55|67|5|3325|460/3|85|B&G E-90 2AAB|1 , 2 , 3"],
+      "header_evidence": [{"bbox": [1260,365,2260,420], "expected": "NEW PUMP SCHEDULE"}]
+    },
+    {
+      "id": "M3-NEW-VFD",
+      "page": 5,
+      "sheet": "M3.0",
+      "title": "NEW VARIABLE FREQUENCY DRIVE SCHEDULE",
+      "classification": "New variable-frequency drive schedule",
+      "columns": "mark|system_location|service_horsepower|volts_ph|purpose|manufacturer_model|remarks",
+      "x_edges": [157.38,211.38,391.47,463.47,535.47,751.5,1165.35,1237.65],
+      "y_edges": [745.2,781.2,817.2],
+      "rows": ["VFD-1|MECHANICAL LOFT|2|460/3|HWP-1|ABB MODEL ACH 580|1 , 2 , 3 , 4", "VFD-2|MECHANICAL LOFT|2|460/3|HWP-2|ABB MODEL ACH 580|1 , 2 , 3 , 4"],
+      "header_evidence": [{"bbox": [150,665,1250,710], "expected": "NEW VARIABLE FREQUENCY DRIVE SCHEDULE"}]
+    }
+  ],
+  "assertions": [
+    {"id": "m3-ahus-existing-reference-note", "page": 5, "bbox": [155,305,515,330], "expected": "EXISTING AIR HANDLING UNIT. SPECIFICATIONS SHOWN FOR REFERENCE ONLY.", "mode": "contains"},
+    {"id": "m3-ahus-new-three-way-valve-note", "page": 5, "bbox": [155,330,605,355], "expected": "INSTALL NEW 3-WAY VALVE AT HEATING COIL CONNECTION. SEE DETAIL FOR ADDITIONAL REQUIREMENTS.", "mode": "contains"},
+    {"id": "m3-pump-capacity-basis-note", "page": 5, "bbox": [1275,765,1570,790], "expected": "CAPACITY BASED ON 70% WATER AND 30% PROPYLENE GLYCOL.", "mode": "contains"},
+    {"id": "m3-vfd-control-note", "page": 5, "bbox": [155,885,600,910], "expected": "EQUIPMENT PROVIDED BY CONTROL CONTRACTOR, INSTALLED BY ELECTRICAL CONTRACTOR.", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "m3-schedule-tables", "records_path": ["tables"], "expected": 4, "unique_key": "id"}
+  ]
+}

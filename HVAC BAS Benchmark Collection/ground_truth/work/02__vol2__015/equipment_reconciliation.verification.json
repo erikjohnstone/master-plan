@@ -1,0 +1,4082 @@
+{
+  "document_id": "02__vol2__015",
+  "source_sha256": "7ac5b4d6d97b5416f7d04a2a3abd303513ac9f19cec5930d0b9aa3bcd550da97",
+  "annotation_sha256": "5b23a758eedf36d89bcd2329f0c396a96b95e7671c31a00e41f97374a652a00f",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 144,
+  "checks": [
+    {
+      "assertion": "MPAC1-tag",
+      "page": 4,
+      "bbox": [
+        627,
+        579,
+        679,
+        596
+      ],
+      "expected": "MPAC-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MPAC-1",
+          "word_ids": [
+            65
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MPAC-1",
+          "word_ids": [
+            116
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "MPAC2-tag",
+      "page": 4,
+      "bbox": [
+        925,
+        579,
+        977,
+        596
+      ],
+      "expected": "MPAC-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MPAC-2",
+          "word_ids": [
+            66
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MPAC-2",
+          "word_ids": [
+            124
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "MPAC3-tag",
+      "page": 4,
+      "bbox": [
+        1202,
+        579,
+        1254,
+        596
+      ],
+      "expected": "MPAC-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MPAC-3",
+          "word_ids": [
+            67
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MPAC-3",
+          "word_ids": [
+            169
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "MPAC4-tag",
+      "page": 4,
+      "bbox": [
+        1480,
+        579,
+        1532,
+        596
+      ],
+      "expected": "MPAC-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MPAC-4",
+          "word_ids": [
+            68
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MPAC-4",
+          "word_ids": [
+            157
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "HPAC1-tag",
+      "page": 5,
+      "bbox": [
+        563,
+        605,
+        613,
+        622
+      ],
+      "expected": "HPAC-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HPAC-1",
+          "word_ids": [
+            39
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HPAC-1",
+          "word_ids": [
+            84
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "HPAC2-tag",
+      "page": 5,
+      "bbox": [
+        1060,
+        615,
+        1110,
+        632
+      ],
+      "expected": "HPAC-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HPAC-2",
+          "word_ids": [
+            40
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HPAC-2",
+          "word_ids": [
+            88
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "HPAC3-tag",
+      "page": 5,
+      "bbox": [
+        1505,
+        605,
+        1555,
+        622
+      ],
+      "expected": "HPAC-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HPAC-3",
+          "word_ids": [
+            41
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HPAC-3",
+          "word_ids": [
+            87
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "MPAP2-tag",
+      "page": 10,
+      "bbox": [
+        940,
+        1210,
+        992,
+        1227
+      ],
+      "expected": "MPAP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MPAP-2",
+          "word_ids": [
+            163
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MPAP-2",
+          "word_ids": [
+            438
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "CS4-tag",
+      "page": 10,
+      "bbox": [
+        855,
+        1190,
+        888,
+        1207
+      ],
+      "expected": "CS-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CS-4",
+          "word_ids": [
+            167
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CS-4",
+          "word_ids": [
+            402
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "HPAP4-tag",
+      "page": 11,
+      "bbox": [
+        864,
+        474,
+        914,
+        491
+      ],
+      "expected": "HPAP-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HPAP-4",
+          "word_ids": [
+            62
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HPAP-4",
+          "word_ids": [
+            169
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "HPR3A-tag",
+      "page": 11,
+      "bbox": [
+        1103,
+        462,
+        1154,
+        479
+      ],
+      "expected": "HPR-3A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HPR-3A",
+          "word_ids": [
+            34
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HPR-3A",
+          "word_ids": [
+            168
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "FOT1-tag",
+      "page": 6,
+      "bbox": [
+        1523,
+        260,
+        1563,
+        277
+      ],
+      "expected": "FOT-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FOT-1",
+          "word_ids": [
+            105
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FOT-1",
+          "word_ids": [
+            274
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "DWM1-roster",
+      "page": 26,
+      "bbox": [
+        143,
+        1181,
+        484,
+        1197
+      ],
+      "expected": "DWM-1 - MAIN WATER METER FOR BUILDING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DWM-1 - MAIN WATER METER FOR BUILDING",
+          "word_ids": [
+            692,
+            693,
+            694,
+            695,
+            696,
+            697,
+            698
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DWM-1 - MAIN WATER METER FOR BUILDING",
+          "word_ids": [
+            405,
+            406,
+            407,
+            408,
+            409,
+            410,
+            411
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "DWM2-roster",
+      "page": 26,
+      "bbox": [
+        143,
+        1195,
+        484,
+        1211
+      ],
+      "expected": "DWM-2 - PURE WATER FLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DWM-2 - PURE WATER FLOW",
+          "word_ids": [
+            699,
+            700,
+            701,
+            702,
+            703
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DWM-2 - PURE WATER FLOW",
+          "word_ids": [
+            412,
+            413,
+            414,
+            415,
+            416
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "DWM3-roster",
+      "page": 26,
+      "bbox": [
+        143,
+        1209,
+        484,
+        1226
+      ],
+      "expected": "DWM-3 - PIER FLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DWM-3 - PIER FLOW",
+          "word_ids": [
+            704,
+            705,
+            706,
+            707
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DWM-3 - PIER FLOW",
+          "word_ids": [
+            417,
+            418,
+            419,
+            420
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "EG3-plan-callout",
+      "page": 6,
+      "bbox": [
+        1069,
+        716,
+        1143,
+        769
+      ],
+      "expected": "EG-3 20x20 2500 CFM (TYP OF 4)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EG-3 20x20 2500 CFM (TYP OF 4)",
+          "word_ids": [
+            182,
+            183,
+            184,
+            185,
+            174,
+            175,
+            176
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EG-3 20x20 2500 CFM (TYP OF 4)",
+          "word_ids": [
+            318,
+            319,
+            320,
+            321,
+            322,
+            323,
+            324
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "SG2-plan-callout",
+      "page": 6,
+      "bbox": [
+        773,
+        824,
+        847,
+        876
+      ],
+      "expected": "SG-2 48x48 7500 CFM (TYP. 8)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SG-2 48x48 7500 CFM (TYP. 8)",
+          "word_ids": [
+            76,
+            77,
+            78,
+            79,
+            80,
+            81
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SG-2 48x48 7500 CFM (TYP. 8)",
+          "word_ids": [
+            405,
+            406,
+            407,
+            408,
+            409,
+            410
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "SG2-section-flow",
+      "page": 11,
+      "bbox": [
+        1628,
+        1134,
+        1700,
+        1171
+      ],
+      "expected": "7000 CFM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SG-2 SG-2 48x48 48x48 7000 7000 CFM CFM",
+          "word_ids": [
+            82,
+            86,
+            83,
+            87,
+            84,
+            88,
+            85,
+            89
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SG-2 48x48 7000 CFM",
+          "word_ids": [
+            275,
+            276,
+            277,
+            278
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "grilles-per-drop",
+      "page": 6,
+      "bbox": [
+        1852,
+        219,
+        2215,
+        264
+      ],
+      "expected": "PROVIDE TWO 48\"x48\" EGGCRATE TYPE GRILLES FOR EACH DROP.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ROUTE DUCT DOWN TO 1'0\" AFF. PROVIDE TWO 48\"x48\" EGGCRATE TYPE GRILLES FOR EACH DROP. COORDINATE DROP LOCATIONS WITH ELECTRICAL PANELS. REFER TO A1/AM302 FOR SECTION CUT.",
+          "word_ids": [
+            442,
+            443,
+            444,
+            445,
+            446,
+            447,
+            448,
+            449,
+            450,
+            451,
+            452,
+            453,
+            454,
+            455,
+            456,
+            457,
+            458,
+            459,
+            460,
+            461,
+            462,
+            463,
+            464,
+            465,
+            466,
+            467,
+            468
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ROUTE DUCT DOWN TO 1'0\" AFF. PROVIDE TWO 48\"x48\" EGGCRATE TYPE GRILLES FOR EACH DROP. COORDINATE DROP LOCATIONS WITH ELECTRICAL PANELS. REFER TO A1/AM302 FOR SECTION CUT.",
+          "word_ids": [
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "EG1-plan-tag",
+      "page": 3,
+      "bbox": [
+        483,
+        978,
+        516,
+        995
+      ],
+      "expected": "EG-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EG-1",
+          "word_ids": [
+            150
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EG-1",
+          "word_ids": [
+            176
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "EG2-plan-tag",
+      "page": 6,
+      "bbox": [
+        284,
+        489,
+        318,
+        506
+      ],
+      "expected": "EG-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EG-2",
+          "word_ids": [
+            101
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EG-2",
+          "word_ids": [
+            278
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "RG1-west-tag",
+      "page": 3,
+      "bbox": [
+        586,
+        1000,
+        620,
+        1017
+      ],
+      "expected": "RG-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-1",
+          "word_ids": [
+            84
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-1",
+          "word_ids": [
+            190
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "RG1-east-tag",
+      "page": 3,
+      "bbox": [
+        949,
+        985,
+        984,
+        1002
+      ],
+      "expected": "RG-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-1",
+          "word_ids": [
+            92
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-1",
+          "word_ids": [
+            184
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "SG1-west-tag",
+      "page": 3,
+      "bbox": [
+        743,
+        767,
+        777,
+        784
+      ],
+      "expected": "SG-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SG-1",
+          "word_ids": [
+            111
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SG-1",
+          "word_ids": [
+            66
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "SG1-east-tag",
+      "page": 3,
+      "bbox": [
+        856,
+        727,
+        890,
+        745
+      ],
+      "expected": "SG-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SG-1",
+          "word_ids": [
+            119
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SG-1",
+          "word_ids": [
+            351
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "GH-CD1-toilet-tag",
+      "page": 8,
+      "bbox": [
+        966,
+        305,
+        1000,
+        322
+      ],
+      "expected": "CD-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-1",
+          "word_ids": [
+            4
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-1",
+          "word_ids": [
+            43
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "GH-CD1-storage-tag",
+      "page": 8,
+      "bbox": [
+        658,
+        128,
+        691,
+        145
+      ],
+      "expected": "CD-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-1",
+          "word_ids": [
+            89
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-1",
+          "word_ids": [
+            31
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "GH-EG1-tag",
+      "page": 8,
+      "bbox": [
+        859,
+        524,
+        892,
+        541
+      ],
+      "expected": "EG-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EG-1",
+          "word_ids": [
+            8
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EG-1",
+          "word_ids": [
+            85
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "GH-LS1-quantity",
+      "page": 8,
+      "bbox": [
+        1648,
+        222,
+        1745,
+        274
+      ],
+      "expected": "LS-1 8ø 200 CFM (TYP. 2)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LS-1 8ø 200 CFM (TYP. 2)",
+          "word_ids": [
+            96,
+            97,
+            98,
+            99,
+            33,
+            34
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LS-1 8ø 200 CFM (TYP. 2)",
+          "word_ids": [
+            131,
+            132,
+            133,
+            134,
+            135,
+            136
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "GH-RR1-equipment-tag",
+      "page": 8,
+      "bbox": [
+        433,
+        500,
+        467,
+        517
+      ],
+      "expected": "RR-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RR-1",
+          "word_ids": [
+            0
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RR-1",
+          "word_ids": [
+            64
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "GH-RR1-storage-tag",
+      "page": 8,
+      "bbox": [
+        864,
+        341,
+        897,
+        357
+      ],
+      "expected": "RR-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RR-1",
+          "word_ids": [
+            22
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RR-1",
+          "word_ids": [
+            56
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "GH-RR2-tag",
+      "page": 8,
+      "bbox": [
+        1294,
+        485,
+        1328,
+        502
+      ],
+      "expected": "RR-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RR-2",
+          "word_ids": [
+            18
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RR-2",
+          "word_ids": [
+            104
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "DDC-panel-spec",
+      "page": 8,
+      "bbox": [
+        1869,
+        540,
+        2085,
+        557
+      ],
+      "expected": "DDC CONTROL PANEL 120 VOLTS 1 PHASE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DDC CONTROL PANEL 120 VOLTS 1 PHASE.",
+          "word_ids": [
+            430,
+            431,
+            432,
+            433,
+            434,
+            435,
+            436
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DDC CONTROL PANEL 120 VOLTS 1 PHASE.",
+          "word_ids": [
+            264,
+            265,
+            266,
+            267,
+            268,
+            269,
+            270
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "DDC-panel-USB3",
+      "page": 3,
+      "bbox": [
+        1006,
+        927,
+        1021,
+        942
+      ],
+      "expected": "45",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            197
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            136
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "DDC-panel-USB4",
+      "page": 4,
+      "bbox": [
+        273,
+        528,
+        288,
+        543
+      ],
+      "expected": "45",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "45 45",
+          "word_ids": [
+            225,
+            226
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            83
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "DDC-panel-USB5",
+      "page": 5,
+      "bbox": [
+        271,
+        319,
+        286,
+        334
+      ],
+      "expected": "45",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            157
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            39
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "DDC-panel-GH04",
+      "page": 8,
+      "bbox": [
+        244,
+        253,
+        259,
+        268
+      ],
+      "expected": "45",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            77
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            38
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "GH-intake-GV-typo",
+      "page": 8,
+      "bbox": [
+        393,
+        432,
+        421,
+        447
+      ],
+      "expected": "GV-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GV-1",
+          "word_ids": [
+            71
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GV-1",
+          "word_ids": [
+            124
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "CW-diagram-MPAC1-status",
+      "page": 23,
+      "bbox": [
+        409,
+        855,
+        529,
+        874
+      ],
+      "expected": "BI-17 MPAC-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-17 MPAC-1",
+          "word_ids": [
+            60,
+            62
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-17 MPAC-1",
+          "word_ids": [
+            299,
+            298
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "CW-diagram-MPAC2-status",
+      "page": 23,
+      "bbox": [
+        643,
+        855,
+        763,
+        874
+      ],
+      "expected": "BI-18 MPAC-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-18 MPAC-2",
+          "word_ids": [
+            65,
+            67
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-18 MPAC-2",
+          "word_ids": [
+            139,
+            140
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "CW-diagram-MPAC3-status",
+      "page": 23,
+      "bbox": [
+        877,
+        855,
+        997,
+        874
+      ],
+      "expected": "BI-19 MPAC-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-19 MPAC-3",
+          "word_ids": [
+            70,
+            72
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-19 MPAC-3",
+          "word_ids": [
+            141,
+            142
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "CW-diagram-MPAC4-status",
+      "page": 23,
+      "bbox": [
+        1111,
+        855,
+        1231,
+        874
+      ],
+      "expected": "BI-20 MPAC-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-20 MPAC-4",
+          "word_ids": [
+            75,
+            77
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-20 MPAC-4",
+          "word_ids": [
+            143,
+            144
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "GI3-diagram-status-command",
+      "page": 25,
+      "bbox": [
+        1579,
+        670,
+        1621,
+        739
+      ],
+      "expected": "FROM GI-3 BI-3 BO-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FROM GI-3 BI-3 BO-2",
+          "word_ids": [
+            986,
+            987,
+            988,
+            990
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FROM GI-3 BI-3 BO-2",
+          "word_ids": [
+            169,
+            170,
+            179,
+            181
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "GI2-diagram-status-command",
+      "page": 25,
+      "bbox": [
+        1579,
+        761,
+        1621,
+        829
+      ],
+      "expected": "FROM GI-2 BI-4 BO-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FROM GI-2 BI-4 BO-3",
+          "word_ids": [
+            980,
+            981,
+            982,
+            984
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FROM GI-2 BI-4 BO-3",
+          "word_ids": [
+            1221,
+            1222,
+            1181,
+            1162
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "GI1-diagram-status-command",
+      "page": 25,
+      "bbox": [
+        1579,
+        858,
+        1621,
+        924
+      ],
+      "expected": "FROM GI-1 BI-5 BO-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FROM GI-1 BI-5 BO-4",
+          "word_ids": [
+            973,
+            974,
+            975,
+            978
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FROM GI-1 BI-5 BO-4",
+          "word_ids": [
+            1058,
+            1059,
+            970,
+            941
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-CCC-1/tag",
+      "page": 3,
+      "bbox": [
+        589,
+        269,
+        630,
+        284
+      ],
+      "expected": "CCC-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CCC-1",
+          "word_ids": [
+            135
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CCC-1",
+          "word_ids": [
+            430
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-CCC-2/tag",
+      "page": 3,
+      "bbox": [
+        929,
+        269,
+        970,
+        284
+      ],
+      "expected": "CCC-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CCC-2",
+          "word_ids": [
+            136
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CCC-2",
+          "word_ids": [
+            38
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-FC-1/tag",
+      "page": 3,
+      "bbox": [
+        889,
+        898,
+        920,
+        913
+      ],
+      "expected": "FC-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FC-1",
+          "word_ids": [
+            1
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FC-1",
+          "word_ids": [
+            105
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-FC-2/tag",
+      "page": 3,
+      "bbox": [
+        1572,
+        973,
+        1603,
+        989
+      ],
+      "expected": "FC-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FC-2",
+          "word_ids": [
+            2
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FC-2",
+          "word_ids": [
+            202
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-FC-3/tag",
+      "page": 4,
+      "bbox": [
+        900,
+        933,
+        931,
+        948
+      ],
+      "expected": "FC-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FC-3",
+          "word_ids": [
+            24
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FC-3",
+          "word_ids": [
+            255
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-FC-4/tag",
+      "page": 5,
+      "bbox": [
+        774,
+        907,
+        804,
+        923
+      ],
+      "expected": "FC-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FC-4",
+          "word_ids": [
+            0
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FC-4",
+          "word_ids": [
+            420
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-P-1/tag",
+      "page": 4,
+      "bbox": [
+        277,
+        334,
+        300,
+        349
+      ],
+      "expected": "P-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "P-1",
+          "word_ids": [
+            31
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "P-1",
+          "word_ids": [
+            52
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-P-2/tag",
+      "page": 4,
+      "bbox": [
+        434,
+        321,
+        456,
+        336
+      ],
+      "expected": "P-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "P-2",
+          "word_ids": [
+            32
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "P-2",
+          "word_ids": [
+            48
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-P-3/tag",
+      "page": 3,
+      "bbox": [
+        811,
+        942,
+        834,
+        958
+      ],
+      "expected": "P-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "P-3",
+          "word_ids": [
+            10
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "P-3",
+          "word_ids": [
+            173
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-P-4/tag",
+      "page": 3,
+      "bbox": [
+        1490,
+        923,
+        1512,
+        939
+      ],
+      "expected": "P-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "P-4",
+          "word_ids": [
+            11
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "P-4",
+          "word_ids": [
+            279
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-P-5/tag",
+      "page": 4,
+      "bbox": [
+        815,
+        885,
+        837,
+        900
+      ],
+      "expected": "P-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "P-5",
+          "word_ids": [
+            34
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "P-5",
+          "word_ids": [
+            228
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-P-6/tag",
+      "page": 5,
+      "bbox": [
+        697,
+        870,
+        719,
+        886
+      ],
+      "expected": "P-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "P-6",
+          "word_ids": [
+            7
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "P-6",
+          "word_ids": [
+            455
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-ET-1/tag",
+      "page": 4,
+      "bbox": [
+        297,
+        123,
+        327,
+        139
+      ],
+      "expected": "ET-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ET-1",
+          "word_ids": [
+            33
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ET-1",
+          "word_ids": [
+            7
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-AS-1/tag",
+      "page": 4,
+      "bbox": [
+        142,
+        260,
+        173,
+        276
+      ],
+      "expected": "AS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AS-1",
+          "word_ids": [
+            133
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AS-1",
+          "word_ids": [
+            179
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-GFS-1/tag",
+      "page": 4,
+      "bbox": [
+        254,
+        288,
+        294,
+        304
+      ],
+      "expected": "GFS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GFS-1",
+          "word_ids": [
+            116
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GFS-1",
+          "word_ids": [
+            46
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-EF-1/tag",
+      "page": 3,
+      "bbox": [
+        538,
+        777,
+        568,
+        793
+      ],
+      "expected": "EF-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-1",
+          "word_ids": [
+            51
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-1",
+          "word_ids": [
+            336
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-EF-2/tag",
+      "page": 3,
+      "bbox": [
+        1167,
+        991,
+        1198,
+        1006
+      ],
+      "expected": "EF-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-2",
+          "word_ids": [
+            50
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-2",
+          "word_ids": [
+            207
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-EF-3/tag",
+      "page": 4,
+      "bbox": [
+        1215,
+        938,
+        1246,
+        954
+      ],
+      "expected": "EF-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-3",
+          "word_ids": [
+            83
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-3",
+          "word_ids": [
+            262
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-EF-4/tag",
+      "page": 5,
+      "bbox": [
+        1062,
+        928,
+        1093,
+        943
+      ],
+      "expected": "EF-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-4",
+          "word_ids": [
+            52
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-4",
+          "word_ids": [
+            325
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-EF-5/tag",
+      "page": 5,
+      "bbox": [
+        1609,
+        251,
+        1640,
+        267
+      ],
+      "expected": "EF-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-5",
+          "word_ids": [
+            49
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-5",
+          "word_ids": [
+            33
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-EF-6/tag",
+      "page": 6,
+      "bbox": [
+        785,
+        413,
+        815,
+        429
+      ],
+      "expected": "EF-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-6",
+          "word_ids": [
+            73
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-6",
+          "word_ids": [
+            262
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-UH-1/tag",
+      "page": 6,
+      "bbox": [
+        284,
+        445,
+        317,
+        460
+      ],
+      "expected": "UH-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-1",
+          "word_ids": [
+            2
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-1",
+          "word_ids": [
+            272
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-UH-2/tag",
+      "page": 6,
+      "bbox": [
+        875,
+        1003,
+        908,
+        1019
+      ],
+      "expected": "UH-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-2",
+          "word_ids": [
+            3
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-2",
+          "word_ids": [
+            531
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-UH-3/tag",
+      "page": 4,
+      "bbox": [
+        1208,
+        188,
+        1241,
+        204
+      ],
+      "expected": "UH-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-3",
+          "word_ids": [
+            252
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-3",
+          "word_ids": [
+            29
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-UH-4/tag",
+      "page": 5,
+      "bbox": [
+        1077,
+        182,
+        1110,
+        198
+      ],
+      "expected": "UH-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-4",
+          "word_ids": [
+            167
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-4",
+          "word_ids": [
+            25
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-DSS-1/tag",
+      "page": 6,
+      "bbox": [
+        575,
+        189,
+        616,
+        205
+      ],
+      "expected": "DSS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DSS-1",
+          "word_ids": [
+            1
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DSS-1",
+          "word_ids": [
+            360
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-DSS-2/tag",
+      "page": 6,
+      "bbox": [
+        587,
+        405,
+        627,
+        421
+      ],
+      "expected": "DSS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DSS-2",
+          "word_ids": [
+            221
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DSS-2",
+          "word_ids": [
+            271
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-CU-1/tag",
+      "page": 6,
+      "bbox": [
+        650,
+        1123,
+        683,
+        1139
+      ],
+      "expected": "CU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CU-1",
+          "word_ids": [
+            4
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CU-1",
+          "word_ids": [
+            452
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-CU-2/tag",
+      "page": 6,
+      "bbox": [
+        586,
+        1165,
+        619,
+        1181
+      ],
+      "expected": "CU-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CU-2",
+          "word_ids": [
+            225
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CU-2",
+          "word_ids": [
+            453
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-M-1/tag",
+      "page": 6,
+      "bbox": [
+        1071,
+        956,
+        1097,
+        972
+      ],
+      "expected": "M-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-1",
+          "word_ids": [
+            180
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-1",
+          "word_ids": [
+            559
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-M-2/tag",
+      "page": 6,
+      "bbox": [
+        1077,
+        491,
+        1103,
+        507
+      ],
+      "expected": "M-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-2",
+          "word_ids": [
+            181
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-2",
+          "word_ids": [
+            36
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-VLV-1/tag",
+      "page": 3,
+      "bbox": [
+        598,
+        534,
+        630,
+        549
+      ],
+      "expected": "VLV-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VLV-1",
+          "word_ids": [
+            206
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VLV-1",
+          "word_ids": [
+            49
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-VLV-2/tag",
+      "page": 3,
+      "bbox": [
+        951,
+        535,
+        983,
+        550
+      ],
+      "expected": "VLV-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VLV-2",
+          "word_ids": [
+            207
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VLV-2",
+          "word_ids": [
+            50
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-VLV-3/tag",
+      "page": 3,
+      "bbox": [
+        1193,
+        744,
+        1225,
+        758
+      ],
+      "expected": "VLV-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VLV-3",
+          "word_ids": [
+            209
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VLV-3",
+          "word_ids": [
+            161
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-VLV-4/tag",
+      "page": 4,
+      "bbox": [
+        780,
+        574,
+        820,
+        591
+      ],
+      "expected": "VLV-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VLV-4",
+          "word_ids": [
+            129
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VLV-4",
+          "word_ids": [
+            115
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-VLV-5/tag",
+      "page": 4,
+      "bbox": [
+        1071,
+        573,
+        1111,
+        589
+      ],
+      "expected": "VLV-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VLV-5",
+          "word_ids": [
+            130
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VLV-5",
+          "word_ids": [
+            123
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-VLV-6/tag",
+      "page": 4,
+      "bbox": [
+        1356,
+        570,
+        1396,
+        587
+      ],
+      "expected": "VLV-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VLV-6",
+          "word_ids": [
+            131
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VLV-6",
+          "word_ids": [
+            168
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-VLV-7/tag",
+      "page": 4,
+      "bbox": [
+        1636,
+        581,
+        1676,
+        598
+      ],
+      "expected": "VLV-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VLV-7",
+          "word_ids": [
+            132
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VLV-7",
+          "word_ids": [
+            149
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-VLV-8/tag",
+      "page": 5,
+      "bbox": [
+        580,
+        742,
+        620,
+        758
+      ],
+      "expected": "VLV-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VLV-8",
+          "word_ids": [
+            120
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VLV-8",
+          "word_ids": [
+            121
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-VLV-9/tag",
+      "page": 5,
+      "bbox": [
+        1063,
+        706,
+        1102,
+        722
+      ],
+      "expected": "VLV-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VLV-9",
+          "word_ids": [
+            121
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VLV-9",
+          "word_ids": [
+            106
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-VLV-10/tag",
+      "page": 5,
+      "bbox": [
+        1599,
+        754,
+        1645,
+        771
+      ],
+      "expected": "VLV-10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VLV-10",
+          "word_ids": [
+            122
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VLV-10",
+          "word_ids": [
+            122
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-VLV-11/tag",
+      "page": 5,
+      "bbox": [
+        1599,
+        619,
+        1645,
+        636
+      ],
+      "expected": "VLV-11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VLV-11",
+          "word_ids": [
+            119
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VLV-11",
+          "word_ids": [
+            95
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-VLV-12/tag",
+      "page": 3,
+      "bbox": [
+        918,
+        827,
+        957,
+        842
+      ],
+      "expected": "VLV-12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VLV-12",
+          "word_ids": [
+            144
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VLV-12",
+          "word_ids": [
+            154
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-VLV-13/tag",
+      "page": 3,
+      "bbox": [
+        1514,
+        1078,
+        1553,
+        1093
+      ],
+      "expected": "VLV-13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VLV-13",
+          "word_ids": [
+            145
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VLV-13",
+          "word_ids": [
+            235
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-VLV-14/tag",
+      "page": 4,
+      "bbox": [
+        724,
+        965,
+        749,
+        980
+      ],
+      "expected": "V-14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-14",
+          "word_ids": [
+            144
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-14",
+          "word_ids": [
+            510
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-VLV-15/tag",
+      "page": 5,
+      "bbox": [
+        638,
+        980,
+        663,
+        995
+      ],
+      "expected": "V-15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-15",
+          "word_ids": [
+            140
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-15",
+          "word_ids": [
+            365
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-1/tag",
+      "page": 3,
+      "bbox": [
+        627,
+        1084,
+        662,
+        1101
+      ],
+      "expected": "MD-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-1",
+          "word_ids": [
+            227
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-1",
+          "word_ids": [
+            225
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-2/tag",
+      "page": 3,
+      "bbox": [
+        844,
+        1080,
+        879,
+        1097
+      ],
+      "expected": "MD-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-2",
+          "word_ids": [
+            228
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-2",
+          "word_ids": [
+            224
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-3/tag",
+      "page": 3,
+      "bbox": [
+        1458,
+        221,
+        1493,
+        238
+      ],
+      "expected": "MD-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-3",
+          "word_ids": [
+            229
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-3",
+          "word_ids": [
+            33
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-4/tag",
+      "page": 4,
+      "bbox": [
+        457,
+        167,
+        491,
+        184
+      ],
+      "expected": "MD-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-4",
+          "word_ids": [
+            236
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-4",
+          "word_ids": [
+            19
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-5/tag",
+      "page": 4,
+      "bbox": [
+        987,
+        167,
+        1022,
+        183
+      ],
+      "expected": "MD-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-5",
+          "word_ids": [
+            237
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-5",
+          "word_ids": [
+            18
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-6/tag",
+      "page": 4,
+      "bbox": [
+        1766,
+        178,
+        1801,
+        194
+      ],
+      "expected": "MD-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-6",
+          "word_ids": [
+            238
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-6",
+          "word_ids": [
+            30
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-7/tag",
+      "page": 5,
+      "bbox": [
+        1321,
+        135,
+        1356,
+        151
+      ],
+      "expected": "MD-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-7",
+          "word_ids": [
+            166
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-7",
+          "word_ids": [
+            18
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-8/tag",
+      "page": 6,
+      "bbox": [
+        617,
+        1036,
+        652,
+        1052
+      ],
+      "expected": "MD-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-8",
+          "word_ids": [
+            217
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-8",
+          "word_ids": [
+            529
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-9/tag",
+      "page": 6,
+      "bbox": [
+        583,
+        768,
+        617,
+        785
+      ],
+      "expected": "MD-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-9",
+          "word_ids": [
+            219
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-9",
+          "word_ids": [
+            308
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-10/tag",
+      "page": 6,
+      "bbox": [
+        589,
+        577,
+        631,
+        594
+      ],
+      "expected": "MD-10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-10",
+          "word_ids": [
+            218
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-10",
+          "word_ids": [
+            248
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-11/tag",
+      "page": 6,
+      "bbox": [
+        782,
+        267,
+        820,
+        284
+      ],
+      "expected": "MD11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD11",
+          "word_ids": [
+            220
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD11",
+          "word_ids": [
+            14
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-12/tag",
+      "page": 4,
+      "bbox": [
+        604,
+        717,
+        646,
+        734
+      ],
+      "expected": "MD-12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-12",
+          "word_ids": [
+            239
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-12",
+          "word_ids": [
+            135
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-13/tag",
+      "page": 4,
+      "bbox": [
+        604,
+        685,
+        645,
+        702
+      ],
+      "expected": "MD-13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-13",
+          "word_ids": [
+            240
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-13",
+          "word_ids": [
+            167
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-14/tag",
+      "page": 4,
+      "bbox": [
+        900,
+        664,
+        942,
+        681
+      ],
+      "expected": "MD-14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-14",
+          "word_ids": [
+            241
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-14",
+          "word_ids": [
+            166
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-15/tag",
+      "page": 4,
+      "bbox": [
+        941,
+        712,
+        983,
+        729
+      ],
+      "expected": "MD-15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-15",
+          "word_ids": [
+            242
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-15",
+          "word_ids": [
+            147
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-16/tag",
+      "page": 4,
+      "bbox": [
+        1177,
+        652,
+        1219,
+        669
+      ],
+      "expected": "MD-16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-16",
+          "word_ids": [
+            243
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-16",
+          "word_ids": [
+            150
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-17/tag",
+      "page": 4,
+      "bbox": [
+        1220,
+        714,
+        1262,
+        731
+      ],
+      "expected": "MD-17",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-17",
+          "word_ids": [
+            244
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-17",
+          "word_ids": [
+            173
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-18/tag",
+      "page": 4,
+      "bbox": [
+        1459,
+        718,
+        1501,
+        735
+      ],
+      "expected": "MD-18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-18",
+          "word_ids": [
+            245
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-18",
+          "word_ids": [
+            174
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-MD-19/tag",
+      "page": 4,
+      "bbox": [
+        1457,
+        687,
+        1499,
+        704
+      ],
+      "expected": "MD-19",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-19",
+          "word_ids": [
+            246
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-19",
+          "word_ids": [
+            143
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-GR-1/tag",
+      "page": 7,
+      "bbox": [
+        1183,
+        296,
+        1217,
+        313
+      ],
+      "expected": "GR-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GR-1",
+          "word_ids": [
+            8
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GR-1",
+          "word_ids": [
+            17
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-GR-2/tag",
+      "page": 7,
+      "bbox": [
+        1320,
+        303,
+        1354,
+        320
+      ],
+      "expected": "GR-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GR-2",
+          "word_ids": [
+            9
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GR-2",
+          "word_ids": [
+            21
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-GR-3/tag",
+      "page": 7,
+      "bbox": [
+        1459,
+        303,
+        1493,
+        320
+      ],
+      "expected": "GR-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GR-3",
+          "word_ids": [
+            10
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GR-3",
+          "word_ids": [
+            18
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-GR-4/tag",
+      "page": 7,
+      "bbox": [
+        1599,
+        303,
+        1633,
+        320
+      ],
+      "expected": "GR-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GR-4",
+          "word_ids": [
+            11
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GR-4",
+          "word_ids": [
+            19
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-GI-1/tag",
+      "page": 7,
+      "bbox": [
+        1358,
+        1077,
+        1387,
+        1093
+      ],
+      "expected": "GI-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GI-1",
+          "word_ids": [
+            35
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GI-1",
+          "word_ids": [
+            99
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-GI-2/tag",
+      "page": 7,
+      "bbox": [
+        1358,
+        994,
+        1387,
+        1010
+      ],
+      "expected": "GI-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GI-2",
+          "word_ids": [
+            34
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GI-2",
+          "word_ids": [
+            181
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-GI-3/tag",
+      "page": 7,
+      "bbox": [
+        1358,
+        912,
+        1387,
+        928
+      ],
+      "expected": "GI-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GI-3",
+          "word_ids": [
+            33
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GI-3",
+          "word_ids": [
+            228
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-L-1/tag",
+      "page": 3,
+      "bbox": [
+        463,
+        733,
+        485,
+        750
+      ],
+      "expected": "L-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-1",
+          "word_ids": [
+            46
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-1",
+          "word_ids": [
+            387
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-L-2/tag",
+      "page": 3,
+      "bbox": [
+        1263,
+        1125,
+        1284,
+        1142
+      ],
+      "expected": "L-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-2",
+          "word_ids": [
+            22
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-2",
+          "word_ids": [
+            241
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-L-3/tag",
+      "page": 4,
+      "bbox": [
+        1137,
+        1078,
+        1159,
+        1095
+      ],
+      "expected": "L-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-3",
+          "word_ids": [
+            47
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-3",
+          "word_ids": [
+            267
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-L-4/tag",
+      "page": 5,
+      "bbox": [
+        1142,
+        1062,
+        1164,
+        1079
+      ],
+      "expected": "L-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-4",
+          "word_ids": [
+            21
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-4",
+          "word_ids": [
+            145
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-L-5/tag",
+      "page": 5,
+      "bbox": [
+        1670,
+        96,
+        1692,
+        113
+      ],
+      "expected": "L-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-5",
+          "word_ids": [
+            25
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-5",
+          "word_ids": [
+            9
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-L-6/tag",
+      "page": 6,
+      "bbox": [
+        774,
+        95,
+        796,
+        112
+      ],
+      "expected": "L-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-6",
+          "word_ids": [
+            65
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-6",
+          "word_ids": [
+            374
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-L-7/tag",
+      "page": 6,
+      "bbox": [
+        1059,
+        107,
+        1082,
+        124
+      ],
+      "expected": "L-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-7",
+          "word_ids": [
+            69
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-7",
+          "word_ids": [
+            369
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-L-8/tag",
+      "page": 3,
+      "bbox": [
+        654,
+        1125,
+        677,
+        1142
+      ],
+      "expected": "L-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-8",
+          "word_ids": [
+            170
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-8",
+          "word_ids": [
+            226
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-L-9/tag",
+      "page": 3,
+      "bbox": [
+        873,
+        1121,
+        895,
+        1138
+      ],
+      "expected": "L-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-9",
+          "word_ids": [
+            163
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-9",
+          "word_ids": [
+            237
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-L-10/tag",
+      "page": 3,
+      "bbox": [
+        1387,
+        157,
+        1416,
+        174
+      ],
+      "expected": "L-10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-10",
+          "word_ids": [
+            18
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-10",
+          "word_ids": [
+            26
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-L-11A/tag",
+      "page": 4,
+      "bbox": [
+        351,
+        108,
+        389,
+        125
+      ],
+      "expected": "L-11A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-11A",
+          "word_ids": [
+            172
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-11A",
+          "word_ids": [
+            13
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-L-11B/tag",
+      "page": 4,
+      "bbox": [
+        938,
+        99,
+        976,
+        116
+      ],
+      "expected": "L-11B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-11B",
+          "word_ids": [
+            51
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-11B",
+          "word_ids": [
+            9
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-L-11C/tag",
+      "page": 4,
+      "bbox": [
+        1667,
+        108,
+        1706,
+        125
+      ],
+      "expected": "L-11C",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-11C",
+          "word_ids": [
+            176
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-11C",
+          "word_ids": [
+            20
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-L-12/tag",
+      "page": 5,
+      "bbox": [
+        1225,
+        96,
+        1254,
+        113
+      ],
+      "expected": "L-12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-12",
+          "word_ids": [
+            17
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-12",
+          "word_ids": [
+            14
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-L-13/tag",
+      "page": 6,
+      "bbox": [
+        389,
+        1108,
+        418,
+        1125
+      ],
+      "expected": "L-13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-13",
+          "word_ids": [
+            158
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-13",
+          "word_ids": [
+            447
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-L-14/tag",
+      "page": 6,
+      "bbox": [
+        1272,
+        343,
+        1302,
+        360
+      ],
+      "expected": "L-14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-14",
+          "word_ids": [
+            163
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-14",
+          "word_ids": [
+            267
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/USB-L-15/tag",
+      "page": 6,
+      "bbox": [
+        1242,
+        810,
+        1271,
+        827
+      ],
+      "expected": "L-15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-15",
+          "word_ids": [
+            167
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-15",
+          "word_ids": [
+            401
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/GH-DSS-3/tag",
+      "page": 8,
+      "bbox": [
+        431,
+        105,
+        473,
+        122
+      ],
+      "expected": "DSS-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DSS-3",
+          "word_ids": [
+            28
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DSS-3",
+          "word_ids": [
+            13
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/GH-CU-3/tag",
+      "page": 8,
+      "bbox": [
+        827,
+        1043,
+        860,
+        1060
+      ],
+      "expected": "CU-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CU-3",
+          "word_ids": [
+            127
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CU-3",
+          "word_ids": [
+            427
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/GH-SS-1/tag",
+      "page": 8,
+      "bbox": [
+        568,
+        325,
+        601,
+        342
+      ],
+      "expected": "SS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SS-1",
+          "word_ids": [
+            84
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SS-1",
+          "word_ids": [
+            52
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/GH-HP-1/tag",
+      "page": 8,
+      "bbox": [
+        558,
+        1062,
+        591,
+        1079
+      ],
+      "expected": "HP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HP-1",
+          "word_ids": [
+            124
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HP-1",
+          "word_ids": [
+            381
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/GH-EF-7/tag",
+      "page": 8,
+      "bbox": [
+        1142,
+        1246,
+        1174,
+        1263
+      ],
+      "expected": "EF-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-7",
+          "word_ids": [
+            125
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-7",
+          "word_ids": [
+            400
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/GH-GI-1/tag",
+      "page": 8,
+      "bbox": [
+        474,
+        1242,
+        503,
+        1259
+      ],
+      "expected": "GI-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GI-1",
+          "word_ids": [
+            126
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GI-1",
+          "word_ids": [
+            398
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/GH-MD-21/tag",
+      "page": 8,
+      "bbox": [
+        423,
+        413,
+        464,
+        430
+      ],
+      "expected": "MD-21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-21",
+          "word_ids": [
+            105
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-21",
+          "word_ids": [
+            122
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/GH-MD-22/tag",
+      "page": 12,
+      "bbox": [
+        982,
+        431,
+        1023,
+        448
+      ],
+      "expected": "MD-22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD-22",
+          "word_ids": [
+            63
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD-22",
+          "word_ids": [
+            54
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/GB-DSS-4/tag",
+      "page": 9,
+      "bbox": [
+        429,
+        202,
+        462,
+        218
+      ],
+      "expected": "DSS-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DSS-4",
+          "word_ids": [
+            30
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DSS-4",
+          "word_ids": [
+            26
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "equipment-plan-anchors/GB-CU-4/tag",
+      "page": 9,
+      "bbox": [
+        328,
+        185,
+        356,
+        201
+      ],
+      "expected": "CU-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CU-4",
+          "word_ids": [
+            29
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CU-4",
+          "word_ids": [
+            25
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "linked-schedule-registry",
+      "pass": true,
+      "tables": 24,
+      "rows": 105,
+      "identities": 109,
+      "primary_anchors": 99
+    },
+    {
+      "id": "scheduled-primary-anchors",
+      "actual": 99,
+      "expected": 99,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {
+    "schedules.json": "09258edcb5198818645a0f92456fc1bde2c942eef880bebe070dace6db1c0165",
+    "supplemental_schedules.json": "64e45938b4aa56b3550279886b72b02152725c50f4b792c56af70fcf4cb3fa06"
+  },
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

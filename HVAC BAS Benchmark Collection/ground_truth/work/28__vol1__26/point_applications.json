@@ -1,0 +1,18 @@
+{
+  "document_id": "28__vol1__26",
+  "module_role": "Published control-legend source-row scope only.",
+  "tables": [],
+  "ledger_mode": "literal_source_row_matrices_v1",
+  "applications": [
+    {
+      "id": "m001-control-legend",
+      "source_table": "M001-CONTROL-LEGEND",
+      "ownership_scope": "Legend function context only; final actuator/device ownership and field wiring are not stated."
+    }
+  ],
+  "expanded_template_counts": {
+    "source_rows": 1,
+    "total": 1
+  },
+  "expanded_count_warning": "One legend row is not a physical device, I/O, controller or cable count."
+}

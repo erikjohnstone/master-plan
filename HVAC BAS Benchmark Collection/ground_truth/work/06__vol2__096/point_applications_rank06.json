@@ -1,0 +1,58 @@
+{
+  "document_id": "06__vol2__096",
+  "module_role": "Explicit source-table application scopes for every printed BAS point-matrix row.",
+  "tables": [],
+  "ledger_mode": "literal_source_row_matrices_v1",
+  "applications": [
+    {
+      "id": "m901-chilled-water",
+      "source_table": "M901-CHILLED-WATER-DDC",
+      "ownership_scope": "Literal source-matrix context only; no final physical owner, controller terminal or I/O-card allocation is printed."
+    },
+    {
+      "id": "m901-heating-hot-water",
+      "source_table": "M901-HEATING-HOT-WATER-DDC",
+      "ownership_scope": "Literal source-matrix context only; no final physical owner, controller terminal or I/O-card allocation is printed."
+    },
+    {
+      "id": "m902-doas-1-2",
+      "source_table": "M902-DOAS-1-2-DDC",
+      "ownership_scope": "Literal source-matrix context only; no final physical owner, controller terminal or I/O-card allocation is printed."
+    },
+    {
+      "id": "m903-ahu-4",
+      "source_table": "M903-AHU-4-DDC",
+      "ownership_scope": "Literal source-matrix context only; no final physical owner, controller terminal or I/O-card allocation is printed."
+    },
+    {
+      "id": "m904-doas-3",
+      "source_table": "M904-DOAS-3-DDC",
+      "ownership_scope": "Literal source-matrix context only; no final physical owner, controller terminal or I/O-card allocation is printed."
+    },
+    {
+      "id": "m905-sallyport-exhaust",
+      "source_table": "M905-SALLYPORT-EXHAUST-DDC",
+      "ownership_scope": "Literal source-matrix context only; no final physical owner, controller terminal or I/O-card allocation is printed."
+    },
+    {
+      "id": "m905-jail-exhaust",
+      "source_table": "M905-JAIL-EXHAUST-DDC",
+      "ownership_scope": "Literal source-matrix context only; no final physical owner, controller terminal or I/O-card allocation is printed."
+    },
+    {
+      "id": "m905-pod-exhaust",
+      "source_table": "M905-POD-EXHAUST-DDC",
+      "ownership_scope": "Literal source-matrix context only; no final physical owner, controller terminal or I/O-card allocation is printed."
+    },
+    {
+      "id": "m906-heat-recovery-chiller",
+      "source_table": "M906-HEAT-RECOVERY-CHILLER-DDC",
+      "ownership_scope": "Literal source-matrix context only; no final physical owner, controller terminal or I/O-card allocation is printed."
+    }
+  ],
+  "expanded_template_counts": {
+    "source_rows": 229,
+    "total": 229
+  },
+  "expanded_count_warning": "229 is the count of literal published source-matrix rows, including repeated labels. It is not an installed BAS point, controller, I/O, terminal, wire, device or address total."
+}

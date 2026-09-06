@@ -1,0 +1,4161 @@
+{
+  "id": "16__vol2__069",
+  "rank": 16,
+  "title": "ITD District 2 Laboratory Heating Upgrades Rebid",
+  "source_pdf": "pdf/16__vol2__069__ITD_District_2_Laboratory_Heating_Upgrades_Rebid.pdf",
+  "source_sha256": "ce0c2bb973f87194f0f6ed8d68faaad2a5683129f9d0db1a73415f6051ed06f1",
+  "page_count": 9,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete ground truth for all nine supplied pages of the ITD District 2 heating-system-upgrades rebid set: project/sheet/scale review, every M3.0 schedule row and cell, schedule/plan reconciliation, printed control interface rows, network/control context, the written grey existing and bold updated sequence layers, and sensor/valve/actuator source limits. No unprinted installed I/O, controller, valve, damper-actuator, or zone-sensor quantity is invented.",
+  "reading_notes": [
+    "The retained corpus has all nine pages of this supplied drawing set. Full-page Poppler renders establish page-level visual context; MuPDF and Poppler independently corroborate every authored schedule cell and bounded controls/reconciliation assertion.",
+    "M3.0 has 4 schedule tables / 11 line items: 1 existing AHU, 2 existing boilers, 6 new hydronic pumps, and 2 new VFDs. A schedule row is not automatically an installed drawing count; the 11 identities are separately anchored to plan/schematic context.",
+    "M4.0 and M4.1 explicitly say grey is existing control sequence and bold is updated control sequence. This record preserves both layers; it does not manufacture an integrated final control narrative where the source does not do so.",
+    "The only printed VFD and chiller points lists are open-ended interface lists. Their 16 visible source rows lack per-row AI/AO/DI/DO classifications and physical owner/multiplier data, so they are neither retyped nor inflated into a terminal count.",
+    "Legends, schematic transmitter/symbol marks, detail callouts, plan symbols, schedules and physical installed devices are distinct source constructs. Their quantities are retained only where the drawing set actually establishes them."
+  ],
+  "module_order": [
+    "metadata",
+    "schedules",
+    "points",
+    "controls_context",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "schedules": [
+      "schedules_m3"
+    ],
+    "points": [
+      "controls_context_m4"
+    ],
+    "controls_context": [
+      "controls_context_m4"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Project name, location, building description, agency, engineering firm, project number, rebid issue and issue date are captured; blank revision grids are not reclassified as revisions.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every supplied sheet has a page-level sheet/title/review ledger. Sheet-ID/name lettering is visually legible outlined title-block graphics, so the source limitation is retained rather than asserting a false text-extraction witness.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The two M1.0 and two E1.0 plan views state 1/4\" = 1'-0\"; detail/controls/schedule pages are not distance-scaled plan views and no supplied page has a graphic scale bar.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 11 M3.0 marked schedule identities are classified and reconciled to plan/schematic visual context. The BP-2 area-served source conflict remains explicit rather than corrected by assumption.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "scheduled_families"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "primary_anchors"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "source_conflicts"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All four M3.0 schedules are retained as 11 exact source rows and 160 two-engine-corrobated cells, including airflow, capacity, flow, electrical, pump, VFD and selection fields.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "schedule_counts"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every visible row in the 4-row VFD and 12-row chiller interface lists is retained with its source scope. The lists are expressly open-ended and untyped, so no unsupported I/O-type or physical-terminal count is claimed.",
+      "evidence": [
+        [
+          "modules",
+          "points",
+          "tables"
+        ],
+        [
+          "modules",
+          "point_applications",
+          "applications"
+        ],
+        [
+          "modules",
+          "point_applications",
+          "installed_IO_total"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Existing Delta system, BACnet, existing controller/operator components and explicitly absent transport/addressing/baud/controller-model information are recorded exactly at source scope.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M4.0 heating-water and M4.1 chilled-water written sequences are separated into existing-grey and updated-bold layers, with the VFD/chiller lists, key reset, delay, lead/lag, alarm, valve, UCP and diagram context retained.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "source_layer_rule"
+        ],
+        [
+          "modules",
+          "controls_context",
+          "sequences"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Schematic/integration logical sensor roles are indexed. The supplied set does not map space, CO2 or smart-thermostat devices to zones, so physical counts remain explicitly not stated.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sensor_and_zone_ledger"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "No valve/actuator schedules, no zone sensor roster, open-ended interface lists, outlined sheet-ID text, grey/bold layering, schedule-versus-installed distinctions and the BP-2 wording conflict are all explicitly recorded.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "control_valve_and_damper_schedule_status"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All nine supplied pages were reviewed at full-page resolution; the saved Poppler renders and each sheet finding are embedded and hash-checked in the final record.",
+      "evidence": [
+        [
+          "page_review"
+        ],
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Build and validation rerun every module against the retained MuPDF and Poppler source captures. The final record stores component and bundle digests in addition to the evidence source hash.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ],
+        [
+          "module_sha256"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/16__vol2__069/p1-p1-full-poppler.png",
+      "finding": "G0.0 general cover: project identity, vicinity map and drawing index; no BAS schedule or point list."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/16__vol2__069/p2-p2-full-poppler.png",
+      "finding": "M0.0 mechanical cover: abbreviations, legend and notes. Legend symbols are not treated as installed inventory."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/16__vol2__069/p3-p3-full-poppler.png",
+      "finding": "M1.0 loft mechanical demolition and new-work plans: removed hot/chilled-water pumps, new HWP/BP/CWP/VFD context and AHU-1 3-way valve note."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/16__vol2__069/p4-p4-full-poppler.png",
+      "finding": "M2.0 mechanical details: existing/new hot-water piping, boiler and heating-coil details; all detailed views marked not to scale."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/16__vol2__069/p5-p5-full-poppler.png",
+      "finding": "M3.0 mechanical schedules: existing AHU/boilers and new pumps/VFDs; all four schedule tables transcribed."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/16__vol2__069/p6-p6-full-poppler.png",
+      "finding": "M4.0 controls: legend, Delta architecture, heating-water schematic, grey existing and bold updated sequence layers, VFD points list."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/16__vol2__069/p7-p7-full-poppler.png",
+      "finding": "M4.1 controls: chilled-water schematic, grey existing and bold updated sequence layers, open-ended chiller points list and BACnet panel label."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/16__vol2__069/p8-p8-full-poppler.png",
+      "finding": "E0.0 electrical cover: legends, general notes and panel schedules; auxiliary electrical context, not a BAS point list."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/16__vol2__069/p9-p9-full-poppler.png",
+      "finding": "E1.0 mechanical power plan: demolition/new power context for scheduled pumps/VFDs and related mechanical equipment."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "supplied-pages",
+      "path": [
+        "modules",
+        "metadata",
+        "visual_review_pages"
+      ],
+      "operation": "length",
+      "expected": 9
+    },
+    {
+      "id": "full-page-review",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 9
+    },
+    {
+      "id": "schedule-tables",
+      "path": [
+        "modules",
+        "equipment_reconciliation",
+        "schedule_counts",
+        "tables"
+      ],
+      "expected": 4
+    },
+    {
+      "id": "schedule-rows",
+      "path": [
+        "modules",
+        "equipment_reconciliation",
+        "schedule_counts",
+        "rows"
+      ],
+      "expected": 11
+    },
+    {
+      "id": "printed-controls-source-rows",
+      "path": [
+        "modules",
+        "point_applications",
+        "listed_template_counts",
+        "source_rows"
+      ],
+      "expected": 16
+    }
+  ],
+  "completion_checks": {
+    "every_source_page_reviewed": true,
+    "all_explicit_objective_categories_reviewed": true,
+    "all_populated_schedule_and_points_rows_captured": true,
+    "source_conflicts_and_unavailable_fields_preserved": true,
+    "two_engine_checks_current": true,
+    "final_assembly_audit_complete": true
+  },
+  "verification_semantics": "MuPDF and Poppler independently captured all nine supplied vector-PDF pages. Current authored schedule/point cells and bounded text assertions are rechecked in both engines at bundle build and validation time. Parser agreement corroborates the retained source text/cells and their bounds; full-page Poppler review establishes visual sheet disposition, symbol/line-weight relationships and source limitations. Neither process invents physical device, terminal, controller, valve, damper-actuator, or zone-sensor quantities not established by the supplied PDF.",
+  "schema_version": "authored-module-bundle-v1",
+  "bundle_manifest": "work/16__vol2__069/document_manifest.json",
+  "bundle_manifest_sha256": "ca87aa1327cc9c816226c9ceb979933e99cca5da6b48a3f420e13ee94cf487f1",
+  "review_render_sha256": {
+    "reviews/16__vol2__069/p1-p1-full-poppler.png": "2de2aa72e8ca4ea986fed5592930d46d696a9ac75d9e77ee8510ff90c4de99ff",
+    "reviews/16__vol2__069/p2-p2-full-poppler.png": "c37cc19fff2236739899c5558e4104b1b34fb8d0fc065dc00f661b8c179da2f3",
+    "reviews/16__vol2__069/p3-p3-full-poppler.png": "4233b7866c6dea37ea557b8bc39c416203f4e71976fa329c69f28bc21b62e12c",
+    "reviews/16__vol2__069/p4-p4-full-poppler.png": "ee49767466066d0ae1766d9879c2ba8ebe0d0dd7b575da061fe3b86ee0d157a1",
+    "reviews/16__vol2__069/p5-p5-full-poppler.png": "651486bcfbe1b1eddb2e59dff4cbfbede7f522b4903a32708ce2cbd2bb04905a",
+    "reviews/16__vol2__069/p6-p6-full-poppler.png": "b8d4651d918f1dbf0ecaa8e1597f9a33ca6deb6e043c31054dd23d34aa4fd89d",
+    "reviews/16__vol2__069/p7-p7-full-poppler.png": "7ac22f285de151089baf5e05e58f66b3a754c4bfdcf389c5e763033c1b89d2e4",
+    "reviews/16__vol2__069/p8-p8-full-poppler.png": "9b65cfc45fb3c150a50c084afd4b70056ee2190b125001a01a568fd57e71f69b",
+    "reviews/16__vol2__069/p9-p9-full-poppler.png": "08344209d489e7abe1636301ddba3322fb3790c2d239a7dc6220379091dd1889"
+  },
+  "modules": {
+    "metadata": {
+      "document_id": "16__vol2__069",
+      "module_role": "Project, sheet, issue-date, scale and complete visual-review ledger for the supplied nine-sheet ITD District 2 heating-upgrades rebid set.",
+      "scope": "All nine supplied pages are covered. The title-block sheet-ID and sheet-name lettering is visually legible in the source renders but outlined rather than exposed as normal vector text by either retained parser; that limitation is retained rather than converted into a false parser assertion.",
+      "project": {
+        "name": "IDAHO TRANSPORTATION DEPARTMENT HEATING SYSTEM UPGRADES - DISTRICT 2",
+        "location": "2606 FRONTAGE RD, LEWISTON, ID 83501",
+        "building_type": "District 2 materials laboratory / heating-system upgrade as printed in project and electrical panel labels",
+        "owner_or_agency": "IDAHO TRANSPORTATION DEPARTMENT",
+        "design_firm_as_printed": "MUSGROVE ENGINEERING, P.A.",
+        "project_number": "26-150",
+        "issue": "REBID",
+        "issue_date": "AUGUST 2026",
+        "revision_date": {
+          "status": "not_stated",
+          "value": null,
+          "note": "The visible revision grids are blank. The repeated AUGUST 2026 field is retained as the drawing date/issue date, not recast as a revision date."
+        }
+      },
+      "scale_semantics": {
+        "finding": "Pages M1.0 and E1.0 show 1/4\" = 1'-0\" for their demolition and new-work plans. M2.0 details are NOT TO SCALE; the controls/schedule/cover sheets are not distance-takeoff plan views. No graphic scale bar is present on any supplied page.",
+        "graphic_scale_bar_total": 0,
+        "measurable_length_scaled_view_total": 4,
+        "views": [
+          {
+            "id": "M1.0-1",
+            "page": 3,
+            "sheet": "M1.0",
+            "view": "1",
+            "title": "LOFT MECHANICAL DEMOLITION PLAN",
+            "scale": "1/4\" = 1'-0\"",
+            "graphic_scale_bar": false
+          },
+          {
+            "id": "M1.0-2",
+            "page": 3,
+            "sheet": "M1.0",
+            "view": "2",
+            "title": "LOFT MECHANICAL NEW WORK PLAN",
+            "scale": "1/4\" = 1'-0\"",
+            "graphic_scale_bar": false
+          },
+          {
+            "id": "E1.0-1",
+            "page": 9,
+            "sheet": "E1.0",
+            "view": "1",
+            "title": "ELECTRICAL LOFT DEMO PLAN",
+            "scale": "1/4\" = 1'-0\"",
+            "graphic_scale_bar": false
+          },
+          {
+            "id": "E1.0-2",
+            "page": 9,
+            "sheet": "E1.0",
+            "view": "2",
+            "title": "ELECTRICAL LOFT NEW PLAN",
+            "scale": "1/4\" = 1'-0\"",
+            "graphic_scale_bar": false
+          }
+        ]
+      },
+      "visual_review_pages": [
+        {
+          "page": 1,
+          "sheet": "G0.0",
+          "title": "GENERAL COVER SHEET",
+          "revision_date": {
+            "status": "not_stated",
+            "value": null
+          },
+          "review_status": "complete",
+          "finding": "Cover, project identity, map and drawing index. Sheet ID/name are visible outlined title-block graphics; two unscaled map views only.",
+          "render": "reviews/16__vol2__069/p1-p1-full-poppler.png"
+        },
+        {
+          "page": 2,
+          "sheet": "M0.0",
+          "title": "MECHANICAL COVER SHEET",
+          "revision_date": {
+            "status": "not_stated",
+            "value": null
+          },
+          "review_status": "complete",
+          "finding": "Mechanical abbreviations, legends, general notes and energy-code compliance notes. Symbol legend is not treated as installed-equipment inventory.",
+          "render": "reviews/16__vol2__069/p2-p2-full-poppler.png"
+        },
+        {
+          "page": 3,
+          "sheet": "M1.0",
+          "title": "MECHANICAL FLOOR PLANS",
+          "revision_date": {
+            "status": "not_stated",
+            "value": null
+          },
+          "review_status": "complete",
+          "finding": "Loft mechanical demolition/new-work plans and keyed notes. The new-work view is the only supplied mechanical plan-level installed-equipment context.",
+          "render": "reviews/16__vol2__069/p3-p3-full-poppler.png"
+        },
+        {
+          "page": 4,
+          "sheet": "M2.0",
+          "title": "MECHANICAL DETAILS",
+          "revision_date": {
+            "status": "not_stated",
+            "value": null
+          },
+          "review_status": "complete",
+          "finding": "Existing/new hot-water piping schematics and boiler/heating-coil details, all captioned NOT TO SCALE.",
+          "render": "reviews/16__vol2__069/p4-p4-full-poppler.png"
+        },
+        {
+          "page": 5,
+          "sheet": "M3.0",
+          "title": "MECHANICAL SCHEDULES",
+          "revision_date": {
+            "status": "not_stated",
+            "value": null
+          },
+          "review_status": "complete",
+          "finding": "Existing AHU and condensing-hot-water-boiler schedules plus new pump and variable-frequency-drive schedules; also an inline-pump detail.",
+          "render": "reviews/16__vol2__069/p5-p5-full-poppler.png"
+        },
+        {
+          "page": 6,
+          "sheet": "M4.0",
+          "title": "MECHANICAL CONTROLS",
+          "revision_date": {
+            "status": "not_stated",
+            "value": null
+          },
+          "review_status": "complete",
+          "finding": "Controls legends/architecture, existing heating-water-system schematic and written sequence. Source color/weight distinguishes existing text from bold updated sequences.",
+          "render": "reviews/16__vol2__069/p6-p6-full-poppler.png"
+        },
+        {
+          "page": 7,
+          "sheet": "M4.1",
+          "title": "MECHANICAL CONTROLS",
+          "revision_date": {
+            "status": "not_stated",
+            "value": null
+          },
+          "review_status": "complete",
+          "finding": "Existing chilled-water-system schematic and written sequence. Source color/weight distinguishes existing text from bold updated sequences.",
+          "render": "reviews/16__vol2__069/p7-p7-full-poppler.png"
+        },
+        {
+          "page": 8,
+          "sheet": "E0.0",
+          "title": "ELECTRICAL COVER SHEET",
+          "revision_date": {
+            "status": "not_stated",
+            "value": null
+          },
+          "review_status": "complete",
+          "finding": "Electrical legends, device notes, panel schedules and general notes. It supplies related electrical context, not a mechanical schedule/point list.",
+          "render": "reviews/16__vol2__069/p8-p8-full-poppler.png"
+        },
+        {
+          "page": 9,
+          "sheet": "E1.0",
+          "title": "MECHANICAL POWER PLAN",
+          "revision_date": {
+            "status": "not_stated",
+            "value": null
+          },
+          "review_status": "complete",
+          "finding": "Electrical loft demolition/new plans, including new pump/VFD power and mechanical equipment callouts; not a BAS point list.",
+          "render": "reviews/16__vol2__069/p9-p9-full-poppler.png"
+        }
+      ],
+      "tables": [],
+      "assertion_groups": [
+        {
+          "id": "standard-title-block-fields-pages-1-8",
+          "defaults": {
+            "project_number": "26-150",
+            "issue_date": "AUGUST 2026"
+          },
+          "templates": [
+            {
+              "id": "project-number",
+              "field": "project_number",
+              "bbox": [
+                2438,
+                1410,
+                2480,
+                1435
+              ],
+              "mode": "exact"
+            },
+            {
+              "id": "issue-date",
+              "field": "issue_date",
+              "bbox": [
+                2438,
+                1472,
+                2510,
+                1500
+              ],
+              "mode": "exact"
+            }
+          ],
+          "records": [
+            {
+              "id": "p1",
+              "page": 1
+            },
+            {
+              "id": "p2",
+              "page": 2
+            },
+            {
+              "id": "p3",
+              "page": 3
+            },
+            {
+              "id": "p4",
+              "page": 4
+            },
+            {
+              "id": "p5",
+              "page": 5
+            },
+            {
+              "id": "p6",
+              "page": 6
+            },
+            {
+              "id": "p7",
+              "page": 7
+            },
+            {
+              "id": "p8",
+              "page": 8
+            }
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "p9-project-number",
+          "page": 9,
+          "bbox": [
+            2455,
+            1410,
+            2500,
+            1435
+          ],
+          "expected": "26-150",
+          "mode": "exact"
+        },
+        {
+          "id": "p9-issue-date",
+          "page": 9,
+          "bbox": [
+            2455,
+            1472,
+            2520,
+            1500
+          ],
+          "expected": "AUGUST 2026",
+          "mode": "exact"
+        },
+        {
+          "id": "p1-project-title",
+          "page": 1,
+          "bbox": [
+            2425,
+            900,
+            2470,
+            1400
+          ],
+          "expected": "HEATING SYSTEM UPGRADES",
+          "reading_direction": "up",
+          "mode": "exact"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "all-supplied-pages-visually-reviewed",
+          "records_path": [
+            "visual_review_pages"
+          ],
+          "expected": 9,
+          "unique_key": "page"
+        },
+        {
+          "id": "length-scaled-views",
+          "records_path": [
+            "scale_semantics",
+            "views"
+          ],
+          "expected": 4,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "schedules": {
+      "document_id": "16__vol2__069",
+      "module_role": "Exact M3.0 mechanical schedule cells. Existing equipment labels and new pump/VFD rows remain in their printed scopes; a schedule row is not silently converted to a plan-installed quantity.",
+      "source_sheet": "M3.0",
+      "source_page": 5,
+      "tables": [
+        {
+          "id": "M3-EXISTING-AHU",
+          "page": 5,
+          "sheet": "M3.0",
+          "title": "EXISTING AIR HANDLING UNIT SCHEDULE",
+          "classification": "Existing air-handling unit reference schedule",
+          "columns": "mark|type|area_served|fan_type|supply_fan_cfm|supply_fan_esp_in_wg|supply_fan_tsp_in_wg|supply_fan_hp_qty|supply_fan_volts_ph|supply_fan_rpm|cooling_fluid_type|cooling_sensible_capacity_mbh|cooling_total_capacity_mbh|cooling_cfm|cooling_eat_db_f|cooling_eat_wb_f|cooling_lat_db_f|cooling_lat_wb_f|cooling_max_face_velocity_fpm|cooling_air_pd_in_wg|cooling_fluid_ewt_f|cooling_fluid_lwt_f|cooling_fluid_gpm|cooling_fluid_pd_ft|cooling_max_rh|heating_fluid_type|heating_capacity_mbh|heating_cfm|heating_eat_db_f|heating_lat_db_f|heating_max_face_velocity_fpm|heating_air_pd_in_wg|heating_fluid_ewt_f|heating_fluid_lwt_f|heating_fluid_gpm|heating_fluid_pd_ft|humidification_coil_air_pd_ft|humidification_finned_height_in|humidification_finned_width_in|humidification_face_area_ft_sq|humidification_face_velocity_fpm|prefilter_efficiency|prefilter_depth_in|final_filter_efficiency|final_filter_depth_in|combination_filter_max_face_velocity_fpm|min_osa_cfm|operating_weight_lbs|manufacturer_model|remarks",
+          "x_edges": [
+            157.38,
+            202.38,
+            274.38,
+            346.38,
+            386.88,
+            422.88,
+            458.88,
+            494.88,
+            530.88,
+            566.88,
+            602.88,
+            643.38,
+            688.38,
+            733.38,
+            769.44,
+            805.44,
+            841.44,
+            877.44,
+            913.44,
+            967.44,
+            1003.44,
+            1039.44,
+            1075.44,
+            1111.44,
+            1147.44,
+            1183.44,
+            1228.44,
+            1273.58,
+            1309.44,
+            1345.44,
+            1381.44,
+            1435.44,
+            1471.58,
+            1507.44,
+            1543.44,
+            1579.44,
+            1615.58,
+            1651.44,
+            1687.44,
+            1723.58,
+            1759.44,
+            1795.44,
+            1831.39,
+            1867.44,
+            1897.331,
+            1939.58,
+            1994.242,
+            2029.44,
+            2081.507,
+            2197.08,
+            2251.29
+          ],
+          "y_edges": [
+            250.14,
+            286.14
+          ],
+          "rows": [
+            "AHU-1(E)|SEMI-CUSTOM|LABORATORIES|ECM|16,400|2.0|5.1|3.2 \\ 6|460/3|3,169|30% PG|842.7|842.7|16,400|98.7|65.5|50.2|46.9|500|0.8|45|55.0|177.0|18.0|50%|30% PG|960.0|16,400|12.9|66.9|500|0.11|140|98.1|48.0|5.1|0.01|24.0|109.0|36.33|451|MERV 8|2\"|MERV 13|4\"|500|2,150|7,000|DAIKIN CAH044GDCM|1 , 2"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                150,
+                130,
+                2260,
+                180
+              ],
+              "expected": "EXISTING AIR HANDLING UNIT SCHEDULE"
+            }
+          ]
+        },
+        {
+          "id": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+          "page": 5,
+          "sheet": "M3.0",
+          "title": "EXISTING CONDENSING HOT WATER BOILER SCHEDULE",
+          "classification": "Existing condensing hot-water boiler reference schedule",
+          "columns": "mark|area_served|thermal_efficiency|fuel|ewt_f|lwt_f|boiler_flow_gpm|max_pd_ft_h2o|input_mbh|output_mbh|manufacturer_model|remarks",
+          "x_edges": [
+            157.38,
+            211.38,
+            319.38,
+            391.47,
+            463.47,
+            535.47,
+            607.56,
+            679.56,
+            751.5,
+            808.74,
+            865.92,
+            1165.35,
+            1237.65
+          ],
+          "y_edges": [
+            481.978,
+            515.67,
+            554.34
+          ],
+          "rows": [
+            "B-1(E)|HOT WATER LOOP|98.3%|NATURAL GAS|100.0|150.0|40.0|3.5|1,000|982|LOCHINVAR FTX1000 (EXISTING)|1 , 2",
+            "B-2(E)|HOT WATER LOOP|98.3%|NATURAL GAS|100.0|150.0|40.0|3.5|1,000|982|LOCHINVAR FTX1000 (EXISTING)|1 , 2"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                150,
+                365,
+                1250,
+                420
+              ],
+              "expected": "EXISTING CONDENSING HOT WATER BOILER SCHEDULE"
+            }
+          ]
+        },
+        {
+          "id": "M3-NEW-PUMP",
+          "page": 5,
+          "sheet": "M3.0",
+          "title": "NEW PUMP SCHEDULE",
+          "classification": "New hydronic pump schedule",
+          "columns": "mark|area_served|type|flow_gpm|head_ft|min_efficiency_percent|motor_hp|motor_rpm|motor_volts_ph|operating_weight_lbs|manufacturer_model|remarks",
+          "x_edges": [
+            1273.58,
+            1327.86,
+            1471.58,
+            1561.86,
+            1615.58,
+            1669.86,
+            1723.58,
+            1777.86,
+            1831.39,
+            1885.86,
+            1939.58,
+            2180.16,
+            2251.29
+          ],
+          "y_edges": [
+            481.978,
+            515.67,
+            554.34,
+            589.2,
+            625.2,
+            661.2,
+            697.2
+          ],
+          "rows": [
+            "HWP-1|HOT WATER LOOP|INLINE VARIABLE SECONDARY|80|40|71|2|1,725|460/3|60|B&G E-90 2AB|1 , 2 , 3 , 4",
+            "HWP-2|HOT WATER LOOP|INLINE VARIABLE SECONDARY|80|40|71|2|1,725|460/3|60|B&G E-90 2AB|1 , 2 , 3 , 4",
+            "BP-1|BOILER PUMP (B-1)|INLINE PRIMARY|40|15|-|1/3|4,350|115/1|35|GRUNDFOS MAGNA3 40-80|1 , 2 , 3 , 4",
+            "BP-2|BOILER PUMP (B-1)|INLINE PRIMARY|40|15|-|1/3|4,350|115/1|35|GRUNDFOS MAGNA3 40-80|1 , 2 , 3 , 4",
+            "CWP-1|CHILLED WATER LOOP|INLINE PRIMARY|185|55|67|5|3325|460/3|85|B&G E-90 2AAB|1 , 2 , 3",
+            "CWP-2|CHILLED WATER LOOP|INLINE PRIMARY|185|55|67|5|3325|460/3|85|B&G E-90 2AAB|1 , 2 , 3"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1260,
+                365,
+                2260,
+                420
+              ],
+              "expected": "NEW PUMP SCHEDULE"
+            }
+          ]
+        },
+        {
+          "id": "M3-NEW-VFD",
+          "page": 5,
+          "sheet": "M3.0",
+          "title": "NEW VARIABLE FREQUENCY DRIVE SCHEDULE",
+          "classification": "New variable-frequency drive schedule",
+          "columns": "mark|system_location|service_horsepower|volts_ph|purpose|manufacturer_model|remarks",
+          "x_edges": [
+            157.38,
+            211.38,
+            391.47,
+            463.47,
+            535.47,
+            751.5,
+            1165.35,
+            1237.65
+          ],
+          "y_edges": [
+            745.2,
+            781.2,
+            817.2
+          ],
+          "rows": [
+            "VFD-1|MECHANICAL LOFT|2|460/3|HWP-1|ABB MODEL ACH 580|1 , 2 , 3 , 4",
+            "VFD-2|MECHANICAL LOFT|2|460/3|HWP-2|ABB MODEL ACH 580|1 , 2 , 3 , 4"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                150,
+                665,
+                1250,
+                710
+              ],
+              "expected": "NEW VARIABLE FREQUENCY DRIVE SCHEDULE"
+            }
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "m3-ahus-existing-reference-note",
+          "page": 5,
+          "bbox": [
+            155,
+            305,
+            515,
+            330
+          ],
+          "expected": "EXISTING AIR HANDLING UNIT. SPECIFICATIONS SHOWN FOR REFERENCE ONLY.",
+          "mode": "contains"
+        },
+        {
+          "id": "m3-ahus-new-three-way-valve-note",
+          "page": 5,
+          "bbox": [
+            155,
+            330,
+            605,
+            355
+          ],
+          "expected": "INSTALL NEW 3-WAY VALVE AT HEATING COIL CONNECTION. SEE DETAIL FOR ADDITIONAL REQUIREMENTS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m3-pump-capacity-basis-note",
+          "page": 5,
+          "bbox": [
+            1275,
+            765,
+            1570,
+            790
+          ],
+          "expected": "CAPACITY BASED ON 70% WATER AND 30% PROPYLENE GLYCOL.",
+          "mode": "contains"
+        },
+        {
+          "id": "m3-vfd-control-note",
+          "page": 5,
+          "bbox": [
+            155,
+            885,
+            600,
+            910
+          ],
+          "expected": "EQUIPMENT PROVIDED BY CONTROL CONTRACTOR, INSTALLED BY ELECTRICAL CONTRACTOR.",
+          "mode": "contains"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "m3-schedule-tables",
+          "records_path": [
+            "tables"
+          ],
+          "expected": 4,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "points": {
+      "document_id": "16__vol2__069",
+      "module_role": "M4.0/M4.1 controls ground truth: source-layered hydronic sequences, the explicitly printed VFD/chiller integration lists, controls/network context and sensor-count limits. It does not convert schematic symbols or an open-ended manufacturer integration list into unsupported installed-I/O or device quantities.",
+      "source_sheets": [
+        "M4.0",
+        "M4.1"
+      ],
+      "source_pages": [
+        6,
+        7
+      ],
+      "source_layer_rule": {
+        "as_printed": "TEXT IN GREY NOTES EXISTING CONTROL SEQUENCE. TEXT IN BOLD NOTES UPDATED CONTROL SEQUENCES.",
+        "visual_verification": "Verified on the Poppler page renders. In the retained MuPDF capture, the grey narrative spans have color 11776947 and the bold update spans have color 0; that capture attribute supports but does not replace the rendered-page review.",
+        "interpretation_rule": "The existing-grey and updated-bold source text is retained in separate layers. It is not collapsed into an invented final sequence where the update does not expressly supersede a grey clause.",
+        "assertion_ids": [
+          "m40-layer-rule",
+          "m41-layer-rule"
+        ]
+      },
+      "network_architecture": {
+        "existing_control_system_as_printed": "EXISTING DELTA CONTROL SYSTEM",
+        "protocols_as_printed": [
+          "BACnet"
+        ],
+        "protocol_context": [
+          "M4.0 says the existing hot-water system has existing hot-water boilers with a BACnet interface and that new components shall be integrated into the existing Delta control system.",
+          "M4.1 labels a CHILLER SYSTEM INTEGRATION PANEL (BACnet)(E)."
+        ],
+        "diagram_components_as_printed": [
+          "GLOBAL CONTROLLER(E)",
+          "OPERATOR TERMINAL (E) DDC SOFTWARE (E)",
+          "OPERATOR INTERFACE(E)",
+          "INTERNET(E)",
+          "PUMP UNIT CONTROLLERS(E)",
+          "AIR HANDLER UNIT CONTROLLERS(E)",
+          "CHILLER UNIT CONTROLLERS(E)"
+        ],
+        "transport_addressing_baud_rate_controller_model": {
+          "status": "not_stated_in_supplied_set",
+          "value": null
+        },
+        "assertion_ids": [
+          "m40-general-system",
+          "m41-general-system",
+          "m41-bacnet-integration-panel"
+        ]
+      },
+      "control_symbol_legend": {
+        "definitions_as_printed": {
+          "AI": "ANALOG INPUT",
+          "DI": "DIGITAL INPUT",
+          "AO": "ANALOG OUTPUT",
+          "DO": "DIGITAL OUTPUT",
+          "DA": "DAMPER ACTUATOR",
+          "TV": "TEMPERATURE CONTROL VALVE",
+          "BCV": "BYPASS CONTROL VALVE",
+          "TT": "TEMPERATURE TRANSMITTER",
+          "PT": "PRESSURE TRANSMITTER",
+          "CSR": "CURRENT SENSING RELAY"
+        },
+        "quantity_rule": "The legend is a symbol key, not an installed-equipment, damper-actuator, or control-valve schedule. Its entries are not counted as field devices.",
+        "assertion_ids": [
+          "m40-ai",
+          "m40-di",
+          "m40-ao",
+          "m40-do",
+          "m40-valve",
+          "m40-da",
+          "m40-tt",
+          "m40-pt",
+          "m40-csr"
+        ]
+      },
+      "controls_schedule_ledger": {
+        "control_valve_schedule": {
+          "status": "not_present",
+          "value": null,
+          "basis": "All nine supplied pages were visually reviewed; no dedicated control-valve schedule is present. M3.0 has a note to install a new 3-way valve, and M4.0 contains a symbol legend and BCV-1 schematic label, neither of which is a valve schedule."
+        },
+        "damper_actuator_schedule": {
+          "status": "not_present",
+          "value": null,
+          "basis": "All nine supplied pages were visually reviewed; no dedicated damper-actuator schedule is present. M4.0 contains DA as a legend definition only."
+        },
+        "physical_schedule_line_item_count": {
+          "status": "not_stated",
+          "value": null,
+          "basis": "No valve or damper-actuator schedule exists from which a schedule count can be made."
+        }
+      },
+      "sequences": [
+        {
+          "id": "heating-water-existing-grey",
+          "sheet": "M4.0",
+          "source_layer": "existing_grey",
+          "title": "EXISTING HEATING WATER SYSTEM SEQUENCE OF OPERATION",
+          "statements": [
+            {
+              "id": "enable-conditions",
+              "text": "THE HEATING WATER SYSTEM SHALL BE ENABLED WHENEVER BOTH OF THE FOLLOWING CONDITION EXISTS: OUTSIDE AIR TEMPERATURE DECREASES TO THE HEATING ENABLE SET POINT FOR 10 CONSECUTIVE MINUTES; THERE IS A CALL FOR HEAT FROM AT LEAST ONE ZONE BASED ON A HEATING COIL CONTROL VALVE MINIMUM POSITION OF 25% OPEN FOR 30 CONSECUTIVE SECONDS.",
+              "assertion_ids": [
+                "m40-grey-enable"
+              ]
+            },
+            {
+              "id": "lead-pump",
+              "text": "SEND AN ENABLE COMMAND TO THE LEAD HEATING WATER PUMP; validate running status through the VFD control interface; enable the standby pump on a lead-pump failure and alarm if the standby pump fails to start.",
+              "assertion_ids": [
+                "m40-grey-lead-pump"
+              ]
+            },
+            {
+              "id": "differential-pressure",
+              "text": "THE DDC CONTROLLER SHALL MODULATE THE VFD BASED ON A DIFFERENTIAL PRESSURE SETPOINT (ADJUSTABLE) LOCATED ACROSS THE PIPING ASSEMBLY; the setpoint is coordinated between balance and control contractors and must allow adequate flow to all hot-water heating coils.",
+              "assertion_ids": [
+                "m40-grey-vfd-dp"
+              ]
+            },
+            {
+              "id": "boiler-enable",
+              "text": "SEND AN ENABLE COMMAND TO THE BOILER SYSTEM'S UNIT CONTROLLER; validate through the UCP; on lead-boiler failure enable the lag boiler; alarm if either boiler fails to start.",
+              "assertion_ids": [
+                "m40-grey-boiler-enable"
+              ]
+            },
+            {
+              "id": "lead-lag-and-lockout",
+              "text": "DDC lead/lag control of heating-water pumps includes monthly lead rotation, manual/operator overrides, and lockout prevention: minimum 10 minutes run and 5 minutes off before restart except for manual or occupied/unoccupied scheduling control.",
+              "assertion_ids": [
+                "m40-grey-lead-lag",
+                "m40-grey-short-cycle"
+              ]
+            },
+            {
+              "id": "heating-enable-setpoint",
+              "text": "THE HEATING ENABLE SET POINT SHALL BE SET AT 60°F.",
+              "assertion_ids": [
+                "m40-grey-heating-enable-setpoint"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "heating-water-updated-bold",
+          "sheet": "M4.0",
+          "source_layer": "updated_bold_black",
+          "title": "UPDATED CONTROL SEQUENCES ON EXISTING HEATING WATER SYSTEM SHEET",
+          "statements": [
+            {
+              "id": "boiler-pump-disable",
+              "text": "EACH BOILER SHALL DISABLE ITS OWN BOILER PUMP RESPECTIVELY.",
+              "assertion_ids": [
+                "m40-bold-boiler-pump-disable"
+              ]
+            },
+            {
+              "id": "bypass-lockout",
+              "text": "THE BYPASS CONTROL VALVE (BCV-1) SHALL BE DISABLE AND LOCKED OUT.",
+              "assertion_ids": [
+                "m40-bold-bcv-lockout"
+              ]
+            },
+            {
+              "id": "boiler-pump-enable",
+              "text": "EACH BOILER SHALL ENABLE THE RESPECTIVE BOILER PUMP BEFORE FIRING THE BOILER. IF EITHER BOILER PUMP FAILS TO START, THE RESPECTIVE BOILER SHALL NOT ENABLE AND AN ALARM OF THE EVENT SHALL BE SENT TO THE OPERATOR'S WORKSTATION.",
+              "assertion_ids": [
+                "m40-bold-boiler-pump-enable"
+              ]
+            },
+            {
+              "id": "boiler-uCP",
+              "text": "WHEN A RUNNING STATUS FROM THE BOILER UNIT CONTROL PANEL (UCP) HAS BEEN CONFIRMED, THE HEATING WATER SYSTEM SHALL CONTINUE TO OPERATE UNDER ITS OWN INTERNAL CONTROLS BY PROVIDING LEAD / LAG SEQUENCING AND ADJUSTING THEIR OWN RAMPING AND LOADING RATES. THE DDC CONTROLLER SHALL SEND THE UNIT CONTROL PANEL A HEATING WATER SUPPLY TEMPERATURE SET POINT TO MAINTAIN.",
+              "assertion_ids": [
+                "m40-bold-boiler-ucp"
+              ]
+            },
+            {
+              "id": "supply-temp-reset",
+              "text": "Heating-water supply temperature reset is based on heating-coil-control-valve positions: first enabled maximum 140°F +/- 1°F, decreasing linearly to 100°F while all heating-coil control valves are 90% open or less; it reverses toward maximum when three or more are over 90%, and resets to maximum if one or more reach 100% for 60 consecutive seconds. All stated values are adjustable where printed.",
+              "assertion_ids": [
+                "m40-bold-hws-reset"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "chilled-water-existing-grey",
+          "sheet": "M4.1",
+          "source_layer": "existing_grey",
+          "title": "EXISTING CHILLED WATER SYSTEM SEQUENCE OF OPERATION",
+          "statements": [
+            {
+              "id": "enable-conditions",
+              "text": "THE CHILLED WATER SYSTEM SHALL BE ENABLED WHENEVER ONE OF THE FOLLOWING CONDITIONS EXIST: outside-air temperature rises to the cooling enable set point for 10 consecutive minutes; buffer-tank temperature rises above 45°F for 30 seconds; or there is a call for dehumidification.",
+              "assertion_ids": [
+                "m41-grey-enable"
+              ]
+            },
+            {
+              "id": "chiller-uCP",
+              "text": "SEND AN ENABLE COMMAND TO THE AIR-COOLED CHILLER'S UNIT CONTROL PANEL (UCP), validate chiller running status through the UCP, alarm on a failed start, and provide the UCP a chilled-water supply-temperature set point after confirmation.",
+              "assertion_ids": [
+                "m41-grey-chiller-enable"
+              ]
+            },
+            {
+              "id": "disable-conditions",
+              "text": "THE CHILLED WATER SYSTEM SHALL BE DISABLED WHENEVER BOTH OF THE FOLLOWING CONDITIONS EXIST: outside-air temperature decreases 2° (adjustable) or more below the cooling-enable set point for 10 consecutive minutes (adjustable), and buffer-tank temperature falls below 45°F for 30 seconds.",
+              "assertion_ids": [
+                "m41-grey-disable"
+              ]
+            },
+            {
+              "id": "lead-standby-and-cooldown",
+              "text": "DDC lead/standby primary-pump control provides automatic rotation by runtime, fixed rotation, or calendar date with manual/operator override. Cooldown disables the chilled-water system 10 minutes before occupied-to-unoccupied switchover of the last air-valve system to use residual cooling capacity in the piping system.",
+              "assertion_ids": [
+                "m41-grey-lead-standby",
+                "m41-grey-cooldown"
+              ]
+            },
+            {
+              "id": "chw-reset",
+              "text": "CHILLED WATER SUPPLY TEMPERATURE SET POINT RESET is based on outdoor-air temperature: 60°F outdoor / 55°F supply and 75°F outdoor / 45°F supply, as printed.",
+              "assertion_ids": [
+                "m41-grey-chw-reset"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "chilled-water-updated-bold",
+          "sheet": "M4.1",
+          "source_layer": "updated_bold_black",
+          "title": "UPDATED CONTROL SEQUENCES ON EXISTING CHILLED WATER SYSTEM SHEET",
+          "statements": [
+            {
+              "id": "lead-pump-start",
+              "text": "SEND AN ENABLE COMMAND TO THE LEAD CHILLED WATER PUMP; validate running status through the current sensing relay; if the lead pump fails to start, enable the standby pump; if the standby pump fails to start, alarm the operator's workstation.",
+              "assertion_ids": [
+                "m41-bold-pump-enable"
+              ]
+            },
+            {
+              "id": "lead-pump-stop",
+              "text": "SEND A DISABLE COMMAND TO THE LEAD CHILLED WATER PUMP. When the chilled-water system is disabled, the lead primary chilled-water pump continues for 10 consecutive minutes; validate running status through the current sensing relay and alarm if the pump fails to stop.",
+              "assertion_ids": [
+                "m41-bold-pump-disable"
+              ]
+            }
+          ]
+        }
+      ],
+      "sensor_and_zone_ledger": {
+        "physical_count_scope": "The supplied plans/schedules do not map space sensors, CO2 sensors, or smart thermostats to zones. Schematic transmitter symbols are not converted to plan-installed device counts.",
+        "counts": {
+          "space_sensors": {
+            "status": "not_stated",
+            "value": null
+          },
+          "CO2_sensors": {
+            "status": "not_stated",
+            "value": null
+          },
+          "smart_thermostats": {
+            "status": "not_stated",
+            "value": null
+          }
+        },
+        "logical_source_items": [
+          {
+            "id": "M40-PT-E",
+            "classification": "Existing pressure-transmitter schematic label",
+            "zone_or_system": "heating-water system",
+            "physical_sensor_count": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "id": "M40-TT-E",
+            "classification": "Existing temperature-transmitter schematic labels",
+            "zone_or_system": "heating-water system",
+            "physical_sensor_count": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "id": "M41-CHILLER-TEMPERATURES",
+            "classification": "Entering and leaving chilled-water temperature points in manufacturer integration list",
+            "zone_or_system": "chiller",
+            "physical_sensor_count": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "id": "M41-CHILLER-REFRIGERANT",
+            "classification": "Evaporator saturated refrigerant pressure and temperature in manufacturer integration list",
+            "zone_or_system": "all compressor circuits",
+            "physical_sensor_count": {
+              "status": "not_stated",
+              "value": null
+            }
+          }
+        ]
+      },
+      "tables": [
+        {
+          "id": "M40-VFD-INTERFACE-POINTS",
+          "page": 6,
+          "sheet": "M4.0",
+          "title": "VFD POINTS LIST",
+          "classification": "Open-ended VFD control-interface requirements; source does not print AI/AO/DI/DO types or an equipment-instance multiplier.",
+          "columns": "tag|point_name",
+          "x_edges": [
+            1855,
+            1870,
+            1960
+          ],
+          "y_ranges": [
+            [
+              1215,
+              1227
+            ],
+            [
+              1227,
+              1239
+            ],
+            [
+              1239,
+              1250
+            ],
+            [
+              1250,
+              1264
+            ]
+          ],
+          "rows": [
+            "1.|ENABLE/DISABLE",
+            "2.|ALARMS",
+            "3.|HERTZ",
+            "4.|SPEED CONTROL"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1830,
+                1188,
+                2210,
+                1218
+              ],
+              "expected": "VFD POINTS LIST THE VFD CONTROL INTERFACE SHALL PROVIDE BUT NOT BE LIMITED TO THE FOLLOWING"
+            }
+          ]
+        },
+        {
+          "id": "M41-CHILLER-INTEGRATION-POINTS",
+          "page": 7,
+          "sheet": "M4.1",
+          "title": "CHILLER POINTS LIST",
+          "classification": "Open-ended chiller integration-module points mapped to the operator workstation. Types are not printed; this is not a field-wired I/O count.",
+          "columns": "tag|point_name",
+          "x_edges": [
+            230,
+            245,
+            800
+          ],
+          "y_ranges": [
+            [
+              1064,
+              1076
+            ],
+            [
+              1076,
+              1088
+            ],
+            [
+              1088,
+              1099
+            ],
+            [
+              1099,
+              1110
+            ],
+            [
+              1110,
+              1121
+            ],
+            [
+              1121,
+              1133
+            ],
+            [
+              1133,
+              1144
+            ],
+            [
+              1144,
+              1155
+            ],
+            [
+              1155,
+              1167
+            ]
+          ],
+          "rows": [
+            "1.|CHILLER ENABLE / DISABLE .",
+            "2.|CHILLER ENABLE / DISABLE STATUS .",
+            "3.|ENTERING CHILLED WATER TEMPERATURE.",
+            "4.|LEAVING CHILLED WATER TEMPERATURE.",
+            "5.|CHILLED WATER SET POINT.",
+            "6.|PERCENT TOTAL CAPACITY.",
+            "7.|ALARM STATE.",
+            "8.|CURRENT ALARMS.",
+            "9.|ALL COMPRESSOR CIRCUITS:"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                195,
+                1018,
+                800,
+                1058
+              ],
+              "expected": "CHILLER POINTS LIST ALL AVAILABLE CHILLER POINTS SUPPORTED BY THE CHILLER'S INTEGRATION MODULE SHALL BE MAPPED TO THE OPERATOR'S WORKSTATION POINTS SHALL INCLUDE BUT NOT BE LIMITED TO THE FOLLOWING"
+            }
+          ]
+        },
+        {
+          "id": "M41-CHILLER-COMPRESSOR-CIRCUIT-POINTS",
+          "page": 7,
+          "sheet": "M4.1",
+          "title": "CHILLER POINTS LIST - ALL COMPRESSOR CIRCUITS",
+          "classification": "Sub-items of the open-ended chiller integration list; no AI/AO/DI/DO type is printed.",
+          "columns": "tag|point_name",
+          "x_edges": [
+            250,
+            265,
+            800
+          ],
+          "y_ranges": [
+            [
+              1167,
+              1178
+            ],
+            [
+              1178,
+              1190
+            ],
+            [
+              1190,
+              1203
+            ]
+          ],
+          "rows": [
+            "a.|EVAPORATOR SATURATED REFRIGERANT PRESSURE",
+            "b.|EVAPORATOR SATURATED REFRIGERANT TEMPERATURE",
+            "c.|EXV POSITION"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                230,
+                1153,
+                480,
+                1168
+              ],
+              "expected": "ALL COMPRESSOR CIRCUITS"
+            }
+          ]
+        }
+      ],
+      "point_list_accounting": {
+        "listed_logical_rows": {
+          "vfd_interface": 4,
+          "chiller_integration": 12,
+          "total_visible_rows": 16
+        },
+        "physical_I_O_count": {
+          "status": "not_stated",
+          "value": null,
+          "basis": "Both printed lists are expressly open-ended / not limited; neither prints point types or a field-wiring/count basis. The chiller list additionally applies to all available points supported by an integration module."
+        },
+        "ai_ao_di_do_count": {
+          "status": "not_stated",
+          "value": null,
+          "basis": "The M4.0 legend defines the four symbol meanings, but the VFD and chiller lists do not classify their rows with those symbols."
+        }
+      },
+      "assertions": [
+        {
+          "id": "m40-layer-rule",
+          "page": 6,
+          "bbox": [
+            1260,
+            815,
+            1710,
+            838
+          ],
+          "expected": "TEXT IN GREY NOTES EXISTING CONTROL SEQUENCE. TEXT IN BOLD NOTES UPDATED CONTROL SEQUENCES.",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-layer-rule",
+          "page": 7,
+          "bbox": [
+            195,
+            335,
+            645,
+            358
+          ],
+          "expected": "TEXT IN GREY NOTES EXISTING CONTROL SEQUENCE. TEXT IN BOLD NOTES UPDATED CONTROL SEQUENCES.",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-general-system",
+          "page": 6,
+          "bbox": [
+            1260,
+            738,
+            1805,
+            812
+          ],
+          "expected": "THE EXISTING HOT WATER HEATING SYSTEM CONSISTS OF (2) NEW VARIABLE SPEED PRIMARY HOT WATER PUMPS",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-general-system",
+          "page": 7,
+          "bbox": [
+            195,
+            270,
+            780,
+            332
+          ],
+          "expected": "NEW COMPONENTS SHALL BE INTEGRATED INTO THE EXISTING DELTA CONTROL SYSTEM.",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-bacnet-integration-panel",
+          "page": 7,
+          "bbox": [
+            2080,
+            880,
+            2215,
+            925
+          ],
+          "expected": "CHILLER SYSTEM INTEGRATION PANEL (BACnet)(E)",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-ai",
+          "page": 6,
+          "bbox": [
+            210,
+            165,
+            650,
+            205
+          ],
+          "expected": "ANALOG INPUT",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-di",
+          "page": 6,
+          "bbox": [
+            210,
+            220,
+            650,
+            255
+          ],
+          "expected": "DIGITAL INPUT",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-ao",
+          "page": 6,
+          "bbox": [
+            130,
+            255,
+            650,
+            290
+          ],
+          "expected": "AO ANALOG OUTPUT",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-do",
+          "page": 6,
+          "bbox": [
+            210,
+            300,
+            650,
+            340
+          ],
+          "expected": "DIGITAL OUTPUT",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-valve",
+          "page": 6,
+          "bbox": [
+            130,
+            390,
+            650,
+            425
+          ],
+          "expected": "3-WAY, 2-WAY CONTROL VALVE",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-da",
+          "page": 6,
+          "bbox": [
+            860,
+            365,
+            1150,
+            393
+          ],
+          "expected": "DA DAMPER ACTUATOR",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-tt",
+          "page": 6,
+          "bbox": [
+            860,
+            635,
+            1150,
+            660
+          ],
+          "expected": "TT TEMPERATURE TRANSMITTER",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-pt",
+          "page": 6,
+          "bbox": [
+            860,
+            615,
+            1150,
+            640
+          ],
+          "expected": "PT PRESSURE TRANSMITTER",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-csr",
+          "page": 6,
+          "bbox": [
+            860,
+            325,
+            1150,
+            350
+          ],
+          "expected": "CSR CURRENT SENSING RELAY",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-grey-enable",
+          "page": 6,
+          "bbox": [
+            1260,
+            840,
+            1800,
+            925
+          ],
+          "expected": "THE HEATING WATER SYSTEM SHALL BE ENABLED WHENEVER BOTH OF THE FOLLOWING CONDITION EXISTS",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-grey-lead-pump",
+          "page": 6,
+          "bbox": [
+            1260,
+            950,
+            1795,
+            1014
+          ],
+          "expected": "SEND AN ENABLE COMMAND TO THE LEAD HEATING WATER PUMP.",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-grey-vfd-dp",
+          "page": 6,
+          "bbox": [
+            1260,
+            1007,
+            1810,
+            1058
+          ],
+          "expected": "THE DDC CONTROLLER SHALL MODULATE THE VFD BASED ON A DIFFERENTIAL PRESSURE SETPOINT",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-grey-boiler-enable",
+          "page": 6,
+          "bbox": [
+            1260,
+            1065,
+            1800,
+            1120
+          ],
+          "expected": "SEND AN ENABLE COMMAND TO THE BOILER SYSTEM'S UNIT CONTROLLER.",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-grey-lead-lag",
+          "page": 6,
+          "bbox": [
+            1830,
+            915,
+            2365,
+            1010
+          ],
+          "expected": "THE DDC CONTROLLER SHALL PROVIDE LEAD/LAG CONTROL OF THE HEATING WATER PUMPS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-grey-short-cycle",
+          "page": 6,
+          "bbox": [
+            1260,
+            1248,
+            1810,
+            1445
+          ],
+          "expected": "EACH PUMP SHALL OPERATE FOR A MINIMUM OF 10 CONSECUTIVE MINUTES",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-grey-heating-enable-setpoint",
+          "page": 6,
+          "bbox": [
+            1260,
+            1448,
+            1800,
+            1470
+          ],
+          "expected": "THE HEATING ENABLE SET POINT SHALL BE SET AT 60°F.",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-bold-boiler-pump-disable",
+          "page": 6,
+          "bbox": [
+            1830,
+            858,
+            2160,
+            885
+          ],
+          "expected": "EACH BOILER SHALL DISABLE ITS OWN BOILER PUMP RESPECTIVELY.",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-bold-bcv-lockout",
+          "page": 6,
+          "bbox": [
+            1830,
+            1007,
+            2140,
+            1040
+          ],
+          "expected": "THE BYPASS CONTROL VALVE (BCV-1) SHALL BE DISABLE AND LOCKED OUT.",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-bold-boiler-pump-enable",
+          "page": 6,
+          "bbox": [
+            1260,
+            1108,
+            1810,
+            1150
+          ],
+          "expected": "EACH BOILER SHALL ENABLE THE RESPECTIVE BOILER PUMP BEFORE FIRING THE BOILER.",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-bold-boiler-ucp",
+          "page": 6,
+          "bbox": [
+            1260,
+            1145,
+            1810,
+            1208
+          ],
+          "expected": "WHEN A RUNNING STATUS FROM THE BOILER UNIT CONTROL PANEL (UCP) HAS BEEN CONFIRMED",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-bold-hws-reset",
+          "page": 6,
+          "bbox": [
+            1830,
+            1042,
+            2370,
+            1150
+          ],
+          "expected": "THE HEATING WATER SUPPLY TEMPERATURE SET POINT SHALL BE RESET BY THE DDC CONTROLLER BASED ON THE POSITION OF THE HEATING WATER COIL CONTROL VALVES.",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-grey-enable",
+          "page": 7,
+          "bbox": [
+            195,
+            355,
+            780,
+            435
+          ],
+          "expected": "THE CHILLED WATER SYSTEM SHALL BE ENABLED WHENEVER ONE OF THE FOLLOWING CONDITIONS EXIST",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-grey-chiller-enable",
+          "page": 7,
+          "bbox": [
+            195,
+            515,
+            785,
+            608
+          ],
+          "expected": "SEND AN ENABLE COMMAND TO THE AIR-COOLED CHILLER'S UNIT CONTROL PANEL (UCP).",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-grey-disable",
+          "page": 7,
+          "bbox": [
+            195,
+            628,
+            790,
+            695
+          ],
+          "expected": "THE CHILLED WATER SYSTEM SHALL BE DISABLED WHENEVER BOTH OF THE FOLLOWING CONDITIONS EXIST",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-grey-lead-standby",
+          "page": 7,
+          "bbox": [
+            195,
+            832,
+            790,
+            875
+          ],
+          "expected": "THE DDC CONTROLLER SHALL PROVIDE LEAD / STAND-BY CONTROL OF THE PRIMARY CHILLED WATER PUMPS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-grey-cooldown",
+          "page": 7,
+          "bbox": [
+            195,
+            880,
+            790,
+            932
+          ],
+          "expected": "THE CHILLED WATER SYSTEM SHALL BE DISABLED 10 MINUTES PRIOR TO THE SWITCHOVER",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-grey-chw-reset",
+          "page": 7,
+          "bbox": [
+            195,
+            935,
+            790,
+            1015
+          ],
+          "expected": "CHILLED WATER SUPPLY TEMPERATURE SET POINT RESET SCHEDULE",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-bold-pump-enable",
+          "page": 7,
+          "bbox": [
+            195,
+            458,
+            780,
+            515
+          ],
+          "expected": "SEND AN ENABLE COMMAND TO THE LEAD CHILLED WATER PUMP.",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-bold-pump-disable",
+          "page": 7,
+          "bbox": [
+            195,
+            765,
+            780,
+            830
+          ],
+          "expected": "SEND A DISABLE COMMAND TO THE LEAD CHILLED WATER PUMP.",
+          "mode": "contains"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "two-layered-system-sequences",
+          "records_path": [
+            "sequences"
+          ],
+          "expected": 4,
+          "unique_key": "id"
+        },
+        {
+          "id": "controls-source-tables",
+          "records_path": [
+            "tables"
+          ],
+          "expected": 3,
+          "unique_key": "id"
+        },
+        {
+          "id": "logical-sensor-source-items",
+          "records_path": [
+            "sensor_and_zone_ledger",
+            "logical_source_items"
+          ],
+          "expected": 4,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "controls_context": {
+      "document_id": "16__vol2__069",
+      "module_role": "M4.0/M4.1 controls ground truth: source-layered hydronic sequences, the explicitly printed VFD/chiller integration lists, controls/network context and sensor-count limits. It does not convert schematic symbols or an open-ended manufacturer integration list into unsupported installed-I/O or device quantities.",
+      "source_sheets": [
+        "M4.0",
+        "M4.1"
+      ],
+      "source_pages": [
+        6,
+        7
+      ],
+      "source_layer_rule": {
+        "as_printed": "TEXT IN GREY NOTES EXISTING CONTROL SEQUENCE. TEXT IN BOLD NOTES UPDATED CONTROL SEQUENCES.",
+        "visual_verification": "Verified on the Poppler page renders. In the retained MuPDF capture, the grey narrative spans have color 11776947 and the bold update spans have color 0; that capture attribute supports but does not replace the rendered-page review.",
+        "interpretation_rule": "The existing-grey and updated-bold source text is retained in separate layers. It is not collapsed into an invented final sequence where the update does not expressly supersede a grey clause.",
+        "assertion_ids": [
+          "m40-layer-rule",
+          "m41-layer-rule"
+        ]
+      },
+      "network_architecture": {
+        "existing_control_system_as_printed": "EXISTING DELTA CONTROL SYSTEM",
+        "protocols_as_printed": [
+          "BACnet"
+        ],
+        "protocol_context": [
+          "M4.0 says the existing hot-water system has existing hot-water boilers with a BACnet interface and that new components shall be integrated into the existing Delta control system.",
+          "M4.1 labels a CHILLER SYSTEM INTEGRATION PANEL (BACnet)(E)."
+        ],
+        "diagram_components_as_printed": [
+          "GLOBAL CONTROLLER(E)",
+          "OPERATOR TERMINAL (E) DDC SOFTWARE (E)",
+          "OPERATOR INTERFACE(E)",
+          "INTERNET(E)",
+          "PUMP UNIT CONTROLLERS(E)",
+          "AIR HANDLER UNIT CONTROLLERS(E)",
+          "CHILLER UNIT CONTROLLERS(E)"
+        ],
+        "transport_addressing_baud_rate_controller_model": {
+          "status": "not_stated_in_supplied_set",
+          "value": null
+        },
+        "assertion_ids": [
+          "m40-general-system",
+          "m41-general-system",
+          "m41-bacnet-integration-panel"
+        ]
+      },
+      "control_symbol_legend": {
+        "definitions_as_printed": {
+          "AI": "ANALOG INPUT",
+          "DI": "DIGITAL INPUT",
+          "AO": "ANALOG OUTPUT",
+          "DO": "DIGITAL OUTPUT",
+          "DA": "DAMPER ACTUATOR",
+          "TV": "TEMPERATURE CONTROL VALVE",
+          "BCV": "BYPASS CONTROL VALVE",
+          "TT": "TEMPERATURE TRANSMITTER",
+          "PT": "PRESSURE TRANSMITTER",
+          "CSR": "CURRENT SENSING RELAY"
+        },
+        "quantity_rule": "The legend is a symbol key, not an installed-equipment, damper-actuator, or control-valve schedule. Its entries are not counted as field devices.",
+        "assertion_ids": [
+          "m40-ai",
+          "m40-di",
+          "m40-ao",
+          "m40-do",
+          "m40-valve",
+          "m40-da",
+          "m40-tt",
+          "m40-pt",
+          "m40-csr"
+        ]
+      },
+      "controls_schedule_ledger": {
+        "control_valve_schedule": {
+          "status": "not_present",
+          "value": null,
+          "basis": "All nine supplied pages were visually reviewed; no dedicated control-valve schedule is present. M3.0 has a note to install a new 3-way valve, and M4.0 contains a symbol legend and BCV-1 schematic label, neither of which is a valve schedule."
+        },
+        "damper_actuator_schedule": {
+          "status": "not_present",
+          "value": null,
+          "basis": "All nine supplied pages were visually reviewed; no dedicated damper-actuator schedule is present. M4.0 contains DA as a legend definition only."
+        },
+        "physical_schedule_line_item_count": {
+          "status": "not_stated",
+          "value": null,
+          "basis": "No valve or damper-actuator schedule exists from which a schedule count can be made."
+        }
+      },
+      "sequences": [
+        {
+          "id": "heating-water-existing-grey",
+          "sheet": "M4.0",
+          "source_layer": "existing_grey",
+          "title": "EXISTING HEATING WATER SYSTEM SEQUENCE OF OPERATION",
+          "statements": [
+            {
+              "id": "enable-conditions",
+              "text": "THE HEATING WATER SYSTEM SHALL BE ENABLED WHENEVER BOTH OF THE FOLLOWING CONDITION EXISTS: OUTSIDE AIR TEMPERATURE DECREASES TO THE HEATING ENABLE SET POINT FOR 10 CONSECUTIVE MINUTES; THERE IS A CALL FOR HEAT FROM AT LEAST ONE ZONE BASED ON A HEATING COIL CONTROL VALVE MINIMUM POSITION OF 25% OPEN FOR 30 CONSECUTIVE SECONDS.",
+              "assertion_ids": [
+                "m40-grey-enable"
+              ]
+            },
+            {
+              "id": "lead-pump",
+              "text": "SEND AN ENABLE COMMAND TO THE LEAD HEATING WATER PUMP; validate running status through the VFD control interface; enable the standby pump on a lead-pump failure and alarm if the standby pump fails to start.",
+              "assertion_ids": [
+                "m40-grey-lead-pump"
+              ]
+            },
+            {
+              "id": "differential-pressure",
+              "text": "THE DDC CONTROLLER SHALL MODULATE THE VFD BASED ON A DIFFERENTIAL PRESSURE SETPOINT (ADJUSTABLE) LOCATED ACROSS THE PIPING ASSEMBLY; the setpoint is coordinated between balance and control contractors and must allow adequate flow to all hot-water heating coils.",
+              "assertion_ids": [
+                "m40-grey-vfd-dp"
+              ]
+            },
+            {
+              "id": "boiler-enable",
+              "text": "SEND AN ENABLE COMMAND TO THE BOILER SYSTEM'S UNIT CONTROLLER; validate through the UCP; on lead-boiler failure enable the lag boiler; alarm if either boiler fails to start.",
+              "assertion_ids": [
+                "m40-grey-boiler-enable"
+              ]
+            },
+            {
+              "id": "lead-lag-and-lockout",
+              "text": "DDC lead/lag control of heating-water pumps includes monthly lead rotation, manual/operator overrides, and lockout prevention: minimum 10 minutes run and 5 minutes off before restart except for manual or occupied/unoccupied scheduling control.",
+              "assertion_ids": [
+                "m40-grey-lead-lag",
+                "m40-grey-short-cycle"
+              ]
+            },
+            {
+              "id": "heating-enable-setpoint",
+              "text": "THE HEATING ENABLE SET POINT SHALL BE SET AT 60°F.",
+              "assertion_ids": [
+                "m40-grey-heating-enable-setpoint"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "heating-water-updated-bold",
+          "sheet": "M4.0",
+          "source_layer": "updated_bold_black",
+          "title": "UPDATED CONTROL SEQUENCES ON EXISTING HEATING WATER SYSTEM SHEET",
+          "statements": [
+            {
+              "id": "boiler-pump-disable",
+              "text": "EACH BOILER SHALL DISABLE ITS OWN BOILER PUMP RESPECTIVELY.",
+              "assertion_ids": [
+                "m40-bold-boiler-pump-disable"
+              ]
+            },
+            {
+              "id": "bypass-lockout",
+              "text": "THE BYPASS CONTROL VALVE (BCV-1) SHALL BE DISABLE AND LOCKED OUT.",
+              "assertion_ids": [
+                "m40-bold-bcv-lockout"
+              ]
+            },
+            {
+              "id": "boiler-pump-enable",
+              "text": "EACH BOILER SHALL ENABLE THE RESPECTIVE BOILER PUMP BEFORE FIRING THE BOILER. IF EITHER BOILER PUMP FAILS TO START, THE RESPECTIVE BOILER SHALL NOT ENABLE AND AN ALARM OF THE EVENT SHALL BE SENT TO THE OPERATOR'S WORKSTATION.",
+              "assertion_ids": [
+                "m40-bold-boiler-pump-enable"
+              ]
+            },
+            {
+              "id": "boiler-uCP",
+              "text": "WHEN A RUNNING STATUS FROM THE BOILER UNIT CONTROL PANEL (UCP) HAS BEEN CONFIRMED, THE HEATING WATER SYSTEM SHALL CONTINUE TO OPERATE UNDER ITS OWN INTERNAL CONTROLS BY PROVIDING LEAD / LAG SEQUENCING AND ADJUSTING THEIR OWN RAMPING AND LOADING RATES. THE DDC CONTROLLER SHALL SEND THE UNIT CONTROL PANEL A HEATING WATER SUPPLY TEMPERATURE SET POINT TO MAINTAIN.",
+              "assertion_ids": [
+                "m40-bold-boiler-ucp"
+              ]
+            },
+            {
+              "id": "supply-temp-reset",
+              "text": "Heating-water supply temperature reset is based on heating-coil-control-valve positions: first enabled maximum 140°F +/- 1°F, decreasing linearly to 100°F while all heating-coil control valves are 90% open or less; it reverses toward maximum when three or more are over 90%, and resets to maximum if one or more reach 100% for 60 consecutive seconds. All stated values are adjustable where printed.",
+              "assertion_ids": [
+                "m40-bold-hws-reset"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "chilled-water-existing-grey",
+          "sheet": "M4.1",
+          "source_layer": "existing_grey",
+          "title": "EXISTING CHILLED WATER SYSTEM SEQUENCE OF OPERATION",
+          "statements": [
+            {
+              "id": "enable-conditions",
+              "text": "THE CHILLED WATER SYSTEM SHALL BE ENABLED WHENEVER ONE OF THE FOLLOWING CONDITIONS EXIST: outside-air temperature rises to the cooling enable set point for 10 consecutive minutes; buffer-tank temperature rises above 45°F for 30 seconds; or there is a call for dehumidification.",
+              "assertion_ids": [
+                "m41-grey-enable"
+              ]
+            },
+            {
+              "id": "chiller-uCP",
+              "text": "SEND AN ENABLE COMMAND TO THE AIR-COOLED CHILLER'S UNIT CONTROL PANEL (UCP), validate chiller running status through the UCP, alarm on a failed start, and provide the UCP a chilled-water supply-temperature set point after confirmation.",
+              "assertion_ids": [
+                "m41-grey-chiller-enable"
+              ]
+            },
+            {
+              "id": "disable-conditions",
+              "text": "THE CHILLED WATER SYSTEM SHALL BE DISABLED WHENEVER BOTH OF THE FOLLOWING CONDITIONS EXIST: outside-air temperature decreases 2° (adjustable) or more below the cooling-enable set point for 10 consecutive minutes (adjustable), and buffer-tank temperature falls below 45°F for 30 seconds.",
+              "assertion_ids": [
+                "m41-grey-disable"
+              ]
+            },
+            {
+              "id": "lead-standby-and-cooldown",
+              "text": "DDC lead/standby primary-pump control provides automatic rotation by runtime, fixed rotation, or calendar date with manual/operator override. Cooldown disables the chilled-water system 10 minutes before occupied-to-unoccupied switchover of the last air-valve system to use residual cooling capacity in the piping system.",
+              "assertion_ids": [
+                "m41-grey-lead-standby",
+                "m41-grey-cooldown"
+              ]
+            },
+            {
+              "id": "chw-reset",
+              "text": "CHILLED WATER SUPPLY TEMPERATURE SET POINT RESET is based on outdoor-air temperature: 60°F outdoor / 55°F supply and 75°F outdoor / 45°F supply, as printed.",
+              "assertion_ids": [
+                "m41-grey-chw-reset"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "chilled-water-updated-bold",
+          "sheet": "M4.1",
+          "source_layer": "updated_bold_black",
+          "title": "UPDATED CONTROL SEQUENCES ON EXISTING CHILLED WATER SYSTEM SHEET",
+          "statements": [
+            {
+              "id": "lead-pump-start",
+              "text": "SEND AN ENABLE COMMAND TO THE LEAD CHILLED WATER PUMP; validate running status through the current sensing relay; if the lead pump fails to start, enable the standby pump; if the standby pump fails to start, alarm the operator's workstation.",
+              "assertion_ids": [
+                "m41-bold-pump-enable"
+              ]
+            },
+            {
+              "id": "lead-pump-stop",
+              "text": "SEND A DISABLE COMMAND TO THE LEAD CHILLED WATER PUMP. When the chilled-water system is disabled, the lead primary chilled-water pump continues for 10 consecutive minutes; validate running status through the current sensing relay and alarm if the pump fails to stop.",
+              "assertion_ids": [
+                "m41-bold-pump-disable"
+              ]
+            }
+          ]
+        }
+      ],
+      "sensor_and_zone_ledger": {
+        "physical_count_scope": "The supplied plans/schedules do not map space sensors, CO2 sensors, or smart thermostats to zones. Schematic transmitter symbols are not converted to plan-installed device counts.",
+        "counts": {
+          "space_sensors": {
+            "status": "not_stated",
+            "value": null
+          },
+          "CO2_sensors": {
+            "status": "not_stated",
+            "value": null
+          },
+          "smart_thermostats": {
+            "status": "not_stated",
+            "value": null
+          }
+        },
+        "logical_source_items": [
+          {
+            "id": "M40-PT-E",
+            "classification": "Existing pressure-transmitter schematic label",
+            "zone_or_system": "heating-water system",
+            "physical_sensor_count": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "id": "M40-TT-E",
+            "classification": "Existing temperature-transmitter schematic labels",
+            "zone_or_system": "heating-water system",
+            "physical_sensor_count": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "id": "M41-CHILLER-TEMPERATURES",
+            "classification": "Entering and leaving chilled-water temperature points in manufacturer integration list",
+            "zone_or_system": "chiller",
+            "physical_sensor_count": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "id": "M41-CHILLER-REFRIGERANT",
+            "classification": "Evaporator saturated refrigerant pressure and temperature in manufacturer integration list",
+            "zone_or_system": "all compressor circuits",
+            "physical_sensor_count": {
+              "status": "not_stated",
+              "value": null
+            }
+          }
+        ]
+      },
+      "tables": [
+        {
+          "id": "M40-VFD-INTERFACE-POINTS",
+          "page": 6,
+          "sheet": "M4.0",
+          "title": "VFD POINTS LIST",
+          "classification": "Open-ended VFD control-interface requirements; source does not print AI/AO/DI/DO types or an equipment-instance multiplier.",
+          "columns": "tag|point_name",
+          "x_edges": [
+            1855,
+            1870,
+            1960
+          ],
+          "y_ranges": [
+            [
+              1215,
+              1227
+            ],
+            [
+              1227,
+              1239
+            ],
+            [
+              1239,
+              1250
+            ],
+            [
+              1250,
+              1264
+            ]
+          ],
+          "rows": [
+            "1.|ENABLE/DISABLE",
+            "2.|ALARMS",
+            "3.|HERTZ",
+            "4.|SPEED CONTROL"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1830,
+                1188,
+                2210,
+                1218
+              ],
+              "expected": "VFD POINTS LIST THE VFD CONTROL INTERFACE SHALL PROVIDE BUT NOT BE LIMITED TO THE FOLLOWING"
+            }
+          ]
+        },
+        {
+          "id": "M41-CHILLER-INTEGRATION-POINTS",
+          "page": 7,
+          "sheet": "M4.1",
+          "title": "CHILLER POINTS LIST",
+          "classification": "Open-ended chiller integration-module points mapped to the operator workstation. Types are not printed; this is not a field-wired I/O count.",
+          "columns": "tag|point_name",
+          "x_edges": [
+            230,
+            245,
+            800
+          ],
+          "y_ranges": [
+            [
+              1064,
+              1076
+            ],
+            [
+              1076,
+              1088
+            ],
+            [
+              1088,
+              1099
+            ],
+            [
+              1099,
+              1110
+            ],
+            [
+              1110,
+              1121
+            ],
+            [
+              1121,
+              1133
+            ],
+            [
+              1133,
+              1144
+            ],
+            [
+              1144,
+              1155
+            ],
+            [
+              1155,
+              1167
+            ]
+          ],
+          "rows": [
+            "1.|CHILLER ENABLE / DISABLE .",
+            "2.|CHILLER ENABLE / DISABLE STATUS .",
+            "3.|ENTERING CHILLED WATER TEMPERATURE.",
+            "4.|LEAVING CHILLED WATER TEMPERATURE.",
+            "5.|CHILLED WATER SET POINT.",
+            "6.|PERCENT TOTAL CAPACITY.",
+            "7.|ALARM STATE.",
+            "8.|CURRENT ALARMS.",
+            "9.|ALL COMPRESSOR CIRCUITS:"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                195,
+                1018,
+                800,
+                1058
+              ],
+              "expected": "CHILLER POINTS LIST ALL AVAILABLE CHILLER POINTS SUPPORTED BY THE CHILLER'S INTEGRATION MODULE SHALL BE MAPPED TO THE OPERATOR'S WORKSTATION POINTS SHALL INCLUDE BUT NOT BE LIMITED TO THE FOLLOWING"
+            }
+          ]
+        },
+        {
+          "id": "M41-CHILLER-COMPRESSOR-CIRCUIT-POINTS",
+          "page": 7,
+          "sheet": "M4.1",
+          "title": "CHILLER POINTS LIST - ALL COMPRESSOR CIRCUITS",
+          "classification": "Sub-items of the open-ended chiller integration list; no AI/AO/DI/DO type is printed.",
+          "columns": "tag|point_name",
+          "x_edges": [
+            250,
+            265,
+            800
+          ],
+          "y_ranges": [
+            [
+              1167,
+              1178
+            ],
+            [
+              1178,
+              1190
+            ],
+            [
+              1190,
+              1203
+            ]
+          ],
+          "rows": [
+            "a.|EVAPORATOR SATURATED REFRIGERANT PRESSURE",
+            "b.|EVAPORATOR SATURATED REFRIGERANT TEMPERATURE",
+            "c.|EXV POSITION"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                230,
+                1153,
+                480,
+                1168
+              ],
+              "expected": "ALL COMPRESSOR CIRCUITS"
+            }
+          ]
+        }
+      ],
+      "point_list_accounting": {
+        "listed_logical_rows": {
+          "vfd_interface": 4,
+          "chiller_integration": 12,
+          "total_visible_rows": 16
+        },
+        "physical_I_O_count": {
+          "status": "not_stated",
+          "value": null,
+          "basis": "Both printed lists are expressly open-ended / not limited; neither prints point types or a field-wiring/count basis. The chiller list additionally applies to all available points supported by an integration module."
+        },
+        "ai_ao_di_do_count": {
+          "status": "not_stated",
+          "value": null,
+          "basis": "The M4.0 legend defines the four symbol meanings, but the VFD and chiller lists do not classify their rows with those symbols."
+        }
+      },
+      "assertions": [
+        {
+          "id": "m40-layer-rule",
+          "page": 6,
+          "bbox": [
+            1260,
+            815,
+            1710,
+            838
+          ],
+          "expected": "TEXT IN GREY NOTES EXISTING CONTROL SEQUENCE. TEXT IN BOLD NOTES UPDATED CONTROL SEQUENCES.",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-layer-rule",
+          "page": 7,
+          "bbox": [
+            195,
+            335,
+            645,
+            358
+          ],
+          "expected": "TEXT IN GREY NOTES EXISTING CONTROL SEQUENCE. TEXT IN BOLD NOTES UPDATED CONTROL SEQUENCES.",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-general-system",
+          "page": 6,
+          "bbox": [
+            1260,
+            738,
+            1805,
+            812
+          ],
+          "expected": "THE EXISTING HOT WATER HEATING SYSTEM CONSISTS OF (2) NEW VARIABLE SPEED PRIMARY HOT WATER PUMPS",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-general-system",
+          "page": 7,
+          "bbox": [
+            195,
+            270,
+            780,
+            332
+          ],
+          "expected": "NEW COMPONENTS SHALL BE INTEGRATED INTO THE EXISTING DELTA CONTROL SYSTEM.",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-bacnet-integration-panel",
+          "page": 7,
+          "bbox": [
+            2080,
+            880,
+            2215,
+            925
+          ],
+          "expected": "CHILLER SYSTEM INTEGRATION PANEL (BACnet)(E)",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-ai",
+          "page": 6,
+          "bbox": [
+            210,
+            165,
+            650,
+            205
+          ],
+          "expected": "ANALOG INPUT",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-di",
+          "page": 6,
+          "bbox": [
+            210,
+            220,
+            650,
+            255
+          ],
+          "expected": "DIGITAL INPUT",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-ao",
+          "page": 6,
+          "bbox": [
+            130,
+            255,
+            650,
+            290
+          ],
+          "expected": "AO ANALOG OUTPUT",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-do",
+          "page": 6,
+          "bbox": [
+            210,
+            300,
+            650,
+            340
+          ],
+          "expected": "DIGITAL OUTPUT",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-valve",
+          "page": 6,
+          "bbox": [
+            130,
+            390,
+            650,
+            425
+          ],
+          "expected": "3-WAY, 2-WAY CONTROL VALVE",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-da",
+          "page": 6,
+          "bbox": [
+            860,
+            365,
+            1150,
+            393
+          ],
+          "expected": "DA DAMPER ACTUATOR",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-tt",
+          "page": 6,
+          "bbox": [
+            860,
+            635,
+            1150,
+            660
+          ],
+          "expected": "TT TEMPERATURE TRANSMITTER",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-pt",
+          "page": 6,
+          "bbox": [
+            860,
+            615,
+            1150,
+            640
+          ],
+          "expected": "PT PRESSURE TRANSMITTER",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-csr",
+          "page": 6,
+          "bbox": [
+            860,
+            325,
+            1150,
+            350
+          ],
+          "expected": "CSR CURRENT SENSING RELAY",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-grey-enable",
+          "page": 6,
+          "bbox": [
+            1260,
+            840,
+            1800,
+            925
+          ],
+          "expected": "THE HEATING WATER SYSTEM SHALL BE ENABLED WHENEVER BOTH OF THE FOLLOWING CONDITION EXISTS",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-grey-lead-pump",
+          "page": 6,
+          "bbox": [
+            1260,
+            950,
+            1795,
+            1014
+          ],
+          "expected": "SEND AN ENABLE COMMAND TO THE LEAD HEATING WATER PUMP.",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-grey-vfd-dp",
+          "page": 6,
+          "bbox": [
+            1260,
+            1007,
+            1810,
+            1058
+          ],
+          "expected": "THE DDC CONTROLLER SHALL MODULATE THE VFD BASED ON A DIFFERENTIAL PRESSURE SETPOINT",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-grey-boiler-enable",
+          "page": 6,
+          "bbox": [
+            1260,
+            1065,
+            1800,
+            1120
+          ],
+          "expected": "SEND AN ENABLE COMMAND TO THE BOILER SYSTEM'S UNIT CONTROLLER.",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-grey-lead-lag",
+          "page": 6,
+          "bbox": [
+            1830,
+            915,
+            2365,
+            1010
+          ],
+          "expected": "THE DDC CONTROLLER SHALL PROVIDE LEAD/LAG CONTROL OF THE HEATING WATER PUMPS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-grey-short-cycle",
+          "page": 6,
+          "bbox": [
+            1260,
+            1248,
+            1810,
+            1445
+          ],
+          "expected": "EACH PUMP SHALL OPERATE FOR A MINIMUM OF 10 CONSECUTIVE MINUTES",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-grey-heating-enable-setpoint",
+          "page": 6,
+          "bbox": [
+            1260,
+            1448,
+            1800,
+            1470
+          ],
+          "expected": "THE HEATING ENABLE SET POINT SHALL BE SET AT 60°F.",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-bold-boiler-pump-disable",
+          "page": 6,
+          "bbox": [
+            1830,
+            858,
+            2160,
+            885
+          ],
+          "expected": "EACH BOILER SHALL DISABLE ITS OWN BOILER PUMP RESPECTIVELY.",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-bold-bcv-lockout",
+          "page": 6,
+          "bbox": [
+            1830,
+            1007,
+            2140,
+            1040
+          ],
+          "expected": "THE BYPASS CONTROL VALVE (BCV-1) SHALL BE DISABLE AND LOCKED OUT.",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-bold-boiler-pump-enable",
+          "page": 6,
+          "bbox": [
+            1260,
+            1108,
+            1810,
+            1150
+          ],
+          "expected": "EACH BOILER SHALL ENABLE THE RESPECTIVE BOILER PUMP BEFORE FIRING THE BOILER.",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-bold-boiler-ucp",
+          "page": 6,
+          "bbox": [
+            1260,
+            1145,
+            1810,
+            1208
+          ],
+          "expected": "WHEN A RUNNING STATUS FROM THE BOILER UNIT CONTROL PANEL (UCP) HAS BEEN CONFIRMED",
+          "mode": "contains"
+        },
+        {
+          "id": "m40-bold-hws-reset",
+          "page": 6,
+          "bbox": [
+            1830,
+            1042,
+            2370,
+            1150
+          ],
+          "expected": "THE HEATING WATER SUPPLY TEMPERATURE SET POINT SHALL BE RESET BY THE DDC CONTROLLER BASED ON THE POSITION OF THE HEATING WATER COIL CONTROL VALVES.",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-grey-enable",
+          "page": 7,
+          "bbox": [
+            195,
+            355,
+            780,
+            435
+          ],
+          "expected": "THE CHILLED WATER SYSTEM SHALL BE ENABLED WHENEVER ONE OF THE FOLLOWING CONDITIONS EXIST",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-grey-chiller-enable",
+          "page": 7,
+          "bbox": [
+            195,
+            515,
+            785,
+            608
+          ],
+          "expected": "SEND AN ENABLE COMMAND TO THE AIR-COOLED CHILLER'S UNIT CONTROL PANEL (UCP).",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-grey-disable",
+          "page": 7,
+          "bbox": [
+            195,
+            628,
+            790,
+            695
+          ],
+          "expected": "THE CHILLED WATER SYSTEM SHALL BE DISABLED WHENEVER BOTH OF THE FOLLOWING CONDITIONS EXIST",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-grey-lead-standby",
+          "page": 7,
+          "bbox": [
+            195,
+            832,
+            790,
+            875
+          ],
+          "expected": "THE DDC CONTROLLER SHALL PROVIDE LEAD / STAND-BY CONTROL OF THE PRIMARY CHILLED WATER PUMPS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-grey-cooldown",
+          "page": 7,
+          "bbox": [
+            195,
+            880,
+            790,
+            932
+          ],
+          "expected": "THE CHILLED WATER SYSTEM SHALL BE DISABLED 10 MINUTES PRIOR TO THE SWITCHOVER",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-grey-chw-reset",
+          "page": 7,
+          "bbox": [
+            195,
+            935,
+            790,
+            1015
+          ],
+          "expected": "CHILLED WATER SUPPLY TEMPERATURE SET POINT RESET SCHEDULE",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-bold-pump-enable",
+          "page": 7,
+          "bbox": [
+            195,
+            458,
+            780,
+            515
+          ],
+          "expected": "SEND AN ENABLE COMMAND TO THE LEAD CHILLED WATER PUMP.",
+          "mode": "contains"
+        },
+        {
+          "id": "m41-bold-pump-disable",
+          "page": 7,
+          "bbox": [
+            195,
+            765,
+            780,
+            830
+          ],
+          "expected": "SEND A DISABLE COMMAND TO THE LEAD CHILLED WATER PUMP.",
+          "mode": "contains"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "two-layered-system-sequences",
+          "records_path": [
+            "sequences"
+          ],
+          "expected": 4,
+          "unique_key": "id"
+        },
+        {
+          "id": "controls-source-tables",
+          "records_path": [
+            "tables"
+          ],
+          "expected": 3,
+          "unique_key": "id"
+        },
+        {
+          "id": "logical-sensor-source-items",
+          "records_path": [
+            "sensor_and_zone_ledger",
+            "logical_source_items"
+          ],
+          "expected": 4,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "equipment_reconciliation": {
+      "document_id": "16__vol2__069",
+      "module_role": "Reconciles every M3.0 schedule identity to its source row and to the supplied plan/detail context without treating a repeated schematic or plan appearance as an extra unit. The drawing set has no dedicated control-valve or damper-actuator schedule.",
+      "schedule_registry_schema": {
+        "namespace_separator": "_",
+        "identity_columns": {
+          "mark": "mark"
+        },
+        "anchor_records_path": [
+          "primary_anchors"
+        ],
+        "non_instance_table_ids": []
+      },
+      "scheduled_families": [
+        {
+          "module": "schedules_m3.json",
+          "bundle_module": "schedules",
+          "table": "M3-EXISTING-AHU",
+          "rows": 1,
+          "class": "Existing air handling unit",
+          "mark": [
+            "AHU-1(E)"
+          ]
+        },
+        {
+          "module": "schedules_m3.json",
+          "bundle_module": "schedules",
+          "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+          "rows": 2,
+          "class": "Existing condensing hot-water boiler",
+          "mark": [
+            "B-1(E)",
+            "B-2(E)"
+          ]
+        },
+        {
+          "module": "schedules_m3.json",
+          "bundle_module": "schedules",
+          "table": "M3-NEW-PUMP",
+          "rows": 6,
+          "class": "New hydronic pump",
+          "mark": [
+            "HWP-1",
+            "HWP-2",
+            "BP-1",
+            "BP-2",
+            "CWP-1",
+            "CWP-2"
+          ]
+        },
+        {
+          "module": "schedules_m3.json",
+          "bundle_module": "schedules",
+          "table": "M3-NEW-VFD",
+          "rows": 2,
+          "class": "New variable frequency drive",
+          "mark": [
+            "VFD-1",
+            "VFD-2"
+          ]
+        }
+      ],
+      "schedule_counts": {
+        "tables": 4,
+        "rows": 11,
+        "building_scoped_tag_identities_including_outlet_types": 11,
+        "other_scheduled_tag_identities": 11
+      },
+      "primary_anchors": [
+        {
+          "id": "M3-EXISTING-AHU-AHU-1(E)",
+          "scope": "Existing equipment",
+          "visual_anchor": "M1.0 loft mechanical plan labels existing AHU-1; M3.0 gives its reference-only schedule."
+        },
+        {
+          "id": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER-B-1(E)",
+          "scope": "Existing equipment retained",
+          "visual_anchor": "M1.0/M2.0 show existing B-1 context; M3.0 schedule row B-1(E)."
+        },
+        {
+          "id": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER-B-2(E)",
+          "scope": "Existing equipment retained",
+          "visual_anchor": "M1.0/M2.0 show existing B-2 context; M3.0 schedule row B-2(E)."
+        },
+        {
+          "id": "M3-NEW-PUMP-HWP-1",
+          "scope": "New equipment",
+          "visual_anchor": "M1.0 new-work plan labels HWP-1; M4.0 schematic shows HWP 1 (N)."
+        },
+        {
+          "id": "M3-NEW-PUMP-HWP-2",
+          "scope": "New equipment",
+          "visual_anchor": "M1.0 new-work plan labels HWP-2; M4.0 schematic shows HWP 2 (N)."
+        },
+        {
+          "id": "M3-NEW-PUMP-BP-1",
+          "scope": "New equipment",
+          "visual_anchor": "M1.0 new-work plan labels BP-1 and directs new boiler-pump installation."
+        },
+        {
+          "id": "M3-NEW-PUMP-BP-2",
+          "scope": "New equipment",
+          "visual_anchor": "M1.0 new-work plan labels BP-2 and directs new boiler-pump installation."
+        },
+        {
+          "id": "M3-NEW-PUMP-CWP-1",
+          "scope": "New equipment",
+          "visual_anchor": "M1.0 new-work plan labels CWP-1; M4.1 schematic shows CWP 1 (N)."
+        },
+        {
+          "id": "M3-NEW-PUMP-CWP-2",
+          "scope": "New equipment",
+          "visual_anchor": "M1.0 new-work plan labels CWP-2; M4.1 schematic shows CWP 2 (N)."
+        },
+        {
+          "id": "M3-NEW-VFD-VFD-1",
+          "scope": "New equipment",
+          "visual_anchor": "M1.0 new-work plan labels VFD-1; M4.0 schematic shows VFD 1 (N)."
+        },
+        {
+          "id": "M3-NEW-VFD-VFD-2",
+          "scope": "New equipment",
+          "visual_anchor": "M1.0 new-work plan labels VFD-2; M4.0 schematic shows VFD 2 (N)."
+        }
+      ],
+      "plan_and_detail_reconciliation": [
+        {
+          "id": "m1-hot-water-pump-removal",
+          "sheet": "M1.0",
+          "scope": "Demolition plan note",
+          "finding": "DISCONNECT AND REMOVE EXISTING HOT WATER PUMPS. The schedule's HWP-1/HWP-2 are new replacement scope, not retained existing pumps.",
+          "assertion_ids": [
+            "m1-remove-existing-hwp"
+          ]
+        },
+        {
+          "id": "m1-chilled-water-pump-removal",
+          "sheet": "M1.0",
+          "scope": "Demolition plan note",
+          "finding": "DISCONNECT AND REMOVE EXISTING CHILLED WATER PUMPS. The schedule's CWP-1/CWP-2 are new replacement scope, not retained existing pumps.",
+          "assertion_ids": [
+            "m1-remove-existing-cwp"
+          ]
+        },
+        {
+          "id": "m1-new-boiler-pump",
+          "sheet": "M1.0",
+          "scope": "New-work plan note",
+          "finding": "INSTALL NEW BOILER PUMP ON RETURN SIDE; this supports BP-1/BP-2 new-schedule scope but does not rewrite the printed BP-2 schedule's B-1 area-served cell.",
+          "assertion_ids": [
+            "m1-install-boiler-pump"
+          ]
+        },
+        {
+          "id": "m1-new-chilled-water-pumps",
+          "sheet": "M1.0",
+          "scope": "New-work plan note",
+          "finding": "CONNECT NEW CHILLED WATER LOOP PUMPS TO EXISTING piping; this supports CWP-1/CWP-2 new-schedule scope.",
+          "assertion_ids": [
+            "m1-connect-cwp"
+          ]
+        },
+        {
+          "id": "m1-existing-ahu-three-way-valve",
+          "sheet": "M1.0",
+          "scope": "New-work plan note",
+          "finding": "INSTALL NEW 3-WAY VALVE ON EXISTING AHU-1 heating-water connection and balance valve to 48 GPM. It is a design note, not a full valve schedule or count.",
+          "assertion_ids": [
+            "m1-ahw-three-way-valve"
+          ]
+        },
+        {
+          "id": "m2-new-heating-coil-detail",
+          "sheet": "M2.0",
+          "scope": "Detail 6",
+          "finding": "The new heating-coil piping detail contains a NEW 3-WAY CONTROL VALVE and a flow control valve with P/T ports, union and shut-off valve. No valve tag, manufacturer, actuator torque, or schedule quantity is printed.",
+          "assertion_ids": [
+            "m2-new-three-way-valve"
+          ]
+        }
+      ],
+      "control_valve_and_damper_schedule_status": {
+        "control_valve_schedule": {
+          "status": "not_present",
+          "value": null,
+          "note": "The project provides individual valve notes/details and M4.0 legend symbols, not a schedule."
+        },
+        "damper_actuator_schedule": {
+          "status": "not_present",
+          "value": null,
+          "note": "M4.0 defines DA in the controls legend; no damper/actuator schedule appears in the supplied set."
+        }
+      },
+      "source_conflicts": [
+        {
+          "id": "bp-2-area-served",
+          "scope": "M3.0 new pump schedule",
+          "finding": "BP-1 and BP-2 both print area served as BOILER PUMP (B-1). The plan/detail context shows two existing boiler locations, but this record preserves the BP-2 printed schedule cell and does not silently correct it to B-2."
+        }
+      ],
+      "tables": [],
+      "assertions": [
+        {
+          "id": "m1-remove-existing-hwp",
+          "page": 3,
+          "bbox": [
+            480,
+            145,
+            820,
+            178
+          ],
+          "expected": "DISCONNECT AND REMOVE EXISTING HOT WATER PUMPS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m1-remove-existing-cwp",
+          "page": 3,
+          "bbox": [
+            480,
+            275,
+            820,
+            315
+          ],
+          "expected": "DISCONNECT AND REMOVE EXISTING CHILLED WATER PUMPS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m1-install-boiler-pump",
+          "page": 3,
+          "bbox": [
+            1590,
+            210,
+            1880,
+            250
+          ],
+          "expected": "INSTALL NEW BOILER PUMP ON RETURN SIDE.",
+          "mode": "contains"
+        },
+        {
+          "id": "m1-connect-cwp",
+          "page": 3,
+          "bbox": [
+            1870,
+            215,
+            2180,
+            255
+          ],
+          "expected": "CONNECT NEW CHILLED WATER LOOP PUMPS TO EXISTING",
+          "mode": "contains"
+        },
+        {
+          "id": "m1-ahw-three-way-valve",
+          "page": 3,
+          "bbox": [
+            1590,
+            285,
+            1880,
+            340
+          ],
+          "expected": "INSTALL NEW 3-WAY VALVE ON EXISTING AIR HANDLING UNIT (AHU-1) HEATING WATER CONNECTION.",
+          "mode": "contains"
+        },
+        {
+          "id": "m2-new-three-way-valve",
+          "page": 4,
+          "bbox": [
+            2040,
+            1030,
+            2140,
+            1070
+          ],
+          "expected": "3-WAY CONTROL VALVE",
+          "mode": "contains"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "scheduled-families",
+          "records_path": [
+            "scheduled_families"
+          ],
+          "expected": 4,
+          "unique_key": "table"
+        },
+        {
+          "id": "scheduled-primary-anchors",
+          "records_path": [
+            "primary_anchors"
+          ],
+          "expected": 11,
+          "unique_key": "id"
+        },
+        {
+          "id": "plan-detail-reconciliation-items",
+          "records_path": [
+            "plan_and_detail_reconciliation"
+          ],
+          "expected": 6,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "point_applications": {
+      "document_id": "16__vol2__069",
+      "module_role": "Source-list ownership ledger for the explicitly printed M4.0 VFD and M4.1 chiller integration lists. It preserves list scope without inventing an installed terminal count, controller wiring assignment, or unprinted AI/AO/DI/DO type.",
+      "tables": [],
+      "ledger_mode": "source_matrix_templates_v1",
+      "source_points_composite": "The points bundle component is controls_context_m4, whose three exact tables retain the VFD, chiller, and all-compressor-circuit source-list rows.",
+      "ownership_binding_semantics": "ownership_scope identifies the printed interface/system scope only. It does not create a physical field-device owner or multiply the open-ended list by an assumed equipment quantity.",
+      "expanded_count_warning": "The ledger contains 16 printed source-list rows. The two printed lists use NOT BE LIMITED TO / ALL AVAILABLE language, so 16 is not a complete installed BAS point or terminal count.",
+      "applications": [
+        {
+          "id": "M40-VFD-INTERFACE",
+          "source_table": "M40-VFD-INTERFACE-POINTS",
+          "ownership_scope": "M4.0 VFD control-interface source list",
+          "physical_installation_count": {
+            "status": "not_stated",
+            "value": null
+          }
+        },
+        {
+          "id": "M41-CHILLER-INTEGRATION",
+          "source_table": "M41-CHILLER-INTEGRATION-POINTS",
+          "ownership_scope": "M4.1 chiller integration-module source list",
+          "physical_installation_count": {
+            "status": "not_stated",
+            "value": null
+          }
+        },
+        {
+          "id": "M41-CHILLER-COMPRESSOR-CIRCUITS",
+          "source_table": "M41-CHILLER-COMPRESSOR-CIRCUIT-POINTS",
+          "ownership_scope": "M4.1 all-compressor-circuits sublist in chiller integration module",
+          "physical_installation_count": {
+            "status": "not_stated",
+            "value": null
+          }
+        }
+      ],
+      "listed_template_counts": {
+        "source_rows": 16,
+        "tables": 3
+      },
+      "expanded_template_counts": {
+        "source_rows": 16
+      },
+      "installed_IO_total": {
+        "status": "not_stated_in_supplied_set",
+        "value": null,
+        "reason": "No terminal plan, controller panel schedule, type-coded point matrix, or complete vendor integration export is supplied. The source lists are expressly open-ended."
+      },
+      "point_transport": {
+        "status": "not_stated_per_point",
+        "value": null,
+        "note": "The controls source prints BACnet and existing Delta-system context, but no list row is assigned a network transport or field wiring method."
+      },
+      "inventory_checks": [
+        {
+          "id": "point-source-list-applications",
+          "records_path": [
+            "applications"
+          ],
+          "expected": 3,
+          "unique_key": "source_table"
+        }
+      ]
+    },
+    "supporting_evidence": {
+      "document_id": "16__vol2__069",
+      "module_role": "Coordinator limitation ledger for the complete nine-page supplied ITD District 2 heating-upgrades rebid PDF. These source limits are findings from complete visual review, not parser absence claims alone.",
+      "source_limitations": [
+        {
+          "id": "outlined-sheet-title-text",
+          "finding": "The title-block sheet IDs/names are legible on the full-page renders but largely outlined graphics rather than normal parser text. Visual review records them; no false parser assertion is made for those outlined labels."
+        },
+        {
+          "id": "no-control-valve-schedule",
+          "finding": "No dedicated control-valve schedule appears on the nine supplied sheets. A new AHU-1 3-way-valve note, schematic BCV-1 label, and legend symbols are not converted to a valve-schedule count."
+        },
+        {
+          "id": "no-damper-actuator-schedule",
+          "finding": "No dedicated damper-actuator schedule appears on the nine supplied sheets. The controls legend's DA definition is not an installed actuator quantity."
+        },
+        {
+          "id": "open-ended-interface-lists",
+          "finding": "The VFD list says NOT BE LIMITED TO and the chiller list says ALL AVAILABLE and NOT BE LIMITED TO. The visible 16 rows are preserved but are not treated as a complete physical I/O count."
+        },
+        {
+          "id": "no-zone-sensor-roster",
+          "finding": "The supplied floor/power plans do not provide a space-sensor, CO2-sensor, or smart-thermostat roster mapped to zones. Schematic TT/PT and integration temperature points are recorded only as logical/source items."
+        },
+        {
+          "id": "existing-versus-updated-sequence",
+          "finding": "M4.0/M4.1 explicitly label grey text as existing sequence and bold text as updated sequence. The two layers are preserved separately; the record does not invent a merged final sequence."
+        },
+        {
+          "id": "schedule-versus-installed-count",
+          "finding": "M3.0 has 11 schedule line items. Schedule rows, plan/schematic visual labels, logical source-list rows, and field-installed devices are different quantities and remain separately scoped."
+        }
+      ],
+      "all_document_pages_visually_reviewed": {
+        "status": "complete",
+        "page_count": 9,
+        "basis": "Full-page Poppler renders p1 through p9 were reviewed and the per-page findings are embedded in metadata/page_review."
+      },
+      "tables": [],
+      "assertions": [],
+      "inventory_checks": [
+        {
+          "id": "source-limitations",
+          "records_path": [
+            "source_limitations"
+          ],
+          "expected": 7,
+          "unique_key": "id"
+        }
+      ]
+    }
+  },
+  "module_sha256": {
+    "metadata": "445c8261b49cadb5906c428c48c2d5f299d1232d72c3386d1fd4ade62e7ea3f3",
+    "schedules": "aa8d90a1297b086058112ab2a336df42b977a857e456d70cf32968f6c9b54824",
+    "points": "72042c1f05fbc4dade455c7d794b4a8cf5b7f773bc33c4be794cc75510fc839f",
+    "controls_context": "72042c1f05fbc4dade455c7d794b4a8cf5b7f773bc33c4be794cc75510fc839f",
+    "equipment_reconciliation": "e68e3c1e5f94541fc7a93df3406d25f1e0bdc026bf5c76643926a6c2d060474c",
+    "point_applications": "41c2b6da394cc47f7486e6196dbddefaf94c43fda5a4e561899d1fce547c83da",
+    "supporting_evidence": "7784fc6b68f489aacac8d9a1aeaee8ba583aaff002e5cf43025fcb25cee57ef2"
+  },
+  "module_source_sha256": {
+    "metadata": {
+      "metadata": "445c8261b49cadb5906c428c48c2d5f299d1232d72c3386d1fd4ade62e7ea3f3"
+    },
+    "schedules": {
+      "schedules_m3": "aa8d90a1297b086058112ab2a336df42b977a857e456d70cf32968f6c9b54824"
+    },
+    "points": {
+      "controls_context_m4": "72042c1f05fbc4dade455c7d794b4a8cf5b7f773bc33c4be794cc75510fc839f"
+    },
+    "controls_context": {
+      "controls_context_m4": "72042c1f05fbc4dade455c7d794b4a8cf5b7f773bc33c4be794cc75510fc839f"
+    },
+    "equipment_reconciliation": {
+      "equipment_reconciliation": "e68e3c1e5f94541fc7a93df3406d25f1e0bdc026bf5c76643926a6c2d060474c"
+    },
+    "point_applications": {
+      "point_applications": "41c2b6da394cc47f7486e6196dbddefaf94c43fda5a4e561899d1fce547c83da"
+    },
+    "supporting_evidence": {
+      "supporting_evidence": "7784fc6b68f489aacac8d9a1aeaee8ba583aaff002e5cf43025fcb25cee57ef2"
+    }
+  },
+  "equipment_inventory": [
+    {
+      "id": "M3-EXISTING-AHU-AHU-1(E)",
+      "tag": "AHU-1(E)",
+      "classification": "Existing air handling unit",
+      "identity_column": "mark",
+      "source_table": "M3-EXISTING-AHU",
+      "source_row": 1,
+      "source_page": 5,
+      "literal_schedule_row": {
+        "mark": "AHU-1(E)",
+        "type": "SEMI-CUSTOM",
+        "area_served": "LABORATORIES",
+        "fan_type": "ECM",
+        "supply_fan_cfm": "16,400",
+        "supply_fan_esp_in_wg": "2.0",
+        "supply_fan_tsp_in_wg": "5.1",
+        "supply_fan_hp_qty": "3.2 \\ 6",
+        "supply_fan_volts_ph": "460/3",
+        "supply_fan_rpm": "3,169",
+        "cooling_fluid_type": "30% PG",
+        "cooling_sensible_capacity_mbh": "842.7",
+        "cooling_total_capacity_mbh": "842.7",
+        "cooling_cfm": "16,400",
+        "cooling_eat_db_f": "98.7",
+        "cooling_eat_wb_f": "65.5",
+        "cooling_lat_db_f": "50.2",
+        "cooling_lat_wb_f": "46.9",
+        "cooling_max_face_velocity_fpm": "500",
+        "cooling_air_pd_in_wg": "0.8",
+        "cooling_fluid_ewt_f": "45",
+        "cooling_fluid_lwt_f": "55.0",
+        "cooling_fluid_gpm": "177.0",
+        "cooling_fluid_pd_ft": "18.0",
+        "cooling_max_rh": "50%",
+        "heating_fluid_type": "30% PG",
+        "heating_capacity_mbh": "960.0",
+        "heating_cfm": "16,400",
+        "heating_eat_db_f": "12.9",
+        "heating_lat_db_f": "66.9",
+        "heating_max_face_velocity_fpm": "500",
+        "heating_air_pd_in_wg": "0.11",
+        "heating_fluid_ewt_f": "140",
+        "heating_fluid_lwt_f": "98.1",
+        "heating_fluid_gpm": "48.0",
+        "heating_fluid_pd_ft": "5.1",
+        "humidification_coil_air_pd_ft": "0.01",
+        "humidification_finned_height_in": "24.0",
+        "humidification_finned_width_in": "109.0",
+        "humidification_face_area_ft_sq": "36.33",
+        "humidification_face_velocity_fpm": "451",
+        "prefilter_efficiency": "MERV 8",
+        "prefilter_depth_in": "2\"",
+        "final_filter_efficiency": "MERV 13",
+        "final_filter_depth_in": "4\"",
+        "combination_filter_max_face_velocity_fpm": "500",
+        "min_osa_cfm": "2,150",
+        "operating_weight_lbs": "7,000",
+        "manufacturer_model": "DAIKIN CAH044GDCM",
+        "remarks": "1 , 2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M3-EXISTING-AHU-AHU-1(E)",
+        "scope": "Existing equipment",
+        "visual_anchor": "M1.0 loft mechanical plan labels existing AHU-1; M3.0 gives its reference-only schedule."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER-B-1(E)",
+      "tag": "B-1(E)",
+      "classification": "Existing condensing hot-water boiler",
+      "identity_column": "mark",
+      "source_table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "source_row": 1,
+      "source_page": 5,
+      "literal_schedule_row": {
+        "mark": "B-1(E)",
+        "area_served": "HOT WATER LOOP",
+        "thermal_efficiency": "98.3%",
+        "fuel": "NATURAL GAS",
+        "ewt_f": "100.0",
+        "lwt_f": "150.0",
+        "boiler_flow_gpm": "40.0",
+        "max_pd_ft_h2o": "3.5",
+        "input_mbh": "1,000",
+        "output_mbh": "982",
+        "manufacturer_model": "LOCHINVAR FTX1000 (EXISTING)",
+        "remarks": "1 , 2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER-B-1(E)",
+        "scope": "Existing equipment retained",
+        "visual_anchor": "M1.0/M2.0 show existing B-1 context; M3.0 schedule row B-1(E)."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER-B-2(E)",
+      "tag": "B-2(E)",
+      "classification": "Existing condensing hot-water boiler",
+      "identity_column": "mark",
+      "source_table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER",
+      "source_row": 2,
+      "source_page": 5,
+      "literal_schedule_row": {
+        "mark": "B-2(E)",
+        "area_served": "HOT WATER LOOP",
+        "thermal_efficiency": "98.3%",
+        "fuel": "NATURAL GAS",
+        "ewt_f": "100.0",
+        "lwt_f": "150.0",
+        "boiler_flow_gpm": "40.0",
+        "max_pd_ft_h2o": "3.5",
+        "input_mbh": "1,000",
+        "output_mbh": "982",
+        "manufacturer_model": "LOCHINVAR FTX1000 (EXISTING)",
+        "remarks": "1 , 2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER-B-2(E)",
+        "scope": "Existing equipment retained",
+        "visual_anchor": "M1.0/M2.0 show existing B-2 context; M3.0 schedule row B-2(E)."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M3-NEW-PUMP-HWP-1",
+      "tag": "HWP-1",
+      "classification": "New hydronic pump",
+      "identity_column": "mark",
+      "source_table": "M3-NEW-PUMP",
+      "source_row": 1,
+      "source_page": 5,
+      "literal_schedule_row": {
+        "mark": "HWP-1",
+        "area_served": "HOT WATER LOOP",
+        "type": "INLINE VARIABLE SECONDARY",
+        "flow_gpm": "80",
+        "head_ft": "40",
+        "min_efficiency_percent": "71",
+        "motor_hp": "2",
+        "motor_rpm": "1,725",
+        "motor_volts_ph": "460/3",
+        "operating_weight_lbs": "60",
+        "manufacturer_model": "B&G E-90 2AB",
+        "remarks": "1 , 2 , 3 , 4"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M3-NEW-PUMP-HWP-1",
+        "scope": "New equipment",
+        "visual_anchor": "M1.0 new-work plan labels HWP-1; M4.0 schematic shows HWP 1 (N)."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M3-NEW-PUMP-HWP-2",
+      "tag": "HWP-2",
+      "classification": "New hydronic pump",
+      "identity_column": "mark",
+      "source_table": "M3-NEW-PUMP",
+      "source_row": 2,
+      "source_page": 5,
+      "literal_schedule_row": {
+        "mark": "HWP-2",
+        "area_served": "HOT WATER LOOP",
+        "type": "INLINE VARIABLE SECONDARY",
+        "flow_gpm": "80",
+        "head_ft": "40",
+        "min_efficiency_percent": "71",
+        "motor_hp": "2",
+        "motor_rpm": "1,725",
+        "motor_volts_ph": "460/3",
+        "operating_weight_lbs": "60",
+        "manufacturer_model": "B&G E-90 2AB",
+        "remarks": "1 , 2 , 3 , 4"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M3-NEW-PUMP-HWP-2",
+        "scope": "New equipment",
+        "visual_anchor": "M1.0 new-work plan labels HWP-2; M4.0 schematic shows HWP 2 (N)."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M3-NEW-PUMP-BP-1",
+      "tag": "BP-1",
+      "classification": "New hydronic pump",
+      "identity_column": "mark",
+      "source_table": "M3-NEW-PUMP",
+      "source_row": 3,
+      "source_page": 5,
+      "literal_schedule_row": {
+        "mark": "BP-1",
+        "area_served": "BOILER PUMP (B-1)",
+        "type": "INLINE PRIMARY",
+        "flow_gpm": "40",
+        "head_ft": "15",
+        "min_efficiency_percent": "-",
+        "motor_hp": "1/3",
+        "motor_rpm": "4,350",
+        "motor_volts_ph": "115/1",
+        "operating_weight_lbs": "35",
+        "manufacturer_model": "GRUNDFOS MAGNA3 40-80",
+        "remarks": "1 , 2 , 3 , 4"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M3-NEW-PUMP-BP-1",
+        "scope": "New equipment",
+        "visual_anchor": "M1.0 new-work plan labels BP-1 and directs new boiler-pump installation."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M3-NEW-PUMP-BP-2",
+      "tag": "BP-2",
+      "classification": "New hydronic pump",
+      "identity_column": "mark",
+      "source_table": "M3-NEW-PUMP",
+      "source_row": 4,
+      "source_page": 5,
+      "literal_schedule_row": {
+        "mark": "BP-2",
+        "area_served": "BOILER PUMP (B-1)",
+        "type": "INLINE PRIMARY",
+        "flow_gpm": "40",
+        "head_ft": "15",
+        "min_efficiency_percent": "-",
+        "motor_hp": "1/3",
+        "motor_rpm": "4,350",
+        "motor_volts_ph": "115/1",
+        "operating_weight_lbs": "35",
+        "manufacturer_model": "GRUNDFOS MAGNA3 40-80",
+        "remarks": "1 , 2 , 3 , 4"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M3-NEW-PUMP-BP-2",
+        "scope": "New equipment",
+        "visual_anchor": "M1.0 new-work plan labels BP-2 and directs new boiler-pump installation."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M3-NEW-PUMP-CWP-1",
+      "tag": "CWP-1",
+      "classification": "New hydronic pump",
+      "identity_column": "mark",
+      "source_table": "M3-NEW-PUMP",
+      "source_row": 5,
+      "source_page": 5,
+      "literal_schedule_row": {
+        "mark": "CWP-1",
+        "area_served": "CHILLED WATER LOOP",
+        "type": "INLINE PRIMARY",
+        "flow_gpm": "185",
+        "head_ft": "55",
+        "min_efficiency_percent": "67",
+        "motor_hp": "5",
+        "motor_rpm": "3325",
+        "motor_volts_ph": "460/3",
+        "operating_weight_lbs": "85",
+        "manufacturer_model": "B&G E-90 2AAB",
+        "remarks": "1 , 2 , 3"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M3-NEW-PUMP-CWP-1",
+        "scope": "New equipment",
+        "visual_anchor": "M1.0 new-work plan labels CWP-1; M4.1 schematic shows CWP 1 (N)."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M3-NEW-PUMP-CWP-2",
+      "tag": "CWP-2",
+      "classification": "New hydronic pump",
+      "identity_column": "mark",
+      "source_table": "M3-NEW-PUMP",
+      "source_row": 6,
+      "source_page": 5,
+      "literal_schedule_row": {
+        "mark": "CWP-2",
+        "area_served": "CHILLED WATER LOOP",
+        "type": "INLINE PRIMARY",
+        "flow_gpm": "185",
+        "head_ft": "55",
+        "min_efficiency_percent": "67",
+        "motor_hp": "5",
+        "motor_rpm": "3325",
+        "motor_volts_ph": "460/3",
+        "operating_weight_lbs": "85",
+        "manufacturer_model": "B&G E-90 2AAB",
+        "remarks": "1 , 2 , 3"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M3-NEW-PUMP-CWP-2",
+        "scope": "New equipment",
+        "visual_anchor": "M1.0 new-work plan labels CWP-2; M4.1 schematic shows CWP 2 (N)."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M3-NEW-VFD-VFD-1",
+      "tag": "VFD-1",
+      "classification": "New variable frequency drive",
+      "identity_column": "mark",
+      "source_table": "M3-NEW-VFD",
+      "source_row": 1,
+      "source_page": 5,
+      "literal_schedule_row": {
+        "mark": "VFD-1",
+        "system_location": "MECHANICAL LOFT",
+        "service_horsepower": "2",
+        "volts_ph": "460/3",
+        "purpose": "HWP-1",
+        "manufacturer_model": "ABB MODEL ACH 580",
+        "remarks": "1 , 2 , 3 , 4"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M3-NEW-VFD-VFD-1",
+        "scope": "New equipment",
+        "visual_anchor": "M1.0 new-work plan labels VFD-1; M4.0 schematic shows VFD 1 (N)."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M3-NEW-VFD-VFD-2",
+      "tag": "VFD-2",
+      "classification": "New variable frequency drive",
+      "identity_column": "mark",
+      "source_table": "M3-NEW-VFD",
+      "source_row": 2,
+      "source_page": 5,
+      "literal_schedule_row": {
+        "mark": "VFD-2",
+        "system_location": "MECHANICAL LOFT",
+        "service_horsepower": "2",
+        "volts_ph": "460/3",
+        "purpose": "HWP-2",
+        "manufacturer_model": "ABB MODEL ACH 580",
+        "remarks": "1 , 2 , 3 , 4"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M3-NEW-VFD-VFD-2",
+        "scope": "New equipment",
+        "visual_anchor": "M1.0 new-work plan labels VFD-2; M4.0 schematic shows VFD 2 (N)."
+      },
+      "outlet_instances": null
+    }
+  ],
+  "point_application_ledger": [
+    {
+      "id": "M40-VFD-INTERFACE/1.",
+      "application": "M40-VFD-INTERFACE",
+      "source_table": "M40-VFD-INTERFACE-POINTS",
+      "source_row": 1,
+      "page": 6,
+      "sheet": "M4.0",
+      "row_bbox": [
+        1855,
+        1215,
+        1960,
+        1227
+      ],
+      "tag_as_printed": "1.",
+      "point_name_as_printed": "ENABLE/DISABLE",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "1.",
+        "point_name": "ENABLE/DISABLE"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "M4.0 VFD control-interface source list",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {
+        "physical_installation_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      }
+    },
+    {
+      "id": "M40-VFD-INTERFACE/2.",
+      "application": "M40-VFD-INTERFACE",
+      "source_table": "M40-VFD-INTERFACE-POINTS",
+      "source_row": 2,
+      "page": 6,
+      "sheet": "M4.0",
+      "row_bbox": [
+        1855,
+        1227,
+        1960,
+        1239
+      ],
+      "tag_as_printed": "2.",
+      "point_name_as_printed": "ALARMS",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "2.",
+        "point_name": "ALARMS"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "M4.0 VFD control-interface source list",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {
+        "physical_installation_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      }
+    },
+    {
+      "id": "M40-VFD-INTERFACE/3.",
+      "application": "M40-VFD-INTERFACE",
+      "source_table": "M40-VFD-INTERFACE-POINTS",
+      "source_row": 3,
+      "page": 6,
+      "sheet": "M4.0",
+      "row_bbox": [
+        1855,
+        1239,
+        1960,
+        1250
+      ],
+      "tag_as_printed": "3.",
+      "point_name_as_printed": "HERTZ",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "3.",
+        "point_name": "HERTZ"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "M4.0 VFD control-interface source list",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {
+        "physical_installation_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      }
+    },
+    {
+      "id": "M40-VFD-INTERFACE/4.",
+      "application": "M40-VFD-INTERFACE",
+      "source_table": "M40-VFD-INTERFACE-POINTS",
+      "source_row": 4,
+      "page": 6,
+      "sheet": "M4.0",
+      "row_bbox": [
+        1855,
+        1250,
+        1960,
+        1264
+      ],
+      "tag_as_printed": "4.",
+      "point_name_as_printed": "SPEED CONTROL",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "4.",
+        "point_name": "SPEED CONTROL"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "M4.0 VFD control-interface source list",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {
+        "physical_installation_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      }
+    },
+    {
+      "id": "M41-CHILLER-INTEGRATION/1.",
+      "application": "M41-CHILLER-INTEGRATION",
+      "source_table": "M41-CHILLER-INTEGRATION-POINTS",
+      "source_row": 1,
+      "page": 7,
+      "sheet": "M4.1",
+      "row_bbox": [
+        230,
+        1064,
+        800,
+        1076
+      ],
+      "tag_as_printed": "1.",
+      "point_name_as_printed": "CHILLER ENABLE / DISABLE .",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "1.",
+        "point_name": "CHILLER ENABLE / DISABLE ."
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "M4.1 chiller integration-module source list",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {
+        "physical_installation_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      }
+    },
+    {
+      "id": "M41-CHILLER-INTEGRATION/2.",
+      "application": "M41-CHILLER-INTEGRATION",
+      "source_table": "M41-CHILLER-INTEGRATION-POINTS",
+      "source_row": 2,
+      "page": 7,
+      "sheet": "M4.1",
+      "row_bbox": [
+        230,
+        1076,
+        800,
+        1088
+      ],
+      "tag_as_printed": "2.",
+      "point_name_as_printed": "CHILLER ENABLE / DISABLE STATUS .",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "2.",
+        "point_name": "CHILLER ENABLE / DISABLE STATUS ."
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "M4.1 chiller integration-module source list",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {
+        "physical_installation_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      }
+    },
+    {
+      "id": "M41-CHILLER-INTEGRATION/3.",
+      "application": "M41-CHILLER-INTEGRATION",
+      "source_table": "M41-CHILLER-INTEGRATION-POINTS",
+      "source_row": 3,
+      "page": 7,
+      "sheet": "M4.1",
+      "row_bbox": [
+        230,
+        1088,
+        800,
+        1099
+      ],
+      "tag_as_printed": "3.",
+      "point_name_as_printed": "ENTERING CHILLED WATER TEMPERATURE.",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "3.",
+        "point_name": "ENTERING CHILLED WATER TEMPERATURE."
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "M4.1 chiller integration-module source list",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {
+        "physical_installation_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      }
+    },
+    {
+      "id": "M41-CHILLER-INTEGRATION/4.",
+      "application": "M41-CHILLER-INTEGRATION",
+      "source_table": "M41-CHILLER-INTEGRATION-POINTS",
+      "source_row": 4,
+      "page": 7,
+      "sheet": "M4.1",
+      "row_bbox": [
+        230,
+        1099,
+        800,
+        1110
+      ],
+      "tag_as_printed": "4.",
+      "point_name_as_printed": "LEAVING CHILLED WATER TEMPERATURE.",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "4.",
+        "point_name": "LEAVING CHILLED WATER TEMPERATURE."
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "M4.1 chiller integration-module source list",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {
+        "physical_installation_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      }
+    },
+    {
+      "id": "M41-CHILLER-INTEGRATION/5.",
+      "application": "M41-CHILLER-INTEGRATION",
+      "source_table": "M41-CHILLER-INTEGRATION-POINTS",
+      "source_row": 5,
+      "page": 7,
+      "sheet": "M4.1",
+      "row_bbox": [
+        230,
+        1110,
+        800,
+        1121
+      ],
+      "tag_as_printed": "5.",
+      "point_name_as_printed": "CHILLED WATER SET POINT.",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "5.",
+        "point_name": "CHILLED WATER SET POINT."
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "M4.1 chiller integration-module source list",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {
+        "physical_installation_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      }
+    },
+    {
+      "id": "M41-CHILLER-INTEGRATION/6.",
+      "application": "M41-CHILLER-INTEGRATION",
+      "source_table": "M41-CHILLER-INTEGRATION-POINTS",
+      "source_row": 6,
+      "page": 7,
+      "sheet": "M4.1",
+      "row_bbox": [
+        230,
+        1121,
+        800,
+        1133
+      ],
+      "tag_as_printed": "6.",
+      "point_name_as_printed": "PERCENT TOTAL CAPACITY.",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "6.",
+        "point_name": "PERCENT TOTAL CAPACITY."
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "M4.1 chiller integration-module source list",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {
+        "physical_installation_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      }
+    },
+    {
+      "id": "M41-CHILLER-INTEGRATION/7.",
+      "application": "M41-CHILLER-INTEGRATION",
+      "source_table": "M41-CHILLER-INTEGRATION-POINTS",
+      "source_row": 7,
+      "page": 7,
+      "sheet": "M4.1",
+      "row_bbox": [
+        230,
+        1133,
+        800,
+        1144
+      ],
+      "tag_as_printed": "7.",
+      "point_name_as_printed": "ALARM STATE.",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "7.",
+        "point_name": "ALARM STATE."
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "M4.1 chiller integration-module source list",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {
+        "physical_installation_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      }
+    },
+    {
+      "id": "M41-CHILLER-INTEGRATION/8.",
+      "application": "M41-CHILLER-INTEGRATION",
+      "source_table": "M41-CHILLER-INTEGRATION-POINTS",
+      "source_row": 8,
+      "page": 7,
+      "sheet": "M4.1",
+      "row_bbox": [
+        230,
+        1144,
+        800,
+        1155
+      ],
+      "tag_as_printed": "8.",
+      "point_name_as_printed": "CURRENT ALARMS.",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "8.",
+        "point_name": "CURRENT ALARMS."
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "M4.1 chiller integration-module source list",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {
+        "physical_installation_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      }
+    },
+    {
+      "id": "M41-CHILLER-INTEGRATION/9.",
+      "application": "M41-CHILLER-INTEGRATION",
+      "source_table": "M41-CHILLER-INTEGRATION-POINTS",
+      "source_row": 9,
+      "page": 7,
+      "sheet": "M4.1",
+      "row_bbox": [
+        230,
+        1155,
+        800,
+        1167
+      ],
+      "tag_as_printed": "9.",
+      "point_name_as_printed": "ALL COMPRESSOR CIRCUITS:",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "9.",
+        "point_name": "ALL COMPRESSOR CIRCUITS:"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "M4.1 chiller integration-module source list",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {
+        "physical_installation_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      }
+    },
+    {
+      "id": "M41-CHILLER-COMPRESSOR-CIRCUITS/a.",
+      "application": "M41-CHILLER-COMPRESSOR-CIRCUITS",
+      "source_table": "M41-CHILLER-COMPRESSOR-CIRCUIT-POINTS",
+      "source_row": 1,
+      "page": 7,
+      "sheet": "M4.1",
+      "row_bbox": [
+        250,
+        1167,
+        800,
+        1178
+      ],
+      "tag_as_printed": "a.",
+      "point_name_as_printed": "EVAPORATOR SATURATED REFRIGERANT PRESSURE",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "a.",
+        "point_name": "EVAPORATOR SATURATED REFRIGERANT PRESSURE"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "M4.1 all-compressor-circuits sublist in chiller integration module",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {
+        "physical_installation_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      }
+    },
+    {
+      "id": "M41-CHILLER-COMPRESSOR-CIRCUITS/b.",
+      "application": "M41-CHILLER-COMPRESSOR-CIRCUITS",
+      "source_table": "M41-CHILLER-COMPRESSOR-CIRCUIT-POINTS",
+      "source_row": 2,
+      "page": 7,
+      "sheet": "M4.1",
+      "row_bbox": [
+        250,
+        1178,
+        800,
+        1190
+      ],
+      "tag_as_printed": "b.",
+      "point_name_as_printed": "EVAPORATOR SATURATED REFRIGERANT TEMPERATURE",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "b.",
+        "point_name": "EVAPORATOR SATURATED REFRIGERANT TEMPERATURE"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "M4.1 all-compressor-circuits sublist in chiller integration module",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {
+        "physical_installation_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      }
+    },
+    {
+      "id": "M41-CHILLER-COMPRESSOR-CIRCUITS/c.",
+      "application": "M41-CHILLER-COMPRESSOR-CIRCUITS",
+      "source_table": "M41-CHILLER-COMPRESSOR-CIRCUIT-POINTS",
+      "source_row": 3,
+      "page": 7,
+      "sheet": "M4.1",
+      "row_bbox": [
+        250,
+        1190,
+        800,
+        1203
+      ],
+      "tag_as_printed": "c.",
+      "point_name_as_printed": "EXV POSITION",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "c.",
+        "point_name": "EXV POSITION"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "M4.1 all-compressor-circuits sublist in chiller integration module",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {
+        "physical_installation_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      }
+    }
+  ]
+}

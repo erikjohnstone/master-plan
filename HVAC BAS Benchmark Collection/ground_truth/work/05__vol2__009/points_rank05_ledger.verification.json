@@ -1,0 +1,4773 @@
+{
+  "document_id": "05__vol2__009",
+  "source_sha256": "d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1",
+  "annotation_sha256": "e425cd79d57e87143d5c06d11c9ecd8412f66af6d7d686f404f4e8f7aeb58e83",
+  "tables": 8,
+  "rows": 75,
+  "cell_assertions": 150,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 1,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        170,
+        1320,
+        189
+      ],
+      "expected": "AI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI1",
+          "word_ids": [
+            525
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI1",
+          "word_ids": [
+            15
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 1,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        170,
+        1650,
+        189
+      ],
+      "expected": "FREQUENCY SETPOINT REFERENCE (HZ)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FREQUENCY SETPOINT REFERENCE (HZ)",
+          "word_ids": [
+            526,
+            527,
+            528,
+            529
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FREQUENCY SETPOINT REFERENCE (HZ)",
+          "word_ids": [
+            24,
+            25,
+            26,
+            27
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 2,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        189,
+        1320,
+        206
+      ],
+      "expected": "AI2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI2",
+          "word_ids": [
+            532
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI2",
+          "word_ids": [
+            16
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 2,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        189,
+        1650,
+        206
+      ],
+      "expected": "FREQUENCY STATUS (HZ)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FREQUENCY STATUS (HZ)",
+          "word_ids": [
+            533,
+            534,
+            535
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FREQUENCY STATUS (HZ)",
+          "word_ids": [
+            28,
+            29,
+            30
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 3,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        206,
+        1320,
+        223
+      ],
+      "expected": "AI3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI3",
+          "word_ids": [
+            538
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI3",
+          "word_ids": [
+            17
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 3,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        206,
+        1650,
+        223
+      ],
+      "expected": "MOTOR SPEED (RPM)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MOTOR SPEED (RPM)",
+          "word_ids": [
+            539,
+            540,
+            541
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MOTOR SPEED (RPM)",
+          "word_ids": [
+            31,
+            32,
+            33
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 4,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        223,
+        1320,
+        241
+      ],
+      "expected": "AI4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI4",
+          "word_ids": [
+            544
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI4",
+          "word_ids": [
+            18
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 4,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        223,
+        1650,
+        241
+      ],
+      "expected": "OUTPUT VOLTAGE (V)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTPUT VOLTAGE (V)",
+          "word_ids": [
+            545,
+            546,
+            547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTPUT VOLTAGE (V)",
+          "word_ids": [
+            34,
+            35,
+            36
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 5,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        241,
+        1320,
+        258
+      ],
+      "expected": "AI5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI5",
+          "word_ids": [
+            550
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI5",
+          "word_ids": [
+            19
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 5,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        241,
+        1650,
+        258
+      ],
+      "expected": "OUTPUT CURRENT (A)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTPUT CURRENT (A)",
+          "word_ids": [
+            551,
+            552,
+            553
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTPUT CURRENT (A)",
+          "word_ids": [
+            37,
+            38,
+            39
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 6,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        258,
+        1320,
+        275
+      ],
+      "expected": "AI6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI6",
+          "word_ids": [
+            556
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI6",
+          "word_ids": [
+            20
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 6,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        258,
+        1650,
+        275
+      ],
+      "expected": "OUTPUT POWER (KW)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTPUT POWER (KW)",
+          "word_ids": [
+            557,
+            558,
+            559
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTPUT POWER (KW)",
+          "word_ids": [
+            40,
+            41,
+            42
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 7,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        275,
+        1320,
+        292
+      ],
+      "expected": "AI7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI7",
+          "word_ids": [
+            562
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI7",
+          "word_ids": [
+            21
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 7,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        275,
+        1650,
+        292
+      ],
+      "expected": "TORQUE (%)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TORQUE (%)",
+          "word_ids": [
+            563,
+            564
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TORQUE (%)",
+          "word_ids": [
+            43,
+            44
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 8,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        309,
+        1320,
+        326
+      ],
+      "expected": "AO1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO1",
+          "word_ids": [
+            567
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO1",
+          "word_ids": [
+            62
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 8,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        309,
+        1650,
+        326
+      ],
+      "expected": "SPEED COMMAND (%)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPEED COMMAND (%)",
+          "word_ids": [
+            568,
+            569,
+            570
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPEED COMMAND (%)",
+          "word_ids": [
+            63,
+            64,
+            65
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 9,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        343,
+        1320,
+        360
+      ],
+      "expected": "AV1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AV1",
+          "word_ids": [
+            573
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AV1",
+          "word_ids": [
+            68
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 9,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        343,
+        1650,
+        360
+      ],
+      "expected": "MINIMUM FREQUENCY (HZ)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MINIMUM FREQUENCY (HZ)",
+          "word_ids": [
+            574,
+            575,
+            576
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MINIMUM FREQUENCY (HZ)",
+          "word_ids": [
+            72,
+            73,
+            74
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 10,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        360,
+        1320,
+        378
+      ],
+      "expected": "AV2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AV2",
+          "word_ids": [
+            579
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AV2",
+          "word_ids": [
+            69
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 10,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        360,
+        1650,
+        378
+      ],
+      "expected": "MAXIMUM FREQUENCY (HZ)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAXIMUM FREQUENCY (HZ)",
+          "word_ids": [
+            580,
+            581,
+            582
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAXIMUM FREQUENCY (HZ)",
+          "word_ids": [
+            75,
+            76,
+            77
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 11,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        378,
+        1320,
+        395
+      ],
+      "expected": "AV3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AV3",
+          "word_ids": [
+            585
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AV3",
+          "word_ids": [
+            70
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 11,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        378,
+        1650,
+        395
+      ],
+      "expected": "ACCELERATION TIME (S)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACCELERATION TIME (S)",
+          "word_ids": [
+            586,
+            587,
+            588
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACCELERATION TIME (S)",
+          "word_ids": [
+            78,
+            79,
+            80
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 12,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        395,
+        1320,
+        412
+      ],
+      "expected": "AV4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AV4",
+          "word_ids": [
+            591
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AV4",
+          "word_ids": [
+            71
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 12,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        395,
+        1650,
+        412
+      ],
+      "expected": "DECELERATION TIME (S)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DECELERATION TIME (S)",
+          "word_ids": [
+            592,
+            593,
+            594
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DECELERATION TIME (S)",
+          "word_ids": [
+            81,
+            82,
+            83
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 13,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        429,
+        1320,
+        447
+      ],
+      "expected": "BI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            597
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            92
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 13,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        429,
+        1650,
+        447
+      ],
+      "expected": "VFD STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD STATUS",
+          "word_ids": [
+            598,
+            599
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD STATUS",
+          "word_ids": [
+            95,
+            96
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 14,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        447,
+        1320,
+        464
+      ],
+      "expected": "BI2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI2",
+          "word_ids": [
+            603
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI2",
+          "word_ids": [
+            93
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 14,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        447,
+        1650,
+        464
+      ],
+      "expected": "VFD FAULT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD FAULT",
+          "word_ids": [
+            604,
+            605
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD FAULT",
+          "word_ids": [
+            97,
+            98
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 15,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        464,
+        1320,
+        481
+      ],
+      "expected": "BI3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI3",
+          "word_ids": [
+            609
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI3",
+          "word_ids": [
+            94
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 15,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        464,
+        1650,
+        481
+      ],
+      "expected": "VFD ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD ALARM",
+          "word_ids": [
+            610,
+            611
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD ALARM",
+          "word_ids": [
+            99,
+            100
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 16,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        498,
+        1320,
+        516
+      ],
+      "expected": "BO1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO1",
+          "word_ids": [
+            615
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO1",
+          "word_ids": [
+            104
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 16,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        498,
+        1650,
+        516
+      ],
+      "expected": "START / STOP COMMAND",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "START / STOP COMMAND",
+          "word_ids": [
+            616,
+            617,
+            618,
+            619
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "START / STOP COMMAND",
+          "word_ids": [
+            106,
+            107,
+            108,
+            109
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 17,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        516,
+        1320,
+        533
+      ],
+      "expected": "BO2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO2",
+          "word_ids": [
+            622
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO2",
+          "word_ids": [
+            105
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 17,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        516,
+        1650,
+        533
+      ],
+      "expected": "FAULT RESET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAULT RESET",
+          "word_ids": [
+            623,
+            624
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAULT RESET",
+          "word_ids": [
+            110,
+            111
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 18,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1280,
+        550,
+        1320,
+        567
+      ],
+      "expected": "MI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MI1",
+          "word_ids": [
+            627
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MI1",
+          "word_ids": [
+            114
+          ]
+        }
+      }
+    },
+    {
+      "table": "M801-VFD-BACNET-INTERFACE-LEDGER",
+      "row": 18,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1320,
+        550,
+        1650,
+        567
+      ],
+      "expected": "HOA MODE STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOA MODE STATUS",
+          "word_ids": [
+            628,
+            629,
+            630
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOA MODE STATUS",
+          "word_ids": [
+            115,
+            116,
+            117
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 1,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        1935,
+        432,
+        1975,
+        449
+      ],
+      "expected": "AI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI1",
+          "word_ids": [
+            1383
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI1",
+          "word_ids": [
+            671
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 1,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        1975,
+        432,
+        2325,
+        449
+      ],
+      "expected": "RETTURN AIR TEMPERATURE (°F)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETTURN AIR TEMPERATURE (°F)",
+          "word_ids": [
+            1384,
+            1385,
+            1386,
+            1387
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETTURN AIR TEMPERATURE (°F)",
+          "word_ids": [
+            682,
+            683,
+            684,
+            685
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 2,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        1935,
+        449,
+        1975,
+        466
+      ],
+      "expected": "AI2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI2",
+          "word_ids": [
+            1390
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI2",
+          "word_ids": [
+            672
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 2,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        1975,
+        449,
+        2325,
+        466
+      ],
+      "expected": "RETURN AIR DAMPER POSITION (%)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN AIR DAMPER POSITION (%)",
+          "word_ids": [
+            1391,
+            1392,
+            1393,
+            1394,
+            1395
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN AIR DAMPER POSITION (%)",
+          "word_ids": [
+            686,
+            687,
+            688,
+            689,
+            690
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 3,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        1935,
+        466,
+        1975,
+        483
+      ],
+      "expected": "AI3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI3",
+          "word_ids": [
+            1398
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI3",
+          "word_ids": [
+            673
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 3,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        1975,
+        466,
+        2325,
+        483
+      ],
+      "expected": "OUTDOOR AIR DAMPER POSITION (%)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTDOOR AIR DAMPER POSITION (%)",
+          "word_ids": [
+            1399,
+            1400,
+            1401,
+            1402,
+            1403
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTDOOR AIR DAMPER POSITION (%)",
+          "word_ids": [
+            691,
+            692,
+            693,
+            694,
+            695
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 4,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        1935,
+        483,
+        1975,
+        500
+      ],
+      "expected": "AI3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI3",
+          "word_ids": [
+            1406
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI3",
+          "word_ids": [
+            674
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 4,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        1975,
+        483,
+        2325,
+        500
+      ],
+      "expected": "OUTDOOR AIR TEMPERATURE (°F)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTDOOR AIR TEMPERATURE (°F)",
+          "word_ids": [
+            1407,
+            1408,
+            1409,
+            1410
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTDOOR AIR TEMPERATURE (°F)",
+          "word_ids": [
+            696,
+            697,
+            698,
+            699
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 5,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        1935,
+        501,
+        1975,
+        518
+      ],
+      "expected": "AI4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI4",
+          "word_ids": [
+            1413
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI4",
+          "word_ids": [
+            675
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 5,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        1975,
+        501,
+        2325,
+        518
+      ],
+      "expected": "OUTDOOR AIRFLOW (CFM)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTDOOR AIRFLOW (CFM)",
+          "word_ids": [
+            1414,
+            1415,
+            1416
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTDOOR AIRFLOW (CFM)",
+          "word_ids": [
+            700,
+            701,
+            702
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 6,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        1935,
+        518,
+        1975,
+        535
+      ],
+      "expected": "AI5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI5",
+          "word_ids": [
+            1420
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI5",
+          "word_ids": [
+            676
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 6,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        1975,
+        518,
+        2325,
+        535
+      ],
+      "expected": "MIXED AIR TEMPERATURE (°F)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MIXED AIR TEMPERATURE (°F)",
+          "word_ids": [
+            1421,
+            1422,
+            1423,
+            1424
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MIXED AIR TEMPERATURE (°F)",
+          "word_ids": [
+            703,
+            704,
+            705,
+            706
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 7,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        1935,
+        535,
+        1975,
+        552
+      ],
+      "expected": "AI6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI6",
+          "word_ids": [
+            1427
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI6",
+          "word_ids": [
+            677
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 7,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        1975,
+        535,
+        2325,
+        552
+      ],
+      "expected": "FILTER DIFFERENTIAL PRESSURE (IN WG)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FILTER DIFFERENTIAL PRESSURE (IN WG)",
+          "word_ids": [
+            1428,
+            1429,
+            1430,
+            1431,
+            1432
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FILTER DIFFERENTIAL PRESSURE (IN WG)",
+          "word_ids": [
+            707,
+            708,
+            709,
+            710,
+            711
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 8,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        1935,
+        552,
+        1975,
+        569
+      ],
+      "expected": "AI7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI7",
+          "word_ids": [
+            1436
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI7",
+          "word_ids": [
+            678
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 8,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        1975,
+        552,
+        2325,
+        569
+      ],
+      "expected": "CHILLED WATER CONTROL VALVE POSITION (%)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLED WATER CONTROL VALVE POSITION (%)",
+          "word_ids": [
+            1437,
+            1438,
+            1439,
+            1440,
+            1441,
+            1442
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLED WATER CONTROL VALVE POSITION (%)",
+          "word_ids": [
+            712,
+            713,
+            714,
+            715,
+            716,
+            717
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 9,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        1935,
+        570,
+        1975,
+        587
+      ],
+      "expected": "AI8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI8",
+          "word_ids": [
+            1445
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI8",
+          "word_ids": [
+            679
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 9,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        1975,
+        570,
+        2325,
+        587
+      ],
+      "expected": "SUPPLY AIR TEMPERATURE (°F)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE (°F)",
+          "word_ids": [
+            1446,
+            1447,
+            1448,
+            1449
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE (°F)",
+          "word_ids": [
+            718,
+            719,
+            720,
+            721
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 10,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        1935,
+        587,
+        1975,
+        604
+      ],
+      "expected": "AI9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI9",
+          "word_ids": [
+            1453
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI9",
+          "word_ids": [
+            680
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 10,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        1975,
+        587,
+        2325,
+        604
+      ],
+      "expected": "DOWN DUCT STATIC PRESSURE (IN WG)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOWN DUCT STATIC PRESSURE (IN WG)",
+          "word_ids": [
+            1454,
+            1455,
+            1456,
+            1457,
+            1458,
+            1459
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOWN DUCT STATIC PRESSURE (IN WG)",
+          "word_ids": [
+            722,
+            723,
+            724,
+            725,
+            726,
+            727
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 11,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        1935,
+        621,
+        1975,
+        638
+      ],
+      "expected": "AO1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO1",
+          "word_ids": [
+            1463
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO1",
+          "word_ids": [
+            739
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 11,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        1975,
+        621,
+        2325,
+        638
+      ],
+      "expected": "RETURN AIR DAMPER COMMAND (%)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN AIR DAMPER COMMAND (%)",
+          "word_ids": [
+            1464,
+            1465,
+            1466,
+            1467,
+            1468
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN AIR DAMPER COMMAND (%)",
+          "word_ids": [
+            743,
+            744,
+            745,
+            746,
+            747
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 12,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        1935,
+        638,
+        1975,
+        656
+      ],
+      "expected": "AO2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO2",
+          "word_ids": [
+            1471
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO2",
+          "word_ids": [
+            740
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 12,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        1975,
+        638,
+        2325,
+        656
+      ],
+      "expected": "OUTDOOR AIR DAMPER COMMAND (%)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTDOOR AIR DAMPER COMMAND (%)",
+          "word_ids": [
+            1472,
+            1473,
+            1474,
+            1475,
+            1476
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTDOOR AIR DAMPER COMMAND (%)",
+          "word_ids": [
+            748,
+            749,
+            750,
+            751,
+            752
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 13,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        1935,
+        656,
+        1975,
+        673
+      ],
+      "expected": "AO3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO3",
+          "word_ids": [
+            1479
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO3",
+          "word_ids": [
+            741
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 13,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        1975,
+        656,
+        2325,
+        673
+      ],
+      "expected": "CHILLED WATER CONTROL VALVE COMMAND (%)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLED WATER CONTROL VALVE COMMAND (%)",
+          "word_ids": [
+            1480,
+            1481,
+            1482,
+            1483,
+            1484,
+            1485
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLED WATER CONTROL VALVE COMMAND (%)",
+          "word_ids": [
+            753,
+            754,
+            755,
+            756,
+            757,
+            758
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 14,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        1935,
+        673,
+        1975,
+        690
+      ],
+      "expected": "AO4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO4",
+          "word_ids": [
+            1488
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO4",
+          "word_ids": [
+            742
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 14,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        1975,
+        673,
+        2325,
+        690
+      ],
+      "expected": "FAN SPEED COMMAND (%)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN SPEED COMMAND (%)",
+          "word_ids": [
+            1489,
+            1490,
+            1491,
+            1492
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN SPEED COMMAND (%)",
+          "word_ids": [
+            759,
+            760,
+            761,
+            762
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 15,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        1935,
+        708,
+        1975,
+        725
+      ],
+      "expected": "BI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            1495
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            767
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 15,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        1975,
+        708,
+        2325,
+        725
+      ],
+      "expected": "DUCT SMOKE DETECTOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT SMOKE DETECTOR",
+          "word_ids": [
+            1496,
+            1497,
+            1498
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT SMOKE DETECTOR",
+          "word_ids": [
+            770,
+            771,
+            772
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 16,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        1935,
+        725,
+        1975,
+        742
+      ],
+      "expected": "BI2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI2",
+          "word_ids": [
+            1502
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI2",
+          "word_ids": [
+            768
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 16,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        1975,
+        725,
+        2325,
+        742
+      ],
+      "expected": "SUPPLY FAN STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN STATUS",
+          "word_ids": [
+            1503,
+            1504,
+            1505
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN STATUS",
+          "word_ids": [
+            773,
+            774,
+            775
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 17,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        1935,
+        742,
+        1975,
+        759
+      ],
+      "expected": "BI3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI3",
+          "word_ids": [
+            1509
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI3",
+          "word_ids": [
+            769
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-AHU1-DDC-LEDGER",
+      "row": 17,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        1975,
+        742,
+        2325,
+        759
+      ],
+      "expected": "DISCHARGE STATIC PRESSURE SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DISCHARGE STATIC PRESSURE SWITCH",
+          "word_ids": [
+            1510,
+            1511,
+            1512,
+            1513
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DISCHARGE STATIC PRESSURE SWITCH",
+          "word_ids": [
+            776,
+            777,
+            778,
+            779
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 1,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        2070,
+        1720,
+        2110,
+        1737
+      ],
+      "expected": "AI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI1",
+          "word_ids": [
+            1277
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI1",
+          "word_ids": [
+            1429
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 1,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        2110,
+        1720,
+        2460,
+        1737
+      ],
+      "expected": "CHILLED WATER SUPPLY TEMPERATURE (°F)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLED WATER SUPPLY TEMPERATURE (°F)",
+          "word_ids": [
+            1278,
+            1279,
+            1280,
+            1281,
+            1282
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLED WATER SUPPLY TEMPERATURE (°F)",
+          "word_ids": [
+            1434,
+            1435,
+            1436,
+            1437,
+            1438
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 2,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        2070,
+        1737,
+        2110,
+        1755
+      ],
+      "expected": "AI2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI2",
+          "word_ids": [
+            1286
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI2",
+          "word_ids": [
+            1430
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 2,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        2110,
+        1737,
+        2460,
+        1755
+      ],
+      "expected": "CHILLED WATE RETURN TEMPERATURE (°F)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLED WATE RETURN TEMPERATURE (°F)",
+          "word_ids": [
+            1287,
+            1288,
+            1289,
+            1290,
+            1291
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLED WATE RETURN TEMPERATURE (°F)",
+          "word_ids": [
+            1439,
+            1440,
+            1441,
+            1442,
+            1443
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 3,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        2070,
+        1755,
+        2110,
+        1772
+      ],
+      "expected": "AI3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI3",
+          "word_ids": [
+            1294
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI3",
+          "word_ids": [
+            1431
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 3,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        2110,
+        1755,
+        2460,
+        1772
+      ],
+      "expected": "PUMP MOTOR CURRENT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP MOTOR CURRENT",
+          "word_ids": [
+            1295,
+            1296,
+            1297
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP MOTOR CURRENT",
+          "word_ids": [
+            1444,
+            1445,
+            1446
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 4,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        2070,
+        1772,
+        2110,
+        1789
+      ],
+      "expected": "AI4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI4",
+          "word_ids": [
+            1301
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI4",
+          "word_ids": [
+            1432
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 4,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        2110,
+        1772,
+        2460,
+        1789
+      ],
+      "expected": "PUMP MOTOR CURRENT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP MOTOR CURRENT",
+          "word_ids": [
+            1302,
+            1303,
+            1304
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP MOTOR CURRENT",
+          "word_ids": [
+            1447,
+            1448,
+            1449
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 5,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        2070,
+        1807,
+        2110,
+        1824
+      ],
+      "expected": "BI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            1308
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            1464
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 5,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        2110,
+        1807,
+        2460,
+        1824
+      ],
+      "expected": "PUMP STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP STATUS",
+          "word_ids": [
+            1309,
+            1310
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP STATUS",
+          "word_ids": [
+            1467,
+            1468
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 6,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        2070,
+        1824,
+        2110,
+        1841
+      ],
+      "expected": "BI3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI3",
+          "word_ids": [
+            1314
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI3",
+          "word_ids": [
+            1465
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 6,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        2110,
+        1824,
+        2460,
+        1841
+      ],
+      "expected": "PUMP STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP STATUS",
+          "word_ids": [
+            1315,
+            1316
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP STATUS",
+          "word_ids": [
+            1469,
+            1470
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 7,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        2070,
+        1841,
+        2110,
+        1858
+      ],
+      "expected": "BI5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI5",
+          "word_ids": [
+            1320
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI5",
+          "word_ids": [
+            1466
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 7,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        2110,
+        1841,
+        2460,
+        1858
+      ],
+      "expected": "CHILLER DIFFERENTIAL PRESSURE (PSI)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLER DIFFERENTIAL PRESSURE (PSI)",
+          "word_ids": [
+            1321,
+            1322,
+            1323,
+            1324
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER DIFFERENTIAL PRESSURE (PSI)",
+          "word_ids": [
+            1471,
+            1472,
+            1473,
+            1474
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 8,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        2070,
+        1876,
+        2110,
+        1893
+      ],
+      "expected": "BO1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO1",
+          "word_ids": [
+            1328
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO1",
+          "word_ids": [
+            1484
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 8,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        2110,
+        1876,
+        2460,
+        1893
+      ],
+      "expected": "CHILLER ENABLE / DISABLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLER ENABLE / DISABLE",
+          "word_ids": [
+            1329,
+            1330,
+            1331,
+            1332
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER ENABLE / DISABLE",
+          "word_ids": [
+            1487,
+            1488,
+            1489,
+            1490
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 9,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        2070,
+        1893,
+        2110,
+        1910
+      ],
+      "expected": "BO2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO2",
+          "word_ids": [
+            1335
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO2",
+          "word_ids": [
+            1485
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 9,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        2110,
+        1893,
+        2460,
+        1910
+      ],
+      "expected": "PUMP START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP START/STOP",
+          "word_ids": [
+            1336,
+            1337
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP START/STOP",
+          "word_ids": [
+            1491,
+            1492
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 10,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        2070,
+        1910,
+        2110,
+        1927
+      ],
+      "expected": "BO3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO3",
+          "word_ids": [
+            1340
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO3",
+          "word_ids": [
+            1486
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 10,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        2110,
+        1910,
+        2460,
+        1927
+      ],
+      "expected": "PUMP START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP START/STOP",
+          "word_ids": [
+            1341,
+            1342
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP START/STOP",
+          "word_ids": [
+            1493,
+            1494
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 11,
+      "column": "tag",
+      "page": 20,
+      "bbox": [
+        2070,
+        1945,
+        2110,
+        1962
+      ],
+      "expected": "MI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MI1",
+          "word_ids": [
+            1345
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MI1",
+          "word_ids": [
+            1498
+          ]
+        }
+      }
+    },
+    {
+      "table": "M802-CHILLER-PLANT-DDC-LEDGER",
+      "row": 11,
+      "column": "point_name",
+      "page": 20,
+      "bbox": [
+        2110,
+        1945,
+        2460,
+        1962
+      ],
+      "expected": "CHILLER INTERGRATION POINTS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLER INTERGRATION POINTS",
+          "word_ids": [
+            1346,
+            1347,
+            1348
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER INTERGRATION POINTS",
+          "word_ids": [
+            1499,
+            1500,
+            1501
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 1,
+      "column": "tag",
+      "page": 21,
+      "bbox": [
+        2112,
+        1584,
+        2150,
+        1602
+      ],
+      "expected": "AI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI1",
+          "word_ids": [
+            1214
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI1",
+          "word_ids": [
+            1232
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 1,
+      "column": "point_name",
+      "page": 21,
+      "bbox": [
+        2150,
+        1584,
+        2500,
+        1602
+      ],
+      "expected": "FILTER DIFFERENTIAL PRESSURE (IN WG)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FILTER DIFFERENTIAL PRESSURE (IN WG)",
+          "word_ids": [
+            1215,
+            1216,
+            1217,
+            1218,
+            1219
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FILTER DIFFERENTIAL PRESSURE (IN WG)",
+          "word_ids": [
+            1238,
+            1239,
+            1240,
+            1241,
+            1242
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 2,
+      "column": "tag",
+      "page": 21,
+      "bbox": [
+        2112,
+        1602,
+        2150,
+        1619
+      ],
+      "expected": "AI2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI2",
+          "word_ids": [
+            1223
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI2",
+          "word_ids": [
+            1233
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 2,
+      "column": "point_name",
+      "page": 21,
+      "bbox": [
+        2150,
+        1602,
+        2500,
+        1619
+      ],
+      "expected": "OUTDOOR AIR TEMPERATURE (°F)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTDOOR AIR TEMPERATURE (°F)",
+          "word_ids": [
+            1224,
+            1225,
+            1226,
+            1227
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTDOOR AIR TEMPERATURE (°F)",
+          "word_ids": [
+            1243,
+            1244,
+            1245,
+            1246
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 3,
+      "column": "tag",
+      "page": 21,
+      "bbox": [
+        2112,
+        1619,
+        2150,
+        1636
+      ],
+      "expected": "AI3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI3",
+          "word_ids": [
+            1230
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI3",
+          "word_ids": [
+            1234
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 3,
+      "column": "point_name",
+      "page": 21,
+      "bbox": [
+        2150,
+        1619,
+        2500,
+        1636
+      ],
+      "expected": "CHILLED WATER CONTROL VALVE POSITION (%)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLED WATER CONTROL VALVE POSITION (%)",
+          "word_ids": [
+            1231,
+            1232,
+            1233,
+            1234,
+            1235,
+            1236
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLED WATER CONTROL VALVE POSITION (%)",
+          "word_ids": [
+            1247,
+            1248,
+            1249,
+            1250,
+            1251,
+            1252
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 4,
+      "column": "tag",
+      "page": 21,
+      "bbox": [
+        2112,
+        1636,
+        2150,
+        1653
+      ],
+      "expected": "AI4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI4",
+          "word_ids": [
+            1239
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI4",
+          "word_ids": [
+            1235
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 4,
+      "column": "point_name",
+      "page": 21,
+      "bbox": [
+        2150,
+        1636,
+        2500,
+        1653
+      ],
+      "expected": "SUPPLY AIR TEMPERATURE (°F)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE (°F)",
+          "word_ids": [
+            1240,
+            1241,
+            1242,
+            1243
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE (°F)",
+          "word_ids": [
+            1253,
+            1254,
+            1255,
+            1256
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 5,
+      "column": "tag",
+      "page": 21,
+      "bbox": [
+        2112,
+        1653,
+        2150,
+        1671
+      ],
+      "expected": "AI4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI4",
+          "word_ids": [
+            1247
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI4",
+          "word_ids": [
+            1236
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 5,
+      "column": "point_name",
+      "page": 21,
+      "bbox": [
+        2150,
+        1653,
+        2500,
+        1671
+      ],
+      "expected": "DOWN DUCT STATIC PRESSURE (IN WG)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOWN DUCT STATIC PRESSURE (IN WG)",
+          "word_ids": [
+            1248,
+            1249,
+            1250,
+            1251,
+            1252,
+            1253
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOWN DUCT STATIC PRESSURE (IN WG)",
+          "word_ids": [
+            1257,
+            1258,
+            1259,
+            1260,
+            1261,
+            1262
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 6,
+      "column": "tag",
+      "page": 21,
+      "bbox": [
+        2112,
+        1688,
+        2150,
+        1705
+      ],
+      "expected": "AO1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO1",
+          "word_ids": [
+            1257
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO1",
+          "word_ids": [
+            1269
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 6,
+      "column": "point_name",
+      "page": 21,
+      "bbox": [
+        2150,
+        1688,
+        2500,
+        1705
+      ],
+      "expected": "CHILLED WATER CONTROL VALVE COMMAND (%)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLED WATER CONTROL VALVE COMMAND (%)",
+          "word_ids": [
+            1258,
+            1259,
+            1260,
+            1261,
+            1262,
+            1263
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLED WATER CONTROL VALVE COMMAND (%)",
+          "word_ids": [
+            1271,
+            1272,
+            1273,
+            1274,
+            1275,
+            1276
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 7,
+      "column": "tag",
+      "page": 21,
+      "bbox": [
+        2112,
+        1705,
+        2150,
+        1722
+      ],
+      "expected": "AO2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO2",
+          "word_ids": [
+            1266
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO2",
+          "word_ids": [
+            1270
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 7,
+      "column": "point_name",
+      "page": 21,
+      "bbox": [
+        2150,
+        1705,
+        2500,
+        1722
+      ],
+      "expected": "SUPPLY FAN SPEED (%)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN SPEED (%)",
+          "word_ids": [
+            1267,
+            1268,
+            1269,
+            1270
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN SPEED (%)",
+          "word_ids": [
+            1277,
+            1278,
+            1279,
+            1280
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 8,
+      "column": "tag",
+      "page": 21,
+      "bbox": [
+        2112,
+        1740,
+        2150,
+        1757
+      ],
+      "expected": "BI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            1273
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            1283
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 8,
+      "column": "point_name",
+      "page": 21,
+      "bbox": [
+        2150,
+        1740,
+        2500,
+        1757
+      ],
+      "expected": "OUTDOOR AIR DAMPER END SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTDOOR AIR DAMPER END SWITCH",
+          "word_ids": [
+            1274,
+            1275,
+            1276,
+            1277,
+            1278
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTDOOR AIR DAMPER END SWITCH",
+          "word_ids": [
+            1286,
+            1287,
+            1288,
+            1289,
+            1290
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 9,
+      "column": "tag",
+      "page": 21,
+      "bbox": [
+        2112,
+        1757,
+        2150,
+        1774
+      ],
+      "expected": "BI2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI2",
+          "word_ids": [
+            1282
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI2",
+          "word_ids": [
+            1284
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 9,
+      "column": "point_name",
+      "page": 21,
+      "bbox": [
+        2150,
+        1757,
+        2500,
+        1774
+      ],
+      "expected": "SUPPLY FAN STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN STATUS",
+          "word_ids": [
+            1283,
+            1284,
+            1285
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN STATUS",
+          "word_ids": [
+            1291,
+            1292,
+            1293
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 10,
+      "column": "tag",
+      "page": 21,
+      "bbox": [
+        2112,
+        1774,
+        2150,
+        1791
+      ],
+      "expected": "BI2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI2",
+          "word_ids": [
+            1288
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI2",
+          "word_ids": [
+            1285
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 10,
+      "column": "point_name",
+      "page": 21,
+      "bbox": [
+        2150,
+        1774,
+        2500,
+        1791
+      ],
+      "expected": "DUCT SMOKE DETECTOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT SMOKE DETECTOR",
+          "word_ids": [
+            1289,
+            1290,
+            1291
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT SMOKE DETECTOR",
+          "word_ids": [
+            1294,
+            1295,
+            1296
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 11,
+      "column": "tag",
+      "page": 21,
+      "bbox": [
+        2112,
+        1809,
+        2150,
+        1826
+      ],
+      "expected": "BO1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO1",
+          "word_ids": [
+            1295
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO1",
+          "word_ids": [
+            1300
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-AHU2-DDC-LEDGER",
+      "row": 11,
+      "column": "point_name",
+      "page": 21,
+      "bbox": [
+        2150,
+        1809,
+        2500,
+        1826
+      ],
+      "expected": "OUTDOOR AIR DAMPER OPEN/CLOSE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTDOOR AIR DAMPER OPEN/CLOSE",
+          "word_ids": [
+            1296,
+            1297,
+            1298,
+            1299
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTDOOR AIR DAMPER OPEN/CLOSE",
+          "word_ids": [
+            1301,
+            1302,
+            1303,
+            1304
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-LAB-EXHAUST-DDC-LEDGER",
+      "row": 1,
+      "column": "tag",
+      "page": 21,
+      "bbox": [
+        866,
+        656,
+        910,
+        673
+      ],
+      "expected": "AI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI1",
+          "word_ids": [
+            1108
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI1",
+          "word_ids": [
+            349
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-LAB-EXHAUST-DDC-LEDGER",
+      "row": 1,
+      "column": "point_name",
+      "page": 21,
+      "bbox": [
+        910,
+        656,
+        1260,
+        673
+      ],
+      "expected": "FAN STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN STATUS",
+          "word_ids": [
+            1109,
+            1110
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN STATUS",
+          "word_ids": [
+            351,
+            352
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-LAB-EXHAUST-DDC-LEDGER",
+      "row": 2,
+      "column": "tag",
+      "page": 21,
+      "bbox": [
+        866,
+        691,
+        910,
+        708
+      ],
+      "expected": "AO1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO1",
+          "word_ids": [
+            1114
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO1",
+          "word_ids": [
+            353
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-LAB-EXHAUST-DDC-LEDGER",
+      "row": 2,
+      "column": "point_name",
+      "page": 21,
+      "bbox": [
+        910,
+        691,
+        1260,
+        708
+      ],
+      "expected": "FAN SPEED COMMAND",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN SPEED COMMAND",
+          "word_ids": [
+            1115,
+            1116,
+            1117
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN SPEED COMMAND",
+          "word_ids": [
+            354,
+            355,
+            356
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-SCHEDULED-EXHAUST-DDC-LEDGER",
+      "row": 1,
+      "column": "tag",
+      "page": 21,
+      "bbox": [
+        2135,
+        840,
+        2175,
+        857
+      ],
+      "expected": "BI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            1072
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            465
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-SCHEDULED-EXHAUST-DDC-LEDGER",
+      "row": 1,
+      "column": "point_name",
+      "page": 21,
+      "bbox": [
+        2175,
+        840,
+        2525,
+        857
+      ],
+      "expected": "FAN STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN STATUS",
+          "word_ids": [
+            1073,
+            1074
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN STATUS",
+          "word_ids": [
+            467,
+            468
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-SCHEDULED-EXHAUST-DDC-LEDGER",
+      "row": 2,
+      "column": "tag",
+      "page": 21,
+      "bbox": [
+        2135,
+        875,
+        2175,
+        892
+      ],
+      "expected": "BO1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO1",
+          "word_ids": [
+            1078
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO1",
+          "word_ids": [
+            494
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-SCHEDULED-EXHAUST-DDC-LEDGER",
+      "row": 2,
+      "column": "point_name",
+      "page": 21,
+      "bbox": [
+        2175,
+        875,
+        2525,
+        892
+      ],
+      "expected": "START / STOP COMMAND",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "START / STOP COMMAND",
+          "word_ids": [
+            1079,
+            1080,
+            1081,
+            1082
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "START / STOP COMMAND",
+          "word_ids": [
+            495,
+            496,
+            497,
+            498
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-ELECTRIC-UNIT-HEATER-DDC-LEDGER",
+      "row": 1,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        2100,
+        374,
+        2140,
+        391
+      ],
+      "expected": "AI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI1",
+          "word_ids": [
+            1002
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI1",
+          "word_ids": [
+            511
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-ELECTRIC-UNIT-HEATER-DDC-LEDGER",
+      "row": 1,
+      "column": "point_name",
+      "page": 22,
+      "bbox": [
+        2140,
+        374,
+        2505,
+        391
+      ],
+      "expected": "ELECTRIC HEAT DISCHARGE AIR TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ELECTRIC HEAT DISCHARGE AIR TEMPERATURE",
+          "word_ids": [
+            1003,
+            1004,
+            1005,
+            1006,
+            1007
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ELECTRIC HEAT DISCHARGE AIR TEMPERATURE",
+          "word_ids": [
+            515,
+            516,
+            517,
+            518,
+            519
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-ELECTRIC-UNIT-HEATER-DDC-LEDGER",
+      "row": 2,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        2100,
+        391,
+        2140,
+        408
+      ],
+      "expected": "AI2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI2",
+          "word_ids": [
+            1010
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI2",
+          "word_ids": [
+            512
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-ELECTRIC-UNIT-HEATER-DDC-LEDGER",
+      "row": 2,
+      "column": "point_name",
+      "page": 22,
+      "bbox": [
+        2140,
+        391,
+        2505,
+        408
+      ],
+      "expected": "SPACE TEMPERATURE (°F)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPACE TEMPERATURE (°F)",
+          "word_ids": [
+            1011,
+            1012,
+            1013
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPACE TEMPERATURE (°F)",
+          "word_ids": [
+            520,
+            521,
+            522
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-ELECTRIC-UNIT-HEATER-DDC-LEDGER",
+      "row": 3,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        2100,
+        408,
+        2140,
+        425
+      ],
+      "expected": "AI3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI3",
+          "word_ids": [
+            1017
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI3",
+          "word_ids": [
+            513
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-ELECTRIC-UNIT-HEATER-DDC-LEDGER",
+      "row": 3,
+      "column": "point_name",
+      "page": 22,
+      "bbox": [
+        2140,
+        408,
+        2505,
+        425
+      ],
+      "expected": "ZONE LOCAL SETPOINT ADJUST (°F)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ZONE LOCAL SETPOINT ADJUST (°F)",
+          "word_ids": [
+            1018,
+            1019,
+            1020,
+            1021,
+            1022
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ZONE LOCAL SETPOINT ADJUST (°F)",
+          "word_ids": [
+            523,
+            524,
+            525,
+            526,
+            527
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-ELECTRIC-UNIT-HEATER-DDC-LEDGER",
+      "row": 4,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        2100,
+        443,
+        2140,
+        460
+      ],
+      "expected": "BI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            1026
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            532
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-ELECTRIC-UNIT-HEATER-DDC-LEDGER",
+      "row": 4,
+      "column": "point_name",
+      "page": 22,
+      "bbox": [
+        2140,
+        443,
+        2505,
+        460
+      ],
+      "expected": "AIRFLOW SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIRFLOW SWITCH",
+          "word_ids": [
+            1027,
+            1028
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIRFLOW SWITCH",
+          "word_ids": [
+            534,
+            535
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-ELECTRIC-UNIT-HEATER-DDC-LEDGER",
+      "row": 5,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        2100,
+        460,
+        2140,
+        477
+      ],
+      "expected": "BI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            1031
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            533
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-ELECTRIC-UNIT-HEATER-DDC-LEDGER",
+      "row": 5,
+      "column": "point_name",
+      "page": 22,
+      "bbox": [
+        2140,
+        460,
+        2505,
+        477
+      ],
+      "expected": "LOCAL OCCUPANCY OVERRIDE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOCAL OCCUPANCY OVERRIDE",
+          "word_ids": [
+            1032,
+            1033,
+            1034
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOCAL OCCUPANCY OVERRIDE",
+          "word_ids": [
+            536,
+            537,
+            538
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-ELECTRIC-UNIT-HEATER-DDC-LEDGER",
+      "row": 6,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        2100,
+        495,
+        2140,
+        512
+      ],
+      "expected": "BO1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO1",
+          "word_ids": [
+            1038
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO1",
+          "word_ids": [
+            541
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-ELECTRIC-UNIT-HEATER-DDC-LEDGER",
+      "row": 6,
+      "column": "point_name",
+      "page": 22,
+      "bbox": [
+        2140,
+        495,
+        2505,
+        512
+      ],
+      "expected": "ELECTRIC HEAT STAGE (ON/OFF)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ELECTRIC HEAT STAGE (ON/OFF)",
+          "word_ids": [
+            1039,
+            1040,
+            1041,
+            1042
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ELECTRIC HEAT STAGE (ON/OFF)",
+          "word_ids": [
+            542,
+            543,
+            544,
+            545
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-TERMINAL-DDC-LEDGER",
+      "row": 1,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        2100,
+        1588,
+        2140,
+        1605
+      ],
+      "expected": "AI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI1",
+          "word_ids": [
+            1143
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI1",
+          "word_ids": [
+            1119
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-TERMINAL-DDC-LEDGER",
+      "row": 1,
+      "column": "point_name",
+      "page": 22,
+      "bbox": [
+        2140,
+        1588,
+        2505,
+        1605
+      ],
+      "expected": "ZONE PRIMARY AIRFLOW (CFM)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ZONE PRIMARY AIRFLOW (CFM)",
+          "word_ids": [
+            1144,
+            1145,
+            1146,
+            1147
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ZONE PRIMARY AIRFLOW (CFM)",
+          "word_ids": [
+            1125,
+            1126,
+            1127,
+            1128
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-TERMINAL-DDC-LEDGER",
+      "row": 2,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        2100,
+        1605,
+        2140,
+        1622
+      ],
+      "expected": "AI2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI2",
+          "word_ids": [
+            1150
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI2",
+          "word_ids": [
+            1120
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-TERMINAL-DDC-LEDGER",
+      "row": 2,
+      "column": "point_name",
+      "page": 22,
+      "bbox": [
+        2140,
+        1605,
+        2505,
+        1622
+      ],
+      "expected": "PRIMARY AIR DAMPER STATUS (%)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRIMARY AIR DAMPER STATUS (%)",
+          "word_ids": [
+            1151,
+            1152,
+            1153,
+            1154,
+            1155
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRIMARY AIR DAMPER STATUS (%)",
+          "word_ids": [
+            1129,
+            1130,
+            1131,
+            1132,
+            1133
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-TERMINAL-DDC-LEDGER",
+      "row": 3,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        2100,
+        1622,
+        2140,
+        1639
+      ],
+      "expected": "AI4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI4",
+          "word_ids": [
+            1158
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI4",
+          "word_ids": [
+            1121
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-TERMINAL-DDC-LEDGER",
+      "row": 3,
+      "column": "point_name",
+      "page": 22,
+      "bbox": [
+        2140,
+        1622,
+        2505,
+        1639
+      ],
+      "expected": "SUPPLY AIR TEMPERATURE (°F)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE (°F)",
+          "word_ids": [
+            1159,
+            1160,
+            1161,
+            1162
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE (°F)",
+          "word_ids": [
+            1134,
+            1135,
+            1136,
+            1137
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-TERMINAL-DDC-LEDGER",
+      "row": 4,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        2100,
+        1639,
+        2140,
+        1656
+      ],
+      "expected": "AI5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI5",
+          "word_ids": [
+            1166
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI5",
+          "word_ids": [
+            1122
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-TERMINAL-DDC-LEDGER",
+      "row": 4,
+      "column": "point_name",
+      "page": 22,
+      "bbox": [
+        2140,
+        1639,
+        2505,
+        1656
+      ],
+      "expected": "ZONE TEMPERATURE (°F)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ZONE TEMPERATURE (°F)",
+          "word_ids": [
+            1167,
+            1168,
+            1169
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ZONE TEMPERATURE (°F)",
+          "word_ids": [
+            1138,
+            1139,
+            1140
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-TERMINAL-DDC-LEDGER",
+      "row": 5,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        2100,
+        1656,
+        2140,
+        1674
+      ],
+      "expected": "AI6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI6",
+          "word_ids": [
+            1173
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI6",
+          "word_ids": [
+            1123
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-TERMINAL-DDC-LEDGER",
+      "row": 5,
+      "column": "point_name",
+      "page": 22,
+      "bbox": [
+        2140,
+        1656,
+        2505,
+        1674
+      ],
+      "expected": "ZONE LOCAL SETPOINT ADJUST (°F)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ZONE LOCAL SETPOINT ADJUST (°F)",
+          "word_ids": [
+            1174,
+            1175,
+            1176,
+            1177,
+            1178
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ZONE LOCAL SETPOINT ADJUST (°F)",
+          "word_ids": [
+            1141,
+            1142,
+            1143,
+            1144,
+            1145
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-TERMINAL-DDC-LEDGER",
+      "row": 6,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        2100,
+        1691,
+        2140,
+        1708
+      ],
+      "expected": "AO1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO1",
+          "word_ids": [
+            1181
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO1",
+          "word_ids": [
+            1153
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-TERMINAL-DDC-LEDGER",
+      "row": 6,
+      "column": "point_name",
+      "page": 22,
+      "bbox": [
+        2140,
+        1691,
+        2505,
+        1708
+      ],
+      "expected": "PRIMARY AIR DAMPER COMMAND (%)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRIMARY AIR DAMPER COMMAND (%)",
+          "word_ids": [
+            1182,
+            1183,
+            1184,
+            1185,
+            1186
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRIMARY AIR DAMPER COMMAND (%)",
+          "word_ids": [
+            1154,
+            1155,
+            1156,
+            1157,
+            1158
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-TERMINAL-DDC-LEDGER",
+      "row": 7,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        2100,
+        1726,
+        2140,
+        1743
+      ],
+      "expected": "BI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            1189
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            1161
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-TERMINAL-DDC-LEDGER",
+      "row": 7,
+      "column": "point_name",
+      "page": 22,
+      "bbox": [
+        2140,
+        1726,
+        2505,
+        1743
+      ],
+      "expected": "LOCAL OCCUPANCY OVERRIDE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOCAL OCCUPANCY OVERRIDE",
+          "word_ids": [
+            1190,
+            1191,
+            1192
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOCAL OCCUPANCY OVERRIDE",
+          "word_ids": [
+            1162,
+            1163,
+            1164
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-TERMINAL-DDC-LEDGER",
+      "row": 8,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        2100,
+        1760,
+        2140,
+        1777
+      ],
+      "expected": "BO2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO2",
+          "word_ids": [
+            1195
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO2",
+          "word_ids": [
+            1167
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-TERMINAL-DDC-LEDGER",
+      "row": 8,
+      "column": "point_name",
+      "page": 22,
+      "bbox": [
+        2140,
+        1760,
+        2505,
+        1777
+      ],
+      "expected": "ELECTRIC HEAT STAGE (ON/OFF)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ELECTRIC HEAT STAGE (ON/OFF)",
+          "word_ids": [
+            1196,
+            1197,
+            1198,
+            1199
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ELECTRIC HEAT STAGE (ON/OFF)",
+          "word_ids": [
+            1168,
+            1169,
+            1170,
+            1171
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

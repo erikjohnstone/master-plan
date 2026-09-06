@@ -1,0 +1,48 @@
+{
+  "document_id": "23__vol2__033",
+  "module_role": "All published typed M7.01–M7.03 source-matrix scopes and ownership limits.",
+  "tables": [],
+  "ledger_mode": "literal_source_row_matrices_v1",
+  "applications": [
+    {
+      "id": "m701-ahu-6",
+      "source_table": "M701-AHU-6",
+      "ownership_scope": "Published AHU-6 M7.01 point-matrix scope; physical devices, controller/card/terminal mapping and field wiring are not stated."
+    },
+    {
+      "id": "m702-vav-terminal",
+      "source_table": "M702-SUPPLY-VAV-TERMINAL-UNIT",
+      "ownership_scope": "Published supply-VAV-terminal M7.02 matrix scope; this is not a per-box physical expansion or controller binding."
+    },
+    {
+      "id": "m702-exhaust-fan",
+      "source_table": "M702-EXHAUST-FAN",
+      "ownership_scope": "Published M7.02 exhaust-fan matrix scope; final fan/device multiplicity and wiring are not stated."
+    },
+    {
+      "id": "m702-geothermal-pumps",
+      "source_table": "M702-GEOTHERMAL-HEAT-PUMP-WATER-PUMPS",
+      "ownership_scope": "Published P-12/P-13 M7.02 matrix scope; no final controller/terminal/device assignment is stated."
+    },
+    {
+      "id": "m703-suspended-unit-heater",
+      "source_table": "M703-SUSPENDED-UNIT-HEATER",
+      "ownership_scope": "Published M7.03 suspended-unit-heater matrix scope; it is not a physical component/terminal count."
+    }
+  ],
+  "expanded_template_counts": {
+    "source_rows": 100,
+    "total": 100
+  },
+  "expanded_count_warning": "100 is the count of literal source-matrix rows, including printed section labels where shown. It is not a count of installed sensors, actuators, controllers, I/O cards, terminals, wires, BACnet objects or field devices.",
+  "inventory_checks": [
+    {
+      "id": "rank23-point-matrix-applications",
+      "records_path": [
+        "applications"
+      ],
+      "expected": 5,
+      "unique_key": "source_table"
+    }
+  ]
+}

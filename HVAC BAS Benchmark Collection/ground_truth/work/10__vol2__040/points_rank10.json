@@ -1,0 +1,11 @@
+{
+  "document_id": "10__vol2__040",
+  "module_role": "Explicit no-row point-list finding.",
+  "tables": [],
+  "assertions": [],
+  "point_list_status": {
+    "formal_row_matrix": "not_published_in_supplied_drawings",
+    "finding": "FMCS/terminal-control diagrams and schedules publish point context but no conventional formal points-list row matrix.",
+    "boundary": "No I/O/device count is inferred from diagram symbols or schedule control/sensor types."
+  }
+}

@@ -1,0 +1,591 @@
+{
+  "document_id": "07__vol2__061",
+  "module_role": "Project/title-block, sheet-ledger, scale boundary and complete page-by-page visual review. Dense schedule, point-list and sequence source facts remain in independently checked modules.",
+  "tables": [],
+  "project": {
+    "project_name_as_printed": "AMES LABORATORY WILHELM HALL HVAC UPGRADES",
+    "location_as_printed": "AMES, IA",
+    "project_number_as_printed": "23008",
+    "ames_lab_project_number_as_printed": "SC-24-622",
+    "issue_as_printed": "BID ISSUE",
+    "issue_date_as_printed": "01.10.24",
+    "revision_date_status": "No populated revision date is asserted from the reviewed title blocks; the issue date is retained only as an issue date.",
+    "assertion_ids": [
+      "rank07-title",
+      "rank07-project-number",
+      "rank07-bid-issue",
+      "rank07-ames-lab-number",
+      "rank07-issue-date"
+    ]
+  },
+  "sheet_details": {
+    "sheet_ledger_semantics": "All 71 supplied PDF pages have a retained full-page Poppler render and completed visual-review disposition.",
+    "revision_status": "No populated revision date is asserted."
+  },
+  "scale_semantics": {
+    "takeoff_scale_status": "No global drawing scale is asserted. Plan, detail, schematic and schedule views must be treated independently; this record does not convert graphic scale bars or dimensions into distance-based takeoff quantities.",
+    "printed_local_view_scales_observed": [],
+    "boundary": "A scale note can be seen on individual sheets, but none is promoted to a document-wide or schedule/control scale."
+  },
+  "visual_review_pages": [
+    {
+      "page": 1,
+      "sheet": "G-000",
+      "title": "COVER SHEET",
+      "render": "reviews/07__vol2__061/p1-p1-full-poppler.png",
+      "finding": "Project identity, issue context, team and sheet index."
+    },
+    {
+      "page": 2,
+      "sheet": "G-001",
+      "title": "ARCHITECTURAL LEGEND",
+      "render": "reviews/07__vol2__061/p2-p2-full-poppler.png",
+      "finding": "Architectural legend and general drawing context."
+    },
+    {
+      "page": 3,
+      "sheet": "G-002",
+      "title": "MEP LEGEND",
+      "render": "reviews/07__vol2__061/p3-p3-full-poppler.png",
+      "finding": "Mechanical, electrical and plumbing legends/context."
+    },
+    {
+      "page": 4,
+      "sheet": "G-003",
+      "title": "CONTRACTOR SITE ACCESS",
+      "render": "reviews/07__vol2__061/p4-p4-full-poppler.png",
+      "finding": "Contractor site-access and logistics context."
+    },
+    {
+      "page": 5,
+      "sheet": "G-004",
+      "title": "GENERAL PROJECT INFORMATION",
+      "render": "reviews/07__vol2__061/p5-p5-full-poppler.png",
+      "finding": "Owner/contractor and general project-drawing context."
+    },
+    {
+      "page": 6,
+      "sheet": "S-001",
+      "title": "STRUCTURAL NOTES",
+      "render": "reviews/07__vol2__061/p6-p6-full-poppler.png",
+      "finding": "Structural general notes."
+    },
+    {
+      "page": 7,
+      "sheet": "S-104E",
+      "title": "LEVEL 1 FRAMING PLAN - EAST",
+      "render": "reviews/07__vol2__061/p7-p7-full-poppler.png",
+      "finding": "Structural framing plan context."
+    },
+    {
+      "page": 8,
+      "sheet": "S-104W",
+      "title": "LEVEL 1 FRAMING PLAN - WEST",
+      "render": "reviews/07__vol2__061/p8-p8-full-poppler.png",
+      "finding": "Structural framing plan context."
+    },
+    {
+      "page": 9,
+      "sheet": "S-105W",
+      "title": "PENTHOUSE FRAMING PLAN",
+      "render": "reviews/07__vol2__061/p9-p9-full-poppler.png",
+      "finding": "Penthouse structural framing context."
+    },
+    {
+      "page": 10,
+      "sheet": "A-104W",
+      "title": "LEVEL 1 FLOOR PLAN - WEST",
+      "render": "reviews/07__vol2__061/p10-p10-full-poppler.png",
+      "finding": "Architectural plan context."
+    },
+    {
+      "page": 11,
+      "sheet": "A-105W",
+      "title": "PENTHOUSE ROOF PLAN - WEST",
+      "render": "reviews/07__vol2__061/p11-p11-full-poppler.png",
+      "finding": "Architectural roof-plan context."
+    },
+    {
+      "page": 12,
+      "sheet": "AD-105W",
+      "title": "PENTHOUSE ROOF DEMOLITION PLAN",
+      "render": "reviews/07__vol2__061/p12-p12-full-poppler.png",
+      "finding": "Architectural demolition context."
+    },
+    {
+      "page": 13,
+      "sheet": "AD-104W",
+      "title": "LEVEL 1 DEMOLITION PLAN - WEST",
+      "render": "reviews/07__vol2__061/p13-p13-full-poppler.png",
+      "finding": "Architectural demolition context."
+    },
+    {
+      "page": 14,
+      "sheet": "A-300",
+      "title": "SECTIONS, SCHEDULES AND NOTES",
+      "render": "reviews/07__vol2__061/p14-p14-full-poppler.png",
+      "finding": "Architectural sections/schedules/notes."
+    },
+    {
+      "page": 15,
+      "sheet": "A-100",
+      "title": "SUB-BASEMENT PLANS",
+      "render": "reviews/07__vol2__061/p15-p15-full-poppler.png",
+      "finding": "Architectural sub-basement plan context."
+    },
+    {
+      "page": 16,
+      "sheet": "AD-104E",
+      "title": "LEVEL 1 DEMOLITION PLAN - EAST",
+      "render": "reviews/07__vol2__061/p16-p16-full-poppler.png",
+      "finding": "Architectural demolition context."
+    },
+    {
+      "page": 17,
+      "sheet": "A-104E",
+      "title": "LEVEL 1 FLOOR PLAN - EAST",
+      "render": "reviews/07__vol2__061/p17-p17-full-poppler.png",
+      "finding": "Architectural plan context."
+    },
+    {
+      "page": 18,
+      "sheet": "A-500",
+      "title": "ARCHITECTURAL DETAILS",
+      "render": "reviews/07__vol2__061/p18-p18-full-poppler.png",
+      "finding": "Architectural detail context."
+    },
+    {
+      "page": 19,
+      "sheet": "FP-104",
+      "title": "FIRE-PROTECTION PLAN",
+      "render": "reviews/07__vol2__061/p19-p19-full-poppler.png",
+      "finding": "Fire-protection plan context."
+    },
+    {
+      "page": 20,
+      "sheet": "PL-100",
+      "title": "BASEMENT PLUMBING PLANS",
+      "render": "reviews/07__vol2__061/p20-p20-full-poppler.png",
+      "finding": "Plumbing plans and details context."
+    },
+    {
+      "page": 21,
+      "sheet": "MD-000W",
+      "title": "SUB-BASEMENT MECHANICAL DEMOLITION",
+      "render": "reviews/07__vol2__061/p21-p21-full-poppler.png",
+      "finding": "Sub-basement mechanical demolition context."
+    },
+    {
+      "page": 22,
+      "sheet": "MD-100E",
+      "title": "BASEMENT MECHANICAL DEMOLITION - EAST",
+      "render": "reviews/07__vol2__061/p22-p22-full-poppler.png",
+      "finding": "Mechanical demolition-plan context."
+    },
+    {
+      "page": 23,
+      "sheet": "MD-100W",
+      "title": "BASEMENT MECHANICAL DEMOLITION - WEST",
+      "render": "reviews/07__vol2__061/p23-p23-full-poppler.png",
+      "finding": "Mechanical demolition-plan context."
+    },
+    {
+      "page": 24,
+      "sheet": "MD-101E",
+      "title": "LEVEL 1 MECHANICAL DEMOLITION - EAST",
+      "render": "reviews/07__vol2__061/p24-p24-full-poppler.png",
+      "finding": "Mechanical demolition-plan context."
+    },
+    {
+      "page": 25,
+      "sheet": "MD-101W",
+      "title": "LEVEL 1 MECHANICAL DEMOLITION - WEST",
+      "render": "reviews/07__vol2__061/p25-p25-full-poppler.png",
+      "finding": "Mechanical demolition-plan context."
+    },
+    {
+      "page": 26,
+      "sheet": "MD-102E",
+      "title": "LEVEL 2 MECHANICAL DEMOLITION - EAST",
+      "render": "reviews/07__vol2__061/p26-p26-full-poppler.png",
+      "finding": "Mechanical demolition-plan context."
+    },
+    {
+      "page": 27,
+      "sheet": "MD-102W",
+      "title": "LEVEL 2 MECHANICAL DEMOLITION - WEST",
+      "render": "reviews/07__vol2__061/p27-p27-full-poppler.png",
+      "finding": "Mechanical demolition-plan context."
+    },
+    {
+      "page": 28,
+      "sheet": "MD-103E",
+      "title": "LEVEL 3 MECHANICAL DEMOLITION - EAST",
+      "render": "reviews/07__vol2__061/p28-p28-full-poppler.png",
+      "finding": "Mechanical demolition-plan context."
+    },
+    {
+      "page": 29,
+      "sheet": "MD-103W",
+      "title": "LEVEL 3 MECHANICAL DEMOLITION - WEST",
+      "render": "reviews/07__vol2__061/p29-p29-full-poppler.png",
+      "finding": "Mechanical demolition-plan context."
+    },
+    {
+      "page": 30,
+      "sheet": "MD-104E",
+      "title": "LEVEL 4 MECHANICAL DEMOLITION - EAST",
+      "render": "reviews/07__vol2__061/p30-p30-full-poppler.png",
+      "finding": "Mechanical demolition-plan context."
+    },
+    {
+      "page": 31,
+      "sheet": "MD-104W",
+      "title": "LEVEL 4 MECHANICAL DEMOLITION - WEST",
+      "render": "reviews/07__vol2__061/p31-p31-full-poppler.png",
+      "finding": "Mechanical demolition-plan context."
+    },
+    {
+      "page": 32,
+      "sheet": "MP-000W",
+      "title": "SUB-BASEMENT MECHANICAL PIPING",
+      "render": "reviews/07__vol2__061/p32-p32-full-poppler.png",
+      "finding": "Sub-basement mechanical piping context."
+    },
+    {
+      "page": 33,
+      "sheet": "MP-100E",
+      "title": "BASEMENT MECHANICAL PIPING - EAST",
+      "render": "reviews/07__vol2__061/p33-p33-full-poppler.png",
+      "finding": "Mechanical piping-plan context."
+    },
+    {
+      "page": 34,
+      "sheet": "MP-100W",
+      "title": "BASEMENT MECHANICAL PIPING - WEST",
+      "render": "reviews/07__vol2__061/p34-p34-full-poppler.png",
+      "finding": "Mechanical piping-plan context."
+    },
+    {
+      "page": 35,
+      "sheet": "MP-101E",
+      "title": "LEVEL 1 MECHANICAL PIPING - EAST",
+      "render": "reviews/07__vol2__061/p35-p35-full-poppler.png",
+      "finding": "Mechanical piping-plan context."
+    },
+    {
+      "page": 36,
+      "sheet": "MP-101W",
+      "title": "LEVEL 1 MECHANICAL PIPING - WEST",
+      "render": "reviews/07__vol2__061/p36-p36-full-poppler.png",
+      "finding": "Mechanical piping-plan context."
+    },
+    {
+      "page": 37,
+      "sheet": "MP-102E",
+      "title": "LEVEL 2 MECHANICAL PIPING - EAST",
+      "render": "reviews/07__vol2__061/p37-p37-full-poppler.png",
+      "finding": "Mechanical piping-plan context."
+    },
+    {
+      "page": 38,
+      "sheet": "MP-102W",
+      "title": "LEVEL 2 MECHANICAL PIPING - WEST",
+      "render": "reviews/07__vol2__061/p38-p38-full-poppler.png",
+      "finding": "Mechanical piping-plan context."
+    },
+    {
+      "page": 39,
+      "sheet": "MP-103E",
+      "title": "LEVEL 3 MECHANICAL PIPING - EAST",
+      "render": "reviews/07__vol2__061/p39-p39-full-poppler.png",
+      "finding": "Mechanical piping-plan context."
+    },
+    {
+      "page": 40,
+      "sheet": "MP-103W",
+      "title": "LEVEL 3 MECHANICAL PIPING - WEST",
+      "render": "reviews/07__vol2__061/p40-p40-full-poppler.png",
+      "finding": "Mechanical piping-plan context."
+    },
+    {
+      "page": 41,
+      "sheet": "MP-104E",
+      "title": "LEVEL 4 MECHANICAL PIPING - EAST",
+      "render": "reviews/07__vol2__061/p41-p41-full-poppler.png",
+      "finding": "Mechanical piping-plan context."
+    },
+    {
+      "page": 42,
+      "sheet": "MP-104W",
+      "title": "LEVEL 4 MECHANICAL PIPING - WEST",
+      "render": "reviews/07__vol2__061/p42-p42-full-poppler.png",
+      "finding": "Mechanical piping-plan context."
+    },
+    {
+      "page": 43,
+      "sheet": "MP-501",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/07__vol2__061/p43-p43-full-poppler.png",
+      "finding": "Mechanical piping/detail context."
+    },
+    {
+      "page": 44,
+      "sheet": "MH-100E",
+      "title": "BASEMENT MECHANICAL HVAC PLAN - EAST",
+      "render": "reviews/07__vol2__061/p44-p44-full-poppler.png",
+      "finding": "Mechanical HVAC plan context."
+    },
+    {
+      "page": 45,
+      "sheet": "MH-100W",
+      "title": "BASEMENT MECHANICAL HVAC PLAN - WEST",
+      "render": "reviews/07__vol2__061/p45-p45-full-poppler.png",
+      "finding": "Mechanical HVAC plan context."
+    },
+    {
+      "page": 46,
+      "sheet": "MH-101E",
+      "title": "LEVEL 1 MECHANICAL HVAC PLAN - EAST",
+      "render": "reviews/07__vol2__061/p46-p46-full-poppler.png",
+      "finding": "Mechanical HVAC plan context."
+    },
+    {
+      "page": 47,
+      "sheet": "MH-101W",
+      "title": "LEVEL 1 MECHANICAL HVAC PLAN - WEST",
+      "render": "reviews/07__vol2__061/p47-p47-full-poppler.png",
+      "finding": "Mechanical HVAC plan context."
+    },
+    {
+      "page": 48,
+      "sheet": "MH-102E",
+      "title": "LEVEL 2 MECHANICAL HVAC PLAN - EAST",
+      "render": "reviews/07__vol2__061/p48-p48-full-poppler.png",
+      "finding": "Mechanical HVAC plan context."
+    },
+    {
+      "page": 49,
+      "sheet": "MH-102W",
+      "title": "LEVEL 2 MECHANICAL HVAC PLAN - WEST",
+      "render": "reviews/07__vol2__061/p49-p49-full-poppler.png",
+      "finding": "Mechanical HVAC plan context."
+    },
+    {
+      "page": 50,
+      "sheet": "MH-103E",
+      "title": "LEVEL 3 MECHANICAL HVAC PLAN - EAST",
+      "render": "reviews/07__vol2__061/p50-p50-full-poppler.png",
+      "finding": "Mechanical HVAC plan context."
+    },
+    {
+      "page": 51,
+      "sheet": "MH-103W",
+      "title": "LEVEL 3 MECHANICAL HVAC PLAN - WEST",
+      "render": "reviews/07__vol2__061/p51-p51-full-poppler.png",
+      "finding": "Mechanical HVAC plan context."
+    },
+    {
+      "page": 52,
+      "sheet": "MH-104E",
+      "title": "LEVEL 4 MECHANICAL HVAC PLAN - EAST",
+      "render": "reviews/07__vol2__061/p52-p52-full-poppler.png",
+      "finding": "Mechanical HVAC plan context."
+    },
+    {
+      "page": 53,
+      "sheet": "MH-104W",
+      "title": "LEVEL 4 MECHANICAL HVAC PLAN - WEST",
+      "render": "reviews/07__vol2__061/p53-p53-full-poppler.png",
+      "finding": "Mechanical HVAC plan context."
+    },
+    {
+      "page": 54,
+      "sheet": "MH-401",
+      "title": "MECHANICAL ENLARGED VIEWS",
+      "render": "reviews/07__vol2__061/p54-p54-full-poppler.png",
+      "finding": "Mechanical enlarged-view and detail context."
+    },
+    {
+      "page": 55,
+      "sheet": "MH-501",
+      "title": "MECHANICAL HVAC DETAILS",
+      "render": "reviews/07__vol2__061/p55-p55-full-poppler.png",
+      "finding": "Mechanical HVAC detail and system-schematic context."
+    },
+    {
+      "page": 56,
+      "sheet": "M-501",
+      "title": "SEQUENCES OF OPERATION",
+      "render": "reviews/07__vol2__061/p56-p56-full-poppler.png",
+      "finding": "AHU, VAV, heat-recovery, laboratory-exhaust and heating-hot-water controls sequences."
+    },
+    {
+      "page": 57,
+      "sheet": "M-502",
+      "title": "POINT LISTS",
+      "render": "reviews/07__vol2__061/p57-p57-full-poppler.png",
+      "finding": "Five dense BAS point matrices for AHU, exhaust, heat recovery, VAV and heating-hot-water plant."
+    },
+    {
+      "page": 58,
+      "sheet": "M-601",
+      "title": "MECHANICAL SCHEDULES",
+      "render": "reviews/07__vol2__061/p58-p58-full-poppler.png",
+      "finding": "Thirteen dense mechanical schedule tables, including AHU, terminal, hydronic and equipment schedules."
+    },
+    {
+      "page": 59,
+      "sheet": "ED-000",
+      "title": "SUB-BASEMENT ELECTRICAL DEMOLITION",
+      "render": "reviews/07__vol2__061/p59-p59-full-poppler.png",
+      "finding": "Electrical demolition-plan context."
+    },
+    {
+      "page": 60,
+      "sheet": "ED-104",
+      "title": "LEVEL 4 ELECTRICAL DEMOLITION",
+      "render": "reviews/07__vol2__061/p60-p60-full-poppler.png",
+      "finding": "Electrical demolition-plan context."
+    },
+    {
+      "page": 61,
+      "sheet": "EP-000W",
+      "title": "SUB-BASEMENT ELECTRICAL PLAN - WEST",
+      "render": "reviews/07__vol2__061/p61-p61-full-poppler.png",
+      "finding": "Electrical power-plan context."
+    },
+    {
+      "page": 62,
+      "sheet": "EP-100",
+      "title": "BASEMENT ELECTRICAL PLAN",
+      "render": "reviews/07__vol2__061/p62-p62-full-poppler.png",
+      "finding": "Electrical power-plan context."
+    },
+    {
+      "page": 63,
+      "sheet": "EP-101",
+      "title": "LEVEL 1 ELECTRICAL PLAN",
+      "render": "reviews/07__vol2__061/p63-p63-full-poppler.png",
+      "finding": "Electrical power-plan context."
+    },
+    {
+      "page": 64,
+      "sheet": "EP-102",
+      "title": "LEVEL 2 ELECTRICAL PLAN",
+      "render": "reviews/07__vol2__061/p64-p64-full-poppler.png",
+      "finding": "Electrical power-plan context."
+    },
+    {
+      "page": 65,
+      "sheet": "EP-103",
+      "title": "LEVEL 3 ELECTRICAL PLAN",
+      "render": "reviews/07__vol2__061/p65-p65-full-poppler.png",
+      "finding": "Electrical power-plan context."
+    },
+    {
+      "page": 66,
+      "sheet": "EP-104E",
+      "title": "LEVEL 4 ELECTRICAL PLAN - EAST",
+      "render": "reviews/07__vol2__061/p66-p66-full-poppler.png",
+      "finding": "Electrical power-plan context."
+    },
+    {
+      "page": 67,
+      "sheet": "EP-104W",
+      "title": "LEVEL 4 ELECTRICAL PLAN - WEST",
+      "render": "reviews/07__vol2__061/p67-p67-full-poppler.png",
+      "finding": "Electrical power-plan context."
+    },
+    {
+      "page": 68,
+      "sheet": "EP-105",
+      "title": "PENTHOUSE ELECTRICAL PLAN",
+      "render": "reviews/07__vol2__061/p68-p68-full-poppler.png",
+      "finding": "Penthouse electrical-plan context."
+    },
+    {
+      "page": 69,
+      "sheet": "EP-501",
+      "title": "ELECTRICAL ONE-LINE DIAGRAM",
+      "render": "reviews/07__vol2__061/p69-p69-full-poppler.png",
+      "finding": "Electrical one-line diagram context."
+    },
+    {
+      "page": 70,
+      "sheet": "EP-502",
+      "title": "ELECTRICAL DIAGRAMS",
+      "render": "reviews/07__vol2__061/p70-p70-full-poppler.png",
+      "finding": "Electrical diagram context."
+    },
+    {
+      "page": 71,
+      "sheet": "EP-601",
+      "title": "ELECTRICAL SCHEDULES",
+      "render": "reviews/07__vol2__061/p71-p71-full-poppler.png",
+      "finding": "Electrical schedule context."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "rank07-title",
+      "page": 1,
+      "bbox": [
+        240,
+        65,
+        1300,
+        250
+      ],
+      "expected": "AMES LABORATORY WILHELM HALL HVAC UPGRADES",
+      "mode": "exact"
+    },
+    {
+      "id": "rank07-project-number",
+      "page": 1,
+      "bbox": [
+        2920,
+        1910,
+        3000,
+        1960
+      ],
+      "expected": "BID ISSUE 23008",
+      "mode": "exact"
+    },
+    {
+      "id": "rank07-bid-issue",
+      "page": 1,
+      "bbox": [
+        2920,
+        1910,
+        3000,
+        1960
+      ],
+      "expected": "BID ISSUE",
+      "mode": "contains"
+    },
+    {
+      "id": "rank07-ames-lab-number",
+      "page": 1,
+      "bbox": [
+        2920,
+        1960,
+        3000,
+        1990
+      ],
+      "expected": "SC-24-622",
+      "mode": "exact"
+    },
+    {
+      "id": "rank07-issue-date",
+      "page": 1,
+      "bbox": [
+        2920,
+        1990,
+        3000,
+        2025
+      ],
+      "expected": "01.10.24",
+      "mode": "exact"
+    }
+  ]
+}

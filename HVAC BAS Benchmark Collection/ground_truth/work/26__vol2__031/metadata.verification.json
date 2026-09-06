@@ -1,0 +1,206 @@
+{
+  "document_id": "26__vol2__031",
+  "source_sha256": "db9141f6582831c37b3a18f55d862e0579b38cf1a702c24208e3030fd8dbeab2",
+  "annotation_sha256": "01ff528ba2880da41b75c063fc5ba0718f9d77695c0c909135ba79a79381069b",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 3,
+  "checks": [
+    {
+      "assertion": "cover-project",
+      "page": 1,
+      "bbox": [
+        2450,
+        1860,
+        2940,
+        2040
+      ],
+      "expected": "RENOVATE WAREHOUSE FOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Project Title Project Number 589A4-20-158 RENOVATE WAREHOUSE FOR Building Number PANDEMIC PREPAREDNESS 14 Location Drawing Number HARRY S. TRUMAN MEM. VETERANS HOSPITAL 800 HOSPITAL DR., COLUMBIA MO 65201 Issue Date Checked Drawn",
+          "word_ids": [
+            6,
+            7,
+            0,
+            1,
+            103,
+            120,
+            121,
+            122,
+            2,
+            3,
+            123,
+            124,
+            104,
+            8,
+            4,
+            5,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            9,
+            10,
+            11,
+            12
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Project Title Project Number 589A4-20-158 RENOVATE WAREHOUSE FOR Building Number PANDEMIC PREPAREDNESS 14 Location Drawing Number HARRY S. TRUMAN MEM. VETERANS HOSPITAL 800 HOSPITAL DR., COLUMBIA MO 65201 Issue Date Checked Drawn",
+          "word_ids": [
+            237,
+            238,
+            239,
+            240,
+            250,
+            245,
+            246,
+            247,
+            270,
+            271,
+            248,
+            249,
+            255,
+            272,
+            279,
+            280,
+            273,
+            274,
+            275,
+            276,
+            277,
+            278,
+            256,
+            257,
+            258,
+            259,
+            260,
+            261,
+            332,
+            333,
+            334,
+            335
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "cover-location",
+      "page": 1,
+      "bbox": [
+        2450,
+        1960,
+        2940,
+        2040
+      ],
+      "expected": "HARRY S. TRUMAN MEM. VETERANS HOSPITAL 800 HOSPITAL DR., COLUMBIA MO 65201",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PANDEMIC PREPAREDNESS 14 Location Drawing Number HARRY S. TRUMAN MEM. VETERANS HOSPITAL 800 HOSPITAL DR., COLUMBIA MO 65201 Issue Date Checked Drawn",
+          "word_ids": [
+            123,
+            124,
+            104,
+            8,
+            4,
+            5,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            9,
+            10,
+            11,
+            12
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PANDEMIC PREPAREDNESS 14 Location Drawing Number HARRY S. TRUMAN MEM. VETERANS HOSPITAL 800 HOSPITAL DR., COLUMBIA MO 65201 Issue Date Checked Drawn",
+          "word_ids": [
+            248,
+            249,
+            255,
+            272,
+            279,
+            280,
+            273,
+            274,
+            275,
+            276,
+            277,
+            278,
+            256,
+            257,
+            258,
+            259,
+            260,
+            261,
+            332,
+            333,
+            334,
+            335
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "cover-issue",
+      "page": 1,
+      "bbox": [
+        2200,
+        1880,
+        2420,
+        1980
+      ],
+      "expected": "BID SET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Phase BID SET",
+          "word_ids": [
+            56,
+            118,
+            119
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Phase BID SET",
+          "word_ids": [
+            236,
+            243,
+            244
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

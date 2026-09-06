@@ -1,0 +1,18 @@
+{
+  "document_id": "25__vol2__053",
+  "module_role": "Supporting full-set evidence and source limitations qualifying use of the MH502 point matrix and MH601 schedules for BAS takeoff.",
+  "source_limitations": [
+    "MH502's 19 VAV terminal point-function rows have no terminal-equipment tag column and no printed rule applying them to the twenty MH601 VAV rows or TU26-73. They remain an unexpanded source template.",
+    "The supplied twelve-sheet set prints no BAS vendor, network protocol, controller/panel model, addressing, transport or point-to-controller terminal schedule.",
+    "MH601's populated VALVE SCHEDULE contains 38 heating-hot-water supply/return BALL VALVE rows. It does not print control-valve Cv, actuator, control signal or fail position.",
+    "The printed air-device rows are type/range schedules, and the two filter rows have no distinct equipment mark. Neither is treated as an installed plan quantity without an explicit source binding."
+  ],
+  "tables": [],
+  "assertions": [
+    {"id": "mh502-vav-sequence-title", "page": 11, "bbox": [1420,899,1825,935], "expected": "VAV TERMINAL SEQUENCE OF OPERATION", "mode": "contains"},
+    {"id": "mh601-valve-schedule-title", "page": 12, "bbox": [1790,849,2375,894], "expected": "VALVE SCHEDULE MARK SYSTEM AND/OR SERVICE TYPE SIZE FLOW REMARKS", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "supporting-source-limitations", "records_path": ["source_limitations"], "expected": 4}
+  ]
+}

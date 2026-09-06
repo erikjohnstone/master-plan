@@ -1,0 +1,219 @@
+{
+  "id": "06__vol2__096",
+  "record_sha256": "7c301853d26132ee01d14a1f98d44ddb9f5c077ce506c617741133f0d473f06f",
+  "checked_utc": "2026-09-05T07:57:59.237233+00:00",
+  "errors": [],
+  "modules": {
+    "metadata": {
+      "components": [
+        {
+          "annotation_sha256": "f02616b7c532505cb8f457cf543c6d341b624c1a598254150427819a529631a6",
+          "cell_assertions": 0,
+          "text_assertions": 6,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 6,
+      "pass": true
+    },
+    "schedules": {
+      "components": [
+        {
+          "annotation_sha256": "db1afe8fa07b7719f47f8a0aa1671eabf20a6ed9aa177df45ff65040d15478a5",
+          "cell_assertions": 39,
+          "text_assertions": 1,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "eb338848f89cbd07c05c72b290381e5c938872ce86173f251c370f2a8a36b0df",
+          "cell_assertions": 21,
+          "text_assertions": 2,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "ccd6e34740a52a5b241008170a9bad58a824b77024b4b7d8bb78f044cf59b1e9",
+          "cell_assertions": 39,
+          "text_assertions": 1,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "ecd228f42e1772e653090e8bb8effe061760a93d9bfacfd5bc36097dc387b759",
+          "cell_assertions": 58,
+          "text_assertions": 1,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "4eb4b7b158c7cfaf21c8b906cfc26d754bcee37da09ad5b3bbc6de02b34f0c95",
+          "cell_assertions": 928,
+          "text_assertions": 4,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "0f3acb8178cf5cb5abd7ce7b3174a0d8180a842f5d5beceab95555f6bb998456",
+          "cell_assertions": 192,
+          "text_assertions": 4,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 1277,
+      "text_assertions": 13,
+      "pass": true
+    },
+    "points": {
+      "components": [
+        {
+          "annotation_sha256": "e0cd56dd8c1bd8ed261ff37b5a565d3f71a368ed09a4607e2e56f750b4d717de",
+          "cell_assertions": 60,
+          "text_assertions": 0,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "e044e19c376838137e70449efe7c2bdb3799f46f61e9d2289a585100118ee7b1",
+          "cell_assertions": 52,
+          "text_assertions": 0,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "5b0ab54853f0534b962e93a927b66237566c78b6b0e1b51c0ac923f578ca8282",
+          "cell_assertions": 41,
+          "text_assertions": 0,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "90a76b7b7ab36437019b708f48e5768548512c3e8d8da3ce4057bf58506237be",
+          "cell_assertions": 30,
+          "text_assertions": 0,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "309fd0d4e021fd66ffcb2216a37e2d54929cfe8243b235f1c374172aa7d3ade3",
+          "cell_assertions": 29,
+          "text_assertions": 0,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "5c538d364eac6b94ae44cae75ba0c31b113ee32d69fe9c3bc927ab9abb874f6d",
+          "cell_assertions": 17,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 229,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "controls_context": {
+      "components": [
+        {
+          "annotation_sha256": "e4c77889bef7755d215a55b5b2542cad02c8af9b5cadf068ab1e20e08235e7a8",
+          "cell_assertions": 0,
+          "text_assertions": 22,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 22,
+      "pass": true
+    },
+    "equipment_reconciliation": {
+      "components": [
+        {
+          "annotation_sha256": "cc6eca43342a9a91afdd9dd9fe85f912cea5f2e773a75644afdf845457fd150a",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "point_applications": {
+      "components": [
+        {
+          "annotation_sha256": "e91cbb487cfe270c452ee2bc3262b01e7d0c6ddd7bde3b1921450b8e2685c76b",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "supporting_evidence": {
+      "components": [
+        {
+          "annotation_sha256": "da4b83ca4530ee7b1b048fb15726c21899a04bade4eb27500a3e59ee204ad377",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    }
+  },
+  "source_files_sha256": {
+    "work/06__vol2__096/document_manifest.json": "29745293c36cac04ab06539cc360d6bdf33e92e951d785b33c920e6ab53b2824",
+    "work/06__vol2__096/metadata_rank06.json": "f02616b7c532505cb8f457cf543c6d341b624c1a598254150427819a529631a6",
+    "work/06__vol2__096/schedules_m600_air_systems.json": "db1afe8fa07b7719f47f8a0aa1671eabf20a6ed9aa177df45ff65040d15478a5",
+    "work/06__vol2__096/schedules_m601_core.json": "eb338848f89cbd07c05c72b290381e5c938872ce86173f251c370f2a8a36b0df",
+    "work/06__vol2__096/schedules_m602_terminal_equipment.json": "ccd6e34740a52a5b241008170a9bad58a824b77024b4b7d8bb78f044cf59b1e9",
+    "work/06__vol2__096/schedules_m603_air_devices.json": "ecd228f42e1772e653090e8bb8effe061760a93d9bfacfd5bc36097dc387b759",
+    "work/06__vol2__096/schedules_m603_vavs.json": "4eb4b7b158c7cfaf21c8b906cfc26d754bcee37da09ad5b3bbc6de02b34f0c95",
+    "work/06__vol2__096/schedules_m603_motorized_dampers.json": "0f3acb8178cf5cb5abd7ce7b3174a0d8180a842f5d5beceab95555f6bb998456",
+    "work/06__vol2__096/points_m901.json": "e0cd56dd8c1bd8ed261ff37b5a565d3f71a368ed09a4607e2e56f750b4d717de",
+    "work/06__vol2__096/points_m902.json": "e044e19c376838137e70449efe7c2bdb3799f46f61e9d2289a585100118ee7b1",
+    "work/06__vol2__096/points_m903.json": "5b0ab54853f0534b962e93a927b66237566c78b6b0e1b51c0ac923f578ca8282",
+    "work/06__vol2__096/points_m904.json": "90a76b7b7ab36437019b708f48e5768548512c3e8d8da3ce4057bf58506237be",
+    "work/06__vol2__096/points_m905.json": "309fd0d4e021fd66ffcb2216a37e2d54929cfe8243b235f1c374172aa7d3ade3",
+    "work/06__vol2__096/points_m906.json": "5c538d364eac6b94ae44cae75ba0c31b113ee32d69fe9c3bc927ab9abb874f6d",
+    "work/06__vol2__096/controls_sequences.json": "e4c77889bef7755d215a55b5b2542cad02c8af9b5cadf068ab1e20e08235e7a8",
+    "work/06__vol2__096/equipment_reconciliation_rank06.json": "cc6eca43342a9a91afdd9dd9fe85f912cea5f2e773a75644afdf845457fd150a",
+    "work/06__vol2__096/point_applications_rank06.json": "e91cbb487cfe270c452ee2bc3262b01e7d0c6ddd7bde3b1921450b8e2685c76b",
+    "work/06__vol2__096/supporting_evidence_rank06.json": "da4b83ca4530ee7b1b048fb15726c21899a04bade4eb27500a3e59ee204ad377",
+    "reviews/06__vol2__096/p1-p1-full-poppler.png": "c88c6510d242088c5e8c351645313dbf79845483179b8ade5a5ca005e447229d",
+    "reviews/06__vol2__096/p2-p2-full-poppler.png": "98f9e7902e2e19b95c7c54738bf40925b9b7d24b453d1b12a68cf3cbd88332d2",
+    "reviews/06__vol2__096/p3-p3-full-poppler.png": "3d420c28ff88857d407b59c4e1a992ee06dedad76af28dd8faf8150abdcbd20f",
+    "reviews/06__vol2__096/p4-p4-full-poppler.png": "6428802faa3c55809ae93c79dfcd878140cbf2ddd10eaa8a10cd48ceac6f60cc",
+    "reviews/06__vol2__096/p5-p5-full-poppler.png": "d7486c9cfc84c8b60dc4e52f7cab8910d626ac717389ff586e7fb40d2a4dc52b",
+    "reviews/06__vol2__096/p6-p6-full-poppler.png": "807828416823f86ddc8a1ac0df1d4bbd1054488b4195e39890ccc37180b00a0b",
+    "reviews/06__vol2__096/p7-p7-full-poppler.png": "9c0da1d871427f9b03bd88ab2ad12cc24dec21be8ffd58e619eaec8950e72a5d",
+    "reviews/06__vol2__096/p8-p8-full-poppler.png": "aa5851b6ec66645e4a5ffb67bacb6f9e9343b803b41162f01248711f56d4f0d8",
+    "reviews/06__vol2__096/p9-p9-full-poppler.png": "ed8af328bc6dcd626e629e236ee5ceeeca78797da9b9d3051066c08b192e7e39",
+    "reviews/06__vol2__096/p10-p10-full-poppler.png": "b762e233d982b2820a40899628a62bf8286e849862c1b6c63c195178d21d38d2",
+    "reviews/06__vol2__096/p11-p11-full-poppler.png": "0cebe3deee80d3b59053c2d5d2da94ce81ae0cec84610652f5ca3af96e3d6dc9",
+    "reviews/06__vol2__096/p12-p12-full-poppler.png": "030a98d2ebfd8108285efd4ae1ef1ea607b4f3e0e19570e11b43edeb5e14716d",
+    "reviews/06__vol2__096/p13-p13-full-poppler.png": "eee4102eb8001e366c3e6c2b327f2b17cda237dc50c3bdff78dabd520945f640",
+    "reviews/06__vol2__096/p14-p14-full-poppler.png": "9de75ffed9a5209f90d2e1bad5489b862f037546c4e3c3c9e18fc0b70ae6f39e",
+    "reviews/06__vol2__096/p15-p15-full-poppler.png": "0b9cde34c658ef23078bdc0c466b6cc62f95bc61f23bacc036584d86ad622de1",
+    "reviews/06__vol2__096/p16-p16-full-poppler.png": "b43527481cb30c7e5737c22fbbe42a864c46838a93fd4ddf810a0abb0e44c4b0",
+    "reviews/06__vol2__096/p17-p17-full-poppler.png": "431d8f3543b3b00156a653528c9c7ad8337fd44fc76b624cc476f01148a79d23",
+    "reviews/06__vol2__096/p18-p18-full-poppler.png": "4bbba217e754b412ec3cee58ce8c3a1526dcbf7714c5beeec38ae3d0c9cb21ad",
+    "reviews/06__vol2__096/p19-p19-full-poppler.png": "b4fd876c16f843922dd2c3f304ad8c2ab72ab59d492568a40356f6a4bd42fc4d",
+    "reviews/06__vol2__096/p20-p20-full-poppler.png": "5c811b0b2a082e91973faafa161986cf3d8ddabc72b1323bcf44c187d205d2f6",
+    "reviews/06__vol2__096/p21-p21-full-poppler.png": "e1e0cb0f37cd7a204a10e9ffdc10ac9140690e097ac3d744ab3886ec6c5c7a69",
+    "reviews/06__vol2__096/p22-p22-full-poppler.png": "9dee5aa82e28627e7c205a5420bfe498186aa792be0cbf81ef26dc81ed0168ac",
+    "reviews/06__vol2__096/p23-p23-full-poppler.png": "e43ef06cbf6ef42c30417cb970e506f72480a6dff0bb9950e0fbc47c7b3dac05",
+    "reviews/06__vol2__096/p24-p24-full-poppler.png": "ac047c3688ad4f94b4e3891c8d9f5ad2f1f4fe265351d8b8a4306000f6107bff",
+    "reviews/06__vol2__096/p25-p25-full-poppler.png": "2234dba9f32f9556e4764f29a2a0595c2b7daa2ba6033af78c08a0bef1b2db1b",
+    "reviews/06__vol2__096/p26-p26-full-poppler.png": "065b59e19ffb5d5ecd41033e24790bc96167844f34dd997a18e3e2af9d715856",
+    "reviews/06__vol2__096/p27-p27-full-poppler.png": "d3495dfd34d5785ef35604c8deb01d7c8787f3fb7113bd922e5f5817e977ee6e",
+    "reviews/06__vol2__096/p28-p28-full-poppler.png": "bd2ca1de7d696ae5f850e66efbd9d7763cd059196f171134fa662d8a9a73a6cf",
+    "reviews/06__vol2__096/p29-p29-full-poppler.png": "4ae529ab35d260bb6ae2a9423a9670022d81449bb526a5380568934d1f62ce49",
+    "reviews/06__vol2__096/p30-p30-full-poppler.png": "369e4d5690da3d150753f274af0d8d516d00e4f1c4bfe336b4182c051d61c2c3",
+    "reviews/06__vol2__096/p31-p31-full-poppler.png": "4f644f1db31278918439cfa449b64d71be5e9f515919387a6b7a30e0889a2f7a",
+    "reviews/06__vol2__096/p32-p32-full-poppler.png": "6187138903f0c153556cd971e754284c3726f7010085a708b88b6c3aac272758",
+    "reviews/06__vol2__096/p33-p33-full-poppler.png": "37e36a7c13d99524a554d8f42eccd5a8c6900b6f1a1a15fa246573a337fe031a",
+    "reviews/06__vol2__096/p34-p34-full-poppler.png": "fb930d6f7b1f965ae0e9d734f229434e18134607ca5831f8f718a5aeb03d118b",
+    "reviews/06__vol2__096/p35-p35-full-poppler.png": "c06339c9429b118015f65608358babcdf2e6d397295651965fcd43ba28cfa5a1",
+    "reviews/06__vol2__096/p36-p36-full-poppler.png": "9c926cf6c08ac32787df2026eb305f2f1110c81d7e21ff710e562fcc339926f6"
+  },
+  "scope": "Rechecks every embedded authored module against MuPDF and Poppler, exact bundle/source identity, authored page/requirement coverage and review-file integrity. Visual interpretation and completeness are coordinator audit assertions, not automatic parser proof.",
+  "bounded_assertions": 1547,
+  "independent_engine_checks": 3094,
+  "pass": true
+}

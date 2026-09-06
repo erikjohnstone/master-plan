@@ -1,0 +1,2492 @@
+{
+  "id": "19__vol2__094",
+  "rank": 19,
+  "title": "Orange County Regional History Center HVAC Replacement",
+  "source_pdf": "pdf/19__vol2__094__Orange_County_Regional_History_Center_HVAC.pdf",
+  "source_sha256": "e205afccbaa16d799d33aed3151c5fd06dbe7a6836e1f1132c61aba0c70fdb45",
+  "page_count": 9,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete ground truth for all nine supplied pages of the Orange County Regional History Center HVAC Replacement set: exact project/title-block/sheet/scale review; all M-401 AHU, chiller, tower and humidifier schedule cells; M-103 preservation criteria; M-201 typed controls templates, DDC handoff instruction and sequence limitation; and schedule/plan reconciliation. No unprinted installed I/O, controller, network, valve, damper-actuator, zone-sensor or sequence data is invented.",
+  "reading_notes": [
+    "The retained corpus has all nine supplied pages. Full-page Poppler renders establish visual context; MuPDF and Poppler independently corroborate every authored schedule/environment cell and bounded assertion.",
+    "M-401 contains 4 schedules / 11 line items: five AHUs, one air-cooled chiller, one cooling tower and four electric humidifiers. A schedule row is not silently converted to a field-installed count.",
+    "M-201 has three controls schematics and typed bubbles, but no formal points matrix or standalone written sequence. It explicitly directs the contractor to match existing DDC points and existing sequence of operations, neither of which is fully supplied.",
+    "The M-103 museum environment table is valuable operating-context ground truth, but it is preservation criteria—not proof of field-sensor placement, BAS setpoint implementation or an installed point count.",
+    "Controls-caption AHU tags omit M-401's leading zero. Both source tag forms are retained without adding an unprinted aliasing or device-multiplication rule."
+  ],
+  "module_order": [
+    "metadata",
+    "schedules",
+    "points",
+    "controls_context",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "schedules": [
+      "schedules_m401"
+    ],
+    "points": [
+      "controls_context_m201"
+    ],
+    "controls_context": [
+      "controls_context_m201"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The project name, address, Atkins title-block context, project number, CD phase and issued date are captured. Blank issue-log rows are not reclassified as revision events.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every supplied page has an exact sheet/title title-block witness and full-page visual-review finding.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M-101/M-102/M-103 print 1/8\" = 1'-0\"; controls/schedules are no-scale and detail views are not treated as measurable plans. No graphic scale bar is supplied.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 11 M-401 scheduled identities are classified and anchored to plan, controls-caption or exact cabinet-row context. Schedule tags and controls-caption forms remain separately recorded.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "scheduled_families"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "primary_anchors"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every row/cell in the four M-401 schedules is retained: 5 AHUs, 1 chiller, 1 tower and 4 humidifiers, covering airflow, fans, coils, water, filters, electrical and humidifier specifications.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "schedule_counts"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M-201's typed schematic bubbles and application captions are retained as diagram source context. The supplied set prints zero formal points-matrix rows and no per-point owner/controller/wiring mapping, so no terminal or equipment-multiplied point count is created.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "schematic_templates"
+        ],
+        [
+          "modules",
+          "point_applications",
+          "installed_IO_total"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The sole printed architecture requirement is connection to the existing DDC system and matching existing points/sequences; protocol, transport, address, baud rate and controller model are explicitly not stated.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All three M-201 controls diagram captions and their external-existing-sequence limitation are captured. No absent standalone sequence is fabricated from schematic bubbles.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sequence_of_operations"
+        ],
+        [
+          "modules",
+          "controls_context",
+          "schematic_templates"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Schematic TS/HS/DPS/FZ source roles are indexed, while the supplied roof/plans do not map space, CO2, smart-thermostat or humidity sensors to zones; physical counts remain not stated.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sensor_and_zone_ledger"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "No standalone sequence, formal points matrix, control-valve schedule, damper-actuator schedule or installed-device roster is supplied. AHU zero-padding differs between schedule and controls captions, and preservation criteria are kept distinct from point/count claims.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "control_valve_and_damper_schedule_status"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All nine supplied pages were reviewed at full-page resolution; saved Poppler renders and page findings are embedded and hash-checked in the final record.",
+      "evidence": [
+        [
+          "page_review"
+        ],
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Build and validation rerun every module against retained MuPDF and Poppler captures. The final record stores the source hash, manifest and module digests.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ],
+        [
+          "module_sha256"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/19__vol2__094/p1-p1-full-poppler.png",
+      "finding": "M-000 cover/index: project identity, title-block data and supplied nine-sheet index; no schedule or controls point list."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/19__vol2__094/p2-p2-full-poppler.png",
+      "finding": "M-001 HVAC symbols/general notes; legends are not treated as installed inventory."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/19__vol2__094/p3-p3-full-poppler.png",
+      "finding": "M-101 demolition roof plan: existing cooling tower/chiller/pumps and roof-AHU removal context."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/19__vol2__094/p4-p4-full-poppler.png",
+      "finding": "M-102 new-work roof plan: AHU-04 through AHU-08, CH-2, CT-1 and pump context."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/19__vol2__094/p5-p5-full-poppler.png",
+      "finding": "M-103 phasing: temporary chiller/pump criteria, work phases and six-row museum temperature/humidity guideline table."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/19__vol2__094/p6-p6-full-poppler.png",
+      "finding": "M-201 no-scale controls: VAV AHU-4/5/8, constant-volume AHU-6 and 100%-outdoor-air AHU-7 templates. Existing-DDC/points/sequence matching requirement; no formal point matrix or standalone sequence."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/19__vol2__094/p7-p7-full-poppler.png",
+      "finding": "M-301 HVAC details: piping, three-way-valve, cooling-tower/chiller and rooftop-AHU detail context; no dedicated valve/actuator schedule."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/19__vol2__094/p8-p8-full-poppler.png",
+      "finding": "M-401 schedules: all four tables and eleven rows transcribed exactly."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/19__vol2__094/p9-p9-full-poppler.png",
+      "finding": "S-500 structural mechanical/cooling-tower support details; no BAS point list or schedule."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "supplied-pages",
+      "path": [
+        "modules",
+        "metadata",
+        "visual_review_pages"
+      ],
+      "operation": "length",
+      "expected": 9
+    },
+    {
+      "id": "full-page-review",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 9
+    },
+    {
+      "id": "schedule-tables",
+      "path": [
+        "modules",
+        "equipment_reconciliation",
+        "schedule_counts",
+        "tables"
+      ],
+      "expected": 4
+    },
+    {
+      "id": "schedule-rows",
+      "path": [
+        "modules",
+        "equipment_reconciliation",
+        "schedule_counts",
+        "rows"
+      ],
+      "expected": 11
+    },
+    {
+      "id": "formal-source-matrix-rows",
+      "path": [
+        "modules",
+        "point_applications",
+        "listed_template_counts",
+        "source_rows"
+      ],
+      "expected": 0
+    }
+  ],
+  "completion_checks": {
+    "every_source_page_reviewed": true,
+    "all_explicit_objective_categories_reviewed": true,
+    "all_populated_schedule_and_points_rows_captured": true,
+    "source_conflicts_and_unavailable_fields_preserved": true,
+    "two_engine_checks_current": true,
+    "final_assembly_audit_complete": true
+  },
+  "verification_semantics": "MuPDF and Poppler independently captured all nine supplied vector-PDF pages. Current authored schedule/environment cells and bounded text assertions are rechecked in both engines at bundle build and validation time. Parser agreement corroborates retained source text/cells and bounds; full-page Poppler review establishes visual sheet disposition, diagram relationships and source limitations. Neither process invents physical device, terminal, controller, network, valve, damper-actuator or zone-sensor quantities that are not established by the supplied PDF.",
+  "schema_version": "authored-module-bundle-v1",
+  "bundle_manifest": "work/19__vol2__094/document_manifest.json",
+  "bundle_manifest_sha256": "f2a3f90de742b85eabc0ff5f82d879529ad482536586969f3f434a015ad1b0c5",
+  "review_render_sha256": {
+    "reviews/19__vol2__094/p1-p1-full-poppler.png": "d07c89cef17e41825b1c188dfe4a573e5b4ceb3b5738518e57af3b3090c95971",
+    "reviews/19__vol2__094/p2-p2-full-poppler.png": "555f218da78c94a18420538f7dc2e6622540eb3ba9d99297208828c328f8cf95",
+    "reviews/19__vol2__094/p3-p3-full-poppler.png": "ccad34d2bea8c7cd1965ec474c0f9a2daeed937be09241fdfab978700bbb829e",
+    "reviews/19__vol2__094/p4-p4-full-poppler.png": "16737d4a538fd90efdb74e0732ffcaa3cfb4a2b41df9312c652b7f6633637eb2",
+    "reviews/19__vol2__094/p5-p5-full-poppler.png": "01f95fb0eaf1e39ca818c7967d450306f04947efb7003bbc26d80c6a1d76879c",
+    "reviews/19__vol2__094/p6-p6-full-poppler.png": "b245fae415471a0ff4f44f2d86939fff86da95d15221219129ade8490efd7530",
+    "reviews/19__vol2__094/p7-p7-full-poppler.png": "d8ddc7335beca64db87811bf106f4b6da0bf9a0881903d11d9a2bbbcb94445dd",
+    "reviews/19__vol2__094/p8-p8-full-poppler.png": "3d0b82435759bef48442b19772792ac5f115a69a2c8edffb3f40485e4264e230",
+    "reviews/19__vol2__094/p9-p9-full-poppler.png": "ad86d82c600fa2864951c638c22c936f102880d6b01de95ee5ad2c996434b1f7"
+  },
+  "modules": {
+    "metadata": {
+      "document_id": "19__vol2__094",
+      "module_role": "Exact project, title-block, sheet, date, scale and complete visual-review ledger for the supplied nine-sheet set.",
+      "scope": "This is complete ground truth for the nine supplied pages only. It does not claim that the set contains all project disciplines or an unstated revision history.",
+      "project": {
+        "name": "Orange County Regional History Center",
+        "site": "65 E Central Blvd, Orlando, FL 32801",
+        "design_firm_as_printed": "ATKINS",
+        "project_number": "100040229",
+        "issue": "CD",
+        "issue_date": "2/10/15",
+        "document_date_context": "Date Issued in repeated title blocks",
+        "revision_date": {
+          "status": "not_stated_in_supplied_title_blocks",
+          "value": null,
+          "note": "The blank issue-log rows are not recast as revision events."
+        }
+      },
+      "scale_semantics": {
+        "finding": "All nine supplied pages were visually reviewed. The three roof-plan sheets print 1/8\" = 1'-0\". M-201 and M-401 print NO SCALE, and M-301/S-500 are detail sheets with N.T.S. captions rather than a measurable plan scale. No supplied page has a graphic scale bar.",
+        "graphic_scale_bar_total": 0,
+        "measurable_length_scaled_view_total": 3,
+        "scaled_plan_views": [
+          {
+            "page": 3,
+            "sheet": "M-101",
+            "scale": "1/8\" = 1'-0\""
+          },
+          {
+            "page": 4,
+            "sheet": "M-102",
+            "scale": "1/8\" = 1'-0\""
+          },
+          {
+            "page": 5,
+            "sheet": "M-103",
+            "scale": "1/8\" = 1'-0\""
+          }
+        ]
+      },
+      "visual_review_pages": [
+        {
+          "page": 1,
+          "sheet": "M-000",
+          "title": "COVER SHEET AND SHEET INDEX",
+          "review_status": "complete",
+          "finding": "Cover/index for the nine supplied sheets; project identity and title-block issue data. No schedule or controls point list.",
+          "render": "reviews/19__vol2__094/p1-p1-full-poppler.png"
+        },
+        {
+          "page": 2,
+          "sheet": "M-001",
+          "title": "HVAC SYMBOLS LEGEND AND GENERAL NOTES",
+          "review_status": "complete",
+          "finding": "HVAC symbols, legends and general notes. The page itself warns that some legend symbols may not pertain to the project; legends are not treated as installed inventory.",
+          "render": "reviews/19__vol2__094/p2-p2-full-poppler.png"
+        },
+        {
+          "page": 3,
+          "sheet": "M-101",
+          "title": "HVAC DEMOLITION ROOF PLAN",
+          "review_status": "complete",
+          "finding": "1/8\" = 1'-0\" demolition roof plan: existing cooling tower, chiller, pumps and roof AHU removal/replacement context.",
+          "render": "reviews/19__vol2__094/p3-p3-full-poppler.png"
+        },
+        {
+          "page": 4,
+          "sheet": "M-102",
+          "title": "HVAC NEW WORK ROOF PLAN",
+          "review_status": "complete",
+          "finding": "1/8\" = 1'-0\" new-work roof plan: AHU-04 through AHU-08, CH-2, CT-1, and circulation-pump context.",
+          "render": "reviews/19__vol2__094/p4-p4-full-poppler.png"
+        },
+        {
+          "page": 5,
+          "sheet": "M-103",
+          "title": "HVAC PHASING PLAN",
+          "review_status": "complete",
+          "finding": "1/8\" = 1'-0\" phasing plan with temporary air-cooled chiller/pump requirements and a temperature/humidity guideline table.",
+          "render": "reviews/19__vol2__094/p5-p5-full-poppler.png"
+        },
+        {
+          "page": 6,
+          "sheet": "M-201",
+          "title": "HVAC CONTROLS",
+          "review_status": "complete",
+          "finding": "No-scale controls schematics for variable-volume AHU-4/5/8, constant-volume AHU-6, and 100% dedicated-outdoor-air AHU-7. Typed point bubbles appear on diagrams; no formal points matrix or written standalone sequence is printed.",
+          "render": "reviews/19__vol2__094/p6-p6-full-poppler.png"
+        },
+        {
+          "page": 7,
+          "sheet": "M-301",
+          "title": "HVAC DETAILS",
+          "review_status": "complete",
+          "finding": "No-scale HVAC details including existing three-way-valve/piping, cooling-tower, chiller and rooftop-AHU details. These are details, not a valve/actuator schedule.",
+          "render": "reviews/19__vol2__094/p7-p7-full-poppler.png"
+        },
+        {
+          "page": 8,
+          "sheet": "M-401",
+          "title": "HVAC SCHEDULES",
+          "review_status": "complete",
+          "finding": "No-scale schedule sheet: five AHUs, one air-cooled chiller, one cooling tower and four electric humidifiers, all transcribed as exact source cells.",
+          "render": "reviews/19__vol2__094/p8-p8-full-poppler.png"
+        },
+        {
+          "page": 9,
+          "sheet": "S-500",
+          "title": "STRUCTURAL SUPPORT DETAILS",
+          "review_status": "complete",
+          "finding": "Structural support details for new mechanical-unit and cooling-tower support; no BAS point list or equipment schedule.",
+          "render": "reviews/19__vol2__094/p9-p9-full-poppler.png"
+        }
+      ],
+      "tables": [],
+      "assertion_groups": [
+        {
+          "id": "sheets",
+          "covers_all_source_pages": true,
+          "defaults": {
+            "job_number": "100040229",
+            "issue_date": "2/10/15"
+          },
+          "templates": [
+            {
+              "id": "sheet-number",
+              "field": "sheet_title_block",
+              "bbox": [
+                2840,
+                2040,
+                2970,
+                2110
+              ],
+              "mode": "exact"
+            },
+            {
+              "id": "sheet-title",
+              "field": "title",
+              "bbox": [
+                2710,
+                1885,
+                2970,
+                1970
+              ],
+              "mode": "exact"
+            },
+            {
+              "id": "job-number",
+              "field": "job_number",
+              "bbox": [
+                2742,
+                2005,
+                2840,
+                2040
+              ],
+              "mode": "exact"
+            },
+            {
+              "id": "date-issued",
+              "field": "issue_date",
+              "bbox": [
+                2930,
+                2000,
+                2980,
+                2030
+              ],
+              "mode": "exact"
+            }
+          ],
+          "records": [
+            {
+              "id": "1",
+              "page": 1,
+              "sheet": "M-000",
+              "sheet_title_block": "Sheet Number: M-000",
+              "title": "SHEET TITLE: COVER SHEET AND SHEET INDEX"
+            },
+            {
+              "id": "2",
+              "page": 2,
+              "sheet": "M-001",
+              "sheet_title_block": "Sheet Number: M-001",
+              "title": "SHEET TITLE: HVAC SYMBOLS LEGEND AND GENERAL NOTES"
+            },
+            {
+              "id": "3",
+              "page": 3,
+              "sheet": "M-101",
+              "sheet_title_block": "Sheet Number: M-101",
+              "title": "SHEET TITLE: HVAC DEMOLITION PLAN ROOF PLAN"
+            },
+            {
+              "id": "4",
+              "page": 4,
+              "sheet": "M-102",
+              "sheet_title_block": "Sheet Number: M-102",
+              "title": "SHEET TITLE: HVAC NEW WORK PLAN ROOF PLAN"
+            },
+            {
+              "id": "5",
+              "page": 5,
+              "sheet": "M-103",
+              "sheet_title_block": "Sheet Number: M-103",
+              "title": "SHEET TITLE: HVAC PHASING PLAN"
+            },
+            {
+              "id": "6",
+              "page": 6,
+              "sheet": "M-201",
+              "sheet_title_block": "Sheet Number: M-201",
+              "title": "SHEET TITLE: HVAC CONTROLS"
+            },
+            {
+              "id": "7",
+              "page": 7,
+              "sheet": "M-301",
+              "sheet_title_block": "Sheet Number: M-301",
+              "title": "SHEET TITLE: HVAC DETAILS"
+            },
+            {
+              "id": "8",
+              "page": 8,
+              "sheet": "M-401",
+              "sheet_title_block": "Sheet Number: M-401",
+              "title": "SHEET TITLE: HVAC SCHEDULES"
+            },
+            {
+              "id": "9",
+              "page": 9,
+              "sheet": "S-500",
+              "sheet_title_block": "S-500",
+              "title": "STRUCTURAL SUPPORT DETAILS"
+            }
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "project-name",
+          "page": 1,
+          "bbox": [
+            2800,
+            620,
+            2875,
+            1400
+          ],
+          "reading_direction": "up",
+          "expected": "Orange County Regional History Center",
+          "mode": "exact"
+        },
+        {
+          "id": "project-site",
+          "page": 1,
+          "bbox": [
+            2875,
+            780,
+            2920,
+            1200
+          ],
+          "reading_direction": "up",
+          "expected": "65 E Central Blvd, Orlando, FL 32801",
+          "mode": "exact"
+        },
+        {
+          "id": "m101-scale",
+          "page": 3,
+          "bbox": [
+            1200,
+            1540,
+            1400,
+            1580
+          ],
+          "expected": "1/8\" = 1'-0\"",
+          "mode": "contains"
+        },
+        {
+          "id": "m102-scale",
+          "page": 4,
+          "bbox": [
+            1200,
+            1540,
+            1400,
+            1580
+          ],
+          "expected": "1/8\" = 1'-0\"",
+          "mode": "contains"
+        },
+        {
+          "id": "m103-scale",
+          "page": 5,
+          "bbox": [
+            1250,
+            1265,
+            1450,
+            1310
+          ],
+          "expected": "1/8\" = 1'-0\"",
+          "mode": "contains"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "full-page-visual-review",
+          "records_path": [
+            "visual_review_pages"
+          ],
+          "expected": 9,
+          "unique_key": "page"
+        }
+      ]
+    },
+    "schedules": {
+      "document_id": "19__vol2__094",
+      "module_role": "Exact M-401 HVAC schedule cells for the supplied Orange County Regional History Center HVAC replacement set. Each schedule row remains a source row; controls or physical-device quantities are not inferred from schedule specifications.",
+      "source_sheet": "M-401",
+      "source_page": 8,
+      "tables": [
+        {
+          "id": "M401-AIR-HANDLING-UNIT-CHW",
+          "page": 8,
+          "sheet": "M-401",
+          "title": "Air Handling Unit Schedule CHW",
+          "classification": "Air-handling-unit schedule",
+          "columns": "mark|unit_model|unit_type|components_in_direction_of_airflow|total_max_cfm|occupied_mode_oa_cfm|unoccupied_mode_oa_cfm|smoke_mode_sa_oa_cfm|external_sp_in_wg|total_sp_in_wg|fan_size_and_type|fan_rpm|motor_hp|variable_frequency_drive|cooling_sensible_capacity_mbh|cooling_total_capacity_mbh|cooling_air_entering_db_wb|cooling_air_leaving_db_wb|cooling_face_velocity_fpm|cooling_rows_fins_per_ft|cooling_air_pd_in_wg|cooling_water_entering_f|cooling_water_leaving_f|cooling_water_flow_gpm|cooling_water_pd_ft|heating_air_entering_f|heating_air_leaving_f|heating_air_pd_in_wg|heating_capacity_kw|prefilter_air_pd_in_wg|prefilter_type|final_filter_air_pd_in_wg|final_filter_type|volt_phase_hz|mca",
+          "x_edges": [
+            150.24,
+            205.08,
+            289.56,
+            494.52,
+            673.919,
+            722.52,
+            789.0,
+            868.08,
+            934.56,
+            975.0,
+            1015.44,
+            1232.64,
+            1276.8,
+            1316.401,
+            1356.96,
+            1397.16,
+            1437.12,
+            1504.561,
+            1575.001,
+            1616.399,
+            1677.121,
+            1727.04,
+            1765.32,
+            1803.84,
+            1852.56,
+            1903.679,
+            1946.279,
+            1984.68,
+            2023.32,
+            2058.6,
+            2111.276,
+            2242.563,
+            2310.608,
+            2517.238,
+            2582.521,
+            2640.713
+          ],
+          "y_edges": [
+            181.44,
+            198.36,
+            215.401,
+            232.32,
+            249.24,
+            266.279
+          ],
+          "rows": [
+            "AHU-04|CSAA012UB|OUTDOOR HORIZ. DRAW-THRU|MXTD3-PF-FF-CC-HF-FAN|5400|1000|0|3000|1.25|4.19|20in. direct-drive plenum, full width|1960|7.5|YES|121|136|74/62|53.6/53.2|439|8/82|0.56|45|57|23|1.9|-|-|-|-|0.625|2\" Pleated - MERV 8|0.747|12in. cartridge - 95% eff - MERV 15|460/3/60|11.75",
+            "AHU-05|CSAA014UB|OUTDOOR HORIZ. DRAW-THRU|MXTD3-PF-FF-CC-HF-FAN|7400|965|0|5400|1.50|5.20|20in. direct-drive plenum, 120% width|2342|10|YES|163|180|74/62|53.9/53.6|542|6/134|0.67|45|57|30|2.8|-|-|-|-|0.67|2\" Pleated - MERV 8|0.795|12in. cartridge - 95% eff - MERV 15|460/3/60|15.63",
+            "AHU-06|CSAA008UB|OUTDOOR HORIZ. DRAW-THRU|MXB2-PF-FF-CC-HCS-HF-FAN|3100|675|0|3200|1.50|4.88|14in. belt-drive plenum, M press|3033|5|NO|72|84|74/62|52.9/52.5|388|6/108|0.39|45|57|14|1.7|72|90|0.11|18|0.606|2\" Pleated - MERV 8|0.726|12in. cartridge - 95% eff - MERV 15|460/3/60|8.38",
+            "AHU-07|CSAA021UB|OUTDOOR HORIZ. DRAW-THRU|OAI-PF-FF-CC-HCS-FAN|9770|9770|0|0|1.50|4.46|22in. diameter Housed AF, M press|1580|15|NO|511|898|100/79|53/52.9|469|8/122|0.88|45|57|149|18.4|35|70|0.15|108|0.631|2\" Pleated - MERV 8|0.795|4in. cartridge - MERV 14 - premium|460/3/60|23.13",
+            "AHU-08|CSAA014UB|OUTDOOR HORIZ. DRAW-THRU|MXTD3-PF-FF-CC-HF-FAN|6700|690|0|4800|1.50|4.67|22.25in. direct-drive plenum, full width|1821|7.5|YES|148|163|74/62|53.9/53.6|491|6/127|0.58|45|57|27|2.3|-|-|-|-|0.649|2\" Pleated - MERV 8|0.773|12in. cartridge - 95% eff - MERV 15|460/3/60|11.75"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                125,
+                60,
+                2650,
+                175
+              ],
+              "expected": "Air Handling Unit Schedule CHW Air Flows Fan Data Cooling Coil Heating Coil Filters Electrical Data"
+            }
+          ]
+        },
+        {
+          "id": "M401-PACKAGED-AIR-COOLED-WATER-CHILLER",
+          "page": 8,
+          "sheet": "M-401",
+          "title": "Packaged Air Cooled Water Chiller Schedule",
+          "classification": "Air-cooled chilled-water chiller schedule",
+          "columns": "mark|model_no|energy_efficiency_rating|integrated_part_load_value|nominal_tons|capacity_tons|ambient_temp_f|flow_gpm|max_pd_ft|ewt_f|lwt_f|condenser_fan_qty|condenser_fan_fla_each|compressor_qty|compressor_rla_each|compressor_lra_each|mca|max_fuse_size|volt_phase",
+          "x_edges": [
+            1625.88,
+            1675.921,
+            1747.92,
+            1819.921,
+            1891.919,
+            1946.16,
+            2015.161,
+            2070.008,
+            2113.791,
+            2160.006,
+            2200.203,
+            2242.687,
+            2285.274,
+            2334.232,
+            2371.913,
+            2413.326,
+            2459.768,
+            2498.521,
+            2568.731,
+            2640.713
+          ],
+          "y_edges": [
+            723.239,
+            740.161
+          ],
+          "rows": [
+            "CH-2|CGAM-030|9.1|14.4|30|23|105|55|15.1|55|45|3|3.2|2|24.2|197|66.3|90|460/3"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1620,
+                625,
+                2650,
+                710
+              ],
+              "expected": "Packaged Air Cooled Water Chiller Schedule Cooling Capacity Chilled Water Data Condenser Fan Compressors Electrical Data"
+            }
+          ]
+        },
+        {
+          "id": "M401-COOLING-TOWER",
+          "page": 8,
+          "sheet": "M-401",
+          "title": "Cooling Tower Schedule",
+          "classification": "Cooling-tower schedule",
+          "columns": "mark|model_no|tower_type|cell_qty|operating_weight_lbs|flow_gpm|max_head_ft|water_entering_f|water_leaving_f|ambient_wb_f|drive_type|fan_motor_hp|fan_motor_rpm|volt_phase",
+          "x_edges": [
+            1869.48,
+            1915.439,
+            1987.44,
+            2096.991,
+            2138.754,
+            2210.757,
+            2255.756,
+            2300.034,
+            2346.6,
+            2394.712,
+            2451.234,
+            2505.241,
+            2550.488,
+            2599.197,
+            2643.475
+          ],
+          "y_edges": [
+            954.121,
+            971.04
+          ],
+          "rows": [
+            "CT-1|MD5016|COUNTERFLOW|1|13150|900|9.6|95|85|80|DIRECT|20|1800|460/3"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1865,
+                850,
+                2650,
+                950
+              ],
+              "expected": "Cooling Tower Schedule Operating Weight Flow GPM Max Head Water Temp Ambient WB Drive Type Fan Motor Data"
+            }
+          ]
+        },
+        {
+          "id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER",
+          "page": 8,
+          "sheet": "M-401",
+          "title": "Disposable Cylinder Electric Humidifier Schedule",
+          "classification": "Electric humidifier schedule",
+          "columns": "mark|model_no|duct_size|minimum_capacity_lb_per_hr|cylinder_qty|kw|volt_phase",
+          "x_edges": [
+            2091.837,
+            2146.566,
+            2218.569,
+            2348.29,
+            2443.442,
+            2505.963,
+            2560.918,
+            2632.921
+          ],
+          "y_edges": [
+            1283.52,
+            1300.561,
+            1317.481,
+            1334.4,
+            1351.44
+          ],
+          "rows": [
+            "HF-4|NH-EL-050|(IN AHU-4 CABINET)|50|1|17|480/3/60",
+            "HF-5|NH-EL-050|(IN AHU-5 CABINET)|50|1|17|480/3/60",
+            "HF-6|NH-EL-030|(IN AHU-6 CABINET)|33|1|11.4|480/3/60",
+            "HF-8|NH-EL-050|(IN AHU-8 CABINET)|50|1|17|480/3/60"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                2090,
+                1200,
+                2640,
+                1265
+              ],
+              "expected": "Disposable Cylinder Electric Humidifier Schedule Mark Model No Duct Size Min Capacity No Cylinders KW Volt Phase"
+            }
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "m401-cooling-coils-existing-three-way-valves",
+          "page": 8,
+          "bbox": [
+            1230,
+            315,
+            1775,
+            342
+          ],
+          "expected": "COOLING COILS SHALL BE RECONNECTED TO EXISTING 3-WAY CONTROL VALVES.",
+          "mode": "contains"
+        },
+        {
+          "id": "m401-humidifier-controls",
+          "page": 8,
+          "bbox": [
+            2120,
+            1380,
+            2580,
+            1410
+          ],
+          "expected": "PROVIDE MICROPROCESSOR-BASED P+I AUTO-ADAPTIVE MODULATING CONTROLS AND SELF-DIAGNOSTICS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m401-chiller-controller-existing-bms",
+          "page": 8,
+          "bbox": [
+            1670,
+            785,
+            2200,
+            810
+          ],
+          "expected": "PROVIDE FACTORY FURNISHED CONTROLLER AND CONNECT TO EXISTING BMS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m401-tower-additional-ddc",
+          "page": 8,
+          "bbox": [
+            1905,
+            1148,
+            2460,
+            1170
+          ],
+          "expected": "ADDITIONAL CONTROL POINTS SHALL BE ADDED TO EXISTING DDC SYSTEM.",
+          "mode": "contains"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "m401-schedule-tables",
+          "records_path": [
+            "tables"
+          ],
+          "expected": 4,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "points": {
+      "document_id": "19__vol2__094",
+      "module_role": "M-201 controls ground truth: three typed schematic templates, the existing-DDC handoff requirement, and limits on sequence, point and installed-device claims. The source does not publish a formal BAS points matrix or a standalone written sequence of operations.",
+      "source_sheet": "M-201",
+      "source_page": 6,
+      "network_architecture": {
+        "existing_control_system_as_printed": "EXISTING DDC SYSTEM",
+        "integration_requirement": "CONNECT CONTROLLER TO EXISTING DDC SYSTEM. MATCH EXISTING DDC POINTS AND EXISTING SEQUENCE OF OPERATIONS.",
+        "protocol_transport_addressing_baud_rate_controller_model": {
+          "status": "not_stated_in_supplied_set",
+          "value": null
+        },
+        "point_transport_per_schematic_symbol": {
+          "status": "not_stated",
+          "value": null
+        },
+        "assertion_ids": [
+          "m201-vav-existing-ddc",
+          "m201-cv-existing-ddc",
+          "m201-doas-existing-ddc"
+        ]
+      },
+      "sequence_of_operations": {
+        "status": "not_printed_as_a_standalone_sequence",
+        "source_requirement": "Each schematic requires matching the existing sequence of operations; the existing sequence text is not included in the supplied nine pages.",
+        "deductions_not_made": [
+          "No enable/disable logic, setpoint, reset, alarm, lead-lag, scheduling or failure behavior is inferred from the diagram bubbles.",
+          "No final sequence is manufactured from the instruction to match an external existing sequence."
+        ],
+        "assertion_ids": [
+          "m201-vav-existing-ddc",
+          "m201-cv-existing-ddc",
+          "m201-doas-existing-ddc"
+        ]
+      },
+      "schematic_templates": [
+        {
+          "id": "M201-DETAIL-1-VAV",
+          "detail": "1",
+          "caption": "VARIABLE AIR VOLUME AHU-4, AHU-5 & AHU-8 CONTROLS",
+          "schedule_tag_relationship": "The caption prints AHU-4/AHU-5/AHU-8 while M-401 prints zero-padded AHU-04/AHU-05/AHU-08. The two printed tag forms are retained; no unprinted controller-instance multiplier is assumed.",
+          "diagram_source_symbols": [
+            {
+              "element": "TS-1",
+              "type_as_printed": "AI",
+              "literal_role": "temperature-sensor schematic label"
+            },
+            {
+              "element": "HS-1",
+              "type_as_printed": "AI",
+              "literal_role": "HI-LIMIT HUMIDITY SENSOR"
+            },
+            {
+              "element": "DM-1",
+              "type_as_printed": "DO",
+              "literal_role": "SMOKE MODE OUTSIDE AIR damper schematic label"
+            },
+            {
+              "element": "DM-2",
+              "type_as_printed": "AO",
+              "literal_role": "damper schematic label"
+            },
+            {
+              "element": "DPS-1",
+              "type_as_printed": "DI",
+              "literal_role": "filter differential-pressure-switch schematic label"
+            },
+            {
+              "element": "TS-3",
+              "type_as_printed": "AI",
+              "literal_role": "temperature-sensor schematic label"
+            },
+            {
+              "element": "FZ-1",
+              "type_as_printed": "not_stated_adjacent_to_label",
+              "literal_role": "FREEZESTAT schematic label"
+            },
+            {
+              "element": "HUMIDIFIER",
+              "type_as_printed": "AO",
+              "literal_role": "humidifier schematic label"
+            },
+            {
+              "element": "DPS-2",
+              "type_as_printed": "DI",
+              "literal_role": "fan differential-pressure-switch schematic label"
+            },
+            {
+              "element": "VFD",
+              "type_as_printed": "DO / DI / AO / AI",
+              "literal_role": "VFD schematic interface bubbles"
+            },
+            {
+              "element": "TS-4",
+              "type_as_printed": "AI",
+              "literal_role": "temperature-sensor schematic label"
+            },
+            {
+              "element": "EXISTING 3-WAY VALVE TO REMAIN",
+              "type_as_printed": "AO",
+              "literal_role": "existing chilled-water valve schematic callout"
+            }
+          ],
+          "quantity_rule": "These are symbols and bubble types in a template schematic. They are not a formal point list and are not multiplied by the three captioned AHUs into an installed terminal count.",
+          "assertion_ids": [
+            "m201-vav-caption",
+            "m201-vav-existing-ddc"
+          ]
+        },
+        {
+          "id": "M201-DETAIL-2-CV",
+          "detail": "2",
+          "caption": "CONSTANT VOLUME AHU-6 CONTROLS",
+          "schedule_tag_relationship": "M-401 prints AHU-06; the controls caption prints AHU-6.",
+          "diagram_source_symbols": [
+            {
+              "element": "DM-1",
+              "type_as_printed": "DO",
+              "literal_role": "outside-air damper schematic label"
+            },
+            {
+              "element": "ELECTRIC HEAT",
+              "type_as_printed": "DO",
+              "literal_role": "electric-heat schematic bubble"
+            },
+            {
+              "element": "DPS-2",
+              "type_as_printed": "DI",
+              "literal_role": "fan differential-pressure-switch schematic label"
+            },
+            {
+              "element": "TS-1",
+              "type_as_printed": "AI",
+              "literal_role": "temperature-sensor schematic label"
+            },
+            {
+              "element": "TS-2",
+              "type_as_printed": "AI",
+              "literal_role": "temperature-sensor schematic label"
+            },
+            {
+              "element": "CV-1",
+              "type_as_printed": "AO",
+              "literal_role": "existing 3-way valve to remain"
+            }
+          ],
+          "quantity_rule": "This is diagram-only source context, not an equipment-specific terminal schedule or complete controller I/O count.",
+          "assertion_ids": [
+            "m201-cv-caption",
+            "m201-cv-existing-ddc"
+          ]
+        },
+        {
+          "id": "M201-DETAIL-3-DOAS",
+          "detail": "3",
+          "caption": "100% DEDICATED OUTDOOR AIR SYSTEM AHU-7 CONTROLS",
+          "schedule_tag_relationship": "M-401 prints AHU-07; the controls caption prints AHU-7.",
+          "diagram_source_symbols": {
+            "status": "full schematic visually reviewed",
+            "value": "The full-page review establishes that Detail 3 is a diagrammatic controls template. Its point bubbles are not recast as a separate typed points table because the supplied source does not print one."
+          },
+          "quantity_rule": "No physical I/O count or field-device multiplier is stated for AHU-7.",
+          "assertion_ids": [
+            "m201-doas-caption",
+            "m201-doas-existing-ddc"
+          ]
+        }
+      ],
+      "sensor_and_zone_ledger": {
+        "physical_count_scope": "No plans in the supplied set map controls sensors to zones or rooms. M-201 labels several schematic sensors, but diagram symbols are not converted to physical quantities.",
+        "counts": {
+          "space_sensors": {
+            "status": "not_stated",
+            "value": null
+          },
+          "CO2_sensors": {
+            "status": "not_stated",
+            "value": null
+          },
+          "smart_thermostats": {
+            "status": "not_stated",
+            "value": null
+          },
+          "humidity_sensors": {
+            "status": "not_stated_as_a_physical_count",
+            "value": null
+          }
+        },
+        "source_role_examples": [
+          {
+            "id": "M201-HS-1",
+            "role": "HI-LIMIT HUMIDITY SENSOR",
+            "scope": "VAV schematic source template",
+            "physical_count": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "id": "M201-TS",
+            "role": "TS-1 through TS-4 labels",
+            "scope": "schematic source templates",
+            "physical_count": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "id": "M201-DPS",
+            "role": "DPS-1/DPS-2 labels",
+            "scope": "schematic source templates",
+            "physical_count": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "id": "M201-FZ",
+            "role": "FZ-1 FREEZESTAT",
+            "scope": "schematic source templates",
+            "physical_count": {
+              "status": "not_stated",
+              "value": null
+            }
+          }
+        ]
+      },
+      "controls_schedule_ledger": {
+        "control_valve_schedule": {
+          "status": "not_present",
+          "value": null,
+          "basis": "All nine supplied pages were visually reviewed. M-201 calls out existing 3-way valves and M-301 depicts valve details, but no dedicated control-valve schedule is printed."
+        },
+        "damper_actuator_schedule": {
+          "status": "not_present",
+          "value": null,
+          "basis": "All nine supplied pages were visually reviewed. M-201 labels DM-1/DM-2 schematic dampers, but no dedicated damper-actuator schedule is printed."
+        },
+        "physical_schedule_line_item_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      },
+      "tables": [],
+      "assertions": [
+        {
+          "id": "m201-vav-caption",
+          "page": 6,
+          "bbox": [
+            1720,
+            675,
+            2470,
+            700
+          ],
+          "expected": "VARIABLE AIR VOLUME AHU-4, AHU-5 & AHU-8 CONTROLS",
+          "mode": "contains"
+        },
+        {
+          "id": "m201-cv-caption",
+          "page": 6,
+          "bbox": [
+            1820,
+            1300,
+            2330,
+            1345
+          ],
+          "expected": "CONSTANT VOLUME AHU-6 CONTROLS",
+          "mode": "contains"
+        },
+        {
+          "id": "m201-doas-caption",
+          "page": 6,
+          "bbox": [
+            1700,
+            1920,
+            2470,
+            1965
+          ],
+          "expected": "100% DEDICATED OUTDOOR AIR SYSTEM AHU-7 CONTROLS",
+          "mode": "contains"
+        },
+        {
+          "id": "m201-vav-existing-ddc",
+          "page": 6,
+          "bbox": [
+            1945,
+            590,
+            2560,
+            660
+          ],
+          "expected": "CONNECT CONTROLLER TO EXISTING DDC SYSTEM. MATCH EXISTING DDC POINTS AND EXISTING SEQUENCE OF OPERATIONS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m201-cv-existing-ddc",
+          "page": 6,
+          "bbox": [
+            1980,
+            1220,
+            2600,
+            1300
+          ],
+          "expected": "CONNECT CONTROLLER TO EXISTING DDC SYSTEM. MATCH EXISTING DDC POINTS AND EXISTING SEQUENCE OF OPERATIONS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m201-doas-existing-ddc",
+          "page": 6,
+          "bbox": [
+            1950,
+            1845,
+            2600,
+            1920
+          ],
+          "expected": "CONNECT CONTROLLER TO EXISTING DDC SYSTEM. MATCH EXISTING DDC POINTS AND EXISTING SEQUENCE OF OPERATIONS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m201-as-built",
+          "page": 6,
+          "bbox": [
+            1945,
+            590,
+            2480,
+            625
+          ],
+          "expected": "THE ABOVE SCHEMATIC IS BASED ON EXISTING AS-BUILT DRAWINGS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m201-factory-sensors",
+          "page": 6,
+          "bbox": [
+            1945,
+            610,
+            2480,
+            640
+          ],
+          "expected": "SENSORS ARE FACTORY INSTALLED.",
+          "mode": "contains"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "controls-schematic-templates",
+          "records_path": [
+            "schematic_templates"
+          ],
+          "expected": 3,
+          "unique_key": "id"
+        },
+        {
+          "id": "logical-sensor-source-examples",
+          "records_path": [
+            "sensor_and_zone_ledger",
+            "source_role_examples"
+          ],
+          "expected": 4,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "controls_context": {
+      "document_id": "19__vol2__094",
+      "module_role": "M-201 controls ground truth: three typed schematic templates, the existing-DDC handoff requirement, and limits on sequence, point and installed-device claims. The source does not publish a formal BAS points matrix or a standalone written sequence of operations.",
+      "source_sheet": "M-201",
+      "source_page": 6,
+      "network_architecture": {
+        "existing_control_system_as_printed": "EXISTING DDC SYSTEM",
+        "integration_requirement": "CONNECT CONTROLLER TO EXISTING DDC SYSTEM. MATCH EXISTING DDC POINTS AND EXISTING SEQUENCE OF OPERATIONS.",
+        "protocol_transport_addressing_baud_rate_controller_model": {
+          "status": "not_stated_in_supplied_set",
+          "value": null
+        },
+        "point_transport_per_schematic_symbol": {
+          "status": "not_stated",
+          "value": null
+        },
+        "assertion_ids": [
+          "m201-vav-existing-ddc",
+          "m201-cv-existing-ddc",
+          "m201-doas-existing-ddc"
+        ]
+      },
+      "sequence_of_operations": {
+        "status": "not_printed_as_a_standalone_sequence",
+        "source_requirement": "Each schematic requires matching the existing sequence of operations; the existing sequence text is not included in the supplied nine pages.",
+        "deductions_not_made": [
+          "No enable/disable logic, setpoint, reset, alarm, lead-lag, scheduling or failure behavior is inferred from the diagram bubbles.",
+          "No final sequence is manufactured from the instruction to match an external existing sequence."
+        ],
+        "assertion_ids": [
+          "m201-vav-existing-ddc",
+          "m201-cv-existing-ddc",
+          "m201-doas-existing-ddc"
+        ]
+      },
+      "schematic_templates": [
+        {
+          "id": "M201-DETAIL-1-VAV",
+          "detail": "1",
+          "caption": "VARIABLE AIR VOLUME AHU-4, AHU-5 & AHU-8 CONTROLS",
+          "schedule_tag_relationship": "The caption prints AHU-4/AHU-5/AHU-8 while M-401 prints zero-padded AHU-04/AHU-05/AHU-08. The two printed tag forms are retained; no unprinted controller-instance multiplier is assumed.",
+          "diagram_source_symbols": [
+            {
+              "element": "TS-1",
+              "type_as_printed": "AI",
+              "literal_role": "temperature-sensor schematic label"
+            },
+            {
+              "element": "HS-1",
+              "type_as_printed": "AI",
+              "literal_role": "HI-LIMIT HUMIDITY SENSOR"
+            },
+            {
+              "element": "DM-1",
+              "type_as_printed": "DO",
+              "literal_role": "SMOKE MODE OUTSIDE AIR damper schematic label"
+            },
+            {
+              "element": "DM-2",
+              "type_as_printed": "AO",
+              "literal_role": "damper schematic label"
+            },
+            {
+              "element": "DPS-1",
+              "type_as_printed": "DI",
+              "literal_role": "filter differential-pressure-switch schematic label"
+            },
+            {
+              "element": "TS-3",
+              "type_as_printed": "AI",
+              "literal_role": "temperature-sensor schematic label"
+            },
+            {
+              "element": "FZ-1",
+              "type_as_printed": "not_stated_adjacent_to_label",
+              "literal_role": "FREEZESTAT schematic label"
+            },
+            {
+              "element": "HUMIDIFIER",
+              "type_as_printed": "AO",
+              "literal_role": "humidifier schematic label"
+            },
+            {
+              "element": "DPS-2",
+              "type_as_printed": "DI",
+              "literal_role": "fan differential-pressure-switch schematic label"
+            },
+            {
+              "element": "VFD",
+              "type_as_printed": "DO / DI / AO / AI",
+              "literal_role": "VFD schematic interface bubbles"
+            },
+            {
+              "element": "TS-4",
+              "type_as_printed": "AI",
+              "literal_role": "temperature-sensor schematic label"
+            },
+            {
+              "element": "EXISTING 3-WAY VALVE TO REMAIN",
+              "type_as_printed": "AO",
+              "literal_role": "existing chilled-water valve schematic callout"
+            }
+          ],
+          "quantity_rule": "These are symbols and bubble types in a template schematic. They are not a formal point list and are not multiplied by the three captioned AHUs into an installed terminal count.",
+          "assertion_ids": [
+            "m201-vav-caption",
+            "m201-vav-existing-ddc"
+          ]
+        },
+        {
+          "id": "M201-DETAIL-2-CV",
+          "detail": "2",
+          "caption": "CONSTANT VOLUME AHU-6 CONTROLS",
+          "schedule_tag_relationship": "M-401 prints AHU-06; the controls caption prints AHU-6.",
+          "diagram_source_symbols": [
+            {
+              "element": "DM-1",
+              "type_as_printed": "DO",
+              "literal_role": "outside-air damper schematic label"
+            },
+            {
+              "element": "ELECTRIC HEAT",
+              "type_as_printed": "DO",
+              "literal_role": "electric-heat schematic bubble"
+            },
+            {
+              "element": "DPS-2",
+              "type_as_printed": "DI",
+              "literal_role": "fan differential-pressure-switch schematic label"
+            },
+            {
+              "element": "TS-1",
+              "type_as_printed": "AI",
+              "literal_role": "temperature-sensor schematic label"
+            },
+            {
+              "element": "TS-2",
+              "type_as_printed": "AI",
+              "literal_role": "temperature-sensor schematic label"
+            },
+            {
+              "element": "CV-1",
+              "type_as_printed": "AO",
+              "literal_role": "existing 3-way valve to remain"
+            }
+          ],
+          "quantity_rule": "This is diagram-only source context, not an equipment-specific terminal schedule or complete controller I/O count.",
+          "assertion_ids": [
+            "m201-cv-caption",
+            "m201-cv-existing-ddc"
+          ]
+        },
+        {
+          "id": "M201-DETAIL-3-DOAS",
+          "detail": "3",
+          "caption": "100% DEDICATED OUTDOOR AIR SYSTEM AHU-7 CONTROLS",
+          "schedule_tag_relationship": "M-401 prints AHU-07; the controls caption prints AHU-7.",
+          "diagram_source_symbols": {
+            "status": "full schematic visually reviewed",
+            "value": "The full-page review establishes that Detail 3 is a diagrammatic controls template. Its point bubbles are not recast as a separate typed points table because the supplied source does not print one."
+          },
+          "quantity_rule": "No physical I/O count or field-device multiplier is stated for AHU-7.",
+          "assertion_ids": [
+            "m201-doas-caption",
+            "m201-doas-existing-ddc"
+          ]
+        }
+      ],
+      "sensor_and_zone_ledger": {
+        "physical_count_scope": "No plans in the supplied set map controls sensors to zones or rooms. M-201 labels several schematic sensors, but diagram symbols are not converted to physical quantities.",
+        "counts": {
+          "space_sensors": {
+            "status": "not_stated",
+            "value": null
+          },
+          "CO2_sensors": {
+            "status": "not_stated",
+            "value": null
+          },
+          "smart_thermostats": {
+            "status": "not_stated",
+            "value": null
+          },
+          "humidity_sensors": {
+            "status": "not_stated_as_a_physical_count",
+            "value": null
+          }
+        },
+        "source_role_examples": [
+          {
+            "id": "M201-HS-1",
+            "role": "HI-LIMIT HUMIDITY SENSOR",
+            "scope": "VAV schematic source template",
+            "physical_count": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "id": "M201-TS",
+            "role": "TS-1 through TS-4 labels",
+            "scope": "schematic source templates",
+            "physical_count": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "id": "M201-DPS",
+            "role": "DPS-1/DPS-2 labels",
+            "scope": "schematic source templates",
+            "physical_count": {
+              "status": "not_stated",
+              "value": null
+            }
+          },
+          {
+            "id": "M201-FZ",
+            "role": "FZ-1 FREEZESTAT",
+            "scope": "schematic source templates",
+            "physical_count": {
+              "status": "not_stated",
+              "value": null
+            }
+          }
+        ]
+      },
+      "controls_schedule_ledger": {
+        "control_valve_schedule": {
+          "status": "not_present",
+          "value": null,
+          "basis": "All nine supplied pages were visually reviewed. M-201 calls out existing 3-way valves and M-301 depicts valve details, but no dedicated control-valve schedule is printed."
+        },
+        "damper_actuator_schedule": {
+          "status": "not_present",
+          "value": null,
+          "basis": "All nine supplied pages were visually reviewed. M-201 labels DM-1/DM-2 schematic dampers, but no dedicated damper-actuator schedule is printed."
+        },
+        "physical_schedule_line_item_count": {
+          "status": "not_stated",
+          "value": null
+        }
+      },
+      "tables": [],
+      "assertions": [
+        {
+          "id": "m201-vav-caption",
+          "page": 6,
+          "bbox": [
+            1720,
+            675,
+            2470,
+            700
+          ],
+          "expected": "VARIABLE AIR VOLUME AHU-4, AHU-5 & AHU-8 CONTROLS",
+          "mode": "contains"
+        },
+        {
+          "id": "m201-cv-caption",
+          "page": 6,
+          "bbox": [
+            1820,
+            1300,
+            2330,
+            1345
+          ],
+          "expected": "CONSTANT VOLUME AHU-6 CONTROLS",
+          "mode": "contains"
+        },
+        {
+          "id": "m201-doas-caption",
+          "page": 6,
+          "bbox": [
+            1700,
+            1920,
+            2470,
+            1965
+          ],
+          "expected": "100% DEDICATED OUTDOOR AIR SYSTEM AHU-7 CONTROLS",
+          "mode": "contains"
+        },
+        {
+          "id": "m201-vav-existing-ddc",
+          "page": 6,
+          "bbox": [
+            1945,
+            590,
+            2560,
+            660
+          ],
+          "expected": "CONNECT CONTROLLER TO EXISTING DDC SYSTEM. MATCH EXISTING DDC POINTS AND EXISTING SEQUENCE OF OPERATIONS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m201-cv-existing-ddc",
+          "page": 6,
+          "bbox": [
+            1980,
+            1220,
+            2600,
+            1300
+          ],
+          "expected": "CONNECT CONTROLLER TO EXISTING DDC SYSTEM. MATCH EXISTING DDC POINTS AND EXISTING SEQUENCE OF OPERATIONS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m201-doas-existing-ddc",
+          "page": 6,
+          "bbox": [
+            1950,
+            1845,
+            2600,
+            1920
+          ],
+          "expected": "CONNECT CONTROLLER TO EXISTING DDC SYSTEM. MATCH EXISTING DDC POINTS AND EXISTING SEQUENCE OF OPERATIONS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m201-as-built",
+          "page": 6,
+          "bbox": [
+            1945,
+            590,
+            2480,
+            625
+          ],
+          "expected": "THE ABOVE SCHEMATIC IS BASED ON EXISTING AS-BUILT DRAWINGS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m201-factory-sensors",
+          "page": 6,
+          "bbox": [
+            1945,
+            610,
+            2480,
+            640
+          ],
+          "expected": "SENSORS ARE FACTORY INSTALLED.",
+          "mode": "contains"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "controls-schematic-templates",
+          "records_path": [
+            "schematic_templates"
+          ],
+          "expected": 3,
+          "unique_key": "id"
+        },
+        {
+          "id": "logical-sensor-source-examples",
+          "records_path": [
+            "sensor_and_zone_ledger",
+            "source_role_examples"
+          ],
+          "expected": 4,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "equipment_reconciliation": {
+      "document_id": "19__vol2__094",
+      "module_role": "Reconciles every M-401 schedule identity to plan/detail/source context without turning schematic appearances or embedded humidifier cabinet text into extra equipment counts. The supplied set has no dedicated control-valve or damper-actuator schedule.",
+      "schedule_registry_schema": {
+        "namespace_separator": "_",
+        "identity_columns": {
+          "mark": "mark"
+        },
+        "anchor_records_path": [
+          "primary_anchors"
+        ],
+        "non_instance_table_ids": []
+      },
+      "scheduled_families": [
+        {
+          "module": "schedules_m401.json",
+          "bundle_module": "schedules",
+          "table": "M401-AIR-HANDLING-UNIT-CHW",
+          "rows": 5,
+          "class": "Roof air-handling unit",
+          "mark": [
+            "AHU-04",
+            "AHU-05",
+            "AHU-06",
+            "AHU-07",
+            "AHU-08"
+          ]
+        },
+        {
+          "module": "schedules_m401.json",
+          "bundle_module": "schedules",
+          "table": "M401-PACKAGED-AIR-COOLED-WATER-CHILLER",
+          "rows": 1,
+          "class": "Air-cooled chilled-water chiller",
+          "mark": [
+            "CH-2"
+          ]
+        },
+        {
+          "module": "schedules_m401.json",
+          "bundle_module": "schedules",
+          "table": "M401-COOLING-TOWER",
+          "rows": 1,
+          "class": "Cooling tower",
+          "mark": [
+            "CT-1"
+          ]
+        },
+        {
+          "module": "schedules_m401.json",
+          "bundle_module": "schedules",
+          "table": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER",
+          "rows": 4,
+          "class": "Electric humidifier",
+          "mark": [
+            "HF-4",
+            "HF-5",
+            "HF-6",
+            "HF-8"
+          ]
+        }
+      ],
+      "schedule_counts": {
+        "tables": 4,
+        "rows": 11,
+        "building_scoped_tag_identities_including_outlet_types": 11,
+        "other_scheduled_tag_identities": 11
+      },
+      "primary_anchors": [
+        {
+          "id": "M401-AIR-HANDLING-UNIT-CHW-AHU-04",
+          "scope": "Scheduled air-handling unit",
+          "visual_anchor": "M-102 new-work roof plan labels AHU-04; M-201 Detail 1 caption uses AHU-4."
+        },
+        {
+          "id": "M401-AIR-HANDLING-UNIT-CHW-AHU-05",
+          "scope": "Scheduled air-handling unit",
+          "visual_anchor": "M-102 new-work roof plan labels AHU-05; M-201 Detail 1 caption uses AHU-5."
+        },
+        {
+          "id": "M401-AIR-HANDLING-UNIT-CHW-AHU-06",
+          "scope": "Scheduled air-handling unit",
+          "visual_anchor": "M-102 new-work roof plan labels AHU-06; M-201 Detail 2 caption uses AHU-6."
+        },
+        {
+          "id": "M401-AIR-HANDLING-UNIT-CHW-AHU-07",
+          "scope": "Scheduled air-handling unit",
+          "visual_anchor": "M-102 new-work roof plan labels AHU-07; M-201 Detail 3 caption uses AHU-7."
+        },
+        {
+          "id": "M401-AIR-HANDLING-UNIT-CHW-AHU-08",
+          "scope": "Scheduled air-handling unit",
+          "visual_anchor": "M-102 new-work roof plan labels AHU-08; M-201 Detail 1 caption uses AHU-8."
+        },
+        {
+          "id": "M401-PACKAGED-AIR-COOLED-WATER-CHILLER-CH-2",
+          "scope": "Scheduled chiller",
+          "visual_anchor": "M-102 new-work roof plan labels CH-2; M-103 phasing plan specifies temporary air-cooled chiller service while the cooling tower is replaced."
+        },
+        {
+          "id": "M401-COOLING-TOWER-CT-1",
+          "scope": "Scheduled cooling tower",
+          "visual_anchor": "M-102 new-work roof plan labels CT-1; M-103 phasing requires remove/replace existing cooling tower."
+        },
+        {
+          "id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER-HF-4",
+          "scope": "Scheduled humidifier",
+          "visual_anchor": "M-401 duct-size cell prints (IN AHU-4 CABINET); this embeds the humidifier in the associated AHU cabinet but is not a plan count."
+        },
+        {
+          "id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER-HF-5",
+          "scope": "Scheduled humidifier",
+          "visual_anchor": "M-401 duct-size cell prints (IN AHU-5 CABINET); this embeds the humidifier in the associated AHU cabinet but is not a plan count."
+        },
+        {
+          "id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER-HF-6",
+          "scope": "Scheduled humidifier",
+          "visual_anchor": "M-401 duct-size cell prints (IN AHU-6 CABINET); this embeds the humidifier in the associated AHU cabinet but is not a plan count."
+        },
+        {
+          "id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER-HF-8",
+          "scope": "Scheduled humidifier",
+          "visual_anchor": "M-401 duct-size cell prints (IN AHU-8 CABINET); this embeds the humidifier in the associated AHU cabinet but is not a plan count."
+        }
+      ],
+      "plan_and_detail_reconciliation": [
+        {
+          "id": "m102-new-work-roof-equipment",
+          "sheet": "M-102",
+          "scope": "New-work roof plan",
+          "finding": "The full-page plan visually anchors AHU-04 through AHU-08, CH-2 and CT-1 to planned work. It does not present a controls point matrix."
+        },
+        {
+          "id": "m201-tag-format",
+          "sheet": "M-201",
+          "scope": "Controls captions",
+          "finding": "Controls captions omit zero-padding on AHU marks: AHU-4/5/8, AHU-6 and AHU-7. The record preserves source forms rather than silently rewriting them."
+        },
+        {
+          "id": "m401-humidifier-cabinet-context",
+          "sheet": "M-401",
+          "scope": "Humidifier schedule",
+          "finding": "HF-4, HF-5, HF-6 and HF-8 have printed in-AHU-cabinet cells. The four schedule rows are four identities; cabinet wording is not a separate physical-device multiplier."
+        }
+      ],
+      "control_valve_and_damper_schedule_status": {
+        "control_valve_schedule": {
+          "status": "not_present",
+          "value": null,
+          "note": "M-201/M-301 show individual existing three-way-valve context and M-401 says cooling coils reconnect to existing 3-way control valves, but the supplied pages contain no control-valve schedule."
+        },
+        "damper_actuator_schedule": {
+          "status": "not_present",
+          "value": null,
+          "note": "M-201 includes DM-1/DM-2 schematic labels and typed bubble context, but the supplied pages contain no damper-actuator schedule."
+        }
+      },
+      "source_conflicts": [
+        {
+          "id": "ahu-zero-padding",
+          "scope": "M-401 versus M-201",
+          "finding": "M-401 prints AHU-04/AHU-05/AHU-06/AHU-07/AHU-08; M-201 captions print AHU-4/AHU-5/AHU-6/AHU-7/AHU-8. This is a source-format difference, not an asserted data correction."
+        }
+      ],
+      "tables": [],
+      "assertions": [],
+      "inventory_checks": [
+        {
+          "id": "scheduled-families",
+          "records_path": [
+            "scheduled_families"
+          ],
+          "expected": 4,
+          "unique_key": "table"
+        },
+        {
+          "id": "scheduled-primary-anchors",
+          "records_path": [
+            "primary_anchors"
+          ],
+          "expected": 11,
+          "unique_key": "id"
+        },
+        {
+          "id": "plan-detail-reconciliation-items",
+          "records_path": [
+            "plan_and_detail_reconciliation"
+          ],
+          "expected": 3,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "point_applications": {
+      "document_id": "19__vol2__094",
+      "module_role": "Formal-point-matrix status and ownership ledger. M-201 supplies typed schematic templates, not a row-based BAS points list, so this intentionally has no fabricated formal-matrix rows or installed terminal total.",
+      "tables": [],
+      "ledger_mode": "source_matrix_templates_v1",
+      "source_points_composite": "controls_context_m201 records the three visual schematic templates and their typed-bubble context. It has no formal source matrix tables because none are printed in the supplied set.",
+      "ownership_binding_semantics": "No row-level physical owner, controller, wiring or transport is stated. The three controls templates identify diagram scope only.",
+      "expanded_count_warning": "There are zero formal points-matrix rows in the supplied set. Typed bubbles on M-201 are retained as schematic context, but are not converted into a terminal count or multiplied by schedule equipment.",
+      "applications": [],
+      "listed_template_counts": {
+        "source_rows": 0,
+        "tables": 0
+      },
+      "expanded_template_counts": {
+        "source_rows": 0
+      },
+      "installed_IO_total": {
+        "status": "not_stated_in_supplied_set",
+        "value": null,
+        "reason": "No typed formal points matrix, controller schedule, panel terminal list, network point export, or equipment-instance multiplier is supplied."
+      },
+      "point_transport": {
+        "status": "not_stated_per_symbol",
+        "value": null,
+        "note": "M-201 directs connection to the existing DDC system, but does not assign transport or wiring method to individual schematic bubbles."
+      },
+      "inventory_checks": [
+        {
+          "id": "formal-source-points-tables",
+          "records_path": [
+            "tables"
+          ],
+          "expected": 0
+        },
+        {
+          "id": "formal-source-points-applications",
+          "records_path": [
+            "applications"
+          ],
+          "expected": 0
+        }
+      ]
+    },
+    "supporting_evidence": {
+      "document_id": "19__vol2__094",
+      "module_role": "Supporting phasing, museum-environment and source-limitation evidence for the supplied nine-page set. This module does not create BAS quantities from preservation criteria or temporary-work notes.",
+      "tables": [
+        {
+          "id": "M103-TEMPERATURE-HUMIDITY-GUIDELINES",
+          "page": 5,
+          "sheet": "M-103",
+          "title": "Temperature & Humidity Guidelines",
+          "classification": "Environmental preservation criteria table; not a BAS points list or verified control sequence",
+          "columns": "equipment|area_space|ideal_temperature|acceptable_temperature|ideal_humidity|acceptable_humidity",
+          "x_edges": [
+            1199.64,
+            1246.921,
+            1370.039,
+            1403.4,
+            1444.2,
+            1473.48,
+            1514.4
+          ],
+          "y_edges": [
+            1663.32,
+            1683.48,
+            1703.761,
+            1724.641,
+            1746.481,
+            1766.641,
+            1787.761
+          ],
+          "rows": [
+            "AHU-5|COURTROOM|70º|68º-72º|45%|40%-50%",
+            "AHU-6|THEATER|70º|60º-80º|45%|35%-55%",
+            "AHU-8|5TH FL. ARCHIVES|70º|68º-72º|35%|30%-45%",
+            "AHU-7|4TH FL. CHAPIN GALLERY|70º|68º-72º|45%|40%-50%",
+            "CH-2|TRAVELING EXHIBIT HALL|70º|68º-72º|45%|40%-50%",
+            "AHU-7|ALL OTHER MUSEUM GALLERIES|70º|68º-75º|55%|45%-60%"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1190,
+                1610,
+                1520,
+                1660
+              ],
+              "expected": "TEMPERATURE & HUMIDITY GUIDELINES EQUIP AREA/SPACE TEMPERATURE HUMIDITY IDEAL ACCEPT"
+            }
+          ]
+        }
+      ],
+      "phasing_context": {
+        "temporary_chiller_requirement": "ON-GRADE SKID-MOUNT TEMP AIR-COOLED CHILLER AND CHW PUMP(S). CHILLER: 300 TONS COOLING CAP. / 11º DELTA T. PUMP: 550 GPM/106 FT. HEAD. ELEC: 480V/3 PH.",
+        "environment_requirement": "The Orange County Regional Historic Center temperature and humidity guidelines shall be maintained throughout construction.",
+        "interpretation_rule": "The table expresses project preservation criteria. It does not itself identify a sensor location, a BAS setpoint implementation, an alarm band, a control loop, or an acceptance-test result.",
+        "assertion_ids": [
+          "m103-temp-chiller",
+          "m103-guidelines-maintained"
+        ]
+      },
+      "source_limitations": [
+        {
+          "id": "no-standalone-sequence",
+          "finding": "The only sequence instruction on M-201 is to match an existing sequence of operations; the complete external sequence is not supplied."
+        },
+        {
+          "id": "no-formal-point-matrix",
+          "finding": "M-201 uses typed bubbles on schematics but does not provide a formal, row-based BAS points list with physical I/O totals, controller assignment or wiring/transport."
+        },
+        {
+          "id": "no-control-valve-schedule",
+          "finding": "M-201/M-301 contain individual existing 3-way valve callouts and M-401 refers to existing 3-way valves; no dedicated control-valve schedule is present."
+        },
+        {
+          "id": "no-damper-actuator-schedule",
+          "finding": "M-201 uses DM labels and typed outputs in control templates; no dedicated damper-actuator schedule is present."
+        },
+        {
+          "id": "schedule-tags-versus-controls-caption-tags",
+          "finding": "M-401 uses zero-padded AHU-04 through AHU-08 marks whereas M-201 captions use AHU-4 through AHU-8. Both forms are retained without inventing a new aliasing rule."
+        },
+        {
+          "id": "preservation-table-not-basis-for-device-count",
+          "finding": "The M-103 temperature/humidity guidelines are environmental criteria; they do not provide a sensor/device schedule, point matrix or installed-device count."
+        }
+      ],
+      "all_document_pages_visually_reviewed": {
+        "status": "complete",
+        "page_count": 9,
+        "basis": "Full-page Poppler renders p1 through p9 were reviewed and page findings are stored in metadata/page_review."
+      },
+      "assertions": [
+        {
+          "id": "m103-temp-chiller",
+          "page": 5,
+          "bbox": [
+            2350,
+            520,
+            2600,
+            580
+          ],
+          "expected": "ON-GRADE SKID-MOUNT TEMP AIR-COOLED CHILLER AND CHW PUMP(S). CHILLER: 300 TONS COOLING CAP. / 11º DELTA T PUMP: 550 GPM/106 FT. HEAD ELEC: 480V/3 PH",
+          "mode": "contains"
+        },
+        {
+          "id": "m103-guidelines-maintained",
+          "page": 5,
+          "bbox": [
+            1015,
+            1580,
+            1690,
+            1620
+          ],
+          "expected": "THE FOLLOWING ORANGE COUNTY REGIONAL HISTORIC CENTER TEMPERATURE AND HUMIDITY GUIDELINES SHALL BE MAINTAINED THROUGHOUT CONSTRUCTION:",
+          "mode": "contains"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "m103-preservation-guidelines",
+          "records_path": [
+            "tables",
+            0,
+            "rows"
+          ],
+          "expected": 6
+        },
+        {
+          "id": "source-limitations",
+          "records_path": [
+            "source_limitations"
+          ],
+          "expected": 6,
+          "unique_key": "id"
+        }
+      ]
+    }
+  },
+  "module_sha256": {
+    "metadata": "ec378e75230156507c158decbddaff29285840809539af29d63e242473ff3d50",
+    "schedules": "5417f0dab47d228436b0605431ad4482bfe32a3649b360405f80b5f16d48f39a",
+    "points": "b23a6af8e4c0b2ba9742c845a99d6789ee5c1536f4040226a78a0931cb534ee9",
+    "controls_context": "b23a6af8e4c0b2ba9742c845a99d6789ee5c1536f4040226a78a0931cb534ee9",
+    "equipment_reconciliation": "de4d65264d0c069e5defe45719420d6c0060c9ba8ad9aca8641e9ef76287e8dc",
+    "point_applications": "99ef8b80aa8f3eb2bfcf049a63c7b8c9e21e721b38e8a5581024801d7f205299",
+    "supporting_evidence": "9a33b8eef8f8e813bf3878e842c66d1f448dea3ca8df07a14794f4b241269ae6"
+  },
+  "module_source_sha256": {
+    "metadata": {
+      "metadata": "ec378e75230156507c158decbddaff29285840809539af29d63e242473ff3d50"
+    },
+    "schedules": {
+      "schedules_m401": "5417f0dab47d228436b0605431ad4482bfe32a3649b360405f80b5f16d48f39a"
+    },
+    "points": {
+      "controls_context_m201": "b23a6af8e4c0b2ba9742c845a99d6789ee5c1536f4040226a78a0931cb534ee9"
+    },
+    "controls_context": {
+      "controls_context_m201": "b23a6af8e4c0b2ba9742c845a99d6789ee5c1536f4040226a78a0931cb534ee9"
+    },
+    "equipment_reconciliation": {
+      "equipment_reconciliation": "de4d65264d0c069e5defe45719420d6c0060c9ba8ad9aca8641e9ef76287e8dc"
+    },
+    "point_applications": {
+      "point_applications": "99ef8b80aa8f3eb2bfcf049a63c7b8c9e21e721b38e8a5581024801d7f205299"
+    },
+    "supporting_evidence": {
+      "supporting_evidence": "9a33b8eef8f8e813bf3878e842c66d1f448dea3ca8df07a14794f4b241269ae6"
+    }
+  },
+  "equipment_inventory": [
+    {
+      "id": "M401-AIR-HANDLING-UNIT-CHW-AHU-04",
+      "tag": "AHU-04",
+      "classification": "Roof air-handling unit",
+      "identity_column": "mark",
+      "source_table": "M401-AIR-HANDLING-UNIT-CHW",
+      "source_row": 1,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "AHU-04",
+        "unit_model": "CSAA012UB",
+        "unit_type": "OUTDOOR HORIZ. DRAW-THRU",
+        "components_in_direction_of_airflow": "MXTD3-PF-FF-CC-HF-FAN",
+        "total_max_cfm": "5400",
+        "occupied_mode_oa_cfm": "1000",
+        "unoccupied_mode_oa_cfm": "0",
+        "smoke_mode_sa_oa_cfm": "3000",
+        "external_sp_in_wg": "1.25",
+        "total_sp_in_wg": "4.19",
+        "fan_size_and_type": "20in. direct-drive plenum, full width",
+        "fan_rpm": "1960",
+        "motor_hp": "7.5",
+        "variable_frequency_drive": "YES",
+        "cooling_sensible_capacity_mbh": "121",
+        "cooling_total_capacity_mbh": "136",
+        "cooling_air_entering_db_wb": "74/62",
+        "cooling_air_leaving_db_wb": "53.6/53.2",
+        "cooling_face_velocity_fpm": "439",
+        "cooling_rows_fins_per_ft": "8/82",
+        "cooling_air_pd_in_wg": "0.56",
+        "cooling_water_entering_f": "45",
+        "cooling_water_leaving_f": "57",
+        "cooling_water_flow_gpm": "23",
+        "cooling_water_pd_ft": "1.9",
+        "heating_air_entering_f": "-",
+        "heating_air_leaving_f": "-",
+        "heating_air_pd_in_wg": "-",
+        "heating_capacity_kw": "-",
+        "prefilter_air_pd_in_wg": "0.625",
+        "prefilter_type": "2\" Pleated - MERV 8",
+        "final_filter_air_pd_in_wg": "0.747",
+        "final_filter_type": "12in. cartridge - 95% eff - MERV 15",
+        "volt_phase_hz": "460/3/60",
+        "mca": "11.75"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M401-AIR-HANDLING-UNIT-CHW-AHU-04",
+        "scope": "Scheduled air-handling unit",
+        "visual_anchor": "M-102 new-work roof plan labels AHU-04; M-201 Detail 1 caption uses AHU-4."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M401-AIR-HANDLING-UNIT-CHW-AHU-05",
+      "tag": "AHU-05",
+      "classification": "Roof air-handling unit",
+      "identity_column": "mark",
+      "source_table": "M401-AIR-HANDLING-UNIT-CHW",
+      "source_row": 2,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "AHU-05",
+        "unit_model": "CSAA014UB",
+        "unit_type": "OUTDOOR HORIZ. DRAW-THRU",
+        "components_in_direction_of_airflow": "MXTD3-PF-FF-CC-HF-FAN",
+        "total_max_cfm": "7400",
+        "occupied_mode_oa_cfm": "965",
+        "unoccupied_mode_oa_cfm": "0",
+        "smoke_mode_sa_oa_cfm": "5400",
+        "external_sp_in_wg": "1.50",
+        "total_sp_in_wg": "5.20",
+        "fan_size_and_type": "20in. direct-drive plenum, 120% width",
+        "fan_rpm": "2342",
+        "motor_hp": "10",
+        "variable_frequency_drive": "YES",
+        "cooling_sensible_capacity_mbh": "163",
+        "cooling_total_capacity_mbh": "180",
+        "cooling_air_entering_db_wb": "74/62",
+        "cooling_air_leaving_db_wb": "53.9/53.6",
+        "cooling_face_velocity_fpm": "542",
+        "cooling_rows_fins_per_ft": "6/134",
+        "cooling_air_pd_in_wg": "0.67",
+        "cooling_water_entering_f": "45",
+        "cooling_water_leaving_f": "57",
+        "cooling_water_flow_gpm": "30",
+        "cooling_water_pd_ft": "2.8",
+        "heating_air_entering_f": "-",
+        "heating_air_leaving_f": "-",
+        "heating_air_pd_in_wg": "-",
+        "heating_capacity_kw": "-",
+        "prefilter_air_pd_in_wg": "0.67",
+        "prefilter_type": "2\" Pleated - MERV 8",
+        "final_filter_air_pd_in_wg": "0.795",
+        "final_filter_type": "12in. cartridge - 95% eff - MERV 15",
+        "volt_phase_hz": "460/3/60",
+        "mca": "15.63"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M401-AIR-HANDLING-UNIT-CHW-AHU-05",
+        "scope": "Scheduled air-handling unit",
+        "visual_anchor": "M-102 new-work roof plan labels AHU-05; M-201 Detail 1 caption uses AHU-5."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M401-AIR-HANDLING-UNIT-CHW-AHU-06",
+      "tag": "AHU-06",
+      "classification": "Roof air-handling unit",
+      "identity_column": "mark",
+      "source_table": "M401-AIR-HANDLING-UNIT-CHW",
+      "source_row": 3,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "AHU-06",
+        "unit_model": "CSAA008UB",
+        "unit_type": "OUTDOOR HORIZ. DRAW-THRU",
+        "components_in_direction_of_airflow": "MXB2-PF-FF-CC-HCS-HF-FAN",
+        "total_max_cfm": "3100",
+        "occupied_mode_oa_cfm": "675",
+        "unoccupied_mode_oa_cfm": "0",
+        "smoke_mode_sa_oa_cfm": "3200",
+        "external_sp_in_wg": "1.50",
+        "total_sp_in_wg": "4.88",
+        "fan_size_and_type": "14in. belt-drive plenum, M press",
+        "fan_rpm": "3033",
+        "motor_hp": "5",
+        "variable_frequency_drive": "NO",
+        "cooling_sensible_capacity_mbh": "72",
+        "cooling_total_capacity_mbh": "84",
+        "cooling_air_entering_db_wb": "74/62",
+        "cooling_air_leaving_db_wb": "52.9/52.5",
+        "cooling_face_velocity_fpm": "388",
+        "cooling_rows_fins_per_ft": "6/108",
+        "cooling_air_pd_in_wg": "0.39",
+        "cooling_water_entering_f": "45",
+        "cooling_water_leaving_f": "57",
+        "cooling_water_flow_gpm": "14",
+        "cooling_water_pd_ft": "1.7",
+        "heating_air_entering_f": "72",
+        "heating_air_leaving_f": "90",
+        "heating_air_pd_in_wg": "0.11",
+        "heating_capacity_kw": "18",
+        "prefilter_air_pd_in_wg": "0.606",
+        "prefilter_type": "2\" Pleated - MERV 8",
+        "final_filter_air_pd_in_wg": "0.726",
+        "final_filter_type": "12in. cartridge - 95% eff - MERV 15",
+        "volt_phase_hz": "460/3/60",
+        "mca": "8.38"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M401-AIR-HANDLING-UNIT-CHW-AHU-06",
+        "scope": "Scheduled air-handling unit",
+        "visual_anchor": "M-102 new-work roof plan labels AHU-06; M-201 Detail 2 caption uses AHU-6."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M401-AIR-HANDLING-UNIT-CHW-AHU-07",
+      "tag": "AHU-07",
+      "classification": "Roof air-handling unit",
+      "identity_column": "mark",
+      "source_table": "M401-AIR-HANDLING-UNIT-CHW",
+      "source_row": 4,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "AHU-07",
+        "unit_model": "CSAA021UB",
+        "unit_type": "OUTDOOR HORIZ. DRAW-THRU",
+        "components_in_direction_of_airflow": "OAI-PF-FF-CC-HCS-FAN",
+        "total_max_cfm": "9770",
+        "occupied_mode_oa_cfm": "9770",
+        "unoccupied_mode_oa_cfm": "0",
+        "smoke_mode_sa_oa_cfm": "0",
+        "external_sp_in_wg": "1.50",
+        "total_sp_in_wg": "4.46",
+        "fan_size_and_type": "22in. diameter Housed AF, M press",
+        "fan_rpm": "1580",
+        "motor_hp": "15",
+        "variable_frequency_drive": "NO",
+        "cooling_sensible_capacity_mbh": "511",
+        "cooling_total_capacity_mbh": "898",
+        "cooling_air_entering_db_wb": "100/79",
+        "cooling_air_leaving_db_wb": "53/52.9",
+        "cooling_face_velocity_fpm": "469",
+        "cooling_rows_fins_per_ft": "8/122",
+        "cooling_air_pd_in_wg": "0.88",
+        "cooling_water_entering_f": "45",
+        "cooling_water_leaving_f": "57",
+        "cooling_water_flow_gpm": "149",
+        "cooling_water_pd_ft": "18.4",
+        "heating_air_entering_f": "35",
+        "heating_air_leaving_f": "70",
+        "heating_air_pd_in_wg": "0.15",
+        "heating_capacity_kw": "108",
+        "prefilter_air_pd_in_wg": "0.631",
+        "prefilter_type": "2\" Pleated - MERV 8",
+        "final_filter_air_pd_in_wg": "0.795",
+        "final_filter_type": "4in. cartridge - MERV 14 - premium",
+        "volt_phase_hz": "460/3/60",
+        "mca": "23.13"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M401-AIR-HANDLING-UNIT-CHW-AHU-07",
+        "scope": "Scheduled air-handling unit",
+        "visual_anchor": "M-102 new-work roof plan labels AHU-07; M-201 Detail 3 caption uses AHU-7."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M401-AIR-HANDLING-UNIT-CHW-AHU-08",
+      "tag": "AHU-08",
+      "classification": "Roof air-handling unit",
+      "identity_column": "mark",
+      "source_table": "M401-AIR-HANDLING-UNIT-CHW",
+      "source_row": 5,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "AHU-08",
+        "unit_model": "CSAA014UB",
+        "unit_type": "OUTDOOR HORIZ. DRAW-THRU",
+        "components_in_direction_of_airflow": "MXTD3-PF-FF-CC-HF-FAN",
+        "total_max_cfm": "6700",
+        "occupied_mode_oa_cfm": "690",
+        "unoccupied_mode_oa_cfm": "0",
+        "smoke_mode_sa_oa_cfm": "4800",
+        "external_sp_in_wg": "1.50",
+        "total_sp_in_wg": "4.67",
+        "fan_size_and_type": "22.25in. direct-drive plenum, full width",
+        "fan_rpm": "1821",
+        "motor_hp": "7.5",
+        "variable_frequency_drive": "YES",
+        "cooling_sensible_capacity_mbh": "148",
+        "cooling_total_capacity_mbh": "163",
+        "cooling_air_entering_db_wb": "74/62",
+        "cooling_air_leaving_db_wb": "53.9/53.6",
+        "cooling_face_velocity_fpm": "491",
+        "cooling_rows_fins_per_ft": "6/127",
+        "cooling_air_pd_in_wg": "0.58",
+        "cooling_water_entering_f": "45",
+        "cooling_water_leaving_f": "57",
+        "cooling_water_flow_gpm": "27",
+        "cooling_water_pd_ft": "2.3",
+        "heating_air_entering_f": "-",
+        "heating_air_leaving_f": "-",
+        "heating_air_pd_in_wg": "-",
+        "heating_capacity_kw": "-",
+        "prefilter_air_pd_in_wg": "0.649",
+        "prefilter_type": "2\" Pleated - MERV 8",
+        "final_filter_air_pd_in_wg": "0.773",
+        "final_filter_type": "12in. cartridge - 95% eff - MERV 15",
+        "volt_phase_hz": "460/3/60",
+        "mca": "11.75"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M401-AIR-HANDLING-UNIT-CHW-AHU-08",
+        "scope": "Scheduled air-handling unit",
+        "visual_anchor": "M-102 new-work roof plan labels AHU-08; M-201 Detail 1 caption uses AHU-8."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M401-PACKAGED-AIR-COOLED-WATER-CHILLER-CH-2",
+      "tag": "CH-2",
+      "classification": "Air-cooled chilled-water chiller",
+      "identity_column": "mark",
+      "source_table": "M401-PACKAGED-AIR-COOLED-WATER-CHILLER",
+      "source_row": 1,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "CH-2",
+        "model_no": "CGAM-030",
+        "energy_efficiency_rating": "9.1",
+        "integrated_part_load_value": "14.4",
+        "nominal_tons": "30",
+        "capacity_tons": "23",
+        "ambient_temp_f": "105",
+        "flow_gpm": "55",
+        "max_pd_ft": "15.1",
+        "ewt_f": "55",
+        "lwt_f": "45",
+        "condenser_fan_qty": "3",
+        "condenser_fan_fla_each": "3.2",
+        "compressor_qty": "2",
+        "compressor_rla_each": "24.2",
+        "compressor_lra_each": "197",
+        "mca": "66.3",
+        "max_fuse_size": "90",
+        "volt_phase": "460/3"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M401-PACKAGED-AIR-COOLED-WATER-CHILLER-CH-2",
+        "scope": "Scheduled chiller",
+        "visual_anchor": "M-102 new-work roof plan labels CH-2; M-103 phasing plan specifies temporary air-cooled chiller service while the cooling tower is replaced."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M401-COOLING-TOWER-CT-1",
+      "tag": "CT-1",
+      "classification": "Cooling tower",
+      "identity_column": "mark",
+      "source_table": "M401-COOLING-TOWER",
+      "source_row": 1,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "CT-1",
+        "model_no": "MD5016",
+        "tower_type": "COUNTERFLOW",
+        "cell_qty": "1",
+        "operating_weight_lbs": "13150",
+        "flow_gpm": "900",
+        "max_head_ft": "9.6",
+        "water_entering_f": "95",
+        "water_leaving_f": "85",
+        "ambient_wb_f": "80",
+        "drive_type": "DIRECT",
+        "fan_motor_hp": "20",
+        "fan_motor_rpm": "1800",
+        "volt_phase": "460/3"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M401-COOLING-TOWER-CT-1",
+        "scope": "Scheduled cooling tower",
+        "visual_anchor": "M-102 new-work roof plan labels CT-1; M-103 phasing requires remove/replace existing cooling tower."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER-HF-4",
+      "tag": "HF-4",
+      "classification": "Electric humidifier",
+      "identity_column": "mark",
+      "source_table": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER",
+      "source_row": 1,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "HF-4",
+        "model_no": "NH-EL-050",
+        "duct_size": "(IN AHU-4 CABINET)",
+        "minimum_capacity_lb_per_hr": "50",
+        "cylinder_qty": "1",
+        "kw": "17",
+        "volt_phase": "480/3/60"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER-HF-4",
+        "scope": "Scheduled humidifier",
+        "visual_anchor": "M-401 duct-size cell prints (IN AHU-4 CABINET); this embeds the humidifier in the associated AHU cabinet but is not a plan count."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER-HF-5",
+      "tag": "HF-5",
+      "classification": "Electric humidifier",
+      "identity_column": "mark",
+      "source_table": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER",
+      "source_row": 2,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "HF-5",
+        "model_no": "NH-EL-050",
+        "duct_size": "(IN AHU-5 CABINET)",
+        "minimum_capacity_lb_per_hr": "50",
+        "cylinder_qty": "1",
+        "kw": "17",
+        "volt_phase": "480/3/60"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER-HF-5",
+        "scope": "Scheduled humidifier",
+        "visual_anchor": "M-401 duct-size cell prints (IN AHU-5 CABINET); this embeds the humidifier in the associated AHU cabinet but is not a plan count."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER-HF-6",
+      "tag": "HF-6",
+      "classification": "Electric humidifier",
+      "identity_column": "mark",
+      "source_table": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER",
+      "source_row": 3,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "HF-6",
+        "model_no": "NH-EL-030",
+        "duct_size": "(IN AHU-6 CABINET)",
+        "minimum_capacity_lb_per_hr": "33",
+        "cylinder_qty": "1",
+        "kw": "11.4",
+        "volt_phase": "480/3/60"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER-HF-6",
+        "scope": "Scheduled humidifier",
+        "visual_anchor": "M-401 duct-size cell prints (IN AHU-6 CABINET); this embeds the humidifier in the associated AHU cabinet but is not a plan count."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER-HF-8",
+      "tag": "HF-8",
+      "classification": "Electric humidifier",
+      "identity_column": "mark",
+      "source_table": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER",
+      "source_row": 4,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "HF-8",
+        "model_no": "NH-EL-050",
+        "duct_size": "(IN AHU-8 CABINET)",
+        "minimum_capacity_lb_per_hr": "50",
+        "cylinder_qty": "1",
+        "kw": "17",
+        "volt_phase": "480/3/60"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER-HF-8",
+        "scope": "Scheduled humidifier",
+        "visual_anchor": "M-401 duct-size cell prints (IN AHU-8 CABINET); this embeds the humidifier in the associated AHU cabinet but is not a plan count."
+      },
+      "outlet_instances": null
+    }
+  ],
+  "point_application_ledger": []
+}

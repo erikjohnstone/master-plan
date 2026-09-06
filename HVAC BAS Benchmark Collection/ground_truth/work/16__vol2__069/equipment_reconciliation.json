@@ -1,0 +1,59 @@
+{
+  "document_id": "16__vol2__069",
+  "module_role": "Reconciles every M3.0 schedule identity to its source row and to the supplied plan/detail context without treating a repeated schematic or plan appearance as an extra unit. The drawing set has no dedicated control-valve or damper-actuator schedule.",
+  "schedule_registry_schema": {
+    "namespace_separator": "_",
+    "identity_columns": {"mark": "mark"},
+    "anchor_records_path": ["primary_anchors"],
+    "non_instance_table_ids": []
+  },
+  "scheduled_families": [
+    {"module": "schedules_m3.json", "bundle_module": "schedules", "table": "M3-EXISTING-AHU", "rows": 1, "class": "Existing air handling unit", "mark": ["AHU-1(E)"]},
+    {"module": "schedules_m3.json", "bundle_module": "schedules", "table": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER", "rows": 2, "class": "Existing condensing hot-water boiler", "mark": ["B-1(E)", "B-2(E)"]},
+    {"module": "schedules_m3.json", "bundle_module": "schedules", "table": "M3-NEW-PUMP", "rows": 6, "class": "New hydronic pump", "mark": ["HWP-1", "HWP-2", "BP-1", "BP-2", "CWP-1", "CWP-2"]},
+    {"module": "schedules_m3.json", "bundle_module": "schedules", "table": "M3-NEW-VFD", "rows": 2, "class": "New variable frequency drive", "mark": ["VFD-1", "VFD-2"]}
+  ],
+  "schedule_counts": {"tables": 4, "rows": 11, "building_scoped_tag_identities_including_outlet_types": 11, "other_scheduled_tag_identities": 11},
+  "primary_anchors": [
+    {"id": "M3-EXISTING-AHU-AHU-1(E)", "scope": "Existing equipment", "visual_anchor": "M1.0 loft mechanical plan labels existing AHU-1; M3.0 gives its reference-only schedule."},
+    {"id": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER-B-1(E)", "scope": "Existing equipment retained", "visual_anchor": "M1.0/M2.0 show existing B-1 context; M3.0 schedule row B-1(E)."},
+    {"id": "M3-EXISTING-CONDENSING-HOT-WATER-BOILER-B-2(E)", "scope": "Existing equipment retained", "visual_anchor": "M1.0/M2.0 show existing B-2 context; M3.0 schedule row B-2(E)."},
+    {"id": "M3-NEW-PUMP-HWP-1", "scope": "New equipment", "visual_anchor": "M1.0 new-work plan labels HWP-1; M4.0 schematic shows HWP 1 (N)."},
+    {"id": "M3-NEW-PUMP-HWP-2", "scope": "New equipment", "visual_anchor": "M1.0 new-work plan labels HWP-2; M4.0 schematic shows HWP 2 (N)."},
+    {"id": "M3-NEW-PUMP-BP-1", "scope": "New equipment", "visual_anchor": "M1.0 new-work plan labels BP-1 and directs new boiler-pump installation."},
+    {"id": "M3-NEW-PUMP-BP-2", "scope": "New equipment", "visual_anchor": "M1.0 new-work plan labels BP-2 and directs new boiler-pump installation."},
+    {"id": "M3-NEW-PUMP-CWP-1", "scope": "New equipment", "visual_anchor": "M1.0 new-work plan labels CWP-1; M4.1 schematic shows CWP 1 (N)."},
+    {"id": "M3-NEW-PUMP-CWP-2", "scope": "New equipment", "visual_anchor": "M1.0 new-work plan labels CWP-2; M4.1 schematic shows CWP 2 (N)."},
+    {"id": "M3-NEW-VFD-VFD-1", "scope": "New equipment", "visual_anchor": "M1.0 new-work plan labels VFD-1; M4.0 schematic shows VFD 1 (N)."},
+    {"id": "M3-NEW-VFD-VFD-2", "scope": "New equipment", "visual_anchor": "M1.0 new-work plan labels VFD-2; M4.0 schematic shows VFD 2 (N)."}
+  ],
+  "plan_and_detail_reconciliation": [
+    {"id": "m1-hot-water-pump-removal", "sheet": "M1.0", "scope": "Demolition plan note", "finding": "DISCONNECT AND REMOVE EXISTING HOT WATER PUMPS. The schedule's HWP-1/HWP-2 are new replacement scope, not retained existing pumps.", "assertion_ids": ["m1-remove-existing-hwp"]},
+    {"id": "m1-chilled-water-pump-removal", "sheet": "M1.0", "scope": "Demolition plan note", "finding": "DISCONNECT AND REMOVE EXISTING CHILLED WATER PUMPS. The schedule's CWP-1/CWP-2 are new replacement scope, not retained existing pumps.", "assertion_ids": ["m1-remove-existing-cwp"]},
+    {"id": "m1-new-boiler-pump", "sheet": "M1.0", "scope": "New-work plan note", "finding": "INSTALL NEW BOILER PUMP ON RETURN SIDE; this supports BP-1/BP-2 new-schedule scope but does not rewrite the printed BP-2 schedule's B-1 area-served cell.", "assertion_ids": ["m1-install-boiler-pump"]},
+    {"id": "m1-new-chilled-water-pumps", "sheet": "M1.0", "scope": "New-work plan note", "finding": "CONNECT NEW CHILLED WATER LOOP PUMPS TO EXISTING piping; this supports CWP-1/CWP-2 new-schedule scope.", "assertion_ids": ["m1-connect-cwp"]},
+    {"id": "m1-existing-ahu-three-way-valve", "sheet": "M1.0", "scope": "New-work plan note", "finding": "INSTALL NEW 3-WAY VALVE ON EXISTING AHU-1 heating-water connection and balance valve to 48 GPM. It is a design note, not a full valve schedule or count.", "assertion_ids": ["m1-ahw-three-way-valve"]},
+    {"id": "m2-new-heating-coil-detail", "sheet": "M2.0", "scope": "Detail 6", "finding": "The new heating-coil piping detail contains a NEW 3-WAY CONTROL VALVE and a flow control valve with P/T ports, union and shut-off valve. No valve tag, manufacturer, actuator torque, or schedule quantity is printed.", "assertion_ids": ["m2-new-three-way-valve"]}
+  ],
+  "control_valve_and_damper_schedule_status": {
+    "control_valve_schedule": {"status": "not_present", "value": null, "note": "The project provides individual valve notes/details and M4.0 legend symbols, not a schedule."},
+    "damper_actuator_schedule": {"status": "not_present", "value": null, "note": "M4.0 defines DA in the controls legend; no damper/actuator schedule appears in the supplied set."}
+  },
+  "source_conflicts": [
+    {"id": "bp-2-area-served", "scope": "M3.0 new pump schedule", "finding": "BP-1 and BP-2 both print area served as BOILER PUMP (B-1). The plan/detail context shows two existing boiler locations, but this record preserves the BP-2 printed schedule cell and does not silently correct it to B-2."}
+  ],
+  "tables": [],
+  "assertions": [
+    {"id": "m1-remove-existing-hwp", "page": 3, "bbox": [480,145,820,178], "expected": "DISCONNECT AND REMOVE EXISTING HOT WATER PUMPS.", "mode": "contains"},
+    {"id": "m1-remove-existing-cwp", "page": 3, "bbox": [480,275,820,315], "expected": "DISCONNECT AND REMOVE EXISTING CHILLED WATER PUMPS.", "mode": "contains"},
+    {"id": "m1-install-boiler-pump", "page": 3, "bbox": [1590,210,1880,250], "expected": "INSTALL NEW BOILER PUMP ON RETURN SIDE.", "mode": "contains"},
+    {"id": "m1-connect-cwp", "page": 3, "bbox": [1870,215,2180,255], "expected": "CONNECT NEW CHILLED WATER LOOP PUMPS TO EXISTING", "mode": "contains"},
+    {"id": "m1-ahw-three-way-valve", "page": 3, "bbox": [1590,285,1880,340], "expected": "INSTALL NEW 3-WAY VALVE ON EXISTING AIR HANDLING UNIT (AHU-1) HEATING WATER CONNECTION.", "mode": "contains"},
+    {"id": "m2-new-three-way-valve", "page": 4, "bbox": [2040,1030,2140,1070], "expected": "3-WAY CONTROL VALVE", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "scheduled-families", "records_path": ["scheduled_families"], "expected": 4, "unique_key": "table"},
+    {"id": "scheduled-primary-anchors", "records_path": ["primary_anchors"], "expected": 11, "unique_key": "id"},
+    {"id": "plan-detail-reconciliation-items", "records_path": ["plan_and_detail_reconciliation"], "expected": 6, "unique_key": "id"}
+  ]
+}

@@ -1,0 +1,407 @@
+{
+  "id": "22__vol2__012",
+  "rank": 22,
+  "title": "Center for Behavioral Medicine Chiller Upgrade",
+  "source_pdf": "pdf/22__vol2__012__Center_for_Behavioral_Medicine_Chiller_Upgrade.pdf",
+  "source_sha256": "b008fd1b72a48adc5ccbacfa74fcf377dd93bbd30c4b8d2ebec2c540a6248711",
+  "page_count": 29,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete source-bounded Rank 22 ground truth: full 29-page visual review; project/sheet/scale boundaries; all 24 M601 equipment schedule rows; all 101 M701 point rows with printed hardwired DI/DO/AI/AO cells; staged M701 sequences; M601 BACnet MS/TP note; M702 sensor-note context; E601 VFD controls-interface context; and explicit topology, physical-count and ownership limitations. Nothing is inferred as a final physical BAS takeoff.",
+  "reading_notes": [
+    "M601 is a dense vector schedule source for three water-cooled chillers, three cooling towers and thirteen water pumps, with capacities, flow, power and specification information in the literal rows.",
+    "M701 is a rare formal 101-row DDC chilled-water point matrix plus a detailed staged chiller sequence covering lead/lag, DP, tower, refrigeration-monitor and seasonal operations.",
+    "M601 explicitly calls for a BACnet MS/TP chiller communication interface and E601 records a controls-contractor VFD interface requirement."
+  ],
+  "verification_semantics": "The bundle verifier rechecks every retained row/assertion against independent MuPDF and Poppler evidence and hashes source/renders. It does not infer plan quantities, controller topology or physical installations.",
+  "module_order": [
+    "metadata",
+    "schedules",
+    "points",
+    "controls_context",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "metadata": [
+      "metadata_rank22"
+    ],
+    "schedules": [
+      "schedules_m601"
+    ],
+    "points": [
+      "points_m701"
+    ],
+    "controls_context": [
+      "controls_context_rank22"
+    ],
+    "equipment_reconciliation": [
+      "equipment_reconciliation_rank22"
+    ],
+    "point_applications": [
+      "point_applications_rank22"
+    ],
+    "supporting_evidence": [
+      "supporting_evidence_rank22"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Cover source bounds the project, behavioral-medicine facility, Kansas City location, MEP engineer and issue date.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every one of the 29 supplied pages is represented by a source sheet identifier and retained visual-review finding.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Stated scales are retained for reviewed plan sheets; no local scale is made document-global or converted to distances.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 24 M601 equipment schedule rows are literal source rows, including three chillers, three towers, one tank, two separators, two feeders and thirteen pumps.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "schedule_counts"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Six M601 schedule tables and all printed equipment rows have bounded source cells/rows.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M701's 101 formal chilled-water point rows retain the published DI/DO/AI/AO flags, while ownership and controller assignment limits remain explicit.",
+      "evidence": [
+        [
+          "modules",
+          "points",
+          "tables"
+        ],
+        [
+          "modules",
+          "point_applications",
+          "expanded_template_counts"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M601 BACnet MS/TP note plus M701 BAS control and E601 VFD controls-interface requirements are bounded without an invented topology.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M701's staged chiller, differential-pressure, tower, condenser-pump, lead/lag and refrigerant-purge logic is retained as bounded clauses.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sequence_inventory"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Source sensor contexts and M702 thermowell note are retained without derived zone or physical-device counts.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sensors_and_control_symbol_context"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Formal point scope, standalone schedule-title limits, topology limits and physical-count limits are explicit.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 29 source pages have retained full-page Poppler renders and review findings.",
+      "evidence": [
+        [
+          "page_review"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every authored source module is rechecked against both MuPDF and Poppler during bundle construction and verification.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p1-p1-full-poppler.png",
+      "finding": "Cover sheet, project identity, issue date, team/title-block information and full drawing index visually reviewed."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p2-p2-full-poppler.png",
+      "finding": "Overall Level 1 plan visually reviewed as site/building context."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p3-p3-full-poppler.png",
+      "finding": "Code-analysis sheet visually reviewed."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p4-p4-full-poppler.png",
+      "finding": "Architectural general-information and enlarged-floor-plan sheet visually reviewed."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p5-p5-full-poppler.png",
+      "finding": "Architectural wall-section/detail sheet visually reviewed."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p6-p6-full-poppler.png",
+      "finding": "Structural general-notes sheet visually reviewed."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p7-p7-full-poppler.png",
+      "finding": "Structural typical-details sheet visually reviewed."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p8-p8-full-poppler.png",
+      "finding": "Structural partial-plans sheet visually reviewed."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p9-p9-full-poppler.png",
+      "finding": "Mechanical/electrical symbols sheet visually reviewed as legend context."
+    },
+    {
+      "page": 10,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p10-p10-full-poppler.png",
+      "finding": "Mechanical/electrical general-notes sheet visually reviewed."
+    },
+    {
+      "page": 11,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p11-p11-full-poppler.png",
+      "finding": "Level 1 mechanical piping demolition plan A visually reviewed."
+    },
+    {
+      "page": 12,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p12-p12-full-poppler.png",
+      "finding": "Level 1 mechanical piping demolition plan B visually reviewed."
+    },
+    {
+      "page": 13,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p13-p13-full-poppler.png",
+      "finding": "Level 1 mechanical piping new-work plan A visually reviewed."
+    },
+    {
+      "page": 14,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p14-p14-full-poppler.png",
+      "finding": "Level 1 mechanical piping new-work plan B visually reviewed."
+    },
+    {
+      "page": 15,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p15-p15-full-poppler.png",
+      "finding": "Mechanical detail sheet visually reviewed."
+    },
+    {
+      "page": 16,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p16-p16-full-poppler.png",
+      "finding": "Mechanical P&ID demolition sheet visually reviewed."
+    },
+    {
+      "page": 17,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p17-p17-full-poppler.png",
+      "finding": "Mechanical P&ID new-work sheet visually reviewed."
+    },
+    {
+      "page": 18,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p18-p18-full-poppler.png",
+      "finding": "Mechanical P&ID sheet visually reviewed."
+    },
+    {
+      "page": 19,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p19-p19-full-poppler.png",
+      "finding": "M601 dense mechanical schedule sheet visually reviewed; all 24 equipment-schedule rows are retained separately."
+    },
+    {
+      "page": 20,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p20-p20-full-poppler.png",
+      "finding": "M701 formal 101-row DDC point matrix and staged chilled-water sequence of operation visually reviewed; coordinate-bounded rows and clauses are retained separately."
+    },
+    {
+      "page": 21,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p21-p21-full-poppler.png",
+      "finding": "M702 chilled/condenser-water controls diagram and sensor notes visually reviewed."
+    },
+    {
+      "page": 22,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p22-p22-full-poppler.png",
+      "finding": "Level 1 electrical power-plan demolition A visually reviewed."
+    },
+    {
+      "page": 23,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p23-p23-full-poppler.png",
+      "finding": "Level 1 electrical power-plan demolition B visually reviewed."
+    },
+    {
+      "page": 24,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p24-p24-full-poppler.png",
+      "finding": "Level 1 electrical power-plan new-work A visually reviewed."
+    },
+    {
+      "page": 25,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p25-p25-full-poppler.png",
+      "finding": "Level 1 electrical power-plan new-work B visually reviewed."
+    },
+    {
+      "page": 26,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p26-p26-full-poppler.png",
+      "finding": "Electrical-detail sheet visually reviewed, including typical BAS-panel-nameplate context."
+    },
+    {
+      "page": 27,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p27-p27-full-poppler.png",
+      "finding": "E601 VFD, disconnect-switch and existing panelboard schedules visually reviewed; VFD controls-interface clauses are retained separately."
+    },
+    {
+      "page": 28,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p28-p28-full-poppler.png",
+      "finding": "Electrical one-line demolition diagram visually reviewed."
+    },
+    {
+      "page": 29,
+      "review_status": "complete",
+      "render": "reviews/22__vol2__012/p29-p29-full-poppler.png",
+      "finding": "Electrical one-line new-work diagram visually reviewed."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "pages",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 29
+    },
+    {
+      "id": "schedules",
+      "path": [
+        "modules",
+        "schedules",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 6
+    },
+    {
+      "id": "points",
+      "path": [
+        "modules",
+        "points",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 1
+    }
+  ],
+  "completion_checks": {
+    "all_29_pages_visually_reviewed": true,
+    "all_authoring_modules_dual_engine_verified_at_build": true,
+    "source_limitations_explicit": true,
+    "required_objectives_covered": true
+  }
+}

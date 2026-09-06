@@ -1,0 +1,546 @@
+{
+  "document_id": "22__vol2__012",
+  "module_role": "All 101 literal M701 chilled-water-system DDC points with the printed DDC hardwired DI/DO/AI/AO flags.",
+  "tables": [
+    {
+      "id": "M701-CHW-DDC-HARDWIRED-IO",
+      "sheet": "M701",
+      "page": 20,
+      "title_as_printed": "DDC POINTS LIST SUMMARY - CHILLED WATER SYSTEM",
+      "columns": "tag|point_name|digital_input|digital_output|analog_input|analog_output",
+      "x_edges": [
+        942,
+        960,
+        1190,
+        1207,
+        1224,
+        1241,
+        1256
+      ],
+      "y_ranges": [
+        [
+          271.0,
+          283.75
+        ],
+        [
+          283.75,
+          296.5
+        ],
+        [
+          296.5,
+          309.25
+        ],
+        [
+          309.25,
+          322.0
+        ],
+        [
+          322.0,
+          334.75
+        ],
+        [
+          334.75,
+          347.5
+        ],
+        [
+          347.5,
+          360.25
+        ],
+        [
+          360.25,
+          373.0
+        ],
+        [
+          373.0,
+          385.75
+        ],
+        [
+          385.75,
+          398.5
+        ],
+        [
+          398.5,
+          411.25
+        ],
+        [
+          411.25,
+          424.0
+        ],
+        [
+          424.0,
+          436.75
+        ],
+        [
+          436.75,
+          449.5
+        ],
+        [
+          449.5,
+          462.25
+        ],
+        [
+          462.25,
+          475.0
+        ],
+        [
+          475.0,
+          487.75
+        ],
+        [
+          487.75,
+          500.5
+        ],
+        [
+          500.5,
+          513.25
+        ],
+        [
+          513.25,
+          526.0
+        ],
+        [
+          526.0,
+          538.75
+        ],
+        [
+          538.75,
+          551.5
+        ],
+        [
+          551.5,
+          564.25
+        ],
+        [
+          564.25,
+          577.0
+        ],
+        [
+          577.0,
+          589.75
+        ],
+        [
+          589.75,
+          602.5
+        ],
+        [
+          602.5,
+          615.25
+        ],
+        [
+          615.25,
+          628.0
+        ],
+        [
+          628.0,
+          640.75
+        ],
+        [
+          640.75,
+          653.5
+        ],
+        [
+          653.5,
+          666.25
+        ],
+        [
+          666.25,
+          679.0
+        ],
+        [
+          679.0,
+          691.75
+        ],
+        [
+          691.75,
+          704.5
+        ],
+        [
+          704.5,
+          717.25
+        ],
+        [
+          717.25,
+          730.0
+        ],
+        [
+          730.0,
+          742.75
+        ],
+        [
+          742.75,
+          755.5
+        ],
+        [
+          755.5,
+          768.25
+        ],
+        [
+          768.25,
+          781.0
+        ],
+        [
+          781.0,
+          793.75
+        ],
+        [
+          793.75,
+          806.5
+        ],
+        [
+          806.5,
+          819.25
+        ],
+        [
+          819.25,
+          832.0
+        ],
+        [
+          832.0,
+          844.75
+        ],
+        [
+          844.75,
+          857.5
+        ],
+        [
+          857.5,
+          870.25
+        ],
+        [
+          870.25,
+          883.0
+        ],
+        [
+          883.0,
+          895.75
+        ],
+        [
+          895.75,
+          908.5
+        ],
+        [
+          908.5,
+          921.25
+        ],
+        [
+          921.25,
+          934.0
+        ],
+        [
+          934.0,
+          946.75
+        ],
+        [
+          946.75,
+          959.5
+        ],
+        [
+          959.5,
+          972.25
+        ],
+        [
+          972.25,
+          985.0
+        ],
+        [
+          985.0,
+          997.75
+        ],
+        [
+          997.75,
+          1010.5
+        ],
+        [
+          1010.5,
+          1023.25
+        ],
+        [
+          1023.25,
+          1036.0
+        ],
+        [
+          1036.0,
+          1048.75
+        ],
+        [
+          1048.75,
+          1061.5
+        ],
+        [
+          1061.5,
+          1074.25
+        ],
+        [
+          1074.25,
+          1087.0
+        ],
+        [
+          1087.0,
+          1099.75
+        ],
+        [
+          1099.75,
+          1112.5
+        ],
+        [
+          1112.5,
+          1125.25
+        ],
+        [
+          1125.25,
+          1138.0
+        ],
+        [
+          1138.0,
+          1150.75
+        ],
+        [
+          1150.75,
+          1163.5
+        ],
+        [
+          1163.5,
+          1176.25
+        ],
+        [
+          1176.25,
+          1189.0
+        ],
+        [
+          1189.0,
+          1201.75
+        ],
+        [
+          1201.75,
+          1214.5
+        ],
+        [
+          1214.5,
+          1227.25
+        ],
+        [
+          1227.25,
+          1240.0
+        ],
+        [
+          1240.0,
+          1252.75
+        ],
+        [
+          1252.75,
+          1265.5
+        ],
+        [
+          1265.5,
+          1278.25
+        ],
+        [
+          1278.25,
+          1291.0
+        ],
+        [
+          1291.0,
+          1303.75
+        ],
+        [
+          1303.75,
+          1316.5
+        ],
+        [
+          1316.5,
+          1329.25
+        ],
+        [
+          1329.25,
+          1342.0
+        ],
+        [
+          1342.0,
+          1354.75
+        ],
+        [
+          1354.75,
+          1367.5
+        ],
+        [
+          1367.5,
+          1380.25
+        ],
+        [
+          1380.25,
+          1393.0
+        ],
+        [
+          1393.0,
+          1405.75
+        ],
+        [
+          1405.75,
+          1418.5
+        ],
+        [
+          1418.5,
+          1431.25
+        ],
+        [
+          1431.25,
+          1444.0
+        ],
+        [
+          1444.0,
+          1456.75
+        ],
+        [
+          1456.75,
+          1469.5
+        ],
+        [
+          1469.5,
+          1482.25
+        ],
+        [
+          1482.25,
+          1495.0
+        ],
+        [
+          1495.0,
+          1507.75
+        ],
+        [
+          1507.75,
+          1520.5
+        ],
+        [
+          1520.5,
+          1533.25
+        ],
+        [
+          1533.25,
+          1546.0
+        ],
+        [
+          1546.0,
+          1558.75
+        ]
+      ],
+      "rows": [
+        "1|CHILLED WATER SYSTEM ENABLE||||",
+        "2|CHILLER 1 - REMOTE ENABLE||X||",
+        "3|CHILLER 1 - STATUS||||",
+        "4|CHILLER 1 - FAULT ALARM||||",
+        "5|CHILLER 1 - % UNIT LOADING||||",
+        "6|CHILLER 1 - CONDENSER WATER VALVE COMMAND||||X",
+        "7|CHILLER 1 - CONDENSER WATER VALVE FEEDBACK|||X|",
+        "8|CHILLER 1 - CHILLED WATER VALVE COMMAND||||X",
+        "9|CHILLER 1 - CHILLED WATER VALVE FEEDBACK|||X|",
+        "10|CHILLER 1 - CONDENSER WATER DP SENSOR|||X|",
+        "11|CHILLER 1 - CHILLED WATER DP SENSOR|||X|",
+        "12|CHILLER 1 - CONDENSER WATER SUPPLY TEMP.|||X|",
+        "13|CHILLER 1 - CONDENSER WATER RETURN TEMP.|||X|",
+        "14|CHILLER 1 - CHILLED WATER SUPPLY TEMP.|||X|",
+        "15|CHILLER 1 - CHILLED WATER RETURN TEMP.|||X|",
+        "16|CHILLER 2 - REMOTE ENABLE||X||",
+        "17|CHILLER 2 - STATUS||||",
+        "18|CHILLER 2 - FAULT ALARM||||",
+        "19|CHILLER 2 - % UNIT LOADING||||",
+        "20|CHILLER 2 - CONDENSER WATER VALVE COMMAND||||X",
+        "21|CHILLER 2 - CONDENSER WATER VALVE FEEDBACK|||X|",
+        "22|CHILLER 2 - CHILLED WATER VALVE COMMAND||||X",
+        "23|CHILLER 2 - CHILLED WATER VALVE FEEDBACK|||X|",
+        "24|CHILLER 2 - CONDENSER WATER DP SENSOR|||X|",
+        "25|CHILLER 2 - CHILLED WATER DP SENSOR|||X|",
+        "26|CHILLER 2 - CONDENSER WATER SUPPLY TEMP.|||X|",
+        "27|CHILLER 2 - CONDENSER WATER RETURN TEMP.|||X|",
+        "28|CHILLER 2 - CHILLED WATER SUPPLY TEMP.|||X|",
+        "29|CHILLER 2 - CHILLED WATER RETURN TEMP.|||X|",
+        "30|CHILLER 3 - REMOTE ENABLE||X||",
+        "31|CHILLER 3 - STATUS||||",
+        "32|CHILLER 3 - FAULT ALARM||||",
+        "33|CHILLER 3 - % UNIT LOADING||||",
+        "34|CHILLER 3 - CONDENSER WATER VALVE COMMAND||||X",
+        "35|CHILLER 3 - CONDENSER WATER VALVE FEEDBACK|||X|",
+        "36|CHILLER 3 - CHILLED WATER VALVE COMMAND||||X",
+        "37|CHILLER 3 - CHILLED WATER VALVE FEEDBACK|||X|",
+        "38|CHILLER 3 - CONDENSER WATER DP SENSOR|||X|",
+        "39|CHILLER 3 - CHILLED WATER DP SENSOR|||X|",
+        "40|CHILLER 3 - CONDENSER WATER SUPPLY TEMP.|||X|",
+        "41|CHILLER 3 - CONDENSER WATER RETURN TEMP.|||X|",
+        "42|CHILLER 3 - CHILLED WATER SUPPLY TEMP.|||X|",
+        "43|CHILLER 3 - CHILLED WATER RETURN TEMP.|||X|",
+        "44|PCHP-1 PUMP START/STOP||X||",
+        "45|PCHP-1 PUMP RUN STATUS|X|||",
+        "46|PCHP-1 PUMP SPEED COMMAND||||X",
+        "47|PCHP-1 PUMP FAULT|X|||",
+        "48|PCHP-2 PUMP START/STOP||X||",
+        "49|PCHP-2 PUMP RUN STATUS|X|||",
+        "50|PCHP-2 PUMP SPEED COMMAND||||X",
+        "51|PCHP-2 PUMP FAULT|X|||",
+        "52|PCHP-3 PUMP START/STOP||X||",
+        "53|PCHP-3 PUMP RUN STATUS|X|||",
+        "54|PCHP-3 PUMP SPEED COMMAND||||X",
+        "55|PCHP-3 PUMP FAULT|X|||",
+        "56|SCHP-1 PUMP START/STOP||X||",
+        "57|SCHP-1 PUMP RUN STATUS|X|||",
+        "58|SCHP-1 PUMP SPEED COMMAND||||X",
+        "59|SCHP-1 PUMP FAULT|X|||",
+        "60|SCHP-2 PUMP START/STOP||X||",
+        "61|SCHP-2 PUMP RUN STATUS|X|||",
+        "62|SCHP-2 PUMP SPEED COMMAND||||X",
+        "63|SCHP-2 PUMP FAULT|X|||",
+        "64|COOLING TOWER 1 VALVE COMMAND||||X",
+        "65|COOLING TOWER 1 VALVE FEEDBACK|||X|",
+        "66|COOLING TOWER 1 BASIN LEVEL|||X|",
+        "67|COOLING TOWER 1 FAN START/STOP||X||",
+        "68|COOLING TOWER 1 RUN STATUS|X|||",
+        "69|COOLING TOWER 1 SPEED COMMAND||||X",
+        "70|COOLING TOWER 1 PUMP FAULT|X|||",
+        "71|COOLING TOWER 2 VALVE COMMAND||||X",
+        "72|COOLING TOWER 2 VALVE FEEDBACK|||X|",
+        "73|COOLING TOWER 2 BASIN LEVEL|||X|",
+        "74|COOLING TOWER 2 FAN START/STOP||X||",
+        "75|COOLING TOWER 2 RUN STATUS|X|||",
+        "76|COOLING TOWER 2 SPEED COMMAND||||X",
+        "77|COOLING TOWER 2 PUMP FAULT|X|||",
+        "78|COOLING TOWER 3 VALVE COMMAND||||X",
+        "79|COOLING TOWER 3 VALVE FEEDBACK|||X|",
+        "80|COOLING TOWER 3 BASIN LEVEL|||X|",
+        "81|COOLING TOWER 3 FAN START/STOP||X||",
+        "82|COOLING TOWER 3 RUN STATUS|X|||",
+        "83|COOLING TOWER 3 SPEED COMMAND||||X",
+        "84|COOLING TOWER 3 PUMP FAULT|X|||",
+        "85|CWP-1 PUMP START/STOP||X||",
+        "86|CWP-1 PUMP RUN STATUS|X|||",
+        "87|CWP-1 PUMP SPEED COMMAND||||X",
+        "88|CWP-1 PUMP FAULT|X|||",
+        "89|CWP-2 PUMP START/STOP||X||",
+        "90|CWP-2 PUMP RUN STATUS|X|||",
+        "91|CWP-2 PUMP SPEED COMMAND||||X",
+        "92|CWP-2 PUMP FAULT|X|||",
+        "93|CWP-3 PUMP START/STOP||X||",
+        "94|CWP-3 PUMP RUN STATUS|X|||",
+        "95|CWP-3 PUMP SPEED COMMAND||||X",
+        "96|CWP-3 PUMP FAULT|X|||",
+        "97|CONDENSER WATER 3-WAY VALVE||||X",
+        "98|CHILLED WATER SUPPLY TEMP.|||X|",
+        "99|CHILLED WATER RETURN TEMP.|||X|",
+        "100|CHILLED WATER DIFFERENTIAL PRESSURE SENSOR|||X|",
+        "101|REFRIGERANT MONITOR|X|||"
+      ],
+      "row_reading_order": "right",
+      "header_evidence": [
+        {
+          "bbox": [
+            1188,
+            114,
+            1576,
+            135
+          ],
+          "expected": "DDC POINTS LIST SUMMARY CHILLED WATER SYSTEM"
+        }
+      ],
+      "source_row_semantics": "Every printed source point row and its four DDC hardwired I/O flags. Other right-hand source columns concern integration, GUI application, alarming and related operational flags; they are not recast as hardwired I/O or counted physical devices here."
+    }
+  ],
+  "assertions": [],
+  "point_scope": "M701 is a formal chilled-water DDC point-list matrix. It establishes source point names and published hardwired I/O classifications but does not publish controller/card/terminal assignment, wiring, installed-device quantities or physical ownership."
+}

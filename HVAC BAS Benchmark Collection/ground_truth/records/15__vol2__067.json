@@ -1,0 +1,2164 @@
+{
+  "id": "15__vol2__067",
+  "rank": 15,
+  "title": "SLAC LCLS-II-HE Process Cooling Water Skid",
+  "source_pdf": "pdf/15__vol2__067__SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf",
+  "source_sha256": "254931f1c37ac5afb3b9ad70d21ae7c2001c2f645c29ca8d92c4aefdc294fa1d",
+  "page_count": 13,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete ground truth for all 13 supplied SLAC LCLS-II-HE PCW-skid sheets: project/title-block and page review; eight strict M7.0 equipment schedule tables with 10 rows/146 cells; schedule-inventory treatment of pipe, pressure-test, duct, utility-riser and demand tables; M6.3 typed I/O P&ID callouts; Modbus TCP/Ignition/EPICS context; sequence and alarm context; schedule/diagram reconciliation; and explicit limits on point-controller, valve and damper-actuator facts. This record does not invent PLC terminal/card counts, a point-list matrix, device register map, control-valve Cv/actuator/fail position, damper torque/fail action, installed quantity multiplier or an unprovided site address.",
+  "reading_notes": [
+    "All 13 supplied pages were visually reviewed as full-page 144 DPI Poppler renders. The P&ID and schedule sheet received additional high-resolution Poppler crop review. Every authored schedule cell and bounded assertion is independently checked against retained MuPDF and Poppler evidence.",
+    "M7.0's strict equipment component captures two N+1 PCW pumps, one PCW/CHW heat exchanger, two pump VFDs, one compressed-air regulator, one grille row, one relocated reheat coil, one existing AHU reference row and one PCW air separator row. Pot feeder, expansion tank and filter are retained in the source-inventory boundary.",
+    "M6.3 prints 23 typed diagram callouts: 15 AI, two DI, four AO and two DO. It is not a final point/PLC-terminal schedule and it explicitly assigns production of a points list to the I&C contractor, so the record does not manufacture an installed I/O total.",
+    "The controls record preserves the 42 PSIG adjustable differential-pressure control, 63°F adjustable PCW temperature control, continuous dual-pump operation, pump failure response, makeup behavior, defined alarms, Modbus TCP to Ignition SCADA and mirrored EPICS context.",
+    "The M6.3 diagram contains a modulating CHW valve and makeup actuator but the supplied set has neither a true control-valve schedule nor a damper-actuator schedule; unsupported selection data remain unavailable."
+  ],
+  "module_order": [
+    "metadata",
+    "schedules",
+    "points",
+    "controls_context",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "schedules": [
+      "schedules_m70"
+    ],
+    "points": [
+      "points_m63"
+    ],
+    "controls_context": [
+      "controls_context_m63"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Title-block/project identity is recorded as B950/NEH LCLS-II-HE:EI with SLAC/DOE context. Menlo Park, CA is marked archive metadata rather than a printed address.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every supplied page has a sheet/title disposition and saved full-page Poppler review render; representative title-block text is bounded and checked.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Plan/detail scales vary by view and include NTS. No global geometry conversion is invented.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Ten strict schedule identities are registered and classified; new, existing, relocated and P&ID-only devices remain distinct. Supplemental feeder/tank/filter identities retain their source scope.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "scheduled_families"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "additional_identities"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The strict M7.0 package preserves 10 schedule rows and 146 exact source cells, including pumps, heat exchanger, VFDs and process equipment specifications. Separate pipe/duct/testing/riser/demand schedule existence and purpose are recorded without falsely merging them into BAS devices.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ],
+        [
+          "modules",
+          "schedules",
+          "additional_schedule_inventory"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Twenty-three M6.3 typed P&ID callouts are retained with source scopes. The set has no final points list/PLC terminal schedule; zero unprinted point applications are emitted.",
+      "evidence": [
+        [
+          "modules",
+          "points",
+          "diagram_callouts"
+        ],
+        [
+          "modules",
+          "point_applications",
+          "diagram_callout_ledger"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M6.3 states CAT6 Ethernet for Modbus TCP to Ignition SCADA and mirrored EPICS context, while expressly recorded missing register/address/controller-topology fields remain unavailable.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The continuous-pump, 42 PSIG DP, 63°F CHW-valve, failure, makeup and alarm sequence contexts are transcribed from M6.3.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sequences"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "This source is a process-water skid P&ID; physical room thermostat/sensor counts are not stated. Process instruments are retained as diagram callouts instead.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sensor_and_zone_ledger"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Absence of final points/terminal schedule, detailed network map, control-valve schedule and damper-actuator schedule is explicit; demand figures are not reclassified as device quantities.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "control_valve_and_damper_schedule_status"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 13 supplied source pages received a full-page visual disposition with saved render paths hash-checked in the record.",
+      "evidence": [
+        [
+          "page_review"
+        ],
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Bundle build rechecks every authored module against retained MuPDF and Poppler captures and records source/module/render digests.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ],
+        [
+          "module_sha256"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/15__vol2__067/p1-p1-full-poppler-poppler.png",
+      "finding": "M0.0 legends/general notes and mechanical project context."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/15__vol2__067/p2-p2-full-poppler-poppler.png",
+      "finding": "MD3.0 demolition process-piping plan."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/15__vol2__067/p3-p3-full-poppler-poppler.png",
+      "finding": "M3.0 new process-piping plan/enlarged PCW-skid context."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/15__vol2__067/p4-p4-full-poppler-poppler.png",
+      "finding": "M5.1 mechanical skid/manifold/support details."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/15__vol2__067/p5-p5-full-poppler-poppler.png",
+      "finding": "M6.0 existing/new PCW mechanical schematic."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/15__vol2__067/p6-p6-full-poppler-poppler.png",
+      "finding": "M6.3 PCW P&ID with typed I/O, sequences and network context."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/15__vol2__067/p7-p7-full-poppler-poppler.png",
+      "finding": "M6.4 existing/new PCW flow diagrams."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/15__vol2__067/p8-p8-full-poppler-poppler.png",
+      "finding": "M7.0 dense mechanical schedules, riser utility and demand tables."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/15__vol2__067/p9-p9-full-poppler-poppler.png",
+      "finding": "S0.1 structural specifications/sheet list."
+    },
+    {
+      "page": 10,
+      "review_status": "complete",
+      "render": "reviews/15__vol2__067/p10-p10-full-poppler-poppler.png",
+      "finding": "S3.1 basement PCW skid structural plan."
+    },
+    {
+      "page": 11,
+      "review_status": "complete",
+      "render": "reviews/15__vol2__067/p11-p11-full-poppler-poppler.png",
+      "finding": "S5.0 structural support details."
+    },
+    {
+      "page": 12,
+      "review_status": "complete",
+      "render": "reviews/15__vol2__067/p12-p12-full-poppler-poppler.png",
+      "finding": "S5.1 PCW skid support/penetration details."
+    },
+    {
+      "page": 13,
+      "review_status": "complete",
+      "render": "reviews/15__vol2__067/p13-p13-full-poppler-poppler.png",
+      "finding": "S5.2 PCW skid base/anchorage details."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "supplied-pages",
+      "path": [
+        "modules",
+        "metadata",
+        "visual_review_pages"
+      ],
+      "operation": "length",
+      "expected": 13
+    },
+    {
+      "id": "full-page-review",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 13
+    },
+    {
+      "id": "strict-schedule-tables",
+      "path": [
+        "modules",
+        "schedules",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 8
+    },
+    {
+      "id": "typed-pid-callouts",
+      "path": [
+        "modules",
+        "points",
+        "diagram_callouts"
+      ],
+      "operation": "length",
+      "expected": 23
+    },
+    {
+      "id": "sequence-contexts",
+      "path": [
+        "modules",
+        "controls_context",
+        "sequences"
+      ],
+      "operation": "length",
+      "expected": 8
+    }
+  ],
+  "completion_checks": {
+    "every_source_page_reviewed": true,
+    "all_explicit_objective_categories_reviewed": true,
+    "all_populated_schedule_and_points_rows_captured": true,
+    "source_conflicts_and_unavailable_fields_preserved": true,
+    "two_engine_checks_current": true,
+    "final_assembly_audit_complete": true
+  },
+  "verification_semantics": "MuPDF and Poppler independently captured all 13 supplied vector-PDF pages. Every authored strict schedule cell and bounded text witness is rechecked by both engines at build/validation time; full-page Poppler review establishes page disposition, visual table/P&ID context and stated limitations. These processes corroborate literal source content and declared bounds; they do not infer missing controller terminals, physical I/O quantities, schedule rows, quantities, network attributes or valve/actuator selection data.",
+  "schema_version": "authored-module-bundle-v1",
+  "bundle_manifest": "work/15__vol2__067/document_manifest.json",
+  "bundle_manifest_sha256": "8e494897a8d4e5aba6c1fc7e4b5b56516c9f12534721d7ddff0ac51c75c6bb8a",
+  "review_render_sha256": {
+    "reviews/15__vol2__067/p1-p1-full-poppler-poppler.png": "159948ccbc317444203f8b5654c4e7fe142ecfc11285c442479fbe46f0a599a9",
+    "reviews/15__vol2__067/p2-p2-full-poppler-poppler.png": "68579e660b184e2c3dd3f5cf7e5f9cbd0736a78e4fdc89d506a191f99b079c83",
+    "reviews/15__vol2__067/p3-p3-full-poppler-poppler.png": "35742797d07125018929b0b268a6ec322660b75a3eecb4c69b870431edd82357",
+    "reviews/15__vol2__067/p4-p4-full-poppler-poppler.png": "1b15b61d4fa2dd7452dfe5576dbef7aef732def14215275323ef22ff2c817ef2",
+    "reviews/15__vol2__067/p5-p5-full-poppler-poppler.png": "7722aa3901542f3164627a1febcbc6154e98a6f1964c4a645cc2b7beb395365b",
+    "reviews/15__vol2__067/p6-p6-full-poppler-poppler.png": "f62e2e59bc18c2039ffb60d6be7c7c7f86574d8a07c30709e1706da5074375d7",
+    "reviews/15__vol2__067/p7-p7-full-poppler-poppler.png": "6542df61d5d0ba93147420ec327580cdb559cec20c050cbc413de4eb5ad3fc30",
+    "reviews/15__vol2__067/p8-p8-full-poppler-poppler.png": "1f64d84794fe5496b470f7a38a7e4160e09af0336699ae5a083b87c88025d37b",
+    "reviews/15__vol2__067/p9-p9-full-poppler-poppler.png": "4db766c9c816e2103732ce5806839c3eae08a8b7739f0659b19340b03266c42a",
+    "reviews/15__vol2__067/p10-p10-full-poppler-poppler.png": "2f11c32af4ac9058f4d935335828eb5fdd0b6d4f940ebd44e9d7af557b1a96f2",
+    "reviews/15__vol2__067/p11-p11-full-poppler-poppler.png": "c89bbe9b92dc5d17ac8f6a446c661b15c4c7ecee4362fc0feac45c6f01903055",
+    "reviews/15__vol2__067/p12-p12-full-poppler-poppler.png": "736397c6df02426d4c65f8ebe1d57b8219e8fa469de723b2640626d70d37db4a",
+    "reviews/15__vol2__067/p13-p13-full-poppler-poppler.png": "b89a8780dddc0e5db1c5a77cc236dd8e6a07400f5449e402a2317112919ee69f"
+  },
+  "modules": {
+    "metadata": {
+      "document_id": "15__vol2__067",
+      "module_role": "Project/title-block context and complete 13-page Poppler full-page visual-review ledger for the supplied SLAC LCLS-II-HE PCW skid drawing set.",
+      "scope": "Complete review of the supplied 13-page, mixed mechanical/structural drawing set only. The record distinguishes existing, demolition, new and relocated source scope; it does not claim to include omitted electrical, controls-submittal or external specification documents.",
+      "project": {
+        "name": "B950/NEH LCLS-II-HE:EI",
+        "facility": "SLAC National Accelerator Laboratory",
+        "owner_context": "Stanford University / SLAC; U.S. Department of Energy logo is printed in the title block.",
+        "project_identifier": "B0950.x",
+        "project_location": {
+          "status": "archive_metadata_only",
+          "value": "Menlo Park, CA",
+          "note": "The supplied title blocks identify B950/NEH and SLAC but do not print a street/city address; the location is preserved as source-archive metadata rather than title-block fact."
+        },
+        "current_review_authorization": "SLAC Building Inspection Office Construction Authorization (IFC), PRS# 26-058, shown with date 3/9/2026 on supplied pages.",
+        "revision_context": "Mechanical pages visibly carry Bulletin 4.2 - PCW Skid Replacement - Installation, revision 7, dated 26 JAN 19; individual sheet logs also retain earlier bullets and page-specific revisions. Revision letters/numbers are not flattened into a single project-wide revision claim."
+      },
+      "scale_semantics": {
+        "finding": "All 13 pages were reviewed. Scale is view-specific: plan/detail captions include 1/8 in = 1 ft, 1/4 in = 1 ft, 1/2 in = 1 ft, 1 in = 1 ft or NTS as appropriate. The repeating title block does not establish one safe global geometry scale for all mechanical and structural views.",
+        "global_measured_takeoff_warning": "The record preserves schedule and P&ID facts, not a geometric quantity takeoff. Any measuring tool must read the local caption/graphic scale of the individual view."
+      },
+      "visual_review_pages": [
+        {
+          "page": 1,
+          "sheet": "M0.0",
+          "title": "SYM, LEGENDS, AND GEN. NOTES",
+          "review_status": "complete",
+          "finding": "Mechanical symbols, abbreviations, general construction notes, scope-of-work text and title-block/revision context; no populated equipment schedule or point list.",
+          "render": "reviews/15__vol2__067/p1-p1-full-poppler-poppler.png"
+        },
+        {
+          "page": 2,
+          "sheet": "MD3.0",
+          "title": "BASEMENT (NEH) - PROCESS PIPING OVERALL PLAN - DEMO",
+          "review_status": "complete",
+          "finding": "Demolition plan including existing PCW skid/control-panel/instrumentation removal and protection context; not a new-equipment schedule.",
+          "render": "reviews/15__vol2__067/p2-p2-full-poppler-poppler.png"
+        },
+        {
+          "page": 3,
+          "sheet": "M3.0",
+          "title": "BASEMENT (NEH) - PROCESS PIPING OVERALL PLAN",
+          "review_status": "complete",
+          "finding": "New PCW skid plan/enlarged view, CHW/PCW routing, pump/PLC panel location and keyed installation notes.",
+          "render": "reviews/15__vol2__067/p3-p3-full-poppler-poppler.png"
+        },
+        {
+          "page": 4,
+          "sheet": "M5.1",
+          "title": "MECHANICAL DETAILS",
+          "review_status": "complete",
+          "finding": "Skid plan/isometrics, PCW custom manifold and pipe support details; manufacturer reconfiguration note is visible.",
+          "render": "reviews/15__vol2__067/p4-p4-full-poppler-poppler.png"
+        },
+        {
+          "page": 5,
+          "sheet": "M6.0",
+          "title": "MECHANICAL SCHEMATIC - PCW",
+          "review_status": "complete",
+          "finding": "Existing and new NEH PCW schematic with project flow/routing context; no standalone points list.",
+          "render": "reviews/15__vol2__067/p5-p5-full-poppler-poppler.png"
+        },
+        {
+          "page": 6,
+          "sheet": "M6.3",
+          "title": "MECHANICAL SCHEMATIC - PCW P&ID",
+          "review_status": "complete",
+          "finding": "Existing/new P&ID, typed I/O callouts, sequence of operation, alarm limits, Modbus-to-Ignition/EPICS wording and factory-versus-field I&C boundary.",
+          "render": "reviews/15__vol2__067/p6-p6-full-poppler-poppler.png"
+        },
+        {
+          "page": 7,
+          "sheet": "M6.4",
+          "title": "MECH SCHEMATIC - PCW FLOW DIAG",
+          "review_status": "complete",
+          "finding": "Existing/new PCW skid flow diagrams; confirms factory-provided I&C within the skid boundary.",
+          "render": "reviews/15__vol2__067/p7-p7-full-poppler-poppler.png"
+        },
+        {
+          "page": 8,
+          "sheet": "M7.0",
+          "title": "MECHANICAL SCHEDULES",
+          "review_status": "complete",
+          "finding": "Dense schedule sheet: pumps, pipe/duct installation, pressure tests, heat exchanger, VFDs, compressed-air regulator, grille, reheat coil, existing AHU, air separator, pot feeder, expansion tank, filter, riser utility and existing/new PCW demand.",
+          "render": "reviews/15__vol2__067/p8-p8-full-poppler-poppler.png"
+        },
+        {
+          "page": 9,
+          "sheet": "S0.1",
+          "title": "STRUCTURAL SPECIFICATIONS",
+          "review_status": "complete",
+          "finding": "Structural specifications and structural sheet list; contextual only for equipment anchorage/support.",
+          "render": "reviews/15__vol2__067/p9-p9-full-poppler-poppler.png"
+        },
+        {
+          "page": 10,
+          "sheet": "S3.1",
+          "title": "BSMT - PCW SKID",
+          "review_status": "complete",
+          "finding": "Basement PCW skid structural plan and equipment schedule/dimension context; not a BAS schedule.",
+          "render": "reviews/15__vol2__067/p10-p10-full-poppler-poppler.png"
+        },
+        {
+          "page": 11,
+          "sheet": "S5.0",
+          "title": "STRUCTURAL DETAILS",
+          "review_status": "complete",
+          "finding": "Structural framing/support details; one detail marked NOT USED.",
+          "render": "reviews/15__vol2__067/p11-p11-full-poppler-poppler.png"
+        },
+        {
+          "page": 12,
+          "sheet": "S5.1",
+          "title": "STRUCTURAL DETAILS",
+          "review_status": "complete",
+          "finding": "PCW skid support/anchorage/wall-penetration structural details.",
+          "render": "reviews/15__vol2__067/p12-p12-full-poppler-poppler.png"
+        },
+        {
+          "page": 13,
+          "sheet": "S5.2",
+          "title": "STRUCTURAL DETAILS",
+          "review_status": "complete",
+          "finding": "PCW skid base/anchorage structural details.",
+          "render": "reviews/15__vol2__067/p13-p13-full-poppler-poppler.png"
+        }
+      ],
+      "tables": [],
+      "assertions": [
+        {
+          "id": "p1-project-family",
+          "page": 1,
+          "bbox": [
+            2920,
+            2365,
+            3090,
+            2410
+          ],
+          "expected": "B950/NEH LCLS-II-HE:EI",
+          "mode": "exact"
+        },
+        {
+          "id": "p1-sheet-title",
+          "page": 1,
+          "bbox": [
+            2920,
+            2418,
+            3320,
+            2465
+          ],
+          "expected": "SYM, LEGENDS, AND GEN. NOTES",
+          "mode": "contains"
+        },
+        {
+          "id": "p6-sheet-number",
+          "page": 6,
+          "bbox": [
+            3205,
+            2318,
+            3265,
+            2355
+          ],
+          "expected": "M6.3",
+          "mode": "exact"
+        },
+        {
+          "id": "p8-sheet-title",
+          "page": 8,
+          "bbox": [
+            2920,
+            2418,
+            3240,
+            2470
+          ],
+          "expected": "MECHANICAL MECHANICAL SCHEDULES",
+          "mode": "exact"
+        },
+        {
+          "id": "p8-sheet-number",
+          "page": 8,
+          "bbox": [
+            3205,
+            2318,
+            3265,
+            2355
+          ],
+          "expected": "M7.0",
+          "mode": "exact"
+        },
+        {
+          "id": "p9-sheet-number",
+          "page": 9,
+          "bbox": [
+            3205,
+            2315,
+            3265,
+            2355
+          ],
+          "expected": "S0.1",
+          "mode": "exact"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "full-page-visual-review",
+          "records_path": [
+            "visual_review_pages"
+          ],
+          "expected": 13,
+          "unique_key": "page"
+        }
+      ]
+    },
+    "schedules": {
+      "document_id": "15__vol2__067",
+      "module_role": "Cell-by-cell schedule transcription from M7.0 for the new PCW skid and directly associated mechanical equipment. Existing/reference schedules and demand ledgers are retained as distinct source classifications; no schedule row is silently expanded into an installed field count.",
+      "source_sheet": "M7.0",
+      "source_page": 8,
+      "tables": [
+        {
+          "id": "M70-NEW-PCW-PUMPS",
+          "page": 8,
+          "sheet": "M7.0",
+          "title": "(N) PUMP SCHEDULE",
+          "classification": "Two scheduled new inline PCW pumps; note 1 identifies the pair as N+1 pumps.",
+          "columns": "mark|manufacturer_model|location|service|type|design_flow_gpm|selection_flow_gpm|design_head_ftwg_psi|max_flow_gpm|max_head_ftwg_psi|bhp|hp|rpm|electrical_v_ph_hz|total_operating_weight_lb|remarks",
+          "x_edges": [
+            170,
+            306,
+            423,
+            500,
+            565,
+            627,
+            682,
+            745,
+            806,
+            859,
+            921,
+            965,
+            994,
+            1024,
+            1090,
+            1184,
+            1262
+          ],
+          "y_edges": [
+            196,
+            229,
+            258
+          ],
+          "rows": [
+            "B950A-PCWP-1001|GOULDS 125SV-55BGT-4C60|MECH ROOM 4 60B24|NEH/XPP|INLINE|581.9|650|277/120|677|300/130|73.9|75|3500|480/3/60|1386|(1)-(9)",
+            "B950A-PCWP-1002|GOULDS 125SV-55BGT-4C60|MECH ROOM 4 60B24|NEH/XPP|INLINE|581.9|650|277/120|677|300/130|73.9|75|3500|480/3/60|1386|(1)-(9)"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                170,
+                131,
+                1262,
+                195
+              ],
+              "expected": "(N) PUMP SCHEDULE MARK MANUFACTURER AND MODEL NUMBER LOCATION SERVICE TYPE DESIGN FLOW SELECTION FLOW DESIGN HEAD MAX FLOW MAX HEAD MOTOR ELECTRICAL TOTAL OPERATING WEIGHT REMARKS"
+            }
+          ]
+        },
+        {
+          "id": "M70-NEW-HEAT-EXCHANGER",
+          "page": 8,
+          "sheet": "M7.0",
+          "title": "(N) HEAT EXCHANGER SCHEDULE",
+          "classification": "One new PCW-to-CHW heat exchanger; high-temperature side is PCW and low-temperature side is CHW exactly as printed.",
+          "columns": "mark|manufacturer_model|location|service|design_capacity_mbh|max_capacity_mbh|high_design_gpm|high_max_gpm|high_ewt_f|high_lwt_f|high_dp_psi|high_fluid|low_design_gpm|low_max_gpm|low_ewt_f|low_lwt_f|low_dp_psi|low_fluid|design_plates|max_plates|total_operating_weight|remarks",
+          "x_edges": [
+            1334,
+            1411,
+            1505,
+            1574,
+            1641,
+            1705,
+            1765,
+            1835,
+            1894,
+            1928,
+            1965,
+            2004,
+            2035,
+            2110,
+            2167,
+            2204,
+            2242,
+            2290,
+            2325,
+            2380,
+            2423,
+            2497,
+            2560
+          ],
+          "y_edges": [
+            738,
+            772
+          ],
+          "rows": [
+            "B950A-HX-PCWP-1001|BELL & GOSSETT AP47|B950A MECHANICAL ROOM|B950A|3462|3905|581.9|650|74°|62°|4.97|PCW|349.12|389.16|45|65|1.92|CHW|186|228|1648 LBS|(1)-(3)"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1334,
+                671,
+                2560,
+                737
+              ],
+              "expected": "(N) HEAT EXCHANGER SCHEDULE MARK MANUFACTURER AND MODEL NUMBER LOCATION SERVICE DESIGN CAPACITY MAX CAPACITY HIGH TEMP WATER SIDE LOW TEMP WATER SIDE DESIGN PLATES MAX PLATES TOTAL OPERATING WEIGHT REMARKS"
+            }
+          ]
+        },
+        {
+          "id": "M70-NEW-VFDS",
+          "page": 8,
+          "sheet": "M7.0",
+          "title": "(N) VFD SCHEDULE",
+          "classification": "Two scheduled new ABB VFDs associated one-for-one with the new PCW pumps.",
+          "columns": "mark|manufacturer_model|hp|fla|volts|weight|enclosure|remarks",
+          "x_edges": [
+            1570,
+            1665,
+            1790,
+            1825,
+            1870,
+            1930,
+            1998,
+            2075,
+            2150
+          ],
+          "y_edges": [
+            1018,
+            1050,
+            1082
+          ],
+          "rows": [
+            "B950A-VFD-PCWP-1001|PUMP SMART ABB ACH580-PCR-096A-4|75|96|480|359 LBS|NEMA 3R|(1)-(5)",
+            "B950A-VFD-PCWP-1002|PUMP SMART ABB ACH580-PCR-096A-4|75|96|480|359 LBS|NEMA 3R|(1)-(5)"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1570,
+                956,
+                2150,
+                1017
+              ],
+              "expected": "(N) VFD SCHEDULE MARK MANUFACTURER AND MODEL NUMBER HP FLA VOLTS WEIGHT ENCLOSURE REMARKS"
+            }
+          ]
+        },
+        {
+          "id": "M70-COMPRESSED-AIR-REGULATOR",
+          "page": 8,
+          "sheet": "M7.0",
+          "title": "(N) COMPRESSED AIR REGULATOR",
+          "classification": "One new compressed-air regulator serving Hutch 1.3; it is a pressure-regulating assembly, not a BAS control valve schedule.",
+          "columns": "mark|manufacturer_model|location|outlet_pressure|diaphragm|inlet_outlet_size|wall_mountable|shipping_weight|remarks",
+          "x_edges": [
+            2225,
+            2320,
+            2425,
+            2500,
+            2560,
+            2660,
+            2740,
+            2825,
+            2900,
+            2980
+          ],
+          "y_edges": [
+            1045,
+            1080
+          ],
+          "rows": [
+            "(N) REG-1|CONOFLOW GH30-XTHMXSXG|HUTCH 1.3|125 PSIG|BUNA \"N\" (WITH RELIEF, NO BLEED)|1/4\"|YES|2 LB|1-4"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                2225,
+                990,
+                3035,
+                1044
+              ],
+              "expected": "(N) COMPRESSED AIR REGULATOR MARK MANUFACTURER AND MODEL NUMBER LOCATION OUTLET PRESSURE DIAPHRAGM INLET OUTLET SIZE WALL MOUNTABLE SHIPPING WEIGHT REMARKS"
+            }
+          ]
+        },
+        {
+          "id": "M70-GRILLE",
+          "page": 8,
+          "sheet": "M7.0",
+          "title": "GRILLE SCHEDULE",
+          "classification": "One scheduled grille type; note 1 explicitly requires a volume damper before the grille connection but does not provide an actuator schedule.",
+          "columns": "mark|maximum_airflow_cfm|design_airflow_cfm|air_velocity_fpm|face_size_in|connection_size_in|max_static_pressure_drop_inwg|max_nc|mounting_location|material|finish|basis_of_design|notes",
+          "x_edges": [
+            180,
+            245,
+            310,
+            400,
+            510,
+            600,
+            700,
+            790,
+            845,
+            920,
+            985,
+            1075,
+            1175,
+            1240
+          ],
+          "y_edges": [
+            875,
+            912
+          ],
+          "rows": [
+            "RG-1|1555|1410/1415|450|30x16|30x16|0.08|25|DUCT|STEEL|#26 WHITE|TITUS 350RL|(1)-(2)"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                180,
+                793,
+                1240,
+                875
+              ],
+              "expected": "GRILLE SCHEDULE MARK NUMBER MAX AIRFLOW DESIGN AIRFLOW AIR VELOCITY FACE SIZE CONNECTION SIZE MAX STATIC PRESS DROP MAX NC MOUNTING LOCATION MATERIAL FINISH BASIS OF DESIGN NOTES"
+            }
+          ]
+        },
+        {
+          "id": "M70-RELOCATED-REHEAT-COIL",
+          "page": 8,
+          "sheet": "M7.0",
+          "title": "REHEAT COIL SCHEDULES (RELOCATED)",
+          "classification": "One existing reheat coil relocated from demolition phase; the schedule note says pre-measurement is required to determine actual airflow.",
+          "columns": "mark|room_number|room_name|maximum_airflow_cfm|capacity_mbh|air_pd_inwg|eat_f|lat_f|flow_gpm|water_pd_ftwg|ewt_f|lwt_f|pipe_connection_in|coil_dimension_hxw_in|basis_of_design|note",
+          "x_edges": [
+            175,
+            260,
+            440,
+            600,
+            675,
+            738,
+            795,
+            850,
+            910,
+            960,
+            1035,
+            1093,
+            1155,
+            1220,
+            1285,
+            1340,
+            1400
+          ],
+          "y_edges": [
+            1092,
+            1135
+          ],
+          "rows": [
+            "B950-RHC-1002|100H3|HUTCH 1.3 XPP|6,050|126|0.10|55|73|9|16.3|180|155|1 1/4|24x48|HEATCRAFT|"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                175,
+                1025,
+                1400,
+                1092
+              ],
+              "expected": "REHEAT COIL SCHEDULES RELOCATED ID TAG ROOM NUMBER ROOM NAME MAXIMUM AIRFLOW CAPACITY AIR PD EAT LAT FLOW WATER PD EWT LWT PIPE CONN COIL DIMENSION BASIS OF DESIGN"
+            }
+          ]
+        },
+        {
+          "id": "M70-EXISTING-AHU",
+          "page": 8,
+          "sheet": "M7.0",
+          "title": "AIR HANDLING UNIT SCHEDULE (EXISTING)",
+          "classification": "One existing AHU reference schedule. Its note limits new work to motorized-damper airflow adjustment and does not identify those dampers by tag or actuator model.",
+          "columns": "mark|location|capacity_designed_cfm|outside_air_cfm|fan_type|fan_count|design_total_sp_inwg|bhp_per_fan|motor_hp_per_fan|electrical_power_vphz|fla_amps|mca_amps|cooling_capacity_mbh|eat_fdb_fwb|lat_fdb_fwb|ewt_f|lwt_f|apd_inwg|wpd_ft|pre_filter|final_filter|weight_lb|basis_of_design|note",
+          "x_edges": [
+            175,
+            295,
+            410,
+            510,
+            585,
+            685,
+            750,
+            825,
+            880,
+            960,
+            1035,
+            1095,
+            1150,
+            1210,
+            1270,
+            1350,
+            1415,
+            1480,
+            1540,
+            1615,
+            1700,
+            1790,
+            1865,
+            2000,
+            2100
+          ],
+          "y_edges": [
+            1320,
+            1365
+          ],
+          "rows": [
+            "B950-AHU-3001|MECH RM|60,000|5,445|DIRECT DRIVE PLENUM|10|9.36|12.54|15|460/3/60|146|164|1,195|68.5/58.2|48.6/48.5|44|55.5|1.03|15.26|MERV 8|99.97 HEPA||TEMTROL|1, 2, 3"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                175,
+                1231,
+                2100,
+                1320
+              ],
+              "expected": "AIR HANDLING UNIT SCHEDULE EXISTING MARK NUMBER LOCATION CAPACITY DESIGNED OUTSIDE AIR FANS COILS FILTERS WEIGHT BASIS OF DESIGN NOTE"
+            }
+          ]
+        },
+        {
+          "id": "M70-PCW-AIR-SEPARATOR",
+          "page": 8,
+          "sheet": "M7.0",
+          "title": "PCW AIR SEPARATOR SCHEDULE",
+          "classification": "One new PCW air separator.",
+          "columns": "mark|manufacturer_model|location|service|inlet_connection|outlet_connection|tank_volume|max_capacity|max_pressure|max_temperature|dimensions|tank_weight_dry|tank_weight_wetted|notes",
+          "x_edges": [
+            1050,
+            1165,
+            1260,
+            1370,
+            1450,
+            1530,
+            1605,
+            1680,
+            1735,
+            1800,
+            1865,
+            1950,
+            2040,
+            2130,
+            2225
+          ],
+          "y_edges": [
+            1538,
+            1575
+          ],
+          "rows": [
+            "(N) B950A-AS-1001|ROLAIRTROL RL-6FB|B950A MECH ROOM|AIR SEPARATOR|6\" FLANGE|6\" FLANGE|34 GAL|850 GPM|125 PSIG|350°F|44-1/16\"H x 21-1/4\"Ø|280 LBS|564 LBS|(1)-(6)"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1050,
+                1488,
+                2225,
+                1538
+              ],
+              "expected": "PCW AIR SEPARATOR SCHEDULE MARK MFR AND MODEL NUMBER LOCATION SERVICE INLET CONNECTION OUTLET CONNECTION TANK VOLUME MAX CAPACITY MAX PRESSURE MAX TEMP DIMENSIONS TANK WEIGHT DRY WETTED NOTES"
+            }
+          ]
+        }
+      ],
+      "additional_schedule_inventory": [
+        {
+          "id": "pipe-installation",
+          "classification": "Six service/material rows: PCWS/R under 2-1/2 in copper; PCWS/R 3 in and larger 316L stainless; CHWS/R Schedule 40 black steel; compressed air copper; heating hot water copper; and makeup water copper. This is an installation schedule, not a device inventory."
+        },
+        {
+          "id": "pressure-testing",
+          "classification": "Four testing rows: PCW, CHW, makeup water and compressed air; no BAS point count is inferred."
+        },
+        {
+          "id": "duct-installation",
+          "classification": "Two material rows: metal duct and fabric duct; this is not a damper-actuator schedule."
+        },
+        {
+          "id": "riser-utility-hutch-1-3",
+          "classification": "PCW riser utility schedule contains 29 literal branch/device lines and a printed total flow of 65.45 GPM. Existing/new identifiers and grouped branch sums are retained in equipment reconciliation."
+        },
+        {
+          "id": "flow-demand",
+          "classification": "NEH PCW Flow Demand separates existing and new columns. Printed existing PCW flow is 536.9 GPM, new PCW flow is 581.998 GPM, future factor increase is 10%, resulting new PCW flow requirement is 640.20 GPM, and pump selection flow is 650 GPM."
+        },
+        {
+          "id": "pcw-pot-feeder",
+          "classification": "One new B950A-PF-1001 pot feeder: JL Wingert Co 5HD; B950A mechanical room; 5.79 gal; 200 PSIG; 200°F; 21-1/8 in H x 10 in diameter; dry 33 lb/wetted 81.37 lb."
+        },
+        {
+          "id": "pcw-expansion-tank",
+          "classification": "One new B950A-ET-1001 expansion tank: Wessels NLA-85, part 22010085; 23 gal; 125 PSIG; 240°F; 37 in H x 16 in diameter; dry 90 lb/wetted 281.82 lb."
+        },
+        {
+          "id": "pcw-filter",
+          "classification": "One new B950A-WF-1001 water filter: Shellco SJCH-170 filter housing, four Shellco SJC-170-20 filter cartridges, 150 GPM per cartridge/600 GPM total, 20 micron."
+        }
+      ],
+      "control_valve_and_damper_schedule_status": {
+        "control_valve_schedule": {
+          "status": "not_present_as_a_schedule",
+          "value": null,
+          "note": "The M6.3 P&ID shows an AO TCV MODULATION callout, but the set has no tabular control-valve schedule with tag, Cv, actuator, signal or fail position."
+        },
+        "damper_actuator_schedule": {
+          "status": "not_present",
+          "value": null,
+          "note": "M7.0 mentions motorized dampers in an existing-AHU note but prints no damper tag list, actuator torque/model, control signal or fail position."
+        }
+      },
+      "assertions": [],
+      "inventory_checks": [
+        {
+          "id": "m70-transcribed-equipment-schedule-tables",
+          "records_path": [
+            "tables"
+          ],
+          "expected": 8,
+          "unique_key": "id"
+        },
+        {
+          "id": "m70-transcribed-equipment-schedule-rows",
+          "records_path": [
+            "tables",
+            0,
+            "rows"
+          ],
+          "expected": 2
+        }
+      ]
+    },
+    "points": {
+      "document_id": "15__vol2__067",
+      "module_role": "Literal typed I/O callouts visibly printed on the new NEH PCW skid P&ID, M6.3. These are diagram callouts, not a contractor-produced points list or an installed PLC terminal schedule.",
+      "source_sheet": "M6.3",
+      "source_page": 6,
+      "tables": [],
+      "diagram_callouts": [
+        {
+          "id": "M63-AI-CHWR-FLOW",
+          "type": "AI",
+          "point_name": "CHWR FLOW",
+          "device_symbol": "FM",
+          "status": "(N)",
+          "scope": "heat-exchanger/CHW return branch"
+        },
+        {
+          "id": "M63-AI-CHWR-TEMP",
+          "type": "AI",
+          "point_name": "CHWR TEMP",
+          "device_symbol": "TIT",
+          "status": "(N)",
+          "scope": "heat-exchanger/CHW return branch"
+        },
+        {
+          "id": "M63-AI-PCWR-TEMP",
+          "type": "AI",
+          "point_name": "PCWR TEMP",
+          "device_symbol": "TIT",
+          "status": "(N)",
+          "scope": "PCW return at heat exchanger"
+        },
+        {
+          "id": "M63-AI-PCWR-PRESSURE",
+          "type": "AI",
+          "point_name": "PCWR PRESSURE",
+          "device_symbol": "PIT",
+          "status": "(N)",
+          "scope": "PCW return at heat exchanger"
+        },
+        {
+          "id": "M63-AO-TCV-MODULATION",
+          "type": "AO",
+          "point_name": "TCV MODULATION",
+          "device_symbol": "MAV",
+          "status": "(N)",
+          "scope": "chilled-water control valve at heat exchanger",
+          "qualification": "No valve tag, Cv, actuator make/model, signal range, or fail position is printed in this supplied set."
+        },
+        {
+          "id": "M63-AI-CHWS-TEMP",
+          "type": "AI",
+          "point_name": "CHWS TEMP",
+          "device_symbol": "TIT",
+          "status": "(N)",
+          "scope": "CHW supply to heat exchanger"
+        },
+        {
+          "id": "M63-AI-PCW-DP",
+          "type": "AI",
+          "point_name": "PCW DP",
+          "device_symbol": "DPIT",
+          "status": "(N)",
+          "scope": "PCW differential-pressure control feedback"
+        },
+        {
+          "id": "M63-AI-PCWS-PRESSURE-HX",
+          "type": "AI",
+          "point_name": "PCWS PRESSURE",
+          "device_symbol": "PIT",
+          "status": "(N)",
+          "scope": "PCW supply at heat exchanger"
+        },
+        {
+          "id": "M63-AI-PCWS-TEMP",
+          "type": "AI",
+          "point_name": "PCWS TEMP",
+          "device_symbol": "TIT",
+          "status": "(N)",
+          "scope": "PCW supply downstream of air separator"
+        },
+        {
+          "id": "M63-AI-PCWS-PRESSURE-AS",
+          "type": "AI",
+          "point_name": "PCWS PRESSURE",
+          "device_symbol": "PIT",
+          "status": "(N)",
+          "scope": "PCW supply at air-separator branch"
+        },
+        {
+          "id": "M63-AI-MAKEUP-FLOW",
+          "type": "AI",
+          "point_name": "MAKEUP FLOW",
+          "device_symbol": "FM",
+          "status": "(N)",
+          "scope": "makeup-water line"
+        },
+        {
+          "id": "M63-AO-MAKEUP-ACTUATOR",
+          "type": "AO",
+          "point_name": "MAKEUP ACTUATOR",
+          "device_symbol": "solenoid/actuator line",
+          "status": "(N)",
+          "scope": "makeup-water line",
+          "qualification": "The sequence calls the makeup-water solenoid valve normally open; the drawing does not publish a valve tag, actuator model, signal range or fail position."
+        },
+        {
+          "id": "M63-AI-PCW-PUMP-1001-DP",
+          "type": "AI",
+          "point_name": "PCW PUMP DP",
+          "device_symbol": "DPIT",
+          "status": "(N)",
+          "scope": "B950A-PCWP-1001"
+        },
+        {
+          "id": "M63-DI-PCW-PUMP-1001-ALARM",
+          "type": "DI",
+          "point_name": "ALARM",
+          "device_symbol": "pump/VFD interface",
+          "status": "(N)",
+          "scope": "B950A-PCWP-1001"
+        },
+        {
+          "id": "M63-AO-PCW-PUMP-1001-VFD-SPEED",
+          "type": "AO",
+          "point_name": "VFD SPEED",
+          "device_symbol": "pump/VFD interface",
+          "status": "(N)",
+          "scope": "B950A-PCWP-1001"
+        },
+        {
+          "id": "M63-DO-PCW-PUMP-1001-START-STOP",
+          "type": "DO",
+          "point_name": "START/STOP",
+          "device_symbol": "pump/VFD interface",
+          "status": "(N)",
+          "scope": "B950A-PCWP-1001"
+        },
+        {
+          "id": "M63-AI-PCW-PUMP-1001-CURRENT",
+          "type": "AI",
+          "point_name": "CURRENT",
+          "device_symbol": "pump/VFD interface",
+          "status": "(N)",
+          "scope": "B950A-PCWP-1001"
+        },
+        {
+          "id": "M63-AI-PCW-PUMP-1002-DP",
+          "type": "AI",
+          "point_name": "PCW PUMP DP",
+          "device_symbol": "DPIT",
+          "status": "(N)",
+          "scope": "B950A-PCWP-1002"
+        },
+        {
+          "id": "M63-DI-PCW-PUMP-1002-ALARM",
+          "type": "DI",
+          "point_name": "ALARM",
+          "device_symbol": "pump/VFD interface",
+          "status": "(N)",
+          "scope": "B950A-PCWP-1002"
+        },
+        {
+          "id": "M63-AO-PCW-PUMP-1002-VFD-SPEED",
+          "type": "AO",
+          "point_name": "VFD SPEED",
+          "device_symbol": "pump/VFD interface",
+          "status": "(N)",
+          "scope": "B950A-PCWP-1002"
+        },
+        {
+          "id": "M63-DO-PCW-PUMP-1002-START-STOP",
+          "type": "DO",
+          "point_name": "START/STOP",
+          "device_symbol": "pump/VFD interface",
+          "status": "(N)",
+          "scope": "B950A-PCWP-1002"
+        },
+        {
+          "id": "M63-AI-PCW-PUMP-1002-CURRENT",
+          "type": "AI",
+          "point_name": "CURRENT",
+          "device_symbol": "pump/VFD interface",
+          "status": "(N)",
+          "scope": "B950A-PCWP-1002"
+        },
+        {
+          "id": "M63-AI-PCW-FILTER-DP",
+          "type": "AI",
+          "point_name": "PCW FILTER DP",
+          "device_symbol": "DPIT",
+          "status": "(N)",
+          "scope": "B950A-WF-1001 water filter"
+        }
+      ],
+      "point_summary": {
+        "AI": 15,
+        "DI": 2,
+        "AO": 4,
+        "DO": 2,
+        "diagram_callouts_total": 23
+      },
+      "source_boundary": "M6.3 labels the I/O at the skid/diagram level. It does not supply a standalone points-list table, controller I/O card schedule, terminal numbers, signal ranges, wiring methods or a point-to-controller ownership matrix. These 20 callouts must not be treated as a verified installed PLC-terminal total.",
+      "assertions": [
+        {
+          "id": "m63-makeup-io",
+          "page": 6,
+          "bbox": [
+            1560,
+            1210,
+            1960,
+            1255
+          ],
+          "expected": "MAKEUP FLOW MAKEUP ACTUATOR AI AO",
+          "mode": "contains"
+        },
+        {
+          "id": "m63-pump-1001-io",
+          "page": 6,
+          "bbox": [
+            1200,
+            1988,
+            1380,
+            2080
+          ],
+          "expected": "DI ALARM AO VFD SPEED DO START/STOP AI CURRENT",
+          "mode": "contains"
+        },
+        {
+          "id": "m63-pump-1002-io",
+          "page": 6,
+          "bbox": [
+            1200,
+            2095,
+            1380,
+            2180
+          ],
+          "expected": "DI ALARM AO VFD SPEED DO START/STOP AI CURRENT",
+          "mode": "contains"
+        },
+        {
+          "id": "m63-modbus-ignition",
+          "page": 6,
+          "bbox": [
+            1440,
+            1992,
+            1590,
+            2050
+          ],
+          "expected": "CAT6 ETHERNET FOR MODBUS TCP TO IGNITION SCADA",
+          "mode": "contains"
+        },
+        {
+          "id": "m63-tcv-output",
+          "page": 6,
+          "bbox": [
+            290,
+            1495,
+            410,
+            1525
+          ],
+          "expected": "TCV MODULATION AO",
+          "mode": "contains"
+        },
+        {
+          "id": "m63-chw-temp-flow",
+          "page": 6,
+          "bbox": [
+            375,
+            1460,
+            610,
+            1530
+          ],
+          "expected": "CHWR FLOW CHWR TEMP AI AI",
+          "mode": "contains"
+        },
+        {
+          "id": "m63-pcw-temp-pressure",
+          "page": 6,
+          "bbox": [
+            820,
+            1460,
+            1185,
+            1525
+          ],
+          "expected": "PCWR TEMP PCWR PRESSURE (N) AI AI",
+          "mode": "contains"
+        },
+        {
+          "id": "m63-filter-dp",
+          "page": 6,
+          "bbox": [
+            1830,
+            1860,
+            1965,
+            1905
+          ],
+          "expected": "PCW FILTER DP AI",
+          "mode": "contains"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "m63-typed-diagram-callouts",
+          "records_path": [
+            "diagram_callouts"
+          ],
+          "expected": 23,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "controls_context": {
+      "document_id": "15__vol2__067",
+      "module_role": "Bounded M6.3 sequence, integration, ownership and alarm context for the new NEH PCW skid.",
+      "source_sheet": "M6.3",
+      "source_page": 6,
+      "network_architecture": {
+        "literal_context": "CAT6 ETHERNET FOR MODBUS TCP TO IGNITION SCADA; all controls shall be mirrored into EPICS program.",
+        "ownership": "I&C contractor integrates the PLC system, including sequence, controls P&ID, points list, PLC and I/O hardware. Ignition SCADA development is in-house by the SLAC SCADA engineer.",
+        "source_boundaries": "The drawing requires 100% Allen Bradley compatible PLC/I/O and CAT6 to the nearest SLAC network switch but states no controller model, I/O card/channel count, IP address, BACnet/IP topology, Modbus register map, polling rate, or individual device network address."
+      },
+      "sequences": [
+        {
+          "id": "monitoring",
+          "finding": "The control system monitors system temperatures, flow and pressures."
+        },
+        {
+          "id": "continuous-pumps",
+          "finding": "Both pumps run continuously, 24 hours/day, 7 days/week."
+        },
+        {
+          "id": "dp-control",
+          "finding": "PLC controls pump speed to maintain 42 PSIG adjustable differential pressure, supply versus return pressure."
+        },
+        {
+          "id": "pump-failure",
+          "finding": "If one pump fails, the other ramps up to maintain pressure."
+        },
+        {
+          "id": "chilled-water-valve",
+          "finding": "Process-water-loop supply-temperature sensor modulates the chilled-water control valve to maintain 63°F adjustable process-water-loop temperature."
+        },
+        {
+          "id": "makeup-water",
+          "finding": "Makeup-water solenoid valve is normally open; the sequence supplies a 15-second adjustable abnormal-meter-run condition and a closed-solenoid alarm."
+        },
+        {
+          "id": "max-speed-low-dp",
+          "finding": "An alarm condition covers system-return DP below setpoint while pump is at 100% speed."
+        },
+        {
+          "id": "alarms",
+          "finding": "BMS alarms are named for PCW supply temperature ±5°F adjustable from setpoint, differential pressure ±5 PSI adjustable, VFD failed, pump failed, makeup water running more than 15 seconds adjustable, solenoid valve closed, and system pressure above 90 PSIG adjustable."
+        }
+      ],
+      "sensor_and_zone_ledger": {
+        "physical_space_sensor_count": {
+          "status": "not_stated",
+          "value": null,
+          "note": "This is a process-water skid P&ID, not a room thermostat/sensor plan."
+        },
+        "process_instrument_context": "M6.3 prints temperature, pressure, differential-pressure, flow, pump alarm/current, start/stop and VFD-speed callouts. Quantities above are diagram callouts only."
+      },
+      "factory_vs_field": "M6.3 explicitly assigns all I&C components within the PCW-skid boundary to the factory, not field installation. Existing ALC I/O/control panel/WebCTRL screen and logic are demolished or rewired as specified; this is not enough to assert exact existing-device quantities.",
+      "tables": [],
+      "assertions": [
+        {
+          "id": "m63-continuous-pumps",
+          "page": 6,
+          "bbox": [
+            2527,
+            1416,
+            2925,
+            1438
+          ],
+          "expected": "BOTH PUMPS SHALL BE RUNNING ALL THE TIME, 24 HOURS/DAY, 7 DAYS/WEEK.",
+          "mode": "contains"
+        },
+        {
+          "id": "m63-dp-setpoint",
+          "page": 6,
+          "bbox": [
+            2527,
+            1428,
+            2965,
+            1460
+          ],
+          "expected": "THE PLC SYSTEM CONTROLS THE PUMP SPEED TO MAINTAIN 42 PSIG (ADJUSTABLE) DIFFERENTIAL PRESSURE",
+          "mode": "contains"
+        },
+        {
+          "id": "m63-pump-failure",
+          "page": 6,
+          "bbox": [
+            2527,
+            1458,
+            2925,
+            1485
+          ],
+          "expected": "IF ONE PUMP FAILS, THE OTHER PUMP RAMPS UP TO MAINTAIN PRESSURE.",
+          "mode": "contains"
+        },
+        {
+          "id": "m63-temperature-control",
+          "page": 6,
+          "bbox": [
+            2527,
+            1476,
+            2965,
+            1510
+          ],
+          "expected": "THE CONTROL VALVE AT THE CHILLED WATER SYSTEM TO MAINTAIN 63 °F (ADJUSTABLE)",
+          "mode": "contains"
+        },
+        {
+          "id": "m63-makeup-normal",
+          "page": 6,
+          "bbox": [
+            2527,
+            1500,
+            2960,
+            1545
+          ],
+          "expected": "THE MAKE-UP WATER SOLENOID VALVE IS NORMALLY OPEN. THE SOLENOID VALVE CLOSES WHEN",
+          "mode": "contains"
+        },
+        {
+          "id": "m63-alarm-limits",
+          "page": 6,
+          "bbox": [
+            2527,
+            1570,
+            2960,
+            1665
+          ],
+          "expected": "THE PCW SUPPLY TEMPERATURE 5°F (ADJUSTABLE) ABOVE/BELOW THE SETPOINT. 2) DIFFERENTIAL PRESSURE 5 PSI (ADJUSTABLE) ABOVE/BELOW THE SETPOINT. 3) VFD FAILED. 4) PUMP FAILED.",
+          "mode": "contains"
+        },
+        {
+          "id": "m63-ignition-scope",
+          "page": 6,
+          "bbox": [
+            2527,
+            1725,
+            2965,
+            1770
+          ],
+          "expected": "I&C CONTRACTOR TO INTEGRATE PLC SYSTEM INCLUDING: SEQUENCE OF OPERATIONS, CONTROLS DRAWINGS INCLUDING CONTROLS P&ID, POINTS LIST, PLC AND IO HARDWARE. EXCEPTION: IGNITION SCADA DEVELOPMENT WILL BE IN-HOUSE",
+          "mode": "contains"
+        },
+        {
+          "id": "m63-epics",
+          "page": 6,
+          "bbox": [
+            2527,
+            1810,
+            2850,
+            1835
+          ],
+          "expected": "ALL CONTROLS SHALL BE MIRRORED INTO EPICS PROGRAM.",
+          "mode": "contains"
+        },
+        {
+          "id": "m63-factory-i-and-c",
+          "page": 6,
+          "bbox": [
+            2527,
+            1825,
+            2940,
+            1860
+          ],
+          "expected": "ALL I&C COMPONENTS SHOWN WITHIN THE BOUNDS OF THE PCW SKID SHALL BE PROVIDED BY THE FACTORY, NOT FIELD INSTALLED.",
+          "mode": "contains"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "m63-sequence-contexts",
+          "records_path": [
+            "sequences"
+          ],
+          "expected": 8,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "equipment_reconciliation": {
+      "document_id": "15__vol2__067",
+      "module_role": "Source-constrained schedule identity/classification ledger for the exact M7.0 equipment tables. It leaves physical I/O, field-installation and unprovided device attributes unknown rather than deriving them from tag patterns.",
+      "schedule_registry_schema": {
+        "namespace_separator": "-",
+        "identity_columns": {
+          "schedule_mark": "mark"
+        },
+        "anchor_records_path": [
+          "primary_anchors"
+        ],
+        "non_instance_table_ids": []
+      },
+      "scheduled_families": [
+        {
+          "module": "schedules_m70.json",
+          "bundle_module": "schedules",
+          "table": "M70-NEW-PCW-PUMPS",
+          "class": "new_inline_pcw_pump",
+          "rows": 2,
+          "schedule_mark": [
+            "B950A-PCWP-1001",
+            "B950A-PCWP-1002"
+          ]
+        },
+        {
+          "module": "schedules_m70.json",
+          "bundle_module": "schedules",
+          "table": "M70-NEW-HEAT-EXCHANGER",
+          "class": "new_pcw_chw_heat_exchanger",
+          "rows": 1,
+          "schedule_mark": [
+            "B950A-HX-PCWP-1001"
+          ]
+        },
+        {
+          "module": "schedules_m70.json",
+          "bundle_module": "schedules",
+          "table": "M70-NEW-VFDS",
+          "class": "new_pump_vfd",
+          "rows": 2,
+          "schedule_mark": [
+            "B950A-VFD-PCWP-1001",
+            "B950A-VFD-PCWP-1002"
+          ]
+        },
+        {
+          "module": "schedules_m70.json",
+          "bundle_module": "schedules",
+          "table": "M70-COMPRESSED-AIR-REGULATOR",
+          "class": "new_compressed_air_regulator",
+          "rows": 1,
+          "schedule_mark": [
+            "(N) REG-1"
+          ]
+        },
+        {
+          "module": "schedules_m70.json",
+          "bundle_module": "schedules",
+          "table": "M70-GRILLE",
+          "class": "grille_type",
+          "rows": 1,
+          "schedule_mark": [
+            "RG-1"
+          ]
+        },
+        {
+          "module": "schedules_m70.json",
+          "bundle_module": "schedules",
+          "table": "M70-RELOCATED-REHEAT-COIL",
+          "class": "relocated_reheat_coil",
+          "rows": 1,
+          "schedule_mark": [
+            "B950-RHC-1002"
+          ]
+        },
+        {
+          "module": "schedules_m70.json",
+          "bundle_module": "schedules",
+          "table": "M70-EXISTING-AHU",
+          "class": "existing_ahu_reference",
+          "rows": 1,
+          "schedule_mark": [
+            "B950-AHU-3001"
+          ]
+        },
+        {
+          "module": "schedules_m70.json",
+          "bundle_module": "schedules",
+          "table": "M70-PCW-AIR-SEPARATOR",
+          "class": "new_pcw_air_separator",
+          "rows": 1,
+          "schedule_mark": [
+            "(N) B950A-AS-1001"
+          ]
+        }
+      ],
+      "schedule_counts": {
+        "tables": 8,
+        "rows": 10,
+        "building_scoped_tag_identities_including_outlet_types": 10,
+        "other_scheduled_tag_identities": 10
+      },
+      "primary_anchors": [
+        {
+          "id": "M70-B950A-PCWP-1001",
+          "scope": "New inline PCW pump; N+1 pair; schedule design flow 581.9 GPM and selection flow 650 GPM."
+        },
+        {
+          "id": "M70-B950A-PCWP-1002",
+          "scope": "New inline PCW pump; N+1 pair; schedule design flow 581.9 GPM and selection flow 650 GPM."
+        },
+        {
+          "id": "M70-B950A-HX-PCWP-1001",
+          "scope": "New PCW/CHW heat exchanger; schedule assigns PCW high-temperature and CHW low-temperature sides."
+        },
+        {
+          "id": "M70-B950A-VFD-PCWP-1001",
+          "scope": "New ABB VFD corresponding to PCWP-1001 by literal mark."
+        },
+        {
+          "id": "M70-B950A-VFD-PCWP-1002",
+          "scope": "New ABB VFD corresponding to PCWP-1002 by literal mark."
+        },
+        {
+          "id": "M70-(N) REG-1",
+          "scope": "New compressed-air regulator at Hutch 1.3."
+        },
+        {
+          "id": "M70-RG-1",
+          "scope": "Grille schedule type row, not an asserted installed-quantity count."
+        },
+        {
+          "id": "M70-B950-RHC-1002",
+          "scope": "Existing reheat coil relocated from demolition phase."
+        },
+        {
+          "id": "M70-B950-AHU-3001",
+          "scope": "Existing AHU reference schedule; change is limited by printed notes."
+        },
+        {
+          "id": "M70-(N) B950A-AS-1001",
+          "scope": "New PCW air separator."
+        }
+      ],
+      "supplemental_source_entities": [
+        {
+          "id": "B950A-PF-1001",
+          "classification": "new_pcw_pot_feeder",
+          "source_scope": "M7.0 PCW POT FEEDER SCHEDULE",
+          "note": "Retained in M7.0 additional schedule inventory; its detailed table is visually reviewed but not promoted into the cross-table registry because the strict primary tables selected above are the direct BAS/equipment anchors."
+        },
+        {
+          "id": "B950A-ET-1001",
+          "classification": "new_pcw_expansion_tank",
+          "source_scope": "M7.0 PCW EXPANSION TANK SCHEDULE"
+        },
+        {
+          "id": "B950A-WF-1001",
+          "classification": "new_pcw_filter",
+          "source_scope": "M7.0 PCW FILTER SCHEDULE"
+        }
+      ],
+      "additional_identities": [
+        {
+          "id": "B950A-PF-1001",
+          "classification": "new_pcw_pot_feeder",
+          "source_scope": "M7.0 PCW POT FEEDER SCHEDULE"
+        },
+        {
+          "id": "B950A-ET-1001",
+          "classification": "new_pcw_expansion_tank",
+          "source_scope": "M7.0 PCW EXPANSION TANK SCHEDULE"
+        },
+        {
+          "id": "B950A-WF-1001",
+          "classification": "new_pcw_filter",
+          "source_scope": "M7.0 PCW FILTER SCHEDULE"
+        },
+        {
+          "id": "M63-TCV",
+          "classification": "P&ID-only modulating chilled-water control valve",
+          "source_scope": "M6.3 AO TCV MODULATION",
+          "limitations": "No tag/Cv/actuator/fail-position schedule in supplied set."
+        }
+      ],
+      "reconciliation_findings": [
+        "M7.0 prints two identical new pump selections and labels their schedule notes N+1; this is a source classification, not an unprinted lead/lag rotation sequence.",
+        "The M6.3 typed I/O diagram binds pump-specific alarm/VFD-speed/start-stop/current callouts to PCWP-1001 and PCWP-1002, but does not state PLC card/channel/terminal numbers.",
+        "M7.0 separates existing and new PCW demand. The revised 581.998 GPM new PCW flow is not automatically a sum of installed device rows, and it is retained as a source demand total.",
+        "The diagram shows a modulating chilled-water control valve and makeup actuator, while the supplied set lacks an actual control-valve or damper-actuator schedule; unsupported Cv, fail action, torque and actuator signal must stay unknown."
+      ],
+      "control_valve_and_damper_schedule_status": {
+        "control_valve_schedule": {
+          "status": "not_present_as_schedule",
+          "value": null
+        },
+        "damper_actuator_schedule": {
+          "status": "not_present",
+          "value": null
+        }
+      },
+      "tables": [],
+      "assertions": [],
+      "inventory_checks": [
+        {
+          "id": "schedule-primary-anchors",
+          "records_path": [
+            "primary_anchors"
+          ],
+          "expected": 10,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "point_applications": {
+      "document_id": "15__vol2__067",
+      "module_role": "Explicit boundary between M6.3 diagram I/O callouts and a nonexistent supplied installed point/controller-terminal schedule.",
+      "ledger_mode": "source_matrix_templates_v1",
+      "source_points_module": "points_m63.json",
+      "applications": [],
+      "listed_template_counts": {
+        "total": 0
+      },
+      "expanded_template_counts": {
+        "total": 0,
+        "source_rows": 0
+      },
+      "diagram_callout_ledger": {
+        "source_records": 23,
+        "typed_counts": {
+          "AI": 15,
+          "DI": 2,
+          "AO": 4,
+          "DO": 2
+        },
+        "installed_io_total": {
+          "status": "not_stated_in_supplied_set",
+          "value": null,
+          "reason": "The P&ID labels 23 diagram callouts but contains no final points list, PLC panel I/O card/terminal schedule, wiring diagram or source rule declaring these a complete field I/O count."
+        }
+      },
+      "expanded_count_warning": "Twenty-three typed P&ID callouts are preserved separately in the points module. This source has no standalone matrix or source-stated multiplier/terminal schedule, so zero unprinted applications or installed PLC I/O counts are emitted.",
+      "ownership_binding_semantics": "Pump-specific diagram callouts are associated with the printed pump tags where visibly drawn; all other callouts remain P&ID/system context. Neither that association nor the requested future contractor points list supplies a PLC-terminal quantity.",
+      "tables": [],
+      "assertions": [],
+      "inventory_checks": [
+        {
+          "id": "unexpanded-point-applications",
+          "records_path": [
+            "applications"
+          ],
+          "expected": 0,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "supporting_evidence": {
+      "document_id": "15__vol2__067",
+      "module_role": "Full-set qualification and source limitations for use of this compact process-cooling-water skid set as HVAC/BAS takeoff ground truth.",
+      "source_limitations": [
+        "M6.3 is a typed I/O P&ID, not a standalone final points list. It directs the I&C contractor to integrate the PLC system including a points list; the supplied drawing set contains no actual PLC I/O-card, terminal or wiring schedule.",
+        "Modbus TCP to Ignition SCADA and mirrored EPICS context are stated, but no register map, address, device topology, IP information, controller model or polling detail is published.",
+        "The M6.3 P&ID shows AO TCV MODULATION and AO MAKEUP ACTUATOR. There is no supplied control-valve schedule with valve tag/Cv, actuator model/torque, control-signal range or fail position, so no such attributes are inferred.",
+        "M7.0's existing AHU note references adjustment of motorized dampers, but no source damper/actuator schedule or installed damper quantity appears in the supplied set.",
+        "M7.0's demand totals separate existing and new PCW demands; a demand table must not be mistaken for a new-equipment quantity schedule or physical point multiplier."
+      ],
+      "tables": [],
+      "assertions": [
+        {
+          "id": "m63-points-list-contractor-scope",
+          "page": 6,
+          "bbox": [
+            2527,
+            1725,
+            2965,
+            1770
+          ],
+          "expected": "POINTS LIST, PLC AND IO HARDWARE",
+          "mode": "contains"
+        },
+        {
+          "id": "m70-pump-n-plus-one",
+          "page": 8,
+          "bbox": [
+            180,
+            260,
+            800,
+            280
+          ],
+          "expected": "(1) N+1 PUMPS.",
+          "mode": "contains"
+        },
+        {
+          "id": "m70-flow-demand-title",
+          "page": 8,
+          "bbox": [
+            2500,
+            2240,
+            2800,
+            2300
+          ],
+          "expected": "NEH PCW FLOW DEMAND",
+          "mode": "contains"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "supporting-source-limitations",
+          "records_path": [
+            "source_limitations"
+          ],
+          "expected": 5
+        }
+      ]
+    }
+  },
+  "module_sha256": {
+    "metadata": "bc97378e2a13317e370e2693c35f430d5d6ef4cf96048451247ef79dd91e5b62",
+    "schedules": "dfbd5a41a51a82e19c6d5418bee87d74da7bc4dc5945acf3b467c7c38806b944",
+    "points": "fddfcb0872f6aaa3d5a3eeddfff21e49396863009fec6ef85b8383121c521898",
+    "controls_context": "ebd3074f44534854a6d2b3203b449a77e3930367c64a9a35b5eb5f861630c853",
+    "equipment_reconciliation": "b80b15d30c18e3ce6a72a3d3f0b5da132089d2183f8f7c570484f772d420d954",
+    "point_applications": "d7d7ba5b7dbd33de68826b428a6f88da8d8f7874c1ad05602aea707f9c6651e4",
+    "supporting_evidence": "7de21ff81833c41a63e4cdaef982b49b1714bdc160eac6d6cebce416030dc28b"
+  },
+  "module_source_sha256": {
+    "metadata": {
+      "metadata": "bc97378e2a13317e370e2693c35f430d5d6ef4cf96048451247ef79dd91e5b62"
+    },
+    "schedules": {
+      "schedules_m70": "dfbd5a41a51a82e19c6d5418bee87d74da7bc4dc5945acf3b467c7c38806b944"
+    },
+    "points": {
+      "points_m63": "fddfcb0872f6aaa3d5a3eeddfff21e49396863009fec6ef85b8383121c521898"
+    },
+    "controls_context": {
+      "controls_context_m63": "ebd3074f44534854a6d2b3203b449a77e3930367c64a9a35b5eb5f861630c853"
+    },
+    "equipment_reconciliation": {
+      "equipment_reconciliation": "b80b15d30c18e3ce6a72a3d3f0b5da132089d2183f8f7c570484f772d420d954"
+    },
+    "point_applications": {
+      "point_applications": "d7d7ba5b7dbd33de68826b428a6f88da8d8f7874c1ad05602aea707f9c6651e4"
+    },
+    "supporting_evidence": {
+      "supporting_evidence": "7de21ff81833c41a63e4cdaef982b49b1714bdc160eac6d6cebce416030dc28b"
+    }
+  },
+  "equipment_inventory": [
+    {
+      "id": "M70-B950A-PCWP-1001",
+      "tag": "B950A-PCWP-1001",
+      "classification": "new_inline_pcw_pump",
+      "identity_column": "mark",
+      "source_table": "M70-NEW-PCW-PUMPS",
+      "source_row": 1,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "B950A-PCWP-1001",
+        "manufacturer_model": "GOULDS 125SV-55BGT-4C60",
+        "location": "MECH ROOM 4 60B24",
+        "service": "NEH/XPP",
+        "type": "INLINE",
+        "design_flow_gpm": "581.9",
+        "selection_flow_gpm": "650",
+        "design_head_ftwg_psi": "277/120",
+        "max_flow_gpm": "677",
+        "max_head_ftwg_psi": "300/130",
+        "bhp": "73.9",
+        "hp": "75",
+        "rpm": "3500",
+        "electrical_v_ph_hz": "480/3/60",
+        "total_operating_weight_lb": "1386",
+        "remarks": "(1)-(9)"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M70-B950A-PCWP-1001",
+        "scope": "New inline PCW pump; N+1 pair; schedule design flow 581.9 GPM and selection flow 650 GPM."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M70-B950A-PCWP-1002",
+      "tag": "B950A-PCWP-1002",
+      "classification": "new_inline_pcw_pump",
+      "identity_column": "mark",
+      "source_table": "M70-NEW-PCW-PUMPS",
+      "source_row": 2,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "B950A-PCWP-1002",
+        "manufacturer_model": "GOULDS 125SV-55BGT-4C60",
+        "location": "MECH ROOM 4 60B24",
+        "service": "NEH/XPP",
+        "type": "INLINE",
+        "design_flow_gpm": "581.9",
+        "selection_flow_gpm": "650",
+        "design_head_ftwg_psi": "277/120",
+        "max_flow_gpm": "677",
+        "max_head_ftwg_psi": "300/130",
+        "bhp": "73.9",
+        "hp": "75",
+        "rpm": "3500",
+        "electrical_v_ph_hz": "480/3/60",
+        "total_operating_weight_lb": "1386",
+        "remarks": "(1)-(9)"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M70-B950A-PCWP-1002",
+        "scope": "New inline PCW pump; N+1 pair; schedule design flow 581.9 GPM and selection flow 650 GPM."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M70-B950A-HX-PCWP-1001",
+      "tag": "B950A-HX-PCWP-1001",
+      "classification": "new_pcw_chw_heat_exchanger",
+      "identity_column": "mark",
+      "source_table": "M70-NEW-HEAT-EXCHANGER",
+      "source_row": 1,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "B950A-HX-PCWP-1001",
+        "manufacturer_model": "BELL & GOSSETT AP47",
+        "location": "B950A MECHANICAL ROOM",
+        "service": "B950A",
+        "design_capacity_mbh": "3462",
+        "max_capacity_mbh": "3905",
+        "high_design_gpm": "581.9",
+        "high_max_gpm": "650",
+        "high_ewt_f": "74°",
+        "high_lwt_f": "62°",
+        "high_dp_psi": "4.97",
+        "high_fluid": "PCW",
+        "low_design_gpm": "349.12",
+        "low_max_gpm": "389.16",
+        "low_ewt_f": "45",
+        "low_lwt_f": "65",
+        "low_dp_psi": "1.92",
+        "low_fluid": "CHW",
+        "design_plates": "186",
+        "max_plates": "228",
+        "total_operating_weight": "1648 LBS",
+        "remarks": "(1)-(3)"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M70-B950A-HX-PCWP-1001",
+        "scope": "New PCW/CHW heat exchanger; schedule assigns PCW high-temperature and CHW low-temperature sides."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M70-B950A-VFD-PCWP-1001",
+      "tag": "B950A-VFD-PCWP-1001",
+      "classification": "new_pump_vfd",
+      "identity_column": "mark",
+      "source_table": "M70-NEW-VFDS",
+      "source_row": 1,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "B950A-VFD-PCWP-1001",
+        "manufacturer_model": "PUMP SMART ABB ACH580-PCR-096A-4",
+        "hp": "75",
+        "fla": "96",
+        "volts": "480",
+        "weight": "359 LBS",
+        "enclosure": "NEMA 3R",
+        "remarks": "(1)-(5)"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M70-B950A-VFD-PCWP-1001",
+        "scope": "New ABB VFD corresponding to PCWP-1001 by literal mark."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M70-B950A-VFD-PCWP-1002",
+      "tag": "B950A-VFD-PCWP-1002",
+      "classification": "new_pump_vfd",
+      "identity_column": "mark",
+      "source_table": "M70-NEW-VFDS",
+      "source_row": 2,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "B950A-VFD-PCWP-1002",
+        "manufacturer_model": "PUMP SMART ABB ACH580-PCR-096A-4",
+        "hp": "75",
+        "fla": "96",
+        "volts": "480",
+        "weight": "359 LBS",
+        "enclosure": "NEMA 3R",
+        "remarks": "(1)-(5)"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M70-B950A-VFD-PCWP-1002",
+        "scope": "New ABB VFD corresponding to PCWP-1002 by literal mark."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M70-(N) REG-1",
+      "tag": "(N) REG-1",
+      "classification": "new_compressed_air_regulator",
+      "identity_column": "mark",
+      "source_table": "M70-COMPRESSED-AIR-REGULATOR",
+      "source_row": 1,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "(N) REG-1",
+        "manufacturer_model": "CONOFLOW GH30-XTHMXSXG",
+        "location": "HUTCH 1.3",
+        "outlet_pressure": "125 PSIG",
+        "diaphragm": "BUNA \"N\" (WITH RELIEF, NO BLEED)",
+        "inlet_outlet_size": "1/4\"",
+        "wall_mountable": "YES",
+        "shipping_weight": "2 LB",
+        "remarks": "1-4"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M70-(N) REG-1",
+        "scope": "New compressed-air regulator at Hutch 1.3."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M70-RG-1",
+      "tag": "RG-1",
+      "classification": "grille_type",
+      "identity_column": "mark",
+      "source_table": "M70-GRILLE",
+      "source_row": 1,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "RG-1",
+        "maximum_airflow_cfm": "1555",
+        "design_airflow_cfm": "1410/1415",
+        "air_velocity_fpm": "450",
+        "face_size_in": "30x16",
+        "connection_size_in": "30x16",
+        "max_static_pressure_drop_inwg": "0.08",
+        "max_nc": "25",
+        "mounting_location": "DUCT",
+        "material": "STEEL",
+        "finish": "#26 WHITE",
+        "basis_of_design": "TITUS 350RL",
+        "notes": "(1)-(2)"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M70-RG-1",
+        "scope": "Grille schedule type row, not an asserted installed-quantity count."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M70-B950-RHC-1002",
+      "tag": "B950-RHC-1002",
+      "classification": "relocated_reheat_coil",
+      "identity_column": "mark",
+      "source_table": "M70-RELOCATED-REHEAT-COIL",
+      "source_row": 1,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "B950-RHC-1002",
+        "room_number": "100H3",
+        "room_name": "HUTCH 1.3 XPP",
+        "maximum_airflow_cfm": "6,050",
+        "capacity_mbh": "126",
+        "air_pd_inwg": "0.10",
+        "eat_f": "55",
+        "lat_f": "73",
+        "flow_gpm": "9",
+        "water_pd_ftwg": "16.3",
+        "ewt_f": "180",
+        "lwt_f": "155",
+        "pipe_connection_in": "1 1/4",
+        "coil_dimension_hxw_in": "24x48",
+        "basis_of_design": "HEATCRAFT",
+        "note": ""
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M70-B950-RHC-1002",
+        "scope": "Existing reheat coil relocated from demolition phase."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M70-B950-AHU-3001",
+      "tag": "B950-AHU-3001",
+      "classification": "existing_ahu_reference",
+      "identity_column": "mark",
+      "source_table": "M70-EXISTING-AHU",
+      "source_row": 1,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "B950-AHU-3001",
+        "location": "MECH RM",
+        "capacity_designed_cfm": "60,000",
+        "outside_air_cfm": "5,445",
+        "fan_type": "DIRECT DRIVE PLENUM",
+        "fan_count": "10",
+        "design_total_sp_inwg": "9.36",
+        "bhp_per_fan": "12.54",
+        "motor_hp_per_fan": "15",
+        "electrical_power_vphz": "460/3/60",
+        "fla_amps": "146",
+        "mca_amps": "164",
+        "cooling_capacity_mbh": "1,195",
+        "eat_fdb_fwb": "68.5/58.2",
+        "lat_fdb_fwb": "48.6/48.5",
+        "ewt_f": "44",
+        "lwt_f": "55.5",
+        "apd_inwg": "1.03",
+        "wpd_ft": "15.26",
+        "pre_filter": "MERV 8",
+        "final_filter": "99.97 HEPA",
+        "weight_lb": "",
+        "basis_of_design": "TEMTROL",
+        "note": "1, 2, 3"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M70-B950-AHU-3001",
+        "scope": "Existing AHU reference schedule; change is limited by printed notes."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "M70-(N) B950A-AS-1001",
+      "tag": "(N) B950A-AS-1001",
+      "classification": "new_pcw_air_separator",
+      "identity_column": "mark",
+      "source_table": "M70-PCW-AIR-SEPARATOR",
+      "source_row": 1,
+      "source_page": 8,
+      "literal_schedule_row": {
+        "mark": "(N) B950A-AS-1001",
+        "manufacturer_model": "ROLAIRTROL RL-6FB",
+        "location": "B950A MECH ROOM",
+        "service": "AIR SEPARATOR",
+        "inlet_connection": "6\" FLANGE",
+        "outlet_connection": "6\" FLANGE",
+        "tank_volume": "34 GAL",
+        "max_capacity": "850 GPM",
+        "max_pressure": "125 PSIG",
+        "max_temperature": "350°F",
+        "dimensions": "44-1/16\"H x 21-1/4\"Ø",
+        "tank_weight_dry": "280 LBS",
+        "tank_weight_wetted": "564 LBS",
+        "notes": "(1)-(6)"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "M70-(N) B950A-AS-1001",
+        "scope": "New PCW air separator."
+      },
+      "outlet_instances": null
+    }
+  ],
+  "point_application_ledger": []
+}

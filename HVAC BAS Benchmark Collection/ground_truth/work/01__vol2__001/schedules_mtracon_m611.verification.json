@@ -1,0 +1,1204 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "4e5c6c11309f0561b4d588f60f771c9e1da1103fbea1b4860e247dc8295a5aaf",
+  "tables": 8,
+  "rows": 33,
+  "cell_assertions": 33,
+  "text_assertions": 1,
+  "checks": [
+    {
+      "table": "M611-AHU-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        160,
+        140,
+        220,
+        160
+      ],
+      "expected": "AHU-M1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-M1",
+          "word_ids": [
+            654
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-M1",
+          "word_ids": [
+            1932
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-AHU-MARKS",
+      "header": "AIR HANDLING UNIT SCHEDULE",
+      "page": 45,
+      "bbox": [
+        150,
+        55,
+        1710,
+        125
+      ],
+      "engine": "mupdf",
+      "actual": "AIR HANDLING UNIT SCHEDULE FAN DATA ELECTRICAL DATA COOLING COIL DATA S.A. CFM E.S.P. FAN (QTY) SENSIBLE EWT LWT EAT EAT LAT LAT MAX WATER PRESSURE NOTES OA CFM VOLTS/PH/Hz TOTAL (MBH) MAX. COIL FV (FPM)",
+      "pass": true
+    },
+    {
+      "table": "M611-AHU-MARKS",
+      "header": "AIR HANDLING UNIT SCHEDULE",
+      "page": 45,
+      "bbox": [
+        150,
+        55,
+        1710,
+        125
+      ],
+      "engine": "poppler",
+      "actual": "AIR HANDLING UNIT SCHEDULE FAN DATA ELECTRICAL DATA COOLING COIL DATA S.A. CFM E.S.P. FAN (QTY) SENSIBLE EWT LWT EAT EAT LAT LAT MAX WATER PRESSURE NOTES OA CFM VOLTS/PH/Hz TOTAL (MBH) MAX. COIL FV (FPM)",
+      "pass": true
+    },
+    {
+      "table": "M611-FCU-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        350,
+        210,
+        369
+      ],
+      "expected": "FCU-M1A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-M1A",
+          "word_ids": [
+            1170
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-M1A",
+          "word_ids": [
+            1487
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-FCU-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        370,
+        210,
+        386
+      ],
+      "expected": "FCU-M1B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-M1B",
+          "word_ids": [
+            1205
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-M1B",
+          "word_ids": [
+            1503
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-FCU-MARKS",
+      "row": 3,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        387,
+        210,
+        403
+      ],
+      "expected": "FCU-M2A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-M2A",
+          "word_ids": [
+            1240
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-M2A",
+          "word_ids": [
+            1519
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-FCU-MARKS",
+      "row": 4,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        404,
+        210,
+        421
+      ],
+      "expected": "FCU-M2B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-M2B",
+          "word_ids": [
+            1275
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-M2B",
+          "word_ids": [
+            1535
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-FCU-MARKS",
+      "row": 5,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        422,
+        210,
+        438
+      ],
+      "expected": "FCU-M3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-M3",
+          "word_ids": [
+            1310
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-M3",
+          "word_ids": [
+            1551
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-FCU-MARKS",
+      "row": 6,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        439,
+        210,
+        455
+      ],
+      "expected": "FCU-M4A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-M4A",
+          "word_ids": [
+            1346
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-M4A",
+          "word_ids": [
+            1568
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-FCU-MARKS",
+      "row": 7,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        456,
+        210,
+        472
+      ],
+      "expected": "FCU-M4B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-M4B",
+          "word_ids": [
+            1381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-M4B",
+          "word_ids": [
+            1584
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-FCU-MARKS",
+      "row": 8,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        473,
+        210,
+        490
+      ],
+      "expected": "FCU-M5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-M5",
+          "word_ids": [
+            1416
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-M5",
+          "word_ids": [
+            1600
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-FCU-MARKS",
+      "row": 9,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        491,
+        210,
+        507
+      ],
+      "expected": "FCU-M6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-M6",
+          "word_ids": [
+            1452
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-M6",
+          "word_ids": [
+            1617
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-FCU-MARKS",
+      "row": 10,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        508,
+        210,
+        524
+      ],
+      "expected": "FCU-M7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-M7",
+          "word_ids": [
+            1487
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-M7",
+          "word_ids": [
+            1633
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-PUMP-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        698,
+        240,
+        717
+      ],
+      "expected": "HHWP-DOAH-M1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHWP-DOAH-M1",
+          "word_ids": [
+            886
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHWP-DOAH-M1",
+          "word_ids": [
+            1419
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-PUMP-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        718,
+        240,
+        734
+      ],
+      "expected": "HRHWP-MT1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HRHWP-MT1",
+          "word_ids": [
+            899
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HRHWP-MT1",
+          "word_ids": [
+            1420
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-PUMP-MARKS",
+      "row": 3,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        735,
+        240,
+        751
+      ],
+      "expected": "HRHWP-MT2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HRHWP-MT2",
+          "word_ids": [
+            919
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HRHWP-MT2",
+          "word_ids": [
+            1421
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-PUMP-MARKS",
+      "row": 4,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        752,
+        240,
+        769
+      ],
+      "expected": "PCHWP-MT1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCHWP-MT1",
+          "word_ids": [
+            939
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCHWP-MT1",
+          "word_ids": [
+            1422
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-PUMP-MARKS",
+      "row": 5,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        770,
+        240,
+        786
+      ],
+      "expected": "PCHWP-MT2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCHWP-MT2",
+          "word_ids": [
+            956
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCHWP-MT2",
+          "word_ids": [
+            1423
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-PUMP-MARKS",
+      "row": 6,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        787,
+        240,
+        803
+      ],
+      "expected": "PHHWP-M1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PHHWP-M1",
+          "word_ids": [
+            973
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PHHWP-M1",
+          "word_ids": [
+            1424
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-PUMP-MARKS",
+      "row": 7,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        804,
+        240,
+        820
+      ],
+      "expected": "PHHWP-M2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PHHWP-M2",
+          "word_ids": [
+            988
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PHHWP-M2",
+          "word_ids": [
+            1425
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-PUMP-MARKS",
+      "row": 8,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        821,
+        240,
+        838
+      ],
+      "expected": "SCHWP-M1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-M1",
+          "word_ids": [
+            1003
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-M1",
+          "word_ids": [
+            1426
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-PUMP-MARKS",
+      "row": 9,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        839,
+        240,
+        855
+      ],
+      "expected": "SCHWP-M2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-M2",
+          "word_ids": [
+            1020
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-M2",
+          "word_ids": [
+            1427
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-PUMP-MARKS",
+      "row": 10,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        856,
+        240,
+        872
+      ],
+      "expected": "SHHWP-M1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SHHWP-M1",
+          "word_ids": [
+            1037
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SHHWP-M1",
+          "word_ids": [
+            1428
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-PUMP-MARKS",
+      "row": 11,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        873,
+        240,
+        890
+      ],
+      "expected": "SHHWP-M2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SHHWP-M2",
+          "word_ids": [
+            1054
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SHHWP-M2",
+          "word_ids": [
+            1429
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-PUMP-MARKS",
+      "header": "PUMP SCHEDULE",
+      "page": 45,
+      "bbox": [
+        150,
+        630,
+        1290,
+        700
+      ],
+      "engine": "mupdf",
+      "actual": "PUMP SCHEDULE ELECTRICAL MARK SERVICE TYPE FLOW (GPM) TDH (FT WC) MIN. MOTOR SPEED REMARKS VOLTS PHASE Hz POWER (HP) CONTROL",
+      "pass": true
+    },
+    {
+      "table": "M611-PUMP-MARKS",
+      "header": "PUMP SCHEDULE",
+      "page": 45,
+      "bbox": [
+        150,
+        630,
+        1290,
+        700
+      ],
+      "engine": "poppler",
+      "actual": "PUMP SCHEDULE ELECTRICAL MARK SERVICE TYPE FLOW (GPM) TDH (FT WC) MIN. MOTOR SPEED REMARKS VOLTS PHASE Hz POWER (HP) CONTROL",
+      "pass": true
+    },
+    {
+      "table": "M611-BOILER-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        1325,
+        680,
+        1370,
+        699
+      ],
+      "expected": "B-M1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B-M1",
+          "word_ids": [
+            562
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B-M1",
+          "word_ids": [
+            405
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-BOILER-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        1325,
+        700,
+        1370,
+        718
+      ],
+      "expected": "B-M2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B-M2",
+          "word_ids": [
+            578
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B-M2",
+          "word_ids": [
+            406
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-BOILER-MARKS",
+      "header": "BOILER SCHEDULE",
+      "page": 45,
+      "bbox": [
+        1310,
+        620,
+        2240,
+        680
+      ],
+      "engine": "mupdf",
+      "actual": "BOILER SCHEDULE LVG. WATER ENT. WATER WATER FLOW NATURAL GAS MINIMUM GROSS STARTER/DISCONNECT MARK TYPE V/PH/Hz NOTES ROOM TEMP (°F) TEMP (°F) (GPM) INPUT (MBH) OUTPUT (MBH) FLA PROVIDED BY",
+      "pass": true
+    },
+    {
+      "table": "M611-BOILER-MARKS",
+      "header": "BOILER SCHEDULE",
+      "page": 45,
+      "bbox": [
+        1310,
+        620,
+        2240,
+        680
+      ],
+      "engine": "poppler",
+      "actual": "BOILER SCHEDULE LVG. WATER ENT. WATER WATER FLOW NATURAL GAS MINIMUM GROSS STARTER/DISCONNECT MARK TYPE V/PH/Hz NOTES ROOM TEMP (°F) TEMP (°F) (GPM) INPUT (MBH) OUTPUT (MBH) FLA PROVIDED BY",
+      "pass": true
+    },
+    {
+      "table": "M611-UNIT-HEATER-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        1330,
+        858,
+        1380,
+        878
+      ],
+      "expected": "UH-M1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-M1",
+          "word_ids": [
+            1906
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-M1",
+          "word_ids": [
+            548
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-UNIT-HEATER-MARKS",
+      "header": "UNIT HEATER SCHEDULE",
+      "page": 45,
+      "bbox": [
+        1310,
+        810,
+        2240,
+        860
+      ],
+      "engine": "mupdf",
+      "actual": "UNIT HEATER SCHEDULE TOTAL CAPACITY WATER FLOW MAX PRESSURE HHW ROUNTOUT MOTOR MARK TYPE EWT (°F) / LWT(°F) V/P/Hz NOTES CFM (MBH) (GPM) DROP (IN WC) SIZE (IN) (HP)",
+      "pass": true
+    },
+    {
+      "table": "M611-UNIT-HEATER-MARKS",
+      "header": "UNIT HEATER SCHEDULE",
+      "page": 45,
+      "bbox": [
+        1310,
+        810,
+        2240,
+        860
+      ],
+      "engine": "poppler",
+      "actual": "UNIT HEATER SCHEDULE TOTAL CAPACITY WATER FLOW MAX PRESSURE HHW ROUNTOUT MOTOR MARK TYPE EWT (°F) / LWT(°F) V/P/Hz NOTES (MBH) (GPM) DROP (IN WC) SIZE (IN) (HP) CFM",
+      "pass": true
+    },
+    {
+      "table": "M611-CHILLER-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        155,
+        1115,
+        210,
+        1135
+      ],
+      "expected": "CH-MT1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-MT1",
+          "word_ids": [
+            1580
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-MT1",
+          "word_ids": [
+            1291
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-CHILLER-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        155,
+        1136,
+        210,
+        1153
+      ],
+      "expected": "CH-MT2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-MT2",
+          "word_ids": [
+            1606
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-MT2",
+          "word_ids": [
+            1292
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-CHILLER-MARKS",
+      "header": "AIR COOLED HEAT RECOVERY CHILLER SCHEDULE",
+      "page": 45,
+      "bbox": [
+        150,
+        1020,
+        1550,
+        1080
+      ],
+      "engine": "mupdf",
+      "actual": "AIR COOLED HEAT RECOVERY CHILLER SCHEDULE CONDENSER EVAPORATOR COMPRESSOR HEAT RECOVERY CONDENSER BUNDLE ELECTRICAL CAPACITY FAN",
+      "pass": true
+    },
+    {
+      "table": "M611-CHILLER-MARKS",
+      "header": "AIR COOLED HEAT RECOVERY CHILLER SCHEDULE",
+      "page": 45,
+      "bbox": [
+        150,
+        1020,
+        1550,
+        1080
+      ],
+      "engine": "poppler",
+      "actual": "AIR COOLED HEAT RECOVERY CHILLER SCHEDULE CONDENSER EVAPORATOR COMPRESSOR HEAT RECOVERY CONDENSER BUNDLE ELECTRICAL CAPACITY FAN",
+      "pass": true
+    },
+    {
+      "table": "M611-AIR-SEPARATOR-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        1635,
+        1083,
+        1710,
+        1103
+      ],
+      "expected": "AS-CHW-M1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AS-CHW-M1",
+          "word_ids": [
+            1857
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AS-CHW-M1",
+          "word_ids": [
+            817
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-AIR-SEPARATOR-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        1635,
+        1104,
+        1710,
+        1120
+      ],
+      "expected": "AS-HHW-M1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AS-HHW-M1",
+          "word_ids": [
+            1866
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AS-HHW-M1",
+          "word_ids": [
+            818
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-AIR-SEPARATOR-MARKS",
+      "header": "AIR SEPARATOR SCHEDULE",
+      "page": 45,
+      "bbox": [
+        1620,
+        1010,
+        2220,
+        1085
+      ],
+      "engine": "mupdf",
+      "actual": "AIR SEPARATOR SCHEDULE MAX PRESSURE MARK TYPE SYSTEM PIPE SIZE FLOW (GPM) DROP (FT WC)",
+      "pass": true
+    },
+    {
+      "table": "M611-AIR-SEPARATOR-MARKS",
+      "header": "AIR SEPARATOR SCHEDULE",
+      "page": 45,
+      "bbox": [
+        1620,
+        1010,
+        2220,
+        1085
+      ],
+      "engine": "poppler",
+      "actual": "AIR SEPARATOR SCHEDULE MAX PRESSURE MARK TYPE SYSTEM PIPE SIZE FLOW (GPM) DROP (FT WC)",
+      "pass": true
+    },
+    {
+      "table": "M611-CRAH-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        1365,
+        220,
+        1385
+      ],
+      "expected": "CRAH-M1A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CRAH-M1A",
+          "word_ids": [
+            757
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CRAH-M1A",
+          "word_ids": [
+            1067
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-CRAH-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        1386,
+        220,
+        1403
+      ],
+      "expected": "CRAH-M1B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CRAH-M1B",
+          "word_ids": [
+            784
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CRAH-M1B",
+          "word_ids": [
+            1069
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-CRAH-MARKS",
+      "row": 3,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        1404,
+        220,
+        1420
+      ],
+      "expected": "CRAH-M2A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CRAH-M2A",
+          "word_ids": [
+            811
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CRAH-M2A",
+          "word_ids": [
+            1071
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-CRAH-MARKS",
+      "row": 4,
+      "column": "mark",
+      "page": 45,
+      "bbox": [
+        150,
+        1421,
+        220,
+        1438
+      ],
+      "expected": "CRAH-M2B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CRAH-M2B",
+          "word_ids": [
+            838
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CRAH-M2B",
+          "word_ids": [
+            1073
+          ]
+        }
+      }
+    },
+    {
+      "table": "M611-CRAH-MARKS",
+      "header": "COMPUTER ROOM AIR HANDLER TYPE SCHEDULE",
+      "page": 45,
+      "bbox": [
+        150,
+        1300,
+        1840,
+        1365
+      ],
+      "engine": "mupdf",
+      "actual": "COMPUTER ROOM AIR HANDLER TYPE SCHEDULE FAN COOLING COIL ELECTRICAL MARK TYPE TOTAL AIRFLOW EXT. STATIC FAN MOTOR MAX. COIL FACE SENSIBLE CAPACITY TOTAL CAPACITY EAT DB EAT WB LAT DB LAT WB CHILLED WATER MAX. WATER PRESSURE MIN. ROWS / PIPING EWT (°F) LWT (°F) V/HZ/PH FLA (CFM) PRESSURE (IN. W.C.) (QTY) HP VELOCITY (FPM) (MBTUH) (MBTUH) (°F) (°F) (°F) (°F) FLOW (GPM) DROP (FT. W.C.) MAX. FPI RUNOUT SIZE",
+      "pass": true
+    },
+    {
+      "table": "M611-CRAH-MARKS",
+      "header": "COMPUTER ROOM AIR HANDLER TYPE SCHEDULE",
+      "page": 45,
+      "bbox": [
+        150,
+        1300,
+        1840,
+        1365
+      ],
+      "engine": "poppler",
+      "actual": "COMPUTER ROOM AIR HANDLER TYPE SCHEDULE FAN COOLING COIL ELECTRICAL MARK TYPE TOTAL AIRFLOW EXT. STATIC FAN MOTOR MAX. COIL FACE SENSIBLE CAPACITY TOTAL CAPACITY EAT DB EAT WB LAT DB LAT WB CHILLED WATER MAX. WATER PRESSURE MIN. ROWS / PIPING EWT (°F) LWT (°F) V/HZ/PH FLA (CFM) PRESSURE (IN. W.C.) (QTY) HP VELOCITY (FPM) (MBTUH) (MBTUH) (°F) (°F) (°F) (°F) FLOW (GPM) DROP (FT. W.C.) MAX. FPI RUNOUT SIZE",
+      "pass": true
+    },
+    {
+      "assertion": "m611-sheet-title",
+      "page": 45,
+      "bbox": [
+        2280,
+        1500,
+        2365,
+        1533
+      ],
+      "expected": "M-611",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-611",
+          "word_ids": [
+            521
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-611",
+          "word_ids": [
+            1973
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m611-schedule-families",
+      "actual": 8,
+      "expected": 8,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

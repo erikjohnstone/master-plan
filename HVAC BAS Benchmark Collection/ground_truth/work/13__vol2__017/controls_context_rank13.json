@@ -1,0 +1,317 @@
+{
+  "document_id": "13__vol2__017",
+  "module_role": "Source-bounded M-702 ACU sequences and M-703 DDC source-matrix integration context.",
+  "tables": [],
+  "assertions": [
+    {
+      "id": "m702-a1-fan-time-schedule",
+      "page": 16,
+      "bbox": [
+        2194,
+        329,
+        2730,
+        347
+      ],
+      "expected": "THE DDC ACU CONTROLLER SHALL START AND STOP THE SUPPLY AND RETURN FANS BASED ON A TIME SCHEDULE",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-a1-preheat-low-outdoor",
+      "page": 16,
+      "bbox": [
+        2194,
+        397,
+        2660,
+        413
+      ],
+      "expected": "THE PREHEAT COIL VALVE SHALL BE OPEN WHEN OUTSIDE AIR TEMPERATURE IS BELOW 36 DEG. F.",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-a1-freezestat-smoke-safety",
+      "page": 16,
+      "bbox": [
+        2194,
+        419,
+        2768,
+        435
+      ],
+      "expected": "SAFETY CONTROLS: PROVIDE A FREEZE STAT (FZ) AND SMOKE DETECTOR SAFETY DEVICES",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-a1-economizer",
+      "page": 16,
+      "bbox": [
+        2194,
+        656,
+        2735,
+        672
+      ],
+      "expected": "THE ECONOMIZER MODE WILL BE ALLOWED. IN ECONOMIZER MODE",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-a1-cooling-valve",
+      "page": 16,
+      "bbox": [
+        2194,
+        701,
+        2752,
+        717
+      ],
+      "expected": "MECHANICAL COOLING BY MODULATING THE COOLING COIL VALVE (V2)",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-a1-night-setback",
+      "page": 16,
+      "bbox": [
+        2194,
+        847,
+        2757,
+        864
+      ],
+      "expected": "A NIGHT SETBACK MODE SHALL BE PROVIDED FOR UNOCCUPIED HOURS.",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-a1-night-setup",
+      "page": 16,
+      "bbox": [
+        2194,
+        1005,
+        2747,
+        1021
+      ],
+      "expected": "A NIGHT SETUP MODE SHALL BE PROVIDED FOR UNOCCUPIED HOURS.",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-a1-airflow-stations",
+      "page": 16,
+      "bbox": [
+        2194,
+        1343,
+        2765,
+        1359
+      ],
+      "expected": "THE AIR FLOW MEASURING STATIONS (AFMS) FOR THE SUPPLY AIR, RETURN AIR AND OUTSIDE AIR FLOWS",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-a1-humidifier-high-limit",
+      "page": 16,
+      "bbox": [
+        2194,
+        1545,
+        2765,
+        1561
+      ],
+      "expected": "HUMIDIFIER OUTPUT SHALL BE SUBJECT TO DUCT HUMIDISTAT HIGH LIMIT SETPOINT (85%, ADJ.).",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-a2-reheat-preheat",
+      "page": 16,
+      "bbox": [
+        870,
+        386,
+        1440,
+        413
+      ],
+      "expected": "THE REHEAT VALVE IS CLOSE. THE PREHEAT COIL VALVE SHALL MODULATE TO MAINTAIN T2",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-a2-cooling-valve",
+      "page": 16,
+      "bbox": [
+        870,
+        836,
+        1448,
+        852
+      ],
+      "expected": "MECHANICAL COOLING BY MODULATING THE COOLING COIL VALVE (V2)",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-a2-zone-night-setback",
+      "page": 16,
+      "bbox": [
+        870,
+        903,
+        1448,
+        920
+      ],
+      "expected": "WHEN THE DDC SYSTEM ZONE SENSOR INDICATES THAT THE SPACE TEMPERATURE HAS FALLEN BELOW THE NIGHT SETBACK TEMPERATURE",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-a2-zone-night-setup",
+      "page": 16,
+      "bbox": [
+        870,
+        1027,
+        1430,
+        1044
+      ],
+      "expected": "WHEN THE DDC SYSTEM ZONE SENSOR INDICATES THAT THE SPACE TEMPERATURE HAS RISEN ABOVE THE NIGHT SETUP TEMPERATURE",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-a2-afms",
+      "page": 16,
+      "bbox": [
+        870,
+        1308,
+        1443,
+        1325
+      ],
+      "expected": "THE AIR FLOW MEASURING STATIONS (AFMS) FOR THE SUPPLY AIR, RETURN AIR AND OUTSIDE AIR FLOWS",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-a3a6-fan-time-schedule",
+      "page": 16,
+      "bbox": [
+        1551,
+        329,
+        2090,
+        347
+      ],
+      "expected": "THE DDC ACU CONTROLLER SHALL START AND STOP THE SUPPLY AND EXHAUST FANS BASED ON A TIME SCHEDULE",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-a3a6-night-setback",
+      "page": 16,
+      "bbox": [
+        1551,
+        847,
+        2115,
+        864
+      ],
+      "expected": "A NIGHT SETBACK MODE SHALL BE PROVIDED FOR UNOCCUPIED HOURS.",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-a3a6-afms",
+      "page": 16,
+      "bbox": [
+        1551,
+        1274,
+        2123,
+        1291
+      ],
+      "expected": "THE AIR FLOW MEASURING STATIONS (AFMS) FOR THE SUPPLY AIR, RETURN AIR AND OUTSIDE AIR FLOWS",
+      "mode": "contains"
+    },
+    {
+      "id": "m703-existing-reference-only",
+      "page": 17,
+      "bbox": [
+        1898,
+        685,
+        2210,
+        702
+      ],
+      "expected": "ALL POINTS ARE EXISTING TO REMAIN AND SHOWN FOR REFERENCE ONLY.",
+      "mode": "contains"
+    },
+    {
+      "id": "m703-alarm-email",
+      "page": 17,
+      "bbox": [
+        1898,
+        714,
+        2238,
+        731
+      ],
+      "expected": "ALARM SIGNALS SHALL NOTIFY UP TO 3 PEOPLE VIA E-MAIL AS DIRECTED BY NIST.",
+      "mode": "contains"
+    },
+    {
+      "id": "m703-campus-ddc-visible",
+      "page": 17,
+      "bbox": [
+        1898,
+        724,
+        2155,
+        741
+      ],
+      "expected": "ALL POINTS SHALL BE VISIBLE TO THE CAMPUS DDC SYSTEM.",
+      "mode": "contains"
+    }
+  ],
+  "network_architecture": {
+    "published_integration": [
+      "M-703 says all points are visible to the Campus DDC system.",
+      "M-703 says alarm signals shall notify up to three people by e-mail as directed by NIST."
+    ],
+    "boundary": "Neither M-702 nor M-703 publishes controller addresses, controller/card assignment, terminal counts, wiring, protocol configuration, network-media design, or a physical I/O/device total.",
+    "assertion_ids": [
+      "m703-alarm-email",
+      "m703-campus-ddc-visible"
+    ]
+  },
+  "sequence_inventory": [
+    {
+      "id": "acu-a1-sequence",
+      "sheet": "M-702",
+      "assertion_ids": [
+        "m702-a1-fan-time-schedule",
+        "m702-a1-preheat-low-outdoor",
+        "m702-a1-freezestat-smoke-safety",
+        "m702-a1-economizer",
+        "m702-a1-cooling-valve",
+        "m702-a1-night-setback",
+        "m702-a1-night-setup",
+        "m702-a1-airflow-stations",
+        "m702-a1-humidifier-high-limit"
+      ]
+    },
+    {
+      "id": "acu-a2-sequence",
+      "sheet": "M-702",
+      "assertion_ids": [
+        "m702-a2-reheat-preheat",
+        "m702-a2-cooling-valve",
+        "m702-a2-zone-night-setback",
+        "m702-a2-zone-night-setup",
+        "m702-a2-afms"
+      ]
+    },
+    {
+      "id": "acu-a3-a6-sequence",
+      "sheet": "M-702",
+      "assertion_ids": [
+        "m702-a3a6-fan-time-schedule",
+        "m702-a3a6-night-setback",
+        "m702-a3a6-afms"
+      ]
+    },
+    {
+      "id": "m703-existing-template-boundary",
+      "sheet": "M-703",
+      "assertion_ids": [
+        "m703-existing-reference-only",
+        "m703-alarm-email",
+        "m703-campus-ddc-visible"
+      ]
+    }
+  ],
+  "sensors_and_control_symbol_context": {
+    "published_context": "M-702 specifies freeze-stat and smoke-detector safety devices, zone-temperature-sensor involvement, and AFMS monitoring in the retained ACU sequence clauses.",
+    "assertion_ids": [
+      "m702-a1-freezestat-smoke-safety",
+      "m702-a2-zone-night-setback",
+      "m702-a1-airflow-stations"
+    ],
+    "boundary": "These are source sequence contexts, not a counted equipment, zone, sensor, actuator, or field-device inventory."
+  },
+  "control_boundaries": [
+    "The text is retained as printed conditional control logic; no design intent is expanded into device, actuator, valve, damper, terminal, controller, wiring, or installed-I/O quantities.",
+    "M-703 explicitly scopes its points as existing-to-remain reference information. Its 60 literal matrix rows are therefore not a final physical point, controller, or field-device takeoff."
+  ]
+}

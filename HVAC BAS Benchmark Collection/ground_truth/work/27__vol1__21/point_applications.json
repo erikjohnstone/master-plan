@@ -1,0 +1,18 @@
+{
+  "document_id": "27__vol1__21",
+  "module_role": "Published control-diagram source-row scope only.",
+  "tables": [],
+  "ledger_mode": "literal_source_row_matrices_v1",
+  "applications": [
+    {
+      "id": "m701-chwp-io",
+      "source_table": "M701-CHWP-IO",
+      "ownership_scope": "Published diagram I/O context only; final device owner, controller/card/terminal, address and field wiring are not stated."
+    }
+  ],
+  "expanded_template_counts": {
+    "source_rows": 1,
+    "total": 1
+  },
+  "expanded_count_warning": "One literal diagram row is not a count of installed I/O, VFDs, pumps, controllers, terminals or cables."
+}

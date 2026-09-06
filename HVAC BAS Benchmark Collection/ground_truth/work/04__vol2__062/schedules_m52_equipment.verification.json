@@ -1,0 +1,6708 @@
+{
+  "document_id": "04__vol2__062",
+  "source_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "annotation_sha256": "2d257d702086ea280197829498df33290be568b70647cd80c28873c41ebc3a22",
+  "tables": 7,
+  "rows": 19,
+  "cell_assertions": 208,
+  "text_assertions": 4,
+  "checks": [
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 1,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        200,
+        180,
+        255,
+        210
+      ],
+      "expected": "EH-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EH-1",
+          "word_ids": [
+            21
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EH-1",
+          "word_ids": [
+            28
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 1,
+      "column": "area_served",
+      "page": 14,
+      "bbox": [
+        255,
+        180,
+        405,
+        210
+      ],
+      "expected": "NUCLEAR GAUGE STORAGE 128",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NUCLEAR GAUGE STORAGE 128",
+          "word_ids": [
+            22,
+            23,
+            24,
+            25
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NUCLEAR GAUGE STORAGE 128",
+          "word_ids": [
+            29,
+            30,
+            31,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 1,
+      "column": "unit_type",
+      "page": 14,
+      "bbox": [
+        405,
+        180,
+        548,
+        210
+      ],
+      "expected": "SURFACE MOUNTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SURFACE MOUNTED",
+          "word_ids": [
+            26,
+            27
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SURFACE MOUNTED",
+          "word_ids": [
+            5,
+            6
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 1,
+      "column": "cfm",
+      "page": 14,
+      "bbox": [
+        548,
+        180,
+        590,
+        210
+      ],
+      "expected": "245",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            28
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            14
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 1,
+      "column": "rpm",
+      "page": 14,
+      "bbox": [
+        590,
+        180,
+        640,
+        210
+      ],
+      "expected": "1,400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            29
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            15
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 1,
+      "column": "hp",
+      "page": 14,
+      "bbox": [
+        640,
+        180,
+        680,
+        210
+      ],
+      "expected": "1/8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/8",
+          "word_ids": [
+            30
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/8",
+          "word_ids": [
+            16
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 1,
+      "column": "kw",
+      "page": 14,
+      "bbox": [
+        680,
+        180,
+        720,
+        210
+      ],
+      "expected": "3.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.0",
+          "word_ids": [
+            31
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.0",
+          "word_ids": [
+            17
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 1,
+      "column": "steps",
+      "page": 14,
+      "bbox": [
+        720,
+        180,
+        760,
+        210
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            32
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            18
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 1,
+      "column": "voltage_phase",
+      "page": 14,
+      "bbox": [
+        760,
+        180,
+        815,
+        210
+      ],
+      "expected": "208 / 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            33,
+            34,
+            35
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            19,
+            20,
+            21
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 1,
+      "column": "amps",
+      "page": 14,
+      "bbox": [
+        815,
+        180,
+        850,
+        210
+      ],
+      "expected": "14.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14.4",
+          "word_ids": [
+            36
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14.4",
+          "word_ids": [
+            22
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        850,
+        180,
+        1000,
+        210
+      ],
+      "expected": "MARKEL MODEL 3420 SERIES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MARKEL MODEL 3420 SERIES",
+          "word_ids": [
+            37,
+            38,
+            39,
+            40
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MARKEL MODEL 3420 SERIES",
+          "word_ids": [
+            23,
+            24,
+            25,
+            26
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 1,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1000,
+        180,
+        1285,
+        210
+      ],
+      "expected": "1 , 3 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 3 , 5",
+          "word_ids": [
+            41,
+            42,
+            43,
+            44,
+            45
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 3 , 5",
+          "word_ids": [
+            117,
+            118,
+            119,
+            120,
+            121
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 2,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        200,
+        215,
+        255,
+        245
+      ],
+      "expected": "EH-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EH-2",
+          "word_ids": [
+            46
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EH-2",
+          "word_ids": [
+            33
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 2,
+      "column": "area_served",
+      "page": 14,
+      "bbox": [
+        255,
+        215,
+        405,
+        245
+      ],
+      "expected": "ENCLOSED MATERIAL STORAGE 127",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ENCLOSED MATERIAL STORAGE 127",
+          "word_ids": [
+            47,
+            48,
+            49,
+            50
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ENCLOSED MATERIAL STORAGE 127",
+          "word_ids": [
+            34,
+            35,
+            36,
+            37
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 2,
+      "column": "unit_type",
+      "page": 14,
+      "bbox": [
+        405,
+        215,
+        548,
+        245
+      ],
+      "expected": "SURFACE MOUNTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SURFACE MOUNTED",
+          "word_ids": [
+            51,
+            52
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SURFACE MOUNTED",
+          "word_ids": [
+            38,
+            39
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 2,
+      "column": "cfm",
+      "page": 14,
+      "bbox": [
+        548,
+        215,
+        590,
+        245
+      ],
+      "expected": "245",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            53
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            128
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 2,
+      "column": "rpm",
+      "page": 14,
+      "bbox": [
+        590,
+        215,
+        640,
+        245
+      ],
+      "expected": "1,400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            54
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            129
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 2,
+      "column": "hp",
+      "page": 14,
+      "bbox": [
+        640,
+        215,
+        680,
+        245
+      ],
+      "expected": "1/8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/8",
+          "word_ids": [
+            55
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/8",
+          "word_ids": [
+            130
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 2,
+      "column": "kw",
+      "page": 14,
+      "bbox": [
+        680,
+        215,
+        720,
+        245
+      ],
+      "expected": "3.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.0",
+          "word_ids": [
+            56
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.0",
+          "word_ids": [
+            131
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 2,
+      "column": "steps",
+      "page": 14,
+      "bbox": [
+        720,
+        215,
+        760,
+        245
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            57
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            132
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 2,
+      "column": "voltage_phase",
+      "page": 14,
+      "bbox": [
+        760,
+        215,
+        815,
+        245
+      ],
+      "expected": "208 / 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            58,
+            59,
+            60
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            133,
+            134,
+            135
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 2,
+      "column": "amps",
+      "page": 14,
+      "bbox": [
+        815,
+        215,
+        850,
+        245
+      ],
+      "expected": "14.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14.4",
+          "word_ids": [
+            61
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14.4",
+          "word_ids": [
+            136
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        850,
+        215,
+        1000,
+        245
+      ],
+      "expected": "MARKEL MODEL 3420 SERIES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MARKEL MODEL 3420 SERIES",
+          "word_ids": [
+            62,
+            63,
+            64,
+            65
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MARKEL MODEL 3420 SERIES",
+          "word_ids": [
+            137,
+            138,
+            139,
+            140
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 2,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1000,
+        215,
+        1285,
+        245
+      ],
+      "expected": "1 , 3 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 3 , 5",
+          "word_ids": [
+            66,
+            67,
+            68,
+            69,
+            70
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 3 , 5",
+          "word_ids": [
+            141,
+            142,
+            143,
+            144,
+            145
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 3,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        200,
+        251,
+        255,
+        281
+      ],
+      "expected": "EH-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EH-3",
+          "word_ids": [
+            71
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EH-3",
+          "word_ids": [
+            40
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 3,
+      "column": "area_served",
+      "page": 14,
+      "bbox": [
+        255,
+        251,
+        405,
+        281
+      ],
+      "expected": "ENCLOSED MATERIAL STORAGE 127",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ENCLOSED MATERIAL STORAGE 127",
+          "word_ids": [
+            72,
+            73,
+            74,
+            75
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ENCLOSED MATERIAL STORAGE 127",
+          "word_ids": [
+            41,
+            42,
+            43,
+            44
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 3,
+      "column": "unit_type",
+      "page": 14,
+      "bbox": [
+        405,
+        251,
+        548,
+        281
+      ],
+      "expected": "SURFACE MOUNTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SURFACE MOUNTED",
+          "word_ids": [
+            76,
+            77
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SURFACE MOUNTED",
+          "word_ids": [
+            45,
+            46
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 3,
+      "column": "cfm",
+      "page": 14,
+      "bbox": [
+        548,
+        251,
+        590,
+        281
+      ],
+      "expected": "245",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            78
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            47
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 3,
+      "column": "rpm",
+      "page": 14,
+      "bbox": [
+        590,
+        251,
+        640,
+        281
+      ],
+      "expected": "1,400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            79
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            48
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 3,
+      "column": "hp",
+      "page": 14,
+      "bbox": [
+        640,
+        251,
+        680,
+        281
+      ],
+      "expected": "1/8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/8",
+          "word_ids": [
+            80
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/8",
+          "word_ids": [
+            49
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 3,
+      "column": "kw",
+      "page": 14,
+      "bbox": [
+        680,
+        251,
+        720,
+        281
+      ],
+      "expected": "3.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.0",
+          "word_ids": [
+            81
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.0",
+          "word_ids": [
+            50
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 3,
+      "column": "steps",
+      "page": 14,
+      "bbox": [
+        720,
+        251,
+        760,
+        281
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            82
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            51
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 3,
+      "column": "voltage_phase",
+      "page": 14,
+      "bbox": [
+        760,
+        251,
+        815,
+        281
+      ],
+      "expected": "208 / 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            83,
+            84,
+            85
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            52,
+            53,
+            54
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 3,
+      "column": "amps",
+      "page": 14,
+      "bbox": [
+        815,
+        251,
+        850,
+        281
+      ],
+      "expected": "14.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14.4",
+          "word_ids": [
+            86
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14.4",
+          "word_ids": [
+            55
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 3,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        850,
+        251,
+        1000,
+        281
+      ],
+      "expected": "MARKEL MODEL 3420 SERIES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MARKEL MODEL 3420 SERIES",
+          "word_ids": [
+            87,
+            88,
+            89,
+            90
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MARKEL MODEL 3420 SERIES",
+          "word_ids": [
+            56,
+            57,
+            58,
+            59
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 3,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1000,
+        251,
+        1285,
+        281
+      ],
+      "expected": "1 , 3 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 3 , 5",
+          "word_ids": [
+            91,
+            92,
+            93,
+            94,
+            95
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 3 , 5",
+          "word_ids": [
+            60,
+            61,
+            62,
+            63,
+            64
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 4,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        200,
+        287,
+        255,
+        317
+      ],
+      "expected": "EH-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EH-4",
+          "word_ids": [
+            96
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EH-4",
+          "word_ids": [
+            65
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 4,
+      "column": "area_served",
+      "page": 14,
+      "bbox": [
+        255,
+        287,
+        405,
+        317
+      ],
+      "expected": "FIRE RISER 121",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FIRE RISER 121",
+          "word_ids": [
+            97,
+            98,
+            99
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FIRE RISER 121",
+          "word_ids": [
+            66,
+            67,
+            68
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 4,
+      "column": "unit_type",
+      "page": 14,
+      "bbox": [
+        405,
+        287,
+        548,
+        317
+      ],
+      "expected": "SURFACE MOUNTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SURFACE MOUNTED",
+          "word_ids": [
+            100,
+            101
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SURFACE MOUNTED",
+          "word_ids": [
+            69,
+            70
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 4,
+      "column": "cfm",
+      "page": 14,
+      "bbox": [
+        548,
+        287,
+        590,
+        317
+      ],
+      "expected": "245",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            102
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            71
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 4,
+      "column": "rpm",
+      "page": 14,
+      "bbox": [
+        590,
+        287,
+        640,
+        317
+      ],
+      "expected": "1,400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            103
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            72
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 4,
+      "column": "hp",
+      "page": 14,
+      "bbox": [
+        640,
+        287,
+        680,
+        317
+      ],
+      "expected": "1/8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/8",
+          "word_ids": [
+            104
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/8",
+          "word_ids": [
+            73
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 4,
+      "column": "kw",
+      "page": 14,
+      "bbox": [
+        680,
+        287,
+        720,
+        317
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            105
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            74
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 4,
+      "column": "steps",
+      "page": 14,
+      "bbox": [
+        720,
+        287,
+        760,
+        317
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            106
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            75
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 4,
+      "column": "voltage_phase",
+      "page": 14,
+      "bbox": [
+        760,
+        287,
+        815,
+        317
+      ],
+      "expected": "208 / 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            107,
+            108,
+            109
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            76,
+            77,
+            78
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 4,
+      "column": "amps",
+      "page": 14,
+      "bbox": [
+        815,
+        287,
+        850,
+        317
+      ],
+      "expected": "9.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.6",
+          "word_ids": [
+            110
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.6",
+          "word_ids": [
+            79
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 4,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        850,
+        287,
+        1000,
+        317
+      ],
+      "expected": "MARKEL MODEL 3420 SERIES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MARKEL MODEL 3420 SERIES",
+          "word_ids": [
+            111,
+            112,
+            113,
+            114
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MARKEL MODEL 3420 SERIES",
+          "word_ids": [
+            80,
+            81,
+            82,
+            83
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 4,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1000,
+        287,
+        1285,
+        317
+      ],
+      "expected": "1 , 3 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 3 , 5",
+          "word_ids": [
+            115,
+            116,
+            117,
+            118,
+            119
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 3 , 5",
+          "word_ids": [
+            84,
+            85,
+            86,
+            87,
+            88
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 5,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        200,
+        323,
+        255,
+        353
+      ],
+      "expected": "EH-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EH-5",
+          "word_ids": [
+            120
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EH-5",
+          "word_ids": [
+            89
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 5,
+      "column": "area_served",
+      "page": 14,
+      "bbox": [
+        255,
+        323,
+        405,
+        353
+      ],
+      "expected": "LAB MECHANICAL 120",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LAB MECHANICAL 120",
+          "word_ids": [
+            121,
+            122,
+            123
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LAB MECHANICAL 120",
+          "word_ids": [
+            90,
+            91,
+            92
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 5,
+      "column": "unit_type",
+      "page": 14,
+      "bbox": [
+        405,
+        323,
+        548,
+        353
+      ],
+      "expected": "WALL MOUNTED UNIT HEATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WALL MOUNTED UNIT HEATER",
+          "word_ids": [
+            124,
+            125,
+            126,
+            127
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WALL MOUNTED UNIT HEATER",
+          "word_ids": [
+            93,
+            94,
+            95,
+            96
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 5,
+      "column": "cfm",
+      "page": 14,
+      "bbox": [
+        548,
+        323,
+        590,
+        353
+      ],
+      "expected": "300",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            128
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            97
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 5,
+      "column": "rpm",
+      "page": 14,
+      "bbox": [
+        590,
+        323,
+        640,
+        353
+      ],
+      "expected": "1,400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            129
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            98
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 5,
+      "column": "hp",
+      "page": 14,
+      "bbox": [
+        640,
+        323,
+        680,
+        353
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            130
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            99
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 5,
+      "column": "kw",
+      "page": 14,
+      "bbox": [
+        680,
+        323,
+        720,
+        353
+      ],
+      "expected": "3.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.0",
+          "word_ids": [
+            131
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.0",
+          "word_ids": [
+            100
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 5,
+      "column": "steps",
+      "page": 14,
+      "bbox": [
+        720,
+        323,
+        760,
+        353
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            132
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            101
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 5,
+      "column": "voltage_phase",
+      "page": 14,
+      "bbox": [
+        760,
+        323,
+        815,
+        353
+      ],
+      "expected": "208 / 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            133,
+            134,
+            135
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            102,
+            103,
+            104
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 5,
+      "column": "amps",
+      "page": 14,
+      "bbox": [
+        815,
+        323,
+        850,
+        353
+      ],
+      "expected": "14.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14.4",
+          "word_ids": [
+            136
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14.4",
+          "word_ids": [
+            105
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 5,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        850,
+        323,
+        1000,
+        353
+      ],
+      "expected": "REZNOR MODEL EGW-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "REZNOR MODEL EGW-3",
+          "word_ids": [
+            137,
+            138,
+            139
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "REZNOR MODEL EGW-3",
+          "word_ids": [
+            106,
+            107,
+            108
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 5,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1000,
+        323,
+        1285,
+        353
+      ],
+      "expected": "1 , 4 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 4 , 5",
+          "word_ids": [
+            140,
+            141,
+            142,
+            143,
+            144
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 4 , 5",
+          "word_ids": [
+            109,
+            110,
+            111,
+            112,
+            113
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 6,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        200,
+        359,
+        255,
+        389
+      ],
+      "expected": "EH-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EH-6",
+          "word_ids": [
+            145
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EH-6",
+          "word_ids": [
+            147
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 6,
+      "column": "area_served",
+      "page": 14,
+      "bbox": [
+        255,
+        359,
+        405,
+        389
+      ],
+      "expected": "ELECTRICAL 116",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ELECTRICAL 116",
+          "word_ids": [
+            146,
+            147
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ELECTRICAL 116",
+          "word_ids": [
+            148,
+            149
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 6,
+      "column": "unit_type",
+      "page": 14,
+      "bbox": [
+        405,
+        359,
+        548,
+        389
+      ],
+      "expected": "RECESSED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RECESSED",
+          "word_ids": [
+            148
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RECESSED",
+          "word_ids": [
+            150
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 6,
+      "column": "cfm",
+      "page": 14,
+      "bbox": [
+        548,
+        359,
+        590,
+        389
+      ],
+      "expected": "245",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            149
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            151
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 6,
+      "column": "rpm",
+      "page": 14,
+      "bbox": [
+        590,
+        359,
+        640,
+        389
+      ],
+      "expected": "1,400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            150
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            152
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 6,
+      "column": "hp",
+      "page": 14,
+      "bbox": [
+        640,
+        359,
+        680,
+        389
+      ],
+      "expected": "1/8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/8",
+          "word_ids": [
+            151
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/8",
+          "word_ids": [
+            153
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 6,
+      "column": "kw",
+      "page": 14,
+      "bbox": [
+        680,
+        359,
+        720,
+        389
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            152
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            154
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 6,
+      "column": "steps",
+      "page": 14,
+      "bbox": [
+        720,
+        359,
+        760,
+        389
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            153
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            155
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 6,
+      "column": "voltage_phase",
+      "page": 14,
+      "bbox": [
+        760,
+        359,
+        815,
+        389
+      ],
+      "expected": "208 / 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            154,
+            155,
+            156
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            156,
+            157,
+            158
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 6,
+      "column": "amps",
+      "page": 14,
+      "bbox": [
+        815,
+        359,
+        850,
+        389
+      ],
+      "expected": "9.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.6",
+          "word_ids": [
+            157
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.6",
+          "word_ids": [
+            159
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 6,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        850,
+        359,
+        1000,
+        389
+      ],
+      "expected": "MARKEL MODEL 3420 SERIES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MARKEL MODEL 3420 SERIES",
+          "word_ids": [
+            158,
+            159,
+            160,
+            161
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MARKEL MODEL 3420 SERIES",
+          "word_ids": [
+            160,
+            161,
+            162,
+            163
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 6,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1000,
+        359,
+        1285,
+        389
+      ],
+      "expected": "1 , 3 , 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 3 , 5",
+          "word_ids": [
+            162,
+            163,
+            164,
+            165,
+            166
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 3 , 5",
+          "word_ids": [
+            164,
+            165,
+            166,
+            167,
+            168
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 7,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        200,
+        395,
+        255,
+        425
+      ],
+      "expected": "EH-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EH-7",
+          "word_ids": [
+            167
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EH-7",
+          "word_ids": [
+            169
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 7,
+      "column": "area_served",
+      "page": 14,
+      "bbox": [
+        255,
+        395,
+        405,
+        425
+      ],
+      "expected": "LOBBY 101",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOBBY 101",
+          "word_ids": [
+            168,
+            169
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOBBY 101",
+          "word_ids": [
+            170,
+            171
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 7,
+      "column": "unit_type",
+      "page": 14,
+      "bbox": [
+        405,
+        395,
+        548,
+        425
+      ],
+      "expected": "RECESSED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RECESSED",
+          "word_ids": [
+            170
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RECESSED",
+          "word_ids": [
+            172
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 7,
+      "column": "cfm",
+      "page": 14,
+      "bbox": [
+        548,
+        395,
+        590,
+        425
+      ],
+      "expected": "245",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            171
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            173
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 7,
+      "column": "rpm",
+      "page": 14,
+      "bbox": [
+        590,
+        395,
+        640,
+        425
+      ],
+      "expected": "1,400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            172
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            174
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 7,
+      "column": "hp",
+      "page": 14,
+      "bbox": [
+        640,
+        395,
+        680,
+        425
+      ],
+      "expected": "1/8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/8",
+          "word_ids": [
+            173
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/8",
+          "word_ids": [
+            175
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 7,
+      "column": "kw",
+      "page": 14,
+      "bbox": [
+        680,
+        395,
+        720,
+        425
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            174
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            176
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 7,
+      "column": "steps",
+      "page": 14,
+      "bbox": [
+        720,
+        395,
+        760,
+        425
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            175
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            177
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 7,
+      "column": "voltage_phase",
+      "page": 14,
+      "bbox": [
+        760,
+        395,
+        815,
+        425
+      ],
+      "expected": "208 / 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            176,
+            177,
+            178
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            178,
+            179,
+            180
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 7,
+      "column": "amps",
+      "page": 14,
+      "bbox": [
+        815,
+        395,
+        850,
+        425
+      ],
+      "expected": "9.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.6",
+          "word_ids": [
+            179
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.6",
+          "word_ids": [
+            181
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 7,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        850,
+        395,
+        1000,
+        425
+      ],
+      "expected": "MARKEL MODEL 3420 SERIES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MARKEL MODEL 3420 SERIES",
+          "word_ids": [
+            180,
+            181,
+            182,
+            183
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MARKEL MODEL 3420 SERIES",
+          "word_ids": [
+            182,
+            183,
+            184,
+            185
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 7,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1000,
+        395,
+        1285,
+        425
+      ],
+      "expected": "1 , 2 , 6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 6",
+          "word_ids": [
+            184,
+            185,
+            186,
+            187,
+            188
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 6",
+          "word_ids": [
+            186,
+            187,
+            188,
+            189,
+            190
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 8,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        200,
+        431,
+        255,
+        461
+      ],
+      "expected": "EH-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EH-8",
+          "word_ids": [
+            189
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EH-8",
+          "word_ids": [
+            191
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 8,
+      "column": "area_served",
+      "page": 14,
+      "bbox": [
+        255,
+        431,
+        405,
+        461
+      ],
+      "expected": "OPEN OFFICE 110",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OPEN OFFICE 110",
+          "word_ids": [
+            190,
+            191,
+            192
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OPEN OFFICE 110",
+          "word_ids": [
+            192,
+            193,
+            194
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 8,
+      "column": "unit_type",
+      "page": 14,
+      "bbox": [
+        405,
+        431,
+        548,
+        461
+      ],
+      "expected": "RECESSED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RECESSED",
+          "word_ids": [
+            193
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RECESSED",
+          "word_ids": [
+            195
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 8,
+      "column": "cfm",
+      "page": 14,
+      "bbox": [
+        548,
+        431,
+        590,
+        461
+      ],
+      "expected": "245",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            194
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            196
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 8,
+      "column": "rpm",
+      "page": 14,
+      "bbox": [
+        590,
+        431,
+        640,
+        461
+      ],
+      "expected": "1,400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            195
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            197
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 8,
+      "column": "hp",
+      "page": 14,
+      "bbox": [
+        640,
+        431,
+        680,
+        461
+      ],
+      "expected": "1/8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/8",
+          "word_ids": [
+            196
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/8",
+          "word_ids": [
+            198
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 8,
+      "column": "kw",
+      "page": 14,
+      "bbox": [
+        680,
+        431,
+        720,
+        461
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            197
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            199
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 8,
+      "column": "steps",
+      "page": 14,
+      "bbox": [
+        720,
+        431,
+        760,
+        461
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            198
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            200
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 8,
+      "column": "voltage_phase",
+      "page": 14,
+      "bbox": [
+        760,
+        431,
+        815,
+        461
+      ],
+      "expected": "208 / 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            199,
+            200,
+            201
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            201,
+            202,
+            203
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 8,
+      "column": "amps",
+      "page": 14,
+      "bbox": [
+        815,
+        431,
+        850,
+        461
+      ],
+      "expected": "9.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.6",
+          "word_ids": [
+            202
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.6",
+          "word_ids": [
+            204
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 8,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        850,
+        431,
+        1000,
+        461
+      ],
+      "expected": "MARKEL MODEL 3420 SERIES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MARKEL MODEL 3420 SERIES",
+          "word_ids": [
+            203,
+            204,
+            205,
+            206
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MARKEL MODEL 3420 SERIES",
+          "word_ids": [
+            205,
+            206,
+            207,
+            208
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 8,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1000,
+        431,
+        1285,
+        461
+      ],
+      "expected": "1 , 2 , 6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 6",
+          "word_ids": [
+            207,
+            208,
+            209,
+            210,
+            211
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 6",
+          "word_ids": [
+            209,
+            210,
+            211,
+            212,
+            213
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 9,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        200,
+        467,
+        255,
+        497
+      ],
+      "expected": "EH-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EH-9",
+          "word_ids": [
+            212
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EH-9",
+          "word_ids": [
+            319
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 9,
+      "column": "area_served",
+      "page": 14,
+      "bbox": [
+        255,
+        467,
+        405,
+        497
+      ],
+      "expected": "REST. 102",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "REST. 102",
+          "word_ids": [
+            213,
+            214
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "REST. 102",
+          "word_ids": [
+            320,
+            321
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 9,
+      "column": "unit_type",
+      "page": 14,
+      "bbox": [
+        405,
+        467,
+        548,
+        497
+      ],
+      "expected": "RECESSED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RECESSED",
+          "word_ids": [
+            215
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RECESSED",
+          "word_ids": [
+            322
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 9,
+      "column": "cfm",
+      "page": 14,
+      "bbox": [
+        548,
+        467,
+        590,
+        497
+      ],
+      "expected": "245",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            216
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            323
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 9,
+      "column": "rpm",
+      "page": 14,
+      "bbox": [
+        590,
+        467,
+        640,
+        497
+      ],
+      "expected": "1,400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            217
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            324
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 9,
+      "column": "hp",
+      "page": 14,
+      "bbox": [
+        640,
+        467,
+        680,
+        497
+      ],
+      "expected": "1/8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/8",
+          "word_ids": [
+            218
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/8",
+          "word_ids": [
+            325
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 9,
+      "column": "kw",
+      "page": 14,
+      "bbox": [
+        680,
+        467,
+        720,
+        497
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            219
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            326
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 9,
+      "column": "steps",
+      "page": 14,
+      "bbox": [
+        720,
+        467,
+        760,
+        497
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            220
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            327
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 9,
+      "column": "voltage_phase",
+      "page": 14,
+      "bbox": [
+        760,
+        467,
+        815,
+        497
+      ],
+      "expected": "208 / 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            221,
+            222,
+            223
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208 / 1",
+          "word_ids": [
+            328,
+            329,
+            330
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 9,
+      "column": "amps",
+      "page": 14,
+      "bbox": [
+        815,
+        467,
+        850,
+        497
+      ],
+      "expected": "9.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.6",
+          "word_ids": [
+            224
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.6",
+          "word_ids": [
+            331
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 9,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        850,
+        467,
+        1000,
+        497
+      ],
+      "expected": "MARKEL MODEL 3420 SERIES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MARKEL MODEL 3420 SERIES",
+          "word_ids": [
+            225,
+            226,
+            227,
+            228
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MARKEL MODEL 3420 SERIES",
+          "word_ids": [
+            332,
+            333,
+            334,
+            335
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-ELECTRIC-HEATERS",
+      "row": 9,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1000,
+        467,
+        1285,
+        497
+      ],
+      "expected": "1 , 2 , 6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 6",
+          "word_ids": [
+            229,
+            230,
+            231,
+            232,
+            233
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 6",
+          "word_ids": [
+            361,
+            362,
+            363,
+            364,
+            365
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 1,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        200,
+        760,
+        255,
+        797
+      ],
+      "expected": "AS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AS-1",
+          "word_ids": [
+            310
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AS-1",
+          "word_ids": [
+            529
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 1,
+      "column": "equipment_description",
+      "page": 14,
+      "bbox": [
+        255,
+        760,
+        400,
+        797
+      ],
+      "expected": "AIR SEDIMENT SEPARATOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIR SEDIMENT SEPARATOR",
+          "word_ids": [
+            311,
+            312,
+            313
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIR SEDIMENT SEPARATOR",
+          "word_ids": [
+            530,
+            531,
+            532
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 1,
+      "column": "system_served",
+      "page": 14,
+      "bbox": [
+        400,
+        760,
+        525,
+        797
+      ],
+      "expected": "HOT WATER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            314,
+            315,
+            316
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            533,
+            534,
+            535
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 1,
+      "column": "description",
+      "page": 14,
+      "bbox": [
+        525,
+        760,
+        980,
+        797
+      ],
+      "expected": "DESIGN FLOW IS 80 GPM WITH A DESIGN PD OF 1.0 FT-H",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DESIGN FLOW IS 80 GPM WITH A DESIGN PD OF 1.0 FT-H",
+          "word_ids": [
+            317,
+            318,
+            319,
+            320,
+            321,
+            322,
+            323,
+            324,
+            325,
+            326,
+            327,
+            328
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DESIGN FLOW IS 80 GPM WITH A DESIGN PD OF 1.0 FT-H",
+          "word_ids": [
+            536,
+            537,
+            538,
+            539,
+            540,
+            541,
+            542,
+            543,
+            544,
+            545,
+            546,
+            547
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 1,
+      "column": "manufacturer_model_and_alternates",
+      "page": 14,
+      "bbox": [
+        980,
+        760,
+        1275,
+        797
+      ],
+      "expected": "B & G MODEL SRS-3F ALTERNATE APPROVED MANUFACTURERS: TACO, ARMSTRONG, AND PACO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B & G MODEL SRS-3F ALTERNATE APPROVED MANUFACTURERS: TACO, ARMSTRONG, AND PACO",
+          "word_ids": [
+            330,
+            331,
+            332,
+            333,
+            334,
+            335,
+            336,
+            337,
+            338,
+            339,
+            340,
+            341
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B & G MODEL SRS-3F ALTERNATE APPROVED MANUFACTURERS: TACO, ARMSTRONG, AND PACO",
+          "word_ids": [
+            550,
+            551,
+            552,
+            553,
+            554,
+            555,
+            556,
+            557,
+            558,
+            559,
+            560,
+            561
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 2,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        200,
+        797,
+        255,
+        835
+      ],
+      "expected": "ET-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ET-1",
+          "word_ids": [
+            342
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ET-1",
+          "word_ids": [
+            612
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 2,
+      "column": "equipment_description",
+      "page": 14,
+      "bbox": [
+        255,
+        797,
+        400,
+        835
+      ],
+      "expected": "EXPANSION TANK (VERTICAL DIAPHRAGM TYPE)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXPANSION TANK (VERTICAL DIAPHRAGM TYPE)",
+          "word_ids": [
+            343,
+            344,
+            345,
+            346,
+            347
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXPANSION TANK (VERTICAL DIAPHRAGM TYPE)",
+          "word_ids": [
+            562,
+            563,
+            564,
+            565,
+            566
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 2,
+      "column": "system_served",
+      "page": 14,
+      "bbox": [
+        400,
+        797,
+        525,
+        835
+      ],
+      "expected": "HOT WATER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            348,
+            349,
+            350
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            583,
+            584,
+            585
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 2,
+      "column": "description",
+      "page": 14,
+      "bbox": [
+        525,
+        797,
+        980,
+        835
+      ],
+      "expected": "7.8 GALLON CAPACITY, ACCEPTANCE 6.3 GALLONS-DIAPHRAGM TYPE EXPANSION TANK. (PRE-CHARGED TO 10 PSI)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "7.8 GALLON CAPACITY, ACCEPTANCE 6.3 GALLONS-DIAPHRAGM TYPE EXPANSION TANK. (PRE-CHARGED TO 10 PSI)",
+          "word_ids": [
+            351,
+            352,
+            353,
+            354,
+            355,
+            356,
+            357,
+            358,
+            359,
+            360,
+            361,
+            362,
+            363
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "7.8 GALLON CAPACITY, ACCEPTANCE 6.3 GALLONS-DIAPHRAGM TYPE EXPANSION TANK. (PRE-CHARGED TO 10 PSI)",
+          "word_ids": [
+            586,
+            587,
+            588,
+            589,
+            590,
+            591,
+            592,
+            593,
+            594,
+            595,
+            596,
+            597,
+            598
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 2,
+      "column": "manufacturer_model_and_alternates",
+      "page": 14,
+      "bbox": [
+        980,
+        797,
+        1275,
+        835
+      ],
+      "expected": "B & G MODEL D-15 ALTERNATE APPROVED MANUFACTURERS: TACO, ARMSTRONG, AND PACO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B & G MODEL D-15 ALTERNATE APPROVED MANUFACTURERS: TACO, ARMSTRONG, AND PACO",
+          "word_ids": [
+            364,
+            365,
+            366,
+            367,
+            368,
+            369,
+            370,
+            371,
+            372,
+            373,
+            374,
+            375
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B & G MODEL D-15 ALTERNATE APPROVED MANUFACTURERS: TACO, ARMSTRONG, AND PACO",
+          "word_ids": [
+            599,
+            600,
+            601,
+            602,
+            603,
+            604,
+            605,
+            606,
+            607,
+            608,
+            609,
+            610
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 3,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        200,
+        835,
+        255,
+        870
+      ],
+      "expected": "FM-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FM-1",
+          "word_ids": [
+            376
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FM-1",
+          "word_ids": [
+            651
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 3,
+      "column": "equipment_description",
+      "page": 14,
+      "bbox": [
+        255,
+        835,
+        400,
+        870
+      ],
+      "expected": "HYDRONIC FLOW METER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HYDRONIC FLOW METER",
+          "word_ids": [
+            377,
+            378,
+            379
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HYDRONIC FLOW METER",
+          "word_ids": [
+            620,
+            621,
+            622
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 3,
+      "column": "system_served",
+      "page": 14,
+      "bbox": [
+        400,
+        835,
+        525,
+        870
+      ],
+      "expected": "HOT WATER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            380,
+            381,
+            382
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            623,
+            624,
+            625
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 3,
+      "column": "description",
+      "page": 14,
+      "bbox": [
+        525,
+        835,
+        980,
+        870
+      ],
+      "expected": "ELECTROMAGNETIC FLOW METER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ELECTROMAGNETIC FLOW METER",
+          "word_ids": [
+            383,
+            384,
+            385
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ELECTROMAGNETIC FLOW METER",
+          "word_ids": [
+            655,
+            656,
+            657
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 3,
+      "column": "manufacturer_model_and_alternates",
+      "page": 14,
+      "bbox": [
+        980,
+        835,
+        1275,
+        870
+      ],
+      "expected": "ONICON F-3200 FLOW METER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ONICON F-3200 FLOW METER",
+          "word_ids": [
+            386,
+            387,
+            388,
+            389
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ONICON F-3200 FLOW METER",
+          "word_ids": [
+            626,
+            627,
+            628,
+            629
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 4,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        200,
+        870,
+        255,
+        908
+      ],
+      "expected": "PF-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PF-1",
+          "word_ids": [
+            390
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PF-1",
+          "word_ids": [
+            652
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 4,
+      "column": "equipment_description",
+      "page": 14,
+      "bbox": [
+        255,
+        870,
+        400,
+        908
+      ],
+      "expected": "POT FEEDER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POT FEEDER",
+          "word_ids": [
+            391,
+            392
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POT FEEDER",
+          "word_ids": [
+            653,
+            654
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 4,
+      "column": "system_served",
+      "page": 14,
+      "bbox": [
+        400,
+        870,
+        525,
+        908
+      ],
+      "expected": "HOT WATER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            393,
+            394,
+            395
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT WATER LOOP",
+          "word_ids": [
+            658,
+            659,
+            660
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 4,
+      "column": "description",
+      "page": 14,
+      "bbox": [
+        525,
+        870,
+        980,
+        908
+      ],
+      "expected": "CHEMICAL POT FEEDER TANK",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHEMICAL POT FEEDER TANK",
+          "word_ids": [
+            396,
+            397,
+            398,
+            399
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHEMICAL POT FEEDER TANK",
+          "word_ids": [
+            661,
+            662,
+            663,
+            664
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "row": 4,
+      "column": "manufacturer_model_and_alternates",
+      "page": 14,
+      "bbox": [
+        980,
+        870,
+        1275,
+        908
+      ],
+      "expected": "WESSELS MODEL CPFT-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WESSELS MODEL CPFT-2",
+          "word_ids": [
+            400,
+            401,
+            402
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WESSELS MODEL CPFT-2",
+          "word_ids": [
+            666,
+            667,
+            668
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        200,
+        1050,
+        275,
+        1083
+      ],
+      "expected": "F-1 , CU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F-1 , CU-1",
+          "word_ids": [
+            549,
+            550,
+            551
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F-1 , CU-1",
+          "word_ids": [
+            1091,
+            1092,
+            1093
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "unit_type",
+      "page": 14,
+      "bbox": [
+        275,
+        1050,
+        345,
+        1083
+      ],
+      "expected": "MULTIPOISE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MULTIPOISE",
+          "word_ids": [
+            552
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MULTIPOISE",
+          "word_ids": [
+            1076
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "nominal_tons",
+      "page": 14,
+      "bbox": [
+        345,
+        1050,
+        389,
+        1083
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            553
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            1066
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "supply_cfm",
+      "page": 14,
+      "bbox": [
+        389,
+        1050,
+        427,
+        1083
+      ],
+      "expected": "2,250",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,250",
+          "word_ids": [
+            554
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,250",
+          "word_ids": [
+            744
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "esp",
+      "page": 14,
+      "bbox": [
+        427,
+        1050,
+        461,
+        1083
+      ],
+      "expected": "0.70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.70",
+          "word_ids": [
+            555
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.70",
+          "word_ids": [
+            745
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "hp",
+      "page": 14,
+      "bbox": [
+        461,
+        1050,
+        497,
+        1083
+      ],
+      "expected": "1.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            556
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            746
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "supply_voltage_phase",
+      "page": 14,
+      "bbox": [
+        497,
+        1050,
+        539,
+        1083
+      ],
+      "expected": "115/1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115/1",
+          "word_ids": [
+            557
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115/1",
+          "word_ids": [
+            747
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "total_cooling_mbh",
+      "page": 14,
+      "bbox": [
+        539,
+        1050,
+        587,
+        1083
+      ],
+      "expected": "52.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "52.0",
+          "word_ids": [
+            558
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "52.0",
+          "word_ids": [
+            748
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "sensible_cooling_mbh",
+      "page": 14,
+      "bbox": [
+        587,
+        1050,
+        648,
+        1083
+      ],
+      "expected": "52.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "52.0",
+          "word_ids": [
+            559
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "52.0",
+          "word_ids": [
+            749
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "heating_input_mbh",
+      "page": 14,
+      "bbox": [
+        648,
+        1050,
+        693,
+        1083
+      ],
+      "expected": "80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            560
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            750
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "heating_output_mbh",
+      "page": 14,
+      "bbox": [
+        693,
+        1050,
+        737,
+        1083
+      ],
+      "expected": "78.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "78.0",
+          "word_ids": [
+            561
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "78.0",
+          "word_ids": [
+            751
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "mca",
+      "page": 14,
+      "bbox": [
+        737,
+        1050,
+        775,
+        1083
+      ],
+      "expected": "32.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "32.4",
+          "word_ids": [
+            562
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "32.4",
+          "word_ids": [
+            752
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "mocp",
+      "page": 14,
+      "bbox": [
+        775,
+        1050,
+        810,
+        1083
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            563
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            753
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "condensing_voltage_phase",
+      "page": 14,
+      "bbox": [
+        810,
+        1050,
+        848,
+        1083
+      ],
+      "expected": "208/1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208/1",
+          "word_ids": [
+            564
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208/1",
+          "word_ids": [
+            754
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "osa_cfm",
+      "page": 14,
+      "bbox": [
+        848,
+        1050,
+        880,
+        1083
+      ],
+      "expected": "260",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "260",
+          "word_ids": [
+            565
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "260",
+          "word_ids": [
+            755
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "minimum_seer2",
+      "page": 14,
+      "bbox": [
+        880,
+        1050,
+        916,
+        1083
+      ],
+      "expected": "14.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14.0",
+          "word_ids": [
+            566
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14.0",
+          "word_ids": [
+            756
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "operating_weight_lb",
+      "page": 14,
+      "bbox": [
+        916,
+        1050,
+        963,
+        1083
+      ],
+      "expected": "450",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "450",
+          "word_ids": [
+            567
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "450",
+          "word_ids": [
+            757
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        963,
+        1050,
+        1210,
+        1083
+      ],
+      "expected": "CARRIER 59SC6A080C211-20 FURNACE CARRIER 24SCA460 CONDENSING UNIT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CARRIER 59SC6A080C211-20 FURNACE CARRIER 24SCA460 CONDENSING UNIT",
+          "word_ids": [
+            568,
+            569,
+            570,
+            571,
+            572,
+            573,
+            574
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CARRIER 59SC6A080C211-20 FURNACE CARRIER 24SCA460 CONDENSING UNIT",
+          "word_ids": [
+            761,
+            762,
+            763,
+            764,
+            765,
+            766,
+            767
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "row": 1,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1210,
+        1050,
+        1285,
+        1083
+      ],
+      "expected": "1 , 2 , 3 , 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            575,
+            576,
+            577,
+            578,
+            579,
+            580,
+            581
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            892,
+            893,
+            894,
+            895,
+            896,
+            897,
+            898
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        1300,
+        285,
+        1360,
+        315
+      ],
+      "expected": "SA-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SA-1",
+          "word_ids": [
+            632
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SA-1",
+          "word_ids": [
+            214
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "type",
+      "page": 14,
+      "bbox": [
+        1360,
+        285,
+        1405,
+        315
+      ],
+      "expected": "DUCT SILENCER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT SILENCER",
+          "word_ids": [
+            633,
+            634
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT SILENCER",
+          "word_ids": [
+            219,
+            222
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "location",
+      "page": 14,
+      "bbox": [
+        1405,
+        285,
+        1470,
+        315
+      ],
+      "expected": "AHU-1 SUPPLY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-1 SUPPLY",
+          "word_ids": [
+            635,
+            636
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-1 SUPPLY",
+          "word_ids": [
+            220,
+            221
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "airflow_cfm",
+      "page": 14,
+      "bbox": [
+        1470,
+        285,
+        1520,
+        315
+      ],
+      "expected": "13,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13,000",
+          "word_ids": [
+            637
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13,000",
+          "word_ids": [
+            223
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "maximum_face_velocity_fpm",
+      "page": 14,
+      "bbox": [
+        1520,
+        285,
+        1570,
+        315
+      ],
+      "expected": "2,500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,500",
+          "word_ids": [
+            638
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,500",
+          "word_ids": [
+            242
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "length_in",
+      "page": 14,
+      "bbox": [
+        1570,
+        285,
+        1620,
+        315
+      ],
+      "expected": "84",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "84",
+          "word_ids": [
+            639
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "84",
+          "word_ids": [
+            239
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "width_in",
+      "page": 14,
+      "bbox": [
+        1620,
+        285,
+        1665,
+        315
+      ],
+      "expected": "58",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "58",
+          "word_ids": [
+            640
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "58",
+          "word_ids": [
+            240
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "height_in",
+      "page": 14,
+      "bbox": [
+        1665,
+        285,
+        1725,
+        315
+      ],
+      "expected": "22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            641
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            241
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "face_area_sq_ft",
+      "page": 14,
+      "bbox": [
+        1725,
+        285,
+        1775,
+        315
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            642
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            247
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "maximum_pressure_drop_in_wc",
+      "page": 14,
+      "bbox": [
+        1775,
+        285,
+        1835,
+        315
+      ],
+      "expected": "0.22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.22",
+          "word_ids": [
+            643
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.22",
+          "word_ids": [
+            250
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "weight_lb",
+      "page": 14,
+      "bbox": [
+        1835,
+        285,
+        1885,
+        315
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            644
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            254
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "il_63",
+      "page": 14,
+      "bbox": [
+        1885,
+        285,
+        1912,
+        315
+      ],
+      "expected": "11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            645
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            266
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "il_125",
+      "page": 14,
+      "bbox": [
+        1912,
+        285,
+        1939,
+        315
+      ],
+      "expected": "18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            646
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            267
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "il_250",
+      "page": 14,
+      "bbox": [
+        1939,
+        285,
+        1966,
+        315
+      ],
+      "expected": "28",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "28",
+          "word_ids": [
+            647
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "28",
+          "word_ids": [
+            268
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "il_500",
+      "page": 14,
+      "bbox": [
+        1966,
+        285,
+        1993,
+        315
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            648
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            269
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "il_1000",
+      "page": 14,
+      "bbox": [
+        1993,
+        285,
+        2020,
+        315
+      ],
+      "expected": "36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            649
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            270
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "il_2000",
+      "page": 14,
+      "bbox": [
+        2020,
+        285,
+        2047,
+        315
+      ],
+      "expected": "26",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "26",
+          "word_ids": [
+            650
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "26",
+          "word_ids": [
+            271
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "il_4000",
+      "page": 14,
+      "bbox": [
+        2047,
+        285,
+        2074,
+        315
+      ],
+      "expected": "22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            651
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            272
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "il_8000",
+      "page": 14,
+      "bbox": [
+        2074,
+        285,
+        2102,
+        315
+      ],
+      "expected": "14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            652
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            273
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        2102,
+        285,
+        2295,
+        315
+      ],
+      "expected": "VIBRO ACOUSTICS SA-S",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VIBRO ACOUSTICS SA-S",
+          "word_ids": [
+            653,
+            654,
+            655
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VIBRO ACOUSTICS SA-S",
+          "word_ids": [
+            275,
+            276,
+            277
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-SOUND-ATTENUATOR",
+      "row": 1,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        2295,
+        285,
+        2420,
+        315
+      ],
+      "expected": "1 , 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2",
+          "word_ids": [
+            656,
+            657,
+            658
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2",
+          "word_ids": [
+            278,
+            279,
+            280
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-PENTHOUSE",
+      "row": 1,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        1300,
+        485,
+        1400,
+        515
+      ],
+      "expected": "PH-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PH-1",
+          "word_ids": [
+            732
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PH-1",
+          "word_ids": [
+            352
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-PENTHOUSE",
+      "row": 1,
+      "column": "area_served",
+      "page": 14,
+      "bbox": [
+        1400,
+        485,
+        1550,
+        515
+      ],
+      "expected": "EQUIPMENT T01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EQUIPMENT T01",
+          "word_ids": [
+            733,
+            734
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EQUIPMENT T01",
+          "word_ids": [
+            353,
+            354
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-PENTHOUSE",
+      "row": 1,
+      "column": "type",
+      "page": 14,
+      "bbox": [
+        1550,
+        485,
+        1630,
+        515
+      ],
+      "expected": "TIERED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TIERED",
+          "word_ids": [
+            735
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TIERED",
+          "word_ids": [
+            355
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-PENTHOUSE",
+      "row": 1,
+      "column": "number_of_tiers",
+      "page": 14,
+      "bbox": [
+        1630,
+        485,
+        1730,
+        515
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            736
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            356
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-PENTHOUSE",
+      "row": 1,
+      "column": "throat_size",
+      "page": 14,
+      "bbox": [
+        1730,
+        485,
+        1840,
+        515
+      ],
+      "expected": "8X8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8X8",
+          "word_ids": [
+            737
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8X8",
+          "word_ids": [
+            357
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-PENTHOUSE",
+      "row": 1,
+      "column": "minimum_free_area_sq_ft",
+      "page": 14,
+      "bbox": [
+        1840,
+        485,
+        1915,
+        515
+      ],
+      "expected": "0.45",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.45",
+          "word_ids": [
+            738
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.45",
+          "word_ids": [
+            358
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-PENTHOUSE",
+      "row": 1,
+      "column": "finish",
+      "page": 14,
+      "bbox": [
+        1915,
+        485,
+        1990,
+        515
+      ],
+      "expected": "AAMA 2604",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AAMA 2604",
+          "word_ids": [
+            739,
+            740
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AAMA 2604",
+          "word_ids": [
+            359,
+            360
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-PENTHOUSE",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        1990,
+        485,
+        2295,
+        515
+      ],
+      "expected": "COOK MODEL 8 TR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COOK MODEL 8 TR",
+          "word_ids": [
+            741,
+            742,
+            743,
+            744
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COOK MODEL 8 TR",
+          "word_ids": [
+            366,
+            367,
+            368,
+            369
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-PENTHOUSE",
+      "row": 1,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        2295,
+        485,
+        2420,
+        515
+      ],
+      "expected": "1 , 2 , 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3",
+          "word_ids": [
+            745,
+            746,
+            747,
+            748,
+            749
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3",
+          "word_ids": [
+            370,
+            371,
+            372,
+            373,
+            374
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-LOUVERS",
+      "row": 1,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        1300,
+        700,
+        1360,
+        730
+      ],
+      "expected": "L-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-1",
+          "word_ids": [
+            812
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-1",
+          "word_ids": [
+            483
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-LOUVERS",
+      "row": 1,
+      "column": "service",
+      "page": 14,
+      "bbox": [
+        1360,
+        700,
+        1480,
+        730
+      ],
+      "expected": "EF-6 MAKEUP AIR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-6 MAKEUP AIR",
+          "word_ids": [
+            813,
+            814,
+            815
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-6 MAKEUP AIR",
+          "word_ids": [
+            484,
+            485,
+            486
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-LOUVERS",
+      "row": 1,
+      "column": "type",
+      "page": 14,
+      "bbox": [
+        1480,
+        700,
+        1600,
+        730
+      ],
+      "expected": "FIXED DRAINABLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FIXED DRAINABLE",
+          "word_ids": [
+            816,
+            817
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FIXED DRAINABLE",
+          "word_ids": [
+            487,
+            488
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-LOUVERS",
+      "row": 1,
+      "column": "nominal_size",
+      "page": 14,
+      "bbox": [
+        1600,
+        700,
+        1710,
+        730
+      ],
+      "expected": "20\"X12\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20\"X12\"",
+          "word_ids": [
+            818
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20\"X12\"",
+          "word_ids": [
+            489
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-LOUVERS",
+      "row": 1,
+      "column": "minimum_free_area_sq_ft",
+      "page": 14,
+      "bbox": [
+        1710,
+        700,
+        1790,
+        730
+      ],
+      "expected": "0.54",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.54",
+          "word_ids": [
+            819
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.54",
+          "word_ids": [
+            490
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-LOUVERS",
+      "row": 1,
+      "column": "finish",
+      "page": 14,
+      "bbox": [
+        1790,
+        700,
+        1890,
+        730
+      ],
+      "expected": "AAMA2604",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AAMA2604",
+          "word_ids": [
+            820
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AAMA2604",
+          "word_ids": [
+            491
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-LOUVERS",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        1890,
+        700,
+        2270,
+        730
+      ],
+      "expected": "RUSKIN ELF6375DX",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RUSKIN ELF6375DX",
+          "word_ids": [
+            821,
+            822
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RUSKIN ELF6375DX",
+          "word_ids": [
+            492,
+            493
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-LOUVERS",
+      "row": 1,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        2270,
+        700,
+        2420,
+        730
+      ],
+      "expected": "1 , 2 , 3 , 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            823,
+            824,
+            825,
+            826,
+            827,
+            828,
+            829
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            494,
+            495,
+            496,
+            497,
+            498,
+            499,
+            500
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-LOUVERS",
+      "row": 2,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        1300,
+        736,
+        1360,
+        766
+      ],
+      "expected": "L-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L-2",
+          "word_ids": [
+            830
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L-2",
+          "word_ids": [
+            501
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-LOUVERS",
+      "row": 2,
+      "column": "service",
+      "page": 14,
+      "bbox": [
+        1360,
+        736,
+        1480,
+        766
+      ],
+      "expected": "EF-7 MAKEUP AIR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-7 MAKEUP AIR",
+          "word_ids": [
+            831,
+            832,
+            833
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-7 MAKEUP AIR",
+          "word_ids": [
+            502,
+            503,
+            504
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-LOUVERS",
+      "row": 2,
+      "column": "type",
+      "page": 14,
+      "bbox": [
+        1480,
+        736,
+        1600,
+        766
+      ],
+      "expected": "FIXED DRAINABLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FIXED DRAINABLE",
+          "word_ids": [
+            834,
+            835
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FIXED DRAINABLE",
+          "word_ids": [
+            505,
+            506
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-LOUVERS",
+      "row": 2,
+      "column": "nominal_size",
+      "page": 14,
+      "bbox": [
+        1600,
+        736,
+        1710,
+        766
+      ],
+      "expected": "14\"X12\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14\"X12\"",
+          "word_ids": [
+            836
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14\"X12\"",
+          "word_ids": [
+            507
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-LOUVERS",
+      "row": 2,
+      "column": "minimum_free_area_sq_ft",
+      "page": 14,
+      "bbox": [
+        1710,
+        736,
+        1790,
+        766
+      ],
+      "expected": "0.36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.36",
+          "word_ids": [
+            837
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.36",
+          "word_ids": [
+            508
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-LOUVERS",
+      "row": 2,
+      "column": "finish",
+      "page": 14,
+      "bbox": [
+        1790,
+        736,
+        1890,
+        766
+      ],
+      "expected": "AAMA2604",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AAMA2604",
+          "word_ids": [
+            838
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AAMA2604",
+          "word_ids": [
+            509
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-LOUVERS",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        1890,
+        736,
+        2270,
+        766
+      ],
+      "expected": "RUSKIN ELF6375DX",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RUSKIN ELF6375DX",
+          "word_ids": [
+            839,
+            840
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RUSKIN ELF6375DX",
+          "word_ids": [
+            510,
+            511
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-LOUVERS",
+      "row": 2,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        2270,
+        736,
+        2420,
+        766
+      ],
+      "expected": "1 , 2 , 3 , 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            841,
+            842,
+            843,
+            844,
+            845,
+            846,
+            847
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4",
+          "word_ids": [
+            512,
+            513,
+            514,
+            515,
+            516,
+            517,
+            518
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-DUCTLESS-SPLIT-HIGH-WALL",
+      "row": 1,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        1300,
+        1010,
+        1380,
+        1045
+      ],
+      "expected": "DFC-1 , DCU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DFC-1 , DCU-1",
+          "word_ids": [
+            1003,
+            1004,
+            1005
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DFC-1 , DCU-1",
+          "word_ids": [
+            758,
+            759,
+            760
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-DUCTLESS-SPLIT-HIGH-WALL",
+      "row": 1,
+      "column": "area_served",
+      "page": 14,
+      "bbox": [
+        1380,
+        1010,
+        1470,
+        1045
+      ],
+      "expected": "IT 115",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "IT 115",
+          "word_ids": [
+            1006,
+            1007
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "IT 115",
+          "word_ids": [
+            1024,
+            1025
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-DUCTLESS-SPLIT-HIGH-WALL",
+      "row": 1,
+      "column": "unit_type",
+      "page": 14,
+      "bbox": [
+        1470,
+        1010,
+        1515,
+        1045
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            848
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            853
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-DUCTLESS-SPLIT-HIGH-WALL",
+      "row": 1,
+      "column": "supply_cfm",
+      "page": 14,
+      "bbox": [
+        1515,
+        1010,
+        1595,
+        1045
+      ],
+      "expected": "HIGH WALL COOLING ONLY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH WALL COOLING ONLY",
+          "word_ids": [
+            1008,
+            1009,
+            1010,
+            1011
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH WALL COOLING ONLY",
+          "word_ids": [
+            854,
+            855,
+            856,
+            857
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-DUCTLESS-SPLIT-HIGH-WALL",
+      "row": 1,
+      "column": "supply_voltage_phase",
+      "page": 14,
+      "bbox": [
+        1595,
+        1010,
+        1635,
+        1045
+      ],
+      "expected": "640",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "640",
+          "word_ids": [
+            1012
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "640",
+          "word_ids": [
+            858
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-DUCTLESS-SPLIT-HIGH-WALL",
+      "row": 1,
+      "column": "nominal_tons",
+      "page": 14,
+      "bbox": [
+        1635,
+        1010,
+        1670,
+        1045
+      ],
+      "expected": "THRU O/U",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THRU O/U",
+          "word_ids": [
+            1013,
+            1014
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THRU O/U",
+          "word_ids": [
+            859,
+            860
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-DUCTLESS-SPLIT-HIGH-WALL",
+      "row": 1,
+      "column": "total_cooling_mbh",
+      "page": 14,
+      "bbox": [
+        1670,
+        1010,
+        1715,
+        1045
+      ],
+      "expected": "25.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25.0",
+          "word_ids": [
+            1015
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25.0",
+          "word_ids": [
+            861
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-DUCTLESS-SPLIT-HIGH-WALL",
+      "row": 1,
+      "column": "sensible_cooling_mbh",
+      "page": 14,
+      "bbox": [
+        1715,
+        1010,
+        1760,
+        1045
+      ],
+      "expected": "18.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18.0",
+          "word_ids": [
+            1016
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18.0",
+          "word_ids": [
+            862
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-DUCTLESS-SPLIT-HIGH-WALL",
+      "row": 1,
+      "column": "mca",
+      "page": 14,
+      "bbox": [
+        1760,
+        1010,
+        1795,
+        1045
+      ],
+      "expected": "18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            1017
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            863
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-DUCTLESS-SPLIT-HIGH-WALL",
+      "row": 1,
+      "column": "mocp",
+      "page": 14,
+      "bbox": [
+        1795,
+        1010,
+        1828,
+        1045
+      ],
+      "expected": "25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            1018
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            864
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-DUCTLESS-SPLIT-HIGH-WALL",
+      "row": 1,
+      "column": "outdoor_voltage_phase",
+      "page": 14,
+      "bbox": [
+        1828,
+        1010,
+        1870,
+        1045
+      ],
+      "expected": "208/1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208/1",
+          "word_ids": [
+            1019
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208/1",
+          "word_ids": [
+            865
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-DUCTLESS-SPLIT-HIGH-WALL",
+      "row": 1,
+      "column": "minimum_seer",
+      "page": 14,
+      "bbox": [
+        1870,
+        1010,
+        1910,
+        1045
+      ],
+      "expected": "18.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18.5",
+          "word_ids": [
+            1020
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18.5",
+          "word_ids": [
+            866
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-DUCTLESS-SPLIT-HIGH-WALL",
+      "row": 1,
+      "column": "indoor_outdoor_weight_lb",
+      "page": 14,
+      "bbox": [
+        1910,
+        1010,
+        1960,
+        1045
+      ],
+      "expected": "35 / 95",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "35 / 95",
+          "word_ids": [
+            1021,
+            1022,
+            1023
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "35 / 95",
+          "word_ids": [
+            867,
+            868,
+            869
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-DUCTLESS-SPLIT-HIGH-WALL",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        1960,
+        1010,
+        2310,
+        1045
+      ],
+      "expected": "CARRIER FAN COIL MODEL 40MHH24 CARRIER CONDENSING UNIT MODEL 38MHRBC24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CARRIER FAN COIL MODEL 40MHH24 CARRIER CONDENSING UNIT MODEL 38MHRBC24",
+          "word_ids": [
+            1024,
+            1025,
+            1026,
+            1027,
+            1028,
+            1029,
+            1030,
+            1031,
+            1032,
+            1033
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CARRIER FAN COIL MODEL 40MHH24 CARRIER CONDENSING UNIT MODEL 38MHRBC24",
+          "word_ids": [
+            870,
+            871,
+            872,
+            873,
+            874,
+            875,
+            876,
+            877,
+            878,
+            879
+          ]
+        }
+      }
+    },
+    {
+      "table": "M52-DUCTLESS-SPLIT-HIGH-WALL",
+      "row": 1,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        2310,
+        1010,
+        2420,
+        1045
+      ],
+      "expected": "1 , 2 , 3 , 4 , 5 , 6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5 , 6",
+          "word_ids": [
+            1034,
+            1035,
+            1036,
+            1037,
+            1038,
+            1039,
+            1040,
+            1041,
+            1042,
+            1043,
+            1044
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 , 2 , 3 , 4 , 5 , 6",
+          "word_ids": [
+            880,
+            881,
+            882,
+            883,
+            884,
+            885,
+            886,
+            887,
+            888,
+            889,
+            890
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m52-electric-heater-title",
+      "page": 14,
+      "bbox": [
+        560,
+        60,
+        950,
+        110
+      ],
+      "expected": "ELECTRIC HEATER SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ELECTRIC HEATER SCHEDULE",
+          "word_ids": [
+            0,
+            1,
+            2
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ELECTRIC HEATER SCHEDULE",
+          "word_ids": [
+            722,
+            723,
+            724
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m52-specialty-title",
+      "page": 14,
+      "bbox": [
+        450,
+        675,
+        980,
+        715
+      ],
+      "expected": "MECHANICAL SPECIALTY EQUIPMENT SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL SPECIALTY EQUIPMENT SCHEDULE",
+          "word_ids": [
+            297,
+            298,
+            299,
+            300
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL SPECIALTY EQUIPMENT SCHEDULE",
+          "word_ids": [
+            685,
+            686,
+            687,
+            688
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m52-split-title",
+      "page": 14,
+      "bbox": [
+        400,
+        930,
+        1200,
+        975
+      ],
+      "expected": "SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS)",
+          "word_ids": [
+            491,
+            492,
+            493,
+            494,
+            495,
+            496,
+            497,
+            498
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPLIT SYSTEM AIR CONDITIONING UNIT SCHEDULE (96%+ GAS)",
+          "word_ids": [
+            727,
+            728,
+            729,
+            730,
+            731,
+            732,
+            733,
+            734
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m52-ductless-title",
+      "page": 14,
+      "bbox": [
+        1530,
+        890,
+        2100,
+        930
+      ],
+      "expected": "DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE",
+          "word_ids": [
+            959,
+            960,
+            961,
+            962,
+            963,
+            964,
+            965
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCTLESS SPLIT HIGH WALL COOLING UNIT SCHEDULE",
+          "word_ids": [
+            676,
+            677,
+            678,
+            679,
+            680,
+            681,
+            682
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "rank04-m52-tables",
+      "actual": 7,
+      "expected": 7,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

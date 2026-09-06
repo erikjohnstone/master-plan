@@ -1,0 +1,3252 @@
+{
+  "document_id": "06__vol2__096",
+  "source_sha256": "72da836a803740382b319b718c1f10d8daeff6e5dbe869f1e68ff173ea4092ec",
+  "annotation_sha256": "ecd228f42e1772e653090e8bb8effe061760a93d9bfacfd5bc36097dc387b759",
+  "tables": 3,
+  "rows": 58,
+  "cell_assertions": 58,
+  "text_assertions": 1,
+  "checks": [
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        340,
+        1800,
+        354
+      ],
+      "expected": "E1 8\"Ø 24\" 24\" STEEL WHITE 0 225 15 6 0.05 PRICE SPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "E1 8\"Ø 24\" 24\" STEEL WHITE 0 225 15 6 0.05 PRICE SPD",
+          "word_ids": [
+            1737,
+            1738,
+            1739,
+            1740,
+            1741,
+            1742,
+            1743,
+            1744,
+            1745,
+            1746,
+            1747,
+            1748,
+            1749
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "E1 8\"Ø 24\" 24\" STEEL WHITE 0 225 15 6 0.05 PRICE SPD",
+          "word_ids": [
+            163,
+            214,
+            265,
+            316,
+            367,
+            418,
+            469,
+            520,
+            571,
+            622,
+            679,
+            731,
+            858
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        354,
+        1800,
+        367
+      ],
+      "expected": "E6 6\"Ø 24\" 24\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE ASPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "E6 6\"Ø 24\" 24\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE ASPD",
+          "word_ids": [
+            1750,
+            1751,
+            1752,
+            1753,
+            1754,
+            1755,
+            1756,
+            1757,
+            1758,
+            1759,
+            1760,
+            1761,
+            1762
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "E6 6\"Ø 24\" 24\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE ASPD",
+          "word_ids": [
+            164,
+            215,
+            266,
+            317,
+            368,
+            419,
+            470,
+            521,
+            572,
+            623,
+            680,
+            732,
+            859
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        367,
+        1800,
+        380
+      ],
+      "expected": "E7 8\"Ø 24\" 24\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE ASPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "E7 8\"Ø 24\" 24\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE ASPD",
+          "word_ids": [
+            1763,
+            1764,
+            1765,
+            1766,
+            1767,
+            1768,
+            1769,
+            1770,
+            1771,
+            1772,
+            1773,
+            1774,
+            1775
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "E7 8\"Ø 24\" 24\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE ASPD",
+          "word_ids": [
+            165,
+            216,
+            267,
+            318,
+            369,
+            420,
+            471,
+            522,
+            573,
+            624,
+            681,
+            733,
+            860
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        380,
+        1800,
+        393
+      ],
+      "expected": "E8 10\"Ø 24\" 24\" ALUMINUM WHITE 226 380 20 10 0.09 PRICE ASPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "E8 10\"Ø 24\" 24\" ALUMINUM WHITE 226 380 20 10 0.09 PRICE ASPD",
+          "word_ids": [
+            1776,
+            1777,
+            1778,
+            1779,
+            1780,
+            1781,
+            1782,
+            1783,
+            1784,
+            1785,
+            1786,
+            1787,
+            1788
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "E8 10\"Ø 24\" 24\" ALUMINUM WHITE 226 380 20 10 0.09 PRICE ASPD",
+          "word_ids": [
+            166,
+            217,
+            268,
+            319,
+            370,
+            421,
+            472,
+            523,
+            574,
+            625,
+            682,
+            734,
+            861
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        393,
+        1800,
+        406
+      ],
+      "expected": "E12 6\"Ø 12\" 12\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE ASPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "E12 6\"Ø 12\" 12\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE ASPD",
+          "word_ids": [
+            1789,
+            1790,
+            1791,
+            1792,
+            1793,
+            1794,
+            1795,
+            1796,
+            1797,
+            1798,
+            1799,
+            1800,
+            1801
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "E12 6\"Ø 12\" 12\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE ASPD",
+          "word_ids": [
+            167,
+            218,
+            269,
+            320,
+            371,
+            422,
+            473,
+            524,
+            575,
+            626,
+            683,
+            735,
+            862
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 6,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        406,
+        1800,
+        419
+      ],
+      "expected": "E13 8\"Ø 12\" 12\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE ASPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "E13 8\"Ø 12\" 12\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE ASPD",
+          "word_ids": [
+            1802,
+            1803,
+            1804,
+            1805,
+            1806,
+            1807,
+            1808,
+            1809,
+            1810,
+            1811,
+            1812,
+            1813,
+            1814
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "E13 8\"Ø 12\" 12\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE ASPD",
+          "word_ids": [
+            168,
+            219,
+            270,
+            321,
+            372,
+            423,
+            474,
+            525,
+            576,
+            627,
+            684,
+            736,
+            863
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 7,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        419,
+        1800,
+        432
+      ],
+      "expected": "EG2 18\"x18\" 18\" 18\" STEEL WHITE 800 1600 15 6 0.05 PRICE PDR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EG2 18\"x18\" 18\" 18\" STEEL WHITE 800 1600 15 6 0.05 PRICE PDR",
+          "word_ids": [
+            1815,
+            1816,
+            1817,
+            1818,
+            1819,
+            1820,
+            1821,
+            1822,
+            1823,
+            1824,
+            1825,
+            1826,
+            1827
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EG2 18\"x18\" 18\" 18\" STEEL WHITE 800 1600 15 6 0.05 PRICE PDR",
+          "word_ids": [
+            169,
+            220,
+            271,
+            322,
+            373,
+            424,
+            475,
+            526,
+            577,
+            628,
+            685,
+            737,
+            864
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 8,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        432,
+        1800,
+        445
+      ],
+      "expected": "EG3 10\"x6\" 10\" 6\" STEEL WHITE 0 200 15 6 0.09 PRICE PDR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EG3 10\"x6\" 10\" 6\" STEEL WHITE 0 200 15 6 0.09 PRICE PDR",
+          "word_ids": [
+            1828,
+            1829,
+            1830,
+            1831,
+            1832,
+            1833,
+            1834,
+            1835,
+            1836,
+            1837,
+            1838,
+            1839,
+            1840
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EG3 10\"x6\" 10\" 6\" STEEL WHITE 0 200 15 6 0.09 PRICE PDR",
+          "word_ids": [
+            170,
+            221,
+            272,
+            323,
+            374,
+            425,
+            476,
+            527,
+            578,
+            629,
+            686,
+            738,
+            865
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 9,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        445,
+        1800,
+        459
+      ],
+      "expected": "R1 8\"Ø 24\" 24\" STEEL WHITE 71 225 15 6 0.05 PRICE SPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R1 8\"Ø 24\" 24\" STEEL WHITE 71 225 15 6 0.05 PRICE SPD",
+          "word_ids": [
+            1841,
+            1842,
+            1843,
+            1844,
+            1845,
+            1846,
+            1847,
+            1848,
+            1849,
+            1850,
+            1851,
+            1852,
+            1853
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R1 8\"Ø 24\" 24\" STEEL WHITE 71 225 15 6 0.05 PRICE SPD",
+          "word_ids": [
+            171,
+            222,
+            273,
+            324,
+            375,
+            426,
+            477,
+            528,
+            579,
+            630,
+            687,
+            739,
+            866
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 10,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        459,
+        1800,
+        472
+      ],
+      "expected": "R2 10\"Ø 24\" 24\" STEEL WHITE 226 380 20 10 0.09 PRICE SPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R2 10\"Ø 24\" 24\" STEEL WHITE 226 380 20 10 0.09 PRICE SPD",
+          "word_ids": [
+            1854,
+            1855,
+            1856,
+            1857,
+            1858,
+            1859,
+            1860,
+            1861,
+            1862,
+            1863,
+            1864,
+            1865,
+            1866
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R2 10\"Ø 24\" 24\" STEEL WHITE 226 380 20 10 0.09 PRICE SPD",
+          "word_ids": [
+            172,
+            223,
+            274,
+            325,
+            376,
+            427,
+            478,
+            529,
+            580,
+            631,
+            688,
+            740,
+            867
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 11,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        472,
+        1800,
+        485
+      ],
+      "expected": "R3 12\"Ø 24\" 24\" STEEL WHITE 381 550 22 12 0.13 PRICE SPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R3 12\"Ø 24\" 24\" STEEL WHITE 381 550 22 12 0.13 PRICE SPD",
+          "word_ids": [
+            1867,
+            1868,
+            1869,
+            1870,
+            1871,
+            1872,
+            1873,
+            1874,
+            1875,
+            1876,
+            1877,
+            1878,
+            1879
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R3 12\"Ø 24\" 24\" STEEL WHITE 381 550 22 12 0.13 PRICE SPD",
+          "word_ids": [
+            173,
+            224,
+            275,
+            326,
+            377,
+            428,
+            479,
+            530,
+            581,
+            632,
+            689,
+            741,
+            868
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 12,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        485,
+        1800,
+        498
+      ],
+      "expected": "R4 14\"Ø 24\" 24\" STEEL WHITE 551 750 24 14 0.18 PRICE SPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R4 14\"Ø 24\" 24\" STEEL WHITE 551 750 24 14 0.18 PRICE SPD",
+          "word_ids": [
+            1880,
+            1881,
+            1882,
+            1883,
+            1884,
+            1885,
+            1886,
+            1887,
+            1888,
+            1889,
+            1890,
+            1891,
+            1892
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R4 14\"Ø 24\" 24\" STEEL WHITE 551 750 24 14 0.18 PRICE SPD",
+          "word_ids": [
+            174,
+            225,
+            276,
+            327,
+            378,
+            429,
+            480,
+            531,
+            582,
+            633,
+            690,
+            742,
+            869
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 13,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        498,
+        1800,
+        511
+      ],
+      "expected": "R7 12\"Ø 24\" 24\" STEEL WHITE 381 550 22 12 0.13 PRICE PDR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R7 12\"Ø 24\" 24\" STEEL WHITE 381 550 22 12 0.13 PRICE PDR",
+          "word_ids": [
+            1893,
+            1894,
+            1895,
+            1896,
+            1897,
+            1898,
+            1899,
+            1900,
+            1901,
+            1902,
+            1903,
+            1904,
+            1905
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R7 12\"Ø 24\" 24\" STEEL WHITE 381 550 22 12 0.13 PRICE PDR",
+          "word_ids": [
+            175,
+            226,
+            277,
+            328,
+            379,
+            430,
+            481,
+            532,
+            583,
+            634,
+            691,
+            743,
+            870
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 14,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        511,
+        1800,
+        524
+      ],
+      "expected": "R8 14\"Ø 24\" 24\" STEEL WHITE 551 750 24 14 0.18 PRICE PDR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R8 14\"Ø 24\" 24\" STEEL WHITE 551 750 24 14 0.18 PRICE PDR",
+          "word_ids": [
+            1906,
+            1907,
+            1908,
+            1909,
+            1910,
+            1911,
+            1912,
+            1913,
+            1914,
+            1915,
+            1916,
+            1917,
+            1918
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R8 14\"Ø 24\" 24\" STEEL WHITE 551 750 24 14 0.18 PRICE PDR",
+          "word_ids": [
+            176,
+            227,
+            278,
+            329,
+            380,
+            431,
+            482,
+            533,
+            584,
+            635,
+            692,
+            744,
+            871
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 15,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        524,
+        1800,
+        537
+      ],
+      "expected": "R9 16\"Ø 24\" 24\" STEEL WHITE 751 900 25 15 0.20 PRICE PDR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R9 16\"Ø 24\" 24\" STEEL WHITE 751 900 25 15 0.20 PRICE PDR",
+          "word_ids": [
+            1919,
+            1920,
+            1921,
+            1922,
+            1923,
+            1924,
+            1925,
+            1926,
+            1927,
+            1928,
+            1929,
+            1930,
+            1931
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R9 16\"Ø 24\" 24\" STEEL WHITE 751 900 25 15 0.20 PRICE PDR",
+          "word_ids": [
+            177,
+            228,
+            279,
+            330,
+            381,
+            432,
+            483,
+            534,
+            585,
+            636,
+            693,
+            745,
+            872
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 16,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        537,
+        1800,
+        550
+      ],
+      "expected": "S0 6\"Ø 24\" 24\" STEEL WHITE 0 70 15 6 0.05 PRICE SPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S0 6\"Ø 24\" 24\" STEEL WHITE 0 70 15 6 0.05 PRICE SPD",
+          "word_ids": [
+            1932,
+            1933,
+            1934,
+            1935,
+            1936,
+            1937,
+            1938,
+            1939,
+            1940,
+            1941,
+            1942,
+            1943,
+            1944
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S0 6\"Ø 24\" 24\" STEEL WHITE 0 70 15 6 0.05 PRICE SPD",
+          "word_ids": [
+            178,
+            229,
+            280,
+            331,
+            382,
+            433,
+            484,
+            535,
+            586,
+            637,
+            694,
+            746,
+            873
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 17,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        550,
+        1800,
+        563
+      ],
+      "expected": "S1 8\"Ø 24\" 24\" STEEL WHITE 71 225 15 6 0.05 PRICE SPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S1 8\"Ø 24\" 24\" STEEL WHITE 71 225 15 6 0.05 PRICE SPD",
+          "word_ids": [
+            1945,
+            1946,
+            1947,
+            1948,
+            1949,
+            1950,
+            1951,
+            1952,
+            1953,
+            1954,
+            1955,
+            1956,
+            1957
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S1 8\"Ø 24\" 24\" STEEL WHITE 71 225 15 6 0.05 PRICE SPD",
+          "word_ids": [
+            179,
+            230,
+            281,
+            332,
+            383,
+            434,
+            485,
+            536,
+            587,
+            638,
+            695,
+            747,
+            874
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 18,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        563,
+        1800,
+        576
+      ],
+      "expected": "S2 10\"Ø 24\" 24\" STEEL WHITE 226 380 20 10 0.09 PRICE SPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S2 10\"Ø 24\" 24\" STEEL WHITE 226 380 20 10 0.09 PRICE SPD",
+          "word_ids": [
+            1958,
+            1959,
+            1960,
+            1961,
+            1962,
+            1963,
+            1964,
+            1965,
+            1966,
+            1967,
+            1968,
+            1969,
+            1970
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S2 10\"Ø 24\" 24\" STEEL WHITE 226 380 20 10 0.09 PRICE SPD",
+          "word_ids": [
+            180,
+            231,
+            282,
+            333,
+            384,
+            435,
+            486,
+            537,
+            588,
+            639,
+            696,
+            748,
+            875
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 19,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        576,
+        1800,
+        590
+      ],
+      "expected": "S3 12\"Ø 24\" 24\" STEEL WHITE 381 550 22 12 0.13 PRICE SPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S3 12\"Ø 24\" 24\" STEEL WHITE 381 550 22 12 0.13 PRICE SPD",
+          "word_ids": [
+            1971,
+            1972,
+            1973,
+            1974,
+            1975,
+            1976,
+            1977,
+            1978,
+            1979,
+            1980,
+            1981,
+            1982,
+            1983
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S3 12\"Ø 24\" 24\" STEEL WHITE 381 550 22 12 0.13 PRICE SPD",
+          "word_ids": [
+            181,
+            232,
+            283,
+            334,
+            385,
+            436,
+            487,
+            538,
+            589,
+            640,
+            697,
+            749,
+            876
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 20,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        590,
+        1800,
+        603
+      ],
+      "expected": "S4 14\"Ø 24\" 24\" STEEL WHITE 551 750 24 14 0.18 PRICE SPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S4 14\"Ø 24\" 24\" STEEL WHITE 551 750 24 14 0.18 PRICE SPD",
+          "word_ids": [
+            1984,
+            1985,
+            1986,
+            1987,
+            1988,
+            1989,
+            1990,
+            1991,
+            1992,
+            1993,
+            1994,
+            1995,
+            1996
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S4 14\"Ø 24\" 24\" STEEL WHITE 551 750 24 14 0.18 PRICE SPD",
+          "word_ids": [
+            182,
+            233,
+            284,
+            335,
+            386,
+            437,
+            488,
+            539,
+            590,
+            641,
+            698,
+            750,
+            877
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 21,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        603,
+        1800,
+        616
+      ],
+      "expected": "S6 6\"Ø 24\" 24\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE ASPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S6 6\"Ø 24\" 24\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE ASPD",
+          "word_ids": [
+            1997,
+            1998,
+            1999,
+            2000,
+            2001,
+            2002,
+            2003,
+            2004,
+            2005,
+            2006,
+            2007,
+            2008,
+            2009
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S6 6\"Ø 24\" 24\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE ASPD",
+          "word_ids": [
+            183,
+            234,
+            285,
+            336,
+            387,
+            438,
+            489,
+            540,
+            591,
+            642,
+            699,
+            751,
+            878
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 22,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        616,
+        1800,
+        629
+      ],
+      "expected": "S12 6\"Ø 12\" 12\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE ASPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S12 6\"Ø 12\" 12\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE ASPD",
+          "word_ids": [
+            2010,
+            2011,
+            2012,
+            2013,
+            2014,
+            2015,
+            2016,
+            2017,
+            2018,
+            2019,
+            2020,
+            2021,
+            2022
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S12 6\"Ø 12\" 12\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE ASPD",
+          "word_ids": [
+            184,
+            235,
+            286,
+            337,
+            388,
+            439,
+            490,
+            541,
+            592,
+            643,
+            700,
+            752,
+            879
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 23,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        629,
+        1800,
+        642
+      ],
+      "expected": "S13 8\"Ø 12\" 12\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE ASPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S13 8\"Ø 12\" 12\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE ASPD",
+          "word_ids": [
+            2023,
+            2024,
+            2025,
+            2026,
+            2027,
+            2028,
+            2029,
+            2030,
+            2031,
+            2032,
+            2033,
+            2034,
+            2035
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S13 8\"Ø 12\" 12\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE ASPD",
+          "word_ids": [
+            185,
+            236,
+            287,
+            338,
+            389,
+            440,
+            491,
+            542,
+            593,
+            644,
+            701,
+            753,
+            880
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 24,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        642,
+        1800,
+        655
+      ],
+      "expected": "S14 6\"Ø 24\" 24\" STEEL WHITE 0 85 15 6 0.05 PRICE PDS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S14 6\"Ø 24\" 24\" STEEL WHITE 0 85 15 6 0.05 PRICE PDS",
+          "word_ids": [
+            2036,
+            2037,
+            2038,
+            2039,
+            2040,
+            2041,
+            2042,
+            2043,
+            2044,
+            2045,
+            2046,
+            2047,
+            2048
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S14 6\"Ø 24\" 24\" STEEL WHITE 0 85 15 6 0.05 PRICE PDS",
+          "word_ids": [
+            186,
+            237,
+            288,
+            339,
+            390,
+            441,
+            492,
+            543,
+            594,
+            645,
+            702,
+            754,
+            881
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 25,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        655,
+        1800,
+        668
+      ],
+      "expected": "S15 8\"Ø 24\" 24\" STEEL WHITE 86 275 15 6 0.05 PRICE PDS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S15 8\"Ø 24\" 24\" STEEL WHITE 86 275 15 6 0.05 PRICE PDS",
+          "word_ids": [
+            2049,
+            2050,
+            2051,
+            2052,
+            2053,
+            2054,
+            2055,
+            2056,
+            2057,
+            2058,
+            2059,
+            2060,
+            2061
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S15 8\"Ø 24\" 24\" STEEL WHITE 86 275 15 6 0.05 PRICE PDS",
+          "word_ids": [
+            187,
+            238,
+            289,
+            340,
+            391,
+            442,
+            493,
+            544,
+            595,
+            646,
+            703,
+            755,
+            882
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 26,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        668,
+        1800,
+        681
+      ],
+      "expected": "SE0 6\"Ø 24\" 24\" STEEL WHITE 0 70 15 6 0.05 AJ MFGR SDR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SE0 6\"Ø 24\" 24\" STEEL WHITE 0 70 15 6 0.05 AJ MFGR SDR",
+          "word_ids": [
+            2062,
+            2063,
+            2064,
+            2065,
+            2066,
+            2067,
+            2068,
+            2069,
+            2070,
+            2071,
+            2072,
+            2073,
+            2074,
+            2075
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SE0 6\"Ø 24\" 24\" STEEL WHITE 0 70 15 6 0.05 AJ MFGR SDR",
+          "word_ids": [
+            188,
+            239,
+            290,
+            341,
+            392,
+            443,
+            494,
+            545,
+            596,
+            647,
+            704,
+            756,
+            757,
+            883
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 27,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        681,
+        1800,
+        694
+      ],
+      "expected": "SE2 8\"Ø 24\" 24\" STEEL WHITE 71 225 15 6 0.05 AJ MFGR SDR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SE2 8\"Ø 24\" 24\" STEEL WHITE 71 225 15 6 0.05 AJ MFGR SDR",
+          "word_ids": [
+            2076,
+            2077,
+            2078,
+            2079,
+            2080,
+            2081,
+            2082,
+            2083,
+            2084,
+            2085,
+            2086,
+            2087,
+            2088,
+            2089
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SE2 8\"Ø 24\" 24\" STEEL WHITE 71 225 15 6 0.05 AJ MFGR SDR",
+          "word_ids": [
+            189,
+            240,
+            291,
+            342,
+            393,
+            444,
+            495,
+            546,
+            597,
+            648,
+            705,
+            758,
+            759,
+            884
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 28,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        694,
+        1800,
+        708
+      ],
+      "expected": "SE3 10\"Ø 24\" 24\" STEEL WHITE 226 380 20 10 0.09 AJ MFGR SDR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SE3 10\"Ø 24\" 24\" STEEL WHITE 226 380 20 10 0.09 AJ MFGR SDR",
+          "word_ids": [
+            2090,
+            2091,
+            2092,
+            2093,
+            2094,
+            2095,
+            2096,
+            2097,
+            2098,
+            2099,
+            2100,
+            2101,
+            2102,
+            2103
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SE3 10\"Ø 24\" 24\" STEEL WHITE 226 380 20 10 0.09 AJ MFGR SDR",
+          "word_ids": [
+            190,
+            241,
+            292,
+            343,
+            394,
+            445,
+            496,
+            547,
+            598,
+            649,
+            706,
+            760,
+            761,
+            885
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 29,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        708,
+        1800,
+        721
+      ],
+      "expected": "SE4 12\"Ø 24\" 24\" STEEL WHITE 381 550 22 12 0.13 AJ MFGR SDR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SE4 12\"Ø 24\" 24\" STEEL WHITE 381 550 22 12 0.13 AJ MFGR SDR",
+          "word_ids": [
+            2104,
+            2105,
+            2106,
+            2107,
+            2108,
+            2109,
+            2110,
+            2111,
+            2112,
+            2113,
+            2114,
+            2115,
+            2116,
+            2117
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SE4 12\"Ø 24\" 24\" STEEL WHITE 381 550 22 12 0.13 AJ MFGR SDR",
+          "word_ids": [
+            191,
+            242,
+            293,
+            344,
+            395,
+            446,
+            497,
+            548,
+            599,
+            650,
+            707,
+            762,
+            763,
+            886
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 30,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        721,
+        1800,
+        734
+      ],
+      "expected": "SE7 8\"Ø 24\" 24\" ALUMINUM WHITE 71 225 15 6 0.05 AJ MFGR SDRA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SE7 8\"Ø 24\" 24\" ALUMINUM WHITE 71 225 15 6 0.05 AJ MFGR SDRA",
+          "word_ids": [
+            2118,
+            2119,
+            2120,
+            2121,
+            2122,
+            2123,
+            2124,
+            2125,
+            2126,
+            2127,
+            2128,
+            2129,
+            2130,
+            2131
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SE7 8\"Ø 24\" 24\" ALUMINUM WHITE 71 225 15 6 0.05 AJ MFGR SDRA",
+          "word_ids": [
+            192,
+            243,
+            294,
+            345,
+            396,
+            447,
+            498,
+            549,
+            600,
+            651,
+            708,
+            764,
+            765,
+            887
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 31,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        734,
+        1800,
+        747
+      ],
+      "expected": "SE8 10\"Ø 24\" 24\" ALUMINUM WHITE 226 380 20 10 0.09 AJ MFGR SDRA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SE8 10\"Ø 24\" 24\" ALUMINUM WHITE 226 380 20 10 0.09 AJ MFGR SDRA",
+          "word_ids": [
+            2132,
+            2133,
+            2134,
+            2135,
+            2136,
+            2137,
+            2138,
+            2139,
+            2140,
+            2141,
+            2142,
+            2143,
+            2144,
+            2145
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SE8 10\"Ø 24\" 24\" ALUMINUM WHITE 226 380 20 10 0.09 AJ MFGR SDRA",
+          "word_ids": [
+            193,
+            244,
+            295,
+            346,
+            397,
+            448,
+            499,
+            550,
+            601,
+            652,
+            709,
+            766,
+            767,
+            888
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 32,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        747,
+        1800,
+        760
+      ],
+      "expected": "SE9 12\"Ø 24\" 24\" ALUMINUM WHITE 381 550 22 12 0.13 AJ MFGR SDRA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SE9 12\"Ø 24\" 24\" ALUMINUM WHITE 381 550 22 12 0.13 AJ MFGR SDRA",
+          "word_ids": [
+            2146,
+            2147,
+            2148,
+            2149,
+            2150,
+            2151,
+            2152,
+            2153,
+            2154,
+            2155,
+            2156,
+            2157,
+            2158,
+            2159
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SE9 12\"Ø 24\" 24\" ALUMINUM WHITE 381 550 22 12 0.13 AJ MFGR SDRA",
+          "word_ids": [
+            194,
+            245,
+            296,
+            347,
+            398,
+            449,
+            500,
+            551,
+            602,
+            653,
+            710,
+            768,
+            769,
+            889
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 33,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        760,
+        1800,
+        773
+      ],
+      "expected": "SE10 14\"Ø 24\" 24\" ALUMINUM WHITE 551 750 24 14 0.18 AJ MFGR SDRA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SE10 14\"Ø 24\" 24\" ALUMINUM WHITE 551 750 24 14 0.18 AJ MFGR SDRA",
+          "word_ids": [
+            2160,
+            2161,
+            2162,
+            2163,
+            2164,
+            2165,
+            2166,
+            2167,
+            2168,
+            2169,
+            2170,
+            2171,
+            2172,
+            2173
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SE10 14\"Ø 24\" 24\" ALUMINUM WHITE 551 750 24 14 0.18 AJ MFGR SDRA",
+          "word_ids": [
+            195,
+            246,
+            297,
+            348,
+            399,
+            450,
+            501,
+            552,
+            603,
+            654,
+            711,
+            770,
+            771,
+            890
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 34,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        773,
+        1800,
+        786
+      ],
+      "expected": "SE12 6\"Ø 12\" 12\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE MSRRP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SE12 6\"Ø 12\" 12\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE MSRRP",
+          "word_ids": [
+            2174,
+            2175,
+            2176,
+            2177,
+            2178,
+            2179,
+            2180,
+            2181,
+            2182,
+            2183,
+            2184,
+            2185,
+            2186
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SE12 6\"Ø 12\" 12\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE MSRRP",
+          "word_ids": [
+            196,
+            247,
+            298,
+            349,
+            400,
+            451,
+            502,
+            553,
+            604,
+            655,
+            712,
+            772,
+            891
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 35,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        786,
+        1800,
+        799
+      ],
+      "expected": "SE13 8\"Ø 12\" 12\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE MSRRP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SE13 8\"Ø 12\" 12\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE MSRRP",
+          "word_ids": [
+            2187,
+            2188,
+            2189,
+            2190,
+            2191,
+            2192,
+            2193,
+            2194,
+            2195,
+            2196,
+            2197,
+            2198,
+            2199
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SE13 8\"Ø 12\" 12\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE MSRRP",
+          "word_ids": [
+            197,
+            248,
+            299,
+            350,
+            401,
+            452,
+            503,
+            554,
+            605,
+            656,
+            713,
+            773,
+            892
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 36,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        799,
+        1800,
+        812
+      ],
+      "expected": "SE15 6\"Ø 12\" 12\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE MSRRP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SE15 6\"Ø 12\" 12\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE MSRRP",
+          "word_ids": [
+            2200,
+            2201,
+            2202,
+            2203,
+            2204,
+            2205,
+            2206,
+            2207,
+            2208,
+            2209,
+            2210,
+            2211,
+            2212
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SE15 6\"Ø 12\" 12\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE MSRRP",
+          "word_ids": [
+            198,
+            249,
+            300,
+            351,
+            402,
+            453,
+            504,
+            555,
+            606,
+            657,
+            714,
+            774,
+            893
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 37,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        812,
+        1800,
+        825
+      ],
+      "expected": "SE16 8\"Ø 12\" 12\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE MSRRP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SE16 8\"Ø 12\" 12\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE MSRRP",
+          "word_ids": [
+            2213,
+            2214,
+            2215,
+            2216,
+            2217,
+            2218,
+            2219,
+            2220,
+            2221,
+            2222,
+            2223,
+            2224,
+            2225
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SE16 8\"Ø 12\" 12\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE MSRRP",
+          "word_ids": [
+            199,
+            250,
+            301,
+            352,
+            403,
+            454,
+            505,
+            556,
+            607,
+            658,
+            715,
+            775,
+            894
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 38,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        825,
+        1800,
+        838
+      ],
+      "expected": "SG1 10\"x6\" 10\" 6\" ALUMINUM WHITE 0 200 15 6 0.05 PRICE 600",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SG1 10\"x6\" 10\" 6\" ALUMINUM WHITE 0 200 15 6 0.05 PRICE 600",
+          "word_ids": [
+            2226,
+            2227,
+            2228,
+            2229,
+            2230,
+            2231,
+            2232,
+            2233,
+            2234,
+            2235,
+            2236,
+            2237,
+            2238
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SG1 10\"x6\" 10\" 6\" ALUMINUM WHITE 0 200 15 6 0.05 PRICE 600",
+          "word_ids": [
+            200,
+            251,
+            302,
+            353,
+            404,
+            455,
+            506,
+            557,
+            608,
+            659,
+            716,
+            776,
+            895
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 39,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        838,
+        1800,
+        852
+      ],
+      "expected": "SS0 6\"Ø 24\" 24\" ALUMINUM WHITE 0 70 15 6 0.05 AJ MFGR SDL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SS0 6\"Ø 24\" 24\" ALUMINUM WHITE 0 70 15 6 0.05 AJ MFGR SDL",
+          "word_ids": [
+            2239,
+            2240,
+            2241,
+            2242,
+            2243,
+            2244,
+            2245,
+            2246,
+            2247,
+            2248,
+            2249,
+            2250,
+            2251,
+            2252
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SS0 6\"Ø 24\" 24\" ALUMINUM WHITE 0 70 15 6 0.05 AJ MFGR SDL",
+          "word_ids": [
+            201,
+            252,
+            303,
+            354,
+            405,
+            456,
+            507,
+            558,
+            609,
+            660,
+            717,
+            777,
+            778,
+            896
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 40,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        852,
+        1800,
+        865
+      ],
+      "expected": "SS1 8\"Ø 24\" 24\" ALUMINUM WHITE 71 225 15 6 0.05 AJ MFGR SDL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SS1 8\"Ø 24\" 24\" ALUMINUM WHITE 71 225 15 6 0.05 AJ MFGR SDL",
+          "word_ids": [
+            2253,
+            2254,
+            2255,
+            2256,
+            2257,
+            2258,
+            2259,
+            2260,
+            2261,
+            2262,
+            2263,
+            2264,
+            2265,
+            2266
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SS1 8\"Ø 24\" 24\" ALUMINUM WHITE 71 225 15 6 0.05 AJ MFGR SDL",
+          "word_ids": [
+            202,
+            253,
+            304,
+            355,
+            406,
+            457,
+            508,
+            559,
+            610,
+            661,
+            718,
+            779,
+            780,
+            897
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 41,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        865,
+        1800,
+        878
+      ],
+      "expected": "SS2 10\"Ø 24\" 24\" ALUMINUM WHITE 226 380 20 10 0.09 AJ MFGR SDL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SS2 10\"Ø 24\" 24\" ALUMINUM WHITE 226 380 20 10 0.09 AJ MFGR SDL",
+          "word_ids": [
+            2267,
+            2268,
+            2269,
+            2270,
+            2271,
+            2272,
+            2273,
+            2274,
+            2275,
+            2276,
+            2277,
+            2278,
+            2279,
+            2280
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SS2 10\"Ø 24\" 24\" ALUMINUM WHITE 226 380 20 10 0.09 AJ MFGR SDL",
+          "word_ids": [
+            203,
+            254,
+            305,
+            356,
+            407,
+            458,
+            509,
+            560,
+            611,
+            662,
+            719,
+            781,
+            782,
+            898
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 42,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        878,
+        1800,
+        891
+      ],
+      "expected": "SS3 12\"Ø 24\" 24\" ALUMINUM WHITE 381 550 22 12 0.13 AJ MFGR SDL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SS3 12\"Ø 24\" 24\" ALUMINUM WHITE 381 550 22 12 0.13 AJ MFGR SDL",
+          "word_ids": [
+            2281,
+            2282,
+            2283,
+            2284,
+            2285,
+            2286,
+            2287,
+            2288,
+            2289,
+            2290,
+            2291,
+            2292,
+            2293,
+            2294
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SS3 12\"Ø 24\" 24\" ALUMINUM WHITE 381 550 22 12 0.13 AJ MFGR SDL",
+          "word_ids": [
+            204,
+            255,
+            306,
+            357,
+            408,
+            459,
+            510,
+            561,
+            612,
+            663,
+            720,
+            783,
+            784,
+            899
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 43,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        891,
+        1800,
+        904
+      ],
+      "expected": "SS6 6\"Ø 24\" 24\" ALUMINUM WHITE 0 70 15 6 0.05 AJ MFGR ASPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SS6 6\"Ø 24\" 24\" ALUMINUM WHITE 0 70 15 6 0.05 AJ MFGR ASPD",
+          "word_ids": [
+            2295,
+            2296,
+            2297,
+            2298,
+            2299,
+            2300,
+            2301,
+            2302,
+            2303,
+            2304,
+            2305,
+            2306,
+            2307,
+            2308
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SS6 6\"Ø 24\" 24\" ALUMINUM WHITE 0 70 15 6 0.05 AJ MFGR ASPD",
+          "word_ids": [
+            205,
+            256,
+            307,
+            358,
+            409,
+            460,
+            511,
+            562,
+            613,
+            664,
+            721,
+            785,
+            786,
+            900
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 44,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        904,
+        1800,
+        917
+      ],
+      "expected": "SS7 8\"Ø 24\" 24\" ALUMINUM WHITE 71 225 15 6 0.05 AJ MFGR ASPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SS7 8\"Ø 24\" 24\" ALUMINUM WHITE 71 225 15 6 0.05 AJ MFGR ASPD",
+          "word_ids": [
+            2309,
+            2310,
+            2311,
+            2312,
+            2313,
+            2314,
+            2315,
+            2316,
+            2317,
+            2318,
+            2319,
+            2320,
+            2321,
+            2322
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SS7 8\"Ø 24\" 24\" ALUMINUM WHITE 71 225 15 6 0.05 AJ MFGR ASPD",
+          "word_ids": [
+            206,
+            257,
+            308,
+            359,
+            410,
+            461,
+            512,
+            563,
+            614,
+            665,
+            722,
+            787,
+            788,
+            901
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 45,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        917,
+        1800,
+        930
+      ],
+      "expected": "SS8 10\"Ø 24\" 24\" ALUMINUM WHITE 226 380 20 10 0.09 AJ MFGR ASPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SS8 10\"Ø 24\" 24\" ALUMINUM WHITE 226 380 20 10 0.09 AJ MFGR ASPD",
+          "word_ids": [
+            2323,
+            2324,
+            2325,
+            2326,
+            2327,
+            2328,
+            2329,
+            2330,
+            2331,
+            2332,
+            2333,
+            2334,
+            2335,
+            2336
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SS8 10\"Ø 24\" 24\" ALUMINUM WHITE 226 380 20 10 0.09 AJ MFGR ASPD",
+          "word_ids": [
+            207,
+            258,
+            309,
+            360,
+            411,
+            462,
+            513,
+            564,
+            615,
+            666,
+            723,
+            789,
+            790,
+            902
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 46,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        930,
+        1800,
+        943
+      ],
+      "expected": "SS9 12\"Ø 24\" 24\" ALUMINUM WHITE 381 550 22 12 0.13 AJ MFGR ASPD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SS9 12\"Ø 24\" 24\" ALUMINUM WHITE 381 550 22 12 0.13 AJ MFGR ASPD",
+          "word_ids": [
+            2337,
+            2338,
+            2339,
+            2340,
+            2341,
+            2342,
+            2343,
+            2344,
+            2345,
+            2346,
+            2347,
+            2348,
+            2349,
+            2350
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SS9 12\"Ø 24\" 24\" ALUMINUM WHITE 381 550 22 12 0.13 AJ MFGR ASPD",
+          "word_ids": [
+            208,
+            259,
+            310,
+            361,
+            412,
+            463,
+            514,
+            565,
+            616,
+            667,
+            724,
+            791,
+            792,
+            903
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 47,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        943,
+        1800,
+        956
+      ],
+      "expected": "SS12 6\"Ø 12\" 12\" STEEL WHITE 0 70 15 6 0.05 PRICE PDS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SS12 6\"Ø 12\" 12\" STEEL WHITE 0 70 15 6 0.05 PRICE PDS",
+          "word_ids": [
+            2351,
+            2352,
+            2353,
+            2354,
+            2355,
+            2356,
+            2357,
+            2358,
+            2359,
+            2360,
+            2361,
+            2362,
+            2363
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SS12 6\"Ø 12\" 12\" STEEL WHITE 0 70 15 6 0.05 PRICE PDS",
+          "word_ids": [
+            209,
+            260,
+            311,
+            362,
+            413,
+            464,
+            515,
+            566,
+            617,
+            668,
+            725,
+            793,
+            904
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 48,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        956,
+        1800,
+        969
+      ],
+      "expected": "SS13 8\"Ø 12\" 12\" STEEL WHITE 71 225 15 6 0.05 PRICE PDS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SS13 8\"Ø 12\" 12\" STEEL WHITE 71 225 15 6 0.05 PRICE PDS",
+          "word_ids": [
+            2364,
+            2365,
+            2366,
+            2367,
+            2368,
+            2369,
+            2370,
+            2371,
+            2372,
+            2373,
+            2374,
+            2375,
+            2376
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SS13 8\"Ø 12\" 12\" STEEL WHITE 71 225 15 6 0.05 PRICE PDS",
+          "word_ids": [
+            210,
+            261,
+            312,
+            363,
+            414,
+            465,
+            516,
+            567,
+            618,
+            669,
+            726,
+            794,
+            905
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 49,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        969,
+        1800,
+        983
+      ],
+      "expected": "SS14 10\"Ø 12\" 12\" STEEL WHITE 226 380 20 10 0.09 PRICE PDS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SS14 10\"Ø 12\" 12\" STEEL WHITE 226 380 20 10 0.09 PRICE PDS",
+          "word_ids": [
+            2377,
+            2378,
+            2379,
+            2380,
+            2381,
+            2382,
+            2383,
+            2384,
+            2385,
+            2386,
+            2387,
+            2388,
+            2389
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SS14 10\"Ø 12\" 12\" STEEL WHITE 226 380 20 10 0.09 PRICE PDS",
+          "word_ids": [
+            211,
+            262,
+            313,
+            364,
+            415,
+            466,
+            517,
+            568,
+            619,
+            670,
+            727,
+            795,
+            906
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 50,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        983,
+        1800,
+        996
+      ],
+      "expected": "SS15 6\"Ø 12\" 12\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE MSRRP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SS15 6\"Ø 12\" 12\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE MSRRP",
+          "word_ids": [
+            2390,
+            2391,
+            2392,
+            2393,
+            2394,
+            2395,
+            2396,
+            2397,
+            2398,
+            2399,
+            2400,
+            2401,
+            2402
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SS15 6\"Ø 12\" 12\" ALUMINUM WHITE 0 70 15 6 0.05 PRICE MSRRP",
+          "word_ids": [
+            212,
+            263,
+            314,
+            365,
+            416,
+            467,
+            518,
+            569,
+            620,
+            671,
+            728,
+            796,
+            907
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "row": 51,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        720,
+        996,
+        1800,
+        1010
+      ],
+      "expected": "SS16 8\"Ø 12\" 12\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE MSRRP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SS16 8\"Ø 12\" 12\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE MSRRP",
+          "word_ids": [
+            2403,
+            2404,
+            2405,
+            2406,
+            2407,
+            2408,
+            2409,
+            2410,
+            2411,
+            2412,
+            2413,
+            2414,
+            2415
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SS16 8\"Ø 12\" 12\" ALUMINUM WHITE 71 225 15 6 0.05 PRICE MSRRP",
+          "word_ids": [
+            213,
+            264,
+            315,
+            366,
+            417,
+            468,
+            519,
+            570,
+            621,
+            672,
+            729,
+            797,
+            908
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "header": "DIFFUSER / GRILLE SCHEDULE",
+      "page": 22,
+      "bbox": [
+        900,
+        72,
+        1750,
+        115
+      ],
+      "engine": "mupdf",
+      "actual": "DIFFUSER / GRILLE SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M603-DIFFUSERS-GRILLES",
+      "header": "DIFFUSER / GRILLE SCHEDULE",
+      "page": 22,
+      "bbox": [
+        900,
+        72,
+        1750,
+        115
+      ],
+      "engine": "poppler",
+      "actual": "DIFFUSER / GRILLE SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M603-SLOT-DIFFUSERS",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        1400,
+        1158,
+        2700,
+        1175
+      ],
+      "expected": "SL-1 8 48\" 1/2\" 2 40 0-160 22 16 STEEL WHITE 0.075 PRICE SDA50 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SL-1 8 48\" 1/2\" 2 40 0-160 22 16 STEEL WHITE 0.075 PRICE SDA50 1,2",
+          "word_ids": [
+            158,
+            159,
+            160,
+            161,
+            162,
+            163,
+            164,
+            165,
+            166,
+            167,
+            168,
+            169,
+            170,
+            171,
+            172
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SL-1 8 48\" 1/2\" 2 40 0-160 22 16 STEEL WHITE 0.075 PRICE SDA50 1,2",
+          "word_ids": [
+            1863,
+            1864,
+            1865,
+            1866,
+            1867,
+            1868,
+            1869,
+            1870,
+            1871,
+            1872,
+            1873,
+            1874,
+            1875,
+            1876,
+            1877
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-SLOT-DIFFUSERS",
+      "header": "SLOT DIFFUSER SCHEDULE",
+      "page": 22,
+      "bbox": [
+        1800,
+        1072,
+        2500,
+        1110
+      ],
+      "engine": "mupdf",
+      "actual": "SLOT DIFFUSER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M603-SLOT-DIFFUSERS",
+      "header": "SLOT DIFFUSER SCHEDULE",
+      "page": 22,
+      "bbox": [
+        1800,
+        1072,
+        2500,
+        1110
+      ],
+      "engine": "poppler",
+      "actual": "SLOT DIFFUSER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M603-SIDEWALL-GRILLES",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        1710,
+        1390,
+        2700,
+        1405
+      ],
+      "expected": "SWG-1 16\"X8\" 18\"X10\" STAINLESS STEEL WHITE 0 - 400 20 0.10 PRICE MSRRP 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SWG-1 16\"X8\" 18\"X10\" STAINLESS STEEL WHITE 0 - 400 20 0.10 PRICE MSRRP 3",
+          "word_ids": [
+            319,
+            320,
+            321,
+            322,
+            323,
+            324,
+            325,
+            326,
+            327,
+            328,
+            329,
+            330,
+            331,
+            332
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SWG-1 16\"X8\" 18\"X10\" STAINLESS STEEL WHITE 0 - 400 20 0.10 PRICE MSRRP 3",
+          "word_ids": [
+            1975,
+            1976,
+            1977,
+            1978,
+            1979,
+            1980,
+            1981,
+            1982,
+            1983,
+            1984,
+            1985,
+            1986,
+            1987,
+            1988
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-SIDEWALL-GRILLES",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        1710,
+        1405,
+        2700,
+        1420
+      ],
+      "expected": "SWG-2 24\"X8\" 18\"X10\" STAINLESS STEEL WHITE 400 - 750 20 0.10 PRICE MSRRP 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SWG-2 24\"X8\" 18\"X10\" STAINLESS STEEL WHITE 400 - 750 20 0.10 PRICE MSRRP 3",
+          "word_ids": [
+            305,
+            306,
+            307,
+            308,
+            309,
+            310,
+            311,
+            312,
+            313,
+            314,
+            315,
+            316,
+            317,
+            318
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SWG-2 24\"X8\" 18\"X10\" STAINLESS STEEL WHITE 400 - 750 20 0.10 PRICE MSRRP 3",
+          "word_ids": [
+            1997,
+            1998,
+            1999,
+            2000,
+            2001,
+            2002,
+            2003,
+            2004,
+            2005,
+            2006,
+            2007,
+            2008,
+            2009,
+            2010
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-SIDEWALL-GRILLES",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        1710,
+        1420,
+        2700,
+        1435
+      ],
+      "expected": "SWG-3 24\"X16\" 26\"X18\" STEEL WHITE 0 - 2000 45 0.30 TITUS 3300RL 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SWG-3 24\"X16\" 26\"X18\" STEEL WHITE 0 - 2000 45 0.30 TITUS 3300RL 3",
+          "word_ids": [
+            292,
+            293,
+            294,
+            295,
+            296,
+            297,
+            298,
+            299,
+            300,
+            301,
+            302,
+            303,
+            304
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SWG-3 24\"X16\" 26\"X18\" STEEL WHITE 0 - 2000 45 0.30 TITUS 3300RL 3",
+          "word_ids": [
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025,
+            2026,
+            2027,
+            2028,
+            2029,
+            2030,
+            2031
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-SIDEWALL-GRILLES",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        1710,
+        1435,
+        2700,
+        1450
+      ],
+      "expected": "SWG-4 30\"X16\" 32\"X18\" STEEL WHITE 0 - 2000 45 0.30 TITUS 3300RL 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SWG-4 30\"X16\" 32\"X18\" STEEL WHITE 0 - 2000 45 0.30 TITUS 3300RL 3",
+          "word_ids": [
+            279,
+            280,
+            281,
+            282,
+            283,
+            284,
+            285,
+            286,
+            287,
+            288,
+            289,
+            290,
+            291
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SWG-4 30\"X16\" 32\"X18\" STEEL WHITE 0 - 2000 45 0.30 TITUS 3300RL 3",
+          "word_ids": [
+            2040,
+            2041,
+            2042,
+            2043,
+            2044,
+            2045,
+            2046,
+            2047,
+            2048,
+            2049,
+            2050,
+            2051,
+            2052
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-SIDEWALL-GRILLES",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        1710,
+        1450,
+        2700,
+        1465
+      ],
+      "expected": "SWG-5 12\"X6\" 14\"X8\" STEEL WHITE 0-350 18 0.02 PRICE SDG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SWG-5 12\"X6\" 14\"X8\" STEEL WHITE 0-350 18 0.02 PRICE SDG",
+          "word_ids": [
+            269,
+            270,
+            271,
+            272,
+            273,
+            274,
+            275,
+            276,
+            277,
+            278
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SWG-5 12\"X6\" 14\"X8\" STEEL WHITE 0-350 18 0.02 PRICE SDG",
+          "word_ids": [
+            2061,
+            2062,
+            2063,
+            2064,
+            2065,
+            2066,
+            2067,
+            2068,
+            2069,
+            2070
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-SIDEWALL-GRILLES",
+      "row": 6,
+      "column": "source_row_as_printed",
+      "page": 22,
+      "bbox": [
+        1710,
+        1465,
+        2700,
+        1480
+      ],
+      "expected": "SWG-6 14\"X10\" 16\"X12\" STEEL WHITE 0-750 20 0.02 PRICE SDG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SWG-6 14\"X10\" 16\"X12\" STEEL WHITE 0-750 20 0.02 PRICE SDG",
+          "word_ids": [
+            259,
+            260,
+            261,
+            262,
+            263,
+            264,
+            265,
+            266,
+            267,
+            268
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SWG-6 14\"X10\" 16\"X12\" STEEL WHITE 0-750 20 0.02 PRICE SDG",
+          "word_ids": [
+            2079,
+            2080,
+            2081,
+            2082,
+            2083,
+            2084,
+            2085,
+            2086,
+            2087,
+            2088
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-SIDEWALL-GRILLES",
+      "header": "SIDEWALL GRILLE SCHEDULE",
+      "page": 22,
+      "bbox": [
+        1800,
+        1305,
+        2500,
+        1342
+      ],
+      "engine": "mupdf",
+      "actual": "SIDEWALL GRILLE SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M603-SIDEWALL-GRILLES",
+      "header": "SIDEWALL GRILLE SCHEDULE",
+      "page": 22,
+      "bbox": [
+        1800,
+        1305,
+        2500,
+        1342
+      ],
+      "engine": "poppler",
+      "actual": "SIDEWALL GRILLE SCHEDULE",
+      "pass": true
+    },
+    {
+      "assertion": "m603-diffuser-note-9",
+      "page": 22,
+      "bbox": [
+        706,
+        236,
+        1070,
+        249
+      ],
+      "expected": "9. PROVIDE SLEEVE AND SECURITY BARS. SLEEVE LENGTH AS REQUIRED FOR INSTALLATION.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9. PROVIDE SLEEVE AND SECURITY BARS. SLEEVE LENGTH AS REQUIRED FOR INSTALLATION.",
+          "word_ids": [
+            1607,
+            1608,
+            1609,
+            1610,
+            1611,
+            1612,
+            1613,
+            1614,
+            1615,
+            1616,
+            1617,
+            1618
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9. PROVIDE SLEEVE AND SECURITY BARS. SLEEVE LENGTH AS REQUIRED FOR INSTALLATION.",
+          "word_ids": [
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

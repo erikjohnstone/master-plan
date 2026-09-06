@@ -1,0 +1,219 @@
+{
+  "document_id": "26__vol2__031",
+  "module_role": "Literal M-500/M-501 equipment, control-valve, reheat-coil and air-terminal schedule rows.",
+  "tables": [
+    {
+      "id": "M500-HEAT-EXCHANGER",
+      "page": 71,
+      "sheet": "M-500",
+      "title_as_printed": "HEAT EXCHANGER SCHEDULE",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        1200,
+        2960
+      ],
+      "y_ranges": [
+        [
+          990,
+          1010
+        ],
+        [
+          1015,
+          1035
+        ],
+        [
+          1035,
+          1055
+        ],
+        [
+          1055,
+          1075
+        ]
+      ],
+      "rows": [
+        "WHSE-HX1 B1 C11 PIPE WAREHOUSE REHEAT WATER SHELL & TUBE 55 [ 4 ] 120 [ 49 ] 160 [ 71 ] 5 [ 15 ] 15 [ 100 ] 5 [ 35 ] 7.3 20 0.75 375 [ 3 ] WHSE-T2 2 2500 [ 1100 ] 1/3 CONTROL VALVE",
+        "WHSE-HX1 14.5 25 1 745 2/3 CONTROL VALVE",
+        "WHSE-HX2 B1 C11 PIPE WAREHOUSE REHEAT WATER SHELL & TUBE 55 [ 4 ] 120 [ 49 ] 160 [ 71 ] 5 [ 15 ] 15 [ 100 ] 5 [ 35 ] 7.3 20 0.75 375 [ 3 ] WHSE-T2 2 2500 [ 1100 ] 1/3 CONTROL VALVE",
+        "WHSE-HX2 BASEMENT 14.5 25 1 745 2/3 CONTROL VALVE"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Complete literal printed schedule or matrix row. It is source evidence only and is not converted into installed multiplicity, wiring, controller, ownership or physical-takeoff claims."
+    },
+    {
+      "id": "M501-HOT-WATER-HEATING-COIL",
+      "page": 72,
+      "sheet": "M-501",
+      "title_as_printed": "HOT WATER HEATING COIL SCHEDULE",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        1400,
+        2940
+      ],
+      "y_ranges": [
+        [
+          690,
+          705
+        ],
+        [
+          705,
+          720
+        ],
+        [
+          720,
+          735
+        ],
+        [
+          735,
+          750
+        ],
+        [
+          750,
+          765
+        ],
+        [
+          765,
+          780
+        ],
+        [
+          780,
+          795
+        ],
+        [
+          795,
+          810
+        ],
+        [
+          810,
+          825
+        ],
+        [
+          825,
+          840
+        ],
+        [
+          840,
+          855
+        ],
+        [
+          855,
+          870
+        ],
+        [
+          870,
+          885
+        ],
+        [
+          885,
+          900
+        ],
+        [
+          900,
+          915
+        ]
+      ],
+      "rows": [
+        "WHSE-PHC1 WHSE-AHU-1 WAREHOUSE WHSE-AHU-1 PREHEAT 6075 [ 2900 ] 213 [ 1 ] 0.015 [ 4 ] 45.0 [ 7 ] 74.0 [ 23 ] 188.0 [ 640 ] 9.4 [ .6 ] 160 [ 71 ] 120 [ 49 ] 5 [ 15 ] 0 SELECTION CRITERIA",
+        "WHSE-PHC1 WHSE-AHU-1 WAREHOUSE WHSE-AHU-1 PREHEAT 6075 [ 2900 ] 213 [ 1 ] 0.015 [ 4 ] 45.0 [ 7 ] 74.0 [ 23 ] 188.0 [ 640 ] 9.4 [ .6 ] 160 [ 71 ] 120 [ 49 ] 5 [ 15 ] 0 OPERATING CONDITION",
+        "WHSE-RHC1 1-1-TU01 W05 WHSE-AHU-1 REHEAT 600 [ 280 ] [ ] .5 [ 130 ] 55.0 [ 13 ] 95.0 [ 35 ] 25.9 [ 88 ] 1.7 [ .1 ] 160 [ 71 ] 120 [ 49 ] 5 [ 15 ] 0 ---",
+        "WHSE-RHC2 1-1-TU02 W06 WHSE-AHU-1 REHEAT 300 [ 140 ] [ ] .5 [ 130 ] 55.0 [ 13 ] 95.0 [ 35 ] 13.0 [ 44 ] 0.9 [ .1 ] 160 [ 71 ] 120 [ 49 ] 5 [ 15 ] 0 ---",
+        "WHSE-RHC3 1-1-TU03 W01 WHSE-AHU-1 REHEAT 370 [ 170 ] [ ] .5 [ 130 ] 55.0 [ 13 ] 95.0 [ 35 ] 16.0 [ 55 ] 1.1 [ .1 ] 160 [ 71 ] 120 [ 49 ] 5 [ 15 ] 0 ---",
+        "WHSE-RHC4 1-1-TU04 W02 WHSE-AHU-1 REHEAT 900 [ 420 ] [ ] .5 [ 130 ] 55.0 [ 13 ] 95.0 [ 35 ] 38.9 [ 130 ] 2.6 [ .2 ] 160 [ 71 ] 120 [ 49 ] 5 [ 15 ] 0 ---",
+        "WHSE-RHC5 1-1-TU05 WC01A WHSE-AHU-1 REHEAT 900 [ 420 ] [ ] .5 [ 130 ] 55.0 [ 13 ] 95.0 [ 35 ] 38.9 [ 130 ] 2.6 [ .2 ] 160 [ 71 ] 120 [ 49 ] 5 [ 15 ] 0 ---",
+        "WHSE-RHC6 1-1-TU06 W05A WHSE-AHU-1 REHEAT 300 [ 140 ] [ ] .5 [ 130 ] 55.0 [ 13 ] 95.0 [ 35 ] 13.0 [ 44 ] 0.9 [ .1 ] 160 [ 71 ] 120 [ 49 ] 5 [ 15 ] 0 ---",
+        "WHSE-RHC7 1-1-TU07 W04 WHSE-AHU-1 REHEAT 520 [ 250 ] [ ] .5 [ 130 ] 55.0 [ 13 ] 95.0 [ 35 ] 22.5 [ 77 ] 1.5 [ .1 ] 160 [ 71 ] 120 [ 49 ] 5 [ 15 ] 0 ---",
+        "WHSE-RHC8 1-1-TU08 W09 WHSE-AHU-1 REHEAT 180 [ 85 ] [ ] .5 [ 130 ] 55.0 [ 13 ] 95.0 [ 35 ] 7.8 [ 27 ] 0.5 [ .0 ] 160 [ 71 ] 120 [ 49 ] 5 [ 15 ] 0 ---",
+        "WHSE-RHC9 1-1-TU09 W04A WHSE-AHU-1 REHEAT 440 [ 210 ] [ ] .5 [ 130 ] 55.0 [ 13 ] 95.0 [ 35 ] 19.0 [ 65 ] 1.3 [ .1 ] 160 [ 71 ] 120 [ 49 ] 5 [ 15 ] 0 ---",
+        "WHSE-RHC10 1-1-TU10 W03 WHSE-AHU-1 REHEAT 1575 [ 740 ] [ ] .5 [ 130 ] 55.0 [ 13 ] 95.0 [ 35 ] 68.0 [ 230 ] 4.5 [ .3 ] 160 [ 71 ] 120 [ 49 ] 5 [ 15 ] 0 ---",
+        "WHSE-RHC11 1-1-TU11 W03A WHSE-AHU-1 REHEAT 1025 [ 480 ] [ ] .5 [ 130 ] 55.0 [ 13 ] 95.0 [ 35 ] 44.3 [ 150 ] 3.0 [ .2 ] 160 [ 71 ] 120 [ 49 ] 5 [ 15 ] 0 ---",
+        "WHSE-RHC12 2-1-TU12 W11 WHSE-AHU-1 REHEAT 2600 [ 1200 ] [ ] .5 [ 130 ] 55.0 [ 13 ] 95.0 [ 35 ] 112.3 [ 380 ] 7.5 [ .5 ] 160 [ 71 ] 120 [ 49 ] 5 [ 15 ] 0 ---",
+        "WHSE-RHC13 2-1-TU13 W11 WHSE-AHU-1 REHEAT 1125 [ 530 ] [ ] .5 [ 130 ] 55.0 [ 13 ] 95.0 [ 35 ] 48.6 [ 170 ] 3.2 [ .2 ] 160 [ 71 ] 120 [ 49 ] 5 [ 15 ] 0 ---"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Complete literal printed schedule or matrix row. It is source evidence only and is not converted into installed multiplicity, wiring, controller, ownership or physical-takeoff claims."
+    },
+    {
+      "id": "M501-AIR-TERMINAL-UNIT",
+      "page": 72,
+      "sheet": "M-501",
+      "title_as_printed": "AIR TERMINAL UNIT SCHEDULE",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        1400,
+        2940
+      ],
+      "y_ranges": [
+        [
+          1015,
+          1030
+        ],
+        [
+          1030,
+          1045
+        ],
+        [
+          1045,
+          1060
+        ],
+        [
+          1060,
+          1075
+        ],
+        [
+          1075,
+          1090
+        ],
+        [
+          1090,
+          1105
+        ],
+        [
+          1105,
+          1120
+        ],
+        [
+          1120,
+          1135
+        ],
+        [
+          1135,
+          1150
+        ],
+        [
+          1150,
+          1165
+        ],
+        [
+          1165,
+          1180
+        ],
+        [
+          1180,
+          1195
+        ],
+        [
+          1195,
+          1210
+        ]
+      ],
+      "rows": [
+        "W05-TU-01 W05 W05 WHSE-AHU-1 E 600 [ 280 ] 270 [ 130 ] NONE VAV 5 DEGREE DEADBAND X NONE ----",
+        "W06-TU-02 W06 W06 WHSE-AHU-1 C 300 [ 140 ] 135 [ 64 ] NONE VAV 5 DEGREE DEADBAND X NONE",
+        "W01-TU-03 W01 W01 WHSE-AHU-1 D 370 [ 170 ] 165 [ 78 ] NONE VAV 5 DEGREE DEADBAND X NONE",
+        "W02-TU-04 W02 W02 WHSE-AHU-1 G 900 [ 420 ] 405 [ 190 ] NONE VAV 5 DEGREE DEADBAND X NONE",
+        "WC01A-TU-05 WC01A WC01A WHSE-AHU-1 G 900 [ 420 ] 405 [ 190 ] NONE VAV 5 DEGREE DEADBAND X NONE",
+        "W05A-TU-06 W05A W05A WHSE-AHU-1 C 300 [ 140 ] 135 [ 64 ] NONE VAV 5 DEGREE DEADBAND X NONE",
+        "W04-TU-07 W04 W04 WHSE-AHU-1 E 520 [ 250 ] 235 [ 110 ] NONE VAV 5 DEGREE DEADBAND X NONE",
+        "W07-TU-08 W07 W09 WHSE-AHU-1 B 180 [ 85 ] 80 [ 38 ] NONE VAV 5 DEGREE DEADBAND X NONE",
+        "W04A-TU-09 W04 W04A WHSE-AHU-1 D 440 [ 210 ] 200 [ 94 ] NONE VAV 5 DEGREE DEADBAND X NONE",
+        "W03-TU-10 W03 W03 WHSE-AHU-1 I 1575 [ 740 ] 710 [ 340 ] NONE VAV 5 DEGREE DEADBAND X NONE",
+        "W11-TU-11 W11 W03A WHSE-AHU-1 H 1025 [ 480 ] 460 NONE VAV 5 DEGREE DEADBAND X NONE",
+        "W11-TU-12 W11 W11 WHSE-AHU-1 J 2600 [ 1200 ] 1170 [ 550 ] NONE VAV 5 DEGREE DEADBAND X NONE",
+        "W11-TU-13 W11 W11 WHSE-AHU-1 H 1125 [ 530 ] 505 [ 240 ] NONE VAV 5 DEGREE DEADBAND X NONE"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Complete literal printed schedule or matrix row. It is source evidence only and is not converted into installed multiplicity, wiring, controller, ownership or physical-takeoff claims."
+    }
+  ],
+  "assertions": [],
+  "schedule_scope": "Thirty-one literal schedule rows are retained: four HX/control-valve rows, fourteen preheat/reheat-coil rows and thirteen VAV terminal rows. They are schedule rows, not installed physical counts."
+}

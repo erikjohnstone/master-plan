@@ -1,0 +1,912 @@
+{
+  "document_id": "24__vol2__019",
+  "module_role": "Literal M8.3/M8.4/M8.5/M8.7/M8.8 BAS point-function rows. The row scope is the printed control-system template; repeated tag text in separate sheets/templates is intentionally not silently merged into an installed terminal or field-device count.",
+  "source_sheets": [
+    "M8.3",
+    "M8.4",
+    "M8.5",
+    "M8.7",
+    "M8.8"
+  ],
+  "tables": [
+    {
+      "id": "M83-CHW-POINTS",
+      "page": 19,
+      "sheet": "M8.3",
+      "title": "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - CHW SYSTEM",
+      "classification": "literal printed BAS point-function matrix row",
+      "columns": "point_name|tag|point_type",
+      "x_edges": [
+        1160,
+        1605,
+        1690,
+        1740
+      ],
+      "y_ranges": [
+        [
+          987.541,
+          1001.541
+        ],
+        [
+          1004.701,
+          1018.701
+        ],
+        [
+          1021.981,
+          1035.981
+        ],
+        [
+          1039.261,
+          1053.261
+        ],
+        [
+          1056.541,
+          1070.541
+        ],
+        [
+          1073.701,
+          1087.701
+        ],
+        [
+          1090.981,
+          1104.981
+        ],
+        [
+          1108.261,
+          1122.261
+        ],
+        [
+          1142.701,
+          1156.701
+        ],
+        [
+          1159.981,
+          1173.981
+        ],
+        [
+          1177.261,
+          1191.261
+        ],
+        [
+          1194.541,
+          1208.541
+        ],
+        [
+          1228.981,
+          1242.981
+        ],
+        [
+          1263.541,
+          1277.541
+        ],
+        [
+          1280.701,
+          1294.701
+        ],
+        [
+          1297.981,
+          1311.981
+        ],
+        [
+          1315.261,
+          1329.261
+        ],
+        [
+          1349.701,
+          1363.701
+        ],
+        [
+          1366.981,
+          1380.981
+        ],
+        [
+          1384.261,
+          1398.261
+        ],
+        [
+          1401.541,
+          1415.541
+        ]
+      ],
+      "rows": [
+        "1 CHWR TEMPERATURE|T-1|AI",
+        "2 CHWS TEMPERATURE|T-2|AI",
+        "3 CHILLER ALARM STATUS|AX-1|DI",
+        "4 CHILLER STATUS|AX-2|DI",
+        "5 CHILLER POWER CONSUMPTION|CI-1|AO",
+        "6 CHILLER LOADING|CI-2|AO",
+        "7 CHILLER SET POINT ADJUSTMENT|SPA-1|AO",
+        "8 ENABLE/DISABLE|ED-1|DO",
+        "9 CHWR TEMPERATURE|T-3|AI",
+        "10 CHWR BYPASS VALVE CONTROL|V-2|AO",
+        "11 CHILLER CHWS FLOW|FM-1|AI",
+        "12 DIFFERENTIAL PRESSURE|DP-1|AI",
+        "14 OUTSIDE AIR TEMPERATURE|T-4|AI",
+        "15 PUMP STATUS|CSR-1|DI",
+        "16 PUMP START/STOP|SS-1|DO",
+        "17 PUMP SPEED CONTROL|CI-5|AO",
+        "18 VFD ALARM STATUS|AX-5|DI",
+        "19 PUMP STATUS|CSR-2|DI",
+        "20 PUMP START/STOP|SS-2|DO",
+        "21 PUMP SPEED CONTROL|CI-6|AO",
+        "22 VFD ALARM STATUS|AX-6|DI"
+      ]
+    },
+    {
+      "id": "M84-HHW-POINTS",
+      "page": 20,
+      "sheet": "M8.4",
+      "title": "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - HHW SYSTEM",
+      "classification": "literal printed BAS point-function matrix row",
+      "columns": "point_name|tag|point_type",
+      "x_edges": [
+        1160,
+        1600,
+        1685,
+        1730
+      ],
+      "y_ranges": [
+        [
+          1105.5,
+          1119.5
+        ],
+        [
+          1122.66,
+          1136.66
+        ],
+        [
+          1139.94,
+          1153.94
+        ],
+        [
+          1157.22,
+          1171.22
+        ],
+        [
+          1174.5,
+          1188.5
+        ],
+        [
+          1191.66,
+          1205.66
+        ],
+        [
+          1208.94,
+          1222.94
+        ],
+        [
+          1226.22,
+          1240.22
+        ],
+        [
+          1243.5,
+          1257.5
+        ],
+        [
+          1277.94,
+          1291.94
+        ],
+        [
+          1295.22,
+          1309.22
+        ],
+        [
+          1312.5,
+          1326.5
+        ],
+        [
+          1329.66,
+          1343.66
+        ],
+        [
+          1346.94,
+          1360.94
+        ],
+        [
+          1364.22,
+          1378.22
+        ],
+        [
+          1381.5,
+          1395.5
+        ],
+        [
+          1398.66,
+          1412.66
+        ],
+        [
+          1415.94,
+          1429.94
+        ],
+        [
+          1433.22,
+          1447.22
+        ],
+        [
+          1450.5,
+          1464.5
+        ],
+        [
+          1484.94,
+          1498.94
+        ],
+        [
+          1502.22,
+          1516.22
+        ],
+        [
+          1519.5,
+          1533.5
+        ],
+        [
+          1536.66,
+          1550.66
+        ],
+        [
+          1571.22,
+          1585.22
+        ],
+        [
+          1588.501,
+          1602.501
+        ],
+        [
+          1605.66,
+          1619.66
+        ],
+        [
+          1622.941,
+          1636.941
+        ],
+        [
+          1657.501,
+          1671.501
+        ],
+        [
+          1674.661,
+          1688.661
+        ],
+        [
+          1691.941,
+          1705.941
+        ],
+        [
+          1709.221,
+          1723.221
+        ]
+      ],
+      "rows": [
+        "1 BOILER ALARM STATUS|AX-1|DI",
+        "2 BOILER STATUS|AX-2|DI",
+        "3 BOILER SET POINT ADJUSTMENT|CI-1|AO",
+        "4 BOILER ENABLE/DISABLE|ED-1|DO",
+        "5 BOILER HHWS FLOW|FM-1|AI",
+        "6 BOILER HHWS ISOLATION VALVE CONTROL|V-1|AO",
+        "7 HHWS TEMPERATURE|T-1|AI",
+        "8 HHWR TEMPERATURE|T-2|AI",
+        "32 BOILER HHWS ISOLATION VALVE CONTROL|CV-1|DI",
+        "9 BOILER ALARM STATUS|AX-3|DI",
+        "10 BOILER STATUS|AX-4|DI",
+        "11 BOILER SET POINT ADJUSTMENT|CI-2|AO",
+        "12 BOILER ENABLE/DISABLE|ED-2|DO",
+        "13 BOILER HHWS FLOW|FM-2|AI",
+        "14 BOILER HHWS ISOLATION VALVE CONTROL|V-2|AO",
+        "15 HHWR TEMPERATURE|T-3|AI",
+        "16 HHWR TEMPERATURE|T-4|AI",
+        "17 HHWS TEMPERATURE|T-5|AI",
+        "18 HHWR TEMPERATURE|T-6|AI",
+        "31 BOILER HHWS ISOLATION VALVE CONTROL|CV-2|DI",
+        "19 HWS BYPASS VALVE CONTROL|V-3|AO",
+        "20 DIFFERENTIAL PRESSURE|DP-1|AI",
+        "21 DIFFERENTIAL PRESSURE|DP-2|AI",
+        "22 OUTSIDE AIR TEMPERATURE SENSOR|T-7|AI",
+        "23 VFD ALARM STATUS|AX-5|DI",
+        "24 PUMP SPEED CONTROL|CI-3|AO",
+        "25 PUMP START/STOP|SS-1|DO",
+        "26 PUMP STATUS|CSR-1|DI",
+        "27 VFD ALARM STATUS|AX-6|DI",
+        "28 PUMP SPEED CONTROL|CI-4|AO",
+        "29 PUMP START/STOP|SS-2|DO",
+        "30 PUMP STATUS|CSR-2|DI"
+      ]
+    },
+    {
+      "id": "M85-AHU1-POINTS",
+      "page": 21,
+      "sheet": "M8.5",
+      "title": "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - AHU-1",
+      "classification": "literal printed BAS point-function matrix row",
+      "columns": "point_name|tag|point_type",
+      "x_edges": [
+        1535,
+        1860,
+        1925,
+        1960
+      ],
+      "y_ranges": [
+        [
+          778.74,
+          792.74
+        ],
+        [
+          796.02,
+          810.02
+        ],
+        [
+          813.3,
+          827.3
+        ],
+        [
+          830.58,
+          844.58
+        ],
+        [
+          847.74,
+          861.74
+        ],
+        [
+          879.54,
+          893.54
+        ],
+        [
+          896.82,
+          910.82
+        ],
+        [
+          914.1,
+          928.1
+        ],
+        [
+          931.38,
+          945.38
+        ],
+        [
+          948.54,
+          962.54
+        ],
+        [
+          965.82,
+          979.82
+        ],
+        [
+          983.1,
+          997.1
+        ],
+        [
+          1014.9,
+          1028.9
+        ],
+        [
+          1032.18,
+          1046.18
+        ],
+        [
+          1049.34,
+          1063.34
+        ],
+        [
+          1066.62,
+          1080.62
+        ],
+        [
+          1083.9,
+          1097.9
+        ],
+        [
+          1101.18,
+          1115.18
+        ],
+        [
+          1118.34,
+          1132.34
+        ],
+        [
+          1135.62,
+          1149.62
+        ],
+        [
+          1152.9,
+          1166.9
+        ],
+        [
+          1170.18,
+          1184.18
+        ],
+        [
+          1187.34,
+          1201.34
+        ],
+        [
+          1204.62,
+          1218.62
+        ],
+        [
+          1221.9,
+          1235.9
+        ],
+        [
+          1239.18,
+          1253.18
+        ],
+        [
+          1256.34,
+          1270.34
+        ],
+        [
+          1273.62,
+          1287.62
+        ],
+        [
+          1290.9,
+          1304.9
+        ],
+        [
+          1308.18,
+          1322.18
+        ],
+        [
+          1325.34,
+          1339.34
+        ],
+        [
+          1342.62,
+          1356.62
+        ],
+        [
+          1359.9,
+          1373.9
+        ],
+        [
+          1377.18,
+          1391.18
+        ],
+        [
+          1394.341,
+          1408.341
+        ],
+        [
+          1411.621,
+          1425.621
+        ],
+        [
+          1428.901,
+          1442.901
+        ],
+        [
+          1460.701,
+          1474.701
+        ],
+        [
+          1477.981,
+          1491.981
+        ],
+        [
+          1495.141,
+          1509.141
+        ],
+        [
+          1512.421,
+          1526.421
+        ],
+        [
+          1529.701,
+          1543.701
+        ],
+        [
+          1546.981,
+          1560.981
+        ],
+        [
+          1564.261,
+          1578.261
+        ],
+        [
+          1581.421,
+          1595.421
+        ],
+        [
+          1598.701,
+          1612.701
+        ],
+        [
+          1615.981,
+          1629.981
+        ],
+        [
+          1633.261,
+          1647.261
+        ],
+        [
+          1650.421,
+          1664.421
+        ],
+        [
+          1667.701,
+          1681.701
+        ],
+        [
+          1684.981,
+          1698.981
+        ],
+        [
+          1702.261,
+          1716.261
+        ],
+        [
+          1719.421,
+          1733.421
+        ],
+        [
+          1736.701,
+          1750.701
+        ],
+        [
+          1753.981,
+          1767.981
+        ],
+        [
+          1771.261,
+          1785.261
+        ],
+        [
+          1788.421,
+          1802.421
+        ],
+        [
+          1805.701,
+          1819.701
+        ],
+        [
+          1822.981,
+          1836.981
+        ],
+        [
+          1840.261,
+          1854.261
+        ],
+        [
+          1857.421,
+          1871.421
+        ],
+        [
+          1874.701,
+          1888.701
+        ],
+        [
+          1926.421,
+          1940.421
+        ],
+        [
+          1943.701,
+          1957.701
+        ],
+        [
+          1960.981,
+          1974.981
+        ],
+        [
+          2012.701,
+          2026.701
+        ],
+        [
+          2064.421,
+          2078.421
+        ],
+        [
+          2081.701,
+          2095.701
+        ],
+        [
+          2098.981,
+          2112.981
+        ]
+      ],
+      "rows": [
+        "1 DUCT STATIC PRESSURE|SP-1|AI",
+        "2 SUPPLY AIR ISOLATION DAMPER|D-1|AO",
+        "3 WHEEL ENTERING HUMIDITY|H-1|AI",
+        "4 SUPPLY AIR TEMPERATURE|T-4|AI",
+        "5 STATIC PRESSURE SENSOR - HIGH STATIC|SP-2|AI",
+        "6 MERV 14 FILTER STATUS|DPS-3|DI",
+        "7 CHW COIL DISCHARGE AIR TEMPERATURE|T-8|AI",
+        "8 CHILLED WATER COIL VALVE CONTROL|V-2|AO",
+        "9 FREEZESTAT STATUS|FZ-1|DI",
+        "10 HHW COIL DISCHARGE AIR TEMPERATURE|T-3|AI",
+        "11 HEATING HOT WATER VALVE CONTROL|V-1|AO",
+        "12 HOT WATER RECIRCULATING PUMP|SS-5|DO",
+        "13 HOT WATER RECIRCULATING PUMP STATUS|CSR-5|DI",
+        "14 MIXED AIR TEMPERATURE|T-7|AI",
+        "15 OA WHEEL LEAVING AIR TEMPERATURE|T-2|AI",
+        "16 OA WHEEL LEAVING RELATIVE HUMIDITY|H-2|AI",
+        "17 ENTERING AIR WHEEL BYPASS D-1 CONTROL|D-4|DO",
+        "18 WHEEL ENTERING HUMIDITY|H-1|AI",
+        "19 WHEEL ENTERING TEMPERATURE|T-1|AI",
+        "20 MERV 9 FILTER STATUS|DPS-1|DI",
+        "21 ECONOMIZER DAMPER CONTROL|D-6|AO",
+        "22 MINIMUM OUTSIDE AIR DAMPER CONTROL|D-7|AO",
+        "23 ECONOMIZER AIR FLOW|AFMS-2|AI",
+        "24 RELIEF AIR ISOLATION DAMPER|D-8|AO",
+        "25 MIN OUTDOOR AIR FLOW|AFMS-1|AI",
+        "26 MIN OUTSIDE AIR DAMPER STATUS|DS-4|DI",
+        "27 ECONOMIZER DAMPER STATUS|DS-5|DI",
+        "28 EA WHEEL LEAVING AIR TEMPERATURE|T-6|AI",
+        "29 EA WHEEL LEAVING AIR RELATIVE HUMIDITY|H-4|AI",
+        "30 HEAT RECOVERY WHEEL ROTATION STATUS|AX-3|DI",
+        "31 HEAT RECOVERY WHEEL STATUS|CSR-2|DI",
+        "32 HEAT RECOVERY WHEEL START/STOP|SS-2|DO",
+        "33 RETURN DAMPER CONTROL|D-3|AO",
+        "34 RA WHEEL ENTERING RELATIVE HUMIDITY|H-3|AI",
+        "35 RA WHEEL ENTERING TEMPERATURE|T-5|AI",
+        "36 MERV 9 FILTER STATUS|DPS-2|DI",
+        "37 STATIC PRESSURE SENSOR - LOW STATIC|SP-2|AI",
+        "38 RETURN AIR ISOLATION DAMPER|D-2|AO",
+        "39 SUPPLY AIR ISOLATION DAMPER STATUS|DS-1|DI",
+        "40 RETURN AIR ISOLATION DAMPER STATUS|DS-2|DI",
+        "42 RELIEF AIR ISOLATION DAMPER STATUS|DS-3|DI",
+        "43 SF #1 FAN STATUS|CSR-1|DI",
+        "44 SF #1 FAN START/STOP|SS-1|DO",
+        "45 SF #1 FAN SPEED CONTROL|CI-1|AO",
+        "46 SF #1 VFD ALARM STATUS|AX-1|DI",
+        "47 SAF #2 VFD ALARM STATUS|AX-1|DI",
+        "48 SAF #2 FAN SPEED CONTROL|CI-1|AO",
+        "49 SAF #2 FAN START/STOP|SS-1|DO",
+        "50 SAF #2 FAN STATUS|CSR-1|DI",
+        "51 SUPPLY AIR FLOW FROM SUPPLY AIR FAN SF-1|AFMS-3|AI",
+        "52 SUPPLY AIR FLOW FROM SUPPLY AIR FAN SF-2|AFMS-4|AI",
+        "53 RF #1 FAN STATUS|CSR-3|DI",
+        "54 RF #1 FAN START/STOP|SS-3|DO",
+        "55 RF #1 FAN SPEED CONTROL|CI-3|AO",
+        "56 RF #1 VFD ALARM STATUS|AX-3|DI",
+        "57 RF #2 VFD ALARM STATUS|AX-4|DI",
+        "58 RF #2 FAN SPEED CONTROL|CI-4|AO",
+        "59 RF #2 FAN START/STOP|SS-4|DO",
+        "60 RF #2 FAN STATUS|CSR-4|DI",
+        "61 RETURN AIR FLOW FROM RETURN AIR FAN RF-1|AFMS-5|AI",
+        "62 RETURN AIR FLOW FROM RETURN AIR FAN RF-2|AFMS-6|AI",
+        "63 EXHAUST AIR WHEEL BYPASS D-2 CONTROL|D-5|DO",
+        "64 WHEEL ENTERING TEMPERATURE|T-1|AI",
+        "65 WHEEL ENTERING HUMIDITY|H-1|AI",
+        "66 OUTSIDE AIR CO2 LEVEL|CO2-X|AI",
+        "67 ZONE AIR CO2 LEVEL|CO2-X|AI",
+        "68 SPACE PRESSURE SENSOR|SPS|AI",
+        "69 SPACE PRESSURE SENSOR|SPS|AI",
+        "70 SPACE PRESSURE SENSOR|SPS|AI"
+      ]
+    },
+    {
+      "id": "M87-VAV-POINTS",
+      "page": 23,
+      "sheet": "M8.7",
+      "title": "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - VAV BOXES",
+      "classification": "literal printed BAS point-function matrix row",
+      "columns": "point_name|tag|point_type",
+      "x_edges": [
+        1400,
+        1925,
+        1985,
+        2030
+      ],
+      "y_ranges": [
+        [
+          364.74,
+          378.74
+        ],
+        [
+          381.9,
+          395.9
+        ],
+        [
+          399.18,
+          413.18
+        ],
+        [
+          416.46,
+          430.46
+        ],
+        [
+          433.74,
+          447.74
+        ],
+        [
+          468.18,
+          482.18
+        ],
+        [
+          485.46,
+          499.46
+        ],
+        [
+          502.74,
+          516.74
+        ],
+        [
+          519.9,
+          533.9
+        ],
+        [
+          537.18,
+          551.18
+        ],
+        [
+          571.74,
+          585.74
+        ],
+        [
+          588.9,
+          602.9
+        ],
+        [
+          606.18,
+          620.18
+        ],
+        [
+          623.46,
+          637.46
+        ],
+        [
+          640.74,
+          654.74
+        ]
+      ],
+      "rows": [
+        "1 BOX AIR FLOW|T-5|AI",
+        "2 BOX DAMPER CONTROL|MD-4|AO",
+        "3 HEATING HOT WATER COIL VALVE CONTROL|V-4|AO",
+        "4 VAV BOX DISCHARGE AIR TEMPERATURE|T-6|AI",
+        "5 ZONE TEMPERATURE|T-7|AI",
+        "6 BOX AIR FLOW|T-9|AI",
+        "7 BOX DAMPER CONTROL|MD-5|AO",
+        "8 HEATING HOT WATER COIL VALVE CONTROL|V-5|AO",
+        "9 BOX DISCHARGE AIR TEMPERATURE|T-10|AI",
+        "10 ZONE TEMPERATURE|T-11|AI",
+        "11 BOX AIR FLOW|T-9|AI",
+        "12 BOX DAMPER CONTROL|MD-5|AO",
+        "13 HEATING HOT WATER COIL VALVE CONTROL|V-5|AO",
+        "14 BOX DISCHARGE AIR TEMPERATURE|T-10|AI",
+        "15 ZONE TEMPERATURE|T-11|AI"
+      ]
+    },
+    {
+      "id": "M88-MISC-POINTS",
+      "page": 24,
+      "sheet": "M8.8",
+      "title": "HVAC CONTROLS - BMS POINT FUNCTION SCHEDULE - MISCELLANEOUS",
+      "classification": "literal printed BAS point-function matrix row",
+      "columns": "point_name|tag|point_type",
+      "x_edges": [
+        1150,
+        1620,
+        1680,
+        1730
+      ],
+      "y_ranges": [
+        [
+          1513.74,
+          1527.74
+        ],
+        [
+          1531.02,
+          1545.02
+        ],
+        [
+          1565.46,
+          1579.46
+        ],
+        [
+          1582.74,
+          1596.74
+        ],
+        [
+          1600.02,
+          1614.02
+        ],
+        [
+          1634.46,
+          1648.46
+        ],
+        [
+          1651.74,
+          1665.74
+        ],
+        [
+          1669.02,
+          1683.02
+        ],
+        [
+          1686.3,
+          1700.3
+        ],
+        [
+          1720.74,
+          1734.74
+        ],
+        [
+          1738.02,
+          1752.02
+        ],
+        [
+          1755.3,
+          1769.3
+        ],
+        [
+          1772.46,
+          1786.46
+        ],
+        [
+          1789.74,
+          1803.74
+        ],
+        [
+          1807.02,
+          1821.02
+        ],
+        [
+          1824.3,
+          1838.3
+        ],
+        [
+          1858.74,
+          1872.74
+        ],
+        [
+          1876.02,
+          1890.02
+        ],
+        [
+          1910.46,
+          1924.46
+        ],
+        [
+          1945.02,
+          1959.02
+        ],
+        [
+          1979.46,
+          1993.46
+        ]
+      ],
+      "rows": [
+        "1 EXHAUST FAN START/STOP|SS-1|DO",
+        "2 EXHAUST FAN STATUS|CSR-1|DI",
+        "3 EXHAUST FAN START/STOP|SS-2|DO",
+        "4 EXHAUST FAN STATUS|CSR-2|DI",
+        "5 SPACE TEMPERATURE SENSOR|T-1|AI",
+        "6 EXHAUST FAN START/STOP|SS-1|DO",
+        "7 EXHAUST FAN STATUS|CSR-1|DI",
+        "8 SPACE TEMPERATURE SENSOR|T-1|AI",
+        "9 HEATING HOT WATER COIL VALVE CONTROL|V-1|AO",
+        "10 LIGHTING CONTROL|L-1|DO",
+        "11 LIGHTING CONTROL|L-2|DO",
+        "12 LIGHTING CONTROL|L-3|DO",
+        "13 LIGHTING CONTROL|L-4|DO",
+        "14 LIGHTING CONTROL|L-5|DO",
+        "15 LIGHTING CONTROL|L-6|DO",
+        "16 LIGHTING CONTROL|L-7|DO",
+        "17 HEATING HOT WATER COIL VALVE CONTROL|V-3|AO",
+        "18 SPACE TEMPERATURE SENSOR|T-4|AI",
+        "19 SPACE TEMPERATURE SENSOR|T-13|AI",
+        "20 EMERGENCY SHUTDOWN SWITCH STATUS|SW-1|DI",
+        "21 STORM WATER LEAK SENSOR|WLS-1|DI"
+      ]
+    }
+  ],
+  "printed_point_type_counts": {
+    "AI": 59,
+    "AO": 33,
+    "DI": 41,
+    "DO": 25,
+    "total": 158
+  },
+  "point_count_semantics": "Counts are rows categorized by the printed AI/DI/AO/DO point-type column. They are source-matrix/template occurrences, not controller card, wiring, field-device or installed-terminal quantities.",
+  "assertions": [],
+  "inventory_checks": [
+    {
+      "id": "rank24-point-matrix-tables",
+      "records_path": [
+        "tables"
+      ],
+      "expected": 5,
+      "unique_key": "id"
+    }
+  ]
+}

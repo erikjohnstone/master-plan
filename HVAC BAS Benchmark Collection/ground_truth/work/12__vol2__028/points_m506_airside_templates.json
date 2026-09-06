@@ -1,0 +1,68 @@
+{
+  "document_id": "12__vol2__028",
+  "module_role": "Exact transcription of the two airside BAS input/output point matrices on M-506. Numeric TAG values are local callout marks within their own P&ID; they are not globally unique BACnet point names or a count of installed controllers.",
+  "source_sheet": "M-506",
+  "source_page": 2,
+  "normalization_note": "An X in AI, AO, DI, or DO is retained in the exact source cell. An X in ALARM is a separately printed alarm indication, not silently converted to a hardware I/O type.",
+  "logical_row_summary": {
+    "M506-MINI-SPLIT": {"rows": 10, "AI": 1, "AO": 0, "DI": 3, "DO": 1, "alarm_flag": 5},
+    "M506-SWITCHED-EF": {"rows": 6, "AI": 0, "AO": 0, "DI": 2, "DO": 2, "alarm_flag": 2},
+    "total_rows": 16,
+    "caution": "These are printed template rows, not an installed-equipment quantity. The M-506 diagrams use TYPICAL labels and do not enumerate a complete field-device application list."
+  },
+  "tables": [
+    {
+      "id": "M506-MINI-SPLIT",
+      "page": 2,
+      "sheet": "M-506",
+      "detail": "1",
+      "title": "MINI SPLIT P&ID",
+      "point_matrix_title": "BAS INPUT/OUTPUT POINTLIST",
+      "columns": "tag|point_name|AI|AO|DI|DO|ALARM",
+      "x_edges": [758, 815, 1125, 1172, 1214, 1252, 1297, 1352],
+      "y_ranges": [[355,379],[379,399],[399,418],[418,438],[438,457],[457,477],[477,496],[496,516],[516,535],[535,555]],
+      "rows": [
+        "1|EMERGENCY SHUTDOWN (GLOBAL)|||||X",
+        "2|COMPRESSOR STATUS|||X||",
+        "3|COMPRESSOR FAILURE|||||X",
+        "4|SUPPLY FAN STATUS|||X||",
+        "5|SUPPLY FAN FAILURE|||||X",
+        "6|CONDENSATE OVER FLOW|||||X",
+        "7|SPACE AIR TEMPERATURE|X||||",
+        "8|SPACE AIR TEMPERATURE SETPOINT||||X|",
+        "9|CU FAN STATUS|||X||",
+        "10|CU FAN FAILURE|||||X"
+      ],
+      "header_evidence": [
+        {"bbox": [950,308,1145,331], "expected": "BAS INPUT/OUTPUT POINTLIST"},
+        {"bbox": [758,330,1352,356], "expected": "TAG POINTNAME AI AO DI DO ALARM"}
+      ]
+    },
+    {
+      "id": "M506-SWITCHED-EF",
+      "page": 2,
+      "sheet": "M-506",
+      "detail": "2",
+      "title": "SWITCH CONTROLLED EXHAUST FAN P&ID",
+      "point_matrix_title": "BAS INPUT/OUTPUT POINT LIST",
+      "columns": "tag|point_name|AI|AO|DI|DO|ALARM",
+      "x_edges": [1580, 1630, 1945, 1992, 2040, 2080, 2120, 2180],
+      "y_ranges": [[326,348],[348,368],[368,388],[388,408],[408,428],[428,448]],
+      "rows": [
+        "1|FAN ON/OFF||||X|",
+        "2|FAN STATUS|||X||",
+        "3|FAN FAILURE|||||X",
+        "4|EMERGENCY SHUTDOWN (GLOBAL)|||||X",
+        "5|FAN ENABLE (SWITCH)||||X|",
+        "6|OCCUPANCY|||X||"
+      ],
+      "header_evidence": [
+        {"bbox": [1780,274,1970,298], "expected": "BAS INPUT/OUTPUT POINT LIST"},
+        {"bbox": [1580,300,2180,326], "expected": "TAG POINT NAME AI AO DI DO ALARM"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "two-airside-matrices", "records_path": ["tables"], "expected": 2, "unique_key": "id"}
+  ]
+}

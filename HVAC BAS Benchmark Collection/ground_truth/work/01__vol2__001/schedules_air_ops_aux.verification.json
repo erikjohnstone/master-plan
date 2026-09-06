@@ -1,0 +1,4263 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "908b88a26c921720e65fad8d5ce7573bedfb1a81c5f8f1de31b4b2f4cfc5811b",
+  "tables": 4,
+  "rows": 18,
+  "cell_assertions": 137,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 1,
+      "column": "mark",
+      "page": 43,
+      "bbox": [
+        162,
+        155,
+        220,
+        173
+      ],
+      "expected": "CUH-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CUH-A1",
+          "word_ids": [
+            1274
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CUH-A1",
+          "word_ids": [
+            3
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 1,
+      "column": "type",
+      "page": 43,
+      "bbox": [
+        220,
+        155,
+        280,
+        173
+      ],
+      "expected": "CABINET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CABINET",
+          "word_ids": [
+            1275
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CABINET",
+          "word_ids": [
+            8
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 1,
+      "column": "mounting_style",
+      "page": 43,
+      "bbox": [
+        280,
+        155,
+        433,
+        173
+      ],
+      "expected": "VERTICAL FLOOR MOUNTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VERTICAL FLOOR MOUNTED",
+          "word_ids": [
+            1276,
+            1277,
+            1278
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VERTICAL FLOOR MOUNTED",
+          "word_ids": [
+            9,
+            10,
+            11
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 1,
+      "column": "fan_CFM",
+      "page": 43,
+      "bbox": [
+        433,
+        155,
+        475,
+        173
+      ],
+      "expected": "140",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "140",
+          "word_ids": [
+            1279
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "140",
+          "word_ids": [
+            22
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 1,
+      "column": "fan_ESP_in_WG",
+      "page": 43,
+      "bbox": [
+        475,
+        155,
+        540,
+        173
+      ],
+      "expected": "0.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.1",
+          "word_ids": [
+            1280
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.1",
+          "word_ids": [
+            19
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 1,
+      "column": "fan_motor_HP_or_W",
+      "page": 43,
+      "bbox": [
+        540,
+        155,
+        610,
+        173
+      ],
+      "expected": "15W",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15W",
+          "word_ids": [
+            1281
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15W",
+          "word_ids": [
+            29
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 1,
+      "column": "heating_total_capacity_MBH",
+      "page": 43,
+      "bbox": [
+        610,
+        155,
+        680,
+        173
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1282
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            34
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 1,
+      "column": "heating_EWT_F",
+      "page": 43,
+      "bbox": [
+        680,
+        155,
+        723,
+        173
+      ],
+      "expected": "130",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "130",
+          "word_ids": [
+            1283
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "130",
+          "word_ids": [
+            38
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 1,
+      "column": "heating_LWT_F",
+      "page": 43,
+      "bbox": [
+        723,
+        155,
+        760,
+        173
+      ],
+      "expected": "110",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            1284
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            59
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 1,
+      "column": "heating_water_flow_GPM",
+      "page": 43,
+      "bbox": [
+        760,
+        155,
+        837,
+        173
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1285
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            60
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 1,
+      "column": "heating_max_pressure_drop_in_water_column",
+      "page": 43,
+      "bbox": [
+        837,
+        155,
+        910,
+        173
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            1286
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            61
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 1,
+      "column": "HHW_runout_size_in",
+      "page": 43,
+      "bbox": [
+        910,
+        155,
+        970,
+        173
+      ],
+      "expected": "3/4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            1287
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            62
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 1,
+      "column": "V_phase_Hz",
+      "page": 43,
+      "bbox": [
+        970,
+        155,
+        1018,
+        173
+      ],
+      "expected": "120/1/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            1288
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            63
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 1,
+      "column": "VFD_starter_disconnect_provided_by",
+      "page": 43,
+      "bbox": [
+        1018,
+        155,
+        1100,
+        173
+      ],
+      "expected": "DIVISION 23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIVISION 23",
+          "word_ids": [
+            1289,
+            1290
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIVISION 23",
+          "word_ids": [
+            64,
+            65
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 1,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1100,
+        155,
+        1155,
+        173
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1291
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            221
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 2,
+      "column": "mark",
+      "page": 43,
+      "bbox": [
+        162,
+        173,
+        220,
+        190
+      ],
+      "expected": "CUH-A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CUH-A2",
+          "word_ids": [
+            1292
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CUH-A2",
+          "word_ids": [
+            4
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 2,
+      "column": "type",
+      "page": 43,
+      "bbox": [
+        220,
+        173,
+        280,
+        190
+      ],
+      "expected": "CABINET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CABINET",
+          "word_ids": [
+            1293
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CABINET",
+          "word_ids": [
+            12
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 2,
+      "column": "mounting_style",
+      "page": 43,
+      "bbox": [
+        280,
+        173,
+        433,
+        190
+      ],
+      "expected": "VERTICAL FLOOR MOUNTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VERTICAL FLOOR MOUNTED",
+          "word_ids": [
+            1294,
+            1295,
+            1296
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VERTICAL FLOOR MOUNTED",
+          "word_ids": [
+            13,
+            14,
+            15
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 2,
+      "column": "fan_CFM",
+      "page": 43,
+      "bbox": [
+        433,
+        173,
+        475,
+        190
+      ],
+      "expected": "140",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "140",
+          "word_ids": [
+            1297
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "140",
+          "word_ids": [
+            23
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 2,
+      "column": "fan_ESP_in_WG",
+      "page": 43,
+      "bbox": [
+        475,
+        173,
+        540,
+        190
+      ],
+      "expected": "0.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.1",
+          "word_ids": [
+            1298
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.1",
+          "word_ids": [
+            20
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 2,
+      "column": "fan_motor_HP_or_W",
+      "page": 43,
+      "bbox": [
+        540,
+        173,
+        610,
+        190
+      ],
+      "expected": "15W",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15W",
+          "word_ids": [
+            1299
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15W",
+          "word_ids": [
+            30
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 2,
+      "column": "heating_total_capacity_MBH",
+      "page": 43,
+      "bbox": [
+        610,
+        173,
+        680,
+        190
+      ],
+      "expected": "5.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            1300
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.0",
+          "word_ids": [
+            35
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 2,
+      "column": "heating_EWT_F",
+      "page": 43,
+      "bbox": [
+        680,
+        173,
+        723,
+        190
+      ],
+      "expected": "130",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "130",
+          "word_ids": [
+            1301
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "130",
+          "word_ids": [
+            39
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 2,
+      "column": "heating_LWT_F",
+      "page": 43,
+      "bbox": [
+        723,
+        173,
+        760,
+        190
+      ],
+      "expected": "110",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            1302
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            66
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 2,
+      "column": "heating_water_flow_GPM",
+      "page": 43,
+      "bbox": [
+        760,
+        173,
+        837,
+        190
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1303
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            67
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 2,
+      "column": "heating_max_pressure_drop_in_water_column",
+      "page": 43,
+      "bbox": [
+        837,
+        173,
+        910,
+        190
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            1304
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            68
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 2,
+      "column": "HHW_runout_size_in",
+      "page": 43,
+      "bbox": [
+        910,
+        173,
+        970,
+        190
+      ],
+      "expected": "3/4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            1305
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            69
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 2,
+      "column": "V_phase_Hz",
+      "page": 43,
+      "bbox": [
+        970,
+        173,
+        1018,
+        190
+      ],
+      "expected": "120/1/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            1306
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            70
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 2,
+      "column": "VFD_starter_disconnect_provided_by",
+      "page": 43,
+      "bbox": [
+        1018,
+        173,
+        1100,
+        190
+      ],
+      "expected": "DIVISION 23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIVISION 23",
+          "word_ids": [
+            1307,
+            1308
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIVISION 23",
+          "word_ids": [
+            71,
+            72
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "row": 2,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1100,
+        173,
+        1155,
+        190
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1309
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            222
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "header": "CABINET UNIT HEATER SCHEDULE",
+      "page": 43,
+      "bbox": [
+        485,
+        62,
+        855,
+        94
+      ],
+      "engine": "mupdf",
+      "actual": "CABINET UNIT HEATER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "header": "CABINET UNIT HEATER SCHEDULE",
+      "page": 43,
+      "bbox": [
+        485,
+        62,
+        855,
+        94
+      ],
+      "engine": "poppler",
+      "actual": "CABINET UNIT HEATER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "header": "MARK TYPE MOUNTING STYLE FAN DATA CFM ESP IN W G MOTOR HP HEATING COIL DATA TOTAL CAPACITY MBH EWT F LWT F WATER FLOW GPM MAX PRESSURE DROP IN WC HHW ROUNTOUT SIZE IN V P HZ VFD STARTER DISCONNECT PROVIDED BY NOTES",
+      "page": 43,
+      "bbox": [
+        160,
+        90,
+        1155,
+        154
+      ],
+      "engine": "mupdf",
+      "actual": "FAN DATA HEATING COIL DATA TOTAL MAX HHW VFD/STARTER/ MARK TYPE MOUNTING STYLE V/P/Hz NOTES EWT WATER FLOW ESP (IN. MOTOR (HP) CAPACITY LWT PRESSURE ROUNTOUT DISCONNECT (°F) (GPM) CFM W.G.) (MBH) (°F) DROP (IN WC) SIZE (IN) PROVIDED BY",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-CUH",
+      "header": "MARK TYPE MOUNTING STYLE FAN DATA CFM ESP IN W G MOTOR HP HEATING COIL DATA TOTAL CAPACITY MBH EWT F LWT F WATER FLOW GPM MAX PRESSURE DROP IN WC HHW ROUNTOUT SIZE IN V P HZ VFD STARTER DISCONNECT PROVIDED BY NOTES",
+      "page": 43,
+      "bbox": [
+        160,
+        90,
+        1155,
+        154
+      ],
+      "engine": "poppler",
+      "actual": "FAN DATA HEATING COIL DATA TOTAL MAX HHW VFD/STARTER/ MARK TYPE MOUNTING STYLE EWT WATER FLOW V/P/Hz NOTES ESP (IN. MOTOR (HP) CAPACITY LWT PRESSURE ROUNTOUT DISCONNECT (°F) (GPM) CFM W.G.) (MBH) (°F) DROP (IN WC) SIZE (IN) PROVIDED BY",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 1,
+      "column": "mark",
+      "page": 43,
+      "bbox": [
+        162,
+        315,
+        220,
+        332
+      ],
+      "expected": "UH-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-A1",
+          "word_ids": [
+            1338
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-A1",
+          "word_ids": [
+            80
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 1,
+      "column": "type",
+      "page": 43,
+      "bbox": [
+        220,
+        315,
+        380,
+        332
+      ],
+      "expected": "HORIZONTAL DISCHARGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HORIZONTAL DISCHARGE",
+          "word_ids": [
+            1339,
+            1340
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HORIZONTAL DISCHARGE",
+          "word_ids": [
+            85,
+            86
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 1,
+      "column": "total_capacity_MBH",
+      "page": 43,
+      "bbox": [
+        380,
+        315,
+        490,
+        332
+      ],
+      "expected": "10.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.9",
+          "word_ids": [
+            1341
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.9",
+          "word_ids": [
+            98
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 1,
+      "column": "EWT_LWT_F",
+      "page": 43,
+      "bbox": [
+        490,
+        315,
+        600,
+        332
+      ],
+      "expected": "130/110",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "130/110",
+          "word_ids": [
+            1342
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "130/110",
+          "word_ids": [
+            107
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 1,
+      "column": "water_flow_GPM",
+      "page": 43,
+      "bbox": [
+        600,
+        315,
+        680,
+        332
+      ],
+      "expected": "1.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.1",
+          "word_ids": [
+            1343
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.1",
+          "word_ids": [
+            124
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 1,
+      "column": "max_pressure_drop_in_water_column",
+      "page": 43,
+      "bbox": [
+        680,
+        315,
+        800,
+        332
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            1344
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            125
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 1,
+      "column": "HHW_runout_size_in",
+      "page": 43,
+      "bbox": [
+        800,
+        315,
+        915,
+        332
+      ],
+      "expected": "3/4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            1345
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            126
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 1,
+      "column": "motor_HP_or_W",
+      "page": 43,
+      "bbox": [
+        915,
+        315,
+        985,
+        332
+      ],
+      "expected": "16W",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16W",
+          "word_ids": [
+            1346
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16W",
+          "word_ids": [
+            147
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 1,
+      "column": "V_phase_Hz",
+      "page": 43,
+      "bbox": [
+        985,
+        315,
+        1060,
+        332
+      ],
+      "expected": "120/1/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            1347
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            152
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 1,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1060,
+        315,
+        1115,
+        332
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1348
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            157
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 2,
+      "column": "mark",
+      "page": 43,
+      "bbox": [
+        162,
+        332,
+        220,
+        349
+      ],
+      "expected": "UH-A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-A2",
+          "word_ids": [
+            1349
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-A2",
+          "word_ids": [
+            81
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 2,
+      "column": "type",
+      "page": 43,
+      "bbox": [
+        220,
+        332,
+        380,
+        349
+      ],
+      "expected": "HORIZONTAL DISCHARGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HORIZONTAL DISCHARGE",
+          "word_ids": [
+            1350,
+            1351
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HORIZONTAL DISCHARGE",
+          "word_ids": [
+            87,
+            88
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 2,
+      "column": "total_capacity_MBH",
+      "page": 43,
+      "bbox": [
+        380,
+        332,
+        490,
+        349
+      ],
+      "expected": "10.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.9",
+          "word_ids": [
+            1352
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.9",
+          "word_ids": [
+            99
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 2,
+      "column": "EWT_LWT_F",
+      "page": 43,
+      "bbox": [
+        490,
+        332,
+        600,
+        349
+      ],
+      "expected": "130/110",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "130/110",
+          "word_ids": [
+            1353
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "130/110",
+          "word_ids": [
+            108
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 2,
+      "column": "water_flow_GPM",
+      "page": 43,
+      "bbox": [
+        600,
+        332,
+        680,
+        349
+      ],
+      "expected": "1.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.1",
+          "word_ids": [
+            1354
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.1",
+          "word_ids": [
+            127
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 2,
+      "column": "max_pressure_drop_in_water_column",
+      "page": 43,
+      "bbox": [
+        680,
+        332,
+        800,
+        349
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            1355
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            128
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 2,
+      "column": "HHW_runout_size_in",
+      "page": 43,
+      "bbox": [
+        800,
+        332,
+        915,
+        349
+      ],
+      "expected": "3/4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            1356
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            129
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 2,
+      "column": "motor_HP_or_W",
+      "page": 43,
+      "bbox": [
+        915,
+        332,
+        985,
+        349
+      ],
+      "expected": "16W",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16W",
+          "word_ids": [
+            1357
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16W",
+          "word_ids": [
+            148
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 2,
+      "column": "V_phase_Hz",
+      "page": 43,
+      "bbox": [
+        985,
+        332,
+        1060,
+        349
+      ],
+      "expected": "120/1/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            1358
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            153
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 2,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1060,
+        332,
+        1115,
+        349
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1359
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            158
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 3,
+      "column": "mark",
+      "page": 43,
+      "bbox": [
+        162,
+        349,
+        220,
+        366
+      ],
+      "expected": "UH-A3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-A3",
+          "word_ids": [
+            1360
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-A3",
+          "word_ids": [
+            82
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 3,
+      "column": "type",
+      "page": 43,
+      "bbox": [
+        220,
+        349,
+        380,
+        366
+      ],
+      "expected": "HORIZONTAL DISCHARGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HORIZONTAL DISCHARGE",
+          "word_ids": [
+            1361,
+            1362
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HORIZONTAL DISCHARGE",
+          "word_ids": [
+            89,
+            90
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 3,
+      "column": "total_capacity_MBH",
+      "page": 43,
+      "bbox": [
+        380,
+        349,
+        490,
+        366
+      ],
+      "expected": "9.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.2",
+          "word_ids": [
+            1363
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.2",
+          "word_ids": [
+            100
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 3,
+      "column": "EWT_LWT_F",
+      "page": 43,
+      "bbox": [
+        490,
+        349,
+        600,
+        366
+      ],
+      "expected": "130/110",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "130/110",
+          "word_ids": [
+            1364
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "130/110",
+          "word_ids": [
+            109
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 3,
+      "column": "water_flow_GPM",
+      "page": 43,
+      "bbox": [
+        600,
+        349,
+        680,
+        366
+      ],
+      "expected": "1.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            1365
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            130
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 3,
+      "column": "max_pressure_drop_in_water_column",
+      "page": 43,
+      "bbox": [
+        680,
+        349,
+        800,
+        366
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            1366
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            131
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 3,
+      "column": "HHW_runout_size_in",
+      "page": 43,
+      "bbox": [
+        800,
+        349,
+        915,
+        366
+      ],
+      "expected": "3/4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            1367
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            132
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 3,
+      "column": "motor_HP_or_W",
+      "page": 43,
+      "bbox": [
+        915,
+        349,
+        985,
+        366
+      ],
+      "expected": "16W",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16W",
+          "word_ids": [
+            1368
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16W",
+          "word_ids": [
+            149
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 3,
+      "column": "V_phase_Hz",
+      "page": 43,
+      "bbox": [
+        985,
+        349,
+        1060,
+        366
+      ],
+      "expected": "120/1/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            1369
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            154
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 3,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1060,
+        349,
+        1115,
+        366
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1370
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            159
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 4,
+      "column": "mark",
+      "page": 43,
+      "bbox": [
+        162,
+        366,
+        220,
+        383
+      ],
+      "expected": "UH-A4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-A4",
+          "word_ids": [
+            1371
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-A4",
+          "word_ids": [
+            83
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 4,
+      "column": "type",
+      "page": 43,
+      "bbox": [
+        220,
+        366,
+        380,
+        383
+      ],
+      "expected": "HORIZONTAL DISCHARGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HORIZONTAL DISCHARGE",
+          "word_ids": [
+            1372,
+            1373
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HORIZONTAL DISCHARGE",
+          "word_ids": [
+            91,
+            92
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 4,
+      "column": "total_capacity_MBH",
+      "page": 43,
+      "bbox": [
+        380,
+        366,
+        490,
+        383
+      ],
+      "expected": "9.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.2",
+          "word_ids": [
+            1374
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.2",
+          "word_ids": [
+            101
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 4,
+      "column": "EWT_LWT_F",
+      "page": 43,
+      "bbox": [
+        490,
+        366,
+        600,
+        383
+      ],
+      "expected": "130/110",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "130/110",
+          "word_ids": [
+            1375
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "130/110",
+          "word_ids": [
+            110
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 4,
+      "column": "water_flow_GPM",
+      "page": 43,
+      "bbox": [
+        600,
+        366,
+        680,
+        383
+      ],
+      "expected": "1.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            1376
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            133
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 4,
+      "column": "max_pressure_drop_in_water_column",
+      "page": 43,
+      "bbox": [
+        680,
+        366,
+        800,
+        383
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            1377
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            134
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 4,
+      "column": "HHW_runout_size_in",
+      "page": 43,
+      "bbox": [
+        800,
+        366,
+        915,
+        383
+      ],
+      "expected": "3/4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            1378
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            135
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 4,
+      "column": "motor_HP_or_W",
+      "page": 43,
+      "bbox": [
+        915,
+        366,
+        985,
+        383
+      ],
+      "expected": "16W",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16W",
+          "word_ids": [
+            1379
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16W",
+          "word_ids": [
+            150
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 4,
+      "column": "V_phase_Hz",
+      "page": 43,
+      "bbox": [
+        985,
+        366,
+        1060,
+        383
+      ],
+      "expected": "120/1/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            1380
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            155
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 4,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1060,
+        366,
+        1115,
+        383
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            160
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 5,
+      "column": "mark",
+      "page": 43,
+      "bbox": [
+        162,
+        383,
+        220,
+        400
+      ],
+      "expected": "UH-A5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-A5",
+          "word_ids": [
+            1382
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-A5",
+          "word_ids": [
+            84
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 5,
+      "column": "type",
+      "page": 43,
+      "bbox": [
+        220,
+        383,
+        380,
+        400
+      ],
+      "expected": "HORIZONTAL DISCHARGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HORIZONTAL DISCHARGE",
+          "word_ids": [
+            1383,
+            1384
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HORIZONTAL DISCHARGE",
+          "word_ids": [
+            93,
+            94
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 5,
+      "column": "total_capacity_MBH",
+      "page": 43,
+      "bbox": [
+        380,
+        383,
+        490,
+        400
+      ],
+      "expected": "9.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9.2",
+          "word_ids": [
+            1385
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9.2",
+          "word_ids": [
+            102
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 5,
+      "column": "EWT_LWT_F",
+      "page": 43,
+      "bbox": [
+        490,
+        383,
+        600,
+        400
+      ],
+      "expected": "130/110",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "130/110",
+          "word_ids": [
+            1386
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "130/110",
+          "word_ids": [
+            111
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 5,
+      "column": "water_flow_GPM",
+      "page": 43,
+      "bbox": [
+        600,
+        383,
+        680,
+        400
+      ],
+      "expected": "1.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            1387
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            136
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 5,
+      "column": "max_pressure_drop_in_water_column",
+      "page": 43,
+      "bbox": [
+        680,
+        383,
+        800,
+        400
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            1388
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            137
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 5,
+      "column": "HHW_runout_size_in",
+      "page": 43,
+      "bbox": [
+        800,
+        383,
+        915,
+        400
+      ],
+      "expected": "3/4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            1389
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            138
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 5,
+      "column": "motor_HP_or_W",
+      "page": 43,
+      "bbox": [
+        915,
+        383,
+        985,
+        400
+      ],
+      "expected": "16W",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16W",
+          "word_ids": [
+            1390
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16W",
+          "word_ids": [
+            151
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 5,
+      "column": "V_phase_Hz",
+      "page": 43,
+      "bbox": [
+        985,
+        383,
+        1060,
+        400
+      ],
+      "expected": "120/1/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            1391
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            156
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "row": 5,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1060,
+        383,
+        1115,
+        400
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1392
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            161
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "header": "UNIT HEATER SCHEDULE",
+      "page": 43,
+      "bbox": [
+        510,
+        253,
+        770,
+        284
+      ],
+      "engine": "mupdf",
+      "actual": "UNIT HEATER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "header": "UNIT HEATER SCHEDULE",
+      "page": 43,
+      "bbox": [
+        510,
+        253,
+        770,
+        284
+      ],
+      "engine": "poppler",
+      "actual": "UNIT HEATER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "header": "MARK TYPE TOTAL CAPACITY MBH EWT F LWT F WATER FLOW GPM MAX PRESSURE DROP IN WC HHW ROUNTOUT SIZE IN MOTOR HP V P HZ NOTES",
+      "page": 43,
+      "bbox": [
+        160,
+        282,
+        1115,
+        313
+      ],
+      "engine": "mupdf",
+      "actual": "TOTAL CAPACITY WATER FLOW MAX PRESSURE DROP HHW ROUNTOUT SIZE MARK TYPE EWT (°F) / LWT(°F) MOTOR (HP) V/P/Hz NOTES (MBH) (GPM) (IN WC) (IN)",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-UH",
+      "header": "MARK TYPE TOTAL CAPACITY MBH EWT F LWT F WATER FLOW GPM MAX PRESSURE DROP IN WC HHW ROUNTOUT SIZE IN MOTOR HP V P HZ NOTES",
+      "page": 43,
+      "bbox": [
+        160,
+        282,
+        1115,
+        313
+      ],
+      "engine": "poppler",
+      "actual": "TOTAL CAPACITY WATER FLOW MAX PRESSURE DROP HHW ROUNTOUT SIZE MARK TYPE EWT (°F) / LWT(°F) MOTOR (HP) V/P/Hz NOTES (MBH) (GPM) (IN WC) (IN)",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-HUMIDIFIER",
+      "row": 1,
+      "column": "mark",
+      "page": 43,
+      "bbox": [
+        1300,
+        504,
+        1350,
+        522
+      ],
+      "expected": "H-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "H-A1",
+          "word_ids": [
+            1407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "H-A1",
+          "word_ids": [
+            553
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HUMIDIFIER",
+      "row": 1,
+      "column": "type",
+      "page": 43,
+      "bbox": [
+        1350,
+        504,
+        1610,
+        522
+      ],
+      "expected": "WALL MOUNT ELECTRODE STEAM HUMIDIFIER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WALL MOUNT ELECTRODE STEAM HUMIDIFIER",
+          "word_ids": [
+            1408,
+            1409,
+            1410,
+            1411,
+            1412
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WALL MOUNT ELECTRODE STEAM HUMIDIFIER",
+          "word_ids": [
+            519,
+            520,
+            521,
+            522,
+            523
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HUMIDIFIER",
+      "row": 1,
+      "column": "capacity_lb_per_hr_as_printed",
+      "page": 43,
+      "bbox": [
+        1610,
+        504,
+        1695,
+        522
+      ],
+      "expected": "1.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            1413
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            627
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HUMIDIFIER",
+      "row": 1,
+      "column": "electric_input_kW",
+      "page": 43,
+      "bbox": [
+        1695,
+        504,
+        1820,
+        522
+      ],
+      "expected": "1.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.9",
+          "word_ids": [
+            1414
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.9",
+          "word_ids": [
+            353
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HUMIDIFIER",
+      "row": 1,
+      "column": "volts_phase_Hz",
+      "page": 43,
+      "bbox": [
+        1820,
+        504,
+        1930,
+        522
+      ],
+      "expected": "120/1/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            1415
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            355
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HUMIDIFIER",
+      "row": 1,
+      "column": "disconnect_provided_by",
+      "page": 43,
+      "bbox": [
+        1930,
+        504,
+        2080,
+        522
+      ],
+      "expected": "DIVISION 23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIVISION 23",
+          "word_ids": [
+            1416,
+            1417
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIVISION 23",
+          "word_ids": [
+            359,
+            360
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HUMIDIFIER",
+      "row": 1,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        2080,
+        504,
+        2150,
+        522
+      ],
+      "expected": "1,2,3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3",
+          "word_ids": [
+            1418
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3",
+          "word_ids": [
+            362
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-HUMIDIFIER",
+      "header": "HUMIDIFIER SCHEDULE",
+      "page": 43,
+      "bbox": [
+        1595,
+        442,
+        1840,
+        472
+      ],
+      "engine": "mupdf",
+      "actual": "HUMIDIFIER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-HUMIDIFIER",
+      "header": "HUMIDIFIER SCHEDULE",
+      "page": 43,
+      "bbox": [
+        1595,
+        442,
+        1840,
+        472
+      ],
+      "engine": "poppler",
+      "actual": "HUMIDIFIER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-HUMIDIFIER",
+      "header": "MARK TYPE LB HR MBH ELECTRIC INPUT KW VOLT PHASE HZ DISCONNECT PROVIDED BY NOTES",
+      "page": 43,
+      "bbox": [
+        1300,
+        472,
+        2150,
+        503
+      ],
+      "engine": "mupdf",
+      "actual": "LB/HR MARK TYPE (MBH) ELECTRIC INPUT (kW) VOLT/PHASE/HZ DISCONNECT PROVIDED BY NOTES",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-HUMIDIFIER",
+      "header": "MARK TYPE LB HR MBH ELECTRIC INPUT KW VOLT PHASE HZ DISCONNECT PROVIDED BY NOTES",
+      "page": 43,
+      "bbox": [
+        1300,
+        472,
+        2150,
+        503
+      ],
+      "engine": "poppler",
+      "actual": "LB/HR MARK TYPE (MBH) ELECTRIC INPUT (kW) VOLT/PHASE/HZ DISCONNECT PROVIDED BY NOTES",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 1,
+      "column": "mark_pattern",
+      "page": 43,
+      "bbox": [
+        1220,
+        117,
+        1300,
+        133
+      ],
+      "expected": "AHU-A1,A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-A1,A2",
+          "word_ids": [
+            260
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-A1,A2",
+          "word_ids": [
+            74
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 1,
+      "column": "base_type",
+      "page": 43,
+      "bbox": [
+        1300,
+        117,
+        1375,
+        133
+      ],
+      "expected": "NONE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            262
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            259
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 1,
+      "column": "isolator_type",
+      "page": 43,
+      "bbox": [
+        1375,
+        117,
+        1550,
+        133
+      ],
+      "expected": "NONE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            281
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            167
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 1,
+      "column": "minimum_deflection_inches",
+      "page": 43,
+      "bbox": [
+        1550,
+        117,
+        1720,
+        133
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            268
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            168
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 1,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1720,
+        117,
+        1780,
+        133
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            290
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            186
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 2,
+      "column": "mark_pattern",
+      "page": 43,
+      "bbox": [
+        1220,
+        133,
+        1300,
+        151
+      ],
+      "expected": "DOAH-A1,A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH-A1,A2",
+          "word_ids": [
+            261
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH-A1,A2",
+          "word_ids": [
+            75
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 2,
+      "column": "base_type",
+      "page": 43,
+      "bbox": [
+        1300,
+        133,
+        1375,
+        151
+      ],
+      "expected": "NONE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            273
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            260
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 2,
+      "column": "isolator_type",
+      "page": 43,
+      "bbox": [
+        1375,
+        133,
+        1550,
+        151
+      ],
+      "expected": "NONE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            280
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            169
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 2,
+      "column": "minimum_deflection_inches",
+      "page": 43,
+      "bbox": [
+        1550,
+        133,
+        1720,
+        151
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            287
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            170
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 2,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1720,
+        133,
+        1780,
+        151
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            291
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            187
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 3,
+      "column": "mark_pattern",
+      "page": 43,
+      "bbox": [
+        1220,
+        151,
+        1300,
+        169
+      ],
+      "expected": "CH-A1,A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-A1,A2",
+          "word_ids": [
+            321
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-A1,A2",
+          "word_ids": [
+            253
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 3,
+      "column": "base_type",
+      "page": 43,
+      "bbox": [
+        1300,
+        151,
+        1375,
+        169
+      ],
+      "expected": "NONE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            318
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            261
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 3,
+      "column": "isolator_type",
+      "page": 43,
+      "bbox": [
+        1375,
+        151,
+        1550,
+        169
+      ],
+      "expected": "NONE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            319
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            171
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 3,
+      "column": "minimum_deflection_inches",
+      "page": 43,
+      "bbox": [
+        1550,
+        151,
+        1720,
+        169
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            320
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            172
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 3,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1720,
+        151,
+        1780,
+        169
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            317
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            188
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 4,
+      "column": "mark_pattern",
+      "page": 43,
+      "bbox": [
+        1220,
+        169,
+        1300,
+        186
+      ],
+      "expected": "FCU-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-",
+          "word_ids": [
+            269
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-",
+          "word_ids": [
+            254
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 4,
+      "column": "base_type",
+      "page": 43,
+      "bbox": [
+        1300,
+        169,
+        1375,
+        186
+      ],
+      "expected": "NONE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            274
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            262
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 4,
+      "column": "isolator_type",
+      "page": 43,
+      "bbox": [
+        1375,
+        169,
+        1550,
+        186
+      ],
+      "expected": "SUSPENDED SPRING ISOLATOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUSPENDED SPRING ISOLATOR",
+          "word_ids": [
+            282,
+            283,
+            284
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUSPENDED SPRING ISOLATOR",
+          "word_ids": [
+            173,
+            174,
+            175
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 4,
+      "column": "minimum_deflection_inches",
+      "page": 43,
+      "bbox": [
+        1550,
+        169,
+        1720,
+        186
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            267
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            176
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 4,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1720,
+        169,
+        1780,
+        186
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            292
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            189
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 5,
+      "column": "mark_pattern",
+      "page": 43,
+      "bbox": [
+        1220,
+        186,
+        1300,
+        203
+      ],
+      "expected": "H-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "H-",
+          "word_ids": [
+            311
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "H-",
+          "word_ids": [
+            255
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 5,
+      "column": "base_type",
+      "page": 43,
+      "bbox": [
+        1300,
+        186,
+        1375,
+        203
+      ],
+      "expected": "NONE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            303
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            263
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 5,
+      "column": "isolator_type",
+      "page": 43,
+      "bbox": [
+        1375,
+        186,
+        1550,
+        203
+      ],
+      "expected": "NONE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            304
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            177
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 5,
+      "column": "minimum_deflection_inches",
+      "page": 43,
+      "bbox": [
+        1550,
+        186,
+        1720,
+        203
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            305
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            178
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 5,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1720,
+        186,
+        1780,
+        203
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            299
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            190
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 6,
+      "column": "mark_pattern",
+      "page": 43,
+      "bbox": [
+        1220,
+        203,
+        1300,
+        221
+      ],
+      "expected": "DH-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DH-",
+          "word_ids": [
+            312
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DH-",
+          "word_ids": [
+            256
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 6,
+      "column": "base_type",
+      "page": 43,
+      "bbox": [
+        1300,
+        203,
+        1375,
+        221
+      ],
+      "expected": "NONE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            306
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            264
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 6,
+      "column": "isolator_type",
+      "page": 43,
+      "bbox": [
+        1375,
+        203,
+        1550,
+        221
+      ],
+      "expected": "NEOPRENE PAD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NEOPRENE PAD",
+          "word_ids": [
+            307,
+            308
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NEOPRENE PAD",
+          "word_ids": [
+            179,
+            180
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 6,
+      "column": "minimum_deflection_inches",
+      "page": 43,
+      "bbox": [
+        1550,
+        203,
+        1720,
+        221
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            309
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            181
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 6,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1720,
+        203,
+        1780,
+        221
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            310
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            191
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 7,
+      "column": "mark_pattern",
+      "page": 43,
+      "bbox": [
+        1220,
+        221,
+        1300,
+        243
+      ],
+      "expected": "EF-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-A1",
+          "word_ids": [
+            297
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-A1",
+          "word_ids": [
+            217
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 7,
+      "column": "base_type",
+      "page": 43,
+      "bbox": [
+        1300,
+        221,
+        1375,
+        243
+      ],
+      "expected": "NONE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            298
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            139
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 7,
+      "column": "isolator_type",
+      "page": 43,
+      "bbox": [
+        1375,
+        221,
+        1550,
+        243
+      ],
+      "expected": "SUSPENDED SPRING ISOLATOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUSPENDED SPRING ISOLATOR",
+          "word_ids": [
+            300,
+            301,
+            302
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUSPENDED SPRING ISOLATOR",
+          "word_ids": [
+            182,
+            183,
+            184
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 7,
+      "column": "minimum_deflection_inches",
+      "page": 43,
+      "bbox": [
+        1550,
+        221,
+        1720,
+        243
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            296
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            192
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 7,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1720,
+        221,
+        1780,
+        243
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 8,
+      "column": "mark_pattern",
+      "page": 43,
+      "bbox": [
+        1220,
+        243,
+        1300,
+        260
+      ],
+      "expected": "PCHWP-A1,A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCHWP-A1,A2",
+          "word_ids": [
+            270
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCHWP-A1,A2",
+          "word_ids": [
+            218
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 8,
+      "column": "base_type",
+      "page": 43,
+      "bbox": [
+        1300,
+        243,
+        1375,
+        260
+      ],
+      "expected": "NONE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            275
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            140
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 8,
+      "column": "isolator_type",
+      "page": 43,
+      "bbox": [
+        1375,
+        243,
+        1550,
+        260
+      ],
+      "expected": "NONE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            285
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            194
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 8,
+      "column": "minimum_deflection_inches",
+      "page": 43,
+      "bbox": [
+        1550,
+        243,
+        1720,
+        260
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            288
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            193
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 8,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1720,
+        243,
+        1780,
+        260
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            293
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            210
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 9,
+      "column": "mark_pattern",
+      "page": 43,
+      "bbox": [
+        1220,
+        260,
+        1300,
+        278
+      ],
+      "expected": "PHHWP-A1,A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PHHWP-A1,A2",
+          "word_ids": [
+            271
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PHHWP-A1,A2",
+          "word_ids": [
+            219
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 9,
+      "column": "base_type",
+      "page": 43,
+      "bbox": [
+        1300,
+        260,
+        1375,
+        278
+      ],
+      "expected": "NONE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            276
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            141
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 9,
+      "column": "isolator_type",
+      "page": 43,
+      "bbox": [
+        1375,
+        260,
+        1550,
+        278
+      ],
+      "expected": "SUSPENDED SPRING ISOLATOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUSPENDED SPRING ISOLATOR",
+          "word_ids": [
+            314,
+            315,
+            316
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUSPENDED SPRING ISOLATOR",
+          "word_ids": [
+            195,
+            196,
+            197
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 9,
+      "column": "minimum_deflection_inches",
+      "page": 43,
+      "bbox": [
+        1550,
+        260,
+        1720,
+        278
+      ],
+      "expected": "1.50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.50",
+          "word_ids": [
+            313
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.50",
+          "word_ids": [
+            212
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 9,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1720,
+        260,
+        1780,
+        278
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            294
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            211
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 10,
+      "column": "mark_pattern",
+      "page": 43,
+      "bbox": [
+        1220,
+        278,
+        1300,
+        295
+      ],
+      "expected": "SHHWP-A1,A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SHHWP-A1,A2",
+          "word_ids": [
+            272
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SHHWP-A1,A2",
+          "word_ids": [
+            220
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 10,
+      "column": "base_type",
+      "page": 43,
+      "bbox": [
+        1300,
+        278,
+        1375,
+        295
+      ],
+      "expected": "NONE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            277
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            142
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 10,
+      "column": "isolator_type",
+      "page": 43,
+      "bbox": [
+        1375,
+        278,
+        1550,
+        295
+      ],
+      "expected": "NONE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            286
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            198
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 10,
+      "column": "minimum_deflection_inches",
+      "page": 43,
+      "bbox": [
+        1550,
+        278,
+        1720,
+        295
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            289
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            213
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "row": 10,
+      "column": "notes",
+      "page": 43,
+      "bbox": [
+        1720,
+        278,
+        1780,
+        295
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            295
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            214
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "header": "VIBRATION ISOLATION SCHEDULE",
+      "page": 43,
+      "bbox": [
+        1290,
+        66,
+        1645,
+        97
+      ],
+      "engine": "mupdf",
+      "actual": "VIBRATION ISOLATION SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "header": "VIBRATION ISOLATION SCHEDULE",
+      "page": 43,
+      "bbox": [
+        1290,
+        66,
+        1645,
+        97
+      ],
+      "engine": "poppler",
+      "actual": "VIBRATION ISOLATION SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "header": "MARK BASE TYPE ISOLATOR TYPE MINIMUM DEFLECTION INCHES NOTES",
+      "page": 43,
+      "bbox": [
+        1220,
+        98,
+        1780,
+        116
+      ],
+      "engine": "mupdf",
+      "actual": "MARK BASE TYPE ISOLATOR TYPE MINIMUM DEFLECTION (INCHES) NOTES",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-VIBRATION-ISOLATION",
+      "header": "MARK BASE TYPE ISOLATOR TYPE MINIMUM DEFLECTION INCHES NOTES",
+      "page": 43,
+      "bbox": [
+        1220,
+        98,
+        1780,
+        116
+      ],
+      "engine": "poppler",
+      "actual": "MARK BASE TYPE ISOLATOR TYPE MINIMUM DEFLECTION (INCHES) NOTES",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "air-ops-aux-schedule-tables",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

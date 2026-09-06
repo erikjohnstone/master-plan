@@ -1,0 +1,1509 @@
+{
+  "document_id": "04__vol2__062",
+  "source_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "annotation_sha256": "f2aef2af6de8cea441262a627b2120a0fc0597277f7b08f5f325dd1a89914c96",
+  "tables": 1,
+  "rows": 1,
+  "cell_assertions": 47,
+  "text_assertions": 2,
+  "checks": [
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "tag",
+      "page": 15,
+      "bbox": [
+        200,
+        327,
+        260,
+        355
+      ],
+      "expected": "AHU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            183
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            18
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "unit_type",
+      "page": 15,
+      "bbox": [
+        260,
+        327,
+        330,
+        355
+      ],
+      "expected": "SEMI-CUSTOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEMI-CUSTOM",
+          "word_ids": [
+            184
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEMI-CUSTOM",
+          "word_ids": [
+            19
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "area_served",
+      "page": 15,
+      "bbox": [
+        330,
+        327,
+        400,
+        355
+      ],
+      "expected": "LABORATORIES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LABORATORIES",
+          "word_ids": [
+            185
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LABORATORIES",
+          "word_ids": [
+            20
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "supply_fan_type",
+      "page": 15,
+      "bbox": [
+        400,
+        327,
+        445,
+        355
+      ],
+      "expected": "REMARK 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "REMARK 2",
+          "word_ids": [
+            186,
+            187
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "REMARK 2",
+          "word_ids": [
+            21,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "supply_airflow_design_cfm",
+      "page": 15,
+      "bbox": [
+        445,
+        327,
+        480,
+        355
+      ],
+      "expected": "13,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13,000",
+          "word_ids": [
+            188
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13,000",
+          "word_ids": [
+            28
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "supply_airflow_actual_cfm",
+      "page": 15,
+      "bbox": [
+        480,
+        327,
+        530,
+        355
+      ],
+      "expected": "11,540",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11,540",
+          "word_ids": [
+            189
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11,540",
+          "word_ids": [
+            29
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "supply_fan_esp",
+      "page": 15,
+      "bbox": [
+        530,
+        327,
+        560,
+        355
+      ],
+      "expected": "1.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.5",
+          "word_ids": [
+            190
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.5",
+          "word_ids": [
+            30
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "supply_fan_tsp",
+      "page": 15,
+      "bbox": [
+        560,
+        327,
+        600,
+        355
+      ],
+      "expected": "4.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4.3",
+          "word_ids": [
+            191
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4.3",
+          "word_ids": [
+            32
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "supply_fan_hp_qty",
+      "page": 15,
+      "bbox": [
+        600,
+        327,
+        640,
+        355
+      ],
+      "expected": "7.6 \\ 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "7.6 \\ 4",
+          "word_ids": [
+            192,
+            193,
+            194
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "7.6 \\ 4",
+          "word_ids": [
+            34,
+            35,
+            36
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "supply_fan_voltage_phase",
+      "page": 15,
+      "bbox": [
+        640,
+        327,
+        673,
+        355
+      ],
+      "expected": "208/3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208/3",
+          "word_ids": [
+            195
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208/3",
+          "word_ids": [
+            38
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "supply_fan_rpm",
+      "page": 15,
+      "bbox": [
+        673,
+        327,
+        710,
+        355
+      ],
+      "expected": "2,246",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,246",
+          "word_ids": [
+            196
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,246",
+          "word_ids": [
+            40
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "dx_sensible_mbh",
+      "page": 15,
+      "bbox": [
+        710,
+        327,
+        750,
+        355
+      ],
+      "expected": "502.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "502.1",
+          "word_ids": [
+            197
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "502.1",
+          "word_ids": [
+            61
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "dx_total_mbh",
+      "page": 15,
+      "bbox": [
+        750,
+        327,
+        790,
+        355
+      ],
+      "expected": "502.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "502.1",
+          "word_ids": [
+            198
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "502.1",
+          "word_ids": [
+            62
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "dx_cfm",
+      "page": 15,
+      "bbox": [
+        790,
+        327,
+        840,
+        355
+      ],
+      "expected": "13,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13,000",
+          "word_ids": [
+            199
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13,000",
+          "word_ids": [
+            63
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "dx_entering_db_f",
+      "page": 15,
+      "bbox": [
+        840,
+        327,
+        870,
+        355
+      ],
+      "expected": "92.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "92.0",
+          "word_ids": [
+            200
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "92.0",
+          "word_ids": [
+            53
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "dx_entering_wb_f",
+      "page": 15,
+      "bbox": [
+        870,
+        327,
+        905,
+        355
+      ],
+      "expected": "63.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "63.5",
+          "word_ids": [
+            201
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "63.5",
+          "word_ids": [
+            54
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "dx_leaving_db_f",
+      "page": 15,
+      "bbox": [
+        905,
+        327,
+        940,
+        355
+      ],
+      "expected": "53.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "53.6",
+          "word_ids": [
+            202
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "53.6",
+          "word_ids": [
+            55
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "dx_leaving_wb_f",
+      "page": 15,
+      "bbox": [
+        940,
+        327,
+        977,
+        355
+      ],
+      "expected": "49.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "49.3",
+          "word_ids": [
+            203
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "49.3",
+          "word_ids": [
+            56
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "dx_max_face_velocity_fpm",
+      "page": 15,
+      "bbox": [
+        977,
+        327,
+        1035,
+        355
+      ],
+      "expected": "500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "500",
+          "word_ids": [
+            204
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "500",
+          "word_ids": [
+            57
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "dx_air_pd_wc",
+      "page": 15,
+      "bbox": [
+        1035,
+        327,
+        1065,
+        355
+      ],
+      "expected": "0.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            205
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            72
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "dx_max_rh",
+      "page": 15,
+      "bbox": [
+        1065,
+        327,
+        1105,
+        355
+      ],
+      "expected": "50%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50%",
+          "word_ids": [
+            206
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50%",
+          "word_ids": [
+            73
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "gas_heat_input_mbh",
+      "page": 15,
+      "bbox": [
+        1105,
+        327,
+        1145,
+        355
+      ],
+      "expected": "1,125.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,125.0",
+          "word_ids": [
+            207
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,125.0",
+          "word_ids": [
+            79
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "gas_heat_output_mbh",
+      "page": 15,
+      "bbox": [
+        1145,
+        327,
+        1190,
+        355
+      ],
+      "expected": "893.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "893.8",
+          "word_ids": [
+            208
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "893.8",
+          "word_ids": [
+            80
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "gas_heat_cfm",
+      "page": 15,
+      "bbox": [
+        1190,
+        327,
+        1232,
+        355
+      ],
+      "expected": "13,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13,000",
+          "word_ids": [
+            209
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13,000",
+          "word_ids": [
+            81
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "gas_heat_entering_db_f",
+      "page": 15,
+      "bbox": [
+        1232,
+        327,
+        1263,
+        355
+      ],
+      "expected": "3.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.0",
+          "word_ids": [
+            210
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.0",
+          "word_ids": [
+            90
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "gas_heat_leaving_db_f",
+      "page": 15,
+      "bbox": [
+        1263,
+        327,
+        1300,
+        355
+      ],
+      "expected": "55.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            211
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.0",
+          "word_ids": [
+            91
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "gas_heat_modulation_pct",
+      "page": 15,
+      "bbox": [
+        1300,
+        327,
+        1370,
+        355
+      ],
+      "expected": "5-100%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5-100%",
+          "word_ids": [
+            212
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5-100%",
+          "word_ids": [
+            94
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "humidifier_unit_tag",
+      "page": 15,
+      "bbox": [
+        1370,
+        327,
+        1410,
+        355
+      ],
+      "expected": "HUM-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUM-1",
+          "word_ids": [
+            213
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUM-1",
+          "word_ids": [
+            101
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "humidifier_coil_air_pd_ft",
+      "page": 15,
+      "bbox": [
+        1410,
+        327,
+        1445,
+        355
+      ],
+      "expected": "0.01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.01",
+          "word_ids": [
+            214
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.01",
+          "word_ids": [
+            102
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "humidifier_finned_height_in",
+      "page": 15,
+      "bbox": [
+        1445,
+        327,
+        1480,
+        355
+      ],
+      "expected": "24.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24.0",
+          "word_ids": [
+            215
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24.0",
+          "word_ids": [
+            109
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "humidifier_finned_width_in",
+      "page": 15,
+      "bbox": [
+        1480,
+        327,
+        1515,
+        355
+      ],
+      "expected": "109.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "109.0",
+          "word_ids": [
+            216
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "109.0",
+          "word_ids": [
+            110
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "humidifier_face_area_ft2",
+      "page": 15,
+      "bbox": [
+        1515,
+        327,
+        1555,
+        355
+      ],
+      "expected": "52.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "52.1",
+          "word_ids": [
+            217
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "52.1",
+          "word_ids": [
+            123
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "humidifier_face_velocity_fpm",
+      "page": 15,
+      "bbox": [
+        1555,
+        327,
+        1590,
+        355
+      ],
+      "expected": "451",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "451",
+          "word_ids": [
+            218
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "451",
+          "word_ids": [
+            124
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "humidifier_coil_type",
+      "page": 15,
+      "bbox": [
+        1590,
+        327,
+        1630,
+        355
+      ],
+      "expected": "REMARK 6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "REMARK 6",
+          "word_ids": [
+            219,
+            220
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "REMARK 6",
+          "word_ids": [
+            125,
+            128
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "pre_filter_efficiency",
+      "page": 15,
+      "bbox": [
+        1630,
+        327,
+        1672,
+        355
+      ],
+      "expected": "MERV 8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MERV 8",
+          "word_ids": [
+            221,
+            222
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MERV 8",
+          "word_ids": [
+            126,
+            127
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "pre_filter_depth",
+      "page": 15,
+      "bbox": [
+        1672,
+        327,
+        1700,
+        355
+      ],
+      "expected": "2\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2\"",
+          "word_ids": [
+            223
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2\"",
+          "word_ids": [
+            158
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "final_filter_efficiency",
+      "page": 15,
+      "bbox": [
+        1700,
+        327,
+        1745,
+        355
+      ],
+      "expected": "MERV 13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MERV 13",
+          "word_ids": [
+            224,
+            225
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MERV 13",
+          "word_ids": [
+            159,
+            160
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "final_filter_depth",
+      "page": 15,
+      "bbox": [
+        1745,
+        327,
+        1780,
+        355
+      ],
+      "expected": "4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4\"",
+          "word_ids": [
+            226
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4\"",
+          "word_ids": [
+            161
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "filter_max_face_velocity_fpm",
+      "page": 15,
+      "bbox": [
+        1780,
+        327,
+        1825,
+        355
+      ],
+      "expected": "500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "500",
+          "word_ids": [
+            227
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "500",
+          "word_ids": [
+            162
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "mca",
+      "page": 15,
+      "bbox": [
+        1825,
+        327,
+        1860,
+        355
+      ],
+      "expected": "178.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "178.9",
+          "word_ids": [
+            228
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "178.9",
+          "word_ids": [
+            166
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "mropd",
+      "page": 15,
+      "bbox": [
+        1860,
+        327,
+        1905,
+        355
+      ],
+      "expected": "225.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "225.0",
+          "word_ids": [
+            229
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "225.0",
+          "word_ids": [
+            167
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "electrical_voltage_phase",
+      "page": 15,
+      "bbox": [
+        1905,
+        327,
+        1950,
+        355
+      ],
+      "expected": "208 / 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "208 / 3",
+          "word_ids": [
+            230,
+            231,
+            232
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "208 / 3",
+          "word_ids": [
+            168,
+            169,
+            170
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "minimum_osa_cfm",
+      "page": 15,
+      "bbox": [
+        1950,
+        327,
+        1985,
+        355
+      ],
+      "expected": "3,950",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3,950",
+          "word_ids": [
+            233
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3,950",
+          "word_ids": [
+            174
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "ahri_eer_rating",
+      "page": 15,
+      "bbox": [
+        1985,
+        327,
+        2015,
+        355
+      ],
+      "expected": "10.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.8",
+          "word_ids": [
+            234
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.8",
+          "word_ids": [
+            181
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "operating_weight_lb",
+      "page": 15,
+      "bbox": [
+        2015,
+        327,
+        2065,
+        355
+      ],
+      "expected": "10,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10,000",
+          "word_ids": [
+            235
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10,000",
+          "word_ids": [
+            182
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 15,
+      "bbox": [
+        2065,
+        327,
+        2175,
+        355
+      ],
+      "expected": "DAIKIN DPSA040",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAIKIN DPSA040",
+          "word_ids": [
+            236,
+            237
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAIKIN DPSA040",
+          "word_ids": [
+            186,
+            187
+          ]
+        }
+      }
+    },
+    {
+      "table": "M53-AIR-HANDLING-UNIT",
+      "row": 1,
+      "column": "remarks",
+      "page": 15,
+      "bbox": [
+        2175,
+        327,
+        2245,
+        355
+      ],
+      "expected": "3 , 4 , 5 , 6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3 , 4 , 5 , 6",
+          "word_ids": [
+            238,
+            239,
+            240,
+            241,
+            242,
+            243,
+            244
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3 , 4 , 5 , 6",
+          "word_ids": [
+            189,
+            190,
+            191,
+            192,
+            193,
+            194,
+            195
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m53-ahu-title",
+      "page": 15,
+      "bbox": [
+        1040,
+        210,
+        1410,
+        245
+      ],
+      "expected": "AIR HANDLING UNIT SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIR HANDLING UNIT SCHEDULE",
+          "word_ids": [
+            67,
+            68,
+            69,
+            70
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIR HANDLING UNIT SCHEDULE",
+          "word_ids": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m53-ahu-remark-3",
+      "page": 15,
+      "bbox": [
+        210,
+        415,
+        730,
+        450
+      ],
+      "expected": "3. EXTERNAL STATIC PRESSURE (ESP) DOES NOT INCLUDE THE COILS, FILTERS, OR OTHER INTERNAL AIR HANDLER LOSSES.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3. EXTERNAL STATIC PRESSURE (ESP) DOES NOT INCLUDE THE COILS, FILTERS, OR OTHER INTERNAL AIR HANDLER LOSSES.",
+          "word_ids": [
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3. EXTERNAL STATIC PRESSURE (ESP) DOES NOT INCLUDE THE COILS, FILTERS, OR OTHER INTERNAL AIR HANDLER LOSSES.",
+          "word_ids": [
+            217,
+            218,
+            219,
+            220,
+            221,
+            222,
+            223,
+            224,
+            225,
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "rank04-m53-ahu-row",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

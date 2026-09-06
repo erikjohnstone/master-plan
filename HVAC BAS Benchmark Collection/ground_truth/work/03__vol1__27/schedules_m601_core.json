@@ -1,0 +1,351 @@
+{
+  "document_id": "03__vol1__27",
+  "module_role": "Cell-for-cell M-601 schedule ledger. The seismic ledger is kept distinct from equipment schedules because a restraint-design row is not evidence of an installed-equipment quantity.",
+  "source_sheet": "M-601",
+  "source_page": 13,
+  "tables": [
+    {
+      "id": "M601-SEISMIC-VIBRATION-LEDGER",
+      "page": 13,
+      "sheet": "M-601",
+      "title": "SEISMIC AND VIBRATION CONTROL",
+      "classification": "Literal seismic/vibration-control ledger marks; not a quantity or installation ledger",
+      "columns": "mark",
+      "x_edges": [
+        600,
+        700
+      ],
+      "y_ranges": [
+        [
+          132.8685,
+          145.6685
+        ],
+        [
+          147.0884,
+          159.8884
+        ],
+        [
+          161.4884,
+          174.2884
+        ],
+        [
+          175.8884,
+          188.6884
+        ],
+        [
+          190.1084,
+          202.9084
+        ],
+        [
+          204.5085,
+          217.3085
+        ],
+        [
+          218.9085,
+          231.7085
+        ],
+        [
+          233.1286,
+          245.9286
+        ],
+        [
+          247.5286,
+          260.3286
+        ],
+        [
+          261.9287,
+          274.7287
+        ],
+        [
+          276.1486,
+          288.9486
+        ],
+        [
+          290.5487,
+          303.3487
+        ],
+        [
+          304.9487,
+          317.7487
+        ],
+        [
+          319.1687,
+          331.9687
+        ],
+        [
+          332.6686,
+          345.4686
+        ],
+        [
+          347.7886,
+          360.5886
+        ],
+        [
+          362.1888,
+          374.9888
+        ],
+        [
+          376.5887,
+          389.3887
+        ],
+        [
+          390.9887,
+          403.7887
+        ],
+        [
+          405.3887,
+          418.1887
+        ],
+        [
+          419.6087,
+          432.4087
+        ],
+        [
+          434.0087,
+          446.8087
+        ],
+        [
+          448.4088,
+          461.2088
+        ],
+        [
+          462.6287,
+          475.4287
+        ],
+        [
+          477.0288,
+          489.8288
+        ],
+        [
+          491.4288,
+          504.2288
+        ]
+      ],
+      "rows": [
+        "ERV-1",
+        "BT-1",
+        "BT-2",
+        "BT-3",
+        "BT-4",
+        "HX-1A",
+        "HX-1B",
+        "HX-2A",
+        "HX-2B",
+        "WSHP-1",
+        "FTR-1",
+        "AS-1",
+        "AS-2",
+        "DISTRIBUTED",
+        "EP-1,2",
+        "EP-3",
+        "EP-4",
+        "CP-1",
+        "CP-2",
+        "HWP-1",
+        "HWP-2",
+        "HWP-3",
+        "HWP-4",
+        "HWP-5",
+        "HWP-6",
+        "DISTRIBUTED"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            600,
+            45,
+            1370,
+            130
+          ],
+          "expected": "SEISMIC AND VIBRATION CONTROL TAG EQUIPMENT LEVEL RESTRAINTS FLEXIBLE CONNECTORS VIBRATION ISOLATORS DEFLECTION"
+        }
+      ],
+      "source_layout_notes": "DISTRIBUTED appears twice as printed (piping and mechanical-room exhaust duct). EP-1,2 is also a single printed shared mark. Neither is expanded into inferred equipment or placement counts."
+    },
+    {
+      "id": "M601-ENERGY-RECOVERY-VENTILATOR",
+      "page": 13,
+      "sheet": "M-601",
+      "title": "ENERGY RECOVERY VENTILATOR SCHEDULE",
+      "classification": "Literal ERV equipment schedule row",
+      "columns": "tag|location|serves|manufacturer_model|supply_cfm|supply_esp_in_wc|supply_motor_bhp|supply_motor_hp|exhaust_cfm|exhaust_esp_in_wc|exhaust_motor_bhp|exhaust_motor_hp|cooling_eat|cooling_lat|cooling_sensible_effectiveness|heating_eat|heating_lat|heating_sensible_effectiveness|volts|phase|mca|mop|filter_count|filter_merv|filter_size_in|unit_weight_lbs|remarks",
+      "x_edges": [
+        770,
+        830,
+        915,
+        1028,
+        1142,
+        1186,
+        1230,
+        1275,
+        1300,
+        1345,
+        1388,
+        1430,
+        1460,
+        1506,
+        1560,
+        1620,
+        1677,
+        1729,
+        1790,
+        1837,
+        1860,
+        1895,
+        1926,
+        1955,
+        1990,
+        2056,
+        2100,
+        2155
+      ],
+      "y_ranges": [
+        [
+          760,
+          795
+        ]
+      ],
+      "rows": [
+        "ERV-1|HATCHERY|OFFICE AND LAB VENTILATION|GREENHECK/ MINIVENT-450-VG|150|0.35|0.038|1/4|150|0.35|0.045|1/4|97.9 DB 67.6 WB|78.9 DB 63.1 WB|82.6%|8.6 DB|59.9 DB 47.9 WB|83.1%|120|1|7.1|15|1 1|13 8|14x20x2 14x20x2|160|1,2,3"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            770,
+            655,
+            2160,
+            760
+          ],
+          "expected": "ENERGY RECOVERY VENTILATOR SCHEDULE TAG LOCATION SERVES MANUFACTURER SUPPLY FAN EXHAUST FAN HEAT EXCHANGER UNIT ELECTRICAL FILTERS UNIT WT REMARKS"
+        }
+      ],
+      "source_layout_notes": "The source prints the two filter MERV and size values vertically within shared physical cells; the literal cell text is retained as `13 8` and `14x20x2 14x20x2` rather than materializing two child records."
+    },
+    {
+      "id": "M601-FANS",
+      "page": 13,
+      "sheet": "M-601",
+      "title": "FAN SCHEDULE",
+      "classification": "Literal fan equipment schedule rows",
+      "columns": "tag|serves|manufacturer_model|type|drive|flow_cfm|esp_in_wc|speed_rpm|bhp|motor_hp|motor_volts|motor_phase|fla|unit_weight_lbs|remarks",
+      "x_edges": [
+        680,
+        744,
+        823,
+        925,
+        1000,
+        1054,
+        1100,
+        1144,
+        1190,
+        1232,
+        1276,
+        1320,
+        1344,
+        1388,
+        1434,
+        1498
+      ],
+      "y_ranges": [
+        [
+          965,
+          1000
+        ],
+        [
+          1000,
+          1035
+        ],
+        [
+          1035,
+          1073
+        ]
+      ],
+      "rows": [
+        "EF-1|HATCHERY|GREENHECK/ SE1-12-432-VG|AXIAL WALL|DIRECT|750|0.25|1317|0.09|1/10|115|1|2.85|84|1,2",
+        "EF-2|HATCHERY|GREENHECK/ SE1-12-432-VG|AXIAL WALL|DIRECT|750|0.25|1317|0.09|1/10|115|1|2.85|84|1,2",
+        "EF-3|MECHANICAL ROOM|GREENHECK/ SQ-90-VG|INLINE|DIRECT|150/480|0.15|1282|0.03|1/10|115|1|1.38|48|3"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            680,
+            900,
+            1500,
+            965
+          ],
+          "expected": "FAN SCHEDULE TAG SERVES MANUFACTURER MODEL DESCRIPTION FAN PERFORMANCE MOTOR ELECTRICAL UNIT WT REMARKS"
+        }
+      ]
+    },
+    {
+      "id": "M601-GRILLES-REGISTERS-DIFFUSERS",
+      "page": 13,
+      "sheet": "M-601",
+      "title": "GRILLES, REGISTERS, DIFFUSERS SCHEDULE",
+      "classification": "Literal grille/register/diffuser type schedule rows",
+      "columns": "tag|type|manufacturer_model|grille_size|neck_size|material|frame_style|finish|notes",
+      "x_edges": [
+        1530,
+        1570,
+        1650,
+        1765,
+        1845,
+        1906,
+        1980,
+        2050,
+        2120,
+        2170
+      ],
+      "y_ranges": [
+        [
+          960,
+          993
+        ],
+        [
+          993,
+          1022
+        ],
+        [
+          1022,
+          1051
+        ],
+        [
+          1051,
+          1079
+        ],
+        [
+          1079,
+          1110
+        ]
+      ],
+      "rows": [
+        "1S|SUPPLY|GREENHECK/ XG-5750|24x24|6|STEEL|LAY-IN|WHITE|1,2",
+        "2S|SUPPLY|GREENHECK/ XG-5750|24x24|10|STEEL|LAY-IN|WHITE|1,2",
+        "1R|RETURN|GREENHECK/ XG-H4002R|6x12|-|STEEL|LAY-IN|WHITE|1,2",
+        "2R|RETURN|GREENHECK/ XG-H4002R|12x16|-|STEEL|LAY-IN|WHITE|1,2",
+        "1E|EXHAUST|GREENHECK/ XG-H4002R|6x12|-|STEEL|LAY-IN|WHITE|1,2"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1530,
+            900,
+            2170,
+            960
+          ],
+          "expected": "GRILLES REGISTERS DIFFUSERS SCHEDULE TAG TYPE MANUFACTURER MODEL GRILLE SIZE NECK SIZE MATERIAL FRAME STYLE FINISH NOTES"
+        }
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {
+      "id": "m601-core-table-count",
+      "records_path": [
+        "tables"
+      ],
+      "expected": 4,
+      "unique_key": "id"
+    }
+  ]
+}

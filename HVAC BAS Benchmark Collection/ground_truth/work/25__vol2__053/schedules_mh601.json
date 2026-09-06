@@ -1,0 +1,172 @@
+{
+  "document_id": "25__vol2__053",
+  "module_role": "Exact MH601 schedule cells. Every table remains in its printed schedule scope; plain ball valves, air devices and terminal-unit type rows are not reclassified as BAS control valves or controller instances.",
+  "source_sheet": "MH601",
+  "source_page": 12,
+  "tables": [
+    {
+      "id": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "page": 12,
+      "sheet": "MH601",
+      "title": "SINGLE DUCT AIR TERMINAL UNIT SCHEDULE",
+      "classification": "Existing terminal-unit reference schedule",
+      "columns": "mark|location|room_served|system_air_handling|vav_size|airflow_max|airflow_min|airflow_reheat|control_type|control_sequence|reheat_elec|reheat_hw|coil_rows|coil_eat|coil_lat|coil_ewt|coil_lwt|coil_flow|coil_capacity|remarks",
+      "x_edges": [150.72,222.721,356.64,529.2,618.72,674.521,721.32,770.52,821.52,893.521,989.64,1043.639,1097.64,1152.361,1204.68,1251.6,1323.601,1397.503,1467.601,1553.761,1622.761],
+      "y_edges": [197.999,210.961,223.92,236.88,249.72,262.843,275.64,288.599,301.593,314.399,327.361,340.321,353.28,366.24,379.2,392.04,405.0,417.959,430.953,443.707,456.719],
+      "rows": [
+        "TU26-11|FIRST FLOOR INTERSTITIAL|1A-728|100-AH26|8\"|115|35|60|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.21 GPM|2,600 Btu/h|3",
+        "TU26-12|FIRST FLOOR INTERSTITIAL|C1A-701|100-AH26|14\"|1120|335|560|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|1.94 GPM|24,300 Btu/h|3",
+        "TU26-34|FIRST FLOOR INTERSTITIAL|1A-794, 1A-795, 1A-796|100-AH26|10\"|825|300|550|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|2.75 GPM|18,000 Btu/h|3",
+        "TU26-40|FIRST FLOOR INTERSTITIAL|C1A-703|100-AH26|14\"|690|200|345|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|1.20 GPM|15,000 Btu/h|3",
+        "TU26-41|FIRST FLOOR INTERSTITIAL|1A-735|100-AH26|6\"|125|40|65|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.23 GPM|2,800 Btu/h|1,2",
+        "TU26-46|FIRST FLOOR INTERSTITIAL|C1A-701|100-AH26|14\"|750|225|375|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|1.30 GPM|16,300 Btu/h|3",
+        "TU26-52|FIRST FLOOR INTERSTITIAL|1A-722|100-AH26|12\"|115|35|60|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.21 GPM|2,600 Btu/h|3",
+        "TU26-60|FIRST FLOOR INTERSTITIAL|1A-765, CORRIDOR|100-AH26|14\"|1050|315|525|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|1.82 GPM|22,800 Btu/h|1,2",
+        "TU26-61|FIRST FLOOR INTERSTITIAL|1A-736|100-AH26|8\"|125|40|65|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.23 GPM|2,800 Btu/h|1,2",
+        "TU26-62|FIRST FLOOR INTERSTITIAL|1A-737|100-AH26|8\"|125|40|65|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.23 GPM|2,800 Btu/h|1,2",
+        "TU26-63|FIRST FLOOR INTERSTITIAL|1A-738|100-AH26|8\"|125|40|65|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.23 GPM|2,800 Btu/h|1,2",
+        "TU26-64|FIRST FLOOR INTERSTITIAL|1A-727|100-AH26|8\"|120|40|60|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.21 GPM|2,600 Btu/h|1,2",
+        "TU26-65|FIRST FLOOR INTERSTITIAL|1A-721, 1A-740, 1A-740A|100-AH26|6\"|155|50|80|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.28 GPM|3,500 Btu/h|1,2",
+        "TU26-66|FIRST FLOOR INTERSTITIAL|1A-726|100-AH26|8\"|120|40|60|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.21 GPM|2,600 Btu/h|1,2",
+        "TU26-67|FIRST FLOOR INTERSTITIAL|1A-734, 1A-734A|100-AH26|8\"|175|55|90|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.31 GPM|3,900 Btu/h|1,2",
+        "TU26-68|FIRST FLOOR INTERSTITIAL|1A-729, 1A-730, 1A-731, CORRIDOR|100-AH26|14\"|1185|360|595|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|2.07 GPM|25,800 Btu/h|1,2",
+        "TU26-69|FIRST FLOOR INTERSTITIAL|1A-733|100-AH26|8\"|110|40|55|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.19 GPM|2,400 Btu/h|1,2",
+        "TU26-70|FIRST FLOOR INTERSTITIAL|1A-732|100-AH26|8\"|110|40|55|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.19 GPM|2,400 Btu/h|1,2",
+        "TU26-71|FIRST FLOOR INTERSTITIAL|1A-724|100-AH26|8\"|120|40|60|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.21 GPM|2,600 Btu/h|1,2",
+        "TU26-72|FIRST FLOOR INTERSTITIAL|1A-723|100-AH26|8\"|120|40|60|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.21 GPM|2,600 Btu/h|1,2"
+      ],
+      "header_evidence": [{"bbox": [150,128,1623,198], "expected": "SINGLE DUCT AIR TERMINAL UNIT SCHEDULE MARK LOCATION ROOM SERVED SYSTEM AIR HANDLING VAV SIZE AIRFLOW CONTROL TYPE CONTROL SEQUENCE REHEAT HEATING COIL REMARKS"}]
+    },
+    {
+      "id": "AD-MH601-EXHAUST",
+      "page": 12,
+      "sheet": "MH601",
+      "title": "AIR DEVICE SCHEDULE (EXHAUST)",
+      "classification": "Air-device type reference schedule; not a field-instance count.",
+      "columns": "mark|type|airflow_min|airflow_max|max_apd|mounting|panel_frame_size|neck_size|max_nc|damper|finish|material|remarks",
+      "x_edges": [1790.639,1862.698,1988.804,2053.441,2118.243,2190.246,2262.249,2352.248,2417.036,2471.043,2543.046,2615.049,2705.048,2777.03],
+      "y_edges": [197.999,210.961,223.92],
+      "rows": [
+        "EG-A|SQUARE CONE|0|100|0.10 in-wg|CEILING|24x24|6x6|20|No|WHITE|STEEL|1,2",
+        "EG-B|SQUARE CONE|100|200|0.10 in-wg|CEILING|24x24|8X8|20|No|WHITE|STEEL|1,2"
+      ],
+      "header_evidence": [{"bbox": [1790,128,2779,198], "expected": "AIR DEVICE SCHEDULE EXHAUST MARK TYPE AIRFLOW MAX APD MOUNTING PANEL FRAME SIZE NECK SIZE MAX NC DAMPER FINISH MATERIAL REMARKS"}]
+    },
+    {
+      "id": "AD-MH601-RETURN",
+      "page": 12,
+      "sheet": "MH601",
+      "title": "AIR DEVICE SCHEDULE (RETURN)",
+      "classification": "Air-device type reference schedule; not a field-instance count.",
+      "columns": "mark|type|airflow_min|airflow_max|max_apd|mounting|panel_frame_size|neck_size|max_nc|damper_diffuser|finish|material|description|remarks",
+      "x_edges": [1790.639,1862.698,1988.804,2053.441,2118.243,2187.958,2264.64,2354.639,2419.448,2473.434,2545.437,2617.44,2707.439,2779.442,2850.002],
+      "y_edges": [371.88,384.72,397.68,410.639,423.599],
+      "rows": [
+        "RG-A|EGG CRATE|0|100|0.16 in-wg|CEILING|24x24|6\"Ø|20|Yes||STEEL|RETURN|1,2,3",
+        "RG-B|EGG CRATE|100|200|0.11 in-wg|CEILING|24x24|8\"Ø|20|Yes||STEEL|RETURN|1,2,3",
+        "RG-C|EGG CRATE|200|350|0.11 in-wg|CEILING|24x24|10\"Ø|20|Yes||STEEL|RETURN|1,2,3",
+        "RG-D|EGG CRATE|350|600|0.10 in-wg|CEILING|24x24|12\"Ø|20|Yes||STEEL|RETURN|1,2,3"
+      ],
+      "header_evidence": [{"bbox": [1790,302,2851,372], "expected": "AIR DEVICE SCHEDULE RETURN MARK TYPE AIRFLOW MAX APD MOUNTING PANEL FRAME SIZE NECK SIZE MAX NC DAMPER DIFFUSER FINISH MATERIAL DESCRIPTION REMARKS"}]
+    },
+    {
+      "id": "AD-MH601-SUPPLY",
+      "page": 12,
+      "sheet": "MH601",
+      "title": "AIR DEVICE SCHEDULE (SUPPLY)",
+      "classification": "Air-device type reference schedule; not a field-instance count.",
+      "columns": "mark|type|airflow_min|airflow_max|max_apd|mounting|panel_frame_size|neck_size_round|neck_size_rect|damper|finish|material|remarks",
+      "x_edges": [1790.639,1862.698,1988.804,2053.441,2118.243,2190.246,2262.249,2352.248,2417.036,2481.845,2554.322,2625.83,2715.907,2787.832],
+      "y_edges": [571.561,584.521,597.48],
+      "rows": [
+        "SD-A|SQUARE CONE|0|125|0.07 in-wg|CEILING|24x24|6\"|--|No|WHITE|STEEL|1,2",
+        "SD-B|SQUARE CONE|125|230|0.07 in-wg|CEILING|24x24|8\"|--|No|WHITE|STEEL|1,2"
+      ],
+      "header_evidence": [{"bbox": [1790,503,2788,559], "expected": "AIR DEVICE SCHEDULE SUPPLY MARK TYPE AIRFLOW MAX APD MOUNTING PANEL FRAME SIZE NECK SIZE ROUND RECT DAMPER MATERIAL REMARKS"}]
+    },
+    {
+      "id": "TU-MH601-SERIES-FAN-POWERED",
+      "page": 12,
+      "sheet": "MH601",
+      "title": "SERIES FAN POWERED AIR TERMINAL UNIT SCHEDULE",
+      "classification": "Existing terminal-unit reference schedule.",
+      "columns": "mark|location|room_served|system_air_handling|vav_size|airflow_max|airflow_min|airflow_reheat|control_type|control_sequence|reheat_elec|reheat_hw|coil_rows|coil_eat|coil_lat|coil_ewt|coil_lwt|coil_flow|coil_capacity|remarks",
+      "x_edges": [150.72,222.721,356.64,529.2,618.72,674.521,721.32,770.52,821.52,893.521,989.64,1043.639,1097.64,1152.361,1204.68,1251.6,1323.601,1397.503,1467.601,1553.761,1625.76],
+      "y_edges": [606.085,619.079],
+      "rows": [
+        "TU26-73|FIRST FLOOR INTERSTITIAL|1A-791, 1A-790A|100-AH26|6\"|275|275|275|CAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.00 GPM|0 Btu/h|1,2"
+      ],
+      "header_evidence": [{"bbox": [150,536,1626,606], "expected": "SERIES FAN POWERED AIR TERMINAL UNIT SCHEDULE MARK LOCATION ROOM SERVED SYSTEM AIR HANDLING VAV SIZE AIRFLOW CONTROL TYPE CONTROL SEQUENCE REHEAT HEATING COIL REMARKS"}]
+    },
+    {
+      "id": "AF-MH601",
+      "page": 12,
+      "sheet": "MH601",
+      "title": "AIR FILTER SCHEDULE",
+      "classification": "Filter type/service schedule; source rows have no discrete field filter tags.",
+      "columns": "location|area_or_bldg_served|system_or_service|merv_rating|apd_initial|apd_changeover|housing_type|cartridge_count|cartridge_size|cartridge_arrangement|remarks",
+      "x_edges": [1790.639,1862.698,1988.804,2133.353,2205.356,2277.359,2349.362,2464.797,2554.322,2648.649,2756.643,2846.642],
+      "y_edges": [745.32,758.28,771.24],
+      "rows": [
+        "ROOF||PE ISOLATION|7|0.25 in-wg|0.75 in-wg|SIDE LOAD|1|2\" THICK|1 WIDE BY 1 HIGH|1",
+        "ROOF||PE ISOLATION|HEPA|1.00 in-wg|2.25 in-wg|BAG-IN / BAG-OUT|1|27\" x 30\" x 24\"|1 WIDE BY 1 HIGH|1"
+      ],
+      "header_evidence": [{"bbox": [1790,676,2847,746], "expected": "AIR FILTER SCHEDULE LOCATION AREA BLDG SERVED SYSTEM SERVICE MERV RATING APD INITIAL CHANGEOVER HOUSING TYPE CARTRIDGES SIZE ARRANGEMENT REMARKS"}]
+    },
+    {
+      "id": "V-MH601-BALL-VALVES",
+      "page": 12,
+      "sheet": "MH601",
+      "title": "VALVE SCHEDULE",
+      "classification": "Manual heating-hot-water supply/return ball-valve schedule; no actuator, Cv, control signal, or fail position is printed, so these are not BAS control valves.",
+      "columns": "mark|system_or_service|type|size|flow|remarks",
+      "x_edges": [1790.639,1862.698,2017.537,2125.561,2215.56,2287.563,2373.83],
+      "y_edges": [905.879,918.838,931.8,944.76,957.72,970.56,983.52,996.479,1009.439,1022.401,1035.36,1048.201,1061.16,1074.12,1087.08,1100.039,1112.88,1125.839,1138.799,1151.761,1164.72,1177.561,1190.52,1203.48,1216.44,1229.399,1242.359,1255.199,1268.161,1281.121,1294.08,1307.04,1319.88,1332.84,1345.8,1358.759,1371.719,1384.679,1397.519],
+      "rows": [
+        "V-HHWR-11|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+        "V-HHWR-12|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|1.94 GPM|1",
+        "V-HHWR-40|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|1.20 GPM|1",
+        "V-HHWR-41|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.23 GPM|1",
+        "V-HHWR-46|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|1.30 GPM|1",
+        "V-HHWR-52|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+        "V-HHWR-60|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|1.82 GPM|1",
+        "V-HHWR-61|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.23 GPM|1",
+        "V-HHWR-62|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.23 GPM|1",
+        "V-HHWR-63|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.23 GPM|1",
+        "V-HHWR-64|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+        "V-HHWR-65|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.28 GPM|1",
+        "V-HHWR-66|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+        "V-HHWR-67|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.31 GPM|1",
+        "V-HHWR-68|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|2.07 GPM|1",
+        "V-HHWR-69|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.19 GPM|1",
+        "V-HHWR-70|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.19 GPM|1",
+        "V-HHWR-71|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+        "V-HHWR-72|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+        "V-HHWS-11|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+        "V-HHWS-12|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|1.94 GPM|1",
+        "V-HHWS-40|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|1.20 GPM|1",
+        "V-HHWS-41|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.23 GPM|1",
+        "V-HHWS-46|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|1.30 GPM|1",
+        "V-HHWS-52|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+        "V-HHWS-60|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|1.82 GPM|1",
+        "V-HHWS-61|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.23 GPM|1",
+        "V-HHWS-62|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.23 GPM|1",
+        "V-HHWS-63|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.23 GPM|1",
+        "V-HHWS-64|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+        "V-HHWS-65|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.28 GPM|1",
+        "V-HHWS-66|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+        "V-HHWS-67|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.31 GPM|1",
+        "V-HHWS-68|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|2.07 GPM|1",
+        "V-HHWS-69|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.19 GPM|1",
+        "V-HHWS-70|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.19 GPM|1",
+        "V-HHWS-71|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+        "V-HHWS-72|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1"
+      ],
+      "header_evidence": [{"bbox": [1790,850,2374,894], "expected": "VALVE SCHEDULE MARK SYSTEM SERVICE TYPE SIZE FLOW REMARKS"}]
+    }
+  ],
+  "assertions": [],
+  "inventory_checks": [
+    {"id": "mh601-populated-tables", "records_path": ["tables"], "expected": 7, "unique_key": "id"}
+  ]
+}

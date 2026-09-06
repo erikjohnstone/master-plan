@@ -1,0 +1,384 @@
+{
+  "document_id": "16__vol2__069",
+  "source_sha256": "ce0c2bb973f87194f0f6ed8d68faaad2a5683129f9d0db1a73415f6051ed06f1",
+  "annotation_sha256": "e68e3c1e5f94541fc7a93df3406d25f1e0bdc026bf5c76643926a6c2d060474c",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 6,
+  "checks": [
+    {
+      "assertion": "m1-remove-existing-hwp",
+      "page": 3,
+      "bbox": [
+        480,
+        145,
+        820,
+        178
+      ],
+      "expected": "DISCONNECT AND REMOVE EXISTING HOT WATER PUMPS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DISCONNECT AND REMOVE EXISTING HOT WATER PUMPS. EXISTING PIPE AND PIPING ACCESSORIES TO REMAIN AND BE",
+          "word_ids": [
+            393,
+            394,
+            395,
+            396,
+            397,
+            398,
+            399,
+            400,
+            401,
+            402,
+            403,
+            404,
+            405,
+            406,
+            407,
+            408
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DISCONNECT AND REMOVE EXISTING HOT WATER PUMPS. EXISTING PIPE AND PIPING ACCESSORIES TO REMAIN AND BE",
+          "word_ids": [
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m1-remove-existing-cwp",
+      "page": 3,
+      "bbox": [
+        480,
+        275,
+        820,
+        315
+      ],
+      "expected": "DISCONNECT AND REMOVE EXISTING CHILLED WATER PUMPS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DISCONNECT AND REMOVE EXISTING CHILLED WATER PUMPS. EXISTING PIPE AND PIPING ACCESSORIES TO REMAIN AND BE",
+          "word_ids": [
+            448,
+            449,
+            450,
+            451,
+            452,
+            453,
+            454,
+            455,
+            456,
+            457,
+            458,
+            459,
+            460,
+            461,
+            462,
+            463
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DISCONNECT AND REMOVE EXISTING CHILLED WATER PUMPS. EXISTING PIPE AND PIPING ACCESSORIES TO REMAIN AND BE",
+          "word_ids": [
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200,
+            201,
+            202,
+            203,
+            204,
+            205,
+            206,
+            207,
+            208
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m1-install-boiler-pump",
+      "page": 3,
+      "bbox": [
+        1590,
+        210,
+        1880,
+        250
+      ],
+      "expected": "INSTALL NEW BOILER PUMP ON RETURN SIDE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3. INSTALL NEW BOILER PUMP ON RETURN SIDE. ADJUST PIPING 8. AS REQUIRED. SEE DETAIL FOR ADDITIONAL INFORMATION.",
+          "word_ids": [
+            304,
+            305,
+            306,
+            307,
+            308,
+            309,
+            310,
+            311,
+            312,
+            313,
+            489,
+            314,
+            315,
+            316,
+            317,
+            318,
+            319,
+            320
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3. INSTALL NEW BOILER PUMP ON RETURN SIDE. ADJUST PIPING 8. AS REQUIRED. SEE DETAIL FOR ADDITIONAL INFORMATION.",
+          "word_ids": [
+            130,
+            156,
+            157,
+            158,
+            159,
+            160,
+            161,
+            162,
+            163,
+            164,
+            82,
+            165,
+            166,
+            167,
+            168,
+            169,
+            170,
+            171
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m1-connect-cwp",
+      "page": 3,
+      "bbox": [
+        1870,
+        215,
+        2180,
+        255
+      ],
+      "expected": "CONNECT NEW CHILLED WATER LOOP PUMPS TO EXISTING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8. CONNECT NEW CHILLED WATER LOOP PUMPS TO EXISTING PARALLEL PIPING ARRANGEMENT. ADJUST AND MODIFY PIPING",
+          "word_ids": [
+            489,
+            490,
+            491,
+            492,
+            493,
+            494,
+            495,
+            496,
+            497,
+            498,
+            499,
+            500,
+            501,
+            502,
+            503,
+            504
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8. CONNECT NEW CHILLED WATER LOOP PUMPS TO EXISTING PARALLEL PIPING ARRANGEMENT. ADJUST AND MODIFY PIPING",
+          "word_ids": [
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m1-ahw-three-way-valve",
+      "page": 3,
+      "bbox": [
+        1590,
+        285,
+        1880,
+        340
+      ],
+      "expected": "INSTALL NEW 3-WAY VALVE ON EXISTING AIR HANDLING UNIT (AHU-1) HEATING WATER CONNECTION.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5. INSTALL NEW 3-WAY VALVE ON EXISTING AIR HANDLING UNIT (AHU-1) HEATING WATER CONNECTION. SEE DETAIL FOR ADDITIONAL REQUIREMENTS. BALANCE VALVE TO 48 GPM.",
+          "word_ids": [
+            342,
+            343,
+            344,
+            345,
+            346,
+            347,
+            348,
+            349,
+            350,
+            351,
+            352,
+            353,
+            354,
+            355,
+            356,
+            357,
+            358,
+            359,
+            360,
+            361,
+            362,
+            363,
+            364,
+            365
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5. INSTALL NEW 3-WAY VALVE ON EXISTING AIR HANDLING UNIT (AHU-1) HEATING WATER CONNECTION. SEE DETAIL FOR ADDITIONAL REQUIREMENTS. BALANCE VALVE TO 48 GPM.",
+          "word_ids": [
+            210,
+            212,
+            213,
+            214,
+            215,
+            216,
+            217,
+            218,
+            219,
+            220,
+            221,
+            222,
+            223,
+            224,
+            225,
+            226,
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m2-new-three-way-valve",
+      "page": 4,
+      "bbox": [
+        2040,
+        1030,
+        2140,
+        1070
+      ],
+      "expected": "3-WAY CONTROL VALVE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3-WAY CONTROL VALVE (N)",
+          "word_ids": [
+            101,
+            102,
+            103,
+            104
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3-WAY CONTROL VALVE (N)",
+          "word_ids": [
+            198,
+            199,
+            200,
+            201
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "linked-schedule-registry",
+      "pass": true,
+      "tables": 4,
+      "rows": 11,
+      "identities": 11,
+      "primary_anchors": 11
+    },
+    {
+      "id": "scheduled-families",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    },
+    {
+      "id": "scheduled-primary-anchors",
+      "actual": 11,
+      "expected": 11,
+      "pass": true
+    },
+    {
+      "id": "plan-detail-reconciliation-items",
+      "actual": 6,
+      "expected": 6,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {
+    "schedules_m3.json": "aa8d90a1297b086058112ab2a336df42b977a857e456d70cf32968f6c9b54824"
+  },
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

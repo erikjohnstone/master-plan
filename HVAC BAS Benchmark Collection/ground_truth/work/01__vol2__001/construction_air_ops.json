@@ -1,0 +1,81 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All printed duct and piping construction schedule rows on Air Operations sheet M-602 (source PDF page 43). These are construction reference schedules, not equipment quantities.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [43],
+    "render": "reviews/01__vol2__001/p43-schedules-poppler.png",
+    "dpi": 180,
+    "finding": "Both M-602 construction tables were visually reviewed at 180 DPI, including their multi-level pressure/leakage header, the buried-chilled-water row's material/insulation merged cell and literal dash cells."
+  },
+  "tables": [
+    {
+      "id": "AIR-OPS-DUCT-CONSTRUCTION",
+      "page": 43,
+      "sheet": "M-602",
+      "building_scope": "Air Operations",
+      "title": "DUCT CONSTRUCTION SCHEDULE",
+      "classification": "Duct construction criteria",
+      "columns": "system|location|description|pressure_class_in_wg|leakage_class_round|leakage_class_rectangular|seal_class|DALT_QTY|duct_test_pressure_in_wg",
+      "x_edges": [150, 370, 520, 640, 750, 820, 900, 980, 1080, 1210],
+      "y_edges": [535, 552, 570, 587, 604, 622, 639, 656, 674, 691],
+      "rows": [
+        "SUPPLY AIR UPSTREAM OF VAV BOXES|CONCEALED / MECH AREA|SINGLE WALL|+ 4.0|3|6|A|YES / 25%|4.0",
+        "SUPPLY AIR DOWNSTREAM OF VAV BOXES|CONCEALED|SINGLE WALL|+ 2.0|3|6|A|YES / 25%|1.0",
+        "RETURN AIR|CONCEALED / MECH AREA|SINGLE WALL|- 2.0|3|6|A|YES / 25%|2.0",
+        "EXHAUST AIR|CONCEALED / MECH AREA|SINGLE WALL|- 2.0|3|6|A|YES / 25%|2.0",
+        "TRANSFER AIR|CONCEALED|SINGLE WALL|+/- 1.0|3|6|A|-|-",
+        "TREATED OUTSIDE AIR (VA)|MECH AREA|SINGLE WALL|+ 2.0|3|6|A|YES / 100%|2.0",
+        "UNTREATED OUTSIDE AIR (OA)|MECH AREA|SINGLE WALL|- 2.0|3|6|A|YES / 100%|2.0",
+        "COMBUSTION AIR INTAKE|MECH AREA|SINGLE WALL|- 6.0|3|-|A|-|-",
+        "BOILER COMBUSTION AIR VENT|MECH AREA|DOUBLE WALL|+ 10.0|3|-|A|-|-"
+      ],
+      "header_evidence": [
+        {"bbox": [500, 435, 800, 490], "expected": "DUCT CONSTRUCTION SCHEDULE"},
+        {"bbox": [150, 490, 1210, 535], "expected": "SYSTEM LOCATION DESCRIPTION PRESSURE CLASS IN WG LEAKAGE CLASS ROUND RECTANGULAR SEAL CLASS DALT QTY DUCT TEST PRESSURE IN WG"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-PIPING-CONSTRUCTION",
+      "page": 43,
+      "sheet": "M-602",
+      "building_scope": "Air Operations",
+      "title": "PIPING CONSTRUCTION SCHEDULE",
+      "classification": "Piping construction criteria",
+      "columns": "system|material|insulation|insulation_jacket|notes",
+      "x_edges": [150, 280, 500, 820, 1080, 1210],
+      "y_ranges": [[763, 781], [798, 815], [815, 833]],
+      "rows": [
+        "CHILLED WATER|TYPE L COPPER, SCHEDULE 40 STEEL|CELLULAR GLASS, POLYISOCYANURATE|SEE SPECIFICATION SECTION 23 07 00|",
+        "CONDENSATE DRAIN|TYPE L COPPER|FLEXIBLE ELASTOMERIC|SEE SPECIFICATION SECTION 23 07 00|",
+        "HEATING HOT WATER|TYPE L COPPER, SCHEDULE 40 STEEL|MINERAL FIBER|SEE SPECIFICATION SECTION 23 07 00|"
+      ],
+      "header_evidence": [
+        {"bbox": [480, 695, 810, 750], "expected": "PIPING CONSTRUCTION SCHEDULE"},
+        {"bbox": [150, 740, 1210, 763], "expected": "SYSTEM MATERIAL INSULATION INSULATION JACKET NOTES"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-PIPING-CONSTRUCTION-BURIED-CHW",
+      "page": 43,
+      "sheet": "M-602",
+      "building_scope": "Air Operations",
+      "title": "PIPING CONSTRUCTION SCHEDULE - merged buried chilled water row",
+      "classification": "Piping construction criteria",
+      "columns": "system|material_and_insulation_merged|insulation_jacket|notes",
+      "x_edges": [150, 280, 820, 1080, 1210],
+      "y_edges": [781, 798],
+      "rows": [
+        "BURIED CHILLED WATER|BURIED FACTORY-PREFABRICATED PREINSULATED WATER PIPING|SEE SPECIFICATION SECTION 33 61 14|"
+      ],
+      "source_layout_note": "The source visibly merges the material and insulation region for this row. It is intentionally represented as one cell rather than inventing a split across the headers above."
+    }
+  ],
+  "inventory_checks": [
+    {"id": "air-ops-duct-construction-row-count", "records_path": ["tables", 0, "rows"], "expected": 9},
+    {"id": "air-ops-piping-construction-standard-row-count", "records_path": ["tables", 1, "rows"], "expected": 3},
+    {"id": "air-ops-piping-construction-merged-row-count", "records_path": ["tables", 2, "rows"], "expected": 1}
+  ],
+  "remaining_work": "The M-602 printed schedule tables are transcribed; reconcile construction criteria and equipment schedules against drawings and controls without inferring installed quantities from these rows."
+}

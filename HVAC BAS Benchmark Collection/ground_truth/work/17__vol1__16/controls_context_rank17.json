@@ -1,0 +1,616 @@
+{
+  "document_id": "17__vol1__16",
+  "module_role": "Source-bounded M6.01–M6.03 BAS network, symbols, sequences, alarms and damper-control context.",
+  "tables": [],
+  "assertions": [
+    {
+      "id": "m601-bacnet-standard",
+      "page": 27,
+      "bbox": [
+        1365,
+        174,
+        1730,
+        192
+      ],
+      "expected": "BACNET COMPONENTS ARE TO BE IN ACCORDANCE WITH ASHRAE STANDARD 2016.",
+      "mode": "contains"
+    },
+    {
+      "id": "m601-complete-ddc-system",
+      "page": 27,
+      "bbox": [
+        1365,
+        198,
+        1775,
+        238
+      ],
+      "expected": "CONTROL SYSTEM CONTRACTOR SHALL PROVIDE A COMPLETE DIRECT DIGITAL CONTROL SYSTEM. PROVIDE AND INSTALL ALL NECESSARY WIRING TO MAKE SYSTEM OPERATIONAL REFER TO CONTROL DIAGRAMS AND SEQUENCE OF OPERATION ON DRAWINGS.",
+      "mode": "contains"
+    },
+    {
+      "id": "m601-controller-network",
+      "page": 27,
+      "bbox": [
+        1365,
+        241,
+        1760,
+        260
+      ],
+      "expected": "CONTROLS CONTRACTOR SHALL CONNECT CONTROLLERS TO THE CONTROL NETWORK",
+      "mode": "contains"
+    },
+    {
+      "id": "m601-thermographic-plan",
+      "page": 27,
+      "bbox": [
+        1365,
+        276,
+        1755,
+        295
+      ],
+      "expected": "CONTROLS CONTRACTOR SHALL PROVIDE A THERMOGRAPHIC FLOOR PLAN INDICATING",
+      "mode": "contains"
+    },
+    {
+      "id": "m601-32-device-trunk",
+      "page": 27,
+      "bbox": [
+        1365,
+        306,
+        1710,
+        325
+      ],
+      "expected": "NO MORE THAN 32 DEVICES ALLOWED ON SINGLE COMMUNICATION TRUNK.",
+      "mode": "contains"
+    },
+    {
+      "id": "m601-btl-listed",
+      "page": 27,
+      "bbox": [
+        1365,
+        352,
+        1790,
+        371
+      ],
+      "expected": "ALL CONTROL DEVICES AND CONTROLLERS SHALL BE BTL LISTED (BACNET TESTING LABORATORY).",
+      "mode": "contains"
+    },
+    {
+      "id": "m601-bacnet-ip",
+      "page": 27,
+      "bbox": [
+        275,
+        494,
+        335,
+        515
+      ],
+      "expected": "BACNET IP",
+      "mode": "contains"
+    },
+    {
+      "id": "m601-mstp-trunk-1",
+      "page": 27,
+      "bbox": [
+        425,
+        476,
+        520,
+        496
+      ],
+      "expected": "MSTP TRUNK XXXX1",
+      "mode": "contains"
+    },
+    {
+      "id": "m601-mstp-trunk-2",
+      "page": 27,
+      "bbox": [
+        425,
+        652,
+        520,
+        672
+      ],
+      "expected": "MSTP TRUNK XXXX2",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-bacnet-mstp-network",
+      "page": 28,
+      "bbox": [
+        915,
+        500,
+        1040,
+        536
+      ],
+      "expected": "BACNET/MSTP NETWORK CONNECTION",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-network-wire",
+      "page": 28,
+      "bbox": [
+        915,
+        537,
+        1035,
+        556
+      ],
+      "expected": "*22AWG/2C SHIELDED*",
+      "mode": "contains"
+    },
+    {
+      "id": "m601-co2-sensor-legend",
+      "page": 27,
+      "bbox": [
+        2430,
+        191,
+        2560,
+        211
+      ],
+      "expected": "CARBON DIOXIDE SENSOR",
+      "mode": "contains"
+    },
+    {
+      "id": "m601-room-temperature-sensor-legend",
+      "page": 27,
+      "bbox": [
+        2430,
+        608,
+        2575,
+        628
+      ],
+      "expected": "ROOM TEMPERATURE SENSOR",
+      "mode": "contains"
+    },
+    {
+      "id": "m601-motorized-actuator-legend",
+      "page": 27,
+      "bbox": [
+        2430,
+        454,
+        2550,
+        474
+      ],
+      "expected": "MOTORIZED ACTUATOR",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-erv-occupied",
+      "page": 28,
+      "bbox": [
+        2290,
+        204,
+        2735,
+        222
+      ],
+      "expected": "ENERGY RECOVERY VENTILATOR (ERV) SHALL BE ENERGIZED DURING OCCUPIED HOURS. ERV SHALL BE",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-erv-leaving-air-alarm",
+      "page": 28,
+      "bbox": [
+        2290,
+        236,
+        2735,
+        254
+      ],
+      "expected": "BMS SHALL MONITOR LEAVING AIR TEMPERATURE AND SHALL ALARM IF SUPPLY TEMPERATURE IS BELOW",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-erv-defrost",
+      "page": 28,
+      "bbox": [
+        2290,
+        268,
+        2725,
+        286
+      ],
+      "expected": "UNIT INTERNAL CONTROLLER SHALL CONTROL DEFROST CYCLE BASED ON DIFFERENTIAL PRESSURE",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-erv-economizer",
+      "page": 28,
+      "bbox": [
+        2290,
+        300,
+        2735,
+        318
+      ],
+      "expected": "UNIT CONTROLLER SHALL CONTROL ECONOMIZER CYCLE. ECONOMIZER CYCLE SHALL STOP WHEEL.",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-erv-filter-alarm",
+      "page": 28,
+      "bbox": [
+        2290,
+        332,
+        2670,
+        350
+      ],
+      "expected": "WHEN FILTER RESISTANCE IS GREATER THAN 0.50\" W.C. (ADJUSTABLE) BMS TO ALARM.",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-furnace-supply-fan",
+      "page": 28,
+      "bbox": [
+        2255,
+        473,
+        2725,
+        492
+      ],
+      "expected": "THE SUPPLY FAN SHALL RUN ANYTIME THE UNIT IS COMMANDED TO RUN, UNLESS SHUTDOWN ON SAFETIES.",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-furnace-cooling-zone-temperature",
+      "page": 28,
+      "bbox": [
+        2255,
+        519,
+        2720,
+        538
+      ],
+      "expected": "THE CONTROLLER SHALL MEASURE THE ZONE TEMPERATURE AND THE UNIT SHALL STAGE THE COOLING TO",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-furnace-cooling-oat-enable",
+      "page": 28,
+      "bbox": [
+        2275,
+        578,
+        2530,
+        597
+      ],
+      "expected": "OUTSIDE AIR TEMPERATURE IS GREATER THAN 60°F (ADJ.).",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-furnace-heating-zone-temperature",
+      "page": 28,
+      "bbox": [
+        2255,
+        709,
+        2715,
+        728
+      ],
+      "expected": "THE CONTROLLER SHALL MEASURE THE ZONE TEMPERATURE AND THE UNIT SHALL STAGE THE HEATING TO",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-furnace-heating-oat-enable",
+      "page": 28,
+      "bbox": [
+        2275,
+        779,
+        2515,
+        799
+      ],
+      "expected": "OUTSIDE AIR TEMPERATURE IS LESS THAN 65°F (ADJ.).",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-furnace-mixed-air",
+      "page": 28,
+      "bbox": [
+        2255,
+        887,
+        2545,
+        906
+      ],
+      "expected": "THE CONTROLLER SHALL MONITOR THE MIXED AIR TEMPERATURE.",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-furnace-supply-air",
+      "page": 28,
+      "bbox": [
+        2255,
+        921,
+        2550,
+        941
+      ],
+      "expected": "THE CONTROLLER SHALL MONITOR THE SUPPLY AIR TEMPERATURE.",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-furnace-optimal-start",
+      "page": 28,
+      "bbox": [
+        2255,
+        990,
+        2705,
+        1010
+      ],
+      "expected": "THE UNIT SHALL USE AN OPTIMAL START ALGORITHM FOR MORNING START-UP. THIS ALGORITHM SHALL",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-furnace-override",
+      "page": 28,
+      "bbox": [
+        2255,
+        1048,
+        2730,
+        1067
+      ],
+      "expected": "A TIMED LOCAL OVERRIDE CONTROL SHALL ALLOW AN OCCUPANT TO OVERRIDE THE SCHEDULE AND PLACE",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-furnace-high-supply-temp-alarm",
+      "page": 28,
+      "bbox": [
+        2275,
+        1118,
+        2655,
+        1137
+      ],
+      "expected": "HIGH SUPPLY AIR TEMP: IF THE SUPPLY AIR TEMPERATURE IS GREATER THAN 120°F (ADJ.).",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-furnace-filter-change-alarm",
+      "page": 28,
+      "bbox": [
+        2275,
+        1238,
+        2710,
+        1257
+      ],
+      "expected": "FINAL FILTER CHANGE REQUIRED: FINAL FILTER HAS BEEN IN USE FOR MORE THAN 2200 HRS. (ADJ.).",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-exhaust-fan-off-warmup",
+      "page": 28,
+      "bbox": [
+        1765,
+        170,
+        2135,
+        189
+      ],
+      "expected": "EXHAUST FAN SHALL REMAIN OFF DURING MORNING WARM UP AND COOL DOWN.",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-exhaust-fan-occupied",
+      "page": 28,
+      "bbox": [
+        1765,
+        188,
+        2205,
+        207
+      ],
+      "expected": "EXHAUST FANS SHALL BE ENABLED THROUGH BUILDING AUTOMATION SYSTEM DURING OCCUPIED",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-exhaust-fan-status",
+      "page": 28,
+      "bbox": [
+        1765,
+        215,
+        2145,
+        234
+      ],
+      "expected": "EXHAUST FAN STATUS SHALL BE MONITORED BY THE BUILDING AUTOMATION SYSTEM.",
+      "mode": "contains"
+    },
+    {
+      "id": "m602-exhaust-fan-current-alarm",
+      "page": 28,
+      "bbox": [
+        1765,
+        272,
+        2180,
+        291
+      ],
+      "expected": "AN ALARM CONDITION SHALL BE INDICATED WHENEVER THE EXHAUST FAN CURRENT SENSOR",
+      "mode": "contains"
+    },
+    {
+      "id": "m603-oau-occupied",
+      "page": 29,
+      "bbox": [
+        1700,
+        179,
+        2150,
+        198
+      ],
+      "expected": "THE SUPPLY FANS ON OUTSIDE AIR UNITS (OAU-B1 AND OAU-B2) SHALL ENERGIZE DURING OCCUPIED",
+      "mode": "contains"
+    },
+    {
+      "id": "m603-oau-warmup-off",
+      "page": 29,
+      "bbox": [
+        1720,
+        214,
+        2085,
+        233
+      ],
+      "expected": "SUPPLY FAN SHALL REMAIN OFF DURING MORNING WARM UP AND COOL DOWN.",
+      "mode": "contains"
+    },
+    {
+      "id": "m603-oau-heating-oat",
+      "page": 29,
+      "bbox": [
+        1700,
+        249,
+        2155,
+        268
+      ],
+      "expected": "WHENEVER OUTSIDE AIR TEMPERATURE IS BELOW 35°F (ADJUSTABLE), HEATING MODE SHALL BE ENABLED",
+      "mode": "contains"
+    },
+    {
+      "id": "m603-oau-gas-valve",
+      "page": 29,
+      "bbox": [
+        1720,
+        284,
+        2145,
+        303
+      ],
+      "expected": "DUCT FURNACE GAS VALVE SHALL MODULATE TO MAINTAIN LEAVING AIR TEMPERATURE OF 35°F",
+      "mode": "contains"
+    },
+    {
+      "id": "m603-oau-cooling-enable",
+      "page": 29,
+      "bbox": [
+        1700,
+        329,
+        2165,
+        349
+      ],
+      "expected": "WHENEVER OUTSIDE AIR TEMPERATURE IS ABOVE 85°F, COOLING SHALL BE ENABLED ON OUTSIDE AIR FANS",
+      "mode": "contains"
+    },
+    {
+      "id": "m603-oau-filter-alarm",
+      "page": 29,
+      "bbox": [
+        1720,
+        423,
+        2040,
+        442
+      ],
+      "expected": "FILTER DIFFERENTIAL PRESSURE GREATER THAN 0.25\" W.C. (ADJUSTABLE).",
+      "mode": "contains"
+    },
+    {
+      "id": "m603-oau-low-leaving-air",
+      "page": 29,
+      "bbox": [
+        1720,
+        448,
+        1995,
+        467
+      ],
+      "expected": "LOW LEAVING AIR TEMPERATURE, BELOW 20°F (ADJUSTABLE).",
+      "mode": "contains"
+    },
+    {
+      "id": "m603-oau-high-duct-static",
+      "page": 29,
+      "bbox": [
+        1720,
+        496,
+        2140,
+        515
+      ],
+      "expected": "HIGH DUCT STATIC SHALL SHUT DOWN UNIT WHENEVER DUCT STATIC IS GREATER THAN 3\" W.C.",
+      "mode": "contains"
+    },
+    {
+      "id": "m603-oau-damper-open",
+      "page": 29,
+      "bbox": [
+        2245,
+        203,
+        2730,
+        222
+      ],
+      "expected": "THE SUPPLY FAN IS ON, CONTROL DAMPERS (CD-B1, CD-OA1, AND CD-OA2) SHALL BE FULLY OPEN.",
+      "mode": "contains"
+    }
+  ],
+  "network_architecture": {
+    "published_integration": [
+      "M6.01 calls for BACnet components compliant with the cited ASHRAE standard, BTL-listed control devices/controllers, and a complete DDC system.",
+      "M6.01 depicts BACnet IP plus two labeled MSTP trunk paths; M6.02 depicts a BACnet/MSTP network connection and shielded cable note.",
+      "M6.01 limits a single communication trunk to no more than 32 devices."
+    ],
+    "assertion_ids": [
+      "m601-bacnet-standard",
+      "m601-complete-ddc-system",
+      "m601-controller-network",
+      "m601-32-device-trunk",
+      "m601-btl-listed",
+      "m601-bacnet-ip",
+      "m601-mstp-trunk-1",
+      "m601-mstp-trunk-2",
+      "m602-bacnet-mstp-network",
+      "m602-network-wire"
+    ],
+    "boundary": "These diagrams and notes do not publish final IP addresses, BACnet device/object IDs, controller-card or terminal assignments, a router/media/termination schedule, cable lengths, or a final installed controller/device total."
+  },
+  "sequence_inventory": [
+    {
+      "id": "m602-c-wing-erv",
+      "sheet": "M6.02",
+      "assertion_ids": [
+        "m602-erv-occupied",
+        "m602-erv-leaving-air-alarm",
+        "m602-erv-defrost",
+        "m602-erv-economizer",
+        "m602-erv-filter-alarm"
+      ]
+    },
+    {
+      "id": "m602-furnace-and-condensing-unit",
+      "sheet": "M6.02",
+      "assertion_ids": [
+        "m602-furnace-supply-fan",
+        "m602-furnace-cooling-zone-temperature",
+        "m602-furnace-cooling-oat-enable",
+        "m602-furnace-heating-zone-temperature",
+        "m602-furnace-heating-oat-enable",
+        "m602-furnace-mixed-air",
+        "m602-furnace-supply-air",
+        "m602-furnace-optimal-start",
+        "m602-furnace-override",
+        "m602-furnace-high-supply-temp-alarm",
+        "m602-furnace-filter-change-alarm"
+      ]
+    },
+    {
+      "id": "m602-exhaust-fan",
+      "sheet": "M6.02",
+      "assertion_ids": [
+        "m602-exhaust-fan-off-warmup",
+        "m602-exhaust-fan-occupied",
+        "m602-exhaust-fan-status",
+        "m602-exhaust-fan-current-alarm"
+      ]
+    },
+    {
+      "id": "m603-building-b-outdoor-air-unit",
+      "sheet": "M6.03",
+      "assertion_ids": [
+        "m603-oau-occupied",
+        "m603-oau-warmup-off",
+        "m603-oau-heating-oat",
+        "m603-oau-gas-valve",
+        "m603-oau-cooling-enable",
+        "m603-oau-filter-alarm",
+        "m603-oau-low-leaving-air",
+        "m603-oau-high-duct-static",
+        "m603-oau-damper-open"
+      ]
+    }
+  ],
+  "sensors_and_control_symbol_context": {
+    "published_context": "M6.01’s legend publishes carbon-dioxide, room-temperature and smoke-detector symbols, motorized-actuator and two-position-actuator symbols. M6.02/M6.03 sequences reference temperature, differential-pressure, current and duct-static conditions.",
+    "assertion_ids": [
+      "m601-co2-sensor-legend",
+      "m601-room-temperature-sensor-legend",
+      "m601-motorized-actuator-legend",
+      "m602-erv-leaving-air-alarm",
+      "m602-erv-filter-alarm",
+      "m602-exhaust-fan-current-alarm",
+      "m603-oau-filter-alarm",
+      "m603-oau-high-duct-static"
+    ],
+    "boundary": "Legends, diagrams and sequence references are retained as device/control context only; they are not expanded into exhaustive zone, sensor, actuator, damper, valve, controller, terminal, wiring, or physical-device counts."
+  },
+  "control_boundaries": [
+    "Every retained sequence clause is text-bound to the supplied drawings. Setpoints marked adjustable remain published design intent, not commissioned settings.",
+    "Control-damper schedule rows are retained separately in M0.03. The M6.03 sequence establishes the quoted operating state for CD-B1, CD-OA1 and CD-OA2, but does not make a physical actuator count."
+  ]
+}

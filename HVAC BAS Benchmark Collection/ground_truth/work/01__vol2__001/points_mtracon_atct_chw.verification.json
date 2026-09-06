@@ -1,0 +1,7804 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "baaa67f9bce58930ca01472a4be3a8c3cfa43d4023145c833d1c5325efe06844",
+  "tables": 4,
+  "rows": 63,
+  "cell_assertions": 252,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 1,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        297,
+        1810,
+        323
+      ],
+      "expected": "AI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            326
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            569
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 1,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        297,
+        2080,
+        323
+      ],
+      "expected": "MTRACON CHW SUPPLY TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MTRACON CHW SUPPLY TEMPERATURE",
+          "word_ids": [
+            327,
+            328,
+            329,
+            330
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MTRACON CHW SUPPLY TEMPERATURE",
+          "word_ids": [
+            570,
+            571,
+            572,
+            573
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 1,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        297,
+        2130,
+        323
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            331
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            511
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 1,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        297,
+        2220,
+        323
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            332
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            469
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 2,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        323,
+        1810,
+        340
+      ],
+      "expected": "AI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            333
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            574
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 2,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        323,
+        2080,
+        340
+      ],
+      "expected": "TOWER CHW DIFFERENTIAL PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TOWER CHW DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            334,
+            335,
+            336,
+            337
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TOWER CHW DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            575,
+            576,
+            577,
+            578
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 2,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        323,
+        2130,
+        340
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            338
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            512
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 2,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        323,
+        2220,
+        340
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            339
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            470
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 3,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        340,
+        1810,
+        357
+      ],
+      "expected": "AI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            340
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            579
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 3,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        340,
+        2080,
+        357
+      ],
+      "expected": "TOWER CHW RETURN TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TOWER CHW RETURN TEMPERATURE",
+          "word_ids": [
+            341,
+            342,
+            343,
+            344
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TOWER CHW RETURN TEMPERATURE",
+          "word_ids": [
+            580,
+            581,
+            582,
+            583
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 3,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        340,
+        2130,
+        357
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            345
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            513
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 3,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        340,
+        2220,
+        357
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            346
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            471
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 4,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        357,
+        1810,
+        374
+      ],
+      "expected": "AI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI04",
+          "word_ids": [
+            347
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI04",
+          "word_ids": [
+            584
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 4,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        357,
+        2080,
+        374
+      ],
+      "expected": "MTRACON CHW RETURN TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MTRACON CHW RETURN TEMPERATURE",
+          "word_ids": [
+            348,
+            349,
+            350,
+            351
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MTRACON CHW RETURN TEMPERATURE",
+          "word_ids": [
+            585,
+            586,
+            587,
+            588
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 4,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        357,
+        2130,
+        374
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            352
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            514
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 4,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        357,
+        2220,
+        374
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            353
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            472
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 5,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        374,
+        1810,
+        391
+      ],
+      "expected": "AI05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI05",
+          "word_ids": [
+            354
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI05",
+          "word_ids": [
+            589
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 5,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        374,
+        2080,
+        391
+      ],
+      "expected": "MTRACON CHW DIFFERENTIAL PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MTRACON CHW DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            355,
+            356,
+            357,
+            358
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MTRACON CHW DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            590,
+            591,
+            592,
+            593
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 5,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        374,
+        2130,
+        391
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            359
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            515
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 5,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        374,
+        2220,
+        391
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            360
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            473
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 6,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        391,
+        1810,
+        408
+      ],
+      "expected": "AI06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI06",
+          "word_ids": [
+            361
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI06",
+          "word_ids": [
+            594
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 6,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        391,
+        2080,
+        408
+      ],
+      "expected": "TOWER SECONDARY CHW FLOWRATE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TOWER SECONDARY CHW FLOWRATE",
+          "word_ids": [
+            362,
+            363,
+            364,
+            365
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TOWER SECONDARY CHW FLOWRATE",
+          "word_ids": [
+            595,
+            596,
+            597,
+            598
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 6,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        391,
+        2130,
+        408
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            366
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            516
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 6,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        391,
+        2220,
+        408
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            367
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            474
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 7,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        408,
+        1810,
+        425
+      ],
+      "expected": "AI07",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI07",
+          "word_ids": [
+            368
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI07",
+          "word_ids": [
+            599
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 7,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        408,
+        2080,
+        425
+      ],
+      "expected": "TOWER CHW SUPPLY TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TOWER CHW SUPPLY TEMPERATURE",
+          "word_ids": [
+            369,
+            370,
+            371,
+            372
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TOWER CHW SUPPLY TEMPERATURE",
+          "word_ids": [
+            600,
+            601,
+            602,
+            603
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 7,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        408,
+        2130,
+        425
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            373
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            517
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 7,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        408,
+        2220,
+        425
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            374
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            475
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 8,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        425,
+        1810,
+        442
+      ],
+      "expected": "AI08",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI08",
+          "word_ids": [
+            375
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI08",
+          "word_ids": [
+            604
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 8,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        425,
+        2080,
+        442
+      ],
+      "expected": "MTRACON SECONDARY CHW FLOWRATE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MTRACON SECONDARY CHW FLOWRATE",
+          "word_ids": [
+            376,
+            377,
+            378,
+            379
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MTRACON SECONDARY CHW FLOWRATE",
+          "word_ids": [
+            605,
+            606,
+            607,
+            608
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 8,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        425,
+        2130,
+        442
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            380
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            518
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 8,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        425,
+        2220,
+        442
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            476
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 9,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        442,
+        1810,
+        459
+      ],
+      "expected": "AI09",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI09",
+          "word_ids": [
+            382
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI09",
+          "word_ids": [
+            609
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 9,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        442,
+        2080,
+        459
+      ],
+      "expected": "PCHWP-MT2 SPEED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCHWP-MT2 SPEED (FEEDBACK)",
+          "word_ids": [
+            383,
+            384,
+            385
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCHWP-MT2 SPEED (FEEDBACK)",
+          "word_ids": [
+            610,
+            611,
+            612
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 9,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        442,
+        2130,
+        459
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            386
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            519
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 9,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        442,
+        2220,
+        459
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            387
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            477
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 10,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        459,
+        1810,
+        476
+      ],
+      "expected": "AI10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI10",
+          "word_ids": [
+            388
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI10",
+          "word_ids": [
+            613
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 10,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        459,
+        2080,
+        476
+      ],
+      "expected": "CH-MT2 CHW DIFFERENTIAL PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-MT2 CHW DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            389,
+            390,
+            391,
+            392
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-MT2 CHW DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            614,
+            615,
+            616,
+            617
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 10,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        459,
+        2130,
+        476
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            393
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            520
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 10,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        459,
+        2220,
+        476
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            394
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            478
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 11,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        476,
+        1810,
+        493
+      ],
+      "expected": "AI11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI11",
+          "word_ids": [
+            395
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI11",
+          "word_ids": [
+            618
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 11,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        476,
+        2080,
+        493
+      ],
+      "expected": "CH-MT2 FLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-MT2 FLOW",
+          "word_ids": [
+            396,
+            397
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-MT2 FLOW",
+          "word_ids": [
+            619,
+            620
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 11,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        476,
+        2130,
+        493
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            398
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            521
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 11,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        476,
+        2220,
+        493
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            399
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            479
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 12,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        493,
+        1810,
+        510
+      ],
+      "expected": "AI12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI12",
+          "word_ids": [
+            400
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI12",
+          "word_ids": [
+            621
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 12,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        493,
+        2080,
+        510
+      ],
+      "expected": "CH-MT2 CHW SUPPLY TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-MT2 CHW SUPPLY TEMPERATURE",
+          "word_ids": [
+            401,
+            402,
+            403,
+            404
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-MT2 CHW SUPPLY TEMPERATURE",
+          "word_ids": [
+            622,
+            623,
+            624,
+            625
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 12,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        493,
+        2130,
+        510
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            405
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            522
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 12,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        493,
+        2220,
+        510
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            406
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            480
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 13,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        510,
+        1810,
+        527
+      ],
+      "expected": "AI13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI13",
+          "word_ids": [
+            407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI13",
+          "word_ids": [
+            626
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 13,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        510,
+        2080,
+        527
+      ],
+      "expected": "PCHWP-A1 SPEED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCHWP-A1 SPEED (FEEDBACK)",
+          "word_ids": [
+            408,
+            409,
+            410
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCHWP-A1 SPEED (FEEDBACK)",
+          "word_ids": [
+            627,
+            628,
+            629
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 13,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        510,
+        2130,
+        527
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            411
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            523
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 13,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        510,
+        2220,
+        527
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            412
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            481
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 14,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        527,
+        1810,
+        544
+      ],
+      "expected": "AI14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI14",
+          "word_ids": [
+            413
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI14",
+          "word_ids": [
+            630
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 14,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        527,
+        2080,
+        544
+      ],
+      "expected": "CH-MT1 CHW DIFFERENTIAL PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-MT1 CHW DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            414,
+            415,
+            416,
+            417
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-MT1 CHW DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            631,
+            632,
+            633,
+            634
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 14,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        527,
+        2130,
+        544
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            418
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            524
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 14,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        527,
+        2220,
+        544
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            419
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            482
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 15,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        544,
+        1810,
+        561
+      ],
+      "expected": "AI15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI15",
+          "word_ids": [
+            420
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI15",
+          "word_ids": [
+            635
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 15,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        544,
+        2080,
+        561
+      ],
+      "expected": "CH-MT1 FLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-MT1 FLOW",
+          "word_ids": [
+            421,
+            422
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-MT1 FLOW",
+          "word_ids": [
+            636,
+            637
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 15,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        544,
+        2130,
+        561
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            423
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            525
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 15,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        544,
+        2220,
+        561
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            424
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            483
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 16,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        561,
+        1810,
+        579
+      ],
+      "expected": "AI16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI16",
+          "word_ids": [
+            425
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI16",
+          "word_ids": [
+            638
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 16,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        561,
+        2080,
+        579
+      ],
+      "expected": "CH-MT1 CHW SUPPLY TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-MT1 CHW SUPPLY TEMPERATURE",
+          "word_ids": [
+            426,
+            427,
+            428,
+            429
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-MT1 CHW SUPPLY TEMPERATURE",
+          "word_ids": [
+            639,
+            640,
+            641,
+            642
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 16,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        561,
+        2130,
+        579
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            430
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            526
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 16,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        561,
+        2220,
+        579
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            431
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            484
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 17,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        579,
+        1810,
+        596
+      ],
+      "expected": "AI17",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI17",
+          "word_ids": [
+            432
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI17",
+          "word_ids": [
+            643
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 17,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        579,
+        2080,
+        596
+      ],
+      "expected": "SCHWP-T1 SPEED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-T1 SPEED (FEEDBACK)",
+          "word_ids": [
+            433,
+            434,
+            435
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-T1 SPEED (FEEDBACK)",
+          "word_ids": [
+            644,
+            645,
+            646
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 17,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        579,
+        2130,
+        596
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            436
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            527
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 17,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        579,
+        2220,
+        596
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            437
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            485
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 18,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        596,
+        1810,
+        613
+      ],
+      "expected": "AI18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI18",
+          "word_ids": [
+            438
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI18",
+          "word_ids": [
+            647
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 18,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        596,
+        2080,
+        613
+      ],
+      "expected": "SCHWP-M2 SPEED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-M2 SPEED (FEEDBACK)",
+          "word_ids": [
+            439,
+            440,
+            441
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-M2 SPEED (FEEDBACK)",
+          "word_ids": [
+            648,
+            649,
+            650
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 18,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        596,
+        2130,
+        613
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            442
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            528
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 18,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        596,
+        2220,
+        613
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            443
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            486
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 19,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        613,
+        1810,
+        630
+      ],
+      "expected": "AI19",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI19",
+          "word_ids": [
+            444
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI19",
+          "word_ids": [
+            651
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 19,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        613,
+        2080,
+        630
+      ],
+      "expected": "SCHWP-M1 SPEED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-M1 SPEED (FEEDBACK)",
+          "word_ids": [
+            445,
+            446,
+            447
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-M1 SPEED (FEEDBACK)",
+          "word_ids": [
+            652,
+            653,
+            654
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 19,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        613,
+        2130,
+        630
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            448
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            529
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 19,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        613,
+        2220,
+        630
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            449
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            487
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 20,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        630,
+        1810,
+        647
+      ],
+      "expected": "AI20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI20",
+          "word_ids": [
+            450
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI20",
+          "word_ids": [
+            655
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 20,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        630,
+        2080,
+        647
+      ],
+      "expected": "ATCT CHW BYPASS POSITION (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ATCT CHW BYPASS POSITION (FEEDBACK)",
+          "word_ids": [
+            451,
+            452,
+            453,
+            454,
+            455
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ATCT CHW BYPASS POSITION (FEEDBACK)",
+          "word_ids": [
+            656,
+            657,
+            658,
+            659,
+            660
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 20,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        630,
+        2130,
+        647
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            456
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            530
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 20,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        630,
+        2220,
+        647
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            457
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            488
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 21,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        647,
+        1810,
+        664
+      ],
+      "expected": "AI21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI21",
+          "word_ids": [
+            458
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI21",
+          "word_ids": [
+            661
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 21,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        647,
+        2080,
+        664
+      ],
+      "expected": "MTRACON CHW BYPASS POSITION (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MTRACON CHW BYPASS POSITION (FEEDBACK)",
+          "word_ids": [
+            459,
+            460,
+            461,
+            462,
+            463
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MTRACON CHW BYPASS POSITION (FEEDBACK)",
+          "word_ids": [
+            662,
+            663,
+            664,
+            665,
+            666
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 21,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        647,
+        2130,
+        664
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            464
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            531
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 21,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        647,
+        2220,
+        664
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            465
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            489
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 22,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        664,
+        1810,
+        681
+      ],
+      "expected": "AI22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI22",
+          "word_ids": [
+            466
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI22",
+          "word_ids": [
+            667
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 22,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        664,
+        2080,
+        681
+      ],
+      "expected": "CH-MT2 CHW RETURN TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-MT2 CHW RETURN TEMPERATURE",
+          "word_ids": [
+            467,
+            468,
+            469,
+            470
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-MT2 CHW RETURN TEMPERATURE",
+          "word_ids": [
+            668,
+            669,
+            670,
+            671
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 22,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        664,
+        2130,
+        681
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            471
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            532
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 22,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        664,
+        2220,
+        681
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            472
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            490
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 23,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        681,
+        1810,
+        698
+      ],
+      "expected": "AI23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI23",
+          "word_ids": [
+            473
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI23",
+          "word_ids": [
+            672
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 23,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        681,
+        2080,
+        698
+      ],
+      "expected": "CH-MT1 CHW RETURN TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-MT1 CHW RETURN TEMPERATURE",
+          "word_ids": [
+            474,
+            475,
+            476,
+            477
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-MT1 CHW RETURN TEMPERATURE",
+          "word_ids": [
+            673,
+            674,
+            675,
+            676
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 23,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        681,
+        2130,
+        698
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            478
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            533
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 23,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        681,
+        2220,
+        698
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            479
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            491
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 24,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        698,
+        1810,
+        715
+      ],
+      "expected": "AI24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI24",
+          "word_ids": [
+            480
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI24",
+          "word_ids": [
+            677
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 24,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        698,
+        2080,
+        715
+      ],
+      "expected": "SCHWP-T2 SPEED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-T2 SPEED (FEEDBACK)",
+          "word_ids": [
+            481,
+            482,
+            483
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-T2 SPEED (FEEDBACK)",
+          "word_ids": [
+            678,
+            679,
+            680
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 24,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        698,
+        2130,
+        715
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            484
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            534
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 24,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        698,
+        2220,
+        715
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            485
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            492
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 25,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        715,
+        1810,
+        732
+      ],
+      "expected": "AI25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI25",
+          "word_ids": [
+            486
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI25",
+          "word_ids": [
+            681
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 25,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        715,
+        2080,
+        732
+      ],
+      "expected": "PCHWP-MT2 DIFFERENTIAL PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCHWP-MT2 DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            487,
+            488,
+            489
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCHWP-MT2 DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            682,
+            683,
+            684
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 25,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        715,
+        2130,
+        732
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            490
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            535
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 25,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        715,
+        2220,
+        732
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            491
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            493
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 26,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        732,
+        1810,
+        749
+      ],
+      "expected": "AI26",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI26",
+          "word_ids": [
+            492
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI26",
+          "word_ids": [
+            685
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 26,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        732,
+        2080,
+        749
+      ],
+      "expected": "PCHWP-MT1 DIFFERENTIAL PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCHWP-MT1 DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            493,
+            494,
+            495
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCHWP-MT1 DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            686,
+            687,
+            688
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 26,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        732,
+        2130,
+        749
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            496
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            536
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 26,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        732,
+        2220,
+        749
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            497
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            494
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 27,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        749,
+        1810,
+        766
+      ],
+      "expected": "AI27",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI27",
+          "word_ids": [
+            498
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI27",
+          "word_ids": [
+            689
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 27,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        749,
+        2080,
+        766
+      ],
+      "expected": "SCHWP-T2 DIFFERENTIAL PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-T2 DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            499,
+            500,
+            501
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-T2 DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            690,
+            691,
+            692
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 27,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        749,
+        2130,
+        766
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            502
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            537
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 27,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        749,
+        2220,
+        766
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            503
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            495
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 28,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        766,
+        1810,
+        783
+      ],
+      "expected": "AI28",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI28",
+          "word_ids": [
+            504
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI28",
+          "word_ids": [
+            693
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 28,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        766,
+        2080,
+        783
+      ],
+      "expected": "SCHWP-T1 DIFFERENTIAL PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-T1 DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            505,
+            506,
+            507
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-T1 DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            694,
+            695,
+            696
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 28,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        766,
+        2130,
+        783
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            508
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            538
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 28,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        766,
+        2220,
+        783
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            509
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            496
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 29,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        783,
+        1810,
+        800
+      ],
+      "expected": "AI29",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI29",
+          "word_ids": [
+            510
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI29",
+          "word_ids": [
+            697
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 29,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        783,
+        2080,
+        800
+      ],
+      "expected": "SCHWP-M2 DIFFERENTIAL PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-M2 DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            511,
+            512,
+            513
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-M2 DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            698,
+            699,
+            700
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 29,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        783,
+        2130,
+        800
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            514
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            539
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 29,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        783,
+        2220,
+        800
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            515
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            497
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 30,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        800,
+        1810,
+        825
+      ],
+      "expected": "AI30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI30",
+          "word_ids": [
+            516
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI30",
+          "word_ids": [
+            701
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 30,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        800,
+        2080,
+        825
+      ],
+      "expected": "SCHWP-M1 DIFFERENTIAL PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-M1 DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            517,
+            518,
+            519
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-M1 DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            702,
+            703,
+            704
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 30,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        800,
+        2130,
+        825
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            520
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            540
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "row": 30,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        800,
+        2220,
+        825
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            521
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            498
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "header": "MTRACON ATCT CHW SYSTEM POINT LIST",
+      "page": 60,
+      "bbox": [
+        1820,
+        227,
+        2130,
+        262
+      ],
+      "engine": "mupdf",
+      "actual": "MTRACON/ATCT - CHW SYSTEM POINT LIST",
+      "pass": true
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "header": "MTRACON ATCT CHW SYSTEM POINT LIST",
+      "page": 60,
+      "bbox": [
+        1820,
+        227,
+        2130,
+        262
+      ],
+      "engine": "poppler",
+      "actual": "MTRACON/ATCT - CHW SYSTEM POINT LIST",
+      "pass": true
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 60,
+      "bbox": [
+        1750,
+        262,
+        2220,
+        289
+      ],
+      "engine": "mupdf",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 60,
+      "bbox": [
+        1750,
+        262,
+        2220,
+        289
+      ],
+      "engine": "poppler",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "header": "ANALOG INPUT",
+      "page": 60,
+      "bbox": [
+        1745,
+        280,
+        1840,
+        297
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AI",
+      "header": "ANALOG INPUT",
+      "page": 60,
+      "bbox": [
+        1745,
+        280,
+        1840,
+        297
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 1,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        849,
+        1810,
+        872
+      ],
+      "expected": "AO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            524
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            140
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 1,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        849,
+        2080,
+        872
+      ],
+      "expected": "PCHWP-MT1 SPEED CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCHWP-MT1 SPEED CONTROL",
+          "word_ids": [
+            525,
+            526,
+            527
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCHWP-MT1 SPEED CONTROL",
+          "word_ids": [
+            141,
+            142,
+            143
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 1,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        849,
+        2130,
+        872
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            528
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            176
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 1,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        849,
+        2220,
+        872
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            529
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            184
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 2,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        872,
+        1810,
+        889
+      ],
+      "expected": "AO02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            530
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            144
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 2,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        872,
+        2080,
+        889
+      ],
+      "expected": "SCHWP-T2 SPEED CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-T2 SPEED CONTROL",
+          "word_ids": [
+            531,
+            532,
+            533
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-T2 SPEED CONTROL",
+          "word_ids": [
+            145,
+            146,
+            147
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 2,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        872,
+        2130,
+        889
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            534
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            177
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 2,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        872,
+        2220,
+        889
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            535
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            185
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 3,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        889,
+        1810,
+        906
+      ],
+      "expected": "AO03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO03",
+          "word_ids": [
+            536
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO03",
+          "word_ids": [
+            148
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 3,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        889,
+        2080,
+        906
+      ],
+      "expected": "SCHWP-M2 SPEED CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-M2 SPEED CONTROL",
+          "word_ids": [
+            537,
+            538,
+            539
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-M2 SPEED CONTROL",
+          "word_ids": [
+            149,
+            150,
+            151
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 3,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        889,
+        2130,
+        906
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            540
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            178
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 3,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        889,
+        2220,
+        906
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            541
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            186
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 4,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        906,
+        1810,
+        923
+      ],
+      "expected": "AO04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO04",
+          "word_ids": [
+            542
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO04",
+          "word_ids": [
+            152
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 4,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        906,
+        2080,
+        923
+      ],
+      "expected": "SCHWP-M1 SPEED CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-M1 SPEED CONTROL",
+          "word_ids": [
+            543,
+            544,
+            545
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-M1 SPEED CONTROL",
+          "word_ids": [
+            153,
+            154,
+            155
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 4,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        906,
+        2130,
+        923
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            546
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            179
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 4,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        906,
+        2220,
+        923
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            187
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 5,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        923,
+        1810,
+        940
+      ],
+      "expected": "AO05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO05",
+          "word_ids": [
+            548
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO05",
+          "word_ids": [
+            156
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 5,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        923,
+        2080,
+        940
+      ],
+      "expected": "SCHWP-T1 SPEED CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-T1 SPEED CONTROL",
+          "word_ids": [
+            549,
+            550,
+            551
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-T1 SPEED CONTROL",
+          "word_ids": [
+            157,
+            158,
+            159
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 5,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        923,
+        2130,
+        940
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            552
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            180
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 5,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        923,
+        2220,
+        940
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            553
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            188
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 6,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        940,
+        1810,
+        957
+      ],
+      "expected": "AO06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO06",
+          "word_ids": [
+            554
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO06",
+          "word_ids": [
+            160
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 6,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        940,
+        2080,
+        957
+      ],
+      "expected": "PCHWP-MT2 SPEED CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCHWP-MT2 SPEED CONTROL",
+          "word_ids": [
+            555,
+            556,
+            557
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCHWP-MT2 SPEED CONTROL",
+          "word_ids": [
+            161,
+            162,
+            163
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 6,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        940,
+        2130,
+        957
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            558
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            181
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 6,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        940,
+        2220,
+        957
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            559
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            189
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 7,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        957,
+        1810,
+        974
+      ],
+      "expected": "AO07",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO07",
+          "word_ids": [
+            560
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO07",
+          "word_ids": [
+            164
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 7,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        957,
+        2080,
+        974
+      ],
+      "expected": "ATCT CHW BYPASS VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ATCT CHW BYPASS VALVE CONTROL",
+          "word_ids": [
+            561,
+            562,
+            563,
+            564,
+            565
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ATCT CHW BYPASS VALVE CONTROL",
+          "word_ids": [
+            165,
+            166,
+            167,
+            168,
+            169
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 7,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        957,
+        2130,
+        974
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            566
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            182
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 7,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        957,
+        2220,
+        974
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            567
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            190
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 8,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        974,
+        1810,
+        992
+      ],
+      "expected": "AO08",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO08",
+          "word_ids": [
+            568
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO08",
+          "word_ids": [
+            170
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 8,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        974,
+        2080,
+        992
+      ],
+      "expected": "MTRACON CHW BYPASS VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MTRACON CHW BYPASS VALVE CONTROL",
+          "word_ids": [
+            569,
+            570,
+            571,
+            572,
+            573
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MTRACON CHW BYPASS VALVE CONTROL",
+          "word_ids": [
+            171,
+            172,
+            173,
+            174,
+            175
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 8,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        974,
+        2130,
+        992
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            574
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            183
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "row": 8,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        974,
+        2220,
+        992
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            575
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            191
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 60,
+      "bbox": [
+        1745,
+        823,
+        1840,
+        849
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 60,
+      "bbox": [
+        1745,
+        823,
+        1840,
+        849
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 1,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1022,
+        1810,
+        1044
+      ],
+      "expected": "BI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            578
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            194
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 1,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1022,
+        2080,
+        1044
+      ],
+      "expected": "CV-CHW-MT1 POSITION (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-CHW-MT1 POSITION (FEEDBACK)",
+          "word_ids": [
+            579,
+            580,
+            581
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-CHW-MT1 POSITION (FEEDBACK)",
+          "word_ids": [
+            195,
+            196,
+            197
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 1,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1022,
+        2130,
+        1044
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            582
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            257
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 1,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1022,
+        2220,
+        1044
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            583
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            272
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 2,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1044,
+        1810,
+        1062
+      ],
+      "expected": "BI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            584
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            198
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 2,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1044,
+        2080,
+        1062
+      ],
+      "expected": "CV-CHW-MT2 POSITION (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-CHW-MT2 POSITION (FEEDBACK)",
+          "word_ids": [
+            585,
+            586,
+            587
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-CHW-MT2 POSITION (FEEDBACK)",
+          "word_ids": [
+            199,
+            200,
+            201
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 2,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1044,
+        2130,
+        1062
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            588
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            258
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 2,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1044,
+        2220,
+        1062
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            589
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            273
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 3,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1062,
+        1810,
+        1079
+      ],
+      "expected": "BI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            590
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            202
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 3,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1062,
+        2080,
+        1079
+      ],
+      "expected": "PCHWP-A1 VFD STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCHWP-A1 VFD STATUS",
+          "word_ids": [
+            591,
+            592,
+            593
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCHWP-A1 VFD STATUS",
+          "word_ids": [
+            203,
+            204,
+            205
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 3,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1062,
+        2130,
+        1079
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            594
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            259
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 3,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1062,
+        2220,
+        1079
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            595
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            274
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 4,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1079,
+        1810,
+        1096
+      ],
+      "expected": "BI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            596
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            206
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 4,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1079,
+        2080,
+        1096
+      ],
+      "expected": "PCHWP-A1 VFD ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCHWP-A1 VFD ALARM",
+          "word_ids": [
+            597,
+            598,
+            599
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCHWP-A1 VFD ALARM",
+          "word_ids": [
+            207,
+            208,
+            209
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 4,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1079,
+        2130,
+        1096
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            600
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            260
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 4,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1079,
+        2220,
+        1096
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            601
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            275
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 5,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1096,
+        1810,
+        1113
+      ],
+      "expected": "BI06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI06",
+          "word_ids": [
+            602
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI06",
+          "word_ids": [
+            210
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 5,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1096,
+        2080,
+        1113
+      ],
+      "expected": "PCHWP-A1 VFD STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCHWP-A1 VFD STATUS",
+          "word_ids": [
+            603,
+            604,
+            605
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCHWP-A1 VFD STATUS",
+          "word_ids": [
+            211,
+            212,
+            213
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 5,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1096,
+        2130,
+        1113
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            606
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            261
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 5,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1096,
+        2220,
+        1113
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            607
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            276
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 6,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1113,
+        1810,
+        1130
+      ],
+      "expected": "BI07",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI07",
+          "word_ids": [
+            608
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI07",
+          "word_ids": [
+            214
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 6,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1113,
+        2080,
+        1130
+      ],
+      "expected": "PCHWP-A1 VFD ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCHWP-A1 VFD ALARM",
+          "word_ids": [
+            609,
+            610,
+            611
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCHWP-A1 VFD ALARM",
+          "word_ids": [
+            215,
+            216,
+            217
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 6,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1113,
+        2130,
+        1130
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            612
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            262
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 6,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1113,
+        2220,
+        1130
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            613
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            277
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 7,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1130,
+        1810,
+        1148
+      ],
+      "expected": "BI08",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI08",
+          "word_ids": [
+            614
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI08",
+          "word_ids": [
+            218
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 7,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1130,
+        2080,
+        1148
+      ],
+      "expected": "SCHWP-T2 VFD ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-T2 VFD ALARM",
+          "word_ids": [
+            615,
+            616,
+            617
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-T2 VFD ALARM",
+          "word_ids": [
+            219,
+            220,
+            221
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 7,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1130,
+        2130,
+        1148
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            618
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            263
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 7,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1130,
+        2220,
+        1148
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            619
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            278
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 8,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1148,
+        1810,
+        1165
+      ],
+      "expected": "BI09",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI09",
+          "word_ids": [
+            620
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI09",
+          "word_ids": [
+            222
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 8,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1148,
+        2080,
+        1165
+      ],
+      "expected": "SCHWP-T2 VFD STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-T2 VFD STATUS",
+          "word_ids": [
+            621,
+            622,
+            623
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-T2 VFD STATUS",
+          "word_ids": [
+            223,
+            224,
+            225
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 8,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1148,
+        2130,
+        1165
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            624
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            264
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 8,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1148,
+        2220,
+        1165
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            625
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            279
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 9,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1165,
+        1810,
+        1182
+      ],
+      "expected": "BI10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI10",
+          "word_ids": [
+            626
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI10",
+          "word_ids": [
+            226
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 9,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1165,
+        2080,
+        1182
+      ],
+      "expected": "SCHWP-T1 VFD STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-T1 VFD STATUS",
+          "word_ids": [
+            627,
+            628,
+            629
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-T1 VFD STATUS",
+          "word_ids": [
+            227,
+            228,
+            229
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 9,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1165,
+        2130,
+        1182
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            630
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            265
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 9,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1165,
+        2220,
+        1182
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            631
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            280
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 10,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1182,
+        1810,
+        1199
+      ],
+      "expected": "BI11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI11",
+          "word_ids": [
+            632
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI11",
+          "word_ids": [
+            230
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 10,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1182,
+        2080,
+        1199
+      ],
+      "expected": "SCHWP-T1 VFD ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-T1 VFD ALARM",
+          "word_ids": [
+            633,
+            634,
+            635
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-T1 VFD ALARM",
+          "word_ids": [
+            231,
+            232,
+            233
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 10,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1182,
+        2130,
+        1199
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            636
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            266
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 10,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1182,
+        2220,
+        1199
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            637
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            281
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 11,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1199,
+        1810,
+        1216
+      ],
+      "expected": "BI12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI12",
+          "word_ids": [
+            638
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI12",
+          "word_ids": [
+            234
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 11,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1199,
+        2080,
+        1216
+      ],
+      "expected": "SCHWP-M2 VFD STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-M2 VFD STATUS",
+          "word_ids": [
+            639,
+            640,
+            641
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-M2 VFD STATUS",
+          "word_ids": [
+            235,
+            236,
+            237
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 11,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1199,
+        2130,
+        1216
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            642
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            267
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 11,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1199,
+        2220,
+        1216
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            643
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            282
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 12,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1216,
+        1810,
+        1233
+      ],
+      "expected": "BI13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI13",
+          "word_ids": [
+            644
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI13",
+          "word_ids": [
+            238
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 12,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1216,
+        2080,
+        1233
+      ],
+      "expected": "SCHWP-M2 VFD ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-M2 VFD ALARM",
+          "word_ids": [
+            645,
+            646,
+            647
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-M2 VFD ALARM",
+          "word_ids": [
+            239,
+            240,
+            241
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 12,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1216,
+        2130,
+        1233
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            648
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            268
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 12,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1216,
+        2220,
+        1233
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            649
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            283
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 13,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1233,
+        1810,
+        1251
+      ],
+      "expected": "BI14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI14",
+          "word_ids": [
+            650
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI14",
+          "word_ids": [
+            242
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 13,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1233,
+        2080,
+        1251
+      ],
+      "expected": "SCHWP-M1 VFD STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-M1 VFD STATUS",
+          "word_ids": [
+            651,
+            652,
+            653
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-M1 VFD STATUS",
+          "word_ids": [
+            243,
+            244,
+            245
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 13,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1233,
+        2130,
+        1251
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            654
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            269
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 13,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1233,
+        2220,
+        1251
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            655
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            284
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 14,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1251,
+        1810,
+        1268
+      ],
+      "expected": "BI15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI15",
+          "word_ids": [
+            656
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI15",
+          "word_ids": [
+            246
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 14,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1251,
+        2080,
+        1268
+      ],
+      "expected": "SCHWP-M1 VFD ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-M1 VFD ALARM",
+          "word_ids": [
+            657,
+            658,
+            659
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-M1 VFD ALARM",
+          "word_ids": [
+            247,
+            248,
+            249
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 14,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1251,
+        2130,
+        1268
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            660
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            270
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 14,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1251,
+        2220,
+        1268
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            661
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            285
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 15,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1268,
+        1810,
+        1285
+      ],
+      "expected": "BI16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI16",
+          "word_ids": [
+            662
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI16",
+          "word_ids": [
+            250
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 15,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1268,
+        2080,
+        1285
+      ],
+      "expected": "AIR OPS/MTRACON CHILLER PLANT DDC RESET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIR OPS/MTRACON CHILLER PLANT DDC RESET",
+          "word_ids": [
+            663,
+            664,
+            665,
+            666,
+            667,
+            668
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIR OPS/MTRACON CHILLER PLANT DDC RESET",
+          "word_ids": [
+            251,
+            252,
+            253,
+            254,
+            255,
+            256
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 15,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1268,
+        2130,
+        1285
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            669
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            271
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "row": 15,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1268,
+        2220,
+        1285
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            670
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            286
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "header": "BINARY INPUT",
+      "page": 60,
+      "bbox": [
+        1745,
+        996,
+        1840,
+        1022
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BI",
+      "header": "BINARY INPUT",
+      "page": 60,
+      "bbox": [
+        1745,
+        996,
+        1840,
+        1022
+      ],
+      "engine": "poppler",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 1,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1315,
+        1810,
+        1337
+      ],
+      "expected": "BO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            673
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            289
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 1,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1315,
+        2080,
+        1337
+      ],
+      "expected": "SCHWP-T1 START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-T1 START/STOP",
+          "word_ids": [
+            674,
+            675
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-T1 START/STOP",
+          "word_ids": [
+            319,
+            320
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 1,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1315,
+        2130,
+        1337
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            676
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            299
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 1,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1315,
+        2220,
+        1337
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            677
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            309
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 2,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1337,
+        1810,
+        1354
+      ],
+      "expected": "BO02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO02",
+          "word_ids": [
+            678
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO02",
+          "word_ids": [
+            290
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 2,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1337,
+        2080,
+        1354
+      ],
+      "expected": "CH-MT2 CHILLER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-MT2 CHILLER CONTROL",
+          "word_ids": [
+            679,
+            680,
+            681
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-MT2 CHILLER CONTROL",
+          "word_ids": [
+            321,
+            322,
+            323
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 2,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1337,
+        2130,
+        1354
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            682
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            300
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 2,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1337,
+        2220,
+        1354
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            683
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            310
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 3,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1354,
+        1810,
+        1371
+      ],
+      "expected": "BO03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO03",
+          "word_ids": [
+            684
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO03",
+          "word_ids": [
+            291
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 3,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1354,
+        2080,
+        1371
+      ],
+      "expected": "CH-MT1 CHILLER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-MT1 CHILLER CONTROL",
+          "word_ids": [
+            685,
+            686,
+            687
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-MT1 CHILLER CONTROL",
+          "word_ids": [
+            324,
+            325,
+            326
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 3,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1354,
+        2130,
+        1371
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            688
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            301
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 3,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1354,
+        2220,
+        1371
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            689
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            311
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 4,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1371,
+        1810,
+        1388
+      ],
+      "expected": "BO04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO04",
+          "word_ids": [
+            690
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO04",
+          "word_ids": [
+            292
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 4,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1371,
+        2080,
+        1388
+      ],
+      "expected": "CV-CHW-MT2 VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-CHW-MT2 VALVE CONTROL",
+          "word_ids": [
+            691,
+            692,
+            693
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-CHW-MT2 VALVE CONTROL",
+          "word_ids": [
+            327,
+            328,
+            329
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 4,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1371,
+        2130,
+        1388
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            694
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            302
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 4,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1371,
+        2220,
+        1388
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            695
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            312
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 5,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1388,
+        1810,
+        1405
+      ],
+      "expected": "BO05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO05",
+          "word_ids": [
+            696
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO05",
+          "word_ids": [
+            293
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 5,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1388,
+        2080,
+        1405
+      ],
+      "expected": "CV-CHW-MT1 VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-CHW-MT1 VALVE CONTROL",
+          "word_ids": [
+            697,
+            698,
+            699
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-CHW-MT1 VALVE CONTROL",
+          "word_ids": [
+            330,
+            331,
+            332
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 5,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1388,
+        2130,
+        1405
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            700
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            303
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 5,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1388,
+        2220,
+        1405
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            701
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            313
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 6,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1405,
+        1810,
+        1423
+      ],
+      "expected": "BO06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO06",
+          "word_ids": [
+            702
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO06",
+          "word_ids": [
+            294
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 6,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1405,
+        2080,
+        1423
+      ],
+      "expected": "SCHWP-M2 START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-M2 START/STOP",
+          "word_ids": [
+            703,
+            704
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-M2 START/STOP",
+          "word_ids": [
+            333,
+            334
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 6,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1405,
+        2130,
+        1423
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            705
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            304
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 6,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1405,
+        2220,
+        1423
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            706
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            314
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 7,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1423,
+        1810,
+        1440
+      ],
+      "expected": "BO07",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO07",
+          "word_ids": [
+            707
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO07",
+          "word_ids": [
+            295
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 7,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1423,
+        2080,
+        1440
+      ],
+      "expected": "SCHWP-M1 START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-M1 START/STOP",
+          "word_ids": [
+            708,
+            709
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-M1 START/STOP",
+          "word_ids": [
+            335,
+            336
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 7,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1423,
+        2130,
+        1440
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            710
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            305
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 7,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1423,
+        2220,
+        1440
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            711
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            315
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 8,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1440,
+        1810,
+        1457
+      ],
+      "expected": "BO08",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO08",
+          "word_ids": [
+            712
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO08",
+          "word_ids": [
+            296
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 8,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1440,
+        2080,
+        1457
+      ],
+      "expected": "SCHWP-T2 START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-T2 START/STOP",
+          "word_ids": [
+            713,
+            714
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-T2 START/STOP",
+          "word_ids": [
+            337,
+            338
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 8,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1440,
+        2130,
+        1457
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            715
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            306
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 8,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1440,
+        2220,
+        1457
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            716
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            316
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 9,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1457,
+        1810,
+        1474
+      ],
+      "expected": "BO09",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO09",
+          "word_ids": [
+            717
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO09",
+          "word_ids": [
+            297
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 9,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1457,
+        2080,
+        1474
+      ],
+      "expected": "PCHWP-MT1 START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCHWP-MT1 START/STOP",
+          "word_ids": [
+            718,
+            719
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCHWP-MT1 START/STOP",
+          "word_ids": [
+            339,
+            340
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 9,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1457,
+        2130,
+        1474
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            720
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            307
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 9,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1457,
+        2220,
+        1474
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            721
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            317
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 10,
+      "column": "mark",
+      "page": 60,
+      "bbox": [
+        1750,
+        1474,
+        1810,
+        1492
+      ],
+      "expected": "BO10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO10",
+          "word_ids": [
+            722
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO10",
+          "word_ids": [
+            298
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 10,
+      "column": "description",
+      "page": 60,
+      "bbox": [
+        1810,
+        1474,
+        2080,
+        1492
+      ],
+      "expected": "PCHWP-MT2 START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PCHWP-MT2 START/STOP",
+          "word_ids": [
+            723,
+            724
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PCHWP-MT2 START/STOP",
+          "word_ids": [
+            341,
+            342
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 10,
+      "column": "alarm",
+      "page": 60,
+      "bbox": [
+        2080,
+        1474,
+        2130,
+        1492
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            725
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            308
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "row": 10,
+      "column": "trend",
+      "page": 60,
+      "bbox": [
+        2130,
+        1474,
+        2220,
+        1492
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            726
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            318
+          ]
+        }
+      }
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "header": "BINARY OUTPUT",
+      "page": 60,
+      "bbox": [
+        1745,
+        1289,
+        1840,
+        1315
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "MTRACON-ATCT-CHW-BO",
+      "header": "BINARY OUTPUT",
+      "page": 60,
+      "bbox": [
+        1745,
+        1289,
+        1840,
+        1315
+      ],
+      "engine": "poppler",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "mtracon-atct-chw-ai-count",
+      "actual": 30,
+      "expected": 30,
+      "pass": true
+    },
+    {
+      "id": "mtracon-atct-chw-ao-count",
+      "actual": 8,
+      "expected": 8,
+      "pass": true
+    },
+    {
+      "id": "mtracon-atct-chw-bi-count",
+      "actual": 15,
+      "expected": 15,
+      "pass": true
+    },
+    {
+      "id": "mtracon-atct-chw-bo-count",
+      "actual": 10,
+      "expected": 10,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

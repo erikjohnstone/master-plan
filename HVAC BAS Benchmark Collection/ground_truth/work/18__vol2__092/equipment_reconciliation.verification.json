@@ -1,0 +1,45 @@
+{
+  "document_id": "18__vol2__092",
+  "source_sha256": "85613e85e63e6e3e527a722dc93a9797b2b1edd57a8ec22fc96b4a808bc0f0a5",
+  "annotation_sha256": "94b14c17a565b1449566ec5f8bde39e7eed01344fb105e73e6dd9d1e40e013d5",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 0,
+  "checks": [],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "linked-schedule-registry",
+      "pass": true,
+      "tables": 8,
+      "rows": 20,
+      "identities": 20,
+      "primary_anchors": 12
+    },
+    {
+      "id": "scheduled-families",
+      "actual": 8,
+      "expected": 8,
+      "pass": true
+    },
+    {
+      "id": "scheduled-primary-anchors",
+      "actual": 12,
+      "expected": 12,
+      "pass": true
+    },
+    {
+      "id": "plan-detail-reconciliation",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {
+    "schedules_m301.json": "e53809889cfa283aa4675a0d90ad8e0d9fc2497b7f6d6ed98fbedee68dcff3c1"
+  },
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

@@ -1,0 +1,58 @@
+{
+  "id": "12__vol2__028",
+  "rank": 12,
+  "title": "Fort Sam Houston Building 615 Controls Excerpt",
+  "source_pdf": "pdf/12__vol2__028__Fort_Sam_Houston_Building_615_Controls_Excerpt.pdf",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "page_count": 9,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete ground truth for the nine supplied pages of the Building 615 archive excerpt: project and sheet metadata, all populated schedule and BAS matrix cells, all printed written control sequences and P&ID context, logical sensor roles, and excerpt limits. This is not ground truth for the missing 182 pages of the original 191-sheet set and does not invent plan-level equipment, zone, actuator, controller, terminal, or wiring quantities.",
+  "reading_notes": [
+    "A schedule row, a P&ID/template row, a logical sensor role and an installed physical device are different quantities. The supplied archive excerpt does not support treating them as interchangeable.",
+    "M-601 has 32 marked equipment schedule rows. M-505 adds 16 duct-silencer-design rows and 17 external-static-pressure rows; all 65 source schedule rows and their cells are embedded in this record.",
+    "The 193 BAS matrix rows are retained exactly in 12 P&ID/template tables. Local numeric tags are unique only within their printed table. This record does not inflate them into a building-wide terminal count.",
+    "M-507 and M-508 are P&ID/point-list sheets without written sequences. M-509 is the printed written hydronic-sequence source; the sheets are not conflated.",
+    "Every supplied page was visually reviewed and independently captured by MuPDF and Poppler. Parser agreement corroborates bounded text/cells, while visual review establishes page disposition and limitations; neither process invents missing project facts."
+  ],
+  "module_order": ["metadata", "schedules", "points", "controls_context", "sensors", "reference_tables", "equipment_reconciliation", "point_applications", "supporting_evidence"],
+  "module_sources": {
+    "schedules": ["schedules_m505_silencer_esp", "schedules_m601_fcu", "schedules_m601_doas", "schedules_m601_boiler_unit_heater", "schedules_m601_chiller_exhaust"],
+    "points": ["points_m506_airside_templates", "points_m506_meter_global_templates", "points_m507_chw_template", "points_m508_hhw_template", "points_m510_fcu_template", "points_m511_doas3_vav_templates", "points_m512_doas12_template"],
+    "controls_context": ["controls_context_m506", "controls_context_m507", "controls_context_m508", "controls_context_m509_hydronic", "controls_context_m510", "controls_context_m511", "controls_context_m512"]
+  },
+  "requirement_audit": [
+    {"id": "project_identity", "result": "reviewed_with_source_limitations_recorded", "finding": "The project, site, owner/agency, design firm as printed, contract number and Final Submittal issue are captured from every supplied title block. The repeated issue date is not relabeled as a revision date.", "evidence": [["modules", "metadata", "project"]]},
+    {"id": "sheet_details", "result": "reviewed_with_source_limitations_recorded", "finding": "All nine supplied pages have independently corroborated sheet numbers and titles in the metadata ledger, with a complete visual finding for each page.", "evidence": [["modules", "metadata", "assertion_groups", 0, "records"], ["modules", "metadata", "visual_review_pages"]]},
+    {"id": "scale_verification", "result": "reviewed_with_source_limitations_recorded", "finding": "The supplied pages are schedules, details and control schematics. The ledger records no title-block scale, zero graphic scale bars and zero measurable length-scaled views; M-505 detail captions are retained as NOT TO SCALE where printed.", "evidence": [["modules", "metadata", "scale_semantics"]]},
+    {"id": "equipment_tags_and_classification", "result": "reviewed_with_source_limitations_recorded", "finding": "All M-601 marked equipment schedule rows are classified and all M-505 schedule rows are retained. No plan anchor or installed total is claimed because the archive excludes mechanical plans.", "evidence": [["modules", "equipment_reconciliation", "scheduled_families"], ["modules", "equipment_reconciliation", "additional_identities"], ["modules", "equipment_reconciliation", "schedule_counts"]]},
+    {"id": "schedule_rows_and_specs", "result": "reviewed_with_source_limitations_recorded", "finding": "The composite schedules module embeds every populated M-505 and M-601 schedule table: 65 rows and 2,758 exact cells, including notes, blanks, performance, hydronic, electrical, dimensional and selection fields.", "evidence": [["modules", "schedules", "tables"], ["modules", "equipment_reconciliation", "schedule_counts"]]},
+    {"id": "point_lists_and_equipment_ownership", "result": "reviewed_with_source_limitations_recorded", "finding": "All 193 printed BAS matrix rows are retained with their literal flag columns and bounded source rows. Ownership is explicitly limited to its printed P&ID/template/system scope because there is no supplied installed-equipment/controller roster.", "evidence": [["modules", "points", "tables"], ["modules", "point_applications", "applications"], ["modules", "point_applications", "installed_IO_total"]]},
+    {"id": "network_architecture", "result": "reviewed_with_source_limitations_recorded", "finding": "The embedded M-506, M-509, M-511 and M-512 components retain BACNET/BAS/GUI/HMI statements and disclose that transport, addressing, baud rate and controller model are not stated in the supplied excerpt.", "evidence": [["modules", "controls_context", "source_components"]]},
+    {"id": "sequences_and_diagrams", "result": "reviewed_with_source_limitations_recorded", "finding": "All printed M-506, M-509, M-510, M-511 and M-512 written sequences are retained in bounded two-engine assertions; M-507/M-508 P&ID context explicitly records that those two sheets do not print written sequences.", "evidence": [["modules", "controls_context", "source_components"]]},
+    {"id": "space_sensors_and_zones", "result": "reviewed_with_source_limitations_recorded", "finding": "Twenty-five logical sensor/control-input roles are indexed from the controls sources. The archive contains no plan or sensor schedule, so physical counts and zone mapping remain not stated rather than being inferred from templates.", "evidence": [["modules", "sensors", "source_ledgers"], ["modules", "sensors", "counts"]]},
+    {"id": "source_limitations_and_conflicts", "result": "reviewed_with_source_limitations_recorded", "finding": "The missing 182 sheets, absent plans, M-505/M-601 naming scope, combined unit-heater row, absent separate valve/actuator schedules, and P&ID-versus-written-sequence distinction are explicitly retained.", "evidence": [["modules", "supporting_evidence", "source_limitations"], ["modules", "equipment_reconciliation", "source_conflicts"]]},
+    {"id": "all_page_visual_review", "result": "reviewed_with_source_limitations_recorded", "finding": "Each of the nine supplied pages has a saved full-page Poppler render and a complete visual-review finding. The review is page-complete for this supplied archive excerpt only.", "evidence": [["page_review"], ["modules", "metadata", "visual_review_pages"]]},
+    {"id": "independent_corroboration", "result": "reviewed_with_source_limitations_recorded", "finding": "Each component is rechecked against retained MuPDF and Poppler captures at build and validation time. Exact table cells and bounded text assertions are independently checked; the composite assembly only embeds verified authored modules.", "evidence": [["module_source_sha256"], ["module_sha256"]]}
+  ],
+  "page_review": [
+    {"page": 1, "review_status": "complete", "render": "reviews/12__vol2__028/p1-p1-full-poppler.png", "finding": "M-505: Noise Control Duct Silencer and External Static Pressure schedules, plus mini-split and concealed-fan-coil details. No graphic scale bar."},
+    {"page": 2, "review_status": "complete", "render": "reviews/12__vol2__028/p2-p2-full-poppler.png", "finding": "M-506: mini-split/exhaust, meter and global BAS matrices, and written mini-split/exhaust sequences."},
+    {"page": 3, "review_status": "complete", "render": "reviews/12__vol2__028/p3-p3-full-poppler.png", "finding": "M-507: chilled-water P&ID, PRV/bypass context and BAS input/output matrix; no written sequence block."},
+    {"page": 4, "review_status": "complete", "render": "reviews/12__vol2__028/p4-p4-full-poppler.png", "finding": "M-508: heating-water P&ID, PRV/bypass context and BAS input/output matrix; no written sequence block."},
+    {"page": 5, "review_status": "complete", "render": "reviews/12__vol2__028/p5-p5-full-poppler.png", "finding": "M-509: written chilled-water and heating-water sequences, including BACNET/HMI, freeze and CO-safety logic."},
+    {"page": 6, "review_status": "complete", "render": "reviews/12__vol2__028/p6-p6-full-poppler.png", "finding": "M-510: FCU P&ID and BAS matrix with written FCU occupancy, temperature, safety and alarm sequence."},
+    {"page": 7, "review_status": "complete", "render": "reviews/12__vol2__028/p7-p7-full-poppler.png", "finding": "M-511: DOAS-3 and VAV P&IDs/matrices with written DOAS/VAV sequences."},
+    {"page": 8, "review_status": "complete", "render": "reviews/12__vol2__028/p8-p8-full-poppler.png", "finding": "M-512: DOAS-1/2 P&ID/matrix and written sequence."},
+    {"page": 9, "review_status": "complete", "render": "reviews/12__vol2__028/p9-p9-full-poppler.png", "finding": "M-601: FCU/FCC, DOAS, boiler, combined unit-heater, chiller and exhaust-fan schedules."}
+  ],
+  "declared_checks": [
+    {"id": "supplied-sheets", "path": ["modules", "metadata", "assertion_groups", 0, "records"], "operation": "length", "expected": 9},
+    {"id": "full-page-review", "path": ["page_review"], "operation": "length", "expected": 9},
+    {"id": "schedule-source-rows", "path": ["modules", "equipment_reconciliation", "schedule_counts", "all_source_schedule_rows"], "expected": 65},
+    {"id": "m601-marked-schedule-rows", "path": ["modules", "equipment_reconciliation", "schedule_counts", "m601_marked_equipment_schedule_rows"], "expected": 32},
+    {"id": "printed-bas-source-rows", "path": ["modules", "point_applications", "listed_template_counts", "source_rows"], "expected": 193},
+    {"id": "logical-sensor-roles", "path": ["modules", "sensors", "logical_role_count"], "expected": 25}
+  ],
+  "completion_checks": {"every_source_page_reviewed": true, "all_explicit_objective_categories_reviewed": true, "all_populated_schedule_and_points_rows_captured": true, "source_conflicts_and_unavailable_fields_preserved": true, "two_engine_checks_current": true, "final_assembly_audit_complete": true},
+  "verification_semantics": "MuPDF 1.27.2.2 and Poppler 26.03.0 independently captured all nine supplied pages. Current authored schedule/point cells and bounded text assertions are rechecked in both engines; composite modules do not infer any new PDF fact. Text agreement is not automatic engineering interpretation, physical symbol counting or proof of the missing 182 project sheets. Full-page Poppler renders were separately reviewed for every supplied page."
+}

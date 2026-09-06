@@ -1,0 +1,18 @@
+{
+  "document_id": "19__vol2__094",
+  "module_role": "Formal-point-matrix status and ownership ledger. M-201 supplies typed schematic templates, not a row-based BAS points list, so this intentionally has no fabricated formal-matrix rows or installed terminal total.",
+  "tables": [],
+  "ledger_mode": "source_matrix_templates_v1",
+  "source_points_composite": "controls_context_m201 records the three visual schematic templates and their typed-bubble context. It has no formal source matrix tables because none are printed in the supplied set.",
+  "ownership_binding_semantics": "No row-level physical owner, controller, wiring or transport is stated. The three controls templates identify diagram scope only.",
+  "expanded_count_warning": "There are zero formal points-matrix rows in the supplied set. Typed bubbles on M-201 are retained as schematic context, but are not converted into a terminal count or multiplied by schedule equipment.",
+  "applications": [],
+  "listed_template_counts": {"source_rows": 0, "tables": 0},
+  "expanded_template_counts": {"source_rows": 0},
+  "installed_IO_total": {"status": "not_stated_in_supplied_set", "value": null, "reason": "No typed formal points matrix, controller schedule, panel terminal list, network point export, or equipment-instance multiplier is supplied."},
+  "point_transport": {"status": "not_stated_per_symbol", "value": null, "note": "M-201 directs connection to the existing DDC system, but does not assign transport or wiring method to individual schematic bubbles."},
+  "inventory_checks": [
+    {"id": "formal-source-points-tables", "records_path": ["tables"], "expected": 0},
+    {"id": "formal-source-points-applications", "records_path": ["applications"], "expected": 0}
+  ]
+}

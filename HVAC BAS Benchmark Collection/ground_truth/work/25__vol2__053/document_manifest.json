@@ -1,0 +1,60 @@
+{
+  "id": "25__vol2__053",
+  "rank": 25,
+  "title": "Houston VA Emergency Room Expansion",
+  "source_pdf": "pdf/25__vol2__053__Houston_VA_Emergency_Room_Expansion.pdf",
+  "source_sha256": "7eaefacf7f42a077e98d3fa1fd01bc96f03a03d444e29ffda7838895dc2e1d57",
+  "page_count": 12,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete ground truth for all twelve supplied Houston VA Emergency Room Expansion mechanical sheets: title-block/project/sheet review; all 69 rows and 778 cells in MH601's seven schedules; all 19 MH502 VAV point-matrix rows; written VAV and isolation-room sequences; explicit schedule-to-point-template boundary; and manual-ball-valve/air-device/filter classification limits. No unprinted installed I/O total, controller terminal count, BAS protocol, network topology, valve actuator/Cv/fail position, damper-actuator schedule, or point-matrix-to-equipment multiplier is invented.",
+  "reading_notes": [
+    "All twelve supplied pages were reviewed as full-page 180 DPI Poppler renders. MuPDF and Poppler independently corroborate every authored schedule/points cell and bounded text assertion.",
+    "MH601 has seven populated schedules and 69 source rows: 20 single-duct terminals, 1 series fan-powered terminal, 8 air-device type rows, 2 filter rows, and 38 heating-hot-water supply/return BALL VALVE rows.",
+    "The 38 valve rows are literal tagged manual ball valves with service, size and flow. Because the schedule has no actuator, Cv, control signal or fail position, they are deliberately excluded from BAS control-valve/actuator counts.",
+    "MH502's 19-row VAV terminal unit point list is a printed point-function matrix with no terminal equipment-tag column or source binding to MH601 schedule rows. Its listed hardware/software totals are not multiplied into installed I/O or controller-terminal totals.",
+    "MH502 nevertheless contains high-value written behavior: continuous VAV operation, occupied/unoccupied airflow and reheat logic, discharge-temperature/humidity alarms, and isolation-room differential-pressure, HEPA-filter, lead/standby-fan, VFD and fan-alarm sequences."
+  ],
+  "module_order": ["metadata", "schedules", "points", "controls_context", "equipment_reconciliation", "point_applications", "supporting_evidence"],
+  "module_sources": {
+    "schedules": ["schedules_mh601"],
+    "points": ["points_mh502"],
+    "controls_context": ["controls_context_mh502"]
+  },
+  "requirement_audit": [
+    {"id": "project_identity", "result": "reviewed_with_source_limitations_recorded", "finding": "Project title, Houston site, VA project number, building number and date are captured from the repeated title block; blank revision-log structure is not treated as a revision event.", "evidence": [["modules", "metadata", "project"]]},
+    {"id": "sheet_details", "result": "reviewed_with_source_limitations_recorded", "finding": "Every supplied page has exact title and sheet-number witnesses plus a full-page visual finding.", "evidence": [["modules", "metadata", "visual_review_pages"]]},
+    {"id": "scale_verification", "result": "reviewed_with_source_limitations_recorded", "finding": "The repeated title block has no document-wide scale field. Geometric takeoff must read each view's local scale and no universal conversion is inferred.", "evidence": [["modules", "metadata", "scale_semantics"]]},
+    {"id": "equipment_tags_and_classification", "result": "reviewed_with_source_limitations_recorded", "finding": "Twenty-one terminal marks are retained as scheduled terminal identities. Air-device rows, filter service rows and the 38 manual-ball-valve tags remain separately classified rather than converted into BAS equipment/actuator quantities.", "evidence": [["modules", "equipment_reconciliation", "scheduled_families"], ["modules", "equipment_reconciliation", "primary_anchors"]]},
+    {"id": "schedule_rows_and_specs", "result": "reviewed_with_source_limitations_recorded", "finding": "All 778 source cells of the 69 populated MH601 schedule rows are retained, including terminal airflows/coils, air-device fields, filters and ball-valve service/size/flow.", "evidence": [["modules", "schedules", "tables"], ["modules", "equipment_reconciliation", "schedule_counts"]]},
+    {"id": "point_lists_and_equipment_ownership", "result": "reviewed_with_source_limitations_recorded", "finding": "Nineteen exact MH502 VAV matrix rows are retained. The source supplies neither terminal tags in that matrix nor row-level controller/wiring/ownership; zero unprinted instance applications are emitted.", "evidence": [["modules", "points", "tables"], ["modules", "point_applications", "installed_IO_total"], ["modules", "point_applications", "ownership_binding_semantics"]]},
+    {"id": "network_architecture", "result": "reviewed_with_source_limitations_recorded", "finding": "No BAS vendor, protocol, transport, controller/panel model, address or topology is stated in the supplied twelve sheets.", "evidence": [["modules", "controls_context", "network_architecture"]]},
+    {"id": "sequences_and_diagrams", "result": "reviewed_with_source_limitations_recorded", "finding": "VAV operation and isolation-room pressure/filter/fan sequences are captured from MH502. The source does not state that the point template applies to every MH601 terminal.", "evidence": [["modules", "controls_context", "sequences"], ["modules", "controls_context", "point_matrix_context"]]},
+    {"id": "space_sensors_and_zones", "result": "reviewed_with_source_limitations_recorded", "finding": "Temperature, airflow, humidity, pressure and filter-pressure roles appear in MH502, but no installed sensor schedule or plan-mapped physical sensor count is stated.", "evidence": [["modules", "controls_context", "sensor_and_zone_ledger"]]},
+    {"id": "source_limitations_and_conflicts", "result": "reviewed_with_source_limitations_recorded", "finding": "Manual ball-valve rows are not recast as BAS control valves, the point matrix is unexpanded, and air-device/filter source rows are not silently made into plan quantities.", "evidence": [["modules", "supporting_evidence", "source_limitations"], ["modules", "equipment_reconciliation", "control_valve_and_damper_schedule_status"]]},
+    {"id": "all_page_visual_review", "result": "reviewed_with_source_limitations_recorded", "finding": "All twelve supplied pages were reviewed at full-page resolution; saved Poppler renders and page dispositions are embedded and hash-checked.", "evidence": [["page_review"], ["modules", "metadata", "visual_review_pages"]]},
+    {"id": "independent_corroboration", "result": "reviewed_with_source_limitations_recorded", "finding": "Bundle build and validation rerun every authored module against retained MuPDF and Poppler captures, then record current source/manifest/module digests.", "evidence": [["module_source_sha256"], ["module_sha256"]]}
+  ],
+  "page_review": [
+    {"page": 1, "review_status": "complete", "render": "reviews/25__vol2__053/p1-p1-full-poppler-poppler.png", "finding": "M-001 mechanical legend, abbreviations and general notes; no populated schedule or point matrix."},
+    {"page": 2, "review_status": "complete", "render": "reviews/25__vol2__053/p2-p2-full-poppler-poppler.png", "finding": "MD101 first-floor ceiling HVAC demolition plan; plan context."},
+    {"page": 3, "review_status": "complete", "render": "reviews/25__vol2__053/p3-p3-full-poppler-poppler.png", "finding": "MD102 first-floor interstitial HVAC demolition plan; plan context."},
+    {"page": 4, "review_status": "complete", "render": "reviews/25__vol2__053/p4-p4-full-poppler-poppler.png", "finding": "MD103 first-floor interstitial mechanical-piping demolition plan; plan context."},
+    {"page": 5, "review_status": "complete", "render": "reviews/25__vol2__053/p5-p5-full-poppler-poppler.png", "finding": "MH101 first-floor ceiling plan; plan context."},
+    {"page": 6, "review_status": "complete", "render": "reviews/25__vol2__053/p6-p6-full-poppler-poppler.png", "finding": "MH102 first-floor interstitial composite HVAC plan; plan context."},
+    {"page": 7, "review_status": "complete", "render": "reviews/25__vol2__053/p7-p7-full-poppler-poppler.png", "finding": "MH103 first-floor interstitial HVAC supply plan; plan context."},
+    {"page": 8, "review_status": "complete", "render": "reviews/25__vol2__053/p8-p8-full-poppler-poppler.png", "finding": "MH104 first-floor interstitial HVAC exhaust/return plan; plan context."},
+    {"page": 9, "review_status": "complete", "render": "reviews/25__vol2__053/p9-p9-full-poppler-poppler.png", "finding": "MP101 first-floor interstitial mechanical piping plan; plan context."},
+    {"page": 10, "review_status": "complete", "render": "reviews/25__vol2__053/p10-p10-full-poppler-poppler.png", "finding": "MH501 mechanical details; no populated control-valve schedule."},
+    {"page": 11, "review_status": "complete", "render": "reviews/25__vol2__053/p11-p11-full-poppler-poppler.png", "finding": "MH502 mechanical controls: VAV schematic/matrix and VAV/isolation-room sequences."},
+    {"page": 12, "review_status": "complete", "render": "reviews/25__vol2__053/p12-p12-full-poppler-poppler.png", "finding": "MH601 mechanical schedules: seven populated schedule tables / 69 rows, transcribed cell-for-cell."}
+  ],
+  "declared_checks": [
+    {"id": "supplied-pages", "path": ["modules", "metadata", "visual_review_pages"], "operation": "length", "expected": 12},
+    {"id": "full-page-review", "path": ["page_review"], "operation": "length", "expected": 12},
+    {"id": "schedule-tables", "path": ["modules", "equipment_reconciliation", "schedule_counts", "tables"], "expected": 7},
+    {"id": "schedule-rows", "path": ["modules", "equipment_reconciliation", "schedule_counts", "rows"], "expected": 69},
+    {"id": "source-point-rows", "path": ["modules", "point_applications", "listed_template_counts", "source_rows"], "expected": 19}
+  ],
+  "completion_checks": {"every_source_page_reviewed": true, "all_explicit_objective_categories_reviewed": true, "all_populated_schedule_and_points_rows_captured": true, "source_conflicts_and_unavailable_fields_preserved": true, "two_engine_checks_current": true, "final_assembly_audit_complete": true},
+  "verification_semantics": "MuPDF and Poppler independently captured all twelve supplied vector-PDF pages. Current authored schedule/points cells and bounded text assertions are rechecked by both engines at build and validation time. Parser agreement corroborates literal source text/cells and their declared bounds; full-page Poppler review establishes page disposition, visual table/detail context and source limitations. Neither process creates missing device quantities, point/terminal counts, controller/panel details, network attributes, actuator/Cv/fail-position fields, aliases or zone mappings."
+}

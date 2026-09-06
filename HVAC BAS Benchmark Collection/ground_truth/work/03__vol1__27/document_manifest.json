@@ -1,0 +1,506 @@
+{
+  "id": "03__vol1__27",
+  "rank": 3,
+  "title": "White Sturgeon Fish Hatchery HVAC/BAS",
+  "source_pdf": "pdf/03__vol1__27__Colville_White_Sturgeon_Fish_Hatchery.pdf",
+  "source_sha256": "2e123db08407f97acd6bc6387ecab6e08ad8204971fb5c24a3668bbd34dec0cf",
+  "page_count": 38,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete source-bounded ground truth for the supplied 38-page White Sturgeon Fish Hatchery set: full-page visual review; project/title-block/sheet/local-scale context; 111 literal schedule rows across M-601-M-604; 75 schedule tag/indoor-tag identities; four control-valve and three louver schedule rows; 52 dual-engine-checked PLC I/O records from E-702; E-501 network-diagram context; M-702/M-703 written sequences and controls diagrams; sensor/instrument context; and documented source limitations. It does not fabricate plan quantities, installed point/device totals, controller/card/terminal/wiring counts, network addressing, or a damper-actuator schedule absent from the source.",
+  "reading_notes": [
+    "All 38 source pages have retained full-page Poppler renders and a completed visual disposition. Strict source cells and bounded assertions are rechecked against retained MuPDF and Poppler captures during every build/verify run.",
+    "The source schedule corpus contains 19 tables and 111 literal rows: 75 tag/indoor-tag identities, 70 primary anchored schedule identities, 26 seismic/vibration ledger rows, five WSHP module-detail rows and five WSHP accessory-detail rows. Grille/register/diffuser marks are type rows rather than installed quantities.",
+    "E-702 contains 52 literal PLC I/O records. Its AI/AO/DI/DO fields remain source-row scoped; they are not automatically a final controller-card, terminal, field-device, cable or wiring count.",
+    "E-702 prints ETHERNET/IP, BACNET /IP and MODBUS TCP/IP. E-501 diagrams an Allen-Bradley CompactLogix 5380, Compact 5000 I/O, PanelView Plus 7 and Ethernet Tap context, but no final addressing or card/terminal design.",
+    "M-603 contains four literal control-valve schedule rows and three louver rows. M-702/M-703 have control behavior, but no standalone damper-actuator schedule with make/model, torque, signal, fail action, tag and installed quantity is supplied."
+  ],
+  "verification_semantics": "The bundle verifier reruns independent MuPDF and Poppler raw-capture checks for every authored literal table and bounded assertion, and hashes linked modules, source PDF, manifest and cited full-page review renders. It validates source evidence and annotation integrity; it does not automatically infer physical plan quantities or engineering suitability.",
+  "module_order": [
+    "metadata",
+    "schedules",
+    "points",
+    "controls_context",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "metadata": [
+      "metadata_rank03"
+    ],
+    "schedules": [
+      "schedules_m601_core",
+      "schedules_m602_core",
+      "schedules_m603_core",
+      "schedules_m604_core"
+    ],
+    "points": [
+      "points_e702_plc_io"
+    ],
+    "controls_context": [
+      "controls_context_rank03"
+    ],
+    "equipment_reconciliation": [
+      "equipment_reconciliation_rank03"
+    ],
+    "point_applications": [
+      "point_applications_rank03"
+    ],
+    "supporting_evidence": [
+      "supporting_evidence_rank03"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The printed project name, title-block firm, issue, date and project number are retained; project location is explicitly unavailable rather than inferred.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Each of the 38 source pages has a sheet/title visual disposition, including both supplied P-101 pages; revision-date availability is explicitly constrained.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "sheet_details"
+        ],
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The stated M-101 3/16\"=1'-0\" view scale is source-bounded, and no graphic scale bar or document-wide scale is asserted.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The schedule registry covers all 19 linked M-601-M-604 tables, retains 75 tag/indoor-tag identities and classifies source families without treating GRD types as installed instances.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "scheduled_families"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "primary_anchors"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The core schedule modules retain every authored source cell across 111 schedule rows, including control valves, louver detail and performance fields.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "schedule_counts"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The E-702 source list retains 52 literal PLC-I/O records with their printed AI/AO/DI/DO fields and one explicit source-table application scope.",
+      "evidence": [
+        [
+          "modules",
+          "points",
+          "tables"
+        ],
+        [
+          "modules",
+          "point_applications",
+          "applications"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Literal E-702 protocols and E-501 diagram components are retained with unavailable address/card/terminal fields recorded.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M-702 and M-703 controls diagrams and written sequences are source-sheet bounded and cite the relevant equipment/system context.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sequence_of_operations"
+        ],
+        [
+          "modules",
+          "controls_context",
+          "control_diagram_bindings"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The record retains named source instrument/sensor contexts and records that a facility-wide thermostat, space-sensor or CO2 total is not published.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sensor_and_zone_ledger"
+        ],
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Schedule identity, PLC I/O, network, sequence, damper-actuator and facility-wide sensor limitations are explicit rather than filled with assumptions.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "control_valve_and_damper_schedule_status"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 38 supplied pages have a completed visual finding and retained full-page Poppler render.",
+      "evidence": [
+        [
+          "page_review"
+        ],
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The final bundle reruns MuPDF and Poppler evidence checks for every component and hashes the source PDF, modules, manifest and cited review renders.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ],
+        [
+          "modules",
+          "controls_context",
+          "assertions"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p1-p1-full-poppler.png",
+      "finding": "Mechanical HVAC floor plan: ERV, split-system, unit-heater, exhaust/louver and ductwork context; local stated plan scale is visible."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p2-p2-full-poppler.png",
+      "finding": "Mechanical piping floor plan: hydronic, wastewater and aerated-water piping context."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p3-p3-full-poppler.png",
+      "finding": "Mechanical piping support plan and support/brace coordination context."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p4-p4-full-poppler.png",
+      "finding": "Mechanical sections with HVAC/piping elevation and routing context."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p5-p5-full-poppler.png",
+      "finding": "Mechanical sections with equipment and piping elevation context."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p6-p6-full-poppler.png",
+      "finding": "Enlarged mechanical piping plans for main-room systems."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p7-p7-full-poppler.png",
+      "finding": "Enlarged aerated-water plan with process/HVAC coordination context."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p8-p8-full-poppler.png",
+      "finding": "Mechanical detail sheet."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p9-p9-full-poppler.png",
+      "finding": "Mechanical detail sheet."
+    },
+    {
+      "page": 10,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p10-p10-full-poppler.png",
+      "finding": "Mechanical detail sheet."
+    },
+    {
+      "page": 11,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p11-p11-full-poppler.png",
+      "finding": "Mechanical detail sheet."
+    },
+    {
+      "page": 12,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p12-p12-full-poppler.png",
+      "finding": "Mechanical detail sheet."
+    },
+    {
+      "page": 13,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p13-p13-full-poppler.png",
+      "finding": "M-601 schedules: seismic/vibration ledger, ERV, exhaust fans and grille/register/diffuser types."
+    },
+    {
+      "page": 14,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p14-p14-full-poppler.png",
+      "finding": "M-602 schedules: expansion tanks, modular WSHP assembly/modules/accessories and filters/strainers."
+    },
+    {
+      "page": 15,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p15-p15-full-poppler.png",
+      "finding": "M-603 schedules: instrumentation, control valves, pumps, chemical feeders, air separators and louvers."
+    },
+    {
+      "page": 16,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p16-p16-full-poppler.png",
+      "finding": "M-604 schedules: hydronic unit heaters, buffer tanks, heat exchangers and split-system AC."
+    },
+    {
+      "page": 17,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p17-p17-full-poppler.png",
+      "finding": "Aerated-water P&ID with process equipment, instruments and control-valve context."
+    },
+    {
+      "page": 18,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p18-p18-full-poppler.png",
+      "finding": "Control diagrams and written sequences for exhaust fans, unit heaters and HWP-5/HWP-6."
+    },
+    {
+      "page": 19,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p19-p19-full-poppler.png",
+      "finding": "White Sturgeon rearing-water written sequence of operations."
+    },
+    {
+      "page": 20,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p20-p20-full-poppler.png",
+      "finding": "Piping isometric sheet."
+    },
+    {
+      "page": 21,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p21-p21-full-poppler.png",
+      "finding": "Piping isometric sheet."
+    },
+    {
+      "page": 22,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p22-p22-full-poppler.png",
+      "finding": "Piping isometric sheet."
+    },
+    {
+      "page": 23,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p23-p23-full-poppler.png",
+      "finding": "Piping isometric sheet."
+    },
+    {
+      "page": 24,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p24-p24-full-poppler.png",
+      "finding": "Piping isometric sheet."
+    },
+    {
+      "page": 25,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p25-p25-full-poppler.png",
+      "finding": "Plumbing under-slab plan."
+    },
+    {
+      "page": 26,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p26-p26-full-poppler.png",
+      "finding": "Second supplied P-101 plumbing under-slab-plan page; retained as a separate source PDF page."
+    },
+    {
+      "page": 27,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p27-p27-full-poppler.png",
+      "finding": "Plumbing detail sheet."
+    },
+    {
+      "page": 28,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p28-p28-full-poppler.png",
+      "finding": "Plumbing schedule sheet."
+    },
+    {
+      "page": 29,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p29-p29-full-poppler.png",
+      "finding": "Electrical symbols, abbreviations and drawing index."
+    },
+    {
+      "page": 30,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p30-p30-full-poppler.png",
+      "finding": "Electrical site plan."
+    },
+    {
+      "page": 31,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p31-p31-full-poppler.png",
+      "finding": "Electrical lighting plan."
+    },
+    {
+      "page": 32,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p32-p32-full-poppler.png",
+      "finding": "Electrical power and system plan."
+    },
+    {
+      "page": 33,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p33-p33-full-poppler.png",
+      "finding": "Electrical control-network, pump and lift-station diagram context."
+    },
+    {
+      "page": 34,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p34-p34-full-poppler.png",
+      "finding": "Electrical wiring diagrams."
+    },
+    {
+      "page": 35,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p35-p35-full-poppler.png",
+      "finding": "Electrical detail sheet."
+    },
+    {
+      "page": 36,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p36-p36-full-poppler.png",
+      "finding": "Electrical one-line diagram."
+    },
+    {
+      "page": 37,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p37-p37-full-poppler.png",
+      "finding": "Electrical schedule sheet."
+    },
+    {
+      "page": 38,
+      "review_status": "complete",
+      "render": "reviews/03__vol1__27/p38-p38-full-poppler.png",
+      "finding": "White Sturgeon PLC I/O list with I/O channels, protocol, display/action, cable and conduit columns."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "rank03-full-page-review",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 38
+    },
+    {
+      "id": "rank03-schedule-table-count",
+      "path": [
+        "modules",
+        "schedules",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 19
+    },
+    {
+      "id": "rank03-point-table-count",
+      "path": [
+        "modules",
+        "points",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 1
+    }
+  ],
+  "completion_checks": {
+    "all_38_pages_visually_reviewed": true,
+    "all_authoring_modules_dual_engine_verified_at_build": true,
+    "source_limitations_explicit": true,
+    "required_objectives_covered": true
+  }
+}

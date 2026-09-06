@@ -1,0 +1,93 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All printed ATCT HHW and CHW control-valve schedule rows on M-622 (source PDF page 49). Rows preserve literal printed marks and values, including the FCU-T9 source valve-mark spelling, without reconciling installed quantities.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {"pages": [49], "render": "reviews/01__vol2__001/p49-p49-schedules-poppler.png", "dpi": 180, "finding": "Both M-622 ATCT control-valve grids were visually reviewed at 180 DPI; the tables print 22 HHW and 24 CHW rows, each with unit mark, valve mark, flowrate, size, configuration, Cv and notes."},
+  "tables": [
+    {
+      "id": "ATCT-HHW-CONTROL-VALVE",
+      "page": 49,
+      "sheet": "M-622",
+      "building_scope": "ATCT",
+      "title": "HHW CONTROL VALVE SCHEDULE",
+      "classification": "Heating-hot-water control valves",
+      "columns": "unit_mark|valve_mark|flowrate_GPM|valve_size_in|configuration|Cv|notes",
+      "x_edges": [1369.32,1455.24,1547.61,1608.32,1654.32,1742.28,1769.808,1810.8],
+      "y_edges": [775.065,792.301,809.641,826.873,843.905,861.361,878.64,895.777,913.08,930.36,947.6,964.22,981.698,999.064,1016.392,1033.648,1050.976,1068.192,1085.44,1102.768,1119.938,1138.034,1168.98],
+      "rows": [
+        "AHU-T1A|AHU-T1A-HHW|6.5|1/2|2-WAY|2.9|1",
+        "AHU-T1B|AHU-T1B-HHW|6.5|1/2|2-WAY|2.9|1",
+        "CUH-T1|CUH-T1-HHW|0.5|1/2|2-WAY|0.2|1",
+        "CUH-T2|CUH-T2-HHW|0.5|1/2|2-WAY|0.2|1",
+        "CV-HHW-BP-T|HHW-BP-T|8.1|1/2|2-WAY|3.6|1",
+        "DOAH-T1|DOAH-T1-HHW|2.6|1/2|2-WAY|1.2|1",
+        "FCU-T2|FCU-T2-HHW|0.5|1/2|2-WAY|0.2|1",
+        "FCU-T3|FCU-T3-HHW|0.5|1/2|2-WAY|0.2|1",
+        "FCU-T4|FCU-T4-HHW|0.5|1/2|2-WAY|0.2|1",
+        "FCU-T6|FCU-T6-HHW|1.4|1/2|2-WAY|0.6|1",
+        "FCU-T7A|FCU-T7A-HHW|3.2|1/2|2-WAY|1.4|1",
+        "FCU-T7B|FCU-T7B-HHW|3.2|1/2|2-WAY|1.4|1",
+        "FCU-T8|FCU-T8-HHW|0.6|1/2|2-WAY|0.3|1",
+        "FCU-T9|FCU-T9-HHW|0.6|1/2|2-WAY|0.3|1",
+        "FCU-T10|FCU-T10-HHW|0.6|1/2|2-WAY|0.3|1",
+        "FCU-T11|FCU-T11-HHW|0.6|1/2|2-WAY|0.3|1",
+        "FCU-T12|FCU-T12-HHW|1.7|1/2|2-WAY|0.8|1",
+        "FCU-T13|FCU-T13-HHW|0.6|1/2|2-WAY|0.3|1",
+        "FCU-T14|FCU-T14-HHW|0.5|1/2|2-WAY|0.2|1",
+        "FCU-T15|FCU-T15-HHW|0.5|1/2|2-WAY|0.2|1",
+        "FCU-T16|FCU-T16-HHW|1.3|1/2|2-WAY|0.6|1",
+        "HHWC-DOAH-T1|HHWC-DOAH-T1-HHW|1.2|1/2|2-WAY|0.5|1"
+      ],
+      "notes": ["1. VALVE SHALL BE MODULATING TYPE."],
+      "header_evidence": [{"bbox": [1369,713,1811,775], "expected": "HHW CONTROL VALVE SCHEDULE UNIT MARK VALVE MARK FLOWRATE GPM VALVE SIZE IN CONFIGURATION Cv NOTES"}]
+    },
+    {
+      "id": "ATCT-CHW-CONTROL-VALVE",
+      "page": 49,
+      "sheet": "M-622",
+      "building_scope": "ATCT",
+      "title": "CHW CONTROL VALVE SCHEDULE",
+      "classification": "Chilled-water control valves",
+      "columns": "unit_mark|valve_mark|flowrate_GPM|valve_size_in|configuration|Cv|notes",
+      "x_edges": [1818.309,1892.64,1979.159,2040.667,2089.673,2177.165,2206.075,2245.312],
+      "y_edges": [775.065,792.301,809.641,826.873,843.905,861.361,878.64,895.777,913.08,930.36,947.6,964.22,981.698,999.064,1016.392,1033.648,1050.976,1068.192,1085.44,1102.768,1119.938,1138.034,1154.625,1168.98,1187.12],
+      "rows": [
+        "AHU-T1A|AHU-T1A-CHW|32.0|1|2-WAY|14.3|1",
+        "AHU-T1B|AHU-T1B-CHW|32.0|1|2-WAY|14.3|1",
+        "CRAH-T1A|CRAH-T1A-CHW|27.0|1|2-WAY|12.1|1",
+        "CRAH-T1B|CRAH-T1B-CHW|27.0|1|2-WAY|12.1|1",
+        "CV-CHW-BP-T|CHW-BP-T|38.8|1|2-WAY|17.3|1",
+        "DOAH-T1|DOAH-T1-CHW|14.8|3/4|2-WAY|6.6|1",
+        "FCU-T1|FCU-T1-CHW|1.2|1/2|2-WAY|0.5|1",
+        "FCU-T2|FCU-T2-CHW|0.9|1/2|2-WAY|0.4|1",
+        "FCU-T3|FCU-T3-CHW|0.9|1/2|2-WAY|0.4|1",
+        "FCU-T4|FCU-T4-CHW|0.9|1/2|2-WAY|0.4|1",
+        "FCU-T5A|FCU-T5A-CHW|6.7|1/2|2-WAY|3.0|1",
+        "FCU-T5B|FCU-T5B-CHW|6.7|1/2|2-WAY|3.0|1",
+        "FCU-T6|FCU-T6-CHW|5.5|1/2|2-WAY|2.5|1",
+        "FCU-T7A|FCU-T7A-CHW|10.7|1/2|2-WAY|4.8|1",
+        "FCU-T7B|FCU-T7B-CHW|10.7|1/2|2-WAY|4.8|1",
+        "FCU-T8|FCU-T8-CHW|1.2|1/2|2-WAY|0.5|1",
+        "FCU-T9|FCU-9-CHW|1.2|1/2|2-WAY|0.5|1",
+        "FCU-T10|FCU-T10-CHW|1.2|1/2|2-WAY|0.5|1",
+        "FCU-T11|FCU-T11-CHW|1.2|1/2|2-WAY|0.5|1",
+        "FCU-T12|FCU-T12-CHW|6.7|1/2|2-WAY|3.0|1",
+        "FCU-T13|FCU-T13-CHW|2.2|1/2|2-WAY|1.0|1",
+        "FCU-T14|FCU-T14-CHW|1.0|1/2|2-WAY|0.4|1",
+        "FCU-T15|FCU-T15-CHW|1.5|1/2|2-WAY|0.7|1",
+        "FCU-T16|FCU-T16-CHW|1.2|1/2|2-WAY|0.5|1"
+      ],
+      "notes": ["1. VALVE SHALL BE MODULATING TYPE."],
+      "header_evidence": [{"bbox": [1818,713,2246,775], "expected": "CHW CONTROL VALVE SCHEDULE UNIT MARK VALVE MARK FLOWRATE GPM VALVE SIZE IN CONFIGURATION Cv NOTES"}]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "atct-hhw-control-valve-row-count", "records_path": ["tables", 0, "rows"], "expected": 22},
+    {"id": "atct-chw-control-valve-row-count", "records_path": ["tables", 1, "rows"], "expected": 24}
+  ],
+  "source_conflicts": [
+    {"table": "ATCT-CHW-CONTROL-VALVE", "finding": "The FCU-T9 row prints unit mark FCU-T9 but valve mark FCU-9-CHW. The literal source mismatch is retained rather than corrected."}
+  ],
+  "remaining_work": "Transcribe the remaining ATCT/MTRACON schedules and reconcile printed valve schedules with equipment schedules, piping diagrams, plans and BAS controls without silently correcting source literals."
+}

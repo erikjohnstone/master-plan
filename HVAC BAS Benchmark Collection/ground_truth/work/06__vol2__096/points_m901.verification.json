@@ -1,0 +1,2621 @@
+{
+  "document_id": "06__vol2__096",
+  "source_sha256": "72da836a803740382b319b718c1f10d8daeff6e5dbe869f1e68ff173ea4092ec",
+  "annotation_sha256": "e0cd56dd8c1bd8ed261ff37b5a565d3f71a368ed09a4607e2e56f750b4d717de",
+  "tables": 2,
+  "rows": 60,
+  "cell_assertions": 60,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        111,
+        640,
+        125
+      ],
+      "expected": "AI-1 OUTDOOR AIR TEMPERATURE (GLOBAL) X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-1 OUTDOOR AIR TEMPERATURE (GLOBAL) X X",
+          "word_ids": [
+            2167,
+            2168,
+            2169,
+            2170,
+            2171,
+            2172,
+            2173
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-1 OUTDOOR AIR TEMPERATURE (GLOBAL) X X",
+          "word_ids": [
+            1178,
+            1025,
+            1026,
+            1027,
+            1028,
+            1003,
+            12
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        125,
+        640,
+        138
+      ],
+      "expected": "AI-2 COMMON CHILLED WATER SUPPLY TEMPERATURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-2 COMMON CHILLED WATER SUPPLY TEMPERATURE X X X",
+          "word_ids": [
+            2174,
+            2175,
+            2176,
+            2177,
+            2178,
+            2179,
+            2180,
+            2181,
+            2182
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-2 COMMON CHILLED WATER SUPPLY TEMPERATURE X X X",
+          "word_ids": [
+            1179,
+            1029,
+            1030,
+            1031,
+            1032,
+            1033,
+            1004,
+            44,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        138,
+        640,
+        151
+      ],
+      "expected": "AI-3 COMMON CHILLED WATER RETURN TEMPERATURE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-3 COMMON CHILLED WATER RETURN TEMPERATURE X X",
+          "word_ids": [
+            2183,
+            2184,
+            2185,
+            2186,
+            2187,
+            2188,
+            2189,
+            2190
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-3 COMMON CHILLED WATER RETURN TEMPERATURE X X",
+          "word_ids": [
+            1180,
+            1034,
+            1035,
+            1036,
+            1037,
+            1038,
+            1005,
+            14
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        151,
+        640,
+        164
+      ],
+      "expected": "AI-4 CHILLER CH-1 DIFFERENTIAL PRESSURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-4 CHILLER CH-1 DIFFERENTIAL PRESSURE X X X",
+          "word_ids": [
+            2191,
+            2192,
+            2193,
+            2194,
+            2195,
+            2196,
+            2197,
+            2198
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-4 CHILLER CH-1 DIFFERENTIAL PRESSURE X X X",
+          "word_ids": [
+            1181,
+            1039,
+            1040,
+            1041,
+            1042,
+            1006,
+            45,
+            15
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        164,
+        640,
+        177
+      ],
+      "expected": "AI-5 CHILLER CH-2 DIFFERENTIAL PRESSURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-5 CHILLER CH-2 DIFFERENTIAL PRESSURE X X X",
+          "word_ids": [
+            2199,
+            2200,
+            2201,
+            2202,
+            2203,
+            2204,
+            2205,
+            2206
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-5 CHILLER CH-2 DIFFERENTIAL PRESSURE X X X",
+          "word_ids": [
+            1182,
+            1043,
+            1044,
+            1045,
+            1046,
+            1007,
+            46,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 6,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        177,
+        640,
+        190
+      ],
+      "expected": "AI-7 SYSTEM DIFFERENTIAL PRESSURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-7 SYSTEM DIFFERENTIAL PRESSURE X X X",
+          "word_ids": [
+            2207,
+            2208,
+            2209,
+            2210,
+            2211,
+            2212,
+            2213
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-7 SYSTEM DIFFERENTIAL PRESSURE X X X",
+          "word_ids": [
+            1183,
+            1047,
+            1048,
+            1049,
+            1008,
+            47,
+            17
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 7,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        190,
+        640,
+        203
+      ],
+      "expected": "AI-8 SYSTEM CHILLED WATER FLOW X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-8 SYSTEM CHILLED WATER FLOW X X",
+          "word_ids": [
+            2214,
+            2215,
+            2216,
+            2217,
+            2218,
+            2219,
+            2220
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-8 SYSTEM CHILLED WATER FLOW X X",
+          "word_ids": [
+            1184,
+            1050,
+            1051,
+            1052,
+            1053,
+            1009,
+            18
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 8,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        203,
+        640,
+        216
+      ],
+      "expected": "AI-9 SYSTEM CHILLED WATER CALCULATED LOAD (VIRTUAL) X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-9 SYSTEM CHILLED WATER CALCULATED LOAD (VIRTUAL) X X",
+          "word_ids": [
+            2221,
+            2222,
+            2223,
+            2224,
+            2225,
+            2226,
+            2227,
+            2228,
+            2229
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-9 SYSTEM CHILLED WATER CALCULATED LOAD (VIRTUAL) X X",
+          "word_ids": [
+            1185,
+            1054,
+            1055,
+            1056,
+            1057,
+            1058,
+            1059,
+            1010,
+            19
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 9,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        216,
+        640,
+        229
+      ],
+      "expected": "AO-1 CHILLED WATER PUMP CHWP-1A VFC X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-1 CHILLED WATER PUMP CHWP-1A VFC X X",
+          "word_ids": [
+            2230,
+            2231,
+            2232,
+            2233,
+            2234,
+            2235,
+            2236,
+            2237
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-1 CHILLED WATER PUMP CHWP-1A VFC X X",
+          "word_ids": [
+            1186,
+            1060,
+            1061,
+            1062,
+            1063,
+            1064,
+            1011,
+            20
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 10,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        229,
+        640,
+        243
+      ],
+      "expected": "AO-2 CHILLED WATER PUMP CHWP-1B VFC X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-2 CHILLED WATER PUMP CHWP-1B VFC X X",
+          "word_ids": [
+            2238,
+            2239,
+            2240,
+            2241,
+            2242,
+            2243,
+            2244,
+            2245
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-2 CHILLED WATER PUMP CHWP-1B VFC X X",
+          "word_ids": [
+            1187,
+            1065,
+            1066,
+            1067,
+            1068,
+            1069,
+            1012,
+            21
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 11,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        243,
+        640,
+        256
+      ],
+      "expected": "AO-3 CHILLED WATER PUMP CHWP-2A VFC X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-3 CHILLED WATER PUMP CHWP-2A VFC X X",
+          "word_ids": [
+            2246,
+            2247,
+            2248,
+            2249,
+            2250,
+            2251,
+            2252,
+            2253
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-3 CHILLED WATER PUMP CHWP-2A VFC X X",
+          "word_ids": [
+            1188,
+            1070,
+            1071,
+            1072,
+            1073,
+            1074,
+            1013,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 12,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        256,
+        640,
+        269
+      ],
+      "expected": "AO-4 CHILLED WATER PUMP CHWP-2B VFC X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-4 CHILLED WATER PUMP CHWP-2B VFC X X",
+          "word_ids": [
+            2254,
+            2255,
+            2256,
+            2257,
+            2258,
+            2259,
+            2260,
+            2261
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-4 CHILLED WATER PUMP CHWP-2B VFC X X",
+          "word_ids": [
+            1189,
+            1075,
+            1076,
+            1077,
+            1078,
+            1079,
+            1014,
+            23
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 13,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        269,
+        640,
+        282
+      ],
+      "expected": "AO-7 CHILLED WATER SYSTEM PRESSURE BYPASS VALVE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-7 CHILLED WATER SYSTEM PRESSURE BYPASS VALVE X X",
+          "word_ids": [
+            2262,
+            2263,
+            2264,
+            2265,
+            2266,
+            2267,
+            2268,
+            2269,
+            2270
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-7 CHILLED WATER SYSTEM PRESSURE BYPASS VALVE X X",
+          "word_ids": [
+            1190,
+            1080,
+            1081,
+            1082,
+            1083,
+            1084,
+            1085,
+            1015,
+            24
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 14,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        282,
+        640,
+        295
+      ],
+      "expected": "AO-8 CHILLER CH-1 ISOLATION VALVE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-8 CHILLER CH-1 ISOLATION VALVE X X",
+          "word_ids": [
+            2271,
+            2272,
+            2273,
+            2274,
+            2275,
+            2276,
+            2277
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-8 CHILLER CH-1 ISOLATION VALVE X X",
+          "word_ids": [
+            1191,
+            1086,
+            1087,
+            1088,
+            1089,
+            1016,
+            25
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 15,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        295,
+        640,
+        308
+      ],
+      "expected": "AO-9 CHILLER CH-2 ISOLATION VALVE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-9 CHILLER CH-2 ISOLATION VALVE X X",
+          "word_ids": [
+            2278,
+            2279,
+            2280,
+            2281,
+            2282,
+            2283,
+            2284
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-9 CHILLER CH-2 ISOLATION VALVE X X",
+          "word_ids": [
+            1192,
+            1090,
+            1091,
+            1092,
+            1093,
+            1017,
+            26
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 16,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        308,
+        640,
+        321
+      ],
+      "expected": "AO-11 CHILLER CH-1 TEMPERATURE SETPOINT X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-11 CHILLER CH-1 TEMPERATURE SETPOINT X X",
+          "word_ids": [
+            2285,
+            2286,
+            2287,
+            2288,
+            2289,
+            2290,
+            2291
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-11 CHILLER CH-1 TEMPERATURE SETPOINT X X",
+          "word_ids": [
+            1193,
+            1094,
+            1095,
+            1096,
+            1097,
+            1018,
+            27
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 17,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        321,
+        640,
+        334
+      ],
+      "expected": "AO-12 CHILLER CH-2 TEMPERATURE SETPOINT X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-12 CHILLER CH-2 TEMPERATURE SETPOINT X X",
+          "word_ids": [
+            2292,
+            2293,
+            2294,
+            2295,
+            2296,
+            2297,
+            2298
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-12 CHILLER CH-2 TEMPERATURE SETPOINT X X",
+          "word_ids": [
+            1194,
+            1098,
+            1099,
+            1100,
+            1101,
+            1019,
+            28
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 18,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        334,
+        640,
+        347
+      ],
+      "expected": "BI-1 LOW LEVEL GLYCOL ALARM - CHILLED WATER X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-1 LOW LEVEL GLYCOL ALARM - CHILLED WATER X X",
+          "word_ids": [
+            2299,
+            2300,
+            2301,
+            2302,
+            2303,
+            2304,
+            2305,
+            2306,
+            2307,
+            2308
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-1 LOW LEVEL GLYCOL ALARM - CHILLED WATER X X",
+          "word_ids": [
+            1195,
+            1102,
+            1103,
+            1104,
+            1105,
+            1106,
+            1107,
+            1108,
+            48,
+            29
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 19,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        347,
+        640,
+        360
+      ],
+      "expected": "BI-2 CHILLED WATER PUMP CHWP-1A STATUS X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-2 CHILLED WATER PUMP CHWP-1A STATUS X X X",
+          "word_ids": [
+            2309,
+            2310,
+            2311,
+            2312,
+            2313,
+            2314,
+            2315,
+            2316,
+            2317
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-2 CHILLED WATER PUMP CHWP-1A STATUS X X X",
+          "word_ids": [
+            1196,
+            1109,
+            1110,
+            1111,
+            1112,
+            1113,
+            57,
+            49,
+            30
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 20,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        360,
+        640,
+        373
+      ],
+      "expected": "BI-3 CHILLED WATER PUMP CHWP-1B STATUS X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-3 CHILLED WATER PUMP CHWP-1B STATUS X X X",
+          "word_ids": [
+            2318,
+            2319,
+            2320,
+            2321,
+            2322,
+            2323,
+            2324,
+            2325,
+            2326
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-3 CHILLED WATER PUMP CHWP-1B STATUS X X X",
+          "word_ids": [
+            1197,
+            1114,
+            1115,
+            1116,
+            1117,
+            1118,
+            58,
+            50,
+            31
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 21,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        373,
+        640,
+        387
+      ],
+      "expected": "BI-4 CHILLED WATER PUMP CHWP-2A STATUS X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-4 CHILLED WATER PUMP CHWP-2A STATUS X X X",
+          "word_ids": [
+            2327,
+            2328,
+            2329,
+            2330,
+            2331,
+            2332,
+            2333,
+            2334,
+            2335
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-4 CHILLED WATER PUMP CHWP-2A STATUS X X X",
+          "word_ids": [
+            1198,
+            1119,
+            1120,
+            1121,
+            1122,
+            1123,
+            59,
+            51,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 22,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        387,
+        640,
+        400
+      ],
+      "expected": "BI-5 CHILLED WATER PUMP CHWP-2B STATUS X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-5 CHILLED WATER PUMP CHWP-2B STATUS X X X",
+          "word_ids": [
+            2336,
+            2337,
+            2338,
+            2339,
+            2340,
+            2341,
+            2342,
+            2343,
+            2344
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-5 CHILLED WATER PUMP CHWP-2B STATUS X X X",
+          "word_ids": [
+            1199,
+            1124,
+            1125,
+            1126,
+            1127,
+            1128,
+            60,
+            52,
+            33
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 23,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        400,
+        640,
+        413
+      ],
+      "expected": "BI-8 CHILLER CH-1 GENERAL ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-8 CHILLER CH-1 GENERAL ALARM X X X",
+          "word_ids": [
+            2345,
+            2346,
+            2347,
+            2348,
+            2349,
+            2350,
+            2351,
+            2352
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-8 CHILLER CH-1 GENERAL ALARM X X X",
+          "word_ids": [
+            1200,
+            1129,
+            1130,
+            1131,
+            1132,
+            61,
+            53,
+            34
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 24,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        413,
+        640,
+        426
+      ],
+      "expected": "BI-9 CHILLER CH-2 GENERAL ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-9 CHILLER CH-2 GENERAL ALARM X X X",
+          "word_ids": [
+            2353,
+            2354,
+            2355,
+            2356,
+            2357,
+            2358,
+            2359,
+            2360
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-9 CHILLER CH-2 GENERAL ALARM X X X",
+          "word_ids": [
+            1201,
+            1133,
+            1134,
+            1135,
+            1136,
+            62,
+            54,
+            35
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 25,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        426,
+        640,
+        439
+      ],
+      "expected": "BI-11 UPS LOW BATTERY ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-11 UPS LOW BATTERY ALARM X X X",
+          "word_ids": [
+            2361,
+            2362,
+            2363,
+            2364,
+            2365,
+            2366,
+            2367,
+            2368
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-11 UPS LOW BATTERY ALARM X X X",
+          "word_ids": [
+            1202,
+            1137,
+            1138,
+            1139,
+            1140,
+            63,
+            55,
+            36
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 26,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        439,
+        640,
+        452
+      ],
+      "expected": "BI-12 UPS ON BATTERY ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-12 UPS ON BATTERY ALARM X X X",
+          "word_ids": [
+            2369,
+            2370,
+            2371,
+            2372,
+            2373,
+            2374,
+            2375,
+            2376
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-12 UPS ON BATTERY ALARM X X X",
+          "word_ids": [
+            1203,
+            1141,
+            1142,
+            1143,
+            1144,
+            64,
+            56,
+            37
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 27,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        452,
+        640,
+        465
+      ],
+      "expected": "BO-1 CHILLED WATER PUMP CHWP-1A START-STOP X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-1 CHILLED WATER PUMP CHWP-1A START-STOP X",
+          "word_ids": [
+            2377,
+            2378,
+            2379,
+            2380,
+            2381,
+            2382,
+            2383
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-1 CHILLED WATER PUMP CHWP-1A START-STOP X",
+          "word_ids": [
+            1204,
+            1145,
+            1146,
+            1147,
+            1148,
+            1149,
+            38
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 28,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        465,
+        640,
+        478
+      ],
+      "expected": "BO-2 CHILLED WATER PUMP CHWP-1B START-STOP X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-2 CHILLED WATER PUMP CHWP-1B START-STOP X",
+          "word_ids": [
+            2384,
+            2385,
+            2386,
+            2387,
+            2388,
+            2389,
+            2390
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-2 CHILLED WATER PUMP CHWP-1B START-STOP X",
+          "word_ids": [
+            1205,
+            1150,
+            1151,
+            1152,
+            1153,
+            1154,
+            39
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 29,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        478,
+        640,
+        491
+      ],
+      "expected": "BO-3 CHILLED WATER PUMP CHWP-2A START-STOP X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-3 CHILLED WATER PUMP CHWP-2A START-STOP X",
+          "word_ids": [
+            2391,
+            2392,
+            2393,
+            2394,
+            2395,
+            2396,
+            2397
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-3 CHILLED WATER PUMP CHWP-2A START-STOP X",
+          "word_ids": [
+            1206,
+            1155,
+            1156,
+            1157,
+            1158,
+            1159,
+            40
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 30,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        491,
+        640,
+        504
+      ],
+      "expected": "BO-4 CHILLED WATER PUMP CHWP-2B START-STOP X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-4 CHILLED WATER PUMP CHWP-2B START-STOP X",
+          "word_ids": [
+            2398,
+            2399,
+            2400,
+            2401,
+            2402,
+            2403,
+            2404
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-4 CHILLED WATER PUMP CHWP-2B START-STOP X",
+          "word_ids": [
+            1207,
+            1160,
+            1161,
+            1162,
+            1163,
+            1164,
+            41
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 31,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        504,
+        640,
+        518
+      ],
+      "expected": "BO-7 CHILLER CH-1 ENERGIZE/DEENERGIZE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-7 CHILLER CH-1 ENERGIZE/DEENERGIZE X X",
+          "word_ids": [
+            2405,
+            2406,
+            2407,
+            2408,
+            2409,
+            2410
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-7 CHILLER CH-1 ENERGIZE/DEENERGIZE X X",
+          "word_ids": [
+            1208,
+            1165,
+            1166,
+            1167,
+            65,
+            42
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "row": 32,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        220,
+        518,
+        640,
+        532
+      ],
+      "expected": "BO-8 CHILLER CH-2 ENERGIZE/DEENERGIZE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-8 CHILLER CH-2 ENERGIZE/DEENERGIZE X X",
+          "word_ids": [
+            2411,
+            2412,
+            2413,
+            2414,
+            2415,
+            2416
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-8 CHILLER CH-2 ENERGIZE/DEENERGIZE X X",
+          "word_ids": [
+            1209,
+            1168,
+            1169,
+            1170,
+            66,
+            43
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "header": "SCHEDULE OF DDC POINTS",
+      "page": 31,
+      "bbox": [
+        350,
+        75,
+        500,
+        95
+      ],
+      "engine": "mupdf",
+      "actual": "SCHEDULE OF DDC POINTS",
+      "pass": true
+    },
+    {
+      "table": "M901-CHILLED-WATER-DDC",
+      "header": "SCHEDULE OF DDC POINTS",
+      "page": 31,
+      "bbox": [
+        350,
+        75,
+        500,
+        95
+      ],
+      "engine": "poppler",
+      "actual": "SCHEDULE OF DDC POINTS",
+      "pass": true
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1723,
+        1300,
+        1736
+      ],
+      "expected": "AI-1 OUTDOOR TEMPERATURE (GLOBAL) X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-1 OUTDOOR TEMPERATURE (GLOBAL) X X",
+          "word_ids": [
+            2426,
+            2427,
+            2428,
+            2429,
+            2430,
+            2431
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-1 OUTDOOR TEMPERATURE (GLOBAL) X X",
+          "word_ids": [
+            1809,
+            1892,
+            1893,
+            1894,
+            2012,
+            2053
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1736,
+        1300,
+        1749
+      ],
+      "expected": "AI-2 SYSTEM HOT WATER SUPPLY TEMPERATURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-2 SYSTEM HOT WATER SUPPLY TEMPERATURE X X X",
+          "word_ids": [
+            2432,
+            2433,
+            2434,
+            2435,
+            2436,
+            2437,
+            2438,
+            2439,
+            2440
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-2 SYSTEM HOT WATER SUPPLY TEMPERATURE X X X",
+          "word_ids": [
+            1810,
+            1895,
+            1896,
+            1897,
+            1898,
+            1899,
+            2013,
+            2039,
+            2054
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1749,
+        1300,
+        1762
+      ],
+      "expected": "AI-3 SYSTEM HOT WATER RETURN TEMPERATURE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-3 SYSTEM HOT WATER RETURN TEMPERATURE X X",
+          "word_ids": [
+            2441,
+            2442,
+            2443,
+            2444,
+            2445,
+            2446,
+            2447,
+            2448
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-3 SYSTEM HOT WATER RETURN TEMPERATURE X X",
+          "word_ids": [
+            1811,
+            1900,
+            1901,
+            1902,
+            1903,
+            1904,
+            2014,
+            2055
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1762,
+        1300,
+        1776
+      ],
+      "expected": "AI-4 SYSTEM HOT WATER FLOW X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-4 SYSTEM HOT WATER FLOW X X",
+          "word_ids": [
+            2449,
+            2450,
+            2451,
+            2452,
+            2453,
+            2454,
+            2455
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-4 SYSTEM HOT WATER FLOW X X",
+          "word_ids": [
+            1812,
+            1905,
+            1906,
+            1907,
+            1908,
+            2015,
+            2056
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1776,
+        1300,
+        1789
+      ],
+      "expected": "AI-5 SYSTEM HOT WATER CALCULATED LOAD X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-5 SYSTEM HOT WATER CALCULATED LOAD X X",
+          "word_ids": [
+            2456,
+            2457,
+            2458,
+            2459,
+            2460,
+            2461,
+            2462,
+            2463
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-5 SYSTEM HOT WATER CALCULATED LOAD X X",
+          "word_ids": [
+            1813,
+            1909,
+            1910,
+            1911,
+            1912,
+            1913,
+            2016,
+            2057
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 6,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1789,
+        1300,
+        1802
+      ],
+      "expected": "AI-6 SYSTEM DIFFERENTIAL PRESSURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-6 SYSTEM DIFFERENTIAL PRESSURE X X X",
+          "word_ids": [
+            2464,
+            2465,
+            2466,
+            2467,
+            2468,
+            2469,
+            2470
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-6 SYSTEM DIFFERENTIAL PRESSURE X X X",
+          "word_ids": [
+            1814,
+            1914,
+            1915,
+            1916,
+            2017,
+            2040,
+            2058
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 7,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1802,
+        1300,
+        1815
+      ],
+      "expected": "AI-7 BOILER B-1 SUPPLY TEMPERATURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-7 BOILER B-1 SUPPLY TEMPERATURE X X X",
+          "word_ids": [
+            2471,
+            2472,
+            2473,
+            2474,
+            2475,
+            2476,
+            2477,
+            2478
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-7 BOILER B-1 SUPPLY TEMPERATURE X X X",
+          "word_ids": [
+            1815,
+            1917,
+            1918,
+            1919,
+            1920,
+            2018,
+            2041,
+            2059
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 8,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1815,
+        1300,
+        1828
+      ],
+      "expected": "AI-8 BOILER B-2 SUPPLY TEMPERATURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-8 BOILER B-2 SUPPLY TEMPERATURE X X X",
+          "word_ids": [
+            2479,
+            2480,
+            2481,
+            2482,
+            2483,
+            2484,
+            2485,
+            2486
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-8 BOILER B-2 SUPPLY TEMPERATURE X X X",
+          "word_ids": [
+            1816,
+            1921,
+            1922,
+            1923,
+            1924,
+            2019,
+            2042,
+            2060
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 9,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1828,
+        1300,
+        1841
+      ],
+      "expected": "AI-10 CARBON MONOXIDE LEVEL X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-10 CARBON MONOXIDE LEVEL X X X",
+          "word_ids": [
+            2487,
+            2488,
+            2489,
+            2490,
+            2491,
+            2492,
+            2493
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-10 CARBON MONOXIDE LEVEL X X X",
+          "word_ids": [
+            1817,
+            1925,
+            1926,
+            1927,
+            2020,
+            2043,
+            2061
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 10,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1841,
+        1300,
+        1854
+      ],
+      "expected": "AO-1 HOT WATER PUMP HWP-1 VFC X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-1 HOT WATER PUMP HWP-1 VFC X X",
+          "word_ids": [
+            2494,
+            2495,
+            2496,
+            2497,
+            2498,
+            2499,
+            2500,
+            2501
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-1 HOT WATER PUMP HWP-1 VFC X X",
+          "word_ids": [
+            1818,
+            1928,
+            1929,
+            1930,
+            1931,
+            1932,
+            2021,
+            2062
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 11,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1854,
+        1300,
+        1867
+      ],
+      "expected": "AO-2 HOT WATER PUMP HWP-2 VFC X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-2 HOT WATER PUMP HWP-2 VFC X X",
+          "word_ids": [
+            2502,
+            2503,
+            2504,
+            2505,
+            2506,
+            2507,
+            2508,
+            2509
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-2 HOT WATER PUMP HWP-2 VFC X X",
+          "word_ids": [
+            1819,
+            1933,
+            1934,
+            1935,
+            1936,
+            1937,
+            2022,
+            2063
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 12,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1867,
+        1300,
+        1880
+      ],
+      "expected": "AO-4 BOILER B-1 FIRING RATE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-4 BOILER B-1 FIRING RATE X X",
+          "word_ids": [
+            2510,
+            2511,
+            2512,
+            2513,
+            2514,
+            2515,
+            2516
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-4 BOILER B-1 FIRING RATE X X",
+          "word_ids": [
+            1820,
+            1938,
+            1939,
+            1940,
+            1941,
+            2023,
+            2064
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 13,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1880,
+        1300,
+        1893
+      ],
+      "expected": "AO-5 BOILER B-2 FIRING RATE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-5 BOILER B-2 FIRING RATE X X",
+          "word_ids": [
+            2517,
+            2518,
+            2519,
+            2520,
+            2521,
+            2522,
+            2523
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-5 BOILER B-2 FIRING RATE X X",
+          "word_ids": [
+            1821,
+            1942,
+            1943,
+            1944,
+            1945,
+            2024,
+            2065
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 14,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1893,
+        1300,
+        1907
+      ],
+      "expected": "AO-7 SYSTEM BYPASS VALVE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-7 SYSTEM BYPASS VALVE X X",
+          "word_ids": [
+            2524,
+            2525,
+            2526,
+            2527,
+            2528,
+            2529
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-7 SYSTEM BYPASS VALVE X X",
+          "word_ids": [
+            1822,
+            1946,
+            1947,
+            1948,
+            2025,
+            2066
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 15,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1907,
+        1300,
+        1920
+      ],
+      "expected": "BI-1 HOT WATER PUMP HWP-1 STATUS X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-1 HOT WATER PUMP HWP-1 STATUS X X X",
+          "word_ids": [
+            2530,
+            2531,
+            2532,
+            2533,
+            2534,
+            2535,
+            2536,
+            2537,
+            2538
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-1 HOT WATER PUMP HWP-1 STATUS X X X",
+          "word_ids": [
+            1823,
+            1949,
+            1950,
+            1951,
+            1952,
+            1953,
+            2026,
+            2044,
+            2067
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 16,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1920,
+        1300,
+        1933
+      ],
+      "expected": "BI-2 HOT WATER PUMP HWP-2 STATUS X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-2 HOT WATER PUMP HWP-2 STATUS X X X",
+          "word_ids": [
+            2539,
+            2540,
+            2541,
+            2542,
+            2543,
+            2544,
+            2545,
+            2546,
+            2547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-2 HOT WATER PUMP HWP-2 STATUS X X X",
+          "word_ids": [
+            1824,
+            1954,
+            1955,
+            1956,
+            1957,
+            1958,
+            2027,
+            2045,
+            2068
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 17,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1933,
+        1300,
+        1946
+      ],
+      "expected": "BI-4 EMERGENCY BOILER SHUTDOWN X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-4 EMERGENCY BOILER SHUTDOWN X X",
+          "word_ids": [
+            2548,
+            2549,
+            2550,
+            2551,
+            2552,
+            2553
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-4 EMERGENCY BOILER SHUTDOWN X X",
+          "word_ids": [
+            1825,
+            1959,
+            1960,
+            1961,
+            2046,
+            2069
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 18,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1946,
+        1300,
+        1959
+      ],
+      "expected": "BI-5 BOILER B-1 GENERAL ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-5 BOILER B-1 GENERAL ALARM X X X",
+          "word_ids": [
+            2554,
+            2555,
+            2556,
+            2557,
+            2558,
+            2559,
+            2560,
+            2561
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-5 BOILER B-1 GENERAL ALARM X X X",
+          "word_ids": [
+            1826,
+            1962,
+            1963,
+            1964,
+            1965,
+            2028,
+            2047,
+            2070
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 19,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1959,
+        1300,
+        1972
+      ],
+      "expected": "BI-6 BOILER B-2 GENERAL ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-6 BOILER B-2 GENERAL ALARM X X X",
+          "word_ids": [
+            2562,
+            2563,
+            2564,
+            2565,
+            2566,
+            2567,
+            2568,
+            2569
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-6 BOILER B-2 GENERAL ALARM X X X",
+          "word_ids": [
+            1827,
+            1966,
+            1967,
+            1968,
+            1969,
+            2029,
+            2048,
+            2071
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 20,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1972,
+        1300,
+        1985
+      ],
+      "expected": "BI-8 BOILER ROOM WATER DETECTOR ALARM X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-8 BOILER ROOM WATER DETECTOR ALARM X X",
+          "word_ids": [
+            2570,
+            2571,
+            2572,
+            2573,
+            2574,
+            2575,
+            2576,
+            2577
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-8 BOILER ROOM WATER DETECTOR ALARM X X",
+          "word_ids": [
+            1828,
+            1970,
+            1971,
+            1972,
+            1973,
+            1974,
+            2049,
+            2072
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 21,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1985,
+        1300,
+        1998
+      ],
+      "expected": "BI-9 UPS LOW BATTERY ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-9 UPS LOW BATTERY ALARM X X X",
+          "word_ids": [
+            2578,
+            2579,
+            2580,
+            2581,
+            2582,
+            2583,
+            2584,
+            2585
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-9 UPS LOW BATTERY ALARM X X X",
+          "word_ids": [
+            1829,
+            1975,
+            1976,
+            1977,
+            1978,
+            2030,
+            2050,
+            2073
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 22,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        1998,
+        1300,
+        2011
+      ],
+      "expected": "BI-10 UPS ON BATTERY ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-10 UPS ON BATTERY ALARM X X X",
+          "word_ids": [
+            2586,
+            2587,
+            2588,
+            2589,
+            2590,
+            2591,
+            2592,
+            2593
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-10 UPS ON BATTERY ALARM X X X",
+          "word_ids": [
+            1830,
+            1979,
+            1980,
+            1981,
+            1982,
+            2031,
+            2051,
+            2074
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 23,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        2011,
+        1300,
+        2025
+      ],
+      "expected": "BO-1 HOT WATER PUMP HWP-1 START-STOP X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-1 HOT WATER PUMP HWP-1 START-STOP X X",
+          "word_ids": [
+            2594,
+            2595,
+            2596,
+            2597,
+            2598,
+            2599,
+            2600,
+            2601
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-1 HOT WATER PUMP HWP-1 START-STOP X X",
+          "word_ids": [
+            1831,
+            1983,
+            1984,
+            1985,
+            1986,
+            1987,
+            2032,
+            2075
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 24,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        2025,
+        1300,
+        2038
+      ],
+      "expected": "BO-2 HOT WATER PUMP HWP-2 START-STOP X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-2 HOT WATER PUMP HWP-2 START-STOP X X",
+          "word_ids": [
+            2602,
+            2603,
+            2604,
+            2605,
+            2606,
+            2607,
+            2608,
+            2609
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-2 HOT WATER PUMP HWP-2 START-STOP X X",
+          "word_ids": [
+            1832,
+            1988,
+            1989,
+            1990,
+            1991,
+            1992,
+            2033,
+            2076
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 25,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        2038,
+        1300,
+        2051
+      ],
+      "expected": "BO-4 BOILER B-1 START/STOP X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-4 BOILER B-1 START/STOP X X",
+          "word_ids": [
+            2610,
+            2611,
+            2612,
+            2613,
+            2614,
+            2615
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-4 BOILER B-1 START/STOP X X",
+          "word_ids": [
+            1833,
+            1993,
+            1994,
+            1995,
+            2034,
+            2077
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 26,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        2051,
+        1300,
+        2064
+      ],
+      "expected": "BO-5 BOILER B-2 START/STOP X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-5 BOILER B-2 START/STOP X X",
+          "word_ids": [
+            2616,
+            2617,
+            2618,
+            2619,
+            2620,
+            2621
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-5 BOILER B-2 START/STOP X X",
+          "word_ids": [
+            1834,
+            1996,
+            1997,
+            1998,
+            2035,
+            2078
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 27,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        2064,
+        1300,
+        2077
+      ],
+      "expected": "BO-7 BOILER B-1 HEATING WATER ISOLATION VALVE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-7 BOILER B-1 HEATING WATER ISOLATION VALVE X X",
+          "word_ids": [
+            2622,
+            2623,
+            2624,
+            2625,
+            2626,
+            2627,
+            2628,
+            2629,
+            2630
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-7 BOILER B-1 HEATING WATER ISOLATION VALVE X X",
+          "word_ids": [
+            1835,
+            1999,
+            2000,
+            2001,
+            2002,
+            2003,
+            2004,
+            2036,
+            2079
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "row": 28,
+      "column": "source_row_as_printed",
+      "page": 31,
+      "bbox": [
+        910,
+        2077,
+        1300,
+        2091
+      ],
+      "expected": "BO-8 BOILER B-2 HEATING WATER ISOLATION VALVE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-8 BOILER B-2 HEATING WATER ISOLATION VALVE X X",
+          "word_ids": [
+            2631,
+            2632,
+            2633,
+            2634,
+            2635,
+            2636,
+            2637,
+            2638,
+            2639
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-8 BOILER B-2 HEATING WATER ISOLATION VALVE X X",
+          "word_ids": [
+            1836,
+            2005,
+            2006,
+            2007,
+            2008,
+            2009,
+            2010,
+            2037,
+            2080
+          ]
+        }
+      }
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "header": "SCHEDULE OF DDC POINTS",
+      "page": 31,
+      "bbox": [
+        1040,
+        1685,
+        1190,
+        1705
+      ],
+      "engine": "mupdf",
+      "actual": "SCHEDULE OF DDC POINTS",
+      "pass": true
+    },
+    {
+      "table": "M901-HEATING-HOT-WATER-DDC",
+      "header": "SCHEDULE OF DDC POINTS",
+      "page": 31,
+      "bbox": [
+        1040,
+        1685,
+        1190,
+        1705
+      ],
+      "engine": "poppler",
+      "actual": "SCHEDULE OF DDC POINTS",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

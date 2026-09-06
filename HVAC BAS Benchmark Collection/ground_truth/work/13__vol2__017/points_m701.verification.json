@@ -1,0 +1,2401 @@
+{
+  "document_id": "13__vol2__017",
+  "source_sha256": "5821df0d298d0e51a6c20ba36b3cc5d2eb7bbece098f12eb1746c339b56a1533",
+  "annotation_sha256": "e18ba2a1f4a8dfd08c5538cf939e867ccd6535b552e5c4328d412c5eff274646",
+  "tables": 3,
+  "rows": 60,
+  "cell_assertions": 60,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        286,
+        2700,
+        304
+      ],
+      "expected": "SUPPLY FAN STATUS SENSOR X X X X X VFD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN STATUS SENSOR X X X X X VFD",
+          "word_ids": [
+            181,
+            182,
+            183,
+            184,
+            244,
+            971,
+            973,
+            1026,
+            1028,
+            254
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN STATUS SENSOR X X X X X VFD",
+          "word_ids": [
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234,
+            235,
+            236
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        304,
+        2700,
+        322
+      ],
+      "expected": "X RETURN FAN STATUS SENSOR X X X X VFD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X RETURN FAN STATUS SENSOR X X X X VFD",
+          "word_ids": [
+            245,
+            186,
+            187,
+            188,
+            189,
+            972,
+            974,
+            1027,
+            1029,
+            255
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X RETURN FAN STATUS SENSOR X X X X VFD",
+          "word_ids": [
+            242,
+            238,
+            239,
+            240,
+            241,
+            243,
+            244,
+            245,
+            246,
+            247
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        322,
+        2700,
+        340
+      ],
+      "expected": "MIXED AIR TEMP SENSOR X T2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MIXED AIR TEMP SENSOR X T2",
+          "word_ids": [
+            190,
+            191,
+            192,
+            193,
+            185,
+            256
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MIXED AIR TEMP SENSOR X T2",
+          "word_ids": [
+            259,
+            260,
+            261,
+            262,
+            263,
+            264
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        340,
+        2700,
+        358
+      ],
+      "expected": "COLD DECK TEMP SENSOR (E) X T3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COLD DECK TEMP SENSOR (E) X T3",
+          "word_ids": [
+            194,
+            195,
+            196,
+            197,
+            198,
+            240,
+            257
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COLD DECK TEMP SENSOR (E) X T3",
+          "word_ids": [
+            271,
+            272,
+            273,
+            274,
+            275,
+            276,
+            277
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        358,
+        2700,
+        376
+      ],
+      "expected": "HOT DECK TEMP SENSOR (E) X T4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT DECK TEMP SENSOR (E) X T4",
+          "word_ids": [
+            199,
+            200,
+            201,
+            202,
+            203,
+            241,
+            258
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT DECK TEMP SENSOR (E) X T4",
+          "word_ids": [
+            285,
+            286,
+            287,
+            288,
+            289,
+            290,
+            291
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 6,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        376,
+        2700,
+        394
+      ],
+      "expected": "RETURN AIR TEMP SENSOR (E) X T5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN AIR TEMP SENSOR (E) X T5",
+          "word_ids": [
+            204,
+            205,
+            206,
+            207,
+            208,
+            242,
+            259
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN AIR TEMP SENSOR (E) X T5",
+          "word_ids": [
+            293,
+            294,
+            295,
+            296,
+            297,
+            298,
+            299
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 7,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        394,
+        2700,
+        412
+      ],
+      "expected": "RETURN AIR HUMIDITY SENSOR (E) X H2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN AIR HUMIDITY SENSOR (E) X H2",
+          "word_ids": [
+            209,
+            210,
+            211,
+            212,
+            213,
+            243,
+            260
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN AIR HUMIDITY SENSOR (E) X H2",
+          "word_ids": [
+            313,
+            314,
+            315,
+            316,
+            317,
+            667,
+            330
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 8,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        412,
+        2700,
+        430
+      ],
+      "expected": "SUPPLY FAN AND RETURN FAN X X SF, RF, AFMS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN AND RETURN FAN X X SF, RF, AFMS",
+          "word_ids": [
+            214,
+            215,
+            216,
+            217,
+            218,
+            917,
+            246,
+            261,
+            262,
+            263
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN AND RETURN FAN X X SF, RF, AFMS",
+          "word_ids": [
+            325,
+            326,
+            327,
+            328,
+            329,
+            331,
+            335,
+            332,
+            333,
+            334
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 9,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        430,
+        2700,
+        448
+      ],
+      "expected": "PREHEAT VALVE X V1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PREHEAT VALVE X V1",
+          "word_ids": [
+            219,
+            220,
+            249,
+            264
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PREHEAT VALVE X V1",
+          "word_ids": [
+            340,
+            341,
+            342,
+            343
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 10,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        448,
+        2700,
+        466
+      ],
+      "expected": "COOLING VALVE X V2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COOLING VALVE X V2",
+          "word_ids": [
+            221,
+            222,
+            250,
+            265
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COOLING VALVE X V2",
+          "word_ids": [
+            349,
+            350,
+            351,
+            352
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 11,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        466,
+        2700,
+        484
+      ],
+      "expected": "REHEAT VALVE X V3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "REHEAT VALVE X V3",
+          "word_ids": [
+            223,
+            224,
+            251,
+            266
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "REHEAT VALVE X V3",
+          "word_ids": [
+            358,
+            359,
+            365,
+            366
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 12,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        484,
+        2700,
+        502
+      ],
+      "expected": "M1(E), M2, M4(E) DAMPERS X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M1(E), M2, M4(E) DAMPERS X X",
+          "word_ids": [
+            267,
+            268,
+            269,
+            228,
+            976,
+            252
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M1(E), M2, M4(E) DAMPERS X X",
+          "word_ids": [
+            373,
+            374,
+            375,
+            472,
+            371,
+            372
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 13,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        502,
+        2700,
+        520
+      ],
+      "expected": "MINIMUM OUTSIDE AIR DAMPER X X X M3, AFMS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MINIMUM OUTSIDE AIR DAMPER X X X M3, AFMS",
+          "word_ids": [
+            229,
+            230,
+            231,
+            232,
+            954,
+            977,
+            253,
+            270,
+            271
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MINIMUM OUTSIDE AIR DAMPER X X X M3, AFMS",
+          "word_ids": [
+            389,
+            390,
+            391,
+            392,
+            450,
+            376,
+            377,
+            378,
+            379
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 14,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        520,
+        2700,
+        538
+      ],
+      "expected": "OUTSIDE AIR TEMP SENSOR X T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMP SENSOR X T1",
+          "word_ids": [
+            233,
+            234,
+            235,
+            236,
+            247,
+            272
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMP SENSOR X T1",
+          "word_ids": [
+            394,
+            395,
+            396,
+            397,
+            451,
+            452
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 15,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        538,
+        2700,
+        556
+      ],
+      "expected": "OUTSIDE HUMIDITY SENSOR X H1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE HUMIDITY SENSOR X H1",
+          "word_ids": [
+            237,
+            238,
+            239,
+            248,
+            273
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE HUMIDITY SENSOR X H1",
+          "word_ids": [
+            399,
+            400,
+            401,
+            453,
+            454
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 16,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        556,
+        2700,
+        574
+      ],
+      "expected": "PURGE SWITCH X S1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PURGE SWITCH X S1",
+          "word_ids": [
+            794,
+            795,
+            796,
+            797
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PURGE SWITCH X S1",
+          "word_ids": [
+            404,
+            405,
+            455,
+            458
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 17,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        574,
+        2700,
+        592
+      ],
+      "expected": "SMOKE DETECTOR X SD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SMOKE DETECTOR X SD",
+          "word_ids": [
+            918,
+            919,
+            920,
+            921
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SMOKE DETECTOR X SD",
+          "word_ids": [
+            408,
+            409,
+            459,
+            460
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 18,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        592,
+        2700,
+        610
+      ],
+      "expected": "FILTER PRESSURE SENSOR X X DPS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FILTER PRESSURE SENSOR X X DPS",
+          "word_ids": [
+            922,
+            923,
+            924,
+            975,
+            925,
+            926
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FILTER PRESSURE SENSOR X X DPS",
+          "word_ids": [
+            412,
+            413,
+            414,
+            456,
+            461,
+            462
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A1-DDC",
+      "row": 19,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        610,
+        2700,
+        628
+      ],
+      "expected": "LEAK DETECTION X X LD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LEAK DETECTION X X LD",
+          "word_ids": [
+            1052,
+            1053,
+            1056,
+            1054,
+            1055
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LEAK DETECTION X X LD",
+          "word_ids": [
+            416,
+            417,
+            457,
+            463,
+            464
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        286,
+        1710,
+        304
+      ],
+      "expected": "SUPPLY FAN STATUS SENSOR X X X X X VFD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN STATUS SENSOR X X X X X VFD",
+          "word_ids": [
+            453,
+            454,
+            455,
+            456,
+            506,
+            962,
+            964,
+            1030,
+            1032,
+            517
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN STATUS SENSOR X X X X X VFD",
+          "word_ids": [
+            206,
+            207,
+            208,
+            209,
+            210,
+            211,
+            212,
+            213,
+            214,
+            215
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        304,
+        1710,
+        322
+      ],
+      "expected": "RETURN FAN STATUS SENSOR X X X X X VFD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN FAN STATUS SENSOR X X X X X VFD",
+          "word_ids": [
+            457,
+            458,
+            459,
+            460,
+            514,
+            963,
+            965,
+            1031,
+            1033,
+            518
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN FAN STATUS SENSOR X X X X X VFD",
+          "word_ids": [
+            216,
+            217,
+            218,
+            219,
+            220,
+            221,
+            222,
+            223,
+            224,
+            237
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        322,
+        1710,
+        340
+      ],
+      "expected": "MIXED AIR TEMP SENSOR X T2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MIXED AIR TEMP SENSOR X T2",
+          "word_ids": [
+            461,
+            462,
+            463,
+            464,
+            502,
+            519
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MIXED AIR TEMP SENSOR X T2",
+          "word_ids": [
+            253,
+            254,
+            255,
+            256,
+            257,
+            258
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        340,
+        1710,
+        358
+      ],
+      "expected": "SUPPLY AIR TEMP SENSOR X T3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMP SENSOR X T3",
+          "word_ids": [
+            465,
+            466,
+            467,
+            468,
+            503,
+            520
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMP SENSOR X T3",
+          "word_ids": [
+            265,
+            266,
+            267,
+            268,
+            269,
+            270
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        358,
+        1710,
+        376
+      ],
+      "expected": "RETURN AIR TEMP SENSOR (E) X T4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN AIR TEMP SENSOR (E) X T4",
+          "word_ids": [
+            469,
+            470,
+            471,
+            472,
+            473,
+            504,
+            521
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN AIR TEMP SENSOR (E) X T4",
+          "word_ids": [
+            278,
+            279,
+            280,
+            281,
+            282,
+            283,
+            284
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 6,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        376,
+        1710,
+        394
+      ],
+      "expected": "RETURN AIR HUMIDITY SENSOR (E) X H2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN AIR HUMIDITY SENSOR (E) X H2",
+          "word_ids": [
+            474,
+            475,
+            476,
+            477,
+            478,
+            505,
+            522
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN AIR HUMIDITY SENSOR (E) X H2",
+          "word_ids": [
+            300,
+            301,
+            302,
+            303,
+            304,
+            305,
+            292
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 7,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        394,
+        1710,
+        412
+      ],
+      "expected": "SUPPLY FAN X X SF, AFMS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN X X SF, AFMS",
+          "word_ids": [
+            498,
+            499,
+            966,
+            515,
+            531,
+            532
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN X X SF, AFMS",
+          "word_ids": [
+            306,
+            307,
+            308,
+            309,
+            310,
+            311
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 8,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        412,
+        1710,
+        430
+      ],
+      "expected": "RETURN FAN X X RF, AFMS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN FAN X X RF, AFMS",
+          "word_ids": [
+            479,
+            480,
+            967,
+            507,
+            523,
+            524
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN FAN X X RF, AFMS",
+          "word_ids": [
+            318,
+            319,
+            320,
+            321,
+            322,
+            323
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 9,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        430,
+        1710,
+        448
+      ],
+      "expected": "PREHEAT VALVE X V1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PREHEAT VALVE X V1",
+          "word_ids": [
+            481,
+            482,
+            510,
+            525
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PREHEAT VALVE X V1",
+          "word_ids": [
+            336,
+            337,
+            338,
+            339
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 10,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        448,
+        1710,
+        466
+      ],
+      "expected": "COOLING COIL VALVE X V2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COOLING COIL VALVE X V2",
+          "word_ids": [
+            483,
+            484,
+            485,
+            511,
+            526
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COOLING COIL VALVE X V2",
+          "word_ids": [
+            344,
+            345,
+            346,
+            347,
+            348
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 11,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        466,
+        1710,
+        484
+      ],
+      "expected": "M1(E), M2, M4(E) DAMPERS X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M1(E), M2, M4(E) DAMPERS X X",
+          "word_ids": [
+            1041,
+            1042,
+            1043,
+            486,
+            968,
+            512
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M1(E), M2, M4(E) DAMPERS X X",
+          "word_ids": [
+            355,
+            356,
+            357,
+            660,
+            353,
+            354
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 12,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        484,
+        1710,
+        502
+      ],
+      "expected": "MINIMUM OUTSIDE AIR DAMPER X X X M3, AFMS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MINIMUM OUTSIDE AIR DAMPER X X X M3, AFMS",
+          "word_ids": [
+            487,
+            488,
+            489,
+            490,
+            955,
+            969,
+            513,
+            527,
+            528
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MINIMUM OUTSIDE AIR DAMPER X X X M3, AFMS",
+          "word_ids": [
+            557,
+            558,
+            559,
+            560,
+            384,
+            367,
+            368,
+            369,
+            370
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 13,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        502,
+        1710,
+        520
+      ],
+      "expected": "OUTSIDE AIR TEMP SENSOR X T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMP SENSOR X T1",
+          "word_ids": [
+            491,
+            492,
+            493,
+            494,
+            508,
+            529
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMP SENSOR X T1",
+          "word_ids": [
+            380,
+            381,
+            382,
+            383,
+            385,
+            424
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 14,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        520,
+        1710,
+        538
+      ],
+      "expected": "OUTSIDE HUMIDITY SENSOR X H1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE HUMIDITY SENSOR X H1",
+          "word_ids": [
+            495,
+            496,
+            497,
+            509,
+            530
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE HUMIDITY SENSOR X H1",
+          "word_ids": [
+            386,
+            387,
+            388,
+            425,
+            393
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 15,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        538,
+        1710,
+        556
+      ],
+      "expected": "PURGE SWITCH X S1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PURGE SWITCH X S1",
+          "word_ids": [
+            500,
+            501,
+            516,
+            789
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PURGE SWITCH X S1",
+          "word_ids": [
+            426,
+            427,
+            418,
+            398
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 16,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        556,
+        1710,
+        574
+      ],
+      "expected": "SMOKE DETECTOR X SD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SMOKE DETECTOR X SD",
+          "word_ids": [
+            940,
+            941,
+            942,
+            943
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SMOKE DETECTOR X SD",
+          "word_ids": [
+            419,
+            420,
+            402,
+            403
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 17,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        574,
+        1710,
+        592
+      ],
+      "expected": "FILTER PRESSURE SENSOR X X DPS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FILTER PRESSURE SENSOR X X DPS",
+          "word_ids": [
+            944,
+            945,
+            946,
+            970,
+            947,
+            948
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FILTER PRESSURE SENSOR X X DPS",
+          "word_ids": [
+            421,
+            422,
+            423,
+            428,
+            406,
+            407
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 18,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        592,
+        1710,
+        610
+      ],
+      "expected": "LEAK DETECTION X X LD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LEAK DETECTION X X LD",
+          "word_ids": [
+            1047,
+            1048,
+            1051,
+            1049,
+            1050
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LEAK DETECTION X X LD",
+          "word_ids": [
+            429,
+            430,
+            431,
+            410,
+            411
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 19,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        610,
+        1710,
+        628
+      ],
+      "expected": "HUMIDIFIER X X X X X X H-A-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDIFIER X X X X X X H-A-3",
+          "word_ids": [
+            986,
+            1001,
+            1002,
+            1003,
+            1024,
+            1025,
+            1004,
+            1017
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDIFIER X X X X X X H-A-3",
+          "word_ids": [
+            432,
+            433,
+            434,
+            435,
+            447,
+            448,
+            449,
+            415
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 20,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        628,
+        1710,
+        646
+      ],
+      "expected": "STEAM CONTROL VALVE X V3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STEAM CONTROL VALVE X V3",
+          "word_ids": [
+            987,
+            988,
+            989,
+            1008,
+            1018
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STEAM CONTROL VALVE X V3",
+          "word_ids": [
+            436,
+            437,
+            438,
+            466,
+            465
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 21,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        646,
+        1710,
+        664
+      ],
+      "expected": "RETURN AIR HUMIDITY SENSOR (E) X H2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN AIR HUMIDITY SENSOR (E) X H2",
+          "word_ids": [
+            990,
+            991,
+            992,
+            993,
+            994,
+            1006,
+            1019
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN AIR HUMIDITY SENSOR (E) X H2",
+          "word_ids": [
+            467,
+            468,
+            469,
+            470,
+            471,
+            439,
+            473
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 22,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        664,
+        1710,
+        682
+      ],
+      "expected": "HL HIGH LIMIT HUMIDITY SENSOR X X X H",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HL HIGH LIMIT HUMIDITY SENSOR X X X H",
+          "word_ids": [
+            1021,
+            995,
+            996,
+            997,
+            998,
+            1007,
+            1010,
+            1009,
+            1020
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HL HIGH LIMIT HUMIDITY SENSOR X X X H",
+          "word_ids": [
+            485,
+            440,
+            441,
+            442,
+            443,
+            444,
+            474,
+            475,
+            484
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 23,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        682,
+        1710,
+        700
+      ],
+      "expected": "AIRFLOW SWITCH X DP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIRFLOW SWITCH X DP",
+          "word_ids": [
+            999,
+            1000,
+            1011,
+            1022
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIRFLOW SWITCH X DP",
+          "word_ids": [
+            445,
+            446,
+            476,
+            488
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A3-A6-DDC",
+      "row": 24,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        875,
+        700,
+        1710,
+        718
+      ],
+      "expected": "COLD WATER CONTROL VALVE X V4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COLD WATER CONTROL VALVE X V4",
+          "word_ids": [
+            1012,
+            1013,
+            1014,
+            1015,
+            1016,
+            1023
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COLD WATER CONTROL VALVE X V4",
+          "word_ids": [
+            477,
+            478,
+            479,
+            480,
+            481,
+            495
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A2-DDC",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        1120,
+        2700,
+        1138
+      ],
+      "expected": "SUPPLY FAN STATUS SENSOR X X X X X VFD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN STATUS SENSOR X X X X X VFD",
+          "word_ids": [
+            713,
+            714,
+            715,
+            716,
+            765,
+            978,
+            980,
+            1034,
+            1036,
+            774
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN STATUS SENSOR X X X X X VFD",
+          "word_ids": [
+            1108,
+            1109,
+            1110,
+            1111,
+            1102,
+            1092,
+            1032,
+            1029,
+            1020,
+            720
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A2-DDC",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        1138,
+        2700,
+        1156
+      ],
+      "expected": "RETURN FAN STATUS SENSOR X X X X X VFD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN FAN STATUS SENSOR X X X X X VFD",
+          "word_ids": [
+            717,
+            718,
+            719,
+            720,
+            773,
+            979,
+            981,
+            1035,
+            1037,
+            775
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN FAN STATUS SENSOR X X X X X VFD",
+          "word_ids": [
+            730,
+            731,
+            732,
+            733,
+            734,
+            735,
+            736,
+            737,
+            738,
+            739
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A2-DDC",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        1156,
+        2700,
+        1174
+      ],
+      "expected": "MIXED AIR TEMP SENSOR X T2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MIXED AIR TEMP SENSOR X T2",
+          "word_ids": [
+            721,
+            722,
+            723,
+            724,
+            761,
+            776
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MIXED AIR TEMP SENSOR X T2",
+          "word_ids": [
+            747,
+            748,
+            749,
+            750,
+            751,
+            752
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A2-DDC",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        1174,
+        2700,
+        1192
+      ],
+      "expected": "SUPPLY AIR TEMP SENSOR X T3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMP SENSOR X T3",
+          "word_ids": [
+            725,
+            726,
+            727,
+            728,
+            762,
+            777
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMP SENSOR X T3",
+          "word_ids": [
+            753,
+            754,
+            755,
+            756,
+            757,
+            758
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A2-DDC",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        1192,
+        2700,
+        1210
+      ],
+      "expected": "RETURN AIR TEMP SENSOR (E) X T4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN AIR TEMP SENSOR (E) X T4",
+          "word_ids": [
+            729,
+            730,
+            731,
+            732,
+            733,
+            763,
+            778
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN AIR TEMP SENSOR (E) X T4",
+          "word_ids": [
+            759,
+            760,
+            761,
+            762,
+            763,
+            764,
+            765
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A2-DDC",
+      "row": 6,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        1210,
+        2700,
+        1228
+      ],
+      "expected": "RETURN AIR HUMIDITY SENSOR (E) X H2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN AIR HUMIDITY SENSOR (E) X H2",
+          "word_ids": [
+            734,
+            735,
+            736,
+            737,
+            738,
+            764,
+            779
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN AIR HUMIDITY SENSOR (E) X H2",
+          "word_ids": [
+            1014,
+            1015,
+            1016,
+            1017,
+            1018,
+            766,
+            772
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A2-DDC",
+      "row": 7,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        1228,
+        2700,
+        1246
+      ],
+      "expected": "SUPPLY FAN AND RETURN FAN X X SF, RF, AFMS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN AND RETURN FAN X X SF, RF, AFMS",
+          "word_ids": [
+            739,
+            740,
+            741,
+            742,
+            743,
+            982,
+            766,
+            780,
+            781,
+            782
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN AND RETURN FAN X X SF, RF, AFMS",
+          "word_ids": [
+            767,
+            768,
+            769,
+            770,
+            771,
+            773,
+            774,
+            775,
+            776,
+            777
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A2-DDC",
+      "row": 8,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        1246,
+        2700,
+        1264
+      ],
+      "expected": "PREHEAT VALVE X V1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PREHEAT VALVE X V1",
+          "word_ids": [
+            744,
+            745,
+            769,
+            783
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PREHEAT VALVE X V1",
+          "word_ids": [
+            784,
+            785,
+            786,
+            787
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A2-DDC",
+      "row": 9,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        1264,
+        2700,
+        1282
+      ],
+      "expected": "COOLING COIL VALVE X V2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COOLING COIL VALVE X V2",
+          "word_ids": [
+            746,
+            747,
+            748,
+            770,
+            784
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COOLING COIL VALVE X V2",
+          "word_ids": [
+            795,
+            796,
+            797,
+            798,
+            799
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A2-DDC",
+      "row": 10,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        1282,
+        2700,
+        1300
+      ],
+      "expected": "DAMPERS X X M1(E), M2, M4(E)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAMPERS X X M1(E), M2, M4(E)",
+          "word_ids": [
+            749,
+            983,
+            771,
+            1038,
+            1039,
+            1040
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAMPERS X X M1(E), M2, M4(E)",
+          "word_ids": [
+            805,
+            806,
+            807,
+            808,
+            809,
+            810
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A2-DDC",
+      "row": 11,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        1300,
+        2700,
+        1318
+      ],
+      "expected": "MINIMUM OUTSIDE AIR DAMPER X X X M3, AFMS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MINIMUM OUTSIDE AIR DAMPER X X X M3, AFMS",
+          "word_ids": [
+            750,
+            751,
+            752,
+            753,
+            956,
+            984,
+            772,
+            785,
+            786
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MINIMUM OUTSIDE AIR DAMPER X X X M3, AFMS",
+          "word_ids": [
+            815,
+            816,
+            817,
+            818,
+            1011,
+            811,
+            812,
+            813,
+            814
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A2-DDC",
+      "row": 12,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        1318,
+        2700,
+        1336
+      ],
+      "expected": "OUTSIDE AIR TEMP SENSOR X T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMP SENSOR X T1",
+          "word_ids": [
+            754,
+            755,
+            756,
+            757,
+            767,
+            787
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMP SENSOR X T1",
+          "word_ids": [
+            1007,
+            1008,
+            1009,
+            1010,
+            819,
+            820
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A2-DDC",
+      "row": 13,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        1336,
+        2700,
+        1354
+      ],
+      "expected": "OUTSIDE HUMIDITY SENSOR X H1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE HUMIDITY SENSOR X H1",
+          "word_ids": [
+            758,
+            759,
+            760,
+            768,
+            788
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE HUMIDITY SENSOR X H1",
+          "word_ids": [
+            994,
+            995,
+            996,
+            992,
+            989
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A2-DDC",
+      "row": 14,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        1354,
+        2700,
+        1372
+      ],
+      "expected": "PURGE SWITCH X S1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PURGE SWITCH X S1",
+          "word_ids": [
+            790,
+            791,
+            792,
+            793
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PURGE SWITCH X S1",
+          "word_ids": [
+            978,
+            979,
+            976,
+            973
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A2-DDC",
+      "row": 15,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        1372,
+        2700,
+        1390
+      ],
+      "expected": "SMOKE DETECTOR X SD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SMOKE DETECTOR X SD",
+          "word_ids": [
+            931,
+            932,
+            933,
+            934
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SMOKE DETECTOR X SD",
+          "word_ids": [
+            965,
+            966,
+            963,
+            958
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A2-DDC",
+      "row": 16,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        1390,
+        2700,
+        1408
+      ],
+      "expected": "FILTER PRESSURE SENSOR X X DPS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FILTER PRESSURE SENSOR X X DPS",
+          "word_ids": [
+            935,
+            936,
+            937,
+            985,
+            938,
+            939
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FILTER PRESSURE SENSOR X X DPS",
+          "word_ids": [
+            960,
+            961,
+            962,
+            957,
+            952,
+            948
+          ]
+        }
+      }
+    },
+    {
+      "table": "M703-ACU-A2-DDC",
+      "row": 17,
+      "column": "source_row_as_printed",
+      "page": 17,
+      "bbox": [
+        1870,
+        1408,
+        2700,
+        1426
+      ],
+      "expected": "LEAK DETECTION X X LD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LEAK DETECTION X X LD",
+          "word_ids": [
+            1057,
+            1058,
+            1061,
+            1059,
+            1060
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LEAK DETECTION X X LD",
+          "word_ids": [
+            955,
+            956,
+            951,
+            945,
+            940
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

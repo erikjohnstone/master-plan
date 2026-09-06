@@ -1,0 +1,224 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "4c4c7571b4ff118255211d8d34d3833a834de98beb0c884b249427ac9d7b0a64",
+  "tables": 3,
+  "rows": 5,
+  "cell_assertions": 5,
+  "text_assertions": 1,
+  "checks": [
+    {
+      "table": "M612-DOAH-M1-PART-1",
+      "row": 1,
+      "column": "mark",
+      "page": 46,
+      "bbox": [
+        150,
+        771,
+        220,
+        793
+      ],
+      "expected": "DOAH-M1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH-M1",
+          "word_ids": [
+            1314
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH-M1",
+          "word_ids": [
+            150
+          ]
+        }
+      }
+    },
+    {
+      "table": "M612-DOAH-M1-PART-1",
+      "header": "DEDICATED OUTDOOR AIR UNIT SCHEDULE 1 OF 2",
+      "page": 46,
+      "bbox": [
+        150,
+        700,
+        1830,
+        770
+      ],
+      "engine": "mupdf",
+      "actual": "DEDICATED OUTDOOR AIR UNIT SCHEDULE 1 OF 2 SUPPLY FAN EXHAUST FAN COOLING COIL DATA HEATING COIL DATA EXTERNAL SP MOTOR (QTY) EXTERNAL MOTOR SENSIBLE WTR P.D. FT. MAX. COIL FV WTR P.D. FT. CFM CFM TOTAL (MBH) EAT °FDB EAT °FWB LAT °FDB LAT °FWB EWT °F LWT °F GPM MBH EAT °FDB LAT °FDB EWT °F MAX. MARK (IN WG) HP SP (IN WG) (QTY) HP (MBH) H20 (FPM) LWT °F GPM H20",
+      "pass": true
+    },
+    {
+      "table": "M612-DOAH-M1-PART-1",
+      "header": "DEDICATED OUTDOOR AIR UNIT SCHEDULE 1 OF 2",
+      "page": 46,
+      "bbox": [
+        150,
+        700,
+        1830,
+        770
+      ],
+      "engine": "poppler",
+      "actual": "DEDICATED OUTDOOR AIR UNIT SCHEDULE 1 OF 2 SUPPLY FAN EXHAUST FAN COOLING COIL DATA HEATING COIL DATA EXTERNAL SP MOTOR (QTY) EXTERNAL MOTOR SENSIBLE WTR P.D. FT. MAX. COIL FV WTR P.D. FT. CFM CFM TOTAL (MBH) EAT °FDB EAT °FWB LAT °FDB LAT °FWB EWT °F LWT °F GPM MBH EAT °FDB LAT °FDB EWT °F MAX. MARK (IN WG) HP SP (IN WG) (QTY) HP (MBH) H20 (FPM) LWT °F GPM H20",
+      "pass": true
+    },
+    {
+      "table": "M612-DOAH-M1-PART-2",
+      "row": 1,
+      "column": "mark",
+      "page": 46,
+      "bbox": [
+        150,
+        913,
+        220,
+        935
+      ],
+      "expected": "DOAH-M1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH-M1",
+          "word_ids": [
+            1443
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH-M1",
+          "word_ids": [
+            1633
+          ]
+        }
+      }
+    },
+    {
+      "table": "M612-RANGE-HOOD-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 46,
+      "bbox": [
+        1580,
+        1443,
+        1630,
+        1461
+      ],
+      "expected": "RH-M1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RH-M1",
+          "word_ids": [
+            413
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RH-M1",
+          "word_ids": [
+            1676
+          ]
+        }
+      }
+    },
+    {
+      "table": "M612-RANGE-HOOD-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 46,
+      "bbox": [
+        1580,
+        1462,
+        1630,
+        1479
+      ],
+      "expected": "RH-M2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RH-M2",
+          "word_ids": [
+            420
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RH-M2",
+          "word_ids": [
+            1677
+          ]
+        }
+      }
+    },
+    {
+      "table": "M612-RANGE-HOOD-MARKS",
+      "row": 3,
+      "column": "mark",
+      "page": 46,
+      "bbox": [
+        1580,
+        1480,
+        1630,
+        1497
+      ],
+      "expected": "RH-M3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RH-M3",
+          "word_ids": [
+            421
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RH-M3",
+          "word_ids": [
+            1678
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m612-sheet-title",
+      "page": 46,
+      "bbox": [
+        2280,
+        1500,
+        2365,
+        1533
+      ],
+      "expected": "M-612",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-612",
+          "word_ids": [
+            554
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-612",
+          "word_ids": [
+            1693
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m612-aux-schedule-tables",
+      "actual": 3,
+      "expected": 3,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

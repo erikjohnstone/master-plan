@@ -1,0 +1,218 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All printed entries in the four DDC point-list templates on MI742 (source PDF page 69): humidifier, UPS battery exhaust fan, bathroom exhaust fan, and elevator machine room FCU/humidifier. This records controller points and source flags, not inferred installed-device quantities.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [69],
+    "render": "reviews/01__vol2__001/p69-p69-controls-poppler.png",
+    "dpi": 180,
+    "finding": "The complete MI742 controls page was visually reviewed at 180 DPI. Each point-list matrix and the adjacent control diagrams/sequences are visually distinguishable; written sequences are intentionally captured separately."
+  },
+  "tables": [
+    {
+      "id": "HUMIDIFIER-AI",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "HUMIDIFIER DDC POINTS LIST - ANALOG INPUT",
+      "classification": "Analog input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [327, 360, 490, 535, 575],
+      "y_edges": [130, 150],
+      "rows": ["AI01|ZONE HUMIDITY|No|Yes"],
+      "header_evidence": [
+        {"bbox": [325, 65, 575, 95], "expected": "HUMIDIFIER DDC POINTS LIST"},
+        {"bbox": [325, 95, 575, 117], "expected": "MARK DESCRIPTION ALARM TREND"},
+        {"bbox": [325, 112, 410, 130], "expected": "ANALOG INPUT"}
+      ]
+    },
+    {
+      "id": "HUMIDIFIER-BI",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "HUMIDIFIER DDC POINTS LIST - BINARY INPUT",
+      "classification": "Binary input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [327, 360, 490, 535, 575],
+      "y_ranges": [[181, 201], [201, 232], [232, 251]],
+      "rows": [
+        "BI01|HUMIDIFER STATUS|Yes|No",
+        "BI02|HUMIDIFIER CYLINDER CHANGE STATUS|Yes|No",
+        "BI03|HUMIDIFIER DDC RESET|No|No"
+      ],
+      "header_evidence": [{"bbox": [325, 163, 410, 181], "expected": "BINARY INPUT"}]
+    },
+    {
+      "id": "HUMIDIFIER-BO",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "HUMIDIFIER DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "Binary output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [327, 360, 490, 535, 575],
+      "y_edges": [282, 304],
+      "rows": ["BO01|HUMIDIFIER START/STOP|No|No"],
+      "header_evidence": [{"bbox": [325, 264, 415, 282], "expected": "BINARY OUTPUT"}]
+    },
+    {
+      "id": "UPS-EXHAUST-BI",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "UPS EXHAUST FAN DDC POINTS LIST - BINARY INPUT",
+      "classification": "Binary input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [930, 964, 1145, 1185, 1225],
+      "y_edges": [122, 140, 157, 175],
+      "rows": [
+        "BI01|EXHAUST DAMPER END SWITCH|Yes|No",
+        "BI02|EXHAUST FAN STATUS (FEEDBACK)|Yes|No",
+        "BI03|EXHAUST FAN DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {"bbox": [930, 58, 1230, 88], "expected": "UPS EXHAUST FAN DDC POINTS LIST"},
+        {"bbox": [930, 87, 1230, 109], "expected": "MARK DESCRIPTION ALARM TREND"},
+        {"bbox": [925, 104, 1010, 122], "expected": "BINARY INPUT"}
+      ]
+    },
+    {
+      "id": "UPS-EXHAUST-BO",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "UPS EXHAUST FAN DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "Binary output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [930, 964, 1145, 1185, 1225],
+      "y_edges": [208, 227],
+      "rows": ["BO01|EXHAUST FAN START/STOP|No|No"],
+      "header_evidence": [{"bbox": [925, 189, 1015, 208], "expected": "BINARY OUTPUT"}]
+    },
+    {
+      "id": "BATHROOM-EXHAUST-BI",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "BATHROOM EXHAUST FAN DDC POINTS LIST - BINARY INPUT",
+      "classification": "Binary input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [930, 964, 1145, 1185, 1225],
+      "y_edges": [826, 844, 861, 879],
+      "rows": [
+        "BI01|EXHAUST DAMPER END SWITCH|Yes|No",
+        "BI02|EXHAUST FAN STATUS (FEEDBACK)|Yes|No",
+        "BI03|EXHAUST FAN DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {"bbox": [930, 762, 1230, 792], "expected": "BATHROOM EXHAUST FAN DDC POINTS LIST"},
+        {"bbox": [930, 790, 1230, 812], "expected": "MARK DESCRIPTION ALARM TREND"},
+        {"bbox": [925, 807, 1010, 826], "expected": "BINARY INPUT"}
+      ]
+    },
+    {
+      "id": "BATHROOM-EXHAUST-BO",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "BATHROOM EXHAUST FAN DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "Binary output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [930, 964, 1145, 1185, 1225],
+      "y_edges": [912, 931],
+      "rows": ["BO01|EXHAUST FAN START/STOP|No|No"],
+      "header_evidence": [{"bbox": [925, 893, 1015, 912], "expected": "BINARY OUTPUT"}]
+    },
+    {
+      "id": "ELEVATOR-MACHINE-ROOM-AI",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "ELEVATOR MACHINE ROOM DDC POINTS LIST - ANALOG INPUT",
+      "classification": "Analog input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1785, 1818, 2050, 2090, 2140],
+      "y_edges": [277, 295, 312, 329, 347, 365],
+      "rows": [
+        "AI01|TEMPERATURE SENSOR|Yes|Yes",
+        "AI02|HUMIDITY SENSOR|Yes|Yes",
+        "AI03|HUMIDIFIER OUTPUT|Yes|Yes",
+        "AI04|CHW VALVE POSITION (FEEDBACK)|No|Yes",
+        "AI05|HHW VALVE CONTROL (FEEDBACK)|No|Yes"
+      ],
+      "header_evidence": [
+        {"bbox": [1780, 215, 2140, 241], "expected": "ELEVATOR MACHINE ROOM DDC POINTS LIST"},
+        {"bbox": [1780, 240, 2140, 263], "expected": "MARK DESCRIPTION ALARM TREND"},
+        {"bbox": [1780, 258, 1870, 277], "expected": "ANALOG INPUT"}
+      ]
+    },
+    {
+      "id": "ELEVATOR-MACHINE-ROOM-AO",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "ELEVATOR MACHINE ROOM DDC POINTS LIST - ANALOG OUTPUT",
+      "classification": "Analog output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1785, 1818, 2050, 2090, 2140],
+      "y_edges": [397, 416, 433, 450],
+      "rows": [
+        "AO01|HUMIDIFIER CONTROL|No|No",
+        "AO02|CHW VALVE CONTROL|No|No",
+        "AO03|HHW VALVE CONTROL|No|No"
+      ],
+      "header_evidence": [{"bbox": [1780, 376, 1880, 397], "expected": "ANALOG OUTPUT"}]
+    },
+    {
+      "id": "ELEVATOR-MACHINE-ROOM-BI",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "ELEVATOR MACHINE ROOM DDC POINTS LIST - BINARY INPUT",
+      "classification": "Binary input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1785, 1818, 2050, 2090, 2140],
+      "y_edges": [484, 502, 519, 536, 555],
+      "rows": [
+        "BI01|FILTER STATUS|Yes|No",
+        "BI02|SECONDARY DRAIN PAN OVERFLOW SWITCH|Yes|No",
+        "BI03|SUPPLY FAN STATUS|Yes|No",
+        "BI04|ELEVATOR MACHINE EQUIPMENT RESET|No|No"
+      ],
+      "header_evidence": [{"bbox": [1780, 462, 1875, 484], "expected": "BINARY INPUT"}]
+    },
+    {
+      "id": "ELEVATOR-MACHINE-ROOM-BO",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "ELEVATOR MACHINE ROOM DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "Binary output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1785, 1818, 2050, 2090, 2140],
+      "y_edges": [588, 607],
+      "rows": ["BO01|SUPPLY FAN START/STOP|No|No"],
+      "header_evidence": [{"bbox": [1780, 566, 1880, 588], "expected": "BINARY OUTPUT"}]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "humidifier-ai-count", "records_path": ["tables", 0, "rows"], "expected": 1},
+    {"id": "humidifier-bi-count", "records_path": ["tables", 1, "rows"], "expected": 3},
+    {"id": "humidifier-bo-count", "records_path": ["tables", 2, "rows"], "expected": 1},
+    {"id": "ups-exhaust-bi-count", "records_path": ["tables", 3, "rows"], "expected": 3},
+    {"id": "ups-exhaust-bo-count", "records_path": ["tables", 4, "rows"], "expected": 1},
+    {"id": "bathroom-exhaust-bi-count", "records_path": ["tables", 5, "rows"], "expected": 3},
+    {"id": "bathroom-exhaust-bo-count", "records_path": ["tables", 6, "rows"], "expected": 1},
+    {"id": "elevator-machine-room-ai-count", "records_path": ["tables", 7, "rows"], "expected": 5},
+    {"id": "elevator-machine-room-ao-count", "records_path": ["tables", 8, "rows"], "expected": 3},
+    {"id": "elevator-machine-room-bi-count", "records_path": ["tables", 9, "rows"], "expected": 4},
+    {"id": "elevator-machine-room-bo-count", "records_path": ["tables", 10, "rows"], "expected": 1}
+  ],
+  "source_conflicts": [
+    {"table": "HUMIDIFIER-BI", "finding": "BI01 is printed as HUMIDIFER STATUS; the source's missing second I is retained."},
+    {"table": "ELEVATOR-MACHINE-ROOM-AI", "finding": "The source places AI03 HUMIDIFIER OUTPUT under ANALOG INPUT while separately listing AO01 HUMIDIFIER CONTROL. The printed point type is retained rather than reclassified."}
+  ],
+  "remaining_work": "Capture MI742 sequence prose as bounded assertions, reconcile printed template rows with their actual schedule/plan applications, and continue full controls/network/sensor audit."
+}

@@ -1,0 +1,199 @@
+{
+  "document_id": "20__vol2__097",
+  "source_sha256": "95f1c434a5dca5ea297a5981901483d0f57b6a7277abc6c87d5645f072dfe0e3",
+  "annotation_sha256": "cf14233e18567ffa7175741739950fab5c1289d978dce4384b3e48b18a7f2b58",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 6,
+  "checks": [
+    {
+      "assertion": "cover-project-main",
+      "page": 1,
+      "bbox": [
+        560,
+        84,
+        1895,
+        160
+      ],
+      "expected": "JVWTP CHEMICAL BUILDINGS HVAC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JVWTP CHEMICAL BUILDINGS HVAC",
+          "word_ids": [
+            22,
+            23,
+            24,
+            25
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JVWTP CHEMICAL BUILDINGS HVAC",
+          "word_ids": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "cover-project-upgrades",
+      "page": 1,
+      "bbox": [
+        1018,
+        164,
+        1435,
+        240
+      ],
+      "expected": "UPGRADES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UPGRADES",
+          "word_ids": [
+            26
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UPGRADES",
+          "word_ids": [
+            4
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "cover-facility-water",
+      "page": 1,
+      "bbox": [
+        912,
+        340,
+        1540,
+        396
+      ],
+      "expected": "JORDAN VALLEY WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JORDAN VALLEY WATER",
+          "word_ids": [
+            2,
+            3,
+            4
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JORDAN VALLEY WATER",
+          "word_ids": [
+            6,
+            7,
+            8
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "cover-facility-plant",
+      "page": 1,
+      "bbox": [
+        973,
+        392,
+        1478,
+        448
+      ],
+      "expected": "TREATMENT PLANT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TREATMENT PLANT",
+          "word_ids": [
+            5,
+            6
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TREATMENT PLANT",
+          "word_ids": [
+            9,
+            10
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "cover-location",
+      "page": 1,
+      "bbox": [
+        1069,
+        490,
+        1382,
+        526
+      ],
+      "expected": "HERRIMAN, UT 84065",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HERRIMAN, UT 84065",
+          "word_ids": [
+            13,
+            14,
+            15
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HERRIMAN, UT 84065",
+          "word_ids": [
+            15,
+            16,
+            17
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "cover-date",
+      "page": 1,
+      "bbox": [
+        1055,
+        1070,
+        1397,
+        1115
+      ],
+      "expected": "February 20, 2025",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "February 20, 2025",
+          "word_ids": [
+            92,
+            93,
+            94
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "February 20, 2025",
+          "word_ids": [
+            24,
+            25,
+            26
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

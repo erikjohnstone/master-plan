@@ -1,0 +1,62 @@
+{
+  "document_id": "12__vol2__028",
+  "status": "partial_document_audit",
+  "scope": "All 23 printed rows in the M-601 Chilled Water Fan Coil Unit Schedule (source PDF page 9).",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [9],
+    "render": "reviews/12__vol2__028/p9-p9-full-poppler.png",
+    "dpi": 144,
+    "finding": "The complete high-density FCU/FCC schedule was visually reviewed. Literal source variants are retained, including `FCC` versus `FCU`, `REHERSAL`, FCC 1-1's 29.3 heating capacity, and the temperature/coil differences in FCC 2-3 and FCC 2-4."
+  },
+  "tables": [
+    {
+      "id": "M601-CHILLED-WATER-FCU",
+      "page": 9,
+      "sheet": "M-601",
+      "title": "CHILLED WATER FAN COIL UNIT SCHEDULE",
+      "classification": "Ductless cassettes and thin-line horizontal fan-coil units",
+      "columns": "mark|room|type|supply_fan_max_cfm|coil_fouling_factor_hr_sq_ft_f_btu|cooling_total_mbh|cooling_sensible_mbh|chilled_water_gpm|cooling_eat_db_wb_f|cooling_lat_db_wb_f|cooling_ewt_lwt_f|cooling_air_side_pressure_drop_in_wg|cooling_water_side_pressure_drop_ft_wg|heating_total_mbh|hot_water_gpm|heating_eat_f|heating_lat_f|heating_ewt_lwt_f|heating_air_side_pressure_drop_in_wg|heating_water_side_pressure_drop_ft_wg|volt_ph|mca|hp|rpm|nema_size|length_in|width_in|height_in|manufacturer_model|notes",
+      "x_edges": [125,180,445,620,680,760,810,870,950,1010,1075,1140,1220,1315,1370,1420,1455,1505,1570,1640,1710,1795,1835,1875,1920,1960,2000,2035,2070,2175,2230],
+      "y_ranges": [[176,191],[191,208],[208,224],[224,241],[241,257],[257,274],[274,290],[290,307],[307,324],[340,357],[357,373],[373,389],[389,406],[406,422],[422,439],[439,455],[455,472],[472,489],[489,505],[505,521],[521,538],[538,554],[554,576]],
+      "rows": [
+        "FCC 1-1|LIBRARY 101|Ductless 4-Way Discharge Cassette|630|0.001|18.4|13.1|4.9|80/67|56.3/56.2|44/56|-|7.16|29.3|3.1|70|106.8|180/160|-|5.54|208-230V 1ph|1.00|0.125|1250|00|37.0|37.0|12.1|MODINE/SCW018|1,2,3,4,5",
+        "FCC 1-2|LIBRARY 101|Ductless 4-Way Discharge Cassette|630|0.001|18.4|13.1|4.9|80/67|56.3/56.2|44/56|-|7.16|13.0|3.1|70|106.8|180/160|-|5.54|208-230V 1ph|1.00|0.125|1250|00|37.0|37.0|12.1|MODINE/SCW018|1,2,3,4,5",
+        "FCU 1-3|RESTROOM AREA: 103, 104, 105, 106|Thin Line Horizontal Fan Coil|600|0.001|20.4|15.4|4.3|80/67|56.3/56.2|44/56|0.05|8.8|20.5|1.8|70|106.8|180/160|0.05|5.7|208-230V 1ph|0.63|8.0|1363|3|68.1|29.5|16.0|DAIKIN/FCHC-206E|1,2,3,4,5",
+        "FCU 1-4|CORRIDORS & STORAGE 107|Thin Line Horizontal Fan Coil|600|0.001|20.4|15.4|4.3|80/67|56.3/56.2|44/56|0.05|8.8|20.5|1.8|70|106.8|180/160|0.05|5.7|208-230V 1ph|0.63|8.0|1363|3|68.1|29.5|16.0|DAIKIN/FCHC-206E|1,2,3,4,5",
+        "FCU 1-5|GROUP REHERSAL 1-3|Thin Line Horizontal Fan Coil|800|0.001|23.6|17.6|5.0|80/67|56.3/56.2|44/56|0.05|12.3|23.5|2.1|70|106.8|180/160|0.05|6.2|208-230V 1ph|0.63|9.4|1456|3|74.6|29.5|16.0|DAIKIN/FCHC-208E|1,2,3,4,5",
+        "FCU 1-6|GROUP REHERSAL 4 & STORAGES|Thin Line Horizontal Fan Coil|400|0.001|13.9|10.6|3.2|80/67|56.3/56.2|44/56|0.05|4.1|13.9|1.3|70|106.8|180/160|0.05|6.4|208-230V 1ph|0.63|4.0|1269|2|57.1|29.5|16.0|DAIKIN/FCHC-204E|1,2,3,4,5",
+        "FCU 1-7|INSTR. ROOMS & MECH 116,117 & 119|Thin Line Horizontal Fan Coil|400|0.001|13.9|10.6|3.2|80/67|56.3/56.2|44/56|0.05|4.1|13.9|1.3|70|106.8|180/160|0.05|6.4|208-230V 1ph|0.63|4.0|1269|2|57.1|29.5|16.0|DAIKIN/FCHC-204E|1,2,3,4,5",
+        "FCU 1-8|MENS 120, MEN SHOWER 121, & MEN LOCKER 122|Thin Line Horizontal Fan Coil|600|0.001|20.4|15.4|4.5|80/67|56.3/56.2|44/56|0.05|8.8|20.5|1.8|70|106.8|180/160|0.05|5.7|208-230V 1ph|0.63|8.0|1363|3|68.1|29.5|16.0|DAIKIN/FCHC-206E|1,2,3,4,5",
+        "FCU 1-9|IND. PRACTICE ROOMS & CORRIDORS|Thin Line Horizontal Fan Coil|600|0.001|20.4|15.4|4.5|80/67|56.3/56.2|44/56|0.05|8.8|20.5|1.8|70|106.8|180/160|0.05|5.7|208-230V 1ph|0.63|8.0|1363|3|68.1|29.5|16.0|DAIKIN/FCHC-206E|1,2,3,4,5",
+        "FCU 2-1|PERFORMANCE/REHERSAL HALL 213|Ductless 4-Way Discharge Cassette|3810|0.001|170.1|114.9|28.1|80/67|56.3/56.2|44/56|1.02|15.34|162.0|16.6|70|106.8|180/160|1.02|22.04|208-230V 3ph|17.10|5.0|1106|1|41.0|54.0|30.0|DAIKIN/BCHD0401|1,2,3,4,5",
+        "FCC 2-2|OPEN OFFICE 216|Ductless 4-Way Discharge Cassette|630|0.001|18.4|13.1|4.9|80/67|56.3/56.2|44/56|-|7.16|13.0|3.1|70|106.8|180/160|-|5.54|208-230V 1ph|1.00|0.125|1250|00|37.0|37.0|12.1|MODINE/SCW018|1,2,3,4,5",
+        "FCC 2-3|OPEN OFFICE 216|Ductless 4-Way Discharge Cassette|630|0.001|18.4|13.1|4.9|80/68|56.3/56.2|44/56|-|7.16|13.0|3.1|70|106.8|180/161|-|5.54|208-230V 1ph|1.00|0.125|1250|00|37.0|37.0|12.1|MODINE/SCW018|1,2,3,4,5",
+        "FCC 2-4|OPEN OFFICE 216|Ductless 4-Way Discharge Cassette|630|0.001|18.4|13.1|4.9|80/69|56.3/56.2|44/56|-|7.16|13.0|3.1|70|106.8|180/162|-|5.54|208-230V 1ph|1.00|0.125|1250|00|37.0|37.0|12.1|MODINE/SCW018|1,2,3,4,5",
+        "FCC 2-5|OPEN OFFICE 216|Ductless 4-Way Discharge Cassette|700|0.001|28.0|23.1|6.1|80/67|56.3/56.2|44/56|-|12.93|46.6|4.9|70|106.8|180/160|-|6.93|208-230V 1ph|1.40|0.125|1250|00|51.4|37.0|14.1|MODINE/SCW033|1,2,3,4,5",
+        "FCC 2-6|ROCK REHERSAL 218|Ductless 4-Way Discharge Cassette|700|0.001|28.0|23.1|6.1|80/67|56.3/56.2|44/56|-|12.93|46.6|4.9|70|106.8|180/160|-|6.93|208-230V 1ph|1.40|0.125|1250|00|51.4|37.0|14.1|MODINE/SCW033|1,2,3,4,5",
+        "FCC 2-7|ROCK REHERSAL 218|Ductless 4-Way Discharge Cassette|700|0.001|28.0|23.1|6.1|80/67|56.3/56.2|44/56|-|12.93|46.6|4.9|70|106.8|180/160|-|6.93|208-230V 1ph|1.40|0.125|1250|00|51.4|37.0|14.1|MODINE/SCW033|1,2,3,4,5",
+        "FCU 2-8|CORRIDOR C206 & MECHANICAL 215|Thin Line Horizontal Fan Coil|800|0.001|23.6|17.6|5.0|80/67|56.3/56.2|44/56|0.05|12.3|20.3|2.1|70|106.8|180/160|0.05|6.2|208-230V 1ph|0.74|9.4|1456|3|74.6|29.5|16.0|DAIKIN/FCHC-208E|1,2,3,4,5",
+        "FCC 2-9|BREAK/CONFERENCE 203|Ductless 4-Way Discharge Cassette|630|0.001|18.4|13.1|4.9|80/67|56.3/56.2|44/56|-|7.16|13.0|3.1|70|106.8|180/160|-|5.54|208-230V 1ph|1.00|0.125|1250|00|37.0|37.0|12.1|MODINE/SCW018|1,2,3,4,5",
+        "FCC 2-10|BREAK/CONFERENCE 203|Ductless 4-Way Discharge Cassette|630|0.001|18.4|13.1|4.9|80/67|56.3/56.2|44/56|-|7.16|13.0|3.1|70|106.8|180/160|-|5.54|208-230V 1ph|1.00|0.125|1250|00|37.0|37.0|12.1|MODINE/SCW018|1,2,3,4,5",
+        "FCC 2-11|BREAK/CONFERENCE 203|Ductless 4-Way Discharge Cassette|630|0.001|18.4|13.1|4.9|80/67|56.3/56.2|44/56|-|7.16|13.0|3.1|70|106.8|180/160|-|5.54|208-230V 1ph|1.00|0.125|1250|00|37.0|37.0|12.1|MODINE/SCW018|1,2,3,4,5",
+        "FCC 2-12|BREAK/CONFERENCE 203|Ductless 4-Way Discharge Cassette|630|0.001|18.4|13.1|4.9|80/67|56.3/56.2|44/56|-|7.16|13.0|3.1|70|106.8|180/160|-|5.54|208-230V 1ph|1.00|0.125|1250|00|37.0|37.0|12.1|MODINE/SCW018|1,2,3,4,5",
+        "FCU 2-13|CORRIDORS,STORAGES, 207, & 209|Thin Line Horizontal Fan Coil|800|0.001|23.6|17.6|5.0|80/67|56.3/56.2|44/56|0.05|12.3|23.5|2.1|70|106.8|180/160|0.05|6.2|208-230V 1ph|0.63|9.4|1456|3|74.6|29.5|16.0|DAIKIN/FCHC-208E|1,2,3,4,5",
+        "FCU 2-14|WOMEN 204 & MEN 206|Thin Line Horizontal Fan Coil|400|0.001|13.9|10.6|3.2|80/67|56.3/56.2|44/56|0.05|4.1|13.9|1.3|70|106.8|180/160|0.05|6.4|208-230V 1ph|0.63|4.0|1269|2|57.1|29.5|16.0|DAIKIN/FCHC-204E|1,2,3,4,5"
+      ],
+      "header_evidence": [
+        {"bbox": [125,62,470,88], "expected": "CHILLED WATER FAN COIL UNIT SCHEDULE"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "m601-fcu-schedule-row-count", "records_path": ["tables", 0, "rows"], "expected": 23}
+  ],
+  "source_conflicts": [
+    {
+      "table": "M601-CHILLED-WATER-FCU",
+      "finding": "The source labels both `FCC` and `FCU` items and contains several literal spelling/value variants. They are source identities rather than normalized model categories. Schedule rows are not a BAS point-list or controller-count claim."
+    }
+  ],
+  "remaining_work": "Reconcile schedule identities against plan locations and FCU P&ID template ownership before physical controller, sensor, or terminal counts are asserted."
+}

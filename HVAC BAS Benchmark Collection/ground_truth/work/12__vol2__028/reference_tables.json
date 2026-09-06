@@ -1,0 +1,16 @@
+{
+  "document_id": "12__vol2__028",
+  "status": "corroborated_document_component",
+  "scope": "Reference-table disposition for the complete supplied excerpt. Every populated schedule and BAS matrix is retained as an exact table in the composite schedules or points module; no extra untranscribed reference table remains.",
+  "tables": [],
+  "disposition": [
+    {"source_sheet": "M-505", "table_scope": "Noise Control Duct Silencer Schedule and External Static Pressure Schedule", "retained_in": "schedules"},
+    {"source_sheet": "M-601", "table_scope": "FCU/FCC, DOAS, boiler, unit heater, chiller, and exhaust-fan schedules", "retained_in": "schedules"},
+    {"source_sheets": ["M-506", "M-507", "M-508", "M-510", "M-511", "M-512"], "table_scope": "BAS input/output point matrices", "retained_in": "points"}
+  ],
+  "separate_control_valve_schedule": {"status": "not_present_in_supplied_nine_sheet_archive_excerpt", "value": null},
+  "separate_damper_actuator_schedule": {"status": "not_present_in_supplied_nine_sheet_archive_excerpt", "value": null},
+  "inventory_checks": [
+    {"id": "table-disposition-groups", "records_path": ["disposition"], "expected": 3, "unique_key": "table_scope"}
+  ]
+}

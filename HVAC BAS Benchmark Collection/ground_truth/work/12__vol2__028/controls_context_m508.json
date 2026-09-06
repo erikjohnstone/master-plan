@@ -1,0 +1,50 @@
+{
+  "document_id": "12__vol2__028",
+  "module_role": "M-508 heating-water P&ID context. This sheet contains the exact BAS I/O matrix in the companion module and a schematic/PRV design note; it does not print a written heating-water sequence of operations.",
+  "source_sheet": "M-508",
+  "source_page": 4,
+  "network_architecture": {
+    "protocols_as_printed": [],
+    "operator_interface_as_printed": [],
+    "transport": {"status": "not_stated_on_M-508", "value": null},
+    "addressing_baud_rate_controller_model": {"status": "not_stated_on_M-508", "value": null},
+    "limitation": "M-508 identifies selected I/O as pulled from the boiler controller, but does not name a BAS protocol, controller model, transport, or addressing method. The separate M-509 written sequence is the source for BACNET and HMI requirements."
+  },
+  "written_sequence_of_operations": {
+    "status": "not_present_on_source_sheet",
+    "value": null,
+    "review_basis": "Full-page visual review and dual-engine text capture show a heating-water P&ID, PRV note, and BAS I/O point list rather than a written sequence-of-operations block. M-509, not this sheet, supplies the written heating-water sequence."
+  },
+  "p_and_id_context": {
+    "title": "HEATING WATER SYSTEM P&ID",
+    "scale": "NOT TO SCALE",
+    "system_scope": "The P&ID labels B-1, BCP-1, BCP-2, HWP-1, HWP-2, AS-2, and ET-2. These are schematic labels only; the supplied excerpt has no plan/equipment schedule basis for converting them to installation quantities.",
+    "bypass_valve": "2-WAY HEATING WATER BYPASS VALVE LOCATED AT END OF LOOP",
+    "controller_ownership_note": "* INDICATES POINT PULLED FROM BOILER CONTROLLER",
+    "makeup_water_note": "The PRV note requires 4 to 5 PSI at the highest pipe elevation, same-elevation tie-in of makeup water with the expansion tank and air separator, contractor field verification of tie-in elevation, and a printed PRV-setpoint formula.",
+    "field_connection_note": "The potable-water connection is field-verified and references Plumbing Sheet PP-302; it is not an asserted installed connection location.",
+    "co_point_scope": "The I/O matrix includes a CO SENSOR row; M-509, rather than this P&ID page, provides the written mechanical-room CO safety sequence."
+  },
+  "sensor_and_zone_ledger": {
+    "source_items": [],
+    "counts": {
+      "space_sensors": {"status": "not_stated", "value": null},
+      "physical_sensor_count": {"status": "not_stated", "value": null}
+    },
+    "limitation": "M-508 is a schematic and point matrix, without plans or a sensor schedule. Point-level indications remain in points_m508_hhw_template.json and are not converted to physical sensor counts or zone assignments."
+  },
+  "tables": [],
+  "assertions": [
+    {"id": "m508-pid-title", "page": 4, "bbox": [925,1370,1325,1420], "expected": "HEATING WATER SYSTEM P&ID", "mode": "contains"},
+    {"id": "m508-not-to-scale", "page": 4, "bbox": [920,1400,1010,1430], "expected": "NOT TO SCALE", "mode": "contains"},
+    {"id": "m508-prv-pressure-basis", "page": 4, "bbox": [580,445,900,490], "expected": "PRV IS DESIGNED TO MAINTAIN 4 TO 5 PSI AT THE HIGHEST PIPE ELEVATION IN THE SYSTEM.", "mode": "contains"},
+    {"id": "m508-prv-tie-in", "page": 4, "bbox": [565,490,900,550], "expected": "THE MAKEUP WATER PIPE SHALL TIE INTO THE SYSTEM AT THE SAME ELEVATION AS THE EXPANSION TANK AND THE AIR SEPARATOR.", "mode": "contains"},
+    {"id": "m508-prv-formula", "page": 4, "bbox": [640,605,900,665], "expected": "PRV PRESSURE = (MAX. HEIGHT RETURN PIPE - HEIGHT MAKEUP WATER PIPE CONNECTION)/2.3 + 5", "mode": "contains"},
+    {"id": "m508-bypass-at-loop-end", "page": 4, "bbox": [2060,435,2190,520], "expected": "2-WAY HEATING WATER BYPASS VALVE LOCATED AT END OF LOOP", "mode": "contains"},
+    {"id": "m508-boiler-controller-note", "page": 4, "bbox": [1600,1375,1940,1400], "expected": "* INDICATES POINT PULLED FROM BOILER CONTROLLER", "mode": "contains"},
+    {"id": "m508-co-point", "page": 4, "bbox": [1655,1345,1750,1375], "expected": "CO SENSOR", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "m508-pid-context-assertions", "records_path": ["assertions"], "expected": 8, "unique_key": "id"}
+  ]
+}

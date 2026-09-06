@@ -1,0 +1,458 @@
+{
+  "document_id": "11__vol1__05",
+  "source_sha256": "78755d16240f834ee429960526cadab8edec205b65df36a70c171ab4d4b993db",
+  "annotation_sha256": "d691b5ecbeaa8f6127b39b0577782863a41cca84944773b11870bcaa1833a876",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 13,
+  "checks": [
+    {
+      "assertion": "mi700-temperature-transmitter",
+      "page": 49,
+      "bbox": [
+        298,
+        224,
+        440,
+        234
+      ],
+      "expected": "TEMPERATURE TRANSMITTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE TRANSMITTER",
+          "word_ids": [
+            9,
+            10
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE TRANSMITTER",
+          "word_ids": [
+            141,
+            142
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mi700-static-pressure-sensor",
+      "page": 49,
+      "bbox": [
+        298,
+        362,
+        430,
+        372
+      ],
+      "expected": "STATIC PRESSURE SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATIC PRESSURE SENSOR",
+          "word_ids": [
+            40,
+            41,
+            42
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATIC PRESSURE SENSOR",
+          "word_ids": [
+            44,
+            45,
+            46
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mi700-pressure-differential-transmitter",
+      "page": 49,
+      "bbox": [
+        298,
+        528,
+        491,
+        538
+      ],
+      "expected": "PRESSURE DIFFERENTIAL TRANSMITTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRESSURE DIFFERENTIAL TRANSMITTER",
+          "word_ids": [
+            47,
+            48,
+            49
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRESSURE DIFFERENTIAL TRANSMITTER",
+          "word_ids": [
+            252,
+            253,
+            254
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mi700-low-freezestat",
+      "page": 49,
+      "bbox": [
+        298,
+        695,
+        509,
+        704
+      ],
+      "expected": "TEMPERATURE SWITCH, LOW (FREEZESTAT)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SWITCH, LOW (FREEZESTAT)",
+          "word_ids": [
+            57,
+            58,
+            59,
+            60
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SWITCH, LOW (FREEZESTAT)",
+          "word_ids": [
+            363,
+            364,
+            365,
+            366
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mi700-high-freezestat",
+      "page": 49,
+      "bbox": [
+        298,
+        727,
+        511,
+        737
+      ],
+      "expected": "TEMPERATURE SWITCH, HIGH (FREEZESTAT)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SWITCH, HIGH (FREEZESTAT)",
+          "word_ids": [
+            83,
+            84,
+            85,
+            86
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SWITCH, HIGH (FREEZESTAT)",
+          "word_ids": [
+            368,
+            369,
+            370,
+            371
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mi700-carbon-dioxide",
+      "page": 49,
+      "bbox": [
+        741,
+        279,
+        894,
+        288
+      ],
+      "expected": "CARBON DIOXIDE TRANSMITTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CARBON DIOXIDE TRANSMITTER",
+          "word_ids": [
+            95,
+            96,
+            97
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CARBON DIOXIDE TRANSMITTER",
+          "word_ids": [
+            47,
+            48,
+            49
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mi700-variable-speed-controller",
+      "page": 49,
+      "bbox": [
+        741,
+        456,
+        929,
+        466
+      ],
+      "expected": "VARIABLE SPEED MOTOR CONTROLLER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VARIABLE SPEED MOTOR CONTROLLER",
+          "word_ids": [
+            137,
+            138,
+            139,
+            140
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VARIABLE SPEED MOTOR CONTROLLER",
+          "word_ids": [
+            227,
+            228,
+            229,
+            230
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mi700-valve-damper-position",
+      "page": 49,
+      "bbox": [
+        298,
+        628,
+        505,
+        638
+      ],
+      "expected": "VALVE OR DAMPER POSITION CONTROLLER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VALVE OR DAMPER POSITION CONTROLLER",
+          "word_ids": [
+            67,
+            68,
+            69,
+            70,
+            71
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VALVE OR DAMPER POSITION CONTROLLER",
+          "word_ids": [
+            349,
+            350,
+            351,
+            352,
+            353
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mi700-bacnet-install-software",
+      "page": 49,
+      "bbox": [
+        1995,
+        549,
+        2224,
+        569
+      ],
+      "expected": "INSTALL NEW BACNET SOFTWARE ON EXISTING ENGINEERING CONTROL CENTER (ECC).",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INSTALL NEW BACNET SOFTWARE ON EXISTING ENGINEERING CONTROL CENTER (ECC).",
+          "word_ids": [
+            301,
+            302,
+            303,
+            304,
+            305,
+            306,
+            307,
+            308,
+            309,
+            310
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INSTALL NEW BACNET SOFTWARE ON EXISTING ENGINEERING CONTROL CENTER (ECC).",
+          "word_ids": [
+            303,
+            304,
+            305,
+            306,
+            307,
+            308,
+            309,
+            310,
+            311,
+            312
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mi700-bacnet-reuse-network",
+      "page": 49,
+      "bbox": [
+        1995,
+        570,
+        2215,
+        580
+      ],
+      "expected": "REUSE EXISTING COMMUNICATION NETWORK.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "REUSE EXISTING COMMUNICATION NETWORK.",
+          "word_ids": [
+            312,
+            313,
+            314,
+            315
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "REUSE EXISTING COMMUNICATION NETWORK.",
+          "word_ids": [
+            314,
+            315,
+            316,
+            317
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mi700-bacnet-multiple-building-controllers",
+      "page": 49,
+      "bbox": [
+        1995,
+        592,
+        2275,
+        602
+      ],
+      "expected": "INSTALL MULTIPLE BUILDING CONTROLLERS AS REQUIRED.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INSTALL MULTIPLE BUILDING CONTROLLERS AS REQUIRED.",
+          "word_ids": [
+            322,
+            323,
+            324,
+            325,
+            326,
+            327
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INSTALL MULTIPLE BUILDING CONTROLLERS AS REQUIRED.",
+          "word_ids": [
+            324,
+            325,
+            326,
+            327,
+            328,
+            329
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mi700-bacnet-new-controllers",
+      "page": 49,
+      "bbox": [
+        1995,
+        603,
+        2277,
+        613
+      ],
+      "expected": "INSTALL NEW CONTROLLERS (B-AAC, B-ASC) AS REQUIRED.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INSTALL NEW CONTROLLERS (B-AAC, B-ASC) AS REQUIRED.",
+          "word_ids": [
+            329,
+            330,
+            331,
+            332,
+            333,
+            334,
+            335
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INSTALL NEW CONTROLLERS (B-AAC, B-ASC) AS REQUIRED.",
+          "word_ids": [
+            331,
+            332,
+            333,
+            334,
+            335,
+            336,
+            337
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mi700-bacnet-architecture-title",
+      "page": 49,
+      "bbox": [
+        1661,
+        649,
+        1942,
+        667
+      ],
+      "expected": "BACNET SYSTEM ARCHITECTURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BACNET SYSTEM ARCHITECTURE",
+          "word_ids": [
+            734,
+            735,
+            736
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BACNET SYSTEM ARCHITECTURE",
+          "word_ids": [
+            399,
+            400,
+            401
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

@@ -1,0 +1,105 @@
+{
+  "document_id": "25__vol2__053",
+  "module_role": "MH502 controls ground truth. It preserves the printed VAV and isolation-room sequences alongside the MH502 template point matrix without manufacturing controller instances, wiring counts, or network details.",
+  "source_sheet": "MH502",
+  "source_page": 11,
+  "network_architecture": {
+    "control_system_or_vendor": {"status": "not_stated", "value": null},
+    "protocol": {"status": "not_stated", "value": null},
+    "transport": {"status": "not_stated", "value": null},
+    "controller_model_or_panel": {"status": "not_stated", "value": null},
+    "addressing_or_network_topology": {"status": "not_stated", "value": null}
+  },
+  "controls_schedule_ledger": {
+    "control_valve_schedule": {"status": "not_present_as_a_control_valve_schedule", "value": null, "basis": "MH502 prints an AO reheat-valve schematic/sequence, and MH601 prints 38 heating-hot-water BALL VALVE rows. Neither sheet prints a control-valve schedule with actuator, Cv, control signal, or fail-position fields."},
+    "damper_actuator_schedule": {"status": "not_present", "value": null, "basis": "MH502 depicts an AO zone damper and sequence behavior, but the supplied set contains no damper-actuator schedule."},
+    "physical_schedule_line_item_count": {"status": "not_stated", "value": null, "basis": "The only printed valve rows are the MH601 manual-ball-valve schedule, which is retained separately and not recast as a BAS control-valve schedule."}
+  },
+  "point_matrix_context": {
+    "source_table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+    "source_rows": 19,
+    "printed_matrix_totals": {"hardware": 8, "software": 21},
+    "interpretation_rule": "The MH502 VAV terminal-unit list is a point-function template. It is not row-mapped to the 20 MH601 single-duct terminal rows or TU26-73, so printed matrix totals are not expanded into project-wide physical I/O totals.",
+    "source_roles": ["zone temperature and zone-temperature setpoint", "airflow and discharge-air temperature", "AO zone damper and AO reheating valve", "occupied/unoccupied airflow setpoints and heating mode", "zone humidity/humidity setpoint and high humidity alarm"]
+  },
+  "sequences": [
+    {
+      "id": "vav-run-conditions-and-zone-setpoints",
+      "scope": "VAV terminal unit",
+      "source_behavior": "The unit runs continuously, maintaining 75°F adjustable cooling and 70°F adjustable heating setpoints; occupants can adjust the zone temperature heating and cooling setpoints at the zone sensor.",
+      "assertion_ids": ["mh502-vav-run-conditions", "mh502-vav-setpoint-adjust"]
+    },
+    {
+      "id": "vav-occupied-flow-and-reheat",
+      "scope": "VAV terminal unit occupied mode",
+      "source_behavior": "Above cooling setpoint, the zone damper modulates between minimum occupied airflow and maximum cooling airflow until satisfied. Between cooling and heating setpoints it maintains minimum required zone airflow. Below heating setpoint it modulates the heating valve open; if warm AHU air is available it also modulates the zone damper between minimum occupied and maximum heating airflow until satisfied.",
+      "assertion_ids": ["mh502-vav-occupied"]
+    },
+    {
+      "id": "vav-unoccupied-flow-and-reheat",
+      "scope": "VAV terminal unit unoccupied mode",
+      "source_behavior": "The zone damper controls to minimum unoccupied airflow. Above cooling setpoint it modulates to maximum cooling airflow; below unoccupied heating setpoint the controller modulates the heating valve open and, if warm AHU air is available, modulates the damper between minimum unoccupied airflow and auxiliary heating airflow until satisfied.",
+      "assertion_ids": ["mh502-vav-unoccupied"]
+    },
+    {
+      "id": "vav-discharge-temperature-and-humidity-alarms",
+      "scope": "VAV terminal unit",
+      "source_behavior": "The controller measures discharge-air temperature and limits hot-water valve position when discharge air is more than 15°F adjustable above zone temperature. High discharge temperature is greater than 100°F adjustable; low is less than 50°F adjustable. A space relative-humidity value above 60% initiates a visible alarm in the affected OR and at the DDC monitoring station.",
+      "assertion_ids": ["mh502-vav-discharge-limit", "mh502-vav-discharge-alarms", "mh502-vav-humidity-alarm"]
+    },
+    {
+      "id": "isolation-room-pressure-control",
+      "scope": "Isolation room",
+      "source_behavior": "The DDC system modulates the exhaust-air venturi valve to maintain +0.01 inches water gauge to the corridor, opening below that value for more than five seconds and closing above it for more than five seconds. Low differential pressure below 0.00 inches for more than 15 seconds causes a local visual alarm and DDC-monitoring-station alarm.",
+      "assertion_ids": ["mh502-isolation-pressure", "mh502-isolation-pressure-alarm"]
+    },
+    {
+      "id": "isolation-room-filter-monitoring",
+      "scope": "Isolation room HEPA pre-filter and HEPA filter",
+      "source_behavior": "The DDC system monitors differential pressure across the HEPA pre-filter and HEPA filter; alarms occur above 1.0 inches water gauge for the pre-filter and 2.0 inches water gauge for the HEPA filter. The HEPA filter also receives a visual Magnehelic gauge.",
+      "assertion_ids": ["mh502-isolation-filters"]
+    },
+    {
+      "id": "isolation-room-lead-standby-fans",
+      "scope": "Isolation room two-fan system",
+      "source_behavior": "The two fans operate lead/standby. The lead runs first with the standby isolation damper closed; on lead failure, the standby runs with the lead isolation damper closed. Lead rotation is user-selectable manually, by adjustable runtime, weekly, or monthly. VFD output modulates from duct static pressure ahead of the filter, with the setpoint determined during TAB.",
+      "assertion_ids": ["mh502-isolation-lead-standby", "mh502-isolation-vfd"]
+    },
+    {
+      "id": "isolation-room-fan-alarms",
+      "scope": "Both isolation-room fans",
+      "source_behavior": "Alarms include failure when commanded on but status is off, running in hand when commanded off but status is on, and runtime exceeded when status runtime exceeds a user-definable limit.",
+      "assertion_ids": ["mh502-isolation-fan-alarms"]
+    }
+  ],
+  "sensor_and_zone_ledger": {
+    "source_typed_roles": "MH502 prints temperature, airflow, humidity, space-pressure, and filter-pressure roles in a VAV point template, sequences, and an isolation-room schematic. It does not provide an installed sensor schedule or plan-mapped physical sensor count.",
+    "physical_sensor_count": {"status": "not_stated", "value": null},
+    "zone_mapping": {"status": "not_stated", "value": null},
+    "written_visual_indicator": "The isolation-room sequence calls for a ball-thru-wall manual pressure differential indicator between the ante room and corridor; this is not counted as a BAS point or sensor instance."
+  },
+  "source_limitations": [
+    "No BAS vendor, protocol, controller/panel model, address, transport, or network topology is printed in the supplied 12-page set.",
+    "No MH502 control-sequence statement identifies which, if any, of the twenty MH601 single-duct terminal schedule rows are the represented VAV template instances.",
+    "MH601's valve table provides plain ball-valve service/size/flow rows only; it cannot supply actuator, fail-position, Cv, or BAS control-valve takeoff fields."
+  ],
+  "tables": [],
+  "assertions": [
+    {"id": "mh502-vav-run-conditions", "page": 11, "bbox": [1420,189,1710,241], "expected": "RUN CONDITIONS - CONTINUOUS: THE UNIT SHALL RUN CONTINUOUSLY AND SHALL MAINTAIN: • A 75°F (ADJ.) COOLING SETPOINT. • A 70°F (ADJ.) HEATING SETPOINT.", "mode": "contains"},
+    {"id": "mh502-vav-setpoint-adjust", "page": 11, "bbox": [1420,310,1950,344], "expected": "THE OCCUPANT SHALL BE ABLE TO ADJUST THE ZONE TEMPERATURE HEATING AND COOLING SETPOINTS AT THE ZONE SENSOR.", "mode": "contains"},
+    {"id": "mh502-vav-occupied", "page": 11, "bbox": [1420,397,1950,517], "expected": "WHEN ZONE TEMPERATURE IS GREATER THAN ITS COOLING SETPOINT, THE ZONE DAMPER SHALL MODULATE BETWEEN THE MINIMUM OCCUPIED AIRFLOW (ADJ.) AND THE MAXIMUM COOLING AIRFLOW (ADJ.) UNTIL THE ZONE IS SATISFIED.", "mode": "contains"},
+    {"id": "mh502-vav-unoccupied", "page": 11, "bbox": [1420,527,1955,648], "expected": "WHEN THE ZONE IS UNOCCUPIED THE ZONE DAMPER SHALL CONTROL TO ITS MINIMUM UNOCCUPIED AIRFLOW (ADJ.).", "mode": "contains"},
+    {"id": "mh502-vav-discharge-limit", "page": 11, "bbox": [1420,701,1950,735], "expected": "THE CONTROLLER SHALL MEASURE THE DISCHARGE AIR TEMPERATURE AND LIMIT HOT WATER VALVE POSITION IF THE DISCHARGE AIR TEMPERATURE IS MORE THAN 15°F (ADJ.) ABOVE THE ZONE TEMPERATURE.", "mode": "contains"},
+    {"id": "mh502-vav-discharge-alarms", "page": 11, "bbox": [1420,777,1920,811], "expected": "HIGH DISCHARGE AIR TEMP: IF THE DISCHARGE AIR TEMPERATURE IS GREATER THAN 100°F (ADJ.).", "mode": "contains"},
+    {"id": "mh502-vav-humidity-alarm", "page": 11, "bbox": [1420,820,1910,855], "expected": "HIGH HUMIDITY: IF THE SPACE RELATIVE HUMIDITY RISES ABOVE 60% A VISIBLE ALARM SHALL BE INITIATED IN THE AFFECTED OR AND AT THE DDC MONITORING STATION.", "mode": "contains"},
+    {"id": "mh502-isolation-pressure", "page": 11, "bbox": [540,257,1210,302], "expected": "THE DDC SYSTEM SHALL MODULATE THE EXHAUST AIR VENTURI VALVE TO MAINTAIN A SET POINT OF +0.01 INCHES WATER GAUGE TO THE CORRIDOR.", "mode": "contains"},
+    {"id": "mh502-isolation-pressure-alarm", "page": 11, "bbox": [540,312,1200,346], "expected": "LOW DIFFERENTIAL PRESSURE IF THE PRESSURE FALLS BELOW 0.00 INCHES FOR MORE THAN 15 SECONDS. A LOCAL VISUAL ALARM SHALL BE INDICATED AND AN ALARM SHALL BE ANNUNCIATED AT THE DDC MONITORING STATION.", "mode": "contains"},
+    {"id": "mh502-isolation-filters", "page": 11, "bbox": [540,388,1210,465], "expected": "THE DDC SYSTEM SHALL MONITOR THE DIFFERENTIAL PRESSURE ACROSS THE HEPA PRE-FILTER AND THE HEPA FILTER. THE HEPA FILTER SHALL BE PROVIDED WITH A VISUAL MANGEHELIC GAUGE AS WELL.", "mode": "contains"},
+    {"id": "mh502-isolation-lead-standby", "page": 11, "bbox": [540,475,1145,520], "expected": "FAN CONTROL: THE TWO FANS SHALL OPERATE IN A LEAD / STANDBY FASHION. • THE LEAD FAN SHALL RUN FIRST AND THE STANDBY FAN ISOLATION DAMPER SHALL BE CLOSED. • ON FAILURE OF THE LEAD FAN, THE STANDBY FAN SHALL RUN AND THE LEAD FAN ISOLATION DAMPER SHALL BE CLOSED.", "mode": "contains"},
+    {"id": "mh502-isolation-vfd", "page": 11, "bbox": [540,594,1210,618], "expected": "UPON A FALL IN DUCT STATIC PRESSURE AHEAD OF THE FILTER AT A SET POINT AS DETERMINED DURING TAB, THE VFD SHALL MODULATE UP. ON A RISE THE VFD SHALL MODULATE DOWN.", "mode": "contains"},
+    {"id": "mh502-isolation-fan-alarms", "page": 11, "bbox": [540,628,930,673], "expected": "ALARMS TO BOTH FANS SHALL BE PROVIDED AS FOLLOWS: • FAILURE: COMMANDED ON, BUT THE STATUS IS OFF. • RUNNING IN HAND: COMMANDED OFF, BUT THE STATUS IS ON. • RUNTIME EXCEEDED: STATUS RUN TIME EXCEEDS A USER DEFINABLE LIMIT.", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "mh502-written-sequences", "records_path": ["sequences"], "expected": 8, "unique_key": "id"}
+  ]
+}

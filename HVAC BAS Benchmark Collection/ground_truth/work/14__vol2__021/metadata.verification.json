@@ -1,0 +1,145 @@
+{
+  "document_id": "14__vol2__021",
+  "source_sha256": "4d883afdd3b2d94ea2e14621dc49df77bc10ca0548bfd077c436420c43ae75f8",
+  "annotation_sha256": "c45f7c4436b3c655c83dc79339f0495d64742e7c9f3cb6164dc07de9d28fcd8c",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 4,
+  "checks": [
+    {
+      "assertion": "m601-sheet-title",
+      "page": 13,
+      "bbox": [
+        3100,
+        2480,
+        3380,
+        2550
+      ],
+      "expected": "SCHEDULES M-601",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHEDULES M-601",
+          "word_ids": [
+            3269,
+            3270
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHEDULES M-601",
+          "word_ids": [
+            3211,
+            3232
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m803-sheet-title",
+      "page": 17,
+      "bbox": [
+        3100,
+        2480,
+        3380,
+        2550
+      ],
+      "expected": "SEQUENCE OF OPERATIONS M-803",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEQUENCE OF OPERATIONS M-803",
+          "word_ids": [
+            2691,
+            2692,
+            2693,
+            2694
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEQUENCE OF OPERATIONS M-803",
+          "word_ids": [
+            2551,
+            2552,
+            2553,
+            2574
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m804-sheet-title",
+      "page": 18,
+      "bbox": [
+        3100,
+        2480,
+        3380,
+        2550
+      ],
+      "expected": "SEQUENCE OF OPERATIONS M-804",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEQUENCE OF OPERATIONS M-804",
+          "word_ids": [
+            2936,
+            2937,
+            2938,
+            2939
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEQUENCE OF OPERATIONS M-804",
+          "word_ids": [
+            2775,
+            2776,
+            2777,
+            2800
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m805-sheet-title",
+      "page": 19,
+      "bbox": [
+        3100,
+        2480,
+        3380,
+        2550
+      ],
+      "expected": "SEQUENCE OF OPERATIONS M-805",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEQUENCE OF OPERATIONS M-805",
+          "word_ids": [
+            2645,
+            2646,
+            2647,
+            2648
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEQUENCE OF OPERATIONS M-805",
+          "word_ids": [
+            2466,
+            2467,
+            2468,
+            2491
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

@@ -1,0 +1,71 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All printed grille, register and diffuser schedule rows on Air Operations sheet M-603 (source PDF page 44). This is a printed schedule inventory, not a plan-derived installed-device quantity.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [44],
+    "render": "reviews/01__vol2__001/p44-schedules-poppler.png",
+    "dpi": 180,
+    "finding": "The entire 28-row M-603 grille/register/diffuser grid was visually reviewed at 180 DPI, including special neck-size glyphs, dash throw patterns, notes and multi-level airflow headers."
+  },
+  "tables": [
+    {
+      "id": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "page": 44,
+      "sheet": "M-603",
+      "building_scope": "Air Operations",
+      "title": "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+      "classification": "Supply, return, exhaust and transfer air terminals",
+      "columns": "mark|type|mounting|face_size_in|neck_size_in|airflow_min_CFM|airflow_max_CFM|max_NC|throw_pattern|notes",
+      "x_edges": [220, 280, 460, 570, 700, 790, 845, 890, 960, 1040, 1120],
+      "y_edges": [559, 576, 593, 610, 627, 645, 662, 679, 696, 713, 731, 748, 765, 782, 799, 817, 834, 851, 868, 885, 903, 920, 937, 954, 971, 989, 1006, 1023, 1040],
+      "rows": [
+        "CD-1|3-CONE SUPPLY|ACT|24x24|6ø|0|155|20|4-WAY|3",
+        "CD-2|3-CONE SUPPLY|ACT|24x24|8ø|156|275|20|4-WAY|3",
+        "CD-3|3-CONE SUPPLY|ACT|24x24|10ø|276|380|20|4-WAY|3",
+        "CD-4|3-CONE SUPPLY|ACT|24x24|12ø|381|470|20|4-WAY|3",
+        "CD-5|3-CONE SUPPLY|SURFACE|12x12|6ø|0|155|20|4-WAY|3",
+        "EG-1|EGGCRATE EXHAUST GRILLE|SURFACE|8x8|6x6|0|150|30|-|3",
+        "EG-2|EGGCRATE EXHAUST GRILLE|SURFACE|12x12|8x8|151|300|30|-|3",
+        "EG-3|EGGCRATE EXHAUST GRILLE|ACT|24x24|8x8|0|200|30|-|3",
+        "EG-4|LOUVERED RETURN GRILLE|DUCT/SURFACE|10x8|8x6|0|180|30|-|3",
+        "LD-1|LINEAR SUPPLY DIFFUSER|SURFACE|4 FT. LONG|8ø|0|175|<10|1-WAY|1,3,4",
+        "LD-2|LINEAR SUPPLY DIFFUSER|SURFACE|3 FT. 11 IN. LONG|8ø|0|175|<10|1-WAY|2,3",
+        "LD-3|LINEAR SUPPLY DIFFUSER|SURFACE|2 FT. 4 IN. LONG|8ø|0|175|<10|1-WAY|2,3",
+        "RG-1|PERFORATED RETURN GRILLE|ACT|24x24|6x6|0|200|30|-|3",
+        "RG-2|PERFORATED RETURN GRILLE|ACT|24x24|8x8|201|350|30|-|3",
+        "RG-3|PERFORATED RETURN GRILLE|ACT|24x24|10x10|351|550|30|-|3",
+        "RG-4|PERFORATED RETURN GRILLE|ACT|24x24|12x12|551|700|30|-|3",
+        "RG-6|FILTERED RETURN GRILLE|ACT|24x24|6x6|0|200|30|-|3,5",
+        "RG-7|FILTERED RETURN GRILLE|ACT|24x24|8x8|201|350|30|-|3,5",
+        "RG-8|FILTERED RETURN GRILLE|ACT|24x24|10x10|351|550|30|-|3,5",
+        "RG-11|LOUVERED RETURN GRILLE|DUCT/SURFACE|10x8|8x6|0|180|30|-|3",
+        "RG-12|FILTERED LOUVERED RETURN GRILLE|DUCT/SURFACE|10x8|8x6|0|180|30|-|3,6",
+        "RG-13|FILTERED LOUVERED RETURN GRILLE|SURFACE|12x12|6x6|0|100|30|-|3,6",
+        "SG-1|LOUVERED SUPPLY GRILLE|DUCT/SURFACE|NECK SIZE + 2\"|SEE DRAWINGS|0|1000|30|-|3",
+        "TG-1|EGGCRATE TRANSFER GRILLE|ACT|24x24|8x8|0|150|30|-|3",
+        "TG-2|LOUVERED TRANSFER GRILLE|DUCT/SURFACE|12x10|10x8|0|200|30|-|3",
+        "TG-3|EGGCRATE TRANSFER GRILLE|SURFACE|12x12|8x8|0|300|30|-|3",
+        "TG-4|LOUVERED TRANSFER GRILLE|DUCT/SURFACE|10x8|8x6|0|200|30|-|3",
+        "TG-5|EGGCRATE TRANSFER GRILLE|SURFACE|12x12|8x8|0|300|30|-|3"
+      ],
+      "notes": [
+        "1. PROVIDE CONTINUOUS LINEAR SLOT DIFFUSER WITH 4 FT LONG ACTIVE SECTIONS. PROVIDE WITH 1 x 1\" SLOT, JET-FLOW TYPE PATTERN. PROVIDE WITH MANUFACTURER'S OPTIONAL INSULATED PLENUM TO MATCH DIFFUSER.",
+        "2. PROVIDE WITH 1 x 1\" SLOT, JET-FLOW TYPE PATTERN. PROVIDE WITH MANUFACTURER'S OPTIONAL INSULATED PLENUM TO MATCH DIFFUSER.",
+        "3. DEVICE RUNOUTS SHALL MATCH NECK SIZE INDICATED ON SCHEDULE, UNLESS OTHERWISE INDICATED ON DRAWINGS.",
+        "4. PROVIDE LSD WITH BLANK PANELS AS INDICATED ON PLANS BETWEEN ACTIVE SECTIONS OF LSDs.",
+        "5. PROVIDE WITH MERV 8 24x24 FILTER.",
+        "6. PROVIDE WITH MERV 8 FILTER."
+      ],
+      "header_evidence": [
+        {"bbox": [430, 480, 950, 525], "expected": "GRILLE REGISTER AND DIFFUSER SCHEDULE"},
+        {"bbox": [220, 525, 1120, 559], "expected": "MARK TYPE MOUNTING FACE SIZE IN NECK SIZE IN AIRFLOW CFM MIN MAX MAX NC THROW PATTERN NOTES"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "air-ops-grille-register-diffuser-row-count", "records_path": ["tables", 0, "rows"], "expected": 28}
+  ],
+  "remaining_work": "Transcribe the M-603 fan sound-power table and reconcile all printed terminal schedule rows against plan callouts without replacing them with inferred installed quantities."
+}

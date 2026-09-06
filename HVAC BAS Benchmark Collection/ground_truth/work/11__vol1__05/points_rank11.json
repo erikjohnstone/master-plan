@@ -1,0 +1,11 @@
+{
+  "document_id": "11__vol1__05",
+  "module_role": "Explicit point-list finding.",
+  "tables": [],
+  "assertions": [],
+  "point_list_status": {
+    "formal_row_matrix": "not_published_in_supplied_drawings",
+    "finding": "MI700 publishes controls symbols and BACnet architecture but no conventional tabular point-list matrix.",
+    "boundary": "No source point, I/O, terminal, wire, sensor or device count is inferred from symbols."
+  }
+}

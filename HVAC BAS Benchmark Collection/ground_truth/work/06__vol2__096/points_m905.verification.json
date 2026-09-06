@@ -1,0 +1,1304 @@
+{
+  "document_id": "06__vol2__096",
+  "source_sha256": "72da836a803740382b319b718c1f10d8daeff6e5dbe869f1e68ff173ea4092ec",
+  "annotation_sha256": "309fd0d4e021fd66ffcb2216a37e2d54929cfe8243b235f1c374172aa7d3ade3",
+  "tables": 3,
+  "rows": 29,
+  "cell_assertions": 29,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M905-SALLYPORT-EXHAUST-DDC",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        157,
+        2450,
+        171
+      ],
+      "expected": "BI-1 FAN STATUS X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-1 FAN STATUS X X X",
+          "word_ids": [
+            1523,
+            1524,
+            1525,
+            1526,
+            1527,
+            1528
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-1 FAN STATUS X X X",
+          "word_ids": [
+            39,
+            124,
+            125,
+            143,
+            149,
+            151
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-SALLYPORT-EXHAUST-DDC",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        171,
+        2450,
+        184
+      ],
+      "expected": "BO-1 FAN START-STOP X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-1 FAN START-STOP X X",
+          "word_ids": [
+            1529,
+            1530,
+            1531,
+            1532,
+            1533
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-1 FAN START-STOP X X",
+          "word_ids": [
+            40,
+            126,
+            127,
+            144,
+            152
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-SALLYPORT-EXHAUST-DDC",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        184,
+        2450,
+        197
+      ],
+      "expected": "BO-2 GAS MONITORING SYSTEM EXHAUST FAN ON/OFF X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-2 GAS MONITORING SYSTEM EXHAUST FAN ON/OFF X X",
+          "word_ids": [
+            1534,
+            1535,
+            1536,
+            1537,
+            1538,
+            1539,
+            1540,
+            1541,
+            1542
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-2 GAS MONITORING SYSTEM EXHAUST FAN ON/OFF X X",
+          "word_ids": [
+            41,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            145,
+            153
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-SALLYPORT-EXHAUST-DDC",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        197,
+        2450,
+        210
+      ],
+      "expected": "BO-3 OUTDOOR INTAKE MOTORIZED DAMPER X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-3 OUTDOOR INTAKE MOTORIZED DAMPER X X",
+          "word_ids": [
+            1543,
+            1544,
+            1545,
+            1546,
+            1547,
+            1548,
+            1549
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-3 OUTDOOR INTAKE MOTORIZED DAMPER X X",
+          "word_ids": [
+            42,
+            134,
+            135,
+            136,
+            137,
+            146,
+            154
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-SALLYPORT-EXHAUST-DDC",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        210,
+        2450,
+        225
+      ],
+      "expected": "BO-4 EXHAUST FAN MOTORIZED DAMPER X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-4 EXHAUST FAN MOTORIZED DAMPER X X",
+          "word_ids": [
+            1550,
+            1551,
+            1552,
+            1553,
+            1554,
+            1555,
+            1556
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-4 EXHAUST FAN MOTORIZED DAMPER X X",
+          "word_ids": [
+            43,
+            138,
+            139,
+            140,
+            141,
+            147,
+            155
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-SALLYPORT-EXHAUST-DDC",
+      "header": "SCHEDULE OF DDC POINTS",
+      "page": 35,
+      "bbox": [
+        2035,
+        120,
+        2180,
+        140
+      ],
+      "engine": "mupdf",
+      "actual": "SCHEDULE OF DDC POINTS",
+      "pass": true
+    },
+    {
+      "table": "M905-SALLYPORT-EXHAUST-DDC",
+      "header": "SCHEDULE OF DDC POINTS",
+      "page": 35,
+      "bbox": [
+        2035,
+        120,
+        2180,
+        140
+      ],
+      "engine": "poppler",
+      "actual": "SCHEDULE OF DDC POINTS",
+      "pass": true
+    },
+    {
+      "table": "M905-JAIL-EXHAUST-DDC",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        703,
+        2450,
+        716
+      ],
+      "expected": "AO-1 EXHAUST FAN STARTER X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-1 EXHAUST FAN STARTER X X",
+          "word_ids": [
+            1723,
+            1724,
+            1725,
+            1726,
+            1727,
+            1728
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-1 EXHAUST FAN STARTER X X",
+          "word_ids": [
+            963,
+            903,
+            904,
+            905,
+            887,
+            849
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-JAIL-EXHAUST-DDC",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        716,
+        2450,
+        729
+      ],
+      "expected": "AO-1 EXHAUST FAN STARTER X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-1 EXHAUST FAN STARTER X X",
+          "word_ids": [
+            1729,
+            1730,
+            1731,
+            1732,
+            1733,
+            1734
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-1 EXHAUST FAN STARTER X X",
+          "word_ids": [
+            964,
+            906,
+            907,
+            908,
+            888,
+            850
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-JAIL-EXHAUST-DDC",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        729,
+        2450,
+        742
+      ],
+      "expected": "BI-1 EXHAUST FAN STATUS X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-1 EXHAUST FAN STATUS X X X",
+          "word_ids": [
+            1735,
+            1736,
+            1737,
+            1738,
+            1739,
+            1740,
+            1741
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-1 EXHAUST FAN STATUS X X X",
+          "word_ids": [
+            965,
+            909,
+            910,
+            911,
+            889,
+            836,
+            851
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-JAIL-EXHAUST-DDC",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        742,
+        2450,
+        756
+      ],
+      "expected": "BI-1 EXHAUST FAN STATUS X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-1 EXHAUST FAN STATUS X X X",
+          "word_ids": [
+            1742,
+            1743,
+            1744,
+            1745,
+            1746,
+            1747,
+            1748
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-1 EXHAUST FAN STATUS X X X",
+          "word_ids": [
+            966,
+            912,
+            913,
+            914,
+            890,
+            837,
+            852
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-JAIL-EXHAUST-DDC",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        756,
+        2450,
+        769
+      ],
+      "expected": "BI-2 EXHAUST FAN DIFFERENTIAL PRESSURE SWITCH X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-2 EXHAUST FAN DIFFERENTIAL PRESSURE SWITCH X X X",
+          "word_ids": [
+            1749,
+            1750,
+            1751,
+            1752,
+            1753,
+            1754,
+            1755,
+            1756,
+            1757
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-2 EXHAUST FAN DIFFERENTIAL PRESSURE SWITCH X X X",
+          "word_ids": [
+            967,
+            915,
+            916,
+            917,
+            918,
+            919,
+            891,
+            838,
+            853
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-JAIL-EXHAUST-DDC",
+      "row": 6,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        769,
+        2450,
+        782
+      ],
+      "expected": "BI-2 EXHAUST FAN DIFFERENTIAL PRESSURE SWITCH X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-2 EXHAUST FAN DIFFERENTIAL PRESSURE SWITCH X X X",
+          "word_ids": [
+            1758,
+            1759,
+            1760,
+            1761,
+            1762,
+            1763,
+            1764,
+            1765,
+            1766
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-2 EXHAUST FAN DIFFERENTIAL PRESSURE SWITCH X X X",
+          "word_ids": [
+            968,
+            920,
+            921,
+            922,
+            923,
+            924,
+            892,
+            839,
+            854
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-JAIL-EXHAUST-DDC",
+      "row": 7,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        782,
+        2450,
+        795
+      ],
+      "expected": "BI-3 EXHAUST FAN DAMPER END SWITCH X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-3 EXHAUST FAN DAMPER END SWITCH X X X",
+          "word_ids": [
+            1767,
+            1768,
+            1769,
+            1770,
+            1771,
+            1772,
+            1773,
+            1774,
+            1775
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-3 EXHAUST FAN DAMPER END SWITCH X X X",
+          "word_ids": [
+            969,
+            925,
+            926,
+            927,
+            928,
+            929,
+            893,
+            840,
+            855
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-JAIL-EXHAUST-DDC",
+      "row": 8,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        795,
+        2450,
+        808
+      ],
+      "expected": "BI-3 EXHAUST FAN DAMPER END SWITCH X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-3 EXHAUST FAN DAMPER END SWITCH X X X",
+          "word_ids": [
+            1776,
+            1777,
+            1778,
+            1779,
+            1780,
+            1781,
+            1782,
+            1783,
+            1784
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-3 EXHAUST FAN DAMPER END SWITCH X X X",
+          "word_ids": [
+            970,
+            930,
+            931,
+            932,
+            933,
+            934,
+            894,
+            841,
+            856
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-JAIL-EXHAUST-DDC",
+      "row": 9,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        808,
+        2450,
+        821
+      ],
+      "expected": "BO-1 EXHAUST FAN START-STOP X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-1 EXHAUST FAN START-STOP X X",
+          "word_ids": [
+            1785,
+            1786,
+            1787,
+            1788,
+            1789,
+            1790
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-1 EXHAUST FAN START-STOP X X",
+          "word_ids": [
+            971,
+            935,
+            936,
+            937,
+            895,
+            857
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-JAIL-EXHAUST-DDC",
+      "row": 10,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        821,
+        2450,
+        834
+      ],
+      "expected": "BO-1 EXHAUST FAN START-STOP X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-1 EXHAUST FAN START-STOP X X",
+          "word_ids": [
+            1791,
+            1792,
+            1793,
+            1794,
+            1795,
+            1796
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-1 EXHAUST FAN START-STOP X X",
+          "word_ids": [
+            972,
+            938,
+            939,
+            940,
+            896,
+            858
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-JAIL-EXHAUST-DDC",
+      "row": 11,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        834,
+        2450,
+        847
+      ],
+      "expected": "BO-2 EXHAUST FAN ISOLATION DAMPER X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-2 EXHAUST FAN ISOLATION DAMPER X X",
+          "word_ids": [
+            1797,
+            1798,
+            1799,
+            1800,
+            1801,
+            1802,
+            1803
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-2 EXHAUST FAN ISOLATION DAMPER X X",
+          "word_ids": [
+            973,
+            941,
+            942,
+            943,
+            944,
+            897,
+            859
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-JAIL-EXHAUST-DDC",
+      "row": 12,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        847,
+        2450,
+        862
+      ],
+      "expected": "BO-2 EXHAUST FAN ISOLATION DAMPER X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-2 EXHAUST FAN ISOLATION DAMPER X X",
+          "word_ids": [
+            1804,
+            1805,
+            1806,
+            1807,
+            1808,
+            1809,
+            1810
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-2 EXHAUST FAN ISOLATION DAMPER X X",
+          "word_ids": [
+            974,
+            945,
+            946,
+            947,
+            948,
+            898,
+            860
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-JAIL-EXHAUST-DDC",
+      "header": "SCHEDULE OF DDC POINTS",
+      "page": 35,
+      "bbox": [
+        2035,
+        665,
+        2180,
+        685
+      ],
+      "engine": "mupdf",
+      "actual": "SCHEDULE OF DDC POINTS",
+      "pass": true
+    },
+    {
+      "table": "M905-JAIL-EXHAUST-DDC",
+      "header": "SCHEDULE OF DDC POINTS",
+      "page": 35,
+      "bbox": [
+        2035,
+        665,
+        2180,
+        685
+      ],
+      "engine": "poppler",
+      "actual": "SCHEDULE OF DDC POINTS",
+      "pass": true
+    },
+    {
+      "table": "M905-POD-EXHAUST-DDC",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        1497,
+        2450,
+        1510
+      ],
+      "expected": "AO-1 EXHAUST FAN STARTER X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-1 EXHAUST FAN STARTER X X",
+          "word_ids": [
+            1566,
+            1567,
+            1568,
+            1569,
+            1570,
+            1571
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-1 EXHAUST FAN STARTER X X",
+          "word_ids": [
+            1660,
+            1610,
+            1611,
+            1612,
+            1582,
+            1547
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-POD-EXHAUST-DDC",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        1510,
+        2450,
+        1523
+      ],
+      "expected": "AO-1 EXHAUST FAN STARTER X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-1 EXHAUST FAN STARTER X X",
+          "word_ids": [
+            1572,
+            1573,
+            1574,
+            1575,
+            1576,
+            1577
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-1 EXHAUST FAN STARTER X X",
+          "word_ids": [
+            1661,
+            1613,
+            1614,
+            1615,
+            1583,
+            1548
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-POD-EXHAUST-DDC",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        1523,
+        2450,
+        1536
+      ],
+      "expected": "BI-1 EXHAUST FAN STATUS X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-1 EXHAUST FAN STATUS X X X",
+          "word_ids": [
+            1578,
+            1579,
+            1580,
+            1581,
+            1582,
+            1583,
+            1584
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-1 EXHAUST FAN STATUS X X X",
+          "word_ids": [
+            1662,
+            1616,
+            1617,
+            1618,
+            1584,
+            1539,
+            1549
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-POD-EXHAUST-DDC",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        1536,
+        2450,
+        1550
+      ],
+      "expected": "BI-1 EXHAUST FAN STATUS X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-1 EXHAUST FAN STATUS X X X",
+          "word_ids": [
+            1585,
+            1586,
+            1587,
+            1588,
+            1589,
+            1590,
+            1591
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-1 EXHAUST FAN STATUS X X X",
+          "word_ids": [
+            1663,
+            1619,
+            1620,
+            1621,
+            1585,
+            1540,
+            1550
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-POD-EXHAUST-DDC",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        1550,
+        2450,
+        1563
+      ],
+      "expected": "BI-2 EXHAUST FAN DIFFERENTIAL PRESSURE SWITCH X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-2 EXHAUST FAN DIFFERENTIAL PRESSURE SWITCH X X X",
+          "word_ids": [
+            1592,
+            1593,
+            1594,
+            1595,
+            1596,
+            1597,
+            1598,
+            1599,
+            1600
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-2 EXHAUST FAN DIFFERENTIAL PRESSURE SWITCH X X X",
+          "word_ids": [
+            1664,
+            1622,
+            1623,
+            1624,
+            1625,
+            1626,
+            1586,
+            1541,
+            1551
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-POD-EXHAUST-DDC",
+      "row": 6,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        1563,
+        2450,
+        1576
+      ],
+      "expected": "BI-2 EXHAUST FAN DIFFERENTIAL PRESSURE SWITCH X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-2 EXHAUST FAN DIFFERENTIAL PRESSURE SWITCH X X X",
+          "word_ids": [
+            1601,
+            1602,
+            1603,
+            1604,
+            1605,
+            1606,
+            1607,
+            1608,
+            1609
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-2 EXHAUST FAN DIFFERENTIAL PRESSURE SWITCH X X X",
+          "word_ids": [
+            1665,
+            1627,
+            1628,
+            1629,
+            1630,
+            1631,
+            1587,
+            1542,
+            1552
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-POD-EXHAUST-DDC",
+      "row": 7,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        1576,
+        2450,
+        1589
+      ],
+      "expected": "BI-3 EXHAUST FAN DAMPER END SWITCH X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-3 EXHAUST FAN DAMPER END SWITCH X X X",
+          "word_ids": [
+            1610,
+            1611,
+            1612,
+            1613,
+            1614,
+            1615,
+            1616,
+            1617,
+            1618
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-3 EXHAUST FAN DAMPER END SWITCH X X X",
+          "word_ids": [
+            1666,
+            1632,
+            1633,
+            1634,
+            1635,
+            1636,
+            1588,
+            1543,
+            1553
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-POD-EXHAUST-DDC",
+      "row": 8,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        1589,
+        2450,
+        1602
+      ],
+      "expected": "BI-3 EXHAUST FAN DAMPER END SWITCH X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-3 EXHAUST FAN DAMPER END SWITCH X X X",
+          "word_ids": [
+            1619,
+            1620,
+            1621,
+            1622,
+            1623,
+            1624,
+            1625,
+            1626,
+            1627
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-3 EXHAUST FAN DAMPER END SWITCH X X X",
+          "word_ids": [
+            1667,
+            1637,
+            1638,
+            1639,
+            1640,
+            1641,
+            1589,
+            1544,
+            1554
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-POD-EXHAUST-DDC",
+      "row": 9,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        1602,
+        2450,
+        1615
+      ],
+      "expected": "BO-1 EXHAUST FAN START-STOP X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-1 EXHAUST FAN START-STOP X X",
+          "word_ids": [
+            1628,
+            1629,
+            1630,
+            1631,
+            1632,
+            1633
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-1 EXHAUST FAN START-STOP X X",
+          "word_ids": [
+            1668,
+            1642,
+            1643,
+            1644,
+            1590,
+            1555
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-POD-EXHAUST-DDC",
+      "row": 10,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        1615,
+        2450,
+        1628
+      ],
+      "expected": "BO-1 EXHAUST FAN START-STOP X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-1 EXHAUST FAN START-STOP X X",
+          "word_ids": [
+            1634,
+            1635,
+            1636,
+            1637,
+            1638,
+            1639
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-1 EXHAUST FAN START-STOP X X",
+          "word_ids": [
+            1669,
+            1645,
+            1646,
+            1647,
+            1591,
+            1556
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-POD-EXHAUST-DDC",
+      "row": 11,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        1628,
+        2450,
+        1641
+      ],
+      "expected": "BO-2 EXHAUST FAN ISOLATION DAMPER X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-2 EXHAUST FAN ISOLATION DAMPER X X",
+          "word_ids": [
+            1640,
+            1641,
+            1642,
+            1643,
+            1644,
+            1645,
+            1646
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-2 EXHAUST FAN ISOLATION DAMPER X X",
+          "word_ids": [
+            1670,
+            1648,
+            1649,
+            1650,
+            1651,
+            1592,
+            1557
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-POD-EXHAUST-DDC",
+      "row": 12,
+      "column": "source_row_as_printed",
+      "page": 35,
+      "bbox": [
+        1910,
+        1641,
+        2450,
+        1656
+      ],
+      "expected": "BO-2 EXHAUST FAN ISOLATION DAMPER X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-2 EXHAUST FAN ISOLATION DAMPER X X",
+          "word_ids": [
+            1647,
+            1648,
+            1649,
+            1650,
+            1651,
+            1652,
+            1653
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-2 EXHAUST FAN ISOLATION DAMPER X X",
+          "word_ids": [
+            1671,
+            1652,
+            1653,
+            1654,
+            1655,
+            1593,
+            1558
+          ]
+        }
+      }
+    },
+    {
+      "table": "M905-POD-EXHAUST-DDC",
+      "header": "SCHEDULE OF DDC POINTS",
+      "page": 35,
+      "bbox": [
+        2035,
+        1460,
+        2180,
+        1480
+      ],
+      "engine": "mupdf",
+      "actual": "SCHEDULE OF DDC POINTS",
+      "pass": true
+    },
+    {
+      "table": "M905-POD-EXHAUST-DDC",
+      "header": "SCHEDULE OF DDC POINTS",
+      "page": 35,
+      "bbox": [
+        2035,
+        1460,
+        2180,
+        1480
+      ],
+      "engine": "poppler",
+      "actual": "SCHEDULE OF DDC POINTS",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

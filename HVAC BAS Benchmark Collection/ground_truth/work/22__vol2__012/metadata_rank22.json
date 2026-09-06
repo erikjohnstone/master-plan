@@ -1,0 +1,426 @@
+{
+  "document_id": "22__vol2__012",
+  "module_role": "Cover/title-sheet project facts, all-page sheet ledger, stated-scale witnesses and visual-review disposition.",
+  "tables": [],
+  "project": {
+    "project_name_as_printed": "CHILLER SYSTEM UPGRADE",
+    "facility_as_printed": "CENTER FOR BEHAVIORAL MEDICINE",
+    "location_as_printed": "KANSAS CITY, MISSOURI",
+    "building_type_as_printed": "Behavioral medicine facility (from printed facility name; a more specific occupancy/use classification is not published in this set).",
+    "mep_engineer_as_printed": "INSITE GROUP, INC.",
+    "issue_date_as_printed": "FEBRUARY 4, 2025",
+    "assertion_ids": [
+      "cover-project",
+      "cover-facility",
+      "cover-location",
+      "cover-mep-engineer",
+      "cover-issue-date"
+    ]
+  },
+  "scale_semantics": {
+    "stated_scale_records": [
+      {
+        "page": 2,
+        "sheet": "G001",
+        "printed_scale": "1/16\" = 1'-0\"",
+        "assertion_id": "g001-scale"
+      },
+      {
+        "page": 11,
+        "sheet": "MPD110A",
+        "printed_scale": "1/4\" = 1'-0\"",
+        "assertion_id": "mpd110a-scale"
+      },
+      {
+        "page": 12,
+        "sheet": "MPD110B",
+        "printed_scale": "1/4\" = 1'-0\"",
+        "assertion_id": "mpd110b-scale"
+      },
+      {
+        "page": 13,
+        "sheet": "MP110A",
+        "printed_scale": "1/4\" = 1'-0\"",
+        "assertion_id": "mp110a-scale"
+      },
+      {
+        "page": 14,
+        "sheet": "MP110B",
+        "printed_scale": "1/4\" = 1'-0\"",
+        "assertion_id": "mp110b-scale"
+      },
+      {
+        "page": 22,
+        "sheet": "ED110A",
+        "printed_scale": "1/4\" = 1'-0\"",
+        "assertion_id": "ed110a-scale"
+      },
+      {
+        "page": 23,
+        "sheet": "ED110B",
+        "printed_scale": "1/4\" = 1'-0\"",
+        "assertion_id": "ed110b-scale"
+      },
+      {
+        "page": 24,
+        "sheet": "E110A",
+        "printed_scale": "1/4\" = 1'-0\"",
+        "assertion_id": "e110a-scale"
+      },
+      {
+        "page": 25,
+        "sheet": "E110B",
+        "printed_scale": "1/4\" = 1'-0\"",
+        "assertion_id": "e110b-scale"
+      }
+    ],
+    "graphic_scale_bar_status": "No graphic scale bar is asserted as a source of measurement. The stated scales are local to their individual plan views; schedules, P&IDs, controls diagrams, schematics and one-lines are not made distance-takeoff sources.",
+    "takeoff_scale_status": "No global scale is asserted across this mixed 29-sheet source set and no physical distance or quantity is derived from a local stated scale."
+  },
+  "visual_review_pages": [
+    {
+      "page": 1,
+      "sheet": "G000",
+      "render": "reviews/22__vol2__012/p1-p1-full-poppler.png",
+      "finding": "Cover sheet, project identity, issue date, team/title-block information and full drawing index visually reviewed."
+    },
+    {
+      "page": 2,
+      "sheet": "G001",
+      "render": "reviews/22__vol2__012/p2-p2-full-poppler.png",
+      "finding": "Overall Level 1 plan visually reviewed as site/building context."
+    },
+    {
+      "page": 3,
+      "sheet": "G003",
+      "render": "reviews/22__vol2__012/p3-p3-full-poppler.png",
+      "finding": "Code-analysis sheet visually reviewed."
+    },
+    {
+      "page": 4,
+      "sheet": "A100",
+      "render": "reviews/22__vol2__012/p4-p4-full-poppler.png",
+      "finding": "Architectural general-information and enlarged-floor-plan sheet visually reviewed."
+    },
+    {
+      "page": 5,
+      "sheet": "A101",
+      "render": "reviews/22__vol2__012/p5-p5-full-poppler.png",
+      "finding": "Architectural wall-section/detail sheet visually reviewed."
+    },
+    {
+      "page": 6,
+      "sheet": "S001",
+      "render": "reviews/22__vol2__012/p6-p6-full-poppler.png",
+      "finding": "Structural general-notes sheet visually reviewed."
+    },
+    {
+      "page": 7,
+      "sheet": "S002",
+      "render": "reviews/22__vol2__012/p7-p7-full-poppler.png",
+      "finding": "Structural typical-details sheet visually reviewed."
+    },
+    {
+      "page": 8,
+      "sheet": "S101",
+      "render": "reviews/22__vol2__012/p8-p8-full-poppler.png",
+      "finding": "Structural partial-plans sheet visually reviewed."
+    },
+    {
+      "page": 9,
+      "sheet": "ME001",
+      "render": "reviews/22__vol2__012/p9-p9-full-poppler.png",
+      "finding": "Mechanical/electrical symbols sheet visually reviewed as legend context."
+    },
+    {
+      "page": 10,
+      "sheet": "ME002",
+      "render": "reviews/22__vol2__012/p10-p10-full-poppler.png",
+      "finding": "Mechanical/electrical general-notes sheet visually reviewed."
+    },
+    {
+      "page": 11,
+      "sheet": "MPD110A",
+      "render": "reviews/22__vol2__012/p11-p11-full-poppler.png",
+      "finding": "Level 1 mechanical piping demolition plan A visually reviewed."
+    },
+    {
+      "page": 12,
+      "sheet": "MPD110B",
+      "render": "reviews/22__vol2__012/p12-p12-full-poppler.png",
+      "finding": "Level 1 mechanical piping demolition plan B visually reviewed."
+    },
+    {
+      "page": 13,
+      "sheet": "MP110A",
+      "render": "reviews/22__vol2__012/p13-p13-full-poppler.png",
+      "finding": "Level 1 mechanical piping new-work plan A visually reviewed."
+    },
+    {
+      "page": 14,
+      "sheet": "MP110B",
+      "render": "reviews/22__vol2__012/p14-p14-full-poppler.png",
+      "finding": "Level 1 mechanical piping new-work plan B visually reviewed."
+    },
+    {
+      "page": 15,
+      "sheet": "M501",
+      "render": "reviews/22__vol2__012/p15-p15-full-poppler.png",
+      "finding": "Mechanical detail sheet visually reviewed."
+    },
+    {
+      "page": 16,
+      "sheet": "MD511",
+      "render": "reviews/22__vol2__012/p16-p16-full-poppler.png",
+      "finding": "Mechanical P&ID demolition sheet visually reviewed."
+    },
+    {
+      "page": 17,
+      "sheet": "M511",
+      "render": "reviews/22__vol2__012/p17-p17-full-poppler.png",
+      "finding": "Mechanical P&ID new-work sheet visually reviewed."
+    },
+    {
+      "page": 18,
+      "sheet": "M512",
+      "render": "reviews/22__vol2__012/p18-p18-full-poppler.png",
+      "finding": "Mechanical P&ID sheet visually reviewed."
+    },
+    {
+      "page": 19,
+      "sheet": "M601",
+      "render": "reviews/22__vol2__012/p19-p19-full-poppler.png",
+      "finding": "M601 dense mechanical schedule sheet visually reviewed; all 24 equipment-schedule rows are retained separately."
+    },
+    {
+      "page": 20,
+      "sheet": "M701",
+      "render": "reviews/22__vol2__012/p20-p20-full-poppler.png",
+      "finding": "M701 formal 101-row DDC point matrix and staged chilled-water sequence of operation visually reviewed; coordinate-bounded rows and clauses are retained separately."
+    },
+    {
+      "page": 21,
+      "sheet": "M702",
+      "render": "reviews/22__vol2__012/p21-p21-full-poppler.png",
+      "finding": "M702 chilled/condenser-water controls diagram and sensor notes visually reviewed."
+    },
+    {
+      "page": 22,
+      "sheet": "ED110A",
+      "render": "reviews/22__vol2__012/p22-p22-full-poppler.png",
+      "finding": "Level 1 electrical power-plan demolition A visually reviewed."
+    },
+    {
+      "page": 23,
+      "sheet": "ED110B",
+      "render": "reviews/22__vol2__012/p23-p23-full-poppler.png",
+      "finding": "Level 1 electrical power-plan demolition B visually reviewed."
+    },
+    {
+      "page": 24,
+      "sheet": "E110A",
+      "render": "reviews/22__vol2__012/p24-p24-full-poppler.png",
+      "finding": "Level 1 electrical power-plan new-work A visually reviewed."
+    },
+    {
+      "page": 25,
+      "sheet": "E110B",
+      "render": "reviews/22__vol2__012/p25-p25-full-poppler.png",
+      "finding": "Level 1 electrical power-plan new-work B visually reviewed."
+    },
+    {
+      "page": 26,
+      "sheet": "E501",
+      "render": "reviews/22__vol2__012/p26-p26-full-poppler.png",
+      "finding": "Electrical-detail sheet visually reviewed, including typical BAS-panel-nameplate context."
+    },
+    {
+      "page": 27,
+      "sheet": "E601",
+      "render": "reviews/22__vol2__012/p27-p27-full-poppler.png",
+      "finding": "E601 VFD, disconnect-switch and existing panelboard schedules visually reviewed; VFD controls-interface clauses are retained separately."
+    },
+    {
+      "page": 28,
+      "sheet": "ED701",
+      "render": "reviews/22__vol2__012/p28-p28-full-poppler.png",
+      "finding": "Electrical one-line demolition diagram visually reviewed."
+    },
+    {
+      "page": 29,
+      "sheet": "E701",
+      "render": "reviews/22__vol2__012/p29-p29-full-poppler.png",
+      "finding": "Electrical one-line new-work diagram visually reviewed."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "cover-project",
+      "page": 1,
+      "bbox": [
+        2335,
+        980,
+        2570,
+        1015
+      ],
+      "expected": "CHILLER SYSTEM UPGRADE",
+      "mode": "exact"
+    },
+    {
+      "id": "cover-facility",
+      "page": 1,
+      "bbox": [
+        370,
+        285,
+        2110,
+        430
+      ],
+      "expected": "CENTER FOR BEHAVIORAL MEDICINE",
+      "mode": "contains"
+    },
+    {
+      "id": "cover-location",
+      "page": 1,
+      "bbox": [
+        810,
+        395,
+        1700,
+        515
+      ],
+      "expected": "KANSAS CITY, MISSOURI",
+      "mode": "contains"
+    },
+    {
+      "id": "cover-mep-engineer",
+      "page": 1,
+      "bbox": [
+        1848,
+        650,
+        2085,
+        695
+      ],
+      "expected": "INSITE GROUP, INC.",
+      "mode": "contains"
+    },
+    {
+      "id": "cover-issue-date",
+      "page": 1,
+      "bbox": [
+        2335,
+        1668,
+        2465,
+        1700
+      ],
+      "expected": "FEBRUARY 4, 2025",
+      "mode": "contains"
+    },
+    {
+      "id": "g001-scale",
+      "page": 2,
+      "bbox": [
+        1088,
+        1598,
+        1205,
+        1625
+      ],
+      "expected": "SCALE: 1/16\" = 1'-0\"",
+      "mode": "exact"
+    },
+    {
+      "id": "mpd110a-scale",
+      "page": 11,
+      "bbox": [
+        767,
+        1598,
+        878,
+        1625
+      ],
+      "expected": "SCALE: 1/4\" = 1'-0\"",
+      "mode": "exact"
+    },
+    {
+      "id": "mpd110b-scale",
+      "page": 12,
+      "bbox": [
+        767,
+        1598,
+        878,
+        1625
+      ],
+      "expected": "SCALE: 1/4\" = 1'-0\"",
+      "mode": "exact"
+    },
+    {
+      "id": "mp110a-scale",
+      "page": 13,
+      "bbox": [
+        767,
+        1635,
+        878,
+        1662
+      ],
+      "expected": "SCALE: 1/4\" = 1'-0\"",
+      "mode": "exact"
+    },
+    {
+      "id": "mp110b-scale",
+      "page": 14,
+      "bbox": [
+        767,
+        1598,
+        878,
+        1625
+      ],
+      "expected": "SCALE: 1/4\" = 1'-0\"",
+      "mode": "exact"
+    },
+    {
+      "id": "ed110a-scale",
+      "page": 22,
+      "bbox": [
+        767,
+        1598,
+        878,
+        1625
+      ],
+      "expected": "SCALE: 1/4\" = 1'-0\"",
+      "mode": "exact"
+    },
+    {
+      "id": "ed110b-scale",
+      "page": 23,
+      "bbox": [
+        767,
+        1598,
+        878,
+        1625
+      ],
+      "expected": "SCALE: 1/4\" = 1'-0\"",
+      "mode": "exact"
+    },
+    {
+      "id": "e110a-scale",
+      "page": 24,
+      "bbox": [
+        767,
+        1598,
+        878,
+        1625
+      ],
+      "expected": "SCALE: 1/4\" = 1'-0\"",
+      "mode": "exact"
+    },
+    {
+      "id": "e110b-scale",
+      "page": 25,
+      "bbox": [
+        767,
+        1598,
+        878,
+        1625
+      ],
+      "expected": "SCALE: 1/4\" = 1'-0\"",
+      "mode": "exact"
+    }
+  ]
+}

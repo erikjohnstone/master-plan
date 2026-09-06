@@ -1,0 +1,39 @@
+{
+  "document_id": "14__vol2__021",
+  "source_sha256": "4d883afdd3b2d94ea2e14621dc49df77bc10ca0548bfd077c436420c43ae75f8",
+  "annotation_sha256": "803a2d17e464b52747ed3ef49a3f40df033ad711a3976f8c34961e8b05686a44",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 0,
+  "checks": [],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "linked-schedule-registry",
+      "pass": true,
+      "tables": 6,
+      "rows": 30,
+      "identities": 30,
+      "primary_anchors": 30
+    },
+    {
+      "id": "m601-primary-schedule-anchors",
+      "actual": 30,
+      "expected": 30,
+      "pass": true
+    },
+    {
+      "id": "m601-detail-inventory-boundaries",
+      "actual": 7,
+      "expected": 7,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {
+    "schedules_m601.json": "5261061bedfb9d27aa4ae2dd3269c8160749295893baf476649814afb657ac69"
+  },
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

@@ -1,0 +1,63 @@
+{
+  "document_id": "25__vol2__053",
+  "module_role": "Reconciles every MH601 schedule table to its literal printed scope. Terminal tags, air-device types, filter service rows and manual ball-valve tags are kept distinct rather than silently converted into a single field-equipment, actuator, or BAS-control inventory.",
+  "schedule_registry_schema": {
+    "namespace_separator": "-",
+    "identity_columns": {"tag": "mark"},
+    "anchor_records_path": ["primary_anchors"],
+    "non_instance_table_ids": ["AD-MH601-EXHAUST", "AD-MH601-RETURN", "AD-MH601-SUPPLY", "AF-MH601", "V-MH601-BALL-VALVES"]
+  },
+  "scheduled_families": [
+    {"module": "schedules_mh601.json", "bundle_module": "schedules", "table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL", "rows": 20, "class": "Single-duct VAV terminal-unit schedule mark", "tag": ["TU26-11", "TU26-12", "TU26-34", "TU26-40", "TU26-41", "TU26-46", "TU26-52", "TU26-60", "TU26-61", "TU26-62", "TU26-63", "TU26-64", "TU26-65", "TU26-66", "TU26-67", "TU26-68", "TU26-69", "TU26-70", "TU26-71", "TU26-72"]},
+    {"module": "schedules_mh601.json", "bundle_module": "schedules", "table": "AD-MH601-EXHAUST", "rows": 2, "class": "Exhaust air-device type", "tag": ["EG-A", "EG-B"]},
+    {"module": "schedules_mh601.json", "bundle_module": "schedules", "table": "AD-MH601-RETURN", "rows": 4, "class": "Return air-device type", "tag": ["RG-A", "RG-B", "RG-C", "RG-D"]},
+    {"module": "schedules_mh601.json", "bundle_module": "schedules", "table": "AD-MH601-SUPPLY", "rows": 2, "class": "Supply air-device type", "tag": ["SD-A", "SD-B"]},
+    {"module": "schedules_mh601.json", "bundle_module": "schedules", "table": "TU-MH601-SERIES-FAN-POWERED", "rows": 1, "class": "Series fan-powered air terminal-unit schedule mark", "tag": ["TU26-73"]},
+    {"module": "schedules_mh601.json", "bundle_module": "schedules", "table": "AF-MH601", "rows": 2, "class": "Filter service/type row without a printed discrete equipment tag"},
+    {"module": "schedules_mh601.json", "bundle_module": "schedules", "table": "V-MH601-BALL-VALVES", "rows": 38, "class": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve", "tag": ["V-HHWR-11", "V-HHWR-12", "V-HHWR-40", "V-HHWR-41", "V-HHWR-46", "V-HHWR-52", "V-HHWR-60", "V-HHWR-61", "V-HHWR-62", "V-HHWR-63", "V-HHWR-64", "V-HHWR-65", "V-HHWR-66", "V-HHWR-67", "V-HHWR-68", "V-HHWR-69", "V-HHWR-70", "V-HHWR-71", "V-HHWR-72", "V-HHWS-11", "V-HHWS-12", "V-HHWS-40", "V-HHWS-41", "V-HHWS-46", "V-HHWS-52", "V-HHWS-60", "V-HHWS-61", "V-HHWS-62", "V-HHWS-63", "V-HHWS-64", "V-HHWS-65", "V-HHWS-66", "V-HHWS-67", "V-HHWS-68", "V-HHWS-69", "V-HHWS-70", "V-HHWS-71", "V-HHWS-72"]}
+  ],
+  "schedule_counts": {"tables": 7, "rows": 69, "building_scoped_tag_identities_including_outlet_types": 67, "other_scheduled_tag_identities": 21},
+  "primary_anchors": [
+    {"id": "TU-TU26-11", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-11; FIRST FLOOR INTERSTITIAL / 1A-728."},
+    {"id": "TU-TU26-12", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-12; FIRST FLOOR INTERSTITIAL / C1A-701."},
+    {"id": "TU-TU26-34", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-34; rooms 1A-794, 1A-795, 1A-796."},
+    {"id": "TU-TU26-40", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-40; C1A-703."},
+    {"id": "TU-TU26-41", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-41; 1A-735."},
+    {"id": "TU-TU26-46", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-46; C1A-701."},
+    {"id": "TU-TU26-52", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-52; 1A-722."},
+    {"id": "TU-TU26-60", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-60; 1A-765, CORRIDOR."},
+    {"id": "TU-TU26-61", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-61; 1A-736."},
+    {"id": "TU-TU26-62", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-62; 1A-737."},
+    {"id": "TU-TU26-63", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-63; 1A-738."},
+    {"id": "TU-TU26-64", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-64; 1A-727."},
+    {"id": "TU-TU26-65", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-65; rooms 1A-721, 1A-740, 1A-740A."},
+    {"id": "TU-TU26-66", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-66; 1A-726."},
+    {"id": "TU-TU26-67", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-67; rooms 1A-734, 1A-734A."},
+    {"id": "TU-TU26-68", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-68; rooms 1A-729, 1A-730, 1A-731, CORRIDOR. Room text is not split into additional terminal identities."},
+    {"id": "TU-TU26-69", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-69; 1A-733."},
+    {"id": "TU-TU26-70", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-70; 1A-732."},
+    {"id": "TU-TU26-71", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-71; 1A-724."},
+    {"id": "TU-TU26-72", "scope": "Scheduled single-duct terminal", "visual_anchor": "MH601 single-duct terminal schedule row TU26-72; 1A-723."},
+    {"id": "TU-TU26-73", "scope": "Scheduled series fan-powered terminal", "visual_anchor": "MH601 series fan-powered terminal schedule row TU26-73; rooms 1A-791, 1A-790A."}
+  ],
+  "plan_and_detail_reconciliation": [
+    {"id": "mh601-terminal-schedule-scope", "sheet": "MH601", "finding": "Twenty single-duct and one series fan-powered terminal marks are literal schedule identities. Multi-room cells remain literal source cells and are not expanded into per-room terminal counts."},
+    {"id": "mh601-air-device-type-scope", "sheet": "MH601", "finding": "EG, RG and SD rows are air-device types/ranges, not plan-counted installed outlet instances; they remain schedule-row type identities."},
+    {"id": "mh601-filter-service-scope", "sheet": "MH601", "finding": "The two filter rows both print ROOF location with no distinct equipment mark, so they are retained as source service/type rows rather than forced into duplicate physical identity keys."},
+    {"id": "mh601-valve-not-basc-control", "sheet": "MH601", "finding": "All 38 valve rows print BALL VALVE with heating-hot-water supply/return service, size and flow. The source does not print Cv, actuator, control signal or fail position, so they are retained as manual ball-valve tags and excluded from BAS control-valve/actuator quantities."}
+  ],
+  "control_valve_and_damper_schedule_status": {
+    "control_valve_schedule": {"status": "not_present_as_BAS_control_valve_schedule", "value": null, "note": "MH601 has a populated 38-row manual BALL VALVE schedule. It has no actuator, Cv, BAS signal, or fail-position fields, so it is not recast as a BAS control-valve schedule."},
+    "damper_actuator_schedule": {"status": "not_present", "value": null, "note": "Air-device schedule rows state damper/damper-diffuser properties but no damper actuator schedule, actuator model, torque, signal or fail position is printed."}
+  },
+  "source_conflicts": [],
+  "valve_aliases": [],
+  "additional_identities": [],
+  "tables": [],
+  "assertions": [],
+  "inventory_checks": [
+    {"id": "scheduled-families", "records_path": ["scheduled_families"], "expected": 7, "unique_key": "table"},
+    {"id": "scheduled-primary-anchors", "records_path": ["primary_anchors"], "expected": 21, "unique_key": "id"},
+    {"id": "plan-detail-reconciliation", "records_path": ["plan_and_detail_reconciliation"], "expected": 4, "unique_key": "id"}
+  ]
+}

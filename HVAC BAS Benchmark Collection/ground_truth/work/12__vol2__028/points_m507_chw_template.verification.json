@@ -1,0 +1,4954 @@
+{
+  "document_id": "12__vol2__028",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "annotation_sha256": "7f9ebacf27185b49e1c331cdb8fd0843b077e0e1158c19659ce438979983388b",
+  "tables": 1,
+  "rows": 25,
+  "cell_assertions": 175,
+  "text_assertions": 1,
+  "checks": [
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 1,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        788,
+        1570,
+        809
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            185
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            373
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 1,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        788,
+        1900,
+        809
+      ],
+      "expected": "CHILLER 1 STATUS*",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLER 1 STATUS*",
+          "word_ids": [
+            223,
+            224,
+            225
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER 1 STATUS*",
+          "word_ids": [
+            315,
+            316,
+            317
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 1,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        788,
+        1942,
+        809
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 1,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        788,
+        1989,
+        809
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 1,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        788,
+        2030,
+        809
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            339
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            197
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 1,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        788,
+        2070,
+        809
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 1,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        788,
+        2135,
+        809
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 2,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        809,
+        1570,
+        829
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            191
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            374
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 2,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        809,
+        1900,
+        829
+      ],
+      "expected": "CHILLER 1 ENABLE/DISABLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLER 1 ENABLE/DISABLE",
+          "word_ids": [
+            213,
+            214,
+            215
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER 1 ENABLE/DISABLE",
+          "word_ids": [
+            318,
+            319,
+            320
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 2,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        809,
+        1942,
+        829
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 2,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        809,
+        1989,
+        829
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 2,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        809,
+        2030,
+        829
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 2,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        809,
+        2070,
+        829
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            207
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            198
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 2,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        809,
+        2135,
+        829
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 3,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        829,
+        1570,
+        849
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            192
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            375
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 3,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        829,
+        1900,
+        849
+      ],
+      "expected": "CHILLER 1 FAILURE*",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLER 1 FAILURE*",
+          "word_ids": [
+            204,
+            205,
+            206
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER 1 FAILURE*",
+          "word_ids": [
+            321,
+            322,
+            323
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 3,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        829,
+        1942,
+        849
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 3,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        829,
+        1989,
+        849
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 3,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        829,
+        2030,
+        849
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 3,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        829,
+        2070,
+        849
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 3,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        829,
+        2135,
+        849
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            222
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            199
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 4,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        849,
+        1570,
+        869
+      ],
+      "expected": "4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            193
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            376
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 4,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        849,
+        1900,
+        869
+      ],
+      "expected": "CHILLER 1 LOAD*",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLER 1 LOAD*",
+          "word_ids": [
+            226,
+            227,
+            228
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER 1 LOAD*",
+          "word_ids": [
+            324,
+            325,
+            326
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 4,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        849,
+        1942,
+        869
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            208
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            200
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 4,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        849,
+        1989,
+        869
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 4,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        849,
+        2030,
+        869
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 4,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        849,
+        2070,
+        869
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 4,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        849,
+        2135,
+        869
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 5,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        869,
+        1570,
+        889
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            194
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            377
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 5,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        869,
+        1900,
+        889
+      ],
+      "expected": "HIGH/LOW CHW PRESSURE DROP ACROSS CHILLER 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH/LOW CHW PRESSURE DROP ACROSS CHILLER 1",
+          "word_ids": [
+            272,
+            273,
+            274,
+            275,
+            276,
+            277,
+            278
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH/LOW CHW PRESSURE DROP ACROSS CHILLER 1",
+          "word_ids": [
+            327,
+            328,
+            329,
+            330,
+            331,
+            332,
+            333
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 5,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        869,
+        1942,
+        889
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            310
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            201
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 5,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        869,
+        1989,
+        889
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 5,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        869,
+        2030,
+        889
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 5,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        869,
+        2070,
+        889
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 5,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        869,
+        2135,
+        889
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            348
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            202
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 6,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        889,
+        1570,
+        909
+      ],
+      "expected": "6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            195
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            378
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 6,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        889,
+        1900,
+        909
+      ],
+      "expected": "CHILLER 1 PROOF OF FLOW*",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLER 1 PROOF OF FLOW*",
+          "word_ids": [
+            298,
+            299,
+            300,
+            301,
+            302
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER 1 PROOF OF FLOW*",
+          "word_ids": [
+            334,
+            335,
+            336,
+            337,
+            338
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 6,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        889,
+        1942,
+        909
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 6,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        889,
+        1989,
+        909
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 6,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        889,
+        2030,
+        909
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            311
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            205
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 6,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        889,
+        2070,
+        909
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 6,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        889,
+        2135,
+        909
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            349
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            203
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 7,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        909,
+        1570,
+        929
+      ],
+      "expected": "7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "7",
+          "word_ids": [
+            196
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "7",
+          "word_ids": [
+            379
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 7,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        909,
+        1900,
+        929
+      ],
+      "expected": "CHILLER 1 LOW CHW FLOW ALARM*",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLER 1 LOW CHW FLOW ALARM*",
+          "word_ids": [
+            279,
+            280,
+            281,
+            282,
+            283,
+            284
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER 1 LOW CHW FLOW ALARM*",
+          "word_ids": [
+            339,
+            340,
+            341,
+            342,
+            343,
+            344
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 7,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        909,
+        1942,
+        929
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 7,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        909,
+        1989,
+        929
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 7,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        909,
+        2030,
+        929
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 7,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        909,
+        2070,
+        929
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 7,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        909,
+        2135,
+        929
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            312
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            204
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 8,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        929,
+        1570,
+        949
+      ],
+      "expected": "8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            197
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            380
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 8,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        929,
+        1900,
+        949
+      ],
+      "expected": "CHP 1 STATUS VIA CT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHP 1 STATUS VIA CT",
+          "word_ids": [
+            235,
+            236,
+            237,
+            238,
+            239
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHP 1 STATUS VIA CT",
+          "word_ids": [
+            345,
+            346,
+            347,
+            348,
+            349
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 8,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        929,
+        1942,
+        949
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 8,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        929,
+        1989,
+        949
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 8,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        929,
+        2030,
+        949
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            340
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            206
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 8,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        929,
+        2070,
+        949
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 8,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        929,
+        2135,
+        949
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 9,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        949,
+        1570,
+        970
+      ],
+      "expected": "9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9",
+          "word_ids": [
+            198
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9",
+          "word_ids": [
+            259
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 9,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        949,
+        1900,
+        970
+      ],
+      "expected": "CHP 1 ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHP 1 ON/OFF",
+          "word_ids": [
+            232,
+            233,
+            234
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHP 1 ON/OFF",
+          "word_ids": [
+            131,
+            132,
+            133
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 9,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        949,
+        1942,
+        970
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 9,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        949,
+        1989,
+        970
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 9,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        949,
+        2030,
+        970
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 9,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        949,
+        2070,
+        970
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            313
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            207
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 9,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        949,
+        2135,
+        970
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 10,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        970,
+        1570,
+        990
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            199
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            260
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 10,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        970,
+        1900,
+        990
+      ],
+      "expected": "CHP 1 FAILURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHP 1 FAILURE",
+          "word_ids": [
+            229,
+            230,
+            231
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHP 1 FAILURE",
+          "word_ids": [
+            134,
+            135,
+            136
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 10,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        970,
+        1942,
+        990
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 10,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        970,
+        1989,
+        990
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 10,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        970,
+        2030,
+        990
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 10,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        970,
+        2070,
+        990
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 10,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        970,
+        2135,
+        990
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            314
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            208
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 11,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        990,
+        1570,
+        1010
+      ],
+      "expected": "11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            200
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            261
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 11,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        990,
+        1900,
+        1010
+      ],
+      "expected": "CHP 1 SPEED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHP 1 SPEED",
+          "word_ids": [
+            240,
+            241,
+            242
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHP 1 SPEED",
+          "word_ids": [
+            137,
+            138,
+            139
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 11,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        990,
+        1942,
+        1010
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 11,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        990,
+        1989,
+        1010
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            315
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            209
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 11,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        990,
+        2030,
+        1010
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 11,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        990,
+        2070,
+        1010
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 11,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        990,
+        2135,
+        1010
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 12,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        1010,
+        1570,
+        1031
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            201
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            262
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 12,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        1010,
+        1900,
+        1031
+      ],
+      "expected": "CHP 1 ECM FAULT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHP 1 ECM FAULT",
+          "word_ids": [
+            285,
+            286,
+            287,
+            288
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHP 1 ECM FAULT",
+          "word_ids": [
+            140,
+            141,
+            142,
+            143
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 12,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        1010,
+        1942,
+        1031
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 12,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        1010,
+        1989,
+        1031
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 12,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        1010,
+        2030,
+        1031
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 12,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        1010,
+        2070,
+        1031
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 12,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        1010,
+        2135,
+        1031
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            324
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            210
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 13,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        1031,
+        1570,
+        1051
+      ],
+      "expected": "13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13",
+          "word_ids": [
+            202
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13",
+          "word_ids": [
+            263
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 13,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        1031,
+        1900,
+        1051
+      ],
+      "expected": "CHP 2 STATUS VIA CT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHP 2 STATUS VIA CT",
+          "word_ids": [
+            249,
+            250,
+            251,
+            252,
+            253
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHP 2 STATUS VIA CT",
+          "word_ids": [
+            144,
+            145,
+            146,
+            147,
+            148
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 13,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        1031,
+        1942,
+        1051
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 13,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        1031,
+        1989,
+        1051
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 13,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        1031,
+        2030,
+        1051
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            341
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            211
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 13,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        1031,
+        2070,
+        1051
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 13,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        1031,
+        2135,
+        1051
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 14,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        1051,
+        1570,
+        1071
+      ],
+      "expected": "14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            203
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            264
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 14,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        1051,
+        1900,
+        1071
+      ],
+      "expected": "CHP 2 ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHP 2 ON/OFF",
+          "word_ids": [
+            246,
+            247,
+            248
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHP 2 ON/OFF",
+          "word_ids": [
+            149,
+            150,
+            151
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 14,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        1051,
+        1942,
+        1071
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 14,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        1051,
+        1989,
+        1071
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 14,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        1051,
+        2030,
+        1071
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 14,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        1051,
+        2070,
+        1071
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            316
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            212
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 14,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        1051,
+        2135,
+        1071
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 15,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        1071,
+        1570,
+        1091
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            209
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            265
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 15,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        1071,
+        1900,
+        1091
+      ],
+      "expected": "CHP 2 FAILURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHP 2 FAILURE",
+          "word_ids": [
+            243,
+            244,
+            245
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHP 2 FAILURE",
+          "word_ids": [
+            152,
+            153,
+            154
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 15,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        1071,
+        1942,
+        1091
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 15,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        1071,
+        1989,
+        1091
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 15,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        1071,
+        2030,
+        1091
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 15,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        1071,
+        2070,
+        1091
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 15,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        1071,
+        2135,
+        1091
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            317
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            213
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 16,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        1091,
+        1570,
+        1111
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            210
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            266
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 16,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        1091,
+        1900,
+        1111
+      ],
+      "expected": "CHP 2 SPEED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHP 2 SPEED",
+          "word_ids": [
+            254,
+            255,
+            256
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHP 2 SPEED",
+          "word_ids": [
+            155,
+            156,
+            157
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 16,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        1091,
+        1942,
+        1111
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 16,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        1091,
+        1989,
+        1111
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            318
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            214
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 16,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        1091,
+        2030,
+        1111
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 16,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        1091,
+        2070,
+        1111
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 16,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        1091,
+        2135,
+        1111
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 17,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        1111,
+        1570,
+        1131
+      ],
+      "expected": "17",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "17",
+          "word_ids": [
+            211
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "17",
+          "word_ids": [
+            267
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 17,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        1111,
+        1900,
+        1131
+      ],
+      "expected": "CHP 2 ECM FAULT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHP 2 ECM FAULT",
+          "word_ids": [
+            289,
+            290,
+            291,
+            292
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHP 2 ECM FAULT",
+          "word_ids": [
+            158,
+            159,
+            160,
+            161
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 17,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        1111,
+        1942,
+        1131
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 17,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        1111,
+        1989,
+        1131
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 17,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        1111,
+        2030,
+        1131
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 17,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        1111,
+        2070,
+        1131
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 17,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        1111,
+        2135,
+        1131
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            325
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            215
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 18,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        1131,
+        1570,
+        1150
+      ],
+      "expected": "18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            212
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            268
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 18,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        1131,
+        1900,
+        1150
+      ],
+      "expected": "CHILLED WATER SUPPLY TEMPERATURE*",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLED WATER SUPPLY TEMPERATURE*",
+          "word_ids": [
+            257,
+            258,
+            259,
+            260
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLED WATER SUPPLY TEMPERATURE*",
+          "word_ids": [
+            162,
+            163,
+            164,
+            165
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 18,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        1131,
+        1942,
+        1150
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            319
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            216
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 18,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        1131,
+        1989,
+        1150
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 18,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        1131,
+        2030,
+        1150
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 18,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        1131,
+        2070,
+        1150
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 18,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        1131,
+        2135,
+        1150
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 19,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        1150,
+        1570,
+        1170
+      ],
+      "expected": "19",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "19",
+          "word_ids": [
+            220
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "19",
+          "word_ids": [
+            269
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 19,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        1150,
+        1900,
+        1170
+      ],
+      "expected": "CHILLER WATER SUPPLY TEMPERATURE SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLER WATER SUPPLY TEMPERATURE SETPOINT",
+          "word_ids": [
+            326,
+            327,
+            328,
+            329,
+            330
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER WATER SUPPLY TEMPERATURE SETPOINT",
+          "word_ids": [
+            166,
+            167,
+            168,
+            169,
+            170
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 19,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        1150,
+        1942,
+        1170
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 19,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        1150,
+        1989,
+        1170
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            331
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            217
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 19,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        1150,
+        2030,
+        1170
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 19,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        1150,
+        2070,
+        1170
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 19,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        1150,
+        2135,
+        1170
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 20,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        1170,
+        1570,
+        1190
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            216
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            270
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 20,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        1170,
+        1900,
+        1190
+      ],
+      "expected": "CHILLED WATER RETURN TEMPERATURE*",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLED WATER RETURN TEMPERATURE*",
+          "word_ids": [
+            265,
+            266,
+            267,
+            268
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLED WATER RETURN TEMPERATURE*",
+          "word_ids": [
+            171,
+            172,
+            173,
+            174
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 20,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        1170,
+        1942,
+        1190
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            321
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            218
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 20,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        1170,
+        1989,
+        1190
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 20,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        1170,
+        2030,
+        1190
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 20,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        1170,
+        2070,
+        1190
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 20,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        1170,
+        2135,
+        1190
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 21,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        1190,
+        1570,
+        1210
+      ],
+      "expected": "21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            217
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            271
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 21,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        1190,
+        1900,
+        1210
+      ],
+      "expected": "CHILLED WATER SYSTEM BYPASS VALVE POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLED WATER SYSTEM BYPASS VALVE POSITION",
+          "word_ids": [
+            332,
+            333,
+            334,
+            335,
+            336,
+            337
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLED WATER SYSTEM BYPASS VALVE POSITION",
+          "word_ids": [
+            175,
+            176,
+            177,
+            178,
+            179,
+            180
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 21,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        1190,
+        1942,
+        1210
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 21,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        1190,
+        1989,
+        1210
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            338
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            219
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 21,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        1190,
+        2030,
+        1210
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 21,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        1190,
+        2070,
+        1210
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 21,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        1190,
+        2135,
+        1210
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 22,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        1210,
+        1570,
+        1230
+      ],
+      "expected": "22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            218
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            272
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 22,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        1210,
+        1900,
+        1230
+      ],
+      "expected": "OUTSIDE AIR TEMPERATURE (GLOBAL)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMPERATURE (GLOBAL)",
+          "word_ids": [
+            261,
+            262,
+            263,
+            264
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMPERATURE (GLOBAL)",
+          "word_ids": [
+            181,
+            182,
+            183,
+            184
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 22,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        1210,
+        1942,
+        1230
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            320
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            220
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 22,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        1210,
+        1989,
+        1230
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 22,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        1210,
+        2030,
+        1230
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 22,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        1210,
+        2070,
+        1230
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 22,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        1210,
+        2135,
+        1230
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 23,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        1230,
+        1570,
+        1248
+      ],
+      "expected": "23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            219
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            273
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 23,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        1230,
+        1900,
+        1248
+      ],
+      "expected": "EMERGENCY SHUTDOWN (GLOBAL)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EMERGENCY SHUTDOWN (GLOBAL)",
+          "word_ids": [
+            269,
+            270,
+            271
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EMERGENCY SHUTDOWN (GLOBAL)",
+          "word_ids": [
+            185,
+            186,
+            187
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 23,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        1230,
+        1942,
+        1248
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 23,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        1230,
+        1989,
+        1248
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 23,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        1230,
+        2030,
+        1248
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            342
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            222
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 23,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        1230,
+        2070,
+        1248
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 23,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        1230,
+        2135,
+        1248
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            323
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            221
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 24,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        1248,
+        1570,
+        1268
+      ],
+      "expected": "24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            221
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            274
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 24,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        1248,
+        1900,
+        1268
+      ],
+      "expected": "CHILLED WATER FLOW RATE (GPM)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLED WATER FLOW RATE (GPM)",
+          "word_ids": [
+            293,
+            294,
+            295,
+            296,
+            297
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLED WATER FLOW RATE (GPM)",
+          "word_ids": [
+            188,
+            189,
+            190,
+            191,
+            192
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 24,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        1248,
+        1942,
+        1268
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            322
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            223
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 24,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        1248,
+        1989,
+        1268
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 24,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        1248,
+        2030,
+        1268
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 24,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        1248,
+        2070,
+        1268
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 24,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        1248,
+        2135,
+        1268
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 25,
+      "column": "tag",
+      "page": 3,
+      "bbox": [
+        1530,
+        1268,
+        1570,
+        1290
+      ],
+      "expected": "25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            344
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            275
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 25,
+      "column": "point_name",
+      "page": 3,
+      "bbox": [
+        1570,
+        1268,
+        1900,
+        1290
+      ],
+      "expected": "FREEZE PROTECTION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FREEZE PROTECTION",
+          "word_ids": [
+            345,
+            346
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FREEZE PROTECTION",
+          "word_ids": [
+            193,
+            194
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 25,
+      "column": "AI",
+      "page": 3,
+      "bbox": [
+        1900,
+        1268,
+        1942,
+        1290
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 25,
+      "column": "AO",
+      "page": 3,
+      "bbox": [
+        1942,
+        1268,
+        1989,
+        1290
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 25,
+      "column": "DI",
+      "page": 3,
+      "bbox": [
+        1989,
+        1268,
+        2030,
+        1290
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 25,
+      "column": "DO",
+      "page": 3,
+      "bbox": [
+        2030,
+        1268,
+        2070,
+        1290
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "row": 25,
+      "column": "ALARM",
+      "page": 3,
+      "bbox": [
+        2070,
+        1268,
+        2135,
+        1290
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            347
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            224
+          ]
+        }
+      }
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "header": "BAS INPUT/OUTPUT POINT LIST",
+      "page": 3,
+      "bbox": [
+        1730,
+        735,
+        1918,
+        758
+      ],
+      "engine": "mupdf",
+      "actual": "BAS INPUT/OUTPUT POINT LIST",
+      "pass": true
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "header": "BAS INPUT/OUTPUT POINT LIST",
+      "page": 3,
+      "bbox": [
+        1730,
+        735,
+        1918,
+        758
+      ],
+      "engine": "poppler",
+      "actual": "BAS INPUT/OUTPUT POINT LIST",
+      "pass": true
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "header": "TAG POINT NAME AI AO DI DO ALARM",
+      "page": 3,
+      "bbox": [
+        1530,
+        760,
+        2135,
+        790
+      ],
+      "engine": "mupdf",
+      "actual": "TAG POINT NAME AI AO DI DO ALARM",
+      "pass": true
+    },
+    {
+      "table": "M507-CHILLED-WATER-SYSTEM",
+      "header": "TAG POINT NAME AI AO DI DO ALARM",
+      "page": 3,
+      "bbox": [
+        1530,
+        760,
+        2135,
+        790
+      ],
+      "engine": "poppler",
+      "actual": "TAG POINT NAME AI AO DI DO ALARM",
+      "pass": true
+    },
+    {
+      "assertion": "m507-asterisk-note",
+      "page": 3,
+      "bbox": [
+        1540,
+        1310,
+        1900,
+        1335
+      ],
+      "expected": "* INDICATES POINT PULLED FROM CHILLER CONTROLLER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "* INDICATES POINT PULLED FROM CHILLER CONTROLLER",
+          "word_ids": [
+            303,
+            304,
+            305,
+            306,
+            307,
+            308,
+            309
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "* INDICATES POINT PULLED FROM CHILLER CONTROLLER",
+          "word_ids": [
+            225,
+            226,
+            227,
+            228,
+            229,
+            230,
+            231
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "chilled-water-io-matrix",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

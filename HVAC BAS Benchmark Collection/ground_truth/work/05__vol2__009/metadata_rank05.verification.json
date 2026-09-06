@@ -1,0 +1,371 @@
+{
+  "document_id": "05__vol2__009",
+  "source_sha256": "d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1",
+  "annotation_sha256": "ff8f6f3f2cc566eaeb5fccb6db5ff57ac9b7bc90cd14bb8ecc4536238f7aefc4",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 10,
+  "checks": [
+    {
+      "assertion": "rank05-project-title",
+      "page": 1,
+      "bbox": [
+        2750,
+        260,
+        3000,
+        360
+      ],
+      "expected": "BUILDING 63 ENVELOPE AND HVAC MODIFICATIONS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BUILDING 63 ENVELOPE AND HVAC MODIFICATIONS",
+          "word_ids": [
+            77,
+            78,
+            79,
+            80,
+            81,
+            82
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BUILDING 63 ENVELOPE AND HVAC MODIFICATIONS",
+          "word_ids": [
+            17,
+            18,
+            19,
+            20,
+            21,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank05-project-owner",
+      "page": 1,
+      "bbox": [
+        2750,
+        210,
+        3000,
+        265
+      ],
+      "expected": "U.S. DEPARTMENT OF AGRICULTURE- ANIMAL AND PLANT HEALTH INSPECTION SERVICE (APHIS)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "U.S. DEPARTMENT OF AGRICULTURE- ANIMAL AND PLANT HEALTH INSPECTION SERVICE (APHIS)",
+          "word_ids": [
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "U.S. DEPARTMENT OF AGRICULTURE- ANIMAL AND PLANT HEALTH INSPECTION SERVICE (APHIS)",
+          "word_ids": [
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank05-project-location",
+      "page": 1,
+      "bbox": [
+        2750,
+        370,
+        2900,
+        410
+      ],
+      "expected": "OLD CUTLER ROAD CORAL GABLES, FL 33158",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OLD CUTLER ROAD CORAL GABLES, FL 33158",
+          "word_ids": [
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OLD CUTLER ROAD CORAL GABLES, FL 33158",
+          "word_ids": [
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank05-ifc-issue-date",
+      "page": 1,
+      "bbox": [
+        2750,
+        1298,
+        2930,
+        1360
+      ],
+      "expected": "2026.07.31 FINAL IFC SUBMITTAL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2026.07.31 FINAL IFC SUBMITTAL",
+          "word_ids": [
+            101,
+            71,
+            72,
+            73
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2026.07.31 FINAL IFC SUBMITTAL",
+          "word_ids": [
+            219,
+            220,
+            221,
+            222
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank05-scale-gi003",
+      "page": 3,
+      "bbox": [
+        370,
+        1944,
+        470,
+        1967
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            287,
+            288,
+            289,
+            290
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            223,
+            224,
+            225,
+            226
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank05-scale-gi101",
+      "page": 4,
+      "bbox": [
+        520,
+        1762,
+        620,
+        1785
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            194,
+            195,
+            196,
+            197
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            285,
+            286,
+            287,
+            288
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank05-scale-ae101",
+      "page": 8,
+      "bbox": [
+        470,
+        1080,
+        575,
+        1108
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            227,
+            228,
+            229,
+            230
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            194,
+            195,
+            196,
+            197
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank05-scale-mh101-upper",
+      "page": 15,
+      "bbox": [
+        250,
+        937,
+        355,
+        964
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            485,
+            486,
+            487,
+            488
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            195,
+            196,
+            197,
+            198
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank05-scale-mh101-lower",
+      "page": 15,
+      "bbox": [
+        250,
+        1830,
+        355,
+        1856
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            475,
+            476,
+            477,
+            478
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            842,
+            843,
+            844,
+            845
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank05-scale-mh102",
+      "page": 16,
+      "bbox": [
+        250,
+        937,
+        355,
+        964
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            152,
+            153,
+            154,
+            155
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            118,
+            119,
+            120,
+            121
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

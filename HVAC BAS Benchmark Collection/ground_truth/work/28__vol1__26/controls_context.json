@@ -1,0 +1,67 @@
+{
+  "document_id": "28__vol1__26",
+  "module_role": "Source-bounded control-symbol and schedule context.",
+  "tables": [],
+  "assertions": [
+    {
+      "id": "m001-controls-legend",
+      "page": 1,
+      "bbox": [
+        1545,
+        645,
+        1725,
+        680
+      ],
+      "expected": "CONTROLS LEGEND",
+      "mode": "contains"
+    },
+    {
+      "id": "m001-auto-control-damper",
+      "page": 1,
+      "bbox": [
+        350,
+        235,
+        510,
+        265
+      ],
+      "expected": "AUTOMATIC CONTROL DAMPER",
+      "mode": "contains"
+    },
+    {
+      "id": "m010-fpt-schedule",
+      "page": 10,
+      "bbox": [
+        550,
+        1215,
+        1130,
+        1250
+      ],
+      "expected": "FAN POWERED TERMINAL UNIT SCHEDULE (SECTION 23 36 00)",
+      "mode": "contains"
+    }
+  ],
+  "network_architecture": {
+    "published_integration": [],
+    "assertion_ids": [],
+    "boundary": "No BAS network architecture, controller schedule, address/object list or wiring design is published in the retained source."
+  },
+  "sequence_inventory": [
+    {
+      "id": "m001-control-legend-no-sequence",
+      "sheet": "M-001",
+      "assertion_ids": [
+        "m001-controls-legend",
+        "m001-auto-control-damper"
+      ],
+      "boundary": "This is a legend context, not a sequence of operation."
+    }
+  ],
+  "sensors_and_control_symbol_context": {
+    "published_context": "The M-001 controls legend publishes automatic-control-damper and associated mechanical control-symbol context.",
+    "assertion_ids": [
+      "m001-controls-legend",
+      "m001-auto-control-damper"
+    ],
+    "boundary": "No device/zone/actuator quantity is inferred."
+  }
+}

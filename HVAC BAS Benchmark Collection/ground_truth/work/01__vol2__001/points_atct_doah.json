@@ -1,0 +1,121 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All printed entries in the ATCT DOAH-T1 point list on MI730 (source PDF page 64): 13 analog inputs, 4 analog outputs, 13 binary inputs and 4 binary outputs. This records controller points and printed flags, not inferred field-device counts.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [64],
+    "render": "reviews/01__vol2__001/p64-p64-controls-poppler.png",
+    "dpi": 180,
+    "finding": "The MI730 ATCT DOAH-T1 schematic, point-list panel and the associated printed sequence page were visually reviewed at 180 DPI. This module transcribes the point-list panel only."
+  },
+  "tables": [
+    {
+      "id": "ATCT-DOAH-AI",
+      "page": 64,
+      "sheet": "MI730",
+      "building_scope": "ATCT",
+      "title": "POINTS LIST DOAH T1 - ANALOG INPUT",
+      "classification": "Analog input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1650, 1720, 2030, 2090, 2145],
+      "y_edges": [409, 429, 446, 463, 480, 497, 514, 531, 548, 565, 582, 599, 616, 635],
+      "rows": [
+        "AI01|UOA RELATIVE HUMIDITY|No|Yes",
+        "AI02|UOA TEMPERATURE|No|Yes",
+        "AI03|HHW VALVE POSITION (FEEDBACK)|No|Yes",
+        "AI04|HEATING COIL LAT|No|Yes",
+        "AI05|COOLING COIL LAT|Yes|Yes",
+        "AI06|TOA TEMPERATURE|No|Yes",
+        "AI07|TOA HUMIDITY|Yes|Yes",
+        "AI08|TOA AIRFLOW|Yes|Yes",
+        "AI09|CHW VALVE POSITION (FEEDBACK)|No|Yes",
+        "AI10|FAN SPEED (FEEDBACK)|No|Yes",
+        "AI11|TOA FAN DIFFERENTIAL PRESSURE|No|Yes",
+        "AI12|REHEAT HHW VALVE POSITION (FEEDBACK)|No|Yes",
+        "AI13|DOAH DISCHARGE TEMPERATURE|No|Yes"
+      ],
+      "header_evidence": [
+        {"bbox": [1780, 345, 2010, 380], "expected": "POINTS LIST DOAH TI"},
+        {"bbox": [1650, 370, 2145, 398], "expected": "MARK DESCRIPTION ALARM TREND"},
+        {"bbox": [1640, 391, 1740, 409], "expected": "ANALOG INPUT"}
+      ]
+    },
+    {
+      "id": "ATCT-DOAH-AO",
+      "page": 64,
+      "sheet": "MI730",
+      "building_scope": "ATCT",
+      "title": "POINTS LIST DOAH T1 - ANALOG OUTPUT",
+      "classification": "Analog output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1650, 1720, 2030, 2090, 2145],
+      "y_edges": [668, 687, 704, 722, 739],
+      "rows": [
+        "AO01|HHW VALVE CONTROL|No|Yes",
+        "AO02|CHW VALVE CONTROL|No|Yes",
+        "AO03|FAN SPEED CONTROL|No|Yes",
+        "AO04|REHEAT HHW VALVE CONTROL|No|Yes"
+      ],
+      "header_evidence": [
+        {"bbox": [1640, 642, 1740, 668], "expected": "ANALOG OUTPUT"}
+      ]
+    },
+    {
+      "id": "ATCT-DOAH-BI",
+      "page": 64,
+      "sheet": "MI730",
+      "building_scope": "ATCT",
+      "title": "POINTS LIST DOAH T1 - BINARY INPUT",
+      "classification": "Binary input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1650, 1720, 2030, 2090, 2145],
+      "y_edges": [771, 790, 808, 825, 842, 859, 876, 893, 910, 928, 945, 962, 979, 997],
+      "rows": [
+        "BI01|MERV 8 UOA FILTER STATUS|Yes|No",
+        "BI02|MERV 13 UOA FILTER STATUS|Yes|No",
+        "BI03|FREEZESTAT|Yes|No",
+        "BI04|UOA DAMPER POSITION CLOSED (FEEDBACK)|Yes|No",
+        "BI05|UOA DAMPER POSITION OPEN (FEEDBACK)|Yes|No",
+        "BI06|HIGH LIMIT STATIC PRESSURE|Yes|No",
+        "BI07|TREATED OA DAMPER POSITION CLOSED (FEEDBACK)|Yes|No",
+        "BI08|TREATED OA DAMPER POSITION OPEN (FEEDBACK)|Yes|No",
+        "BI09|HHWP-DOAH-T1 CIRCULATOR PUMP STATUS|Yes|Yes",
+        "BI10|FAN VFD STATUS|No|Yes",
+        "BI11|FAN VFD ALARM|Yes|No",
+        "BI12|ESS (ATFP EMERGENCY SHUTDOWN) *GLOBAL POINT|Yes|No",
+        "BI13|ATCT DOAH DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {"bbox": [1640, 745, 1740, 771], "expected": "BINARY INPUT"}
+      ]
+    },
+    {
+      "id": "ATCT-DOAH-BO",
+      "page": 64,
+      "sheet": "MI730",
+      "building_scope": "ATCT",
+      "title": "POINTS LIST DOAH T1 - BINARY OUTPUT",
+      "classification": "Binary output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1650, 1720, 2030, 2090, 2145],
+      "y_edges": [1030, 1049, 1066, 1083, 1101],
+      "rows": [
+        "BO01|UOA DAMPER CONTROL|No|No",
+        "BO02|TREATED OA DAMPER CONTROL|No|No",
+        "BO03|HHWP-DOAH-T1 CIRCULATOR PUMP ON/OFF|No|No",
+        "BO04|FAN START/STOP|No|No"
+      ],
+      "header_evidence": [
+        {"bbox": [1640, 1004, 1740, 1030], "expected": "BINARY OUTPUT"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "atct-doah-ai-count", "records_path": ["tables", 0, "rows"], "expected": 13},
+    {"id": "atct-doah-ao-count", "records_path": ["tables", 1, "rows"], "expected": 4},
+    {"id": "atct-doah-bi-count", "records_path": ["tables", 2, "rows"], "expected": 13},
+    {"id": "atct-doah-bo-count", "records_path": ["tables", 3, "rows"], "expected": 4}
+  ],
+  "remaining_work": "Capture the remaining system point lists, control diagrams, sequences, DDC-network relationships and plan-level field-device reconciliation."
+}

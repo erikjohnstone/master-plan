@@ -1,0 +1,96 @@
+{
+  "document_id":"02__vol2__015",
+  "inventory_checks": [
+    {"id":"drawn-sensor-total","records_path":["assertion_groups",0,"records"],"expected_path":["counts","drawn_space_control_marks"],"unique_key":"id"},
+    {"id":"thermostat-symbols","records_path":["assertion_groups",0,"records"],"equals":{"symbol":"T"},"expected_path":["counts","printed_T_thermostat_symbols"]},
+    {"id":"temperature-sensor-symbols","records_path":["assertion_groups",0,"records"],"equals":{"symbol":"S"},"expected_path":["counts","printed_S_temperature_sensor_symbols"]},
+    {"id":"zone-counts","records_path":["assertion_groups",0,"records"],"expected":23,"group_by":"zone","expected_groups_path":["zone_counts"],"expected_key":"zone","expected_value":"drawn_marks"}
+  ],
+  "text_absence_assertions": [
+    {"id":"no-co2-text","pages":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27],"covers_all_source_pages":true,"patterns":["\\bCO\\s*2\\b","CARBON\\s+DIOXIDE"],"scope":"Corroborates the separately recorded all-page visual review; text absence is not a stand-alone device-count proof."}
+  ],
+  "status":"corroborated_document_component",
+  "scope":"Complete visual inventory of space thermostat/temperature-sensor marks on primary enlarged floor plans AM101-AM104, AM106 and AM107. Overall plans, sections, legends and typical controls are cross-references, not additional instances. Counts are source-drawn marks, not an independently commissioned hardware inventory.",
+  "tables":[],
+  "primary_plan_pages":[3,4,5,6,8,9],
+  "all_document_pages_visually_reviewed":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27],
+  "counts":{
+    "drawn_space_control_marks":23,"printed_T_thermostat_symbols":21,"printed_S_temperature_sensor_symbols":2,
+    "T_symbols_functioning_as_DDC_zone_temperature_pickups":16,
+    "local_ductless_thermostat_marks":4,"gatehouse_split_system_thermostat_marks":1,
+    "additional_DDC_temperature_sensor_required_but_not_separately_located_on_plan":{"equipment":"DSS-3","count":1,"zone":"GH04","basis":"AM706 generic DDC sensor requirement applies to gatehouse; only guard booth is exempt. AM106 shows local DSS-3 T but no separate S. Treat required-versus-drawn mismatch explicitly."},
+    "internet_connected_smart_thermostats":{"status":"not_stated","count":null,"reason":"One 7-day programmable thermostat is specified for gatehouse SS-1; internet/smart connectivity is not stated. Local wired/remote ductless thermostats are not presumed smart."},
+    "CO2_sensors":{"status":"not_present_in_supplied_pdf","count":0,"basis":"Full 27-page visual review, complete controls lists and native text check in both engines; no CO2/carbon-dioxide sensor or function found."},
+    "space_humidity_sensor_hardware":{"status":"unresolved","count":null,"reason":"Ductless sequence requires space humidity measurement but gives no separate typed point or plan location. Do not report absence or invent a terminal/device count."},
+    "return_air_humidity_sensors":{"count":1,"system":"Gatehouse SS-1","source":"AM706 AI-2/return-air H; not counted as a space sensor"},
+    "return_air_temperature_sensors":{"count":1,"system":"Gatehouse SS-1","source":"AM706 AI-1/return-air T; not counted as a space thermostat"}
+  },
+  "zone_counts":[
+    {"zone":"USB1","name":"Fire pump","drawn_marks":2},
+    {"zone":"USB2","name":"Fresh water pump room","drawn_marks":2},
+    {"zone":"USB3","name":"Pure water room","drawn_marks":2},
+    {"zone":"USB4","name":"Medium pressure air room","drawn_marks":3},
+    {"zone":"USB5","name":"High pressure air room","drawn_marks":3},
+    {"zone":"USB6","name":"Main electrical room","drawn_marks":2},
+    {"zone":"USB7","name":"Generator room","drawn_marks":1},
+    {"zone":"USB8","name":"Telecom room","drawn_marks":2},
+    {"zone":"USB9","name":"Fire alarm closet","drawn_marks":2},
+    {"zone":"USB6/USB7 shared wall - conflict","name":"EF-6 sensor: USB6-side callout/leader versus generator-room sequence","drawn_marks":1},
+    {"zone":"GH04","name":"Gatehouse equipment room","drawn_marks":1},
+    {"zone":"GH01","name":"Gatehouse sentry","drawn_marks":1},
+    {"zone":"GB01","name":"Guard booth","drawn_marks":1}
+  ],
+  "interpretation_rules":[
+    "AM001 labels circle T as THERMOSTAT and circle S as TEMPERATURE SENSOR. Keep printed symbol type separate from DDC functional role; do not rename every T to an internet-connected thermostat.",
+    "For FC/EF/UH T marks, the controls diagrams and AI-1 rows describe a zone-temperature input. The source does not supply a controller/terminal address per physical sensor.",
+    "FC-1 and EF-1 each span the fire-pump and fresh-water-pump spaces and explicitly require two temperature sensors; those are four distinct drawn marks, not duplicate labels.",
+    "MPAC relief AI-1 reuses FC-3 temperature and adds no new space sensor.",
+    "Typical control drawings show representative sensor symbols; they are not extra plan instances.",
+    "Input points do not prove separate hardware where shared or communicated. Preserve required functions, drawn devices and field-wired counts separately."
+  ],
+  "assertion_groups":[
+    {
+      "id":"plan-sensors",
+      "templates":[{"id":"glyph","field":"symbol","bbox_field":"glyph_bbox","mode":"exact"},{"id":"equipment-callout","field":"equipment","bbox_field":"association_bbox"}],
+      "records":[
+        {"id":"EF1-west","page":3,"symbol":"T","equipment":"EF-1","zone":"USB1","role":"DDC zone-temperature pickup","glyph_bbox":[696,742,708,758],"association_bbox":[668,739,710,766],"notes":"West/fire-pump side of dividing wall; one of two EF-1 sensors."},
+        {"id":"EF1-east","page":3,"symbol":"T","equipment":"EF-1","zone":"USB2","role":"DDC zone-temperature pickup","glyph_bbox":[727,741,740,757],"association_bbox":[726,739,770,766],"notes":"East/fresh-water-pump side; highest of two readings governs ventilation."},
+        {"id":"FC1-west","page":3,"symbol":"T","equipment":"FC-1","zone":"USB1","role":"DDC zone-temperature pickup","glyph_bbox":[697,785,710,802],"association_bbox":[668,784,711,806],"notes":"West/fire-pump side; one of two FC-1 sensors."},
+        {"id":"FC1-east","page":3,"symbol":"T","equipment":"FC-1","zone":"USB2","role":"DDC zone-temperature pickup","glyph_bbox":[727,808,740,825],"association_bbox":[726,806,771,828],"notes":"East/fresh-water-pump side; lowest of two readings governs heating."},
+        {"id":"EF2","page":3,"symbol":"T","equipment":"EF-2","zone":"USB3","role":"DDC zone-temperature pickup","glyph_bbox":[1101,968,1114,986],"association_bbox":[1099,966,1146,988]},
+        {"id":"FC2","page":3,"symbol":"T","equipment":"FC-2","zone":"USB3","role":"DDC zone-temperature pickup","glyph_bbox":[1710,969,1723,986],"association_bbox":[1680,967,1726,1001]},
+        {"id":"FC3","page":4,"symbol":"T","equipment":"FC-3","zone":"USB4","role":"DDC zone-temperature pickup shared with MPAC relief controls","glyph_bbox":[200,917,213,935],"association_bbox":[197,915,254,949]},
+        {"id":"EF3","page":4,"symbol":"T","equipment":"EF-3","zone":"USB4","role":"DDC zone-temperature pickup","glyph_bbox":[1941,867,1955,885],"association_bbox":[1910,865,1958,894]},
+        {"id":"UH3","page":4,"symbol":"T","equipment":"UH-3","zone":"USB4","role":"DDC zone-temperature pickup","glyph_bbox":[1192,165,1205,184],"association_bbox":[1189,162,1238,189],"notes":"Insulated subbase required by work note 77."},
+        {"id":"FC4","page":5,"symbol":"T","equipment":"FC-4","zone":"USB5","role":"DDC zone-temperature pickup","glyph_bbox":[209,871,222,889],"association_bbox":[206,869,255,899]},
+        {"id":"EF4","page":5,"symbol":"T","equipment":"EF-4","zone":"USB5","role":"DDC zone-temperature pickup","glyph_bbox":[1783,888,1797,906],"association_bbox":[1748,886,1800,911]},
+        {"id":"UH4","page":5,"symbol":"T","equipment":"UH-4","zone":"USB5","role":"DDC zone-temperature pickup","glyph_bbox":[1105,155,1118,173],"association_bbox":[1075,153,1121,180]},
+        {"id":"EF5","page":6,"symbol":"T","equipment":"EF-5","zone":"USB6","role":"DDC zone-temperature pickup","glyph_bbox":[240,523,253,541],"association_bbox":[237,520,282,555],"notes":"EF-5 fan itself is drawn across the matchline on AM103; do not move sensor to fan location or count fan twice."},
+        {"id":"UH1","page":6,"symbol":"T","equipment":"UH-1","zone":"USB6","role":"DDC zone-temperature pickup","glyph_bbox":[303,417,316,435],"association_bbox":[300,414,350,441]},
+        {"id":"UH2","page":6,"symbol":"T","equipment":"UH-2","zone":"USB7","role":"DDC zone-temperature pickup","glyph_bbox":[705,992,719,1010],"association_bbox":[702,989,752,1017]},
+        {"id":"EF6","page":6,"symbol":"T","equipment":"EF-6","zone":"USB6/USB7 shared wall - conflict","role":"DDC zone-temperature pickup","glyph_bbox":[559,707,573,726],"association_bbox":[556,704,603,740],"notes":"Callout is on the electrical-room side, with leader landing at that side of shared wall near MD-9. AM704 is generator-room temperature control. Room placement requires clarification; not silently assigned to USB7.","detail_render":"reviews/02__vol2__015/p6-ef6-sensor-poppler.png"},
+        {"id":"DSS1-local","page":6,"symbol":"T","equipment":"DSS-1","zone":"USB8","role":"Local ductless thermostat","glyph_bbox":[621,284,635,302],"association_bbox":[530,280,640,332]},
+        {"id":"DSS1-DDC","page":6,"symbol":"S","equipment":"DSS-1","zone":"USB8","role":"Separate DDC temperature sensor","glyph_bbox":[621,303,635,320],"association_bbox":[530,280,640,332]},
+        {"id":"DSS2-local","page":6,"symbol":"T","equipment":"DSS-2","zone":"USB9","role":"Local ductless thermostat","glyph_bbox":[624,350,638,367],"association_bbox":[468,348,644,435],"notes":"AM601 schedule repeats TELECOM ROOM USB8 for DSS-2. Plan places DSS-2 and its controls in fire-alarm closet USB9; preserve source conflict."},
+        {"id":"DSS2-DDC","page":6,"symbol":"S","equipment":"DSS-2","zone":"USB9","role":"Separate DDC temperature sensor","glyph_bbox":[621,368,635,386],"association_bbox":[468,348,644,435]},
+        {"id":"DSS3-local","page":8,"symbol":"T","equipment":"DSS-3","zone":"GH04","role":"Local ductless thermostat","glyph_bbox":[460,181,474,199],"association_bbox":[426,177,479,213],"notes":"No separate S is drawn; AM706 still requires DDC temperature sensor for gatehouse. Do not pretend this extra sensor has a verified plan location."},
+        {"id":"SS1-local","page":8,"symbol":"T","equipment":"SS-1","zone":"GH01","role":"7-day programmable split-system thermostat","glyph_bbox":[1083,384,1096,402],"association_bbox":[1080,365,1117,406]},
+        {"id":"DSS4-local","page":9,"symbol":"T","equipment":"DSS-4","zone":"GB01","role":"Local remote controller / ductless thermostat","glyph_bbox":[423,255,436,272],"association_bbox":[418,248,549,345],"notes":"Remote controller 48 inches AFF, work note 16. AM706 expressly exempts extra guard-booth DDC temperature sensor."}
+      ]
+    }
+  ],
+  "assertions":[
+    {"id":"legend-T","page":1,"bbox":[150,114,275,132],"expected":"T THERMOSTAT"},
+    {"id":"legend-S","page":1,"bbox":[150,140,331,158],"expected":"S TEMPERATURE SENSOR"},
+    {"id":"FC1-two","page":25,"bbox":[198,1036,733,1084],"expected":"FC-1 HAS (2) TEMPERATURE SENSORS"},
+    {"id":"EF1-two","page":25,"bbox":[927,1200,1477,1234],"expected":"EF-1 HAS (2) TEMPERATURE SENSORS"},
+    {"id":"MPAC-shared","page":26,"bbox":[1955,752,2035,784],"expected":"FC-3 SENSOR INPUT"},
+    {"id":"guard-exempt","page":27,"bbox":[1505,890,1730,930],"expected":"TEMPERATURE SENSOR NOT REQUIRED ON GUARD BOOTH"},
+    {"id":"programmable-7day","page":27,"bbox":[179,917,714,1035],"expected":"7-DAY PROGRAMMABLE THERMOSTAT"},
+    {"id":"guard-controller-height","page":9,"bbox":[1820,245,2245,470],"expected":"MOUNT REMOTE CONTROLLER TO WALL AT 48\" AFF."},
+    {"id":"general-control-height","page":1,"bbox":[1820,690,2225,736],"expected":"MOUNT THERMOSTATS, HUMIDISTATS, AND ESS 48 INCHES ABOVE FINISHED FLOOR UNLESS OTHERWISE INDICATED."},
+    {"id":"ddc-control-height","page":22,"bbox":[1850,131,2190,148],"expected":"LOCATE ALL THERMOSTAT AND TEMPERATURE SENSORS 5'-0\" AFF."}
+  ],
+  "mounting_height_requirements":{"general_mechanical_note":{"page":1,"height":"48 inches AFF","qualifier":"unless otherwise indicated"},"DDC_controls_note":{"page":22,"height":"5 feet AFF","scope":"all thermostat and temperature sensors as stated on AM701"},"guard_booth_remote_controller":{"page":9,"height":"48 inches AFF","scope":"specific local remote-controller work note 16"},"interpretation":"Retain the general 48-inch default, the 5-foot controls instruction and the specific 48-inch guard-booth local-controller requirement with their scopes. The general note expressly allows other indicated heights; do not flatten all devices to one mounting height.","assertion_ids":["general-control-height","ddc-control-height","guard-controller-height"]},
+  "document_record":"../../records/02__vol2__015.json"
+}

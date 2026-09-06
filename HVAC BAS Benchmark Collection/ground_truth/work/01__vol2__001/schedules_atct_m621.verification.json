@@ -1,0 +1,1269 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "5886aedd34532507fe1d2341c48e7c9e01688cc259de6565a919d73dd893f09d",
+  "tables": 8,
+  "rows": 42,
+  "cell_assertions": 42,
+  "text_assertions": 1,
+  "checks": [
+    {
+      "table": "M621-AHU-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        173,
+        180,
+        191
+      ],
+      "expected": "AHU-T1A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A",
+          "word_ids": [
+            1578
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A",
+          "word_ids": [
+            148
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-AHU-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        192,
+        180,
+        209
+      ],
+      "expected": "AHU-T1B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B",
+          "word_ids": [
+            1614
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B",
+          "word_ids": [
+            160
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        427,
+        175,
+        445
+      ],
+      "expected": "FCU-T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T1",
+          "word_ids": [
+            644
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T1",
+          "word_ids": [
+            2179
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        446,
+        175,
+        462
+      ],
+      "expected": "FCU-T2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T2",
+          "word_ids": [
+            679
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T2",
+          "word_ids": [
+            2180
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 3,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        463,
+        175,
+        480
+      ],
+      "expected": "FCU-T3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T3",
+          "word_ids": [
+            714
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T3",
+          "word_ids": [
+            2181
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 4,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        481,
+        175,
+        497
+      ],
+      "expected": "FCU-T4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T4",
+          "word_ids": [
+            749
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T4",
+          "word_ids": [
+            2182
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 5,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        498,
+        175,
+        514
+      ],
+      "expected": "FCU-T5A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T5A",
+          "word_ids": [
+            784
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T5A",
+          "word_ids": [
+            2183
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 6,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        515,
+        175,
+        532
+      ],
+      "expected": "FCU-T5B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T5B",
+          "word_ids": [
+            818
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T5B",
+          "word_ids": [
+            2184
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 7,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        533,
+        175,
+        549
+      ],
+      "expected": "FCU-T6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T6",
+          "word_ids": [
+            852
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T6",
+          "word_ids": [
+            2185
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 8,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        550,
+        175,
+        566
+      ],
+      "expected": "FCU-T7A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T7A",
+          "word_ids": [
+            888
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T7A",
+          "word_ids": [
+            2186
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 9,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        567,
+        175,
+        583
+      ],
+      "expected": "FCU-T7B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T7B",
+          "word_ids": [
+            923
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T7B",
+          "word_ids": [
+            2187
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 10,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        584,
+        175,
+        600
+      ],
+      "expected": "FCU-T8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T8",
+          "word_ids": [
+            958
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T8",
+          "word_ids": [
+            2188
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 11,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        601,
+        175,
+        617
+      ],
+      "expected": "FCU-T9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T9",
+          "word_ids": [
+            992
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T9",
+          "word_ids": [
+            2189
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 12,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        618,
+        175,
+        635
+      ],
+      "expected": "FCU-T10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T10",
+          "word_ids": [
+            1026
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T10",
+          "word_ids": [
+            2190
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 13,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        636,
+        175,
+        652
+      ],
+      "expected": "FCU-T11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T11",
+          "word_ids": [
+            1060
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T11",
+          "word_ids": [
+            2191
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 14,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        653,
+        175,
+        669
+      ],
+      "expected": "FCU-T12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T12",
+          "word_ids": [
+            1094
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T12",
+          "word_ids": [
+            2192
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 15,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        670,
+        175,
+        686
+      ],
+      "expected": "FCU-T13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T13",
+          "word_ids": [
+            1130
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T13",
+          "word_ids": [
+            2193
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 16,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        687,
+        175,
+        704
+      ],
+      "expected": "FCU-T14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T14",
+          "word_ids": [
+            1166
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T14",
+          "word_ids": [
+            2194
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 17,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        705,
+        175,
+        721
+      ],
+      "expected": "FCU-T15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T15",
+          "word_ids": [
+            1201
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T15",
+          "word_ids": [
+            2195
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FCU-MARKS",
+      "row": 18,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        115,
+        722,
+        175,
+        739
+      ],
+      "expected": "FCU-T16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T16",
+          "word_ids": [
+            1236
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T16",
+          "word_ids": [
+            2196
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-CRAH-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        110,
+        950,
+        180,
+        968
+      ],
+      "expected": "CRAH-T1A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CRAH-T1A",
+          "word_ids": [
+            1724
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CRAH-T1A",
+          "word_ids": [
+            1687
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-CRAH-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        110,
+        969,
+        180,
+        986
+      ],
+      "expected": "CRAH-T1B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CRAH-T1B",
+          "word_ids": [
+            1747
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CRAH-T1B",
+          "word_ids": [
+            1696
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FAN-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        125,
+        1158,
+        180,
+        1177
+      ],
+      "expected": "EF-T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-T1",
+          "word_ids": [
+            1290
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-T1",
+          "word_ids": [
+            572
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FAN-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        125,
+        1178,
+        180,
+        1195
+      ],
+      "expected": "EF-T2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-T2",
+          "word_ids": [
+            1307
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-T2",
+          "word_ids": [
+            573
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FAN-MARKS",
+      "row": 3,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        125,
+        1196,
+        180,
+        1212
+      ],
+      "expected": "SPF-T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPF-T1",
+          "word_ids": [
+            1324
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPF-T1",
+          "word_ids": [
+            574
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-FAN-MARKS",
+      "row": 4,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        125,
+        1213,
+        180,
+        1230
+      ],
+      "expected": "SPF-T2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPF-T2",
+          "word_ids": [
+            1340
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPF-T2",
+          "word_ids": [
+            575
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-HUMIDIFIER-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        1525,
+        812,
+        1570,
+        830
+      ],
+      "expected": "H-T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "H-T1",
+          "word_ids": [
+            1864
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "H-T1",
+          "word_ids": [
+            1344
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-HUMIDIFIER-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        1525,
+        831,
+        1570,
+        848
+      ],
+      "expected": "H-T2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "H-T2",
+          "word_ids": [
+            1876
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "H-T2",
+          "word_ids": [
+            1351
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-HUMIDIFIER-MARKS",
+      "row": 3,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        1525,
+        849,
+        1570,
+        865
+      ],
+      "expected": "H-T3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "H-T3",
+          "word_ids": [
+            1888
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "H-T3",
+          "word_ids": [
+            1358
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-HUMIDIFIER-MARKS",
+      "row": 4,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        1525,
+        866,
+        1570,
+        882
+      ],
+      "expected": "H-T4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "H-T4",
+          "word_ids": [
+            1900
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "H-T4",
+          "word_ids": [
+            1365
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-HUMIDIFIER-MARKS",
+      "row": 5,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        1525,
+        883,
+        1570,
+        900
+      ],
+      "expected": "H-T5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "H-T5",
+          "word_ids": [
+            1912
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "H-T5",
+          "word_ids": [
+            1372
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-CABINET-UNIT-HEATER-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        1370,
+        1125,
+        1430,
+        1143
+      ],
+      "expected": "CUH-T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CUH-T1",
+          "word_ids": [
+            2221
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CUH-T1",
+          "word_ids": [
+            1169
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-CABINET-UNIT-HEATER-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        1370,
+        1144,
+        1430,
+        1161
+      ],
+      "expected": "CUH-T2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CUH-T2",
+          "word_ids": [
+            2239
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CUH-T2",
+          "word_ids": [
+            1170
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-PUMP-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        1260,
+        1288,
+        1355,
+        1305
+      ],
+      "expected": "HHWP-DOAH-T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHWP-DOAH-T1",
+          "word_ids": [
+            1380
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHWP-DOAH-T1",
+          "word_ids": [
+            868
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-PUMP-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        1260,
+        1306,
+        1355,
+        1322
+      ],
+      "expected": "PHHWP-T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PHHWP-T1",
+          "word_ids": [
+            1395
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PHHWP-T1",
+          "word_ids": [
+            869
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-PUMP-MARKS",
+      "row": 3,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        1260,
+        1323,
+        1355,
+        1339
+      ],
+      "expected": "PHHWP-T2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PHHWP-T2",
+          "word_ids": [
+            1411
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PHHWP-T2",
+          "word_ids": [
+            870
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-PUMP-MARKS",
+      "row": 4,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        1260,
+        1340,
+        1355,
+        1357
+      ],
+      "expected": "SCHWP-T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-T1",
+          "word_ids": [
+            1427
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-T1",
+          "word_ids": [
+            871
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-PUMP-MARKS",
+      "row": 5,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        1260,
+        1358,
+        1355,
+        1375
+      ],
+      "expected": "SCHWP-T2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCHWP-T2",
+          "word_ids": [
+            1442
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCHWP-T2",
+          "word_ids": [
+            872
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-PUMP-MARKS",
+      "row": 6,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        1260,
+        1376,
+        1355,
+        1392
+      ],
+      "expected": "SHHWP-T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SHHWP-T1",
+          "word_ids": [
+            1457
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SHHWP-T1",
+          "word_ids": [
+            873
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-PUMP-MARKS",
+      "row": 7,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        1260,
+        1393,
+        1355,
+        1410
+      ],
+      "expected": "SHHWP-T2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SHHWP-T2",
+          "word_ids": [
+            1473
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SHHWP-T2",
+          "word_ids": [
+            874
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-BOILER-MARKS",
+      "row": 1,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        130,
+        1417,
+        175,
+        1435
+      ],
+      "expected": "B-T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B-T1",
+          "word_ids": [
+            1800
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B-T1",
+          "word_ids": [
+            628
+          ]
+        }
+      }
+    },
+    {
+      "table": "M621-BOILER-MARKS",
+      "row": 2,
+      "column": "mark",
+      "page": 48,
+      "bbox": [
+        130,
+        1436,
+        175,
+        1454
+      ],
+      "expected": "B-T2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B-T2",
+          "word_ids": [
+            1817
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B-T2",
+          "word_ids": [
+            629
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m621-sheet-title",
+      "page": 48,
+      "bbox": [
+        2280,
+        1500,
+        2365,
+        1533
+      ],
+      "expected": "M-621",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-621",
+          "word_ids": [
+            543
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-621",
+          "word_ids": [
+            2254
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m621-schedule-families",
+      "actual": 8,
+      "expected": 8,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

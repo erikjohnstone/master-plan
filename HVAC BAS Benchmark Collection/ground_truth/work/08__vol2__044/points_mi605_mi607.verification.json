@@ -1,0 +1,9836 @@
+{
+  "document_id": "08__vol2__044",
+  "source_sha256": "d726ef89f4021eef903c001f71f786df5837c432887f5d5ca88051fa8a151384",
+  "annotation_sha256": "1ce3ca57ca80c66050942a15381389b43e7dba49c75132748f85b86722a39bd2",
+  "tables": 2,
+  "rows": 96,
+  "cell_assertions": 321,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 1,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        958,
+        2530,
+        975
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            631
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            861
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 1,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        958,
+        2625,
+        975
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            632
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            862
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 1,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        958,
+        2790,
+        975
+      ],
+      "expected": "PUMP #1 RUNTIME HRS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP #1 RUNTIME HRS",
+          "word_ids": [
+            633,
+            634,
+            635,
+            636
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP #1 RUNTIME HRS",
+          "word_ids": [
+            863,
+            864,
+            865,
+            866
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 1,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        958,
+        2885,
+        975
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 2,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        980,
+        2530,
+        998
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            637
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            867
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 2,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        980,
+        2625,
+        998
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            638
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            868
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 2,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        980,
+        2790,
+        998
+      ],
+      "expected": "PUMP #2 RUNTIME HRS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP #2 RUNTIME HRS",
+          "word_ids": [
+            639,
+            640,
+            641,
+            642
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP #2 RUNTIME HRS",
+          "word_ids": [
+            869,
+            870,
+            871,
+            872
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 2,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        980,
+        2885,
+        998
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 3,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1000,
+        2530,
+        1028
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            643
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            996
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 3,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1000,
+        2625,
+        1028
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            644
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            873
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 3,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1000,
+        2790,
+        1028
+      ],
+      "expected": "PUMP 1 CALL FOR OPERATION-START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP 1 CALL FOR OPERATION-START/STOP",
+          "word_ids": [
+            645,
+            646,
+            647,
+            648,
+            649
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP 1 CALL FOR OPERATION-START/STOP",
+          "word_ids": [
+            874,
+            875,
+            876,
+            877,
+            878
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 3,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1000,
+        2885,
+        1028
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 4,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1040,
+        2530,
+        1065
+      ],
+      "expected": "4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            650
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            997
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 4,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1040,
+        2625,
+        1065
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            651
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            879
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 4,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1040,
+        2790,
+        1065
+      ],
+      "expected": "PUMP 1 FAULT-NORMAL/ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP 1 FAULT-NORMAL/ALARM",
+          "word_ids": [
+            652,
+            653,
+            654
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP 1 FAULT-NORMAL/ALARM",
+          "word_ids": [
+            880,
+            881,
+            882
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 4,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1040,
+        2885,
+        1065
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 5,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1065,
+        2530,
+        1103
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            655
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            1001
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 5,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1065,
+        2625,
+        1103
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            656
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            883
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 5,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1065,
+        2790,
+        1103
+      ],
+      "expected": "PUMP 1 ON-OFF-AUTO SWITCH POSITION-ON-OFF/AUTO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP 1 ON-OFF-AUTO SWITCH POSITION-ON-OFF/AUTO",
+          "word_ids": [
+            657,
+            658,
+            659,
+            660,
+            661
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP 1 ON-OFF-AUTO SWITCH POSITION-ON-OFF/AUTO",
+          "word_ids": [
+            884,
+            885,
+            886,
+            887,
+            888
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 5,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1065,
+        2885,
+        1103
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 6,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1104,
+        2530,
+        1130
+      ],
+      "expected": "6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            662
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            1009
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 6,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1104,
+        2625,
+        1130
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            663
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            889
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 6,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1104,
+        2790,
+        1130
+      ],
+      "expected": "PUMP 1 START OUTPUT-START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP 1 START OUTPUT-START/STOP",
+          "word_ids": [
+            664,
+            665,
+            666,
+            667
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP 1 START OUTPUT-START/STOP",
+          "word_ids": [
+            890,
+            891,
+            892,
+            893
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 6,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1104,
+        2885,
+        1130
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 7,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1132,
+        2530,
+        1149
+      ],
+      "expected": "7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "7",
+          "word_ids": [
+            668
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "7",
+          "word_ids": [
+            1011
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 7,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1132,
+        2625,
+        1149
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            669
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            894
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 7,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1132,
+        2790,
+        1149
+      ],
+      "expected": "PUMP 1 STATUS-ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP 1 STATUS-ON/OFF",
+          "word_ids": [
+            670,
+            671,
+            672
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP 1 STATUS-ON/OFF",
+          "word_ids": [
+            895,
+            896,
+            897
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 7,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1132,
+        2885,
+        1149
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 8,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1154,
+        2530,
+        1179
+      ],
+      "expected": "8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            673
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            1012
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 8,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1154,
+        2625,
+        1179
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            674
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            898
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 8,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1154,
+        2790,
+        1179
+      ],
+      "expected": "PUMP 2 CALL FOR OPERATION-START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP 2 CALL FOR OPERATION-START/STOP",
+          "word_ids": [
+            675,
+            676,
+            677,
+            678,
+            679
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP 2 CALL FOR OPERATION-START/STOP",
+          "word_ids": [
+            899,
+            900,
+            901,
+            902,
+            903
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 8,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1154,
+        2885,
+        1179
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 9,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1180,
+        2530,
+        1206
+      ],
+      "expected": "9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9",
+          "word_ids": [
+            680
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9",
+          "word_ids": [
+            1021
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 9,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1180,
+        2625,
+        1206
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            681
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            904
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 9,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1180,
+        2790,
+        1206
+      ],
+      "expected": "PUMP 2 FAULT-NORMAL/ ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP 2 FAULT-NORMAL/ ALARM",
+          "word_ids": [
+            682,
+            683,
+            684,
+            685
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP 2 FAULT-NORMAL/ ALARM",
+          "word_ids": [
+            905,
+            906,
+            907,
+            908
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 9,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1180,
+        2885,
+        1206
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 10,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1207,
+        2530,
+        1244
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            686
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            1026
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 10,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1207,
+        2625,
+        1244
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            687
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            909
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 10,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1207,
+        2790,
+        1244
+      ],
+      "expected": "PUMP 2 ON-OFF-AUTO SWITCH POSITION-ON-OFF/AUTO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP 2 ON-OFF-AUTO SWITCH POSITION-ON-OFF/AUTO",
+          "word_ids": [
+            688,
+            689,
+            690,
+            691,
+            692
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP 2 ON-OFF-AUTO SWITCH POSITION-ON-OFF/AUTO",
+          "word_ids": [
+            910,
+            911,
+            912,
+            913,
+            914
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 10,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1207,
+        2885,
+        1244
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 11,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1246,
+        2530,
+        1271
+      ],
+      "expected": "11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            693
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            1031
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 11,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1246,
+        2625,
+        1271
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            694
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            915
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 11,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1246,
+        2790,
+        1271
+      ],
+      "expected": "PUMP 2 START OUTPUT-START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP 2 START OUTPUT-START/STOP",
+          "word_ids": [
+            695,
+            696,
+            697,
+            698
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP 2 START OUTPUT-START/STOP",
+          "word_ids": [
+            916,
+            917,
+            918,
+            919
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 11,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1246,
+        2885,
+        1271
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 12,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1273,
+        2530,
+        1289
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            699
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            920
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 12,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1273,
+        2625,
+        1289
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            700
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            921
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 12,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1273,
+        2790,
+        1289
+      ],
+      "expected": "PUMP 2 STATUS-ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP 2 STATUS-ON/OFF",
+          "word_ids": [
+            701,
+            702,
+            703
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP 2 STATUS-ON/OFF",
+          "word_ids": [
+            922,
+            923,
+            924
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 12,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1273,
+        2885,
+        1289
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 13,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1295,
+        2530,
+        1311
+      ],
+      "expected": "13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13",
+          "word_ids": [
+            704
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13",
+          "word_ids": [
+            925
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 13,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1295,
+        2625,
+        1311
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            705
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            926
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 13,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1295,
+        2790,
+        1311
+      ],
+      "expected": "PUMP 1 LEAD-LEAD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP 1 LEAD-LEAD",
+          "word_ids": [
+            706,
+            707,
+            708
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP 1 LEAD-LEAD",
+          "word_ids": [
+            927,
+            928,
+            929
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 13,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1295,
+        2885,
+        1311
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 14,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1317,
+        2530,
+        1333
+      ],
+      "expected": "14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            709
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            930
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 14,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1317,
+        2625,
+        1333
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            710
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            931
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 14,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1317,
+        2790,
+        1333
+      ],
+      "expected": "PUMP 2 LEAD-LEAD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP 2 LEAD-LEAD",
+          "word_ids": [
+            711,
+            712,
+            713
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP 2 LEAD-LEAD",
+          "word_ids": [
+            932,
+            933,
+            934
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 14,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1317,
+        2885,
+        1333
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 15,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1338,
+        2530,
+        1363
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            714
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            1042
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 15,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1338,
+        2625,
+        1363
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            715
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            935
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 15,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1338,
+        2790,
+        1363
+      ],
+      "expected": "OIL FLOW SWITCH-FLOW/NO FLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OIL FLOW SWITCH-FLOW/NO FLOW",
+          "word_ids": [
+            716,
+            717,
+            718,
+            719
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OIL FLOW SWITCH-FLOW/NO FLOW",
+          "word_ids": [
+            936,
+            937,
+            938,
+            939
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 15,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1338,
+        2885,
+        1363
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 16,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1365,
+        2530,
+        1390
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            720
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            1047
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 16,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1365,
+        2625,
+        1390
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            721
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            940
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 16,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1365,
+        2790,
+        1390
+      ],
+      "expected": "STRAINER DIFFERENTIAL PRESSURE-NORMAL/ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STRAINER DIFFERENTIAL PRESSURE-NORMAL/ALARM",
+          "word_ids": [
+            722,
+            723,
+            724
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STRAINER DIFFERENTIAL PRESSURE-NORMAL/ALARM",
+          "word_ids": [
+            941,
+            942,
+            943
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 16,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1365,
+        2885,
+        1390
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 17,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1402,
+        2530,
+        1428
+      ],
+      "expected": "17",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "17",
+          "word_ids": [
+            725
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "17",
+          "word_ids": [
+            1049
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 17,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1402,
+        2625,
+        1428
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            726
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            944
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 17,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1402,
+        2790,
+        1428
+      ],
+      "expected": "LEVER GATE VALVE-NORMAL/ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LEVER GATE VALVE-NORMAL/ALARM",
+          "word_ids": [
+            727,
+            728,
+            729
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LEVER GATE VALVE-NORMAL/ALARM",
+          "word_ids": [
+            945,
+            946,
+            947
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 17,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1402,
+        2885,
+        1428
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 18,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1430,
+        2530,
+        1455
+      ],
+      "expected": "18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            730
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            1050
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 18,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1430,
+        2625,
+        1455
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            731
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            948
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 18,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1430,
+        2790,
+        1455
+      ],
+      "expected": "PUMP SET LEAK-NORMAL/ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP SET LEAK-NORMAL/ALARM",
+          "word_ids": [
+            732,
+            733,
+            734
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP SET LEAK-NORMAL/ALARM",
+          "word_ids": [
+            949,
+            950,
+            951
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 18,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1430,
+        2885,
+        1455
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 19,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1457,
+        2530,
+        1474
+      ],
+      "expected": "19",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "19",
+          "word_ids": [
+            735
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "19",
+          "word_ids": [
+            1052
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 19,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1457,
+        2625,
+        1474
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            736
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            952
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 19,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1457,
+        2790,
+        1474
+      ],
+      "expected": "DAY TANK-NORMAL/ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAY TANK-NORMAL/ALARM",
+          "word_ids": [
+            737,
+            738
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAY TANK-NORMAL/ALARM",
+          "word_ids": [
+            953,
+            954
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 19,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1457,
+        2885,
+        1474
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 20,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1478,
+        2530,
+        1504
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            739
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            1060
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 20,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1478,
+        2625,
+        1504
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            740
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            955
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 20,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1478,
+        2790,
+        1504
+      ],
+      "expected": "DAY TANK VENT FLOW SWITCH-NORMAL/ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAY TANK VENT FLOW SWITCH-NORMAL/ALARM",
+          "word_ids": [
+            741,
+            742,
+            743,
+            744,
+            745
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAY TANK VENT FLOW SWITCH-NORMAL/ALARM",
+          "word_ids": [
+            956,
+            957,
+            958,
+            959,
+            960
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 20,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1478,
+        2885,
+        1504
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 21,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1505,
+        2530,
+        1531
+      ],
+      "expected": "21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            746
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            1061
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 21,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1505,
+        2625,
+        1531
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            747
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            961
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 21,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1505,
+        2790,
+        1531
+      ],
+      "expected": "DAY TANK HIGH LEVEL-NORMAL/ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAY TANK HIGH LEVEL-NORMAL/ALARM",
+          "word_ids": [
+            748,
+            749,
+            750,
+            751
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAY TANK HIGH LEVEL-NORMAL/ALARM",
+          "word_ids": [
+            962,
+            963,
+            964,
+            965
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 21,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1505,
+        2885,
+        1531
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 22,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1533,
+        2530,
+        1558
+      ],
+      "expected": "22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            752
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            1064
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 22,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1533,
+        2625,
+        1558
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            753
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            966
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 22,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1533,
+        2790,
+        1558
+      ],
+      "expected": "DAY TANK LOW LEVEL-NORMAL/ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAY TANK LOW LEVEL-NORMAL/ALARM",
+          "word_ids": [
+            754,
+            755,
+            756,
+            757
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAY TANK LOW LEVEL-NORMAL/ALARM",
+          "word_ids": [
+            967,
+            968,
+            969,
+            970
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 22,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1533,
+        2885,
+        1558
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 23,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1560,
+        2530,
+        1585
+      ],
+      "expected": "23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            758
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            1065
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 23,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1560,
+        2625,
+        1585
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            759
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            971
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 23,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1560,
+        2790,
+        1585
+      ],
+      "expected": "CONTAINMENT PIPE LEAK-NORMAL/ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONTAINMENT PIPE LEAK-NORMAL/ALARM",
+          "word_ids": [
+            760,
+            761,
+            762
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONTAINMENT PIPE LEAK-NORMAL/ALARM",
+          "word_ids": [
+            972,
+            973,
+            974
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 23,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1560,
+        2885,
+        1585
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 24,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1588,
+        2530,
+        1612
+      ],
+      "expected": "24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            763
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            1066
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 24,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1588,
+        2625,
+        1612
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            764
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            975
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 24,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1588,
+        2790,
+        1612
+      ],
+      "expected": "MODBUS REMOTE ALARM SILENCE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MODBUS REMOTE ALARM SILENCE",
+          "word_ids": [
+            765,
+            766,
+            767,
+            768
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MODBUS REMOTE ALARM SILENCE",
+          "word_ids": [
+            976,
+            977,
+            978,
+            979
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 24,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1588,
+        2885,
+        1612
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 25,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1614,
+        2530,
+        1639
+      ],
+      "expected": "25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            769
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            1070
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 25,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1614,
+        2625,
+        1639
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            770
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            980
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 25,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1614,
+        2790,
+        1639
+      ],
+      "expected": "LEAD PUMP AUTO ROTATE MODE-ROTATE/MANUAL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LEAD PUMP AUTO ROTATE MODE-ROTATE/MANUAL",
+          "word_ids": [
+            771,
+            772,
+            773,
+            774,
+            775
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LEAD PUMP AUTO ROTATE MODE-ROTATE/MANUAL",
+          "word_ids": [
+            981,
+            982,
+            983,
+            984,
+            985
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 25,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1614,
+        2885,
+        1639
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 26,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1640,
+        2530,
+        1664
+      ],
+      "expected": "26",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "26",
+          "word_ids": [
+            776
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "26",
+          "word_ids": [
+            986
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 26,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1640,
+        2625,
+        1664
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            777
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            987
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 26,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1640,
+        2790,
+        1664
+      ],
+      "expected": "PUMP FAULT RESET-RESET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMP FAULT RESET-RESET",
+          "word_ids": [
+            778,
+            779,
+            780
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMP FAULT RESET-RESET",
+          "word_ids": [
+            990,
+            991,
+            992
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 26,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1640,
+        2885,
+        1664
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 27,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1665,
+        2530,
+        1680
+      ],
+      "expected": "27",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "27",
+          "word_ids": [
+            781
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "27",
+          "word_ids": [
+            988
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 27,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1665,
+        2625,
+        1680
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            782
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            989
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 27,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1665,
+        2790,
+        1680
+      ],
+      "expected": "GENERATOR RUN TIME",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GENERATOR RUN TIME",
+          "word_ids": [
+            783,
+            784,
+            785
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GENERATOR RUN TIME",
+          "word_ids": [
+            993,
+            994,
+            995
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 27,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1665,
+        2885,
+        1680
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 28,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1683,
+        2530,
+        1710
+      ],
+      "expected": "28",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "28",
+          "word_ids": [
+            786
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "28",
+          "word_ids": [
+            1071
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 28,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1683,
+        2625,
+        1710
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            787
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            1076
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 28,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1683,
+        2790,
+        1710
+      ],
+      "expected": "GENERATOR FUEL OIL CONSUMPTION LAST RUN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GENERATOR FUEL OIL CONSUMPTION LAST RUN",
+          "word_ids": [
+            788,
+            789,
+            790,
+            791,
+            792,
+            793
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GENERATOR FUEL OIL CONSUMPTION LAST RUN",
+          "word_ids": [
+            1077,
+            1078,
+            1079,
+            1080,
+            1081,
+            1082
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 28,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1683,
+        2885,
+        1710
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 29,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1711,
+        2530,
+        1748
+      ],
+      "expected": "29",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "29",
+          "word_ids": [
+            794
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "29",
+          "word_ids": [
+            1107
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 29,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1711,
+        2625,
+        1748
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            795
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            1083
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 29,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1711,
+        2790,
+        1748
+      ],
+      "expected": "GENERATOR FUEL OIL CONSUMPTION CUMULATIVE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GENERATOR FUEL OIL CONSUMPTION CUMULATIVE",
+          "word_ids": [
+            796,
+            797,
+            798,
+            799,
+            800
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GENERATOR FUEL OIL CONSUMPTION CUMULATIVE",
+          "word_ids": [
+            1084,
+            1085,
+            1086,
+            1087,
+            1088
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 29,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1711,
+        2885,
+        1748
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 30,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1750,
+        2530,
+        1775
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            801
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            1108
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 30,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1750,
+        2625,
+        1775
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            802
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            1089
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 30,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1750,
+        2790,
+        1775
+      ],
+      "expected": "CONTROL VALVE COMMAND OPEN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONTROL VALVE COMMAND OPEN",
+          "word_ids": [
+            803,
+            804,
+            805,
+            806
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONTROL VALVE COMMAND OPEN",
+          "word_ids": [
+            1090,
+            1091,
+            1092,
+            1093
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 30,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1750,
+        2885,
+        1775
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 31,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1777,
+        2530,
+        1798
+      ],
+      "expected": "31",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "31",
+          "word_ids": [
+            807
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "31",
+          "word_ids": [
+            1109
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 31,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1777,
+        2625,
+        1798
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            808
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            1094
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 31,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1777,
+        2790,
+        1798
+      ],
+      "expected": "CONTROL VALVE POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONTROL VALVE POSITION",
+          "word_ids": [
+            809,
+            810,
+            811
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONTROL VALVE POSITION",
+          "word_ids": [
+            1095,
+            1096,
+            1097
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 31,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1777,
+        2885,
+        1798
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 32,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1800,
+        2530,
+        1825
+      ],
+      "expected": "32",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "32",
+          "word_ids": [
+            812
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "32",
+          "word_ids": [
+            1110
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 32,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1800,
+        2625,
+        1825
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            813
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            1098
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 32,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1800,
+        2790,
+        1825
+      ],
+      "expected": "CONTROL VALVE ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONTROL VALVE ALARM",
+          "word_ids": [
+            814,
+            815,
+            816
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONTROL VALVE ALARM",
+          "word_ids": [
+            1099,
+            1100,
+            1101
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 32,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1800,
+        2885,
+        1825
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 33,
+      "column": "point_number",
+      "page": 29,
+      "bbox": [
+        2450,
+        1827,
+        2530,
+        1856
+      ],
+      "expected": "33",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "33",
+          "word_ids": [
+            817
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "33",
+          "word_ids": [
+            1111
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 33,
+      "column": "type_as_printed",
+      "page": 29,
+      "bbox": [
+        2530,
+        1827,
+        2625,
+        1856
+      ],
+      "expected": "DI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            818
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI",
+          "word_ids": [
+            1102
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 33,
+      "column": "description_as_printed",
+      "page": 29,
+      "bbox": [
+        2625,
+        1827,
+        2790,
+        1856
+      ],
+      "expected": "CONTROL VALVE COMMAND CLOSE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONTROL VALVE COMMAND CLOSE",
+          "word_ids": [
+            819,
+            820,
+            821,
+            822
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONTROL VALVE COMMAND CLOSE",
+          "word_ids": [
+            1103,
+            1104,
+            1105,
+            1106
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "row": 33,
+      "column": "read_write_allowed_as_printed",
+      "page": 29,
+      "bbox": [
+        2790,
+        1827,
+        2885,
+        1856
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "header": "A FUEL OIL SYSTEM BACNET POINTS LIST:",
+      "page": 29,
+      "bbox": [
+        2540,
+        895,
+        2760,
+        930
+      ],
+      "engine": "mupdf",
+      "actual": "A FUEL OIL SYSTEM BACNET POINTS LIST:",
+      "pass": true
+    },
+    {
+      "table": "MI605-FUEL-OIL-BACNET",
+      "header": "A FUEL OIL SYSTEM BACNET POINTS LIST:",
+      "page": 29,
+      "bbox": [
+        2540,
+        895,
+        2760,
+        930
+      ],
+      "engine": "poppler",
+      "actual": "A FUEL OIL SYSTEM BACNET POINTS LIST:",
+      "pass": true
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 1,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        190,
+        2700,
+        216
+      ],
+      "expected": "T1 - WATER IN TEMP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T1 - WATER IN TEMP",
+          "word_ids": [
+            79,
+            80,
+            81,
+            82,
+            83
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T1 - WATER IN TEMP",
+          "word_ids": [
+            79,
+            80,
+            81,
+            82,
+            83
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 1,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        190,
+        2820,
+        216
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            84
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            84
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 1,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        190,
+        2890,
+        216
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            85
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            85
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 2,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        217,
+        2700,
+        243
+      ],
+      "expected": "T2 - WATER OUT TEMP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T2 - WATER OUT TEMP",
+          "word_ids": [
+            86,
+            87,
+            88,
+            89,
+            90
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T2 - WATER OUT TEMP",
+          "word_ids": [
+            86,
+            87,
+            88,
+            89,
+            90
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 2,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        217,
+        2820,
+        243
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            91
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            91
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 2,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        217,
+        2890,
+        243
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            92
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            92
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 3,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        244,
+        2700,
+        270
+      ],
+      "expected": "T3 - STEAM IN TEMP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T3 - STEAM IN TEMP",
+          "word_ids": [
+            93,
+            94,
+            95,
+            96,
+            97
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T3 - STEAM IN TEMP",
+          "word_ids": [
+            93,
+            94,
+            95,
+            96,
+            97
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 3,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        244,
+        2820,
+        270
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            98
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            98
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 3,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        244,
+        2890,
+        270
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            99
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            99
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 4,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        271,
+        2700,
+        297
+      ],
+      "expected": "T4 - CONDENSATE OUT TEMP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T4 - CONDENSATE OUT TEMP",
+          "word_ids": [
+            100,
+            101,
+            102,
+            103,
+            104
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T4 - CONDENSATE OUT TEMP",
+          "word_ids": [
+            100,
+            101,
+            102,
+            103,
+            104
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 4,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        271,
+        2820,
+        297
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            105
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            105
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 4,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        271,
+        2890,
+        297
+      ],
+      "expected": "4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            106
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            106
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 5,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        298,
+        2700,
+        324
+      ],
+      "expected": "T5 - HI LIM TEMP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T5 - HI LIM TEMP",
+          "word_ids": [
+            107,
+            108,
+            109,
+            110,
+            111
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T5 - HI LIM TEMP",
+          "word_ids": [
+            107,
+            108,
+            109,
+            110,
+            111
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 5,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        298,
+        2820,
+        324
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            112
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            112
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 5,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        298,
+        2890,
+        324
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            113
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            113
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 6,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        325,
+        2700,
+        351
+      ],
+      "expected": "T5I - INDEPENDENT HI LIM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "T5I - INDEPENDENT HI LIM",
+          "word_ids": [
+            114,
+            115,
+            116,
+            117,
+            118
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "T5I - INDEPENDENT HI LIM",
+          "word_ids": [
+            114,
+            115,
+            116,
+            117,
+            118
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 6,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        325,
+        2820,
+        351
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            119
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            119
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 6,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        325,
+        2890,
+        351
+      ],
+      "expected": "6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            120
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            120
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 7,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        352,
+        2700,
+        378
+      ],
+      "expected": "ET - ENCLOSURE TEMP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ET - ENCLOSURE TEMP",
+          "word_ids": [
+            121,
+            122,
+            123,
+            124
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ET - ENCLOSURE TEMP",
+          "word_ids": [
+            121,
+            122,
+            123,
+            124
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 7,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        352,
+        2820,
+        378
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            125
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            125
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 7,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        352,
+        2890,
+        378
+      ],
+      "expected": "7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "7",
+          "word_ids": [
+            126
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "7",
+          "word_ids": [
+            126
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 8,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        379,
+        2700,
+        405
+      ],
+      "expected": "OUTSIDE TEMP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE TEMP",
+          "word_ids": [
+            127,
+            128
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE TEMP",
+          "word_ids": [
+            127,
+            128
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 8,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        379,
+        2820,
+        405
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            129
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            129
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 8,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        379,
+        2890,
+        405
+      ],
+      "expected": "8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            130
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            130
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 9,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        406,
+        2700,
+        432
+      ],
+      "expected": "REMOTE SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "REMOTE SETPOINT",
+          "word_ids": [
+            131,
+            132
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "REMOTE SETPOINT",
+          "word_ids": [
+            131,
+            132
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 9,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        406,
+        2820,
+        432
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            133
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            133
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 9,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        406,
+        2890,
+        432
+      ],
+      "expected": "9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9",
+          "word_ids": [
+            134
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9",
+          "word_ids": [
+            134
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 10,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        433,
+        2700,
+        459
+      ],
+      "expected": "SYSTEM ENABLE EVENT COUNT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SYSTEM ENABLE EVENT COUNT",
+          "word_ids": [
+            135,
+            136,
+            137,
+            138
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SYSTEM ENABLE EVENT COUNT",
+          "word_ids": [
+            135,
+            136,
+            137,
+            138
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 10,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        433,
+        2820,
+        459
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            139
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            139
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 10,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        433,
+        2890,
+        459
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            140
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            140
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 11,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        460,
+        2700,
+        486
+      ],
+      "expected": "SYSTEM HI LIM EVENT COUNT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SYSTEM HI LIM EVENT COUNT",
+          "word_ids": [
+            141,
+            142,
+            143,
+            144,
+            145
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SYSTEM HI LIM EVENT COUNT",
+          "word_ids": [
+            141,
+            142,
+            143,
+            144,
+            145
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 11,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        460,
+        2820,
+        486
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            146
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            146
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 11,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        460,
+        2890,
+        486
+      ],
+      "expected": "11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            147
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            147
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 12,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        487,
+        2700,
+        513
+      ],
+      "expected": "CPU BATTERY LEVEL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CPU BATTERY LEVEL",
+          "word_ids": [
+            148,
+            149,
+            150
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CPU BATTERY LEVEL",
+          "word_ids": [
+            148,
+            149,
+            150
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 12,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        487,
+        2820,
+        513
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            151
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            151
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 12,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        487,
+        2890,
+        513
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            152
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            152
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 13,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        514,
+        2700,
+        540
+      ],
+      "expected": "VALVE V1 PERCENT POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VALVE V1 PERCENT POSITION",
+          "word_ids": [
+            153,
+            154,
+            155,
+            156
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VALVE V1 PERCENT POSITION",
+          "word_ids": [
+            153,
+            154,
+            155,
+            156
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 13,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        514,
+        2820,
+        540
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            157
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            157
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 13,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        514,
+        2890,
+        540
+      ],
+      "expected": "13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13",
+          "word_ids": [
+            158
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13",
+          "word_ids": [
+            158
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 14,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        541,
+        2700,
+        567
+      ],
+      "expected": "VALVE V4 PERCENT POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VALVE V4 PERCENT POSITION",
+          "word_ids": [
+            159,
+            160,
+            161,
+            162
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VALVE V4 PERCENT POSITION",
+          "word_ids": [
+            159,
+            160,
+            161,
+            162
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 14,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        541,
+        2820,
+        567
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            163
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            163
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 14,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        541,
+        2890,
+        567
+      ],
+      "expected": "14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            164
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            164
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 15,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        568,
+        2700,
+        594
+      ],
+      "expected": "ACTUAL CONTROL SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACTUAL CONTROL SETPOINT",
+          "word_ids": [
+            165,
+            166,
+            167
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACTUAL CONTROL SETPOINT",
+          "word_ids": [
+            165,
+            166,
+            167
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 15,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        568,
+        2820,
+        594
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            168
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            168
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 15,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        568,
+        2890,
+        594
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            169
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            169
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 16,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        595,
+        2700,
+        621
+      ],
+      "expected": "SV PID SETPOINT VARIABLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SV PID SETPOINT VARIABLE",
+          "word_ids": [
+            170,
+            171,
+            172,
+            173
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SV PID SETPOINT VARIABLE",
+          "word_ids": [
+            170,
+            171,
+            172,
+            173
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 16,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        595,
+        2820,
+        621
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            174
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            174
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 16,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        595,
+        2890,
+        621
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            175
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            175
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 17,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        622,
+        2700,
+        648
+      ],
+      "expected": "PV PID PROCESS VARIABLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PV PID PROCESS VARIABLE",
+          "word_ids": [
+            176,
+            177,
+            178,
+            179
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PV PID PROCESS VARIABLE",
+          "word_ids": [
+            176,
+            177,
+            178,
+            179
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 17,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        622,
+        2820,
+        648
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            180
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            180
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 17,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        622,
+        2890,
+        648
+      ],
+      "expected": "17",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "17",
+          "word_ids": [
+            181
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "17",
+          "word_ids": [
+            181
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 18,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        649,
+        2700,
+        675
+      ],
+      "expected": "CV PIC CONTROL VARIABLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV PIC CONTROL VARIABLE",
+          "word_ids": [
+            182,
+            183,
+            184,
+            185
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV PIC CONTROL VARIABLE",
+          "word_ids": [
+            182,
+            183,
+            184,
+            185
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 18,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        649,
+        2820,
+        675
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            186
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            186
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 18,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        649,
+        2890,
+        675
+      ],
+      "expected": "18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            187
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            187
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 19,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        676,
+        2700,
+        702
+      ],
+      "expected": "FLOW RATE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FLOW RATE",
+          "word_ids": [
+            188,
+            189
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FLOW RATE",
+          "word_ids": [
+            188,
+            189
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 19,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        676,
+        2820,
+        702
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            190
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            190
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 19,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        676,
+        2890,
+        702
+      ],
+      "expected": "19",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "19",
+          "word_ids": [
+            191
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "19",
+          "word_ids": [
+            191
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 20,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        703,
+        2700,
+        729
+      ],
+      "expected": "POWER USE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POWER USE",
+          "word_ids": [
+            192,
+            193
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POWER USE",
+          "word_ids": [
+            192,
+            193
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 20,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        703,
+        2820,
+        729
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            194
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            194
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 20,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        703,
+        2890,
+        729
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            195
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            195
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 21,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        730,
+        2700,
+        756
+      ],
+      "expected": "SYSTEM HOURS RUN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SYSTEM HOURS RUN",
+          "word_ids": [
+            196,
+            197,
+            198
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SYSTEM HOURS RUN",
+          "word_ids": [
+            196,
+            197,
+            198
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 21,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        730,
+        2820,
+        756
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            199
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            199
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 21,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        730,
+        2890,
+        756
+      ],
+      "expected": "21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            200
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            200
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 22,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        757,
+        2700,
+        783
+      ],
+      "expected": "SYSTEM LAST SERVICE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SYSTEM LAST SERVICE",
+          "word_ids": [
+            201,
+            202,
+            203
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SYSTEM LAST SERVICE",
+          "word_ids": [
+            201,
+            202,
+            203
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 22,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        757,
+        2820,
+        783
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            204
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            204
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 22,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        757,
+        2890,
+        783
+      ],
+      "expected": "22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            205
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            205
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 23,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        784,
+        2700,
+        810
+      ],
+      "expected": "SYSTEM NEXT SERVICE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SYSTEM NEXT SERVICE",
+          "word_ids": [
+            206,
+            207,
+            208
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SYSTEM NEXT SERVICE",
+          "word_ids": [
+            206,
+            207,
+            208
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 23,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        784,
+        2820,
+        810
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            209
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            209
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 23,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        784,
+        2890,
+        810
+      ],
+      "expected": "23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            210
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            210
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 24,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        811,
+        2700,
+        837
+      ],
+      "expected": "STATUS: MODE OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS: MODE OFF",
+          "word_ids": [
+            211,
+            212,
+            213
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS: MODE OFF",
+          "word_ids": [
+            211,
+            212,
+            213
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 24,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        811,
+        2820,
+        837
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            214
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            214
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 24,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        811,
+        2890,
+        837
+      ],
+      "expected": "24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            215
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            215
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 25,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        838,
+        2700,
+        864
+      ],
+      "expected": "STATUS: MODE TIMED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS: MODE TIMED",
+          "word_ids": [
+            216,
+            217,
+            218
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS: MODE TIMED",
+          "word_ids": [
+            216,
+            217,
+            218
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 25,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        838,
+        2820,
+        864
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            219
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            219
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 25,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        838,
+        2890,
+        864
+      ],
+      "expected": "25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            220
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            220
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 26,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        865,
+        2700,
+        891
+      ],
+      "expected": "STATUS: MODE CONTINUOUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS: MODE CONTINUOUS",
+          "word_ids": [
+            221,
+            222,
+            223
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS: MODE CONTINUOUS",
+          "word_ids": [
+            221,
+            222,
+            223
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 26,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        865,
+        2820,
+        891
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            224
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            224
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 26,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        865,
+        2890,
+        891
+      ],
+      "expected": "26",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "26",
+          "word_ids": [
+            225
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "26",
+          "word_ids": [
+            225
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 27,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        892,
+        2700,
+        918
+      ],
+      "expected": "STATUS: RUNNING/STOPPED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS: RUNNING/STOPPED",
+          "word_ids": [
+            226,
+            227
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS: RUNNING/STOPPED",
+          "word_ids": [
+            226,
+            227
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 27,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        892,
+        2820,
+        918
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            228
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            228
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 27,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        892,
+        2890,
+        918
+      ],
+      "expected": "27",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "27",
+          "word_ids": [
+            229
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "27",
+          "word_ids": [
+            229
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 28,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        919,
+        2700,
+        945
+      ],
+      "expected": "STATUS: DEGREES C SELECTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS: DEGREES C SELECTED",
+          "word_ids": [
+            230,
+            231,
+            232,
+            233
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS: DEGREES C SELECTED",
+          "word_ids": [
+            230,
+            231,
+            232,
+            233
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 28,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        919,
+        2820,
+        945
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            234
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            234
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 28,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        919,
+        2890,
+        945
+      ],
+      "expected": "28",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "28",
+          "word_ids": [
+            235
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "28",
+          "word_ids": [
+            235
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 29,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        946,
+        2700,
+        972
+      ],
+      "expected": "STATUS: DEGREES F SELECTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS: DEGREES F SELECTED",
+          "word_ids": [
+            236,
+            237,
+            238,
+            239
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS: DEGREES F SELECTED",
+          "word_ids": [
+            236,
+            237,
+            238,
+            239
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 29,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        946,
+        2820,
+        972
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            240
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            240
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 29,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        946,
+        2890,
+        972
+      ],
+      "expected": "29",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "29",
+          "word_ids": [
+            241
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "29",
+          "word_ids": [
+            241
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 30,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        973,
+        2700,
+        999
+      ],
+      "expected": "STATUS: FLOW IN KG/HR SELECTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS: FLOW IN KG/HR SELECTED",
+          "word_ids": [
+            242,
+            243,
+            244,
+            245,
+            246
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS: FLOW IN KG/HR SELECTED",
+          "word_ids": [
+            242,
+            243,
+            244,
+            245,
+            246
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 30,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        973,
+        2820,
+        999
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            247
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            247
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 30,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        973,
+        2890,
+        999
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            248
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            248
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 31,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1000,
+        2700,
+        1026
+      ],
+      "expected": "STATUS: FLOW IN LBS/HR SELECTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS: FLOW IN LBS/HR SELECTED",
+          "word_ids": [
+            249,
+            250,
+            251,
+            252,
+            253
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS: FLOW IN LBS/HR SELECTED",
+          "word_ids": [
+            249,
+            250,
+            251,
+            252,
+            253
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 31,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1000,
+        2820,
+        1026
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            254
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            254
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 31,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1000,
+        2890,
+        1026
+      ],
+      "expected": "31",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "31",
+          "word_ids": [
+            255
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "31",
+          "word_ids": [
+            255
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 32,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1027,
+        2700,
+        1053
+      ],
+      "expected": "STATUS: POWER IN KW SELECTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS: POWER IN KW SELECTED",
+          "word_ids": [
+            256,
+            257,
+            258,
+            259,
+            260
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS: POWER IN KW SELECTED",
+          "word_ids": [
+            256,
+            257,
+            258,
+            259,
+            260
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 32,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1027,
+        2820,
+        1053
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            261
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            261
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 32,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1027,
+        2890,
+        1053
+      ],
+      "expected": "32",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "32",
+          "word_ids": [
+            262
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "32",
+          "word_ids": [
+            262
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 33,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1054,
+        2700,
+        1080
+      ],
+      "expected": "STATUS: POWER IN MBTU/HR SELECTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS: POWER IN MBTU/HR SELECTED",
+          "word_ids": [
+            263,
+            264,
+            265,
+            266,
+            267
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS: POWER IN MBTU/HR SELECTED",
+          "word_ids": [
+            263,
+            264,
+            265,
+            266,
+            267
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 33,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1054,
+        2820,
+        1080
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            268
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            268
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 33,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1054,
+        2890,
+        1080
+      ],
+      "expected": "33",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "33",
+          "word_ids": [
+            269
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "33",
+          "word_ids": [
+            269
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 34,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1081,
+        2700,
+        1107
+      ],
+      "expected": "STATUS: POWER IN MJ/HR SELECTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS: POWER IN MJ/HR SELECTED",
+          "word_ids": [
+            270,
+            271,
+            272,
+            273,
+            274
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS: POWER IN MJ/HR SELECTED",
+          "word_ids": [
+            270,
+            271,
+            272,
+            273,
+            274
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 34,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1081,
+        2820,
+        1107
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            275
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            275
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 34,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1081,
+        2890,
+        1107
+      ],
+      "expected": "34",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "34",
+          "word_ids": [
+            276
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "34",
+          "word_ids": [
+            276
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 35,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1108,
+        2700,
+        1134
+      ],
+      "expected": "STATUS: POWER IN KCAL/HR SELECTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS: POWER IN KCAL/HR SELECTED",
+          "word_ids": [
+            277,
+            278,
+            279,
+            280,
+            281
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS: POWER IN KCAL/HR SELECTED",
+          "word_ids": [
+            277,
+            278,
+            279,
+            280,
+            281
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 35,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1108,
+        2820,
+        1134
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            282
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            282
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 35,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1108,
+        2890,
+        1134
+      ],
+      "expected": "35",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "35",
+          "word_ids": [
+            283
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "35",
+          "word_ids": [
+            283
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 36,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1135,
+        2700,
+        1161
+      ],
+      "expected": "STATUS: SPARE 40028.12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS: SPARE 40028.12",
+          "word_ids": [
+            284,
+            285,
+            286
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS: SPARE 40028.12",
+          "word_ids": [
+            284,
+            285,
+            286
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 36,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1135,
+        2820,
+        1161
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            287
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            287
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 36,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1135,
+        2890,
+        1161
+      ],
+      "expected": "36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            288
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            288
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 37,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1162,
+        2700,
+        1188
+      ],
+      "expected": "STATUS: SPARE 40028.13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS: SPARE 40028.13",
+          "word_ids": [
+            289,
+            290,
+            291
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS: SPARE 40028.13",
+          "word_ids": [
+            289,
+            290,
+            291
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 37,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1162,
+        2820,
+        1188
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            292
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            292
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 37,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1162,
+        2890,
+        1188
+      ],
+      "expected": "37",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "37",
+          "word_ids": [
+            293
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "37",
+          "word_ids": [
+            293
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 38,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1189,
+        2700,
+        1215
+      ],
+      "expected": "STATUS: SPARE 40028.14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS: SPARE 40028.14",
+          "word_ids": [
+            294,
+            295,
+            296
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS: SPARE 40028.14",
+          "word_ids": [
+            294,
+            295,
+            296
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 38,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1189,
+        2820,
+        1215
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            297
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            297
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 38,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1189,
+        2890,
+        1215
+      ],
+      "expected": "38",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "38",
+          "word_ids": [
+            298
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "38",
+          "word_ids": [
+            298
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 39,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1216,
+        2700,
+        1242
+      ],
+      "expected": "STATUS: SPARE 40028.15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS: SPARE 40028.15",
+          "word_ids": [
+            299,
+            300,
+            301
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS: SPARE 40028.15",
+          "word_ids": [
+            299,
+            300,
+            301
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 39,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1216,
+        2820,
+        1242
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            302
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            302
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 39,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1216,
+        2890,
+        1242
+      ],
+      "expected": "39",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "39",
+          "word_ids": [
+            303
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "39",
+          "word_ids": [
+            303
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 40,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1243,
+        2700,
+        1269
+      ],
+      "expected": "ALARM: PT100 T1 SENSOR FAULT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: PT100 T1 SENSOR FAULT",
+          "word_ids": [
+            304,
+            305,
+            306,
+            307,
+            308
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: PT100 T1 SENSOR FAULT",
+          "word_ids": [
+            304,
+            305,
+            306,
+            307,
+            308
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 40,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1243,
+        2820,
+        1269
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            309
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            309
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 40,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1243,
+        2890,
+        1269
+      ],
+      "expected": "40",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "40",
+          "word_ids": [
+            310
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "40",
+          "word_ids": [
+            310
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 41,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1270,
+        2700,
+        1296
+      ],
+      "expected": "ALARM: PT100 T2 SENSOR FAULT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: PT100 T2 SENSOR FAULT",
+          "word_ids": [
+            311,
+            312,
+            313,
+            314,
+            315
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: PT100 T2 SENSOR FAULT",
+          "word_ids": [
+            311,
+            312,
+            313,
+            314,
+            315
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 41,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1270,
+        2820,
+        1296
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            316
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            316
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 41,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1270,
+        2890,
+        1296
+      ],
+      "expected": "41",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "41",
+          "word_ids": [
+            317
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "41",
+          "word_ids": [
+            317
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 42,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1297,
+        2700,
+        1323
+      ],
+      "expected": "ALARM: PT100 T3 SENSOR FAULT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: PT100 T3 SENSOR FAULT",
+          "word_ids": [
+            318,
+            319,
+            320,
+            321,
+            322
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: PT100 T3 SENSOR FAULT",
+          "word_ids": [
+            318,
+            319,
+            320,
+            321,
+            322
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 42,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1297,
+        2820,
+        1323
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            323
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            323
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 42,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1297,
+        2890,
+        1323
+      ],
+      "expected": "42",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "42",
+          "word_ids": [
+            324
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "42",
+          "word_ids": [
+            324
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 43,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1324,
+        2700,
+        1350
+      ],
+      "expected": "ALARM: PT100 T4 SENSOR FAULT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: PT100 T4 SENSOR FAULT",
+          "word_ids": [
+            325,
+            326,
+            327,
+            328,
+            329
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: PT100 T4 SENSOR FAULT",
+          "word_ids": [
+            325,
+            326,
+            327,
+            328,
+            329
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 43,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1324,
+        2820,
+        1350
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            330
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            330
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 43,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1324,
+        2890,
+        1350
+      ],
+      "expected": "43",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "43",
+          "word_ids": [
+            331
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "43",
+          "word_ids": [
+            331
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 44,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1351,
+        2700,
+        1377
+      ],
+      "expected": "ALARM: PT100 T5 SENSOR FAULT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: PT100 T5 SENSOR FAULT",
+          "word_ids": [
+            332,
+            333,
+            334,
+            335,
+            336
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: PT100 T5 SENSOR FAULT",
+          "word_ids": [
+            332,
+            333,
+            334,
+            335,
+            336
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 44,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1351,
+        2820,
+        1377
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            337
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            337
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 44,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1351,
+        2890,
+        1377
+      ],
+      "expected": "44",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "44",
+          "word_ids": [
+            338
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "44",
+          "word_ids": [
+            338
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 45,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1378,
+        2700,
+        1404
+      ],
+      "expected": "ALARM: ENCLOSURE TEMP SENSOR FAULT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: ENCLOSURE TEMP SENSOR FAULT",
+          "word_ids": [
+            339,
+            340,
+            341,
+            342,
+            343
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: ENCLOSURE TEMP SENSOR FAULT",
+          "word_ids": [
+            339,
+            340,
+            341,
+            342,
+            343
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 45,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1378,
+        2820,
+        1404
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            344
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            344
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 45,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1378,
+        2890,
+        1404
+      ],
+      "expected": "45",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            345
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            345
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 46,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1405,
+        2700,
+        1431
+      ],
+      "expected": "ALARM: V1 4-20MA FAILED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: V1 4-20MA FAILED",
+          "word_ids": [
+            346,
+            347,
+            348,
+            349
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: V1 4-20MA FAILED",
+          "word_ids": [
+            346,
+            347,
+            348,
+            349
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 46,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1405,
+        2820,
+        1431
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            350
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            350
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 46,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1405,
+        2890,
+        1431
+      ],
+      "expected": "46",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "46",
+          "word_ids": [
+            351
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "46",
+          "word_ids": [
+            351
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 47,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1432,
+        2700,
+        1458
+      ],
+      "expected": "ALARM: REM PID/ OUT WTHR 4 20MA FAIL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: REM PID/ OUT WTHR 4 20MA FAIL",
+          "word_ids": [
+            352,
+            353,
+            354,
+            355,
+            356,
+            357,
+            358,
+            359
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: REM PID/ OUT WTHR 4 20MA FAIL",
+          "word_ids": [
+            352,
+            353,
+            354,
+            355,
+            356,
+            357,
+            358,
+            359
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 47,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1432,
+        2820,
+        1458
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            360
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            360
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 47,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1432,
+        2890,
+        1458
+      ],
+      "expected": "47",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "47",
+          "word_ids": [
+            361
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "47",
+          "word_ids": [
+            361
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 48,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1459,
+        2700,
+        1485
+      ],
+      "expected": "ALARM: STEAM FLOMETER 4-20MA FAILED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: STEAM FLOMETER 4-20MA FAILED",
+          "word_ids": [
+            362,
+            363,
+            364,
+            365,
+            366
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: STEAM FLOMETER 4-20MA FAILED",
+          "word_ids": [
+            362,
+            363,
+            364,
+            365,
+            366
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 48,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1459,
+        2820,
+        1485
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            367
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            367
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 48,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1459,
+        2890,
+        1485
+      ],
+      "expected": "48",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "48",
+          "word_ids": [
+            368
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "48",
+          "word_ids": [
+            368
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 49,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1486,
+        2700,
+        1512
+      ],
+      "expected": "ALARM: TB45 4-20MA FAILED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: TB45 4-20MA FAILED",
+          "word_ids": [
+            369,
+            370,
+            371,
+            372
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: TB45 4-20MA FAILED",
+          "word_ids": [
+            369,
+            370,
+            371,
+            372
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 49,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1486,
+        2820,
+        1512
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            373
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            373
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 49,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1486,
+        2890,
+        1512
+      ],
+      "expected": "49",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "49",
+          "word_ids": [
+            374
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "49",
+          "word_ids": [
+            374
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 50,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1513,
+        2700,
+        1539
+      ],
+      "expected": "ALARM: BAND ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: BAND ALARM",
+          "word_ids": [
+            375,
+            376,
+            377
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: BAND ALARM",
+          "word_ids": [
+            375,
+            376,
+            377
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 50,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1513,
+        2820,
+        1539
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            378
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            378
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 50,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1513,
+        2890,
+        1539
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            379
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            379
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 51,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1540,
+        2700,
+        1566
+      ],
+      "expected": "ALARM: DEVIATION ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: DEVIATION ALARM",
+          "word_ids": [
+            380,
+            381,
+            382
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: DEVIATION ALARM",
+          "word_ids": [
+            380,
+            381,
+            382
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 51,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1540,
+        2820,
+        1566
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            383
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            383
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 51,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1540,
+        2890,
+        1566
+      ],
+      "expected": "51",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "51",
+          "word_ids": [
+            384
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "51",
+          "word_ids": [
+            384
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 52,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1567,
+        2700,
+        1593
+      ],
+      "expected": "ALARM: DIFFERENTIAL ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: DIFFERENTIAL ALARM",
+          "word_ids": [
+            385,
+            386,
+            387
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: DIFFERENTIAL ALARM",
+          "word_ids": [
+            385,
+            386,
+            387
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 52,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1567,
+        2820,
+        1593
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            388
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            388
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 52,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1567,
+        2890,
+        1593
+      ],
+      "expected": "52",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "52",
+          "word_ids": [
+            389
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "52",
+          "word_ids": [
+            389
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 53,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1594,
+        2700,
+        1620
+      ],
+      "expected": "ALARM: HI LIM ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: HI LIM ALARM",
+          "word_ids": [
+            390,
+            391,
+            392,
+            393
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: HI LIM ALARM",
+          "word_ids": [
+            390,
+            391,
+            392,
+            393
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 53,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1594,
+        2820,
+        1620
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            394
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            394
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 53,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1594,
+        2890,
+        1620
+      ],
+      "expected": "53",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "53",
+          "word_ids": [
+            395
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "53",
+          "word_ids": [
+            395
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 54,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1621,
+        2700,
+        1647
+      ],
+      "expected": "ALARM: INDEPENDENT HI LIM ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: INDEPENDENT HI LIM ALARM",
+          "word_ids": [
+            396,
+            397,
+            398,
+            399,
+            400
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: INDEPENDENT HI LIM ALARM",
+          "word_ids": [
+            396,
+            397,
+            398,
+            399,
+            400
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 54,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1621,
+        2820,
+        1647
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            401
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            401
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 54,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1621,
+        2890,
+        1647
+      ],
+      "expected": "54",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "54",
+          "word_ids": [
+            402
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "54",
+          "word_ids": [
+            402
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 55,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1648,
+        2700,
+        1674
+      ],
+      "expected": "ALARM: RATE OF CHANGE ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: RATE OF CHANGE ALARM",
+          "word_ids": [
+            403,
+            404,
+            405,
+            406,
+            407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: RATE OF CHANGE ALARM",
+          "word_ids": [
+            403,
+            404,
+            405,
+            406,
+            407
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 55,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1648,
+        2820,
+        1674
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            408
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            408
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 55,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1648,
+        2890,
+        1674
+      ],
+      "expected": "55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55",
+          "word_ids": [
+            409
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55",
+          "word_ids": [
+            409
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 56,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1675,
+        2700,
+        1701
+      ],
+      "expected": "ALARM: SPARE 40030.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: SPARE 40030.0",
+          "word_ids": [
+            410,
+            411,
+            412
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: SPARE 40030.0",
+          "word_ids": [
+            410,
+            411,
+            412
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 56,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1675,
+        2820,
+        1701
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            413
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            413
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 56,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1675,
+        2890,
+        1701
+      ],
+      "expected": "56",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "56",
+          "word_ids": [
+            414
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "56",
+          "word_ids": [
+            414
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 57,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1702,
+        2700,
+        1728
+      ],
+      "expected": "ALARM: SYSTEM IS DUE TO SERVICE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: SYSTEM IS DUE TO SERVICE",
+          "word_ids": [
+            415,
+            416,
+            417,
+            418,
+            419,
+            420
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: SYSTEM IS DUE TO SERVICE",
+          "word_ids": [
+            415,
+            416,
+            417,
+            418,
+            419,
+            420
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 57,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1702,
+        2820,
+        1728
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            421
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            421
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 57,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1702,
+        2890,
+        1728
+      ],
+      "expected": "57",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "57",
+          "word_ids": [
+            422
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "57",
+          "word_ids": [
+            422
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 58,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1729,
+        2700,
+        1755
+      ],
+      "expected": "ALARM: CPU BATTERY LO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: CPU BATTERY LO",
+          "word_ids": [
+            423,
+            424,
+            425,
+            426
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: CPU BATTERY LO",
+          "word_ids": [
+            423,
+            424,
+            425,
+            426
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 58,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1729,
+        2820,
+        1755
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            427
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            427
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 58,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1729,
+        2890,
+        1755
+      ],
+      "expected": "58",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "58",
+          "word_ids": [
+            428
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "58",
+          "word_ids": [
+            428
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 59,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1756,
+        2700,
+        1782
+      ],
+      "expected": "ALARM: VALPES BATTERY LO ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: VALPES BATTERY LO ALARM",
+          "word_ids": [
+            429,
+            430,
+            431,
+            432,
+            433
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: VALPES BATTERY LO ALARM",
+          "word_ids": [
+            429,
+            430,
+            431,
+            432,
+            433
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 59,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1756,
+        2820,
+        1782
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            434
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            434
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 59,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1756,
+        2890,
+        1782
+      ],
+      "expected": "59",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "59",
+          "word_ids": [
+            435
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "59",
+          "word_ids": [
+            435
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 60,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1783,
+        2700,
+        1809
+      ],
+      "expected": "ALARM: CONDENSATE HI TEMP ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: CONDENSATE HI TEMP ALARM",
+          "word_ids": [
+            436,
+            437,
+            438,
+            439,
+            440
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: CONDENSATE HI TEMP ALARM",
+          "word_ids": [
+            436,
+            437,
+            438,
+            439,
+            440
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 60,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1783,
+        2820,
+        1809
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            441
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            441
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 60,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1783,
+        2890,
+        1809
+      ],
+      "expected": "60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            442
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            442
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 61,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1810,
+        2700,
+        1836
+      ],
+      "expected": "ALARM: V1 FAIL TO MOVE TO SP ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: V1 FAIL TO MOVE TO SP ALARM",
+          "word_ids": [
+            443,
+            444,
+            445,
+            446,
+            447,
+            448,
+            449,
+            450
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: V1 FAIL TO MOVE TO SP ALARM",
+          "word_ids": [
+            443,
+            444,
+            445,
+            446,
+            447,
+            448,
+            449,
+            450
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 61,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1810,
+        2820,
+        1836
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            451
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            451
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 61,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1810,
+        2890,
+        1836
+      ],
+      "expected": "61",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "61",
+          "word_ids": [
+            452
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "61",
+          "word_ids": [
+            452
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 62,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1837,
+        2700,
+        1863
+      ],
+      "expected": "ALARM: MANUAL MODE SELECTED ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM: MANUAL MODE SELECTED ALARM",
+          "word_ids": [
+            453,
+            454,
+            455,
+            456,
+            457
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM: MANUAL MODE SELECTED ALARM",
+          "word_ids": [
+            453,
+            454,
+            455,
+            456,
+            457
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 62,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1837,
+        2820,
+        1863
+      ],
+      "expected": "BI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            458
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI",
+          "word_ids": [
+            458
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 62,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1837,
+        2890,
+        1863
+      ],
+      "expected": "62",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "62",
+          "word_ids": [
+            459
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "62",
+          "word_ids": [
+            459
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 63,
+      "column": "point_name_as_printed",
+      "page": 31,
+      "bbox": [
+        2475,
+        1864,
+        2700,
+        1890
+      ],
+      "expected": "ENERGY COST PER UNIT OF ENERGY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ENERGY COST PER UNIT OF ENERGY",
+          "word_ids": [
+            460,
+            461,
+            462,
+            463,
+            464,
+            465
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ENERGY COST PER UNIT OF ENERGY",
+          "word_ids": [
+            460,
+            461,
+            462,
+            463,
+            464,
+            465
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 63,
+      "column": "bacnet_object_type_as_printed",
+      "page": 31,
+      "bbox": [
+        2700,
+        1864,
+        2820,
+        1890
+      ],
+      "expected": "AI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            466
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI",
+          "word_ids": [
+            466
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "row": 63,
+      "column": "bacnet_object_id_as_printed",
+      "page": 31,
+      "bbox": [
+        2820,
+        1864,
+        2890,
+        1890
+      ],
+      "expected": "91",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "91",
+          "word_ids": [
+            467
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "91",
+          "word_ids": [
+            467
+          ]
+        }
+      }
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "header": "SERVICE WATER HEATER POINTS LIST",
+      "page": 31,
+      "bbox": [
+        2420,
+        95,
+        2925,
+        150
+      ],
+      "engine": "mupdf",
+      "actual": "SERVICE WATER HEATER POINTS LIST FOLLOWING POINTS SHALL BE PROGRAMMED AT THE ALC CONTROL SYSTEM VIA THE",
+      "pass": true
+    },
+    {
+      "table": "MI607-SERVICE-WATER-HEATER",
+      "header": "SERVICE WATER HEATER POINTS LIST",
+      "page": 31,
+      "bbox": [
+        2420,
+        95,
+        2925,
+        150
+      ],
+      "engine": "poppler",
+      "actual": "SERVICE WATER HEATER POINTS LIST FOLLOWING POINTS SHALL BE PROGRAMMED AT THE ALC CONTROL SYSTEM VIA THE",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

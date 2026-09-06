@@ -1,0 +1,4004 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "f59fc637c71dda0f986c072640e2821f12e8912da2e2f3979e24b97695fc53fa",
+  "tables": 4,
+  "rows": 31,
+  "cell_assertions": 124,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 1,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        356,
+        1810,
+        374
+      ],
+      "expected": "AI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI1",
+          "word_ids": [
+            299
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI1",
+          "word_ids": [
+            373
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 1,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        356,
+        2100,
+        374
+      ],
+      "expected": "SF SPEED (FEEDBACK) *TYPICAL OF 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SF SPEED (FEEDBACK) *TYPICAL OF 2",
+          "word_ids": [
+            300,
+            301,
+            302,
+            303,
+            304,
+            305
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SF SPEED (FEEDBACK) *TYPICAL OF 2",
+          "word_ids": [
+            374,
+            375,
+            376,
+            377,
+            378,
+            379
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 1,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        356,
+        2155,
+        374
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            306
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            324
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 1,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        356,
+        2210,
+        374
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            307
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            305
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 2,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        374,
+        1810,
+        391
+      ],
+      "expected": "AI2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI2",
+          "word_ids": [
+            308
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI2",
+          "word_ids": [
+            380
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 2,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        374,
+        2100,
+        391
+      ],
+      "expected": "MA TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MA TEMPERATURE",
+          "word_ids": [
+            309,
+            310
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MA TEMPERATURE",
+          "word_ids": [
+            381,
+            382
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 2,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        374,
+        2155,
+        391
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            311
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            325
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 2,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        374,
+        2210,
+        391
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            312
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            306
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 3,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        391,
+        1810,
+        408
+      ],
+      "expected": "AI3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI3",
+          "word_ids": [
+            313
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI3",
+          "word_ids": [
+            383
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 3,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        391,
+        2100,
+        408
+      ],
+      "expected": "MA HUMIDITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MA HUMIDITY",
+          "word_ids": [
+            314,
+            315
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MA HUMIDITY",
+          "word_ids": [
+            384,
+            385
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 3,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        391,
+        2155,
+        408
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            316
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            326
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 3,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        391,
+        2210,
+        408
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            317
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            307
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 4,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        408,
+        1810,
+        425
+      ],
+      "expected": "AI4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI4",
+          "word_ids": [
+            318
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI4",
+          "word_ids": [
+            386
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 4,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        408,
+        2100,
+        425
+      ],
+      "expected": "RA DAMPER POSITION (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RA DAMPER POSITION (FEEDBACK)",
+          "word_ids": [
+            319,
+            320,
+            321,
+            322
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RA DAMPER POSITION (FEEDBACK)",
+          "word_ids": [
+            387,
+            388,
+            389,
+            390
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 4,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        408,
+        2155,
+        425
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            323
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            327
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 4,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        408,
+        2210,
+        425
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            324
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            308
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 5,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        425,
+        1810,
+        443
+      ],
+      "expected": "AI5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI5",
+          "word_ids": [
+            325
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI5",
+          "word_ids": [
+            391
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 5,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        425,
+        2100,
+        443
+      ],
+      "expected": "MA TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MA TEMPERATURE",
+          "word_ids": [
+            326,
+            327
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MA TEMPERATURE",
+          "word_ids": [
+            392,
+            393
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 5,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        425,
+        2155,
+        443
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            328
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            328
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 5,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        425,
+        2210,
+        443
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            329
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            309
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 6,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        443,
+        1810,
+        460
+      ],
+      "expected": "AI6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI6",
+          "word_ids": [
+            330
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI6",
+          "word_ids": [
+            394
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 6,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        443,
+        2100,
+        460
+      ],
+      "expected": "CHW VALVE POSITION (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            331,
+            332,
+            333,
+            334
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            395,
+            396,
+            397,
+            398
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 6,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        443,
+        2155,
+        460
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            335
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            329
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 6,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        443,
+        2210,
+        460
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            336
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            310
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 7,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        460,
+        1810,
+        477
+      ],
+      "expected": "AI7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI7",
+          "word_ids": [
+            337
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI7",
+          "word_ids": [
+            399
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 7,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        460,
+        2100,
+        477
+      ],
+      "expected": "COOLING COIL LAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COOLING COIL LAT",
+          "word_ids": [
+            338,
+            339,
+            340
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COOLING COIL LAT",
+          "word_ids": [
+            400,
+            401,
+            402
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 7,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        460,
+        2155,
+        477
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            341
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            330
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 7,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        460,
+        2210,
+        477
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            342
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            311
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 8,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        477,
+        1810,
+        494
+      ],
+      "expected": "AI8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI8",
+          "word_ids": [
+            343
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI8",
+          "word_ids": [
+            403
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 8,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        477,
+        2100,
+        494
+      ],
+      "expected": "SA FAN AIRFLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SA FAN AIRFLOW",
+          "word_ids": [
+            344,
+            345,
+            346
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SA FAN AIRFLOW",
+          "word_ids": [
+            404,
+            405,
+            406
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 8,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        477,
+        2155,
+        494
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            347
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            331
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 8,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        477,
+        2210,
+        494
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            348
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            312
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 9,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        494,
+        1810,
+        512
+      ],
+      "expected": "AI9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI9",
+          "word_ids": [
+            349
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI9",
+          "word_ids": [
+            407
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 9,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        494,
+        2100,
+        512
+      ],
+      "expected": "SA DIFFERENTIAL PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SA DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            350,
+            351,
+            352
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SA DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            408,
+            409,
+            410
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 9,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        494,
+        2155,
+        512
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            353
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            332
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 9,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        494,
+        2210,
+        512
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            354
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            313
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 10,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        512,
+        1810,
+        529
+      ],
+      "expected": "AI10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI10",
+          "word_ids": [
+            355
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI10",
+          "word_ids": [
+            411
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 10,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        512,
+        2100,
+        529
+      ],
+      "expected": "SA TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SA TEMPERATURE",
+          "word_ids": [
+            356,
+            357
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SA TEMPERATURE",
+          "word_ids": [
+            412,
+            413
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 10,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        512,
+        2155,
+        529
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            358
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            333
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 10,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        512,
+        2210,
+        529
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            359
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            314
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 11,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        529,
+        1810,
+        546
+      ],
+      "expected": "AI11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI11",
+          "word_ids": [
+            360
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI11",
+          "word_ids": [
+            414
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 11,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        529,
+        2100,
+        546
+      ],
+      "expected": "SA HUMIDITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SA HUMIDITY",
+          "word_ids": [
+            361,
+            362
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SA HUMIDITY",
+          "word_ids": [
+            415,
+            416
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 11,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        529,
+        2155,
+        546
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            363
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            334
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 11,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        529,
+        2210,
+        546
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            364
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            315
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 12,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        546,
+        1810,
+        563
+      ],
+      "expected": "AI12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI12",
+          "word_ids": [
+            365
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI12",
+          "word_ids": [
+            417
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 12,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        546,
+        2100,
+        563
+      ],
+      "expected": "SUPPLY AIR PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR PRESSURE",
+          "word_ids": [
+            366,
+            367,
+            368
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR PRESSURE",
+          "word_ids": [
+            418,
+            419,
+            420
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 12,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        546,
+        2155,
+        563
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            369
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            335
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "row": 12,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        546,
+        2210,
+        563
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            370
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            316
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "header": "AIR OPS AHU DDC POINTS LIST",
+      "page": 54,
+      "bbox": [
+        1910,
+        285,
+        2110,
+        320
+      ],
+      "engine": "mupdf",
+      "actual": "AIR OPS AHU DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "header": "AIR OPS AHU DDC POINTS LIST",
+      "page": 54,
+      "bbox": [
+        1910,
+        285,
+        2110,
+        320
+      ],
+      "engine": "poppler",
+      "actual": "AIR OPS AHU DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 54,
+      "bbox": [
+        1775,
+        320,
+        2210,
+        347
+      ],
+      "engine": "mupdf",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 54,
+      "bbox": [
+        1775,
+        320,
+        2210,
+        347
+      ],
+      "engine": "poppler",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "header": "ANALOG INPUT",
+      "page": 54,
+      "bbox": [
+        1760,
+        337,
+        1850,
+        356
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AHU-AI",
+      "header": "ANALOG INPUT",
+      "page": 54,
+      "bbox": [
+        1760,
+        337,
+        1850,
+        356
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AHU-AO",
+      "row": 1,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        598,
+        1810,
+        615
+      ],
+      "expected": "AO1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO1",
+          "word_ids": [
+            373
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO1",
+          "word_ids": [
+            110
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AO",
+      "row": 1,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        598,
+        2100,
+        615
+      ],
+      "expected": "RA DAMPER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RA DAMPER CONTROL",
+          "word_ids": [
+            374,
+            375,
+            376
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RA DAMPER CONTROL",
+          "word_ids": [
+            111,
+            112,
+            113
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AO",
+      "row": 1,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        598,
+        2155,
+        615
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            377
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            225
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AO",
+      "row": 1,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        598,
+        2210,
+        615
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            378
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            228
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AO",
+      "row": 2,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        615,
+        1810,
+        632
+      ],
+      "expected": "AO2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO2",
+          "word_ids": [
+            379
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO2",
+          "word_ids": [
+            114
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AO",
+      "row": 2,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        615,
+        2100,
+        632
+      ],
+      "expected": "CHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL",
+          "word_ids": [
+            380,
+            381,
+            382
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL",
+          "word_ids": [
+            115,
+            116,
+            117
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AO",
+      "row": 2,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        615,
+        2155,
+        632
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            383
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            226
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AO",
+      "row": 2,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        615,
+        2210,
+        632
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            384
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            229
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AO",
+      "row": 3,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        632,
+        1810,
+        650
+      ],
+      "expected": "AO3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO3",
+          "word_ids": [
+            385
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO3",
+          "word_ids": [
+            118
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AO",
+      "row": 3,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        632,
+        2100,
+        650
+      ],
+      "expected": "SF SPEED *TYPICAL OF 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SF SPEED *TYPICAL OF 2",
+          "word_ids": [
+            386,
+            387,
+            388,
+            389,
+            390
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SF SPEED *TYPICAL OF 2",
+          "word_ids": [
+            119,
+            120,
+            121,
+            122,
+            123
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AO",
+      "row": 3,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        632,
+        2155,
+        650
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            391
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            227
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AO",
+      "row": 3,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        632,
+        2210,
+        650
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            392
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            230
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 54,
+      "bbox": [
+        1760,
+        580,
+        1850,
+        598
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AHU-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 54,
+      "bbox": [
+        1760,
+        580,
+        1850,
+        598
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 1,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        684,
+        1810,
+        701
+      ],
+      "expected": "BI1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            395
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI1",
+          "word_ids": [
+            140
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 1,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        684,
+        2100,
+        701
+      ],
+      "expected": "MERV 8 FILTER STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MERV 8 FILTER STATUS",
+          "word_ids": [
+            396,
+            397,
+            398,
+            399
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MERV 8 FILTER STATUS",
+          "word_ids": [
+            141,
+            142,
+            143,
+            144
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 1,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        684,
+        2155,
+        701
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            400
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            231
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 1,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        684,
+        2210,
+        701
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            401
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            243
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 2,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        701,
+        1810,
+        718
+      ],
+      "expected": "BI2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI2",
+          "word_ids": [
+            402
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI2",
+          "word_ids": [
+            145
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 2,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        701,
+        2100,
+        718
+      ],
+      "expected": "MERV 13 FILTER STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MERV 13 FILTER STATUS",
+          "word_ids": [
+            403,
+            404,
+            405,
+            406
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MERV 13 FILTER STATUS",
+          "word_ids": [
+            146,
+            147,
+            148,
+            149
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 2,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        701,
+        2155,
+        718
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            232
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 2,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        701,
+        2210,
+        718
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            408
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            244
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 3,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        718,
+        1810,
+        735
+      ],
+      "expected": "BI3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI3",
+          "word_ids": [
+            409
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI3",
+          "word_ids": [
+            150
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 3,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        718,
+        2100,
+        735
+      ],
+      "expected": "SF STATUS *TYPICAL OF 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SF STATUS *TYPICAL OF 2",
+          "word_ids": [
+            410,
+            411,
+            412,
+            413,
+            414
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SF STATUS *TYPICAL OF 2",
+          "word_ids": [
+            151,
+            152,
+            153,
+            154,
+            155
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 3,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        718,
+        2155,
+        735
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            415
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            233
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 3,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        718,
+        2210,
+        735
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            416
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            245
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 4,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        735,
+        1810,
+        753
+      ],
+      "expected": "BI4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI4",
+          "word_ids": [
+            417
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI4",
+          "word_ids": [
+            156
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 4,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        735,
+        2100,
+        753
+      ],
+      "expected": "SF ALARM *TYPICAL OF 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SF ALARM * TYPICAL OF 2",
+          "word_ids": [
+            418,
+            419,
+            420,
+            421,
+            422,
+            423
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SF ALARM * TYPICAL OF 2",
+          "word_ids": [
+            157,
+            158,
+            159,
+            160,
+            161,
+            162
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 4,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        735,
+        2155,
+        753
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            424
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            234
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 4,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        735,
+        2210,
+        753
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            425
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            246
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 5,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        753,
+        1810,
+        770
+      ],
+      "expected": "BI5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI5",
+          "word_ids": [
+            426
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI5",
+          "word_ids": [
+            163
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 5,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        753,
+        2100,
+        770
+      ],
+      "expected": "HIGH LIMIT STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH LIMIT STATIC PRESSURE",
+          "word_ids": [
+            427,
+            428,
+            429,
+            430
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH LIMIT STATIC PRESSURE",
+          "word_ids": [
+            164,
+            165,
+            166,
+            167
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 5,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        753,
+        2155,
+        770
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            431
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            235
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 5,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        753,
+        2210,
+        770
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            432
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            247
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 6,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        770,
+        1810,
+        787
+      ],
+      "expected": "BI6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI6",
+          "word_ids": [
+            433
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI6",
+          "word_ids": [
+            168
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 6,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        770,
+        2100,
+        787
+      ],
+      "expected": "SA DUCT SMOKE DETECTOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SA DUCT SMOKE DETECTOR",
+          "word_ids": [
+            434,
+            435,
+            436,
+            437
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SA DUCT SMOKE DETECTOR",
+          "word_ids": [
+            169,
+            170,
+            171,
+            172
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 6,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        770,
+        2155,
+        787
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            438
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            236
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 6,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        770,
+        2210,
+        787
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            439
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            248
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 7,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        787,
+        1810,
+        804
+      ],
+      "expected": "BI7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI7",
+          "word_ids": [
+            440
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI7",
+          "word_ids": [
+            173
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 7,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        787,
+        2100,
+        804
+      ],
+      "expected": "SA SMOKE DAMPER POSITION OPEN (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SA SMOKE DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            441,
+            442,
+            443,
+            444,
+            445,
+            446
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SA SMOKE DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            174,
+            175,
+            176,
+            177,
+            178,
+            179
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 7,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        787,
+        2155,
+        804
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            447
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            237
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 7,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        787,
+        2210,
+        804
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            448
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            249
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 8,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        804,
+        1810,
+        822
+      ],
+      "expected": "BI8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI8",
+          "word_ids": [
+            449
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI8",
+          "word_ids": [
+            180
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 8,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        804,
+        2100,
+        822
+      ],
+      "expected": "SA SMOKE DAMPER POSITION CLOSED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SA SMOKE DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            450,
+            451,
+            452,
+            453,
+            454,
+            455
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SA SMOKE DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            181,
+            182,
+            183,
+            184,
+            185,
+            186
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 8,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        804,
+        2155,
+        822
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            456
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            238
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 8,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        804,
+        2210,
+        822
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            457
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            250
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 9,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        822,
+        1810,
+        839
+      ],
+      "expected": "BI9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI9",
+          "word_ids": [
+            458
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI9",
+          "word_ids": [
+            187
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 9,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        822,
+        2100,
+        839
+      ],
+      "expected": "LOW LIMIT STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOW LIMIT STATIC PRESSURE",
+          "word_ids": [
+            459,
+            460,
+            461,
+            462
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOW LIMIT STATIC PRESSURE",
+          "word_ids": [
+            188,
+            189,
+            190,
+            191
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 9,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        822,
+        2155,
+        839
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            463
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            239
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 9,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        822,
+        2210,
+        839
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            464
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            251
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 10,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        839,
+        1810,
+        856
+      ],
+      "expected": "BI10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI10",
+          "word_ids": [
+            465
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI10",
+          "word_ids": [
+            192
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 10,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        839,
+        2100,
+        856
+      ],
+      "expected": "ESS (ATFP EMERGENCY SHUTDOWN) *GLOBAL POINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ESS (ATFP EMERGENCY SHUTDOWN) *GLOBAL POINT",
+          "word_ids": [
+            466,
+            467,
+            468,
+            469,
+            470,
+            471
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ESS (ATFP EMERGENCY SHUTDOWN) *GLOBAL POINT",
+          "word_ids": [
+            193,
+            194,
+            195,
+            196,
+            197,
+            198
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 10,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        839,
+        2155,
+        856
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            472
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            240
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 10,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        839,
+        2210,
+        856
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            473
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            252
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 11,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        856,
+        1810,
+        873
+      ],
+      "expected": "BI11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI11",
+          "word_ids": [
+            474
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI11",
+          "word_ids": [
+            199
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 11,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        856,
+        2100,
+        873
+      ],
+      "expected": "AHU DDC RESET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU DDC RESET",
+          "word_ids": [
+            475,
+            476,
+            477
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU DDC RESET",
+          "word_ids": [
+            200,
+            201,
+            202
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 11,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        856,
+        2155,
+        873
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            478
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            241
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 11,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        856,
+        2210,
+        873
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            479
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            253
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 12,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        873,
+        1810,
+        907
+      ],
+      "expected": "BI#",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI#",
+          "word_ids": [
+            480
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI#",
+          "word_ids": [
+            203
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 12,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        873,
+        2100,
+        907
+      ],
+      "expected": "RA 24/7 ISOLATION DAMPER POSITION OPEN (FEEDBACK) *TYPICAL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RA 24/7 ISOLATION DAMPER POSITION OPEN (FEEDBACK) *TYPICAL",
+          "word_ids": [
+            481,
+            482,
+            483,
+            484,
+            485,
+            486,
+            487,
+            488
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RA 24/7 ISOLATION DAMPER POSITION OPEN (FEEDBACK) *TYPICAL",
+          "word_ids": [
+            204,
+            205,
+            206,
+            207,
+            208,
+            209,
+            210,
+            211
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 12,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        873,
+        2155,
+        907
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            489
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            242
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 12,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        873,
+        2210,
+        907
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            490
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            254
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 13,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        907,
+        1810,
+        942
+      ],
+      "expected": "BI##",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI##",
+          "word_ids": [
+            491
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI##",
+          "word_ids": [
+            212
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 13,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        907,
+        2100,
+        942
+      ],
+      "expected": "RA 24/7 ISOLATION DAMPER POSITION CLOSED (FEEDBACK) *TYPICAL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RA 24/7 ISOLATION DAMPER POSITION CLOSED (FEEDBACK) *TYPICAL",
+          "word_ids": [
+            492,
+            493,
+            494,
+            495,
+            496,
+            497,
+            498,
+            499
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RA 24/7 ISOLATION DAMPER POSITION CLOSED (FEEDBACK) *TYPICAL",
+          "word_ids": [
+            213,
+            214,
+            215,
+            216,
+            217,
+            218,
+            219,
+            220
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 13,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        907,
+        2155,
+        942
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            500
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            293
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "row": 13,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        907,
+        2210,
+        942
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            501
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            255
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "header": "BINARY INPUT",
+      "page": 54,
+      "bbox": [
+        1760,
+        657,
+        1850,
+        684
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AHU-BI",
+      "header": "BINARY INPUT",
+      "page": 54,
+      "bbox": [
+        1760,
+        657,
+        1850,
+        684
+      ],
+      "engine": "poppler",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AHU-BO",
+      "row": 1,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        972,
+        1810,
+        989
+      ],
+      "expected": "BO1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO1",
+          "word_ids": [
+            504
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO1",
+          "word_ids": [
+            518
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BO",
+      "row": 1,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        972,
+        2100,
+        989
+      ],
+      "expected": "SA SMOKE DAMPER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SA SMOKE DAMPER CONTROL",
+          "word_ids": [
+            505,
+            506,
+            507,
+            508
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SA SMOKE DAMPER CONTROL",
+          "word_ids": [
+            519,
+            520,
+            521,
+            522
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BO",
+      "row": 1,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        972,
+        2155,
+        989
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            509
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            502
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BO",
+      "row": 1,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        972,
+        2210,
+        989
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            510
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            489
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BO",
+      "row": 2,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        989,
+        1810,
+        1006
+      ],
+      "expected": "BO2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO2",
+          "word_ids": [
+            511
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO2",
+          "word_ids": [
+            523
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BO",
+      "row": 2,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        989,
+        2100,
+        1006
+      ],
+      "expected": "SF ENABLE *TYPICAL OF 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SF ENABLE *TYPICAL OF 2",
+          "word_ids": [
+            512,
+            513,
+            514,
+            515,
+            516
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SF ENABLE *TYPICAL OF 2",
+          "word_ids": [
+            524,
+            525,
+            526,
+            527,
+            528
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BO",
+      "row": 2,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        989,
+        2155,
+        1006
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            517
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            503
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BO",
+      "row": 2,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        989,
+        2210,
+        1006
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            518
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            490
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BO",
+      "row": 3,
+      "column": "mark",
+      "page": 54,
+      "bbox": [
+        1775,
+        1006,
+        1810,
+        1040
+      ],
+      "expected": "BO#",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO#",
+          "word_ids": [
+            519
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO#",
+          "word_ids": [
+            529
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BO",
+      "row": 3,
+      "column": "description",
+      "page": 54,
+      "bbox": [
+        1810,
+        1006,
+        2100,
+        1040
+      ],
+      "expected": "RA 24/7 ISOLATION DAMPER CONTROL *TYPICAL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RA 24/7 ISOLATION DAMPER CONTROL *TYPICAL",
+          "word_ids": [
+            520,
+            521,
+            522,
+            523,
+            524,
+            525
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RA 24/7 ISOLATION DAMPER CONTROL *TYPICAL",
+          "word_ids": [
+            530,
+            531,
+            532,
+            533,
+            534,
+            535
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BO",
+      "row": 3,
+      "column": "alarm",
+      "page": 54,
+      "bbox": [
+        2100,
+        1006,
+        2155,
+        1040
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            526
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            504
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BO",
+      "row": 3,
+      "column": "trend",
+      "page": 54,
+      "bbox": [
+        2155,
+        1006,
+        2210,
+        1040
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            527
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            491
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-AHU-BO",
+      "header": "BINARY OUTPUT",
+      "page": 54,
+      "bbox": [
+        1760,
+        944,
+        1850,
+        972
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-AHU-BO",
+      "header": "BINARY OUTPUT",
+      "page": 54,
+      "bbox": [
+        1760,
+        944,
+        1850,
+        972
+      ],
+      "engine": "poppler",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "air-ops-ahu-ai-count",
+      "actual": 12,
+      "expected": 12,
+      "pass": true
+    },
+    {
+      "id": "air-ops-ahu-ao-count",
+      "actual": 3,
+      "expected": 3,
+      "pass": true
+    },
+    {
+      "id": "air-ops-ahu-bi-count",
+      "actual": 13,
+      "expected": 13,
+      "pass": true
+    },
+    {
+      "id": "air-ops-ahu-bo-count",
+      "actual": 3,
+      "expected": 3,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

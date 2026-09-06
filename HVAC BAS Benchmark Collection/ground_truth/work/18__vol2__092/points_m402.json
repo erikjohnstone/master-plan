@@ -1,0 +1,52 @@
+{
+  "document_id": "18__vol2__092",
+  "module_role": "Exact M4.02 typical BAS points lists. These are printed templates, not a controller export, terminal schedule, or per-equipment installed I/O count.",
+  "source_sheet": "M4.02",
+  "source_page": 13,
+  "tables": [
+    {
+      "id": "M402-TYPICAL-FAN-COIL-POINTS",
+      "page": 13,
+      "sheet": "M4.02",
+      "title": "THE FOLLOWING SHALL BE A TYPICAL POINTS LIST FOR A FAN COIL UNIT",
+      "classification": "Typical fan-coil BAS points list",
+      "columns": "tag|point_name",
+      "x_edges": [1790.0,1850.0,2150.0],
+      "y_edges": [780.0,796.0,808.0,819.0,830.0,842.0,853.0],
+      "rows": [
+        "AO-1:|MODULATING CHILLED WATER VALVE CONTROL",
+        "AI-1:|FAN COIL DISCHARGE AIR TEMPERATURE",
+        "DI-1:|OCCUPIED WALL SWITCH",
+        "DO-1:|FAN COMMAND ON/OFF",
+        "DO-2:|ELECTRIC HEAT COIL COMMAND ON/OFF",
+        "COMM:|THERMOSTAT"
+      ],
+      "header_evidence": [{"bbox": [1770,757,2160,776], "expected": "3. THE FOLLOWING SHALL BE A TYPICAL POINTS LIST FOR A FAN COIL UNIT:"}]
+    },
+    {
+      "id": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "page": 13,
+      "sheet": "M4.02",
+      "title": "THE FOLLOWING SHALL BE A TYPICAL POINTS LIST FOR AN AIR HANDLING UNIT",
+      "classification": "Typical air-handling-unit BAS points list",
+      "columns": "tag|point_name",
+      "x_edges": [1790.0,1850.0,2180.0],
+      "y_edges": [882.0,899.0,910.0,921.0,933.0,944.0],
+      "rows": [
+        "AO-1:|MODULATING CHILLED WATER VALVE CONTROL",
+        "AI-2:|RETURN AIR TEMPERATURE",
+        "AI-1:|DISCHARGE AIR TEMPERATURE",
+        "DO-1:|FAN COMMAND ON/OFF",
+        "COMM:|THERMOSTAT"
+      ],
+      "header_evidence": [{"bbox": [1770,859,2190,878], "expected": "3. THE FOLLOWING SHALL BE A TYPICAL POINTS LIST FOR AN AIR HANDLING UNIT:"}]
+    }
+  ],
+  "assertions": [
+    {"id": "m402-fcu1-oa-damper-operation", "page": 13, "bbox": [1770,950,2720,992], "expected": "4. FCU-1 IN ISFA CONFERENCE ROOM SHALL HAVE OUTDOOR AIR DUCTWORK AND ASSOCIATED MOTORIZED DAMPER INSTALLED. OA DAMPER SHALL ONLY OPEN TO CFM INDICATED AFTER PROOF OF FCU OPERATION.", "mode": "exact"},
+    {"id": "m402-smoke-fire-ddc-behavior", "page": 13, "bbox": [1770,996,2720,1070], "expected": "5. THE ELECTRICAL CONTRACTOR SHALL FURNISH AND INSTALL SMOKE AND/OR HEAT DETECTORS IN AIR SUPPLY SYSTEM OVER 2000 CFM. AN ADDRESSABLE FIRE ALARM RELAY SHALL BE FURNISHED AND INSTALLED BY THE ELECTRICAL CONTRACTOR. BAS CONTRACTOR SHALL PICK UP SIGNAL FROM RELAY AND PROVIDE A PROGRAM TO STOP SUPPLY FAN INTERLOCKED WITH THE SYSTEM SENSING FIRE OR SMOKE. DDC PROGRAM SHALL ALSO SHOW FIRE IN UNIT ALARM AT TIME OF SHUT DOWN.", "mode": "exact"}
+  ],
+  "inventory_checks": [
+    {"id": "m402-typical-points-tables", "records_path": ["tables"], "expected": 2, "unique_key": "id"}
+  ]
+}

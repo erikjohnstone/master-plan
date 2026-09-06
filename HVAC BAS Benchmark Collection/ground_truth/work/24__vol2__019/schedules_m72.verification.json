@@ -1,0 +1,1445 @@
+{
+  "document_id": "24__vol2__019",
+  "source_sha256": "b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10",
+  "annotation_sha256": "adf981be72e923721863323471b5d3700c6ca662d9991d279d75a3fb39c0ce31",
+  "tables": 9,
+  "rows": 49,
+  "cell_assertions": 49,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M72-GRD",
+      "row": 1,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        140.377,
+        1625.989,
+        155.257
+      ],
+      "expected": "S1-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S1-1",
+          "word_ids": [
+            1473
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S1-1",
+          "word_ids": [
+            6
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 2,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        155.257,
+        1625.989,
+        170.137
+      ],
+      "expected": "S1-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S1-2",
+          "word_ids": [
+            1464
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S1-2",
+          "word_ids": [
+            7
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 3,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        170.137,
+        1625.989,
+        185.017
+      ],
+      "expected": "S1-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S1-3",
+          "word_ids": [
+            1455
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S1-3",
+          "word_ids": [
+            8
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 4,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        185.017,
+        1625.989,
+        199.957
+      ],
+      "expected": "S1-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S1-4",
+          "word_ids": [
+            1446
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S1-4",
+          "word_ids": [
+            9
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 5,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        199.957,
+        1625.989,
+        214.597
+      ],
+      "expected": "S3-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S3-1",
+          "word_ids": [
+            1436
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S3-1",
+          "word_ids": [
+            10
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 6,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        214.597,
+        1625.989,
+        228.517
+      ],
+      "expected": "S2-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S2-1",
+          "word_ids": [
+            1421
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S2-1",
+          "word_ids": [
+            11
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 7,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        228.517,
+        1625.989,
+        242.437
+      ],
+      "expected": "S2-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S2-2",
+          "word_ids": [
+            1406
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S2-2",
+          "word_ids": [
+            12
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 8,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        242.437,
+        1625.989,
+        257.077
+      ],
+      "expected": "S2-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S2-4",
+          "word_ids": [
+            1391
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S2-4",
+          "word_ids": [
+            13
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 9,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        257.077,
+        1625.989,
+        272.017
+      ],
+      "expected": "S2-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S2-5",
+          "word_ids": [
+            1381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S2-5",
+          "word_ids": [
+            14
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 10,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        272.017,
+        1625.989,
+        286.897
+      ],
+      "expected": "S2-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S2-6",
+          "word_ids": [
+            1371
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S2-6",
+          "word_ids": [
+            15
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 11,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        286.897,
+        1625.989,
+        301.477
+      ],
+      "expected": "S2-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S2-7",
+          "word_ids": [
+            1361
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S2-7",
+          "word_ids": [
+            16
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 12,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        301.477,
+        1625.989,
+        315.757
+      ],
+      "expected": "S4-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S4-1",
+          "word_ids": [
+            1347
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S4-1",
+          "word_ids": [
+            17
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 13,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        315.757,
+        1625.989,
+        330.337
+      ],
+      "expected": "R1-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R1-1",
+          "word_ids": [
+            1333
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R1-1",
+          "word_ids": [
+            18
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 14,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        330.337,
+        1625.989,
+        345.217
+      ],
+      "expected": "R1-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R1-2",
+          "word_ids": [
+            1324
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R1-2",
+          "word_ids": [
+            19
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 15,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        345.217,
+        1625.989,
+        360.097
+      ],
+      "expected": "R1-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R1-3",
+          "word_ids": [
+            1315
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R1-3",
+          "word_ids": [
+            20
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 16,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        360.097,
+        1625.989,
+        374.977
+      ],
+      "expected": "R1-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R1-4",
+          "word_ids": [
+            1306
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R1-4",
+          "word_ids": [
+            21
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 17,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        374.977,
+        1625.989,
+        389.857
+      ],
+      "expected": "R1-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R1-5",
+          "word_ids": [
+            1297
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R1-5",
+          "word_ids": [
+            22
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 18,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        389.857,
+        1625.989,
+        404.737
+      ],
+      "expected": "R3-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R3-1",
+          "word_ids": [
+            1283
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R3-1",
+          "word_ids": [
+            23
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 19,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        404.737,
+        1625.989,
+        419.677
+      ],
+      "expected": "R3-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R3-2",
+          "word_ids": [
+            1273
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R3-2",
+          "word_ids": [
+            24
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 20,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        419.677,
+        1625.989,
+        434.617
+      ],
+      "expected": "R3-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R3-3",
+          "word_ids": [
+            1263
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R3-3",
+          "word_ids": [
+            25
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 21,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        434.617,
+        1625.989,
+        449.497
+      ],
+      "expected": "E1-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "E1-1",
+          "word_ids": [
+            1249
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "E1-1",
+          "word_ids": [
+            26
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 22,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        449.497,
+        1625.989,
+        464.377
+      ],
+      "expected": "E1-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "E1-2",
+          "word_ids": [
+            1240
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "E1-2",
+          "word_ids": [
+            27
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-GRD",
+      "row": 23,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1591.239,
+        464.377,
+        1625.989,
+        479.257
+      ],
+      "expected": "E1-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "E1-3",
+          "word_ids": [
+            1230
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "E1-3",
+          "word_ids": [
+            28
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-FCU",
+      "row": 1,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        973.12,
+        651.04,
+        1010.695,
+        667.04
+      ],
+      "expected": "FCU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-1",
+          "word_ids": [
+            156
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-1",
+          "word_ids": [
+            379
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-CONDENSING",
+      "row": 1,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1176.88,
+        805.44,
+        1208.695,
+        818.4
+      ],
+      "expected": "CU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CU-1",
+          "word_ids": [
+            216
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CU-1",
+          "word_ids": [
+            470
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-CONDENSING",
+      "row": 2,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1176.88,
+        818.4,
+        1208.695,
+        831.36
+      ],
+      "expected": "CU-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CU-2",
+          "word_ids": [
+            233
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CU-2",
+          "word_ids": [
+            471
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-CONDENSING",
+      "row": 3,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1176.88,
+        831.36,
+        1208.695,
+        844.32
+      ],
+      "expected": "CU-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CU-3",
+          "word_ids": [
+            250
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CU-3",
+          "word_ids": [
+            472
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-CONDENSING",
+      "row": 4,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1176.88,
+        844.32,
+        1208.695,
+        857.219
+      ],
+      "expected": "CU-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CU-4",
+          "word_ids": [
+            267
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CU-4",
+          "word_ids": [
+            473
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-CONDENSING",
+      "row": 5,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1176.88,
+        857.219,
+        1208.695,
+        870.119
+      ],
+      "expected": "CU-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CU-5",
+          "word_ids": [
+            284
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CU-5",
+          "word_ids": [
+            474
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-CONDENSING",
+      "row": 6,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1176.88,
+        870.119,
+        1208.695,
+        883.079
+      ],
+      "expected": "CU-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CU-6",
+          "word_ids": [
+            301
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CU-6",
+          "word_ids": [
+            475
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-EXPANSION-TANK",
+      "row": 1,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        881.68,
+        1058.999,
+        912.055,
+        1071.959
+      ],
+      "expected": "ET-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ET-1",
+          "word_ids": [
+            1016
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ET-1",
+          "word_ids": [
+            669
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-EXPANSION-TANK",
+      "row": 2,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        881.68,
+        1071.959,
+        912.055,
+        1084.919
+      ],
+      "expected": "ET-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ET-2",
+          "word_ids": [
+            1036
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ET-2",
+          "word_ids": [
+            670
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-DX-FCU",
+      "row": 1,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        733.96,
+        1225.8,
+        764.815,
+        1238.759
+      ],
+      "expected": "EV-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EV-1",
+          "word_ids": [
+            374
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EV-1",
+          "word_ids": [
+            765
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-DX-FCU",
+      "row": 2,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        733.96,
+        1238.759,
+        764.815,
+        1251.659
+      ],
+      "expected": "EV-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EV-2",
+          "word_ids": [
+            397
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EV-2",
+          "word_ids": [
+            766
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-DX-FCU",
+      "row": 3,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        733.96,
+        1251.659,
+        764.815,
+        1264.559
+      ],
+      "expected": "EV-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EV-3",
+          "word_ids": [
+            420
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EV-3",
+          "word_ids": [
+            767
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-DX-FCU",
+      "row": 4,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        733.96,
+        1264.559,
+        764.815,
+        1277.519
+      ],
+      "expected": "EV-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EV-4",
+          "word_ids": [
+            443
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EV-4",
+          "word_ids": [
+            768
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-DX-FCU",
+      "row": 5,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        733.96,
+        1277.519,
+        764.815,
+        1290.479
+      ],
+      "expected": "EV-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EV-5",
+          "word_ids": [
+            466
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EV-5",
+          "word_ids": [
+            769
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-DX-FCU",
+      "row": 6,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        733.96,
+        1290.479,
+        764.815,
+        1303.439
+      ],
+      "expected": "EV-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EV-6",
+          "word_ids": [
+            489
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EV-6",
+          "word_ids": [
+            770
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-UNIT-HEATER",
+      "row": 1,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        815.08,
+        1484.039,
+        846.895,
+        1496.999
+      ],
+      "expected": "UH-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-1",
+          "word_ids": [
+            560
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-1",
+          "word_ids": [
+            968
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-UNIT-HEATER",
+      "row": 2,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        815.08,
+        1496.999,
+        846.895,
+        1509.959
+      ],
+      "expected": "UH-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-2",
+          "word_ids": [
+            586
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-2",
+          "word_ids": [
+            969
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-SILENCER",
+      "row": 1,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        757.0,
+        1678.679,
+        781.615,
+        1691.639
+      ],
+      "expected": "S-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S-1",
+          "word_ids": [
+            667
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S-1",
+          "word_ids": [
+            1067
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-SILENCER",
+      "row": 2,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        757.0,
+        1691.639,
+        781.615,
+        1704.599
+      ],
+      "expected": "S-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "S-2",
+          "word_ids": [
+            692
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "S-2",
+          "word_ids": [
+            1068
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-RADIATOR",
+      "row": 1,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        876.88,
+        1816.199,
+        919.704,
+        1829.159
+      ],
+      "expected": "FTR-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FTR-1",
+          "word_ids": [
+            760
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FTR-1",
+          "word_ids": [
+            1184
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-RADIATOR",
+      "row": 2,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        876.88,
+        1829.159,
+        919.704,
+        1842.119
+      ],
+      "expected": "FTR-1B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FTR-1B",
+          "word_ids": [
+            791
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FTR-1B",
+          "word_ids": [
+            1185
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-RADIATOR",
+      "row": 3,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        876.88,
+        1842.119,
+        919.704,
+        1855.019
+      ],
+      "expected": "FTR-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FTR-2",
+          "word_ids": [
+            822
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FTR-2",
+          "word_ids": [
+            1186
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-RADIATOR",
+      "row": 4,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        876.88,
+        1855.019,
+        919.704,
+        1867.859
+      ],
+      "expected": "FTR-2B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FTR-2B",
+          "word_ids": [
+            853
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FTR-2B",
+          "word_ids": [
+            1187
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-LOUVER",
+      "row": 1,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1616.439,
+        2012.519,
+        1652.579,
+        2025.479
+      ],
+      "expected": "ALP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALP-1",
+          "word_ids": [
+            912
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALP-1",
+          "word_ids": [
+            1391
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-LOUVER",
+      "row": 2,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1616.439,
+        2025.479,
+        1652.579,
+        2038.379
+      ],
+      "expected": "ALP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALP-2",
+          "word_ids": [
+            934
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALP-2",
+          "word_ids": [
+            1392
+          ]
+        }
+      }
+    },
+    {
+      "table": "M72-LOUVER",
+      "row": 3,
+      "column": "mark",
+      "page": 15,
+      "bbox": [
+        1616.439,
+        2038.379,
+        1652.579,
+        2051.219
+      ],
+      "expected": "ALP-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALP-3",
+          "word_ids": [
+            956
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALP-3",
+          "word_ids": [
+            1393
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "schedules_m72-families",
+      "actual": 9,
+      "expected": 9,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

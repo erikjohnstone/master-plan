@@ -1,0 +1,190 @@
+{
+  "document_id": "29__vol2__030",
+  "source_sha256": "c8a85e522ea577c37a658f099e5f3b2af619fb3a8c35ffc219b39a13b9c56367",
+  "annotation_sha256": "cc7ce474a1e17a86811670e6eb1552320e3d2d8dd5f395583e32c8462c8615e5",
+  "tables": 1,
+  "rows": 1,
+  "cell_assertions": 1,
+  "text_assertions": 4,
+  "checks": [
+    {
+      "table": "M601-TWO-PIPE-FCU",
+      "row": 1,
+      "column": "literal_source_row_as_printed",
+      "page": 84,
+      "bbox": [
+        150,
+        260,
+        2900,
+        270
+      ],
+      "expected": "25,700 30,000 1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25,700 30,000 1,2",
+          "word_ids": [
+            292,
+            293,
+            312
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25,700 30,000 1,2",
+          "word_ids": [
+            116,
+            117,
+            136
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-fcu-title",
+      "page": 84,
+      "bbox": [
+        1310,
+        105,
+        1790,
+        155
+      ],
+      "expected": "TWO-PIPE FAN COIL UNIT SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TWO-PIPE FAN COIL UNIT SCHEDULE",
+          "word_ids": [
+            189,
+            190,
+            191,
+            192,
+            193
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TWO-PIPE FAN COIL UNIT SCHEDULE",
+          "word_ids": [
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-doas-hw",
+      "page": 85,
+      "bbox": [
+        550,
+        400,
+        1140,
+        440
+      ],
+      "expected": "DOAS HOT WATER HEATING COIL SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAS HOT WATER HEATING COIL SCHEDULE",
+          "word_ids": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAS HOT WATER HEATING COIL SCHEDULE",
+          "word_ids": [
+            170,
+            171,
+            172,
+            173,
+            174,
+            175
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-damper",
+      "page": 85,
+      "bbox": [
+        550,
+        985,
+        1120,
+        1020
+      ],
+      "expected": "PRESSURE RELIEF DAMPER SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRESSURE RELIEF DAMPER SCHEDULE",
+          "word_ids": [
+            178,
+            179,
+            180,
+            181
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRESSURE RELIEF DAMPER SCHEDULE",
+          "word_ids": [
+            583,
+            584,
+            585,
+            586
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m603-fire-smoke-damper",
+      "page": 86,
+      "bbox": [
+        600,
+        335,
+        1100,
+        375
+      ],
+      "expected": "FIRE AND SMOKE DAMPER SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FIRE AND SMOKE DAMPER SCHEDULE",
+          "word_ids": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FIRE AND SMOKE DAMPER SCHEDULE",
+          "word_ids": [
+            129,
+            130,
+            131,
+            132,
+            133
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

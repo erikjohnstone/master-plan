@@ -1,0 +1,108 @@
+{
+  "document_id": "14__vol2__021",
+  "module_role": "Printed M-803 DDC controller input/output matrix ground truth. The Chiller/primary-secondary-pumping matrix is retained as source-template rows: a matrix row can have several I/O assignments and is not a one-for-one installed terminal count. Physical/logical circle styles and matrix flags are preserved separately from assumed device ownership.",
+  "source_sheet": "M-803",
+  "source_page": 17,
+  "tables": [
+    {
+      "id": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "page": 17,
+      "sheet": "M-803",
+      "title": "AIR COOLED CHILLER WITH PRIMARY AND SECONDARY PUMPING POINT LIST TABLE",
+      "classification": "Printed DDC I/O matrix rows with tag and control-device description; individual AI/DI/AO/DO assignments are in printed_matrix_assignments and are not collapsed to a single point type.",
+      "columns": "tag|point_name",
+      "x_edges": [1710,1755,2050],
+      "y_ranges": [[1717,1736],[1737,1756],[1757,1776],[1777,1796],[1797,1816],[1817,1836],[1837,1856],[1857,1876],[1877,1896],[1897,1916],[1917,1936],[1937,1956],[1957,1976],[1977,1996],[1997,2016],[2017,2036],[2037,2056],[2057,2076],[2077,2096],[2097,2116],[2117,2134],[2135,2149],[2150,2168]],
+      "rows": [
+        "DPS-1|DIFFERENTIAL PRESSURE 1","DPS-2|DIFFERENTIAL PRESSURE 2","DPS-3|DIFFERENTIAL PRESSURE 3","CP-1|CHILLER PUMP 1","CP-2|CHILLER PUMP 2","CP-3|CHILLER PUMP 3","CP-4|CHILLER PUMP 4","FM-1|FLOW METER 1","FM-2|FLOW METER 2","VFD-1|VARIABLE FREQUENCY DRIVE 1","VFD-2|VARIABLE FREQUENCY DRIVE 2","VFD-3|VARIABLE FREQUENCY DRIVE 3","VFD-4|VARIABLE FREQUENCY DRIVE 4","TS-1|TEMPERATURE SENSOR 1","TS-2|TEMPERATURE SENSOR 2","TS-3|TEMPERATURE SENSOR 3","TS-4|TEMPERATURE SENSOR 4","TS-5|TEMPERATURE SENSOR 5","TS-6|TEMPERATURE SENSOR 6","TS-7|TEMPERATURE SENSOR 7","TS-8|TEMPERATURE SENSOR 8","V-1|VALVE MODULATION 1","V-2|VALVE MODULATION 2"
+      ],
+      "listed_point_counts": {"source_matrix_rows": 23},
+      "header_evidence": [{"bbox": [1650,1525,3050,1720], "expected": "AIR COOLED CHILLER WITH PRIMARY AND SECONDARY PUMPING POINT LIST TABLE DDC CONTROLLER INPUT OUTPUT SUMMARY ANALOG IN ANALOG OUT BINARY IN BINARY OUT TRENDING GENERAL TAG ID DESCRIPTION"}]
+    }
+  ],
+  "normalization": {"DPS": "source_matrix_rows", "CP": "source_matrix_rows", "FM": "source_matrix_rows", "VFD": "source_matrix_rows", "TS": "source_matrix_rows", "V": "source_matrix_rows"},
+  "printed_matrix_assignments": {
+    "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX": [
+      {"tag": "DPS-1", "point_name": "DIFFERENTIAL PRESSURE 1", "physical_or_logical_as_drawn": "logical_circle", "AI": ["pressure"], "DI": [], "AO": [], "DO": []},
+      {"tag": "DPS-2", "point_name": "DIFFERENTIAL PRESSURE 2", "physical_or_logical_as_drawn": "logical_circle", "AI": ["pressure"], "DI": [], "AO": [], "DO": []},
+      {"tag": "DPS-3", "point_name": "DIFFERENTIAL PRESSURE 3", "physical_or_logical_as_drawn": "logical_circle", "AI": ["pressure"], "DI": [], "AO": [], "DO": []},
+      {"tag": "CP-1", "point_name": "CHILLER PUMP 1", "physical_or_logical_as_drawn": "logical_circle", "AI": [], "DI": ["status/proof"], "AO": [], "DO": ["on/off"]},
+      {"tag": "CP-2", "point_name": "CHILLER PUMP 2", "physical_or_logical_as_drawn": "logical_circle", "AI": [], "DI": ["status/proof"], "AO": [], "DO": ["on/off"]},
+      {"tag": "CP-3", "point_name": "CHILLER PUMP 3", "physical_or_logical_as_drawn": "logical_circle", "AI": [], "DI": ["status/proof"], "AO": [], "DO": ["on/off"]},
+      {"tag": "CP-4", "point_name": "CHILLER PUMP 4", "physical_or_logical_as_drawn": "logical_circle", "AI": [], "DI": ["status/proof"], "AO": [], "DO": ["on/off"]},
+      {"tag": "FM-1", "point_name": "FLOW METER 1", "physical_or_logical_as_drawn": "logical_circle", "AI": ["flow", "positive feedback"], "DI": [], "AO": ["controller setpoint adjustment"], "DO": []},
+      {"tag": "FM-2", "point_name": "FLOW METER 2", "physical_or_logical_as_drawn": "logical_circle", "AI": ["flow", "positive feedback"], "DI": [], "AO": ["controller setpoint adjustment"], "DO": []},
+      {"tag": "VFD-1", "point_name": "VARIABLE FREQUENCY DRIVE 1", "physical_or_logical_as_drawn": "logical_circle", "AI": ["positive feedback"], "DI": ["status/proof"], "AO": ["variable speed control"], "DO": ["on/off"]},
+      {"tag": "VFD-2", "point_name": "VARIABLE FREQUENCY DRIVE 2", "physical_or_logical_as_drawn": "logical_circle", "AI": ["positive feedback"], "DI": ["status/proof"], "AO": ["variable speed control"], "DO": ["on/off"]},
+      {"tag": "VFD-3", "point_name": "VARIABLE FREQUENCY DRIVE 3", "physical_or_logical_as_drawn": "logical_circle", "AI": ["positive feedback"], "DI": ["status/proof"], "AO": ["variable speed control"], "DO": ["on/off"]},
+      {"tag": "VFD-4", "point_name": "VARIABLE FREQUENCY DRIVE 4", "physical_or_logical_as_drawn": "logical_circle", "AI": ["positive feedback"], "DI": ["status/proof"], "AO": ["variable speed control"], "DO": ["on/off"]},
+      {"tag": "TS-1", "point_name": "TEMPERATURE SENSOR 1", "physical_or_logical_as_drawn": "logical_circle", "AI": ["temperature"], "DI": [], "AO": [], "DO": []},
+      {"tag": "TS-2", "point_name": "TEMPERATURE SENSOR 2", "physical_or_logical_as_drawn": "logical_circle", "AI": ["temperature"], "DI": [], "AO": [], "DO": []},
+      {"tag": "TS-3", "point_name": "TEMPERATURE SENSOR 3", "physical_or_logical_as_drawn": "logical_circle", "AI": ["temperature"], "DI": [], "AO": [], "DO": []},
+      {"tag": "TS-4", "point_name": "TEMPERATURE SENSOR 4", "physical_or_logical_as_drawn": "logical_circle", "AI": ["temperature"], "DI": [], "AO": [], "DO": []},
+      {"tag": "TS-5", "point_name": "TEMPERATURE SENSOR 5", "physical_or_logical_as_drawn": "logical_circle", "AI": ["temperature"], "DI": [], "AO": [], "DO": []},
+      {"tag": "TS-6", "point_name": "TEMPERATURE SENSOR 6", "physical_or_logical_as_drawn": "logical_circle", "AI": ["temperature"], "DI": [], "AO": [], "DO": []},
+      {"tag": "TS-7", "point_name": "TEMPERATURE SENSOR 7", "physical_or_logical_as_drawn": "logical_circle", "AI": ["temperature"], "DI": [], "AO": [], "DO": []},
+      {"tag": "TS-8", "point_name": "TEMPERATURE SENSOR 8", "physical_or_logical_as_drawn": "logical_circle", "AI": ["temperature"], "DI": [], "AO": [], "DO": []},
+      {"tag": "V-1", "point_name": "VALVE MODULATION 1", "physical_or_logical_as_drawn": "logical_circle", "AI": [], "DI": [], "AO": ["valve modulation"], "DO": []},
+      {"tag": "V-2", "point_name": "VALVE MODULATION 2", "physical_or_logical_as_drawn": "logical_circle", "AI": [], "DI": [], "AO": ["valve modulation"], "DO": []}
+    ],
+    "counts_by_assignment_not_terminal_count": {"AI_assignments": 21, "DI_assignments": 8, "AO_assignments": 8, "DO_assignments": 8, "source_rows": 23},
+    "qualification": "The circles in this DDC summary encode physical/logical point status and category flags. Counts above are matrix assignments, not a contractor-installed terminal count; the schedule note expressly says not all virtual points are shown."
+  },
+  "logical_chiller_telemetry_rows": [
+    "ENTERING AND LEAVING CHILLED WATER TEMPERATURE|logical matrix row|AI temperature|graphic display",
+    "ENTERING AND LEAVING CHILLED WATER PRESSURE|logical matrix row|AI pressure|graphic display",
+    "CHILLED WATER FLOW|logical matrix row|AI flow|graphic display",
+    "SELF DIAGNOSTIC|logical matrix row|DI status/proof|graphic display",
+    "OPERATION STATUS|logical matrix row|DI status/proof|graphic display",
+    "OPERATION HOURS|logical matrix row|trend every 1 hour|graphic display",
+    "NUMBER OF STARTS|logical matrix row|DI status/proof|graphic display",
+    "COMPRESSOR STATUS ON/OFF|logical matrix row|DI status/proof|graphic display",
+    "COMPRESSOR LOAD (%)|logical matrix row|AI positive feedback|graphic display",
+    "REFRIGERANT DISCHARGE & SUCTION PRESSURES|logical matrix row|AI pressure|graphic display",
+    "OIL PRESSURE|logical matrix row|AI pressure|graphic display",
+    "NUMBER OF PURGE CYCLES OVER THE LAST 7 DAYS|logical matrix row|DI status/proof|graphic display"
+  ],
+  "boiler_matrix_visual_transcription": {
+    "status": "complete_dual_render_visual_transcription; outline row glyphs are not usable as two-engine raw-text cells, so this evidence is anchored to paired retained renders rather than fabricated extraction bounds",
+    "source_title": "HOT WATER BOILER POINT LIST TABLE",
+    "source_page": 17,
+    "review_renders": ["reviews/14__vol2__021/p17-p17-boiler-points-poppler-poppler.png", "reviews/14__vol2__021/p17-boiler-points-mupdf-mupdf.png"],
+    "printed_columns": ["ANALOG IN", "ANALOG OUT", "BINARY IN", "BINARY OUT"],
+    "row_transcription": [
+      {"row_id":"pressure-1","tag":"DPS-1","point_name":"DIFFERENTIAL PRESSURE 1","AI":["analog in"],"DI":[],"AO":[],"DO":[]},
+      {"row_id":"pressure-2","tag":"DPS-2","point_name":"DIFFERENTIAL PRESSURE 2","AI":["analog in"],"DI":[],"AO":[],"DO":[]},
+      {"row_id":"pressure-3","tag":"DPS-3","point_name":"DIFFERENTIAL PRESSURE 3","AI":["analog in"],"DI":[],"AO":[],"DO":[]},
+      {"row_id":"boiler-circulator-1","tag":"BCP-1","point_name":"BOILER CIRCULATOR PUMP 1","AI":[],"DI":["binary in"],"AO":[],"DO":[]},
+      {"row_id":"boiler-circulator-2","tag":"BCP-2","point_name":"BOILER CIRCULATOR PUMP 2","AI":[],"DI":["binary in"],"AO":[],"DO":[]},
+      {"row_id":"critical-zone-damper","tag":"CZ-1","point_name":"CRITICAL ZONE DAMPER","AI":["analog in"],"DI":[],"AO":["analog out"],"DO":[]},
+      {"row_id":"boiler-vfd-1","tag":"VFD-1","point_name":"VARIABLE FREQUENCY DRIVE 1","AI":["analog in"],"DI":["binary in"],"AO":["analog out"],"DO":["binary out"]},
+      {"row_id":"boiler-vfd-2","tag":"VFD-2","point_name":"VARIABLE FREQUENCY DRIVE 2","AI":["analog in"],"DI":["binary in"],"AO":["analog out"],"DO":["binary out"]},
+      {"row_id":"temperature-1","tag":"TS-1","point_name":"TEMPERATURE SENSOR 1","AI":["analog in"],"DI":[],"AO":[],"DO":[]},
+      {"row_id":"temperature-2","tag":"TS-2","point_name":"TEMPERATURE SENSOR 2","AI":["analog in"],"DI":[],"AO":[],"DO":[]},
+      {"row_id":"temperature-3","tag":"TS-3","point_name":"TEMPERATURE SENSOR 3","AI":["analog in"],"DI":[],"AO":[],"DO":[]},
+      {"row_id":"temperature-4","tag":"TS-4","point_name":"TEMPERATURE SENSOR 4","AI":["analog in"],"DI":[],"AO":[],"DO":[]},
+      {"row_id":"valve-modulation-1","tag":"V-1","point_name":"VALVE MODULATION 1","AI":[],"DI":["binary in"],"AO":[],"DO":["binary out"]},
+      {"row_id":"valve-modulation-2","tag":"V-2","point_name":"VALVE MODULATION 2","AI":[],"DI":["binary in"],"AO":[],"DO":["binary out"]},
+      {"row_id":"valve-modulation-3","tag":"V-3","point_name":"VALVE MODULATION 3","AI":[],"DI":["binary in"],"AO":[],"DO":["binary out"]},
+      {"row_id":"valve-modulation-4","tag":"V-4","point_name":"VALVE MODULATION 4","AI":[],"DI":["binary in"],"AO":[],"DO":["binary out"]},
+      {"row_id":"pressure-sensor-1","tag":"DPS-1","point_name":"DIFFERENTIAL PRESSURE SENSOR 1","AI":["analog in"],"DI":["binary in"],"AO":[],"DO":[]},
+      {"row_id":"pressure-sensor-2","tag":"DPS-2","point_name":"DIFFERENTIAL PRESSURE SENSOR 2","AI":["analog in"],"DI":["binary in"],"AO":[],"DO":[]},
+      {"row_id":"pressure-sensor-3","tag":"DPS-3","point_name":"DIFFERENTIAL PRESSURE SENSOR 3","AI":["analog in"],"DI":["binary in"],"AO":[],"DO":[]}
+    ],
+    "counts_by_assignment_not_terminal_count": {"source_rows":19,"AI_assignments":13,"DI_assignments":11,"AO_assignments":3,"DO_assignments":6},
+    "qualification": "The table only labels generic Analog/Binary input/output categories, so no unsupported functional subtype is inferred. Duplicate DPS tags are preserved with their distinct printed descriptions and row ids. The page note says not all virtual points are shown; this remains a matrix-assignment transcription, not an installed terminal count."
+  },
+  "assertions": [
+    {"id": "m803-chiller-matrix-title", "page": 17, "bbox": [1650,1525,3050,1585], "expected": "AIR COOLED CHILLER WITH PRIMARY AND SECONDARY PUMPING POINT LIST TABLE"},
+    {"id": "m803-virtual-points-note", "page": 17, "bbox": [1650,2370,3050,2440], "expected": "2. NOT ALL VIRTUAL POINTS ARE SHOWN. PROVIDE ALL POINTS REQUIRED FOR SOFTWARE OPERATION."},
+    {"id": "m803-chiller-4to20-command", "page": 17, "bbox": [2060,1065,2540,1084], "expected": "TRANSMITTING A 4 TO 20 MA DC SIGNAL TO MODULATE PUMP SPEED FROM MINIMUM TO"},
+    {"id": "m803-chiller-mode-title", "page": 17, "bbox": [2080,1402,2360,1420], "expected": "ICE STORAGE SYSTEM OPERATES IN ONE OF THREE MODES"}
+  ],
+  "inventory_checks": [
+    {"id": "m803-chiller-printed-matrix-rows", "records_path": ["tables",0,"rows"], "expected": 23},
+    {"id": "m803-chiller-matrix-assignment-rows", "records_path": ["printed_matrix_assignments","M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX"], "expected": 23},
+    {"id": "m803-chiller-logical-telemetry-rows", "records_path": ["logical_chiller_telemetry_rows"], "expected": 12}
+  ]
+}

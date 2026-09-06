@@ -1,0 +1,51 @@
+{
+  "document_id": "12__vol2__028",
+  "status": "partial_document_audit",
+  "scope": "All printed rows in M-601 Boiler and Unit Heater schedules (source PDF page 9).",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [9],
+    "render": "reviews/12__vol2__028/p9-p9-full-poppler.png",
+    "dpi": 144,
+    "finding": "The one-row Boiler Schedule and the combined UH-1 & UH-2 Unit Heater Schedule row were visually reviewed. The combined unit-heater mark is preserved as printed rather than expanded into two assumed independent specifications."
+  },
+  "tables": [
+    {
+      "id": "M601-BOILER",
+      "page": 9,
+      "sheet": "M-601",
+      "title": "BOILER SCHEDULE",
+      "classification": "Boiler",
+      "columns": "mark|input_mbh_min|input_mbh_max|output_mbh_min|output_mbh_max|heating_capacity_mbh|efficiency_afue|max_operating_pressure_psi|ewt_f|lwt_f|boiler_pressure_drop_ft|max_gpm|volt_ph_hz|rated_current_a|tank_weight_lbs|fouling_factor_hr_sq_ft_f_btu|length_in|width_in|height_in|manufacturer_model|notes",
+      "x_edges": [130,180,230,275,320,370,430,500,600,650,715,790,840,920,990,1070,1175,1215,1250,1285,1435,1500],
+      "y_edges": [1002,1025],
+      "rows": [
+        "B-1|60|160|55|146|146|95%|60|100|140|15.8|15.4|120/1/60|12|155|0.002|17.8|14.2|41.0|VITODENS/200-W B2HA-45|1,2,3,4,5,6"
+      ],
+      "header_evidence": [
+        {"bbox": [130,920,300,945], "expected": "BOILER SCHEDULE"}
+      ]
+    },
+    {
+      "id": "M601-UNIT-HEATER",
+      "page": 9,
+      "sheet": "M-601",
+      "title": "UNIT HEATER SCHEDULE",
+      "classification": "Power-vented gas-fired unit heaters",
+      "columns": "mark|serves|heat_input_mbh|gas_type|amps|volt_ph|manufacturer_model|notes",
+      "x_edges": [1535,1615,1730,1800,1875,1925,1985,2105,2180],
+      "y_edges": [980,1000],
+      "rows": [
+        "UH-1 & UH-2|MECHANICAL 108|24.9|NATURAL|1.80|115/1|REZNOR/UDAS-300|1,2,3,4,5,6"
+      ],
+      "header_evidence": [
+        {"bbox": [1530,920,1740,945], "expected": "UNIT HEATER SCHEDULE"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "m601-boiler-row-count", "records_path": ["tables", 0, "rows"], "expected": 1},
+    {"id": "m601-unit-heater-row-count", "records_path": ["tables", 1, "rows"], "expected": 1}
+  ],
+  "remaining_work": "Reconcile the schedule's combined unit-heater designation and boiler identity to plan anchors before any physical controller or sensor count is claimed."
+}

@@ -1,0 +1,23 @@
+{
+  "document_id": "25__vol2__053",
+  "source_sha256": "7eaefacf7f42a077e98d3fa1fd01bc96f03a03d444e29ffda7838895dc2e1d57",
+  "annotation_sha256": "040758138466fb624654c7927872ffb8cabe712568bd24f9bb505c801badcd4e",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 0,
+  "checks": [],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "unexpanded-source-point-applications",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

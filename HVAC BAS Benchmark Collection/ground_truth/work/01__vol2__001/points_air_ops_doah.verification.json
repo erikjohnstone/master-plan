@@ -1,0 +1,8444 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "9b4d318570f479519ee9ac1e9dc3e0d70202af60f436a7a79c2ddf8dbc66cdb2",
+  "tables": 4,
+  "rows": 67,
+  "cell_assertions": 268,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 1,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        254,
+        1790,
+        272
+      ],
+      "expected": "AI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            374
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            583
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 1,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        254,
+        2100,
+        272
+      ],
+      "expected": "HIGH LIMIT STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH LIMIT STATIC PRESSURE",
+          "word_ids": [
+            375,
+            376,
+            377,
+            378
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH LIMIT STATIC PRESSURE",
+          "word_ids": [
+            584,
+            585,
+            586,
+            587
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 1,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        254,
+        2160,
+        272
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            379
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            539
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 1,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        254,
+        2210,
+        272
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            380
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            510
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 2,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        272,
+        1790,
+        289
+      ],
+      "expected": "AI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            588
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 2,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        272,
+        2100,
+        289
+      ],
+      "expected": "HIGH LIMIT STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH LIMIT STATIC PRESSURE",
+          "word_ids": [
+            382,
+            383,
+            384,
+            385
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH LIMIT STATIC PRESSURE",
+          "word_ids": [
+            589,
+            590,
+            591,
+            592
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 2,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        272,
+        2160,
+        289
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            386
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            540
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 2,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        272,
+        2210,
+        289
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            387
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            511
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 3,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        289,
+        1790,
+        306
+      ],
+      "expected": "AI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            388
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            593
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 3,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        289,
+        2100,
+        306
+      ],
+      "expected": "ERW DIFFERENTIAL PRESSURE - OA SIDE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ERW DIFFERENTIAL PRESSURE - OA SIDE",
+          "word_ids": [
+            389,
+            390,
+            391,
+            392,
+            393,
+            394
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ERW DIFFERENTIAL PRESSURE - OA SIDE",
+          "word_ids": [
+            594,
+            595,
+            596,
+            597,
+            598,
+            599
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 3,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        289,
+        2160,
+        306
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            395
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            541
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 3,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        289,
+        2210,
+        306
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            396
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            512
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 4,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        306,
+        1790,
+        324
+      ],
+      "expected": "AI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI04",
+          "word_ids": [
+            397
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI04",
+          "word_ids": [
+            600
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 4,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        306,
+        2100,
+        324
+      ],
+      "expected": "ERW BYPASS DAMPER POSITION (FEEDBACK) - OA SIDE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ERW BYPASS DAMPER POSITION (FEEDBACK) - OA SIDE",
+          "word_ids": [
+            398,
+            399,
+            400,
+            401,
+            402,
+            403,
+            404,
+            405
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ERW BYPASS DAMPER POSITION (FEEDBACK) - OA SIDE",
+          "word_ids": [
+            601,
+            602,
+            603,
+            604,
+            605,
+            606,
+            607,
+            608
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 4,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        306,
+        2160,
+        324
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            406
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            542
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 4,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        306,
+        2210,
+        324
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            513
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 5,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        324,
+        1790,
+        341
+      ],
+      "expected": "AI05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI05",
+          "word_ids": [
+            408
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI05",
+          "word_ids": [
+            609
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 5,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        324,
+        2100,
+        341
+      ],
+      "expected": "ERW LEAVING AIR HUMIDITY - OA SIDE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ERW LEAVING AIR HUMIDITY - OA SIDE",
+          "word_ids": [
+            409,
+            410,
+            411,
+            412,
+            413,
+            414,
+            415
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ERW LEAVING AIR HUMIDITY - OA SIDE",
+          "word_ids": [
+            610,
+            611,
+            612,
+            613,
+            614,
+            615,
+            616
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 5,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        324,
+        2160,
+        341
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            416
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            543
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 5,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        324,
+        2210,
+        341
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            417
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            514
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 6,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        341,
+        1790,
+        358
+      ],
+      "expected": "AI06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI06",
+          "word_ids": [
+            418
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI06",
+          "word_ids": [
+            617
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 6,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        341,
+        2100,
+        358
+      ],
+      "expected": "ERW LAT - OA SIDE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ERW LAT - OA SIDE",
+          "word_ids": [
+            419,
+            420,
+            421,
+            422,
+            423
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ERW LAT - OA SIDE",
+          "word_ids": [
+            618,
+            619,
+            620,
+            621,
+            622
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 6,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        341,
+        2160,
+        358
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            424
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            544
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 6,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        341,
+        2210,
+        358
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            425
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            515
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 7,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        358,
+        1790,
+        375
+      ],
+      "expected": "AI07",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI07",
+          "word_ids": [
+            426
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI07",
+          "word_ids": [
+            623
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 7,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        358,
+        2100,
+        375
+      ],
+      "expected": "HWR VALVE POSITION (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWR VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            427,
+            428,
+            429,
+            430
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWR VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            624,
+            625,
+            626,
+            627
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 7,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        358,
+        2160,
+        375
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            431
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            545
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 7,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        358,
+        2210,
+        375
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            432
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            516
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 8,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        375,
+        1790,
+        393
+      ],
+      "expected": "AI08",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI08",
+          "word_ids": [
+            433
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI08",
+          "word_ids": [
+            628
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 8,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        375,
+        2100,
+        393
+      ],
+      "expected": "HEATING COIL LAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HEATING COIL LAT",
+          "word_ids": [
+            434,
+            435,
+            436
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HEATING COIL LAT",
+          "word_ids": [
+            629,
+            630,
+            631
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 8,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        375,
+        2160,
+        393
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            437
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            546
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 8,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        375,
+        2210,
+        393
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            438
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            517
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 9,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        393,
+        1790,
+        410
+      ],
+      "expected": "AI09",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI09",
+          "word_ids": [
+            439
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI09",
+          "word_ids": [
+            632
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 9,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        393,
+        2100,
+        410
+      ],
+      "expected": "CHW VALVE POSITION (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            440,
+            441,
+            442,
+            443
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            633,
+            634,
+            635,
+            636
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 9,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        393,
+        2160,
+        410
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            444
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            547
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 9,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        393,
+        2210,
+        410
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            445
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            518
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 10,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        410,
+        1790,
+        427
+      ],
+      "expected": "AI10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI10",
+          "word_ids": [
+            446
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI10",
+          "word_ids": [
+            637
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 10,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        410,
+        2100,
+        427
+      ],
+      "expected": "COOLING COIL LAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COOLING COIL LAT",
+          "word_ids": [
+            447,
+            448,
+            449
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COOLING COIL LAT",
+          "word_ids": [
+            638,
+            639,
+            640
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 10,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        410,
+        2160,
+        427
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            450
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            548
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 10,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        410,
+        2210,
+        427
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            451
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            519
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 11,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        427,
+        1790,
+        444
+      ],
+      "expected": "AI11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI11",
+          "word_ids": [
+            452
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI11",
+          "word_ids": [
+            641
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 11,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        427,
+        2100,
+        444
+      ],
+      "expected": "TOA FAN DIFFERENTIAL PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TOA FAN DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            453,
+            454,
+            455,
+            456
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TOA FAN DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            642,
+            643,
+            644,
+            645
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 11,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        427,
+        2160,
+        444
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            457
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            549
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 11,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        427,
+        2210,
+        444
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            458
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            520
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 12,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        444,
+        1790,
+        461
+      ],
+      "expected": "AI12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI12",
+          "word_ids": [
+            459
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI12",
+          "word_ids": [
+            646
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 12,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        444,
+        2100,
+        461
+      ],
+      "expected": "TOA TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TOA TEMPERATURE",
+          "word_ids": [
+            460,
+            461
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TOA TEMPERATURE",
+          "word_ids": [
+            647,
+            648
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 12,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        444,
+        2160,
+        461
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            462
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            550
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 12,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        444,
+        2210,
+        461
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            463
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            521
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 13,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        461,
+        1790,
+        479
+      ],
+      "expected": "AI13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI13",
+          "word_ids": [
+            464
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI13",
+          "word_ids": [
+            649
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 13,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        461,
+        2100,
+        479
+      ],
+      "expected": "TOA HUMIDITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TOA HUMIDITY",
+          "word_ids": [
+            465,
+            466
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TOA HUMIDITY",
+          "word_ids": [
+            650,
+            651
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 13,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        461,
+        2160,
+        479
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            467
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            551
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 13,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        461,
+        2210,
+        479
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            468
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            522
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 14,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        479,
+        1790,
+        496
+      ],
+      "expected": "AI14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI14",
+          "word_ids": [
+            469
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI14",
+          "word_ids": [
+            652
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 14,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        479,
+        2100,
+        496
+      ],
+      "expected": "TOA AIRFLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TOA AIRFLOW",
+          "word_ids": [
+            470,
+            471
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TOA AIRFLOW",
+          "word_ids": [
+            653,
+            654
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 14,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        479,
+        2160,
+        496
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            472
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            552
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 14,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        479,
+        2210,
+        496
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            473
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            523
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 15,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        496,
+        1790,
+        513
+      ],
+      "expected": "AI15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI15",
+          "word_ids": [
+            474
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI15",
+          "word_ids": [
+            655
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 15,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        496,
+        2100,
+        513
+      ],
+      "expected": "EA FAN DIFFERENTIAL PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EA FAN DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            475,
+            476,
+            477,
+            478
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EA FAN DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            656,
+            657,
+            658,
+            659
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 15,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        496,
+        2160,
+        513
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            479
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            553
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 15,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        496,
+        2210,
+        513
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            480
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            524
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 16,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        513,
+        1790,
+        530
+      ],
+      "expected": "AI16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI16",
+          "word_ids": [
+            481
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI16",
+          "word_ids": [
+            660
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 16,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        513,
+        2100,
+        530
+      ],
+      "expected": "EA AIRFLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EA AIRFLOW",
+          "word_ids": [
+            482,
+            483
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EA AIRFLOW",
+          "word_ids": [
+            661,
+            662
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 16,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        513,
+        2160,
+        530
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            484
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            554
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 16,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        513,
+        2210,
+        530
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            485
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            525
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 17,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        530,
+        1790,
+        548
+      ],
+      "expected": "AI17",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI17",
+          "word_ids": [
+            486
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI17",
+          "word_ids": [
+            663
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 17,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        530,
+        2100,
+        548
+      ],
+      "expected": "ERW LEAVING AIR HUMIDITY - EA SIDE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ERW LEAVING AIR HUMIDITY - EA SIDE",
+          "word_ids": [
+            487,
+            488,
+            489,
+            490,
+            491,
+            492,
+            493
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ERW LEAVING AIR HUMIDITY - EA SIDE",
+          "word_ids": [
+            664,
+            665,
+            666,
+            667,
+            668,
+            669,
+            670
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 17,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        530,
+        2160,
+        548
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            494
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            555
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 17,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        530,
+        2210,
+        548
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            495
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            526
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 18,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        548,
+        1790,
+        565
+      ],
+      "expected": "AI18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI18",
+          "word_ids": [
+            496
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI18",
+          "word_ids": [
+            671
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 18,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        548,
+        2100,
+        565
+      ],
+      "expected": "ERW LAT - EA SIDE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ERW LAT - EA SIDE",
+          "word_ids": [
+            497,
+            498,
+            499,
+            500,
+            501
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ERW LAT - EA SIDE",
+          "word_ids": [
+            672,
+            673,
+            674,
+            675,
+            676
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 18,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        548,
+        2160,
+        565
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            502
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            556
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 18,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        548,
+        2210,
+        565
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            503
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            527
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 19,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        565,
+        1790,
+        582
+      ],
+      "expected": "AI19",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI19",
+          "word_ids": [
+            504
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI19",
+          "word_ids": [
+            677
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 19,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        565,
+        2100,
+        582
+      ],
+      "expected": "ERW DIFFERENTIAL PRESSURE - EA SIDE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ERW DIFFERENTIAL PRESSURE - EA SIDE",
+          "word_ids": [
+            505,
+            506,
+            507,
+            508,
+            509,
+            510
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ERW DIFFERENTIAL PRESSURE - EA SIDE",
+          "word_ids": [
+            678,
+            679,
+            680,
+            681,
+            682,
+            683
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 19,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        565,
+        2160,
+        582
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            511
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            557
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 19,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        565,
+        2210,
+        582
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            512
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            528
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 20,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        582,
+        1790,
+        599
+      ],
+      "expected": "AI20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI20",
+          "word_ids": [
+            513
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI20",
+          "word_ids": [
+            684
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 20,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        582,
+        2100,
+        599
+      ],
+      "expected": "ERW BYPASS DAMPER POSITION (FEEDBACK) - EA SIDE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ERW BYPASS DAMPER POSITION (FEEDBACK) - EA SIDE",
+          "word_ids": [
+            514,
+            515,
+            516,
+            517,
+            518,
+            519,
+            520,
+            521
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ERW BYPASS DAMPER POSITION (FEEDBACK) - EA SIDE",
+          "word_ids": [
+            685,
+            686,
+            687,
+            688,
+            689,
+            690,
+            691,
+            692
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 20,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        582,
+        2160,
+        599
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            522
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            558
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 20,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        582,
+        2210,
+        599
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            523
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            529
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 21,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        599,
+        1790,
+        617
+      ],
+      "expected": "AI21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI21",
+          "word_ids": [
+            524
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI21",
+          "word_ids": [
+            693
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 21,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        599,
+        2100,
+        617
+      ],
+      "expected": "ERW ENTERING AIR HUMIDITY - EA SIDE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ERW ENTERING AIR HUMIDITY - EA SIDE",
+          "word_ids": [
+            525,
+            526,
+            527,
+            528,
+            529,
+            530,
+            531
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ERW ENTERING AIR HUMIDITY - EA SIDE",
+          "word_ids": [
+            694,
+            695,
+            696,
+            697,
+            698,
+            699,
+            700
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 21,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        599,
+        2160,
+        617
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            532
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            559
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 21,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        599,
+        2210,
+        617
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            533
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            530
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 22,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        617,
+        1790,
+        634
+      ],
+      "expected": "AI22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI22",
+          "word_ids": [
+            534
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI22",
+          "word_ids": [
+            701
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 22,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        617,
+        2100,
+        634
+      ],
+      "expected": "ERW EAT - EA SIDE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ERW EAT - EA SIDE",
+          "word_ids": [
+            535,
+            536,
+            537,
+            538,
+            539
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ERW EAT - EA SIDE",
+          "word_ids": [
+            702,
+            703,
+            704,
+            705,
+            706
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 22,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        617,
+        2160,
+        634
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            540
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            560
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 22,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        617,
+        2210,
+        634
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            541
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            531
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 23,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        634,
+        1790,
+        651
+      ],
+      "expected": "AI23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI23",
+          "word_ids": [
+            542
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI23",
+          "word_ids": [
+            707
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 23,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        634,
+        2100,
+        651
+      ],
+      "expected": "DOAH SF SPEED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH SF SPEED (FEEDBACK)",
+          "word_ids": [
+            543,
+            544,
+            545,
+            546
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH SF SPEED (FEEDBACK)",
+          "word_ids": [
+            708,
+            709,
+            710,
+            711
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 23,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        634,
+        2160,
+        651
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            561
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 23,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        634,
+        2210,
+        651
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            548
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            532
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 24,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        651,
+        1790,
+        668
+      ],
+      "expected": "AI24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI24",
+          "word_ids": [
+            549
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI24",
+          "word_ids": [
+            712
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 24,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        651,
+        2100,
+        668
+      ],
+      "expected": "DOAH EF SPEED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH EF SPEED (FEEDBACK)",
+          "word_ids": [
+            550,
+            551,
+            552,
+            553
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH EF SPEED (FEEDBACK)",
+          "word_ids": [
+            713,
+            714,
+            715,
+            716
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 24,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        651,
+        2160,
+        668
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            554
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            562
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 24,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        651,
+        2210,
+        668
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            555
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            533
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 25,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        668,
+        1790,
+        685
+      ],
+      "expected": "AI25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI25",
+          "word_ids": [
+            556
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI25",
+          "word_ids": [
+            717
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 25,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        668,
+        2100,
+        685
+      ],
+      "expected": "BATHROOM EXHAUST AIRFLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BATHROOM EXHAUST AIRFLOW",
+          "word_ids": [
+            557,
+            558,
+            559
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BATHROOM EXHAUST AIRFLOW",
+          "word_ids": [
+            718,
+            719,
+            720
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 25,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        668,
+        2160,
+        685
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            560
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            563
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 25,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        668,
+        2210,
+        685
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            561
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            534
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 26,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        685,
+        1790,
+        703
+      ],
+      "expected": "AI26",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI26",
+          "word_ids": [
+            562
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI26",
+          "word_ids": [
+            721
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 26,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        685,
+        2100,
+        703
+      ],
+      "expected": "RELIEF DAMPER POSITION (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RELIEF DAMPER POSITION (FEEDBACK)",
+          "word_ids": [
+            563,
+            564,
+            565,
+            566
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RELIEF DAMPER POSITION (FEEDBACK)",
+          "word_ids": [
+            722,
+            723,
+            724,
+            725
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 26,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        685,
+        2160,
+        703
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            567
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            564
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 26,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        685,
+        2210,
+        703
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            568
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            535
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 27,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        703,
+        1790,
+        720
+      ],
+      "expected": "AI27",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI27",
+          "word_ids": [
+            569
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI27",
+          "word_ids": [
+            726
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 27,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        703,
+        2100,
+        720
+      ],
+      "expected": "RELIEF AIRFLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RELIEF AIRFLOW",
+          "word_ids": [
+            570,
+            571
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RELIEF AIRFLOW",
+          "word_ids": [
+            727,
+            728
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 27,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        703,
+        2160,
+        720
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            572
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            565
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "row": 27,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        703,
+        2210,
+        720
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            573
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            536
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "header": "AIR OPS DOAH DDC POINTS LIST",
+      "page": 52,
+      "bbox": [
+        1890,
+        185,
+        2100,
+        220
+      ],
+      "engine": "mupdf",
+      "actual": "AIR OPS DOAH DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "header": "AIR OPS DOAH DDC POINTS LIST",
+      "page": 52,
+      "bbox": [
+        1890,
+        185,
+        2100,
+        220
+      ],
+      "engine": "poppler",
+      "actual": "AIR OPS DOAH DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 52,
+      "bbox": [
+        1750,
+        220,
+        2210,
+        246
+      ],
+      "engine": "mupdf",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 52,
+      "bbox": [
+        1750,
+        220,
+        2210,
+        246
+      ],
+      "engine": "poppler",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "header": "ANALOG INPUT",
+      "page": 52,
+      "bbox": [
+        1730,
+        235,
+        1840,
+        254
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DOAH-AI",
+      "header": "ANALOG INPUT",
+      "page": 52,
+      "bbox": [
+        1730,
+        235,
+        1840,
+        254
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 1,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        754,
+        1790,
+        772
+      ],
+      "expected": "AO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            576
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            97
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 1,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        754,
+        2100,
+        772
+      ],
+      "expected": "ERW BYPASS DAMPER CONTROL - OA SIDE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ERW BYPASS DAMPER CONTROL - OA SIDE",
+          "word_ids": [
+            577,
+            578,
+            579,
+            580,
+            581,
+            582,
+            583
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ERW BYPASS DAMPER CONTROL - OA SIDE",
+          "word_ids": [
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 1,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        754,
+        2160,
+        772
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            584
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            135
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 1,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        754,
+        2210,
+        772
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            585
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            142
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 2,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        772,
+        1790,
+        789
+      ],
+      "expected": "AO02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            586
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            105
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 2,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        772,
+        2100,
+        789
+      ],
+      "expected": "HHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL",
+          "word_ids": [
+            587,
+            588,
+            589
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL",
+          "word_ids": [
+            106,
+            107,
+            108
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 2,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        772,
+        2160,
+        789
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            590
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            136
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 2,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        772,
+        2210,
+        789
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            591
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            143
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 3,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        789,
+        1790,
+        806
+      ],
+      "expected": "AO03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO03",
+          "word_ids": [
+            592
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO03",
+          "word_ids": [
+            109
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 3,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        789,
+        2100,
+        806
+      ],
+      "expected": "CHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL",
+          "word_ids": [
+            593,
+            594,
+            595
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL",
+          "word_ids": [
+            110,
+            111,
+            112
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 3,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        789,
+        2160,
+        806
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            596
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            137
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 3,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        789,
+        2210,
+        806
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            597
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            144
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 4,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        806,
+        1790,
+        823
+      ],
+      "expected": "AO04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO04",
+          "word_ids": [
+            598
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO04",
+          "word_ids": [
+            113
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 4,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        806,
+        2100,
+        823
+      ],
+      "expected": "ERW BYPASS DAMPER CONTROL - EA SIDE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ERW BYPASS DAMPER CONTROL - EA SIDE",
+          "word_ids": [
+            599,
+            600,
+            601,
+            602,
+            603,
+            604,
+            605
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ERW BYPASS DAMPER CONTROL - EA SIDE",
+          "word_ids": [
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 4,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        806,
+        2160,
+        823
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            606
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            138
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 4,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        806,
+        2210,
+        823
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            607
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            145
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 5,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        823,
+        1790,
+        841
+      ],
+      "expected": "AO05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO05",
+          "word_ids": [
+            608
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO05",
+          "word_ids": [
+            121
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 5,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        823,
+        2100,
+        841
+      ],
+      "expected": "DOAH SF SPEED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH SF SPEED (FEEDBACK)",
+          "word_ids": [
+            609,
+            610,
+            611,
+            612
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH SF SPEED (FEEDBACK)",
+          "word_ids": [
+            122,
+            123,
+            124,
+            125
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 5,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        823,
+        2160,
+        841
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            613
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            139
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 5,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        823,
+        2210,
+        841
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            614
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            146
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 6,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        841,
+        1790,
+        858
+      ],
+      "expected": "AO06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO06",
+          "word_ids": [
+            615
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO06",
+          "word_ids": [
+            126
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 6,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        841,
+        2100,
+        858
+      ],
+      "expected": "DOAH EF SPEED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH EF SPEED (FEEDBACK)",
+          "word_ids": [
+            616,
+            617,
+            618,
+            619
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH EF SPEED (FEEDBACK)",
+          "word_ids": [
+            127,
+            128,
+            129,
+            130
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 6,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        841,
+        2160,
+        858
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            620
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            140
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 6,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        841,
+        2210,
+        858
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            621
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            147
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 7,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        858,
+        1790,
+        875
+      ],
+      "expected": "AO07",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO07",
+          "word_ids": [
+            622
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO07",
+          "word_ids": [
+            131
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 7,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        858,
+        2100,
+        875
+      ],
+      "expected": "RELIEF DAMPER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RELIEF DAMPER CONTROL",
+          "word_ids": [
+            623,
+            624,
+            625
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RELIEF DAMPER CONTROL",
+          "word_ids": [
+            132,
+            133,
+            134
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 7,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        858,
+        2160,
+        875
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            626
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            141
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "row": 7,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        858,
+        2210,
+        875
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            627
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            148
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 52,
+      "bbox": [
+        1730,
+        735,
+        1840,
+        754
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DOAH-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 52,
+      "bbox": [
+        1730,
+        735,
+        1840,
+        754
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 1,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        909,
+        1790,
+        927
+      ],
+      "expected": "BI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            630
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            363
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 1,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        909,
+        2100,
+        927
+      ],
+      "expected": "DOAH OA DAMPER POSITION OPEN (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH OA DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            631,
+            632,
+            633,
+            634,
+            635,
+            636
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH OA DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            364,
+            365,
+            366,
+            367,
+            368,
+            369
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 1,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        909,
+        2160,
+        927
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            637
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            332
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 1,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        909,
+        2210,
+        927
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            638
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            304
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 2,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        927,
+        1790,
+        944
+      ],
+      "expected": "BI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            639
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            370
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 2,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        927,
+        2100,
+        944
+      ],
+      "expected": "DOAH OA DAMPER POSITION CLOSED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH OA DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            640,
+            641,
+            642,
+            643,
+            644,
+            645
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH OA DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            371,
+            372,
+            373,
+            374,
+            375,
+            376
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 2,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        927,
+        2160,
+        944
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            646
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            333
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 2,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        927,
+        2210,
+        944
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            647
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            305
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 3,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        944,
+        1790,
+        961
+      ],
+      "expected": "BI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            648
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            377
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 3,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        944,
+        2100,
+        961
+      ],
+      "expected": "MERV 8 UOA FILTER STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MERV 8 UOA FILTER STATUS",
+          "word_ids": [
+            649,
+            650,
+            651,
+            652,
+            653
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MERV 8 UOA FILTER STATUS",
+          "word_ids": [
+            378,
+            379,
+            380,
+            381,
+            382
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 3,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        944,
+        2160,
+        961
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            654
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            334
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 3,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        944,
+        2210,
+        961
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            655
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            306
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 4,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        961,
+        1790,
+        979
+      ],
+      "expected": "BI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            656
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            383
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 4,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        961,
+        2100,
+        979
+      ],
+      "expected": "MERV 13 UOA FILTER STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MERV 13 UOA FILTER STATUS",
+          "word_ids": [
+            657,
+            658,
+            659,
+            660,
+            661
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MERV 13 UOA FILTER STATUS",
+          "word_ids": [
+            384,
+            385,
+            386,
+            387,
+            388
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 4,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        961,
+        2160,
+        979
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            662
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            335
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 4,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        961,
+        2210,
+        979
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            663
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            307
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 5,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        979,
+        1790,
+        996
+      ],
+      "expected": "BI06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI06",
+          "word_ids": [
+            664
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI06",
+          "word_ids": [
+            389
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 5,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        979,
+        2100,
+        996
+      ],
+      "expected": "FREEZESTAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FREEZESTAT",
+          "word_ids": [
+            665
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FREEZESTAT",
+          "word_ids": [
+            390
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 5,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        979,
+        2160,
+        996
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            666
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            336
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 5,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        979,
+        2210,
+        996
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            667
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            308
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 6,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        996,
+        1790,
+        1013
+      ],
+      "expected": "BI07",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI07",
+          "word_ids": [
+            668
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI07",
+          "word_ids": [
+            391
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 6,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        996,
+        2100,
+        1013
+      ],
+      "expected": "HIGH LIMIT STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH LIMIT STATIC PRESSURE",
+          "word_ids": [
+            669,
+            670,
+            671,
+            672
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH LIMIT STATIC PRESSURE",
+          "word_ids": [
+            392,
+            393,
+            394,
+            395
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 6,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        996,
+        2160,
+        1013
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            673
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            337
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 6,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        996,
+        2210,
+        1013
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            674
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            309
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 7,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1013,
+        1790,
+        1030
+      ],
+      "expected": "BI08",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI08",
+          "word_ids": [
+            675
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI08",
+          "word_ids": [
+            396
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 7,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1013,
+        2100,
+        1030
+      ],
+      "expected": "TOA DUCT SMOKE DETECTOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TOA DUCT SMOKE DETECTOR",
+          "word_ids": [
+            676,
+            677,
+            678,
+            679
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TOA DUCT SMOKE DETECTOR",
+          "word_ids": [
+            397,
+            398,
+            399,
+            400
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 7,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1013,
+        2160,
+        1030
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            680
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            338
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 7,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1013,
+        2210,
+        1030
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            681
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            310
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 8,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1030,
+        1790,
+        1048
+      ],
+      "expected": "BI09",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI09",
+          "word_ids": [
+            682
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI09",
+          "word_ids": [
+            401
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 8,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1030,
+        2100,
+        1048
+      ],
+      "expected": "DOAH EA DISCHARGE DAMPER POSITION OPEN (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH EA DISCHARGE DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            683,
+            684,
+            685,
+            686,
+            687,
+            688,
+            689
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH EA DISCHARGE DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            402,
+            403,
+            404,
+            405,
+            406,
+            407,
+            408
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 8,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1030,
+        2160,
+        1048
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            690
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            339
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 8,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1030,
+        2210,
+        1048
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            691
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            311
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 9,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1048,
+        1790,
+        1065
+      ],
+      "expected": "BI10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI10",
+          "word_ids": [
+            692
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI10",
+          "word_ids": [
+            409
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 9,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1048,
+        2100,
+        1065
+      ],
+      "expected": "DOAH EA DISCHARGE DAMPER POSITION CLOSED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH EA DISCHARGE DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            693,
+            694,
+            695,
+            696,
+            697,
+            698,
+            699
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH EA DISCHARGE DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            410,
+            411,
+            412,
+            413,
+            414,
+            415,
+            416
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 9,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1048,
+        2160,
+        1065
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            700
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            340
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 9,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1048,
+        2210,
+        1065
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            701
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            312
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 10,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1065,
+        1790,
+        1082
+      ],
+      "expected": "BI11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI11",
+          "word_ids": [
+            702
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI11",
+          "word_ids": [
+            417
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 10,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1065,
+        2100,
+        1082
+      ],
+      "expected": "MERV 8 EA FILTER STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MERV 8 EA FILTER STATUS",
+          "word_ids": [
+            703,
+            704,
+            705,
+            706,
+            707
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MERV 8 EA FILTER STATUS",
+          "word_ids": [
+            418,
+            419,
+            420,
+            421,
+            422
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 10,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1065,
+        2160,
+        1082
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            708
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            341
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 10,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1065,
+        2210,
+        1082
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            709
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            313
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 11,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1082,
+        1790,
+        1099
+      ],
+      "expected": "BI12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI12",
+          "word_ids": [
+            710
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI12",
+          "word_ids": [
+            423
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 11,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1082,
+        2100,
+        1099
+      ],
+      "expected": "TREATED OA DAMPER POSITION OPEN (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TREATED OA DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            711,
+            712,
+            713,
+            714,
+            715,
+            716
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TREATED OA DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            424,
+            425,
+            426,
+            427,
+            428,
+            429
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 11,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1082,
+        2160,
+        1099
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            717
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            342
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 11,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1082,
+        2210,
+        1099
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            718
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            314
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 12,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1099,
+        1790,
+        1117
+      ],
+      "expected": "BI13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI13",
+          "word_ids": [
+            719
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI13",
+          "word_ids": [
+            430
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 12,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1099,
+        2100,
+        1117
+      ],
+      "expected": "TREATED OA DAMPER POSITION CLOSED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TREATED OA DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            720,
+            721,
+            722,
+            723,
+            724,
+            725
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TREATED OA DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            431,
+            432,
+            433,
+            434,
+            435,
+            436
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 12,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1099,
+        2160,
+        1117
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            726
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            343
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 12,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1099,
+        2210,
+        1117
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            727
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            315
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 13,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1117,
+        1790,
+        1134
+      ],
+      "expected": "BI14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI14",
+          "word_ids": [
+            728
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI14",
+          "word_ids": [
+            437
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 13,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1117,
+        2100,
+        1134
+      ],
+      "expected": "EA INLET DAMPER POSITION OPEN (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EA INLET DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            729,
+            730,
+            731,
+            732,
+            733,
+            734
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EA INLET DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            438,
+            439,
+            440,
+            441,
+            442,
+            443
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 13,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1117,
+        2160,
+        1134
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            735
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            344
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 13,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1117,
+        2210,
+        1134
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            736
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            316
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 14,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1134,
+        1790,
+        1151
+      ],
+      "expected": "BI15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI15",
+          "word_ids": [
+            737
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI15",
+          "word_ids": [
+            444
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 14,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1134,
+        2100,
+        1151
+      ],
+      "expected": "EA INLET DAMPER POSITION CLOSED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EA INLET DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            738,
+            739,
+            740,
+            741,
+            742,
+            743
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EA INLET DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            445,
+            446,
+            447,
+            448,
+            449,
+            450
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 14,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1134,
+        2160,
+        1151
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            744
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            345
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 14,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1134,
+        2210,
+        1151
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            745
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            317
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 15,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1151,
+        1790,
+        1168
+      ],
+      "expected": "BI16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI16",
+          "word_ids": [
+            746
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI16",
+          "word_ids": [
+            451
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 15,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1151,
+        2100,
+        1168
+      ],
+      "expected": "DOAH SF STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH SF STATUS",
+          "word_ids": [
+            747,
+            748,
+            749
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH SF STATUS",
+          "word_ids": [
+            452,
+            453,
+            454
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 15,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1151,
+        2160,
+        1168
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            750
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            346
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 15,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1151,
+        2210,
+        1168
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            751
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            318
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 16,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1168,
+        1790,
+        1186
+      ],
+      "expected": "BI17",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI17",
+          "word_ids": [
+            752
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI17",
+          "word_ids": [
+            455
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 16,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1168,
+        2100,
+        1186
+      ],
+      "expected": "DOAH SF ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH SF ALARM",
+          "word_ids": [
+            753,
+            754,
+            755
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH SF ALARM",
+          "word_ids": [
+            456,
+            457,
+            458
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 16,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1168,
+        2160,
+        1186
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            756
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            347
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 16,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1168,
+        2210,
+        1186
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            757
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            319
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 17,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1186,
+        1790,
+        1203
+      ],
+      "expected": "BI18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI18",
+          "word_ids": [
+            758
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI18",
+          "word_ids": [
+            459
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 17,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1186,
+        2100,
+        1203
+      ],
+      "expected": "ERW STATUS (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ERW STATUS (FEEDBACK)",
+          "word_ids": [
+            759,
+            760,
+            761
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ERW STATUS (FEEDBACK)",
+          "word_ids": [
+            460,
+            461,
+            462
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 17,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1186,
+        2160,
+        1203
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            762
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            348
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 17,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1186,
+        2210,
+        1203
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            763
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            320
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 18,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1203,
+        1790,
+        1220
+      ],
+      "expected": "BI19",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI19",
+          "word_ids": [
+            764
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI19",
+          "word_ids": [
+            463
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 18,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1203,
+        2100,
+        1220
+      ],
+      "expected": "DOAH EF ALARM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH EF ALARM",
+          "word_ids": [
+            765,
+            766,
+            767
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH EF ALARM",
+          "word_ids": [
+            464,
+            465,
+            466
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 18,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1203,
+        2160,
+        1220
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            768
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            349
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 18,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1203,
+        2210,
+        1220
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            769
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            321
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 19,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1220,
+        1790,
+        1237
+      ],
+      "expected": "BI20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI20",
+          "word_ids": [
+            770
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI20",
+          "word_ids": [
+            467
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 19,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1220,
+        2100,
+        1237
+      ],
+      "expected": "DOAH EF STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH EF STATUS",
+          "word_ids": [
+            771,
+            772,
+            773
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH EF STATUS",
+          "word_ids": [
+            468,
+            469,
+            470
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 19,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1220,
+        2160,
+        1237
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            774
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            350
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 19,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1220,
+        2210,
+        1237
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            775
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            322
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 20,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1237,
+        1790,
+        1255
+      ],
+      "expected": "BI21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI21",
+          "word_ids": [
+            776
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI21",
+          "word_ids": [
+            471
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 20,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1237,
+        2100,
+        1255
+      ],
+      "expected": "ESS (ATFP EMERGENCY SHUTDOWN) *GLOBAL POINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ESS (ATFP EMERGENCY SHUTDOWN) *GLOBAL POINT",
+          "word_ids": [
+            777,
+            778,
+            779,
+            780,
+            781,
+            782
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ESS (ATFP EMERGENCY SHUTDOWN) *GLOBAL POINT",
+          "word_ids": [
+            472,
+            473,
+            474,
+            475,
+            476,
+            477
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 20,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1237,
+        2160,
+        1255
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            783
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            351
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 20,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1237,
+        2210,
+        1255
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            784
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            323
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 21,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1255,
+        1790,
+        1272
+      ],
+      "expected": "BI22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI22",
+          "word_ids": [
+            785
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI22",
+          "word_ids": [
+            478
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 21,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1255,
+        2100,
+        1272
+      ],
+      "expected": "HHWP-DOAH-X CIRCULATOR PUMP STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHWP-DOAH-X CIRCULATOR PUMP STATUS",
+          "word_ids": [
+            786,
+            787,
+            788,
+            789
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHWP-DOAH-X CIRCULATOR PUMP STATUS",
+          "word_ids": [
+            479,
+            480,
+            481,
+            482
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 21,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1255,
+        2160,
+        1272
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            790
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            352
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 21,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1255,
+        2210,
+        1272
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            791
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            324
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 22,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1272,
+        1790,
+        1289
+      ],
+      "expected": "BI23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI23",
+          "word_ids": [
+            792
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI23",
+          "word_ids": [
+            483
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 22,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1272,
+        2100,
+        1289
+      ],
+      "expected": "DOAH DDC HARDWARE RESET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH DDC HARDWARE RESET",
+          "word_ids": [
+            793,
+            794,
+            795,
+            796
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH DDC HARDWARE RESET",
+          "word_ids": [
+            484,
+            485,
+            486,
+            487
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 22,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1272,
+        2160,
+        1289
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            797
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            353
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 22,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1272,
+        2210,
+        1289
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            798
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            325
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 23,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1289,
+        1790,
+        1306
+      ],
+      "expected": "BI24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI24",
+          "word_ids": [
+            799
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI24",
+          "word_ids": [
+            488
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 23,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1289,
+        2100,
+        1306
+      ],
+      "expected": "24/7 EA ISOLATION DAMPER POSITION OPEN (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24/7 EA ISOLATION DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            800,
+            801,
+            802,
+            803,
+            804,
+            805,
+            806
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24/7 EA ISOLATION DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            489,
+            490,
+            491,
+            492,
+            493,
+            494,
+            495
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 23,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1289,
+        2160,
+        1306
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            807
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            354
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 23,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1289,
+        2210,
+        1306
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            808
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            326
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 24,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1306,
+        1790,
+        1324
+      ],
+      "expected": "BI25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI25",
+          "word_ids": [
+            809
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI25",
+          "word_ids": [
+            496
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 24,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1306,
+        2100,
+        1324
+      ],
+      "expected": "24/7 EA DAMPER POSITION CLOSED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24/7 EA DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            810,
+            811,
+            812,
+            813,
+            814,
+            815
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24/7 EA DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            497,
+            498,
+            499,
+            500,
+            501,
+            502
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 24,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1306,
+        2160,
+        1324
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            816
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            355
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "row": 24,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1306,
+        2210,
+        1324
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            817
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            327
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "header": "BINARY INPUT",
+      "page": 52,
+      "bbox": [
+        1730,
+        890,
+        1840,
+        909
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DOAH-BI",
+      "header": "BINARY INPUT",
+      "page": 52,
+      "bbox": [
+        1730,
+        890,
+        1840,
+        909
+      ],
+      "engine": "poppler",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 1,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1358,
+        1790,
+        1376
+      ],
+      "expected": "BO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            820
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            232
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 1,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1358,
+        2100,
+        1376
+      ],
+      "expected": "DOAH OA DAMPER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH OA DAMPER CONTROL",
+          "word_ids": [
+            821,
+            822,
+            823,
+            824
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH OA DAMPER CONTROL",
+          "word_ids": [
+            233,
+            234,
+            235,
+            236
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 1,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1358,
+        2160,
+        1376
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            825
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            216
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 1,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1358,
+        2210,
+        1376
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            826
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            177
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 2,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1376,
+        1790,
+        1393
+      ],
+      "expected": "BO02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO02",
+          "word_ids": [
+            827
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO02",
+          "word_ids": [
+            237
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 2,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1376,
+        2100,
+        1393
+      ],
+      "expected": "DOAH SF ENABLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH SF ENABLE",
+          "word_ids": [
+            828,
+            829,
+            830
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH SF ENABLE",
+          "word_ids": [
+            238,
+            239,
+            240
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 2,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1376,
+        2160,
+        1393
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            831
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            217
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 2,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1376,
+        2210,
+        1393
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            832
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            178
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 3,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1393,
+        1790,
+        1410
+      ],
+      "expected": "BO03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO03",
+          "word_ids": [
+            833
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO03",
+          "word_ids": [
+            241
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 3,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1393,
+        2100,
+        1410
+      ],
+      "expected": "DOAH EA DAMPER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH EA DAMPER CONTROL",
+          "word_ids": [
+            834,
+            835,
+            836,
+            837
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH EA DAMPER CONTROL",
+          "word_ids": [
+            242,
+            243,
+            244,
+            245
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 3,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1393,
+        2160,
+        1410
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            838
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            218
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 3,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1393,
+        2210,
+        1410
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            839
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            179
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 4,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1410,
+        1790,
+        1427
+      ],
+      "expected": "BO04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO04",
+          "word_ids": [
+            840
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO04",
+          "word_ids": [
+            246
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 4,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1410,
+        2100,
+        1427
+      ],
+      "expected": "TREATED OA DAMPER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TREATED OA DAMPER CONTROL",
+          "word_ids": [
+            841,
+            842,
+            843,
+            844
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TREATED OA DAMPER CONTROL",
+          "word_ids": [
+            247,
+            248,
+            249,
+            250
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 4,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1410,
+        2160,
+        1427
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            845
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            219
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 4,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1410,
+        2210,
+        1427
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            846
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            180
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 5,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1427,
+        1790,
+        1444
+      ],
+      "expected": "BO05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO05",
+          "word_ids": [
+            847
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO05",
+          "word_ids": [
+            251
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 5,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1427,
+        2100,
+        1444
+      ],
+      "expected": "EA INLET DAMPER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EA INLET DAMPER CONTROL",
+          "word_ids": [
+            848,
+            849,
+            850,
+            851
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EA INLET DAMPER CONTROL",
+          "word_ids": [
+            252,
+            253,
+            254,
+            255
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 5,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1427,
+        2160,
+        1444
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            852
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            220
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 5,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1427,
+        2210,
+        1444
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            853
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            181
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 6,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1444,
+        1790,
+        1462
+      ],
+      "expected": "BO06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO06",
+          "word_ids": [
+            854
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO06",
+          "word_ids": [
+            256
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 6,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1444,
+        2100,
+        1462
+      ],
+      "expected": "ERW CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ERW CONTROL",
+          "word_ids": [
+            855,
+            856
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ERW CONTROL",
+          "word_ids": [
+            257,
+            258
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 6,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1444,
+        2160,
+        1462
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            857
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            221
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 6,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1444,
+        2210,
+        1462
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            858
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            182
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 7,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1462,
+        1790,
+        1479
+      ],
+      "expected": "BO07",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO07",
+          "word_ids": [
+            859
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO07",
+          "word_ids": [
+            259
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 7,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1462,
+        2100,
+        1479
+      ],
+      "expected": "DOAH EF ENABLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH EF ENABLE",
+          "word_ids": [
+            860,
+            861,
+            862
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH EF ENABLE",
+          "word_ids": [
+            260,
+            261,
+            262
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 7,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1462,
+        2160,
+        1479
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            863
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            222
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 7,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1462,
+        2210,
+        1479
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            864
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            183
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 8,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1479,
+        1790,
+        1496
+      ],
+      "expected": "BO08",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO08",
+          "word_ids": [
+            865
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO08",
+          "word_ids": [
+            263
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 8,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1479,
+        2100,
+        1496
+      ],
+      "expected": "HHWP-DOAH-X CIRCULATOR PUMP ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHWP-DOAH-X CIRCULATOR PUMP ON/OFF",
+          "word_ids": [
+            866,
+            867,
+            868,
+            869
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHWP-DOAH-X CIRCULATOR PUMP ON/OFF",
+          "word_ids": [
+            264,
+            265,
+            266,
+            267
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 8,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1479,
+        2160,
+        1496
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            870
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            223
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 8,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1479,
+        2210,
+        1496
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            871
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            184
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 9,
+      "column": "mark",
+      "page": 52,
+      "bbox": [
+        1750,
+        1496,
+        1790,
+        1514
+      ],
+      "expected": "BO09",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO09",
+          "word_ids": [
+            872
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO09",
+          "word_ids": [
+            268
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 9,
+      "column": "description",
+      "page": 52,
+      "bbox": [
+        1790,
+        1496,
+        2100,
+        1514
+      ],
+      "expected": "24/7 EA DAMPER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24/7 EA DAMPER CONTROL",
+          "word_ids": [
+            873,
+            874,
+            875,
+            876
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24/7 EA DAMPER CONTROL",
+          "word_ids": [
+            269,
+            270,
+            271,
+            272
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 9,
+      "column": "alarm",
+      "page": 52,
+      "bbox": [
+        2100,
+        1496,
+        2160,
+        1514
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            877
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            224
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "row": 9,
+      "column": "trend",
+      "page": 52,
+      "bbox": [
+        2160,
+        1496,
+        2210,
+        1514
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            878
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            185
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "header": "BINARY OUTPUT",
+      "page": 52,
+      "bbox": [
+        1730,
+        1338,
+        1840,
+        1358
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-DOAH-BO",
+      "header": "BINARY OUTPUT",
+      "page": 52,
+      "bbox": [
+        1730,
+        1338,
+        1840,
+        1358
+      ],
+      "engine": "poppler",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "air-ops-doah-ai-count",
+      "actual": 27,
+      "expected": 27,
+      "pass": true
+    },
+    {
+      "id": "air-ops-doah-ao-count",
+      "actual": 7,
+      "expected": 7,
+      "pass": true
+    },
+    {
+      "id": "air-ops-doah-bi-count",
+      "actual": 24,
+      "expected": 24,
+      "pass": true
+    },
+    {
+      "id": "air-ops-doah-bo-count",
+      "actual": 9,
+      "expected": 9,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

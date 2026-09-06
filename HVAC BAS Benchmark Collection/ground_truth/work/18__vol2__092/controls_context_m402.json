@@ -1,0 +1,67 @@
+{
+  "document_id": "18__vol2__092",
+  "module_role": "M4.02 controls, safety, integration, wiring and sequence context. This records the supplied written requirements without converting typical lists or prose responsibilities into an unprinted installed controller/terminal roster.",
+  "source_sheet": "M4.02",
+  "source_page": 13,
+  "network_architecture": {
+    "existing_system": "Existing Siemens building automation system currently in operation within Guaranteed Rate Field",
+    "integration_requirement": "All project work shall be incorporated into the existing Siemens BAS; all control items indicated below shall be provided in graphic form on the building BAS system.",
+    "protocol": {"status": "not_stated", "value": null},
+    "transport": {"status": "not_stated", "value": null},
+    "controller_model_or_panel": {"status": "not_stated", "value": null},
+    "addressing_or_network_topology": {"status": "not_stated", "value": null}
+  },
+  "ownership_and_wiring": {
+    "basc": [
+      "All low-voltage control wiring, power wiring and conduit associated with control valves, actuators and controllers installed as part of the project.",
+      "May reuse compatible existing relays/current sensing relays/current transducers; reused conduit, wiring, sensors or switches must be tested before use and included in the project warranty.",
+      "Hard-wired control points are mapped to system graphics for building-staff viewing.",
+      "Adequate bid time for complete on-site commissioning with the mechanical contractor and other trades."
+    ],
+    "electrical_contractor": "Furnishes/installs smoke and/or heat detectors in air supply systems over 2000 CFM and the addressable fire-alarm relay; the BAS contractor picks up the relay signal.",
+    "source_boundary": "M3.01 separately assigns the scheduled automatic dampers to MC and the listed-fail-position actuators to BASC. No row-level assignment is printed for the two M4.02 typical point lists."
+  },
+  "sequence_of_operations": [
+    {
+      "id": "fcu1-outdoor-air-damper",
+      "scope": "FCU-1 in ISFA conference room",
+      "source_behavior": "Outdoor-air ductwork and associated motorized damper; OA damper shall only open to the indicated CFM after proof of FCU operation.",
+      "source_status": "specific written behavior"
+    },
+    {
+      "id": "fire-smoke-fan-shutdown",
+      "scope": "Air supply system over 2000 CFM",
+      "source_behavior": "BAS picks up the addressable fire-alarm relay signal, stops the supply fan when interlocked fire/smoke is sensed, and the DDC program shows a fire-in-unit alarm at shutdown.",
+      "source_status": "specific written behavior"
+    },
+    {
+      "id": "freeze-protection",
+      "scope": "All water coils",
+      "source_behavior": "BASC furnishes/installs manual-reset safety devices; each water coil has a downstream averaging-element freeze-stat with non-adjustable 40°F setpoint, manual reset and hardwired fan-shutdown interlock when any 12-inch element length is below 40°F.",
+      "source_status": "specific written safety interlock"
+    }
+  ],
+  "sensor_and_zone_ledger": {
+    "source_typed_roles": "M4.02's two lists print fan-coil/air-handling discharge-air temperature, AHU return-air temperature, occupied wall switch and thermostat context; they are typical list rows rather than location-tagged installed sensor quantities.",
+    "placement_requirement": "Temperature and pressure sensors must avoid false readings; BASC reviews plans, reports potential causes before rough-in and relocates improperly located false-reading sensors at its expense.",
+    "physical_sensor_count": {"status": "not_stated", "value": null},
+    "zone_mapping": {"status": "not_stated", "value": null}
+  },
+  "source_limitations": [
+    "The supplied set has two explicitly labeled typical points lists, not an equipment-instance matrix, controller schedule, panel terminal list, network point export, or installed I/O total.",
+    "No communications protocol, transport, controller/panel model, address, baud rate, network topology or per-point physical owner is printed.",
+    "M4.02 contains specific behaviors for FCU-1 OA damper, fire/smoke shutdown and coil freeze protection, but not a system-wide standalone written sequence for every scheduled unit."
+  ],
+  "tables": [],
+  "assertions": [
+    {"id": "m402-siemens-bas-integration", "page": 13, "bbox": [1770,668,2740,730], "expected": "1. ALL WORK ASSOCIATED WITH THIS PROJECT SHALL BE INCORPORATED INTO THE EXISTING SIEMENS BUILDING AUTOMATION SYSTEM CURRENTLY IN OPERATION WITHIN GUARANTEED RATE FIELD. THE SCOPE OF WORK SHALL BE AS FOLLOWS FOR EACH COMPONENT ASSOCIATED WITH THIS PROJECT. ALL CONTROL ITEMS INDICATED BELOW SHALL BE PROVIDED IN GRAPHIC FORM ON THE BUILDING BAS SYSTEM.", "mode": "exact"},
+    {"id": "m402-basc-wiring-responsibility", "page": 13, "bbox": [1770,360,2250,401], "expected": "15. THE BASC IS RESPONSIBLE FOR ALL LOW VOLTAGE CONTROL WIRING, POWER WIRING, AND CONDUIT ASSOCIATED WITH ALL CONTROL VALVES, ACTUATORS, CONTROLLERS, ETC., BEING INSTALLED AS A PART OF THIS PROJECT.", "mode": "exact"},
+    {"id": "m402-basc-reuse-graphics-warranty", "page": 13, "bbox": [1770,405,2250,475], "expected": "16. THE BASC MAY RE-USE ANY EXISTING RELAYS, CURRENT SENSING RELAYS, AND CURRENT TRANSDUCERS PROVIDED THEY ARE COMPATIBLE WITH THE NEW CONTROLLERS. ALL HARD WIRED CONTROL POINTS ARE TO BE MAPPED TO THE SYSTEM GRAPHICS FOR EASY VIEWING BY BUILDING STAFF. ANY CONDUIT, WIRING, SENSORS, OR SWITCHES THAT ARE RE-USED BY THE BASC ARE TO BE TESTED PRIOR TO USE AND INCLUDED IN THE PROJECT WARRANTY.", "mode": "exact"},
+    {"id": "m402-freeze-stat-protection", "page": 13, "bbox": [1770,202,2250,288], "expected": "12. THE BASC SHALL FURNISH AND INSTALL MANUAL RESET SAFETY DEVICES FOR ANY AND ALL CONDITIONS THAT COULD DAMAGE THE EQUIPMENT AND / OR REPRESENT A THREAT TO HUMAN SAFETY. ALL WATER COILS SHALL BE PROTECTED BY AN AVERAGING ELEMENT FREEZE-STAT WITH A NON-ADJUSTABLE 40°F SET POINT, MANUAL RESET, AND HARDWIRED INTERLOCK TO SHUT DOWN THE ASSOCIATED FAN ANY TIME THE TEMPERATURE ACROSS ANY 12\" LENGTH OF THE AVERAGING ELEMENT FALLS BELOW 40°F. FREEZE-STATS SHALL BE INSTALLED DOWNSTREAM OF ALL WATER COILS.", "mode": "exact"},
+    {"id": "m402-ddc-power-source", "page": 13, "bbox": [1770,520,2250,548], "expected": "18. CONTRACTOR SHALL OBTAIN POWER FOR THE NEW DDC CONTROL SYSTEM FROM THE NEAREST SOURCE.", "mode": "exact"},
+    {"id": "m402-basc-commissioning", "page": 13, "bbox": [1770,555,2250,603], "expected": "19. THE BASC SHALL INCLUDE ADEQUATE TIME IN HIS BID FOR COMPLETE COMMISSIONING OF THE MECHANICAL SYSTEMS, ON SITE IN COORDINATION WITH THE MECHANICAL CONTRACTOR AND OTHER TRADES AS REQUIRED TO MAKE ALL EQUIPMENT COMPLETE AND FULLY OPERATIONAL.", "mode": "exact"}
+  ],
+  "inventory_checks": [
+    {"id": "m402-written-sequences", "records_path": ["sequence_of_operations"], "expected": 3, "unique_key": "id"}
+  ]
+}

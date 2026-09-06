@@ -1,0 +1,18 @@
+{
+  "document_id": "25__vol2__053",
+  "module_role": "Unexpanded printed-matrix ledger. MH502's VAV terminal unit point list has point-name and flag columns but no equipment-instance tag column or source rule binding the template to the twenty MH601 VAV schedule rows or the one series fan-powered row.",
+  "ledger_mode": "printed_matrix_unexpanded_v1",
+  "source_points_composite": "points_mh502 holds the 19 printed VAV terminal point-function rows, including hardware/software flag columns and source totals.",
+  "ownership_binding_semantics": "The points matrix does not print field equipment tags, controller identities, I/O terminal ownership, wiring method or protocol. Written sequences identify DDC behavior but do not create row-level installed-point assignments.",
+  "expanded_count_warning": "Nineteen is the number of printed source matrix rows. Zero is intentionally the number of emitted instance applications: no multiplier from the schedule is source-stated, so no field I/O or controller-terminal count is manufactured.",
+  "applications": [],
+  "listed_template_counts": {"source_rows": 19, "tables": 1, "printed_hardware_total": 8, "printed_software_total": 21},
+  "expanded_template_counts": {"total": 0},
+  "installed_IO_total": {"status": "not_stated_in_supplied_set", "value": null, "reason": "No installed equipment-instance point matrix, controller schedule, panel terminal list, network point export, or source multiplier is supplied."},
+  "point_transport": {"status": "not_stated_per_symbol", "value": null, "note": "No protocol or transport is assigned to individual MH502 matrix rows."},
+  "tables": [],
+  "assertions": [],
+  "inventory_checks": [
+    {"id": "unexpanded-source-point-applications", "records_path": ["applications"], "expected": 0, "unique_key": "id"}
+  ]
+}

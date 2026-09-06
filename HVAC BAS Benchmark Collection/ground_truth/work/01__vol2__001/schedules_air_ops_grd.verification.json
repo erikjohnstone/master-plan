@@ -1,0 +1,8334 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "b1bb113fd4b2669e4e72fd9169c758a94f0dfc439dd44b0bcee88c22f923f31c",
+  "tables": 1,
+  "rows": 28,
+  "cell_assertions": 280,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 1,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        559,
+        280,
+        576
+      ],
+      "expected": "CD-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-1",
+          "word_ids": [
+            375
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-1",
+          "word_ids": [
+            839
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 1,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        559,
+        460,
+        576
+      ],
+      "expected": "3-CONE SUPPLY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3-CONE SUPPLY",
+          "word_ids": [
+            376,
+            377
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3-CONE SUPPLY",
+          "word_ids": [
+            119,
+            120
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 1,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        559,
+        570,
+        576
+      ],
+      "expected": "ACT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            378
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            200
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 1,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        559,
+        700,
+        576
+      ],
+      "expected": "24x24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            379
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            228
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 1,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        559,
+        790,
+        576
+      ],
+      "expected": "6ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6ø",
+          "word_ids": [
+            380
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6ø",
+          "word_ids": [
+            871
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 1,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        559,
+        845,
+        576
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            872
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 1,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        559,
+        890,
+        576
+      ],
+      "expected": "155",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "155",
+          "word_ids": [
+            382
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "155",
+          "word_ids": [
+            873
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 1,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        559,
+        960,
+        576
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            383
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            274
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 1,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        559,
+        1040,
+        576
+      ],
+      "expected": "4-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4-WAY",
+          "word_ids": [
+            384
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4-WAY",
+          "word_ids": [
+            302
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 1,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        559,
+        1120,
+        576
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            385
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            330
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 2,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        576,
+        280,
+        593
+      ],
+      "expected": "CD-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-2",
+          "word_ids": [
+            386
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-2",
+          "word_ids": [
+            840
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 2,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        576,
+        460,
+        593
+      ],
+      "expected": "3-CONE SUPPLY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3-CONE SUPPLY",
+          "word_ids": [
+            387,
+            388
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3-CONE SUPPLY",
+          "word_ids": [
+            121,
+            122
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 2,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        576,
+        570,
+        593
+      ],
+      "expected": "ACT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            389
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            201
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 2,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        576,
+        700,
+        593
+      ],
+      "expected": "24x24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            390
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            229
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 2,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        576,
+        790,
+        593
+      ],
+      "expected": "8ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8ø",
+          "word_ids": [
+            391
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8ø",
+          "word_ids": [
+            874
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 2,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        576,
+        845,
+        593
+      ],
+      "expected": "156",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "156",
+          "word_ids": [
+            392
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "156",
+          "word_ids": [
+            875
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 2,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        576,
+        890,
+        593
+      ],
+      "expected": "275",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "275",
+          "word_ids": [
+            393
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "275",
+          "word_ids": [
+            876
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 2,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        576,
+        960,
+        593
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            394
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            275
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 2,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        576,
+        1040,
+        593
+      ],
+      "expected": "4-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4-WAY",
+          "word_ids": [
+            395
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4-WAY",
+          "word_ids": [
+            303
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 2,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        576,
+        1120,
+        593
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            396
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            331
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 3,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        593,
+        280,
+        610
+      ],
+      "expected": "CD-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-3",
+          "word_ids": [
+            397
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-3",
+          "word_ids": [
+            841
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 3,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        593,
+        460,
+        610
+      ],
+      "expected": "3-CONE SUPPLY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3-CONE SUPPLY",
+          "word_ids": [
+            398,
+            399
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3-CONE SUPPLY",
+          "word_ids": [
+            123,
+            124
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 3,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        593,
+        570,
+        610
+      ],
+      "expected": "ACT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            400
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            202
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 3,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        593,
+        700,
+        610
+      ],
+      "expected": "24x24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            401
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            230
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 3,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        593,
+        790,
+        610
+      ],
+      "expected": "10ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10ø",
+          "word_ids": [
+            402
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10ø",
+          "word_ids": [
+            877
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 3,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        593,
+        845,
+        610
+      ],
+      "expected": "276",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "276",
+          "word_ids": [
+            403
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "276",
+          "word_ids": [
+            878
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 3,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        593,
+        890,
+        610
+      ],
+      "expected": "380",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "380",
+          "word_ids": [
+            404
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "380",
+          "word_ids": [
+            879
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 3,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        593,
+        960,
+        610
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            405
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            276
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 3,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        593,
+        1040,
+        610
+      ],
+      "expected": "4-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4-WAY",
+          "word_ids": [
+            406
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4-WAY",
+          "word_ids": [
+            304
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 3,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        593,
+        1120,
+        610
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            332
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 4,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        610,
+        280,
+        627
+      ],
+      "expected": "CD-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-4",
+          "word_ids": [
+            408
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-4",
+          "word_ids": [
+            842
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 4,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        610,
+        460,
+        627
+      ],
+      "expected": "3-CONE SUPPLY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3-CONE SUPPLY",
+          "word_ids": [
+            409,
+            410
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3-CONE SUPPLY",
+          "word_ids": [
+            125,
+            126
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 4,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        610,
+        570,
+        627
+      ],
+      "expected": "ACT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            411
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            203
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 4,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        610,
+        700,
+        627
+      ],
+      "expected": "24x24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            412
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            231
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 4,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        610,
+        790,
+        627
+      ],
+      "expected": "12ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12ø",
+          "word_ids": [
+            413
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12ø",
+          "word_ids": [
+            880
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 4,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        610,
+        845,
+        627
+      ],
+      "expected": "381",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "381",
+          "word_ids": [
+            414
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "381",
+          "word_ids": [
+            881
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 4,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        610,
+        890,
+        627
+      ],
+      "expected": "470",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "470",
+          "word_ids": [
+            415
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "470",
+          "word_ids": [
+            882
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 4,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        610,
+        960,
+        627
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            416
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            277
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 4,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        610,
+        1040,
+        627
+      ],
+      "expected": "4-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4-WAY",
+          "word_ids": [
+            417
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4-WAY",
+          "word_ids": [
+            305
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 4,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        610,
+        1120,
+        627
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            418
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            333
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 5,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        627,
+        280,
+        645
+      ],
+      "expected": "CD-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-5",
+          "word_ids": [
+            419
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-5",
+          "word_ids": [
+            843
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 5,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        627,
+        460,
+        645
+      ],
+      "expected": "3-CONE SUPPLY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3-CONE SUPPLY",
+          "word_ids": [
+            420,
+            421
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3-CONE SUPPLY",
+          "word_ids": [
+            127,
+            128
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 5,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        627,
+        570,
+        645
+      ],
+      "expected": "SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            422
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            204
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 5,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        627,
+        700,
+        645
+      ],
+      "expected": "12x12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12x12",
+          "word_ids": [
+            423
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12x12",
+          "word_ids": [
+            232
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 5,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        627,
+        790,
+        645
+      ],
+      "expected": "6ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6ø",
+          "word_ids": [
+            424
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6ø",
+          "word_ids": [
+            883
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 5,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        627,
+        845,
+        645
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            425
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            884
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 5,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        627,
+        890,
+        645
+      ],
+      "expected": "155",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "155",
+          "word_ids": [
+            426
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "155",
+          "word_ids": [
+            885
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 5,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        627,
+        960,
+        645
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            427
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            278
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 5,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        627,
+        1040,
+        645
+      ],
+      "expected": "4-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4-WAY",
+          "word_ids": [
+            428
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4-WAY",
+          "word_ids": [
+            306
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 5,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        627,
+        1120,
+        645
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            429
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            334
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 6,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        645,
+        280,
+        662
+      ],
+      "expected": "EG-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EG-1",
+          "word_ids": [
+            430
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EG-1",
+          "word_ids": [
+            844
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 6,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        645,
+        460,
+        662
+      ],
+      "expected": "EGGCRATE EXHAUST GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EGGCRATE EXHAUST GRILLE",
+          "word_ids": [
+            431,
+            432,
+            433
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EGGCRATE EXHAUST GRILLE",
+          "word_ids": [
+            129,
+            130,
+            131
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 6,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        645,
+        570,
+        662
+      ],
+      "expected": "SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            434
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            205
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 6,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        645,
+        700,
+        662
+      ],
+      "expected": "8x8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8x8",
+          "word_ids": [
+            435
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8x8",
+          "word_ids": [
+            233
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 6,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        645,
+        790,
+        662
+      ],
+      "expected": "6x6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6x6",
+          "word_ids": [
+            436
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6x6",
+          "word_ids": [
+            886
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 6,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        645,
+        845,
+        662
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            437
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            887
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 6,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        645,
+        890,
+        662
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            438
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            888
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 6,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        645,
+        960,
+        662
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            439
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            279
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 6,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        645,
+        1040,
+        662
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            440
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            307
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 6,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        645,
+        1120,
+        662
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            441
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            335
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 7,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        662,
+        280,
+        679
+      ],
+      "expected": "EG-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EG-2",
+          "word_ids": [
+            442
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EG-2",
+          "word_ids": [
+            845
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 7,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        662,
+        460,
+        679
+      ],
+      "expected": "EGGCRATE EXHAUST GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EGGCRATE EXHAUST GRILLE",
+          "word_ids": [
+            443,
+            444,
+            445
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EGGCRATE EXHAUST GRILLE",
+          "word_ids": [
+            132,
+            133,
+            134
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 7,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        662,
+        570,
+        679
+      ],
+      "expected": "SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            446
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            206
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 7,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        662,
+        700,
+        679
+      ],
+      "expected": "12x12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12x12",
+          "word_ids": [
+            447
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12x12",
+          "word_ids": [
+            234
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 7,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        662,
+        790,
+        679
+      ],
+      "expected": "8x8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8x8",
+          "word_ids": [
+            448
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8x8",
+          "word_ids": [
+            889
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 7,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        662,
+        845,
+        679
+      ],
+      "expected": "151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "151",
+          "word_ids": [
+            449
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "151",
+          "word_ids": [
+            890
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 7,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        662,
+        890,
+        679
+      ],
+      "expected": "300",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            450
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            891
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 7,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        662,
+        960,
+        679
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            451
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            280
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 7,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        662,
+        1040,
+        679
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            452
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            308
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 7,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        662,
+        1120,
+        679
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            453
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            336
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 8,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        679,
+        280,
+        696
+      ],
+      "expected": "EG-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EG-3",
+          "word_ids": [
+            454
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EG-3",
+          "word_ids": [
+            846
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 8,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        679,
+        460,
+        696
+      ],
+      "expected": "EGGCRATE EXHAUST GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EGGCRATE EXHAUST GRILLE",
+          "word_ids": [
+            455,
+            456,
+            457
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EGGCRATE EXHAUST GRILLE",
+          "word_ids": [
+            135,
+            136,
+            137
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 8,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        679,
+        570,
+        696
+      ],
+      "expected": "ACT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            458
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            207
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 8,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        679,
+        700,
+        696
+      ],
+      "expected": "24x24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            459
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            235
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 8,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        679,
+        790,
+        696
+      ],
+      "expected": "8x8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8x8",
+          "word_ids": [
+            460
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8x8",
+          "word_ids": [
+            892
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 8,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        679,
+        845,
+        696
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            461
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            893
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 8,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        679,
+        890,
+        696
+      ],
+      "expected": "200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            462
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            894
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 8,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        679,
+        960,
+        696
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            463
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            281
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 8,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        679,
+        1040,
+        696
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            464
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            309
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 8,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        679,
+        1120,
+        696
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            465
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            337
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 9,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        696,
+        280,
+        713
+      ],
+      "expected": "EG-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EG-4",
+          "word_ids": [
+            466
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EG-4",
+          "word_ids": [
+            847
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 9,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        696,
+        460,
+        713
+      ],
+      "expected": "LOUVERED RETURN GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOUVERED RETURN GRILLE",
+          "word_ids": [
+            467,
+            468,
+            469
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOUVERED RETURN GRILLE",
+          "word_ids": [
+            138,
+            139,
+            140
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 9,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        696,
+        570,
+        713
+      ],
+      "expected": "DUCT/SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT/SURFACE",
+          "word_ids": [
+            470
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT/SURFACE",
+          "word_ids": [
+            208
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 9,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        696,
+        700,
+        713
+      ],
+      "expected": "10x8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10x8",
+          "word_ids": [
+            471
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10x8",
+          "word_ids": [
+            236
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 9,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        696,
+        790,
+        713
+      ],
+      "expected": "8x6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8x6",
+          "word_ids": [
+            472
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8x6",
+          "word_ids": [
+            895
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 9,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        696,
+        845,
+        713
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            473
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            896
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 9,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        696,
+        890,
+        713
+      ],
+      "expected": "180",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "180",
+          "word_ids": [
+            474
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "180",
+          "word_ids": [
+            897
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 9,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        696,
+        960,
+        713
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            475
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            282
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 9,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        696,
+        1040,
+        713
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            476
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            310
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 9,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        696,
+        1120,
+        713
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            477
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            338
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 10,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        713,
+        280,
+        731
+      ],
+      "expected": "LD-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LD-1",
+          "word_ids": [
+            478
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LD-1",
+          "word_ids": [
+            848
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 10,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        713,
+        460,
+        731
+      ],
+      "expected": "LINEAR SUPPLY DIFFUSER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LINEAR SUPPLY DIFFUSER",
+          "word_ids": [
+            479,
+            480,
+            481
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LINEAR SUPPLY DIFFUSER",
+          "word_ids": [
+            141,
+            142,
+            143
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 10,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        713,
+        570,
+        731
+      ],
+      "expected": "SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            482
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            209
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 10,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        713,
+        700,
+        731
+      ],
+      "expected": "4 FT. LONG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4 FT. LONG",
+          "word_ids": [
+            483,
+            484,
+            485
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4 FT. LONG",
+          "word_ids": [
+            237,
+            238,
+            239
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 10,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        713,
+        790,
+        731
+      ],
+      "expected": "8ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8ø",
+          "word_ids": [
+            486
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8ø",
+          "word_ids": [
+            898
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 10,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        713,
+        845,
+        731
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            487
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            899
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 10,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        713,
+        890,
+        731
+      ],
+      "expected": "175",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "175",
+          "word_ids": [
+            488
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "175",
+          "word_ids": [
+            900
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 10,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        713,
+        960,
+        731
+      ],
+      "expected": "<10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "<10",
+          "word_ids": [
+            489
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "<10",
+          "word_ids": [
+            283
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 10,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        713,
+        1040,
+        731
+      ],
+      "expected": "1-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-WAY",
+          "word_ids": [
+            490
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-WAY",
+          "word_ids": [
+            311
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 10,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        713,
+        1120,
+        731
+      ],
+      "expected": "1,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            491
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            339
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 11,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        731,
+        280,
+        748
+      ],
+      "expected": "LD-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LD-2",
+          "word_ids": [
+            492
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LD-2",
+          "word_ids": [
+            849
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 11,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        731,
+        460,
+        748
+      ],
+      "expected": "LINEAR SUPPLY DIFFUSER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LINEAR SUPPLY DIFFUSER",
+          "word_ids": [
+            493,
+            494,
+            495
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LINEAR SUPPLY DIFFUSER",
+          "word_ids": [
+            144,
+            145,
+            146
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 11,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        731,
+        570,
+        748
+      ],
+      "expected": "SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            496
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            210
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 11,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        731,
+        700,
+        748
+      ],
+      "expected": "3 FT. 11 IN. LONG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3 FT. 11 IN. LONG",
+          "word_ids": [
+            497,
+            498,
+            499,
+            500,
+            501
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3 FT. 11 IN. LONG",
+          "word_ids": [
+            240,
+            241,
+            242,
+            243,
+            244
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 11,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        731,
+        790,
+        748
+      ],
+      "expected": "8ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8ø",
+          "word_ids": [
+            502
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8ø",
+          "word_ids": [
+            901
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 11,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        731,
+        845,
+        748
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            503
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            902
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 11,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        731,
+        890,
+        748
+      ],
+      "expected": "175",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "175",
+          "word_ids": [
+            504
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "175",
+          "word_ids": [
+            903
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 11,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        731,
+        960,
+        748
+      ],
+      "expected": "<10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "<10",
+          "word_ids": [
+            505
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "<10",
+          "word_ids": [
+            284
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 11,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        731,
+        1040,
+        748
+      ],
+      "expected": "1-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-WAY",
+          "word_ids": [
+            506
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-WAY",
+          "word_ids": [
+            312
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 11,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        731,
+        1120,
+        748
+      ],
+      "expected": "2,3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,3",
+          "word_ids": [
+            507
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,3",
+          "word_ids": [
+            340
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 12,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        748,
+        280,
+        765
+      ],
+      "expected": "LD-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LD-3",
+          "word_ids": [
+            508
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LD-3",
+          "word_ids": [
+            850
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 12,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        748,
+        460,
+        765
+      ],
+      "expected": "LINEAR SUPPLY DIFFUSER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LINEAR SUPPLY DIFFUSER",
+          "word_ids": [
+            509,
+            510,
+            511
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LINEAR SUPPLY DIFFUSER",
+          "word_ids": [
+            147,
+            148,
+            149
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 12,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        748,
+        570,
+        765
+      ],
+      "expected": "SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            512
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            211
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 12,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        748,
+        700,
+        765
+      ],
+      "expected": "2 FT. 4 IN. LONG",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2 FT. 4 IN. LONG",
+          "word_ids": [
+            513,
+            514,
+            515,
+            516,
+            517
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2 FT. 4 IN. LONG",
+          "word_ids": [
+            245,
+            246,
+            247,
+            248,
+            249
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 12,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        748,
+        790,
+        765
+      ],
+      "expected": "8ø",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8ø",
+          "word_ids": [
+            518
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8ø",
+          "word_ids": [
+            904
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 12,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        748,
+        845,
+        765
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            519
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            905
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 12,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        748,
+        890,
+        765
+      ],
+      "expected": "175",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "175",
+          "word_ids": [
+            520
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "175",
+          "word_ids": [
+            906
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 12,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        748,
+        960,
+        765
+      ],
+      "expected": "<10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "<10",
+          "word_ids": [
+            521
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "<10",
+          "word_ids": [
+            285
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 12,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        748,
+        1040,
+        765
+      ],
+      "expected": "1-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-WAY",
+          "word_ids": [
+            522
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-WAY",
+          "word_ids": [
+            313
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 12,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        748,
+        1120,
+        765
+      ],
+      "expected": "2,3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,3",
+          "word_ids": [
+            523
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,3",
+          "word_ids": [
+            341
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 13,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        765,
+        280,
+        782
+      ],
+      "expected": "RG-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-1",
+          "word_ids": [
+            524
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-1",
+          "word_ids": [
+            851
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 13,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        765,
+        460,
+        782
+      ],
+      "expected": "PERFORATED RETURN GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PERFORATED RETURN GRILLE",
+          "word_ids": [
+            525,
+            526,
+            527
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PERFORATED RETURN GRILLE",
+          "word_ids": [
+            150,
+            151,
+            152
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 13,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        765,
+        570,
+        782
+      ],
+      "expected": "ACT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            528
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            212
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 13,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        765,
+        700,
+        782
+      ],
+      "expected": "24x24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            529
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            250
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 13,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        765,
+        790,
+        782
+      ],
+      "expected": "6x6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6x6",
+          "word_ids": [
+            530
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6x6",
+          "word_ids": [
+            907
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 13,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        765,
+        845,
+        782
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            531
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            908
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 13,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        765,
+        890,
+        782
+      ],
+      "expected": "200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            532
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            909
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 13,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        765,
+        960,
+        782
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            533
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            286
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 13,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        765,
+        1040,
+        782
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            534
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            314
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 13,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        765,
+        1120,
+        782
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            535
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            342
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 14,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        782,
+        280,
+        799
+      ],
+      "expected": "RG-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-2",
+          "word_ids": [
+            536
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-2",
+          "word_ids": [
+            852
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 14,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        782,
+        460,
+        799
+      ],
+      "expected": "PERFORATED RETURN GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PERFORATED RETURN GRILLE",
+          "word_ids": [
+            537,
+            538,
+            539
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PERFORATED RETURN GRILLE",
+          "word_ids": [
+            153,
+            154,
+            155
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 14,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        782,
+        570,
+        799
+      ],
+      "expected": "ACT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            540
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            213
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 14,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        782,
+        700,
+        799
+      ],
+      "expected": "24x24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            541
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            251
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 14,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        782,
+        790,
+        799
+      ],
+      "expected": "8x8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8x8",
+          "word_ids": [
+            542
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8x8",
+          "word_ids": [
+            910
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 14,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        782,
+        845,
+        799
+      ],
+      "expected": "201",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "201",
+          "word_ids": [
+            543
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "201",
+          "word_ids": [
+            911
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 14,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        782,
+        890,
+        799
+      ],
+      "expected": "350",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "350",
+          "word_ids": [
+            544
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "350",
+          "word_ids": [
+            912
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 14,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        782,
+        960,
+        799
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            545
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            287
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 14,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        782,
+        1040,
+        799
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            546
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            315
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 14,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        782,
+        1120,
+        799
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            343
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 15,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        799,
+        280,
+        817
+      ],
+      "expected": "RG-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-3",
+          "word_ids": [
+            548
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-3",
+          "word_ids": [
+            853
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 15,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        799,
+        460,
+        817
+      ],
+      "expected": "PERFORATED RETURN GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PERFORATED RETURN GRILLE",
+          "word_ids": [
+            549,
+            550,
+            551
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PERFORATED RETURN GRILLE",
+          "word_ids": [
+            156,
+            157,
+            158
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 15,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        799,
+        570,
+        817
+      ],
+      "expected": "ACT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            552
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            214
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 15,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        799,
+        700,
+        817
+      ],
+      "expected": "24x24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            553
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            252
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 15,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        799,
+        790,
+        817
+      ],
+      "expected": "10x10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10x10",
+          "word_ids": [
+            554
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10x10",
+          "word_ids": [
+            913
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 15,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        799,
+        845,
+        817
+      ],
+      "expected": "351",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "351",
+          "word_ids": [
+            555
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "351",
+          "word_ids": [
+            914
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 15,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        799,
+        890,
+        817
+      ],
+      "expected": "550",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "550",
+          "word_ids": [
+            556
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "550",
+          "word_ids": [
+            915
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 15,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        799,
+        960,
+        817
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            557
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            288
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 15,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        799,
+        1040,
+        817
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            558
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            316
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 15,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        799,
+        1120,
+        817
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            559
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            344
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 16,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        817,
+        280,
+        834
+      ],
+      "expected": "RG-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-4",
+          "word_ids": [
+            560
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-4",
+          "word_ids": [
+            854
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 16,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        817,
+        460,
+        834
+      ],
+      "expected": "PERFORATED RETURN GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PERFORATED RETURN GRILLE",
+          "word_ids": [
+            561,
+            562,
+            563
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PERFORATED RETURN GRILLE",
+          "word_ids": [
+            159,
+            160,
+            161
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 16,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        817,
+        570,
+        834
+      ],
+      "expected": "ACT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            564
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            215
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 16,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        817,
+        700,
+        834
+      ],
+      "expected": "24x24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            565
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            253
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 16,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        817,
+        790,
+        834
+      ],
+      "expected": "12x12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12x12",
+          "word_ids": [
+            566
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12x12",
+          "word_ids": [
+            916
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 16,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        817,
+        845,
+        834
+      ],
+      "expected": "551",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "551",
+          "word_ids": [
+            567
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "551",
+          "word_ids": [
+            917
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 16,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        817,
+        890,
+        834
+      ],
+      "expected": "700",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "700",
+          "word_ids": [
+            568
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "700",
+          "word_ids": [
+            918
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 16,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        817,
+        960,
+        834
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            569
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            289
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 16,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        817,
+        1040,
+        834
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            570
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            317
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 16,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        817,
+        1120,
+        834
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            571
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            345
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 17,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        834,
+        280,
+        851
+      ],
+      "expected": "RG-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-6",
+          "word_ids": [
+            572
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-6",
+          "word_ids": [
+            855
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 17,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        834,
+        460,
+        851
+      ],
+      "expected": "FILTERED RETURN GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FILTERED RETURN GRILLE",
+          "word_ids": [
+            573,
+            574,
+            575
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FILTERED RETURN GRILLE",
+          "word_ids": [
+            162,
+            163,
+            164
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 17,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        834,
+        570,
+        851
+      ],
+      "expected": "ACT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            576
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            216
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 17,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        834,
+        700,
+        851
+      ],
+      "expected": "24x24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            577
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            254
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 17,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        834,
+        790,
+        851
+      ],
+      "expected": "6x6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6x6",
+          "word_ids": [
+            578
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6x6",
+          "word_ids": [
+            919
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 17,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        834,
+        845,
+        851
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            579
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            920
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 17,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        834,
+        890,
+        851
+      ],
+      "expected": "200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            580
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            921
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 17,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        834,
+        960,
+        851
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            581
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            290
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 17,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        834,
+        1040,
+        851
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            582
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            318
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 17,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        834,
+        1120,
+        851
+      ],
+      "expected": "3,5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3,5",
+          "word_ids": [
+            583
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3,5",
+          "word_ids": [
+            346
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 18,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        851,
+        280,
+        868
+      ],
+      "expected": "RG-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-7",
+          "word_ids": [
+            584
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-7",
+          "word_ids": [
+            856
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 18,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        851,
+        460,
+        868
+      ],
+      "expected": "FILTERED RETURN GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FILTERED RETURN GRILLE",
+          "word_ids": [
+            585,
+            586,
+            587
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FILTERED RETURN GRILLE",
+          "word_ids": [
+            165,
+            166,
+            167
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 18,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        851,
+        570,
+        868
+      ],
+      "expected": "ACT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            588
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            217
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 18,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        851,
+        700,
+        868
+      ],
+      "expected": "24x24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            589
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            255
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 18,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        851,
+        790,
+        868
+      ],
+      "expected": "8x8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8x8",
+          "word_ids": [
+            590
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8x8",
+          "word_ids": [
+            922
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 18,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        851,
+        845,
+        868
+      ],
+      "expected": "201",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "201",
+          "word_ids": [
+            591
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "201",
+          "word_ids": [
+            923
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 18,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        851,
+        890,
+        868
+      ],
+      "expected": "350",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "350",
+          "word_ids": [
+            592
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "350",
+          "word_ids": [
+            924
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 18,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        851,
+        960,
+        868
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            593
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            291
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 18,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        851,
+        1040,
+        868
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            594
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            319
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 18,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        851,
+        1120,
+        868
+      ],
+      "expected": "3,5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3,5",
+          "word_ids": [
+            595
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3,5",
+          "word_ids": [
+            347
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 19,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        868,
+        280,
+        885
+      ],
+      "expected": "RG-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-8",
+          "word_ids": [
+            596
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-8",
+          "word_ids": [
+            857
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 19,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        868,
+        460,
+        885
+      ],
+      "expected": "FILTERED RETURN GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FILTERED RETURN GRILLE",
+          "word_ids": [
+            597,
+            598,
+            599
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FILTERED RETURN GRILLE",
+          "word_ids": [
+            168,
+            169,
+            170
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 19,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        868,
+        570,
+        885
+      ],
+      "expected": "ACT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            600
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            218
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 19,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        868,
+        700,
+        885
+      ],
+      "expected": "24x24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            601
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            256
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 19,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        868,
+        790,
+        885
+      ],
+      "expected": "10x10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10x10",
+          "word_ids": [
+            602
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10x10",
+          "word_ids": [
+            925
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 19,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        868,
+        845,
+        885
+      ],
+      "expected": "351",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "351",
+          "word_ids": [
+            603
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "351",
+          "word_ids": [
+            926
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 19,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        868,
+        890,
+        885
+      ],
+      "expected": "550",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "550",
+          "word_ids": [
+            604
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "550",
+          "word_ids": [
+            927
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 19,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        868,
+        960,
+        885
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            605
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            292
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 19,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        868,
+        1040,
+        885
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            606
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            320
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 19,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        868,
+        1120,
+        885
+      ],
+      "expected": "3,5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3,5",
+          "word_ids": [
+            607
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3,5",
+          "word_ids": [
+            348
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 20,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        885,
+        280,
+        903
+      ],
+      "expected": "RG-11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-11",
+          "word_ids": [
+            608
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-11",
+          "word_ids": [
+            858
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 20,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        885,
+        460,
+        903
+      ],
+      "expected": "LOUVERED RETURN GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOUVERED RETURN GRILLE",
+          "word_ids": [
+            609,
+            610,
+            611
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOUVERED RETURN GRILLE",
+          "word_ids": [
+            171,
+            172,
+            173
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 20,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        885,
+        570,
+        903
+      ],
+      "expected": "DUCT/SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT/SURFACE",
+          "word_ids": [
+            612
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT/SURFACE",
+          "word_ids": [
+            219
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 20,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        885,
+        700,
+        903
+      ],
+      "expected": "10x8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10x8",
+          "word_ids": [
+            613
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10x8",
+          "word_ids": [
+            257
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 20,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        885,
+        790,
+        903
+      ],
+      "expected": "8x6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8x6",
+          "word_ids": [
+            614
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8x6",
+          "word_ids": [
+            928
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 20,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        885,
+        845,
+        903
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            615
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            929
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 20,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        885,
+        890,
+        903
+      ],
+      "expected": "180",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "180",
+          "word_ids": [
+            616
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "180",
+          "word_ids": [
+            930
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 20,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        885,
+        960,
+        903
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            617
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            293
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 20,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        885,
+        1040,
+        903
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            618
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            321
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 20,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        885,
+        1120,
+        903
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            619
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            349
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 21,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        903,
+        280,
+        920
+      ],
+      "expected": "RG-12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-12",
+          "word_ids": [
+            620
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-12",
+          "word_ids": [
+            859
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 21,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        903,
+        460,
+        920
+      ],
+      "expected": "FILTERED LOUVERED RETURN GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FILTERED LOUVERED RETURN GRILLE",
+          "word_ids": [
+            621,
+            622,
+            623,
+            624
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FILTERED LOUVERED RETURN GRILLE",
+          "word_ids": [
+            174,
+            175,
+            176,
+            177
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 21,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        903,
+        570,
+        920
+      ],
+      "expected": "DUCT/SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT/SURFACE",
+          "word_ids": [
+            625
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT/SURFACE",
+          "word_ids": [
+            220
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 21,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        903,
+        700,
+        920
+      ],
+      "expected": "10x8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10x8",
+          "word_ids": [
+            626
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10x8",
+          "word_ids": [
+            258
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 21,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        903,
+        790,
+        920
+      ],
+      "expected": "8x6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8x6",
+          "word_ids": [
+            627
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8x6",
+          "word_ids": [
+            931
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 21,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        903,
+        845,
+        920
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            628
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            932
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 21,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        903,
+        890,
+        920
+      ],
+      "expected": "180",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "180",
+          "word_ids": [
+            629
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "180",
+          "word_ids": [
+            933
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 21,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        903,
+        960,
+        920
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            630
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            294
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 21,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        903,
+        1040,
+        920
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            631
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            322
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 21,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        903,
+        1120,
+        920
+      ],
+      "expected": "3,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3,6",
+          "word_ids": [
+            632
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3,6",
+          "word_ids": [
+            350
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 22,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        920,
+        280,
+        937
+      ],
+      "expected": "RG-13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RG-13",
+          "word_ids": [
+            633
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RG-13",
+          "word_ids": [
+            860
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 22,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        920,
+        460,
+        937
+      ],
+      "expected": "FILTERED LOUVERED RETURN GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FILTERED LOUVERED RETURN GRILLE",
+          "word_ids": [
+            634,
+            635,
+            636,
+            637
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FILTERED LOUVERED RETURN GRILLE",
+          "word_ids": [
+            178,
+            179,
+            180,
+            181
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 22,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        920,
+        570,
+        937
+      ],
+      "expected": "SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            638
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            221
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 22,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        920,
+        700,
+        937
+      ],
+      "expected": "12x12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12x12",
+          "word_ids": [
+            639
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12x12",
+          "word_ids": [
+            259
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 22,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        920,
+        790,
+        937
+      ],
+      "expected": "6x6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6x6",
+          "word_ids": [
+            640
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6x6",
+          "word_ids": [
+            934
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 22,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        920,
+        845,
+        937
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            641
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            935
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 22,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        920,
+        890,
+        937
+      ],
+      "expected": "100",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            642
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            936
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 22,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        920,
+        960,
+        937
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            643
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            295
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 22,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        920,
+        1040,
+        937
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            644
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            323
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 22,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        920,
+        1120,
+        937
+      ],
+      "expected": "3,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3,6",
+          "word_ids": [
+            645
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3,6",
+          "word_ids": [
+            351
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 23,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        937,
+        280,
+        954
+      ],
+      "expected": "SG-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SG-1",
+          "word_ids": [
+            646
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SG-1",
+          "word_ids": [
+            861
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 23,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        937,
+        460,
+        954
+      ],
+      "expected": "LOUVERED SUPPLY GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOUVERED SUPPLY GRILLE",
+          "word_ids": [
+            647,
+            648,
+            649
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOUVERED SUPPLY GRILLE",
+          "word_ids": [
+            182,
+            183,
+            184
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 23,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        937,
+        570,
+        954
+      ],
+      "expected": "DUCT/SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT/SURFACE",
+          "word_ids": [
+            650
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT/SURFACE",
+          "word_ids": [
+            222
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 23,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        937,
+        700,
+        954
+      ],
+      "expected": "NECK SIZE + 2\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NECK SIZE + 2\"",
+          "word_ids": [
+            651,
+            652,
+            653,
+            654
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NECK SIZE + 2\"",
+          "word_ids": [
+            260,
+            261,
+            262,
+            263
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 23,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        937,
+        790,
+        954
+      ],
+      "expected": "SEE DRAWINGS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE DRAWINGS",
+          "word_ids": [
+            655,
+            656
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE DRAWINGS",
+          "word_ids": [
+            937,
+            938
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 23,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        937,
+        845,
+        954
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            657
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            939
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 23,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        937,
+        890,
+        954
+      ],
+      "expected": "1000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1000",
+          "word_ids": [
+            658
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1000",
+          "word_ids": [
+            940
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 23,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        937,
+        960,
+        954
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            659
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            296
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 23,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        937,
+        1040,
+        954
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            660
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            324
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 23,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        937,
+        1120,
+        954
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            661
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            352
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 24,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        954,
+        280,
+        971
+      ],
+      "expected": "TG-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TG-1",
+          "word_ids": [
+            662
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TG-1",
+          "word_ids": [
+            862
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 24,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        954,
+        460,
+        971
+      ],
+      "expected": "EGGCRATE TRANSFER GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EGGCRATE TRANSFER GRILLE",
+          "word_ids": [
+            663,
+            664,
+            665
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EGGCRATE TRANSFER GRILLE",
+          "word_ids": [
+            185,
+            186,
+            187
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 24,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        954,
+        570,
+        971
+      ],
+      "expected": "ACT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            666
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACT",
+          "word_ids": [
+            223
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 24,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        954,
+        700,
+        971
+      ],
+      "expected": "24x24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            667
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24x24",
+          "word_ids": [
+            264
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 24,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        954,
+        790,
+        971
+      ],
+      "expected": "8x8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8x8",
+          "word_ids": [
+            668
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8x8",
+          "word_ids": [
+            941
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 24,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        954,
+        845,
+        971
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            669
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            942
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 24,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        954,
+        890,
+        971
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            670
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            943
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 24,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        954,
+        960,
+        971
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            671
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            297
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 24,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        954,
+        1040,
+        971
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            672
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            325
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 24,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        954,
+        1120,
+        971
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            673
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            353
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 25,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        971,
+        280,
+        989
+      ],
+      "expected": "TG-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TG-2",
+          "word_ids": [
+            674
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TG-2",
+          "word_ids": [
+            863
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 25,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        971,
+        460,
+        989
+      ],
+      "expected": "LOUVERED TRANSFER GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOUVERED TRANSFER GRILLE",
+          "word_ids": [
+            675,
+            676,
+            677
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOUVERED TRANSFER GRILLE",
+          "word_ids": [
+            188,
+            189,
+            190
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 25,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        971,
+        570,
+        989
+      ],
+      "expected": "DUCT/SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT/SURFACE",
+          "word_ids": [
+            678
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT/SURFACE",
+          "word_ids": [
+            224
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 25,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        971,
+        700,
+        989
+      ],
+      "expected": "12x10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12x10",
+          "word_ids": [
+            679
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12x10",
+          "word_ids": [
+            265
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 25,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        971,
+        790,
+        989
+      ],
+      "expected": "10x8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10x8",
+          "word_ids": [
+            680
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10x8",
+          "word_ids": [
+            944
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 25,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        971,
+        845,
+        989
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            681
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            945
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 25,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        971,
+        890,
+        989
+      ],
+      "expected": "200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            682
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            946
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 25,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        971,
+        960,
+        989
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            683
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            298
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 25,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        971,
+        1040,
+        989
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            684
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            326
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 25,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        971,
+        1120,
+        989
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            685
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            354
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 26,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        989,
+        280,
+        1006
+      ],
+      "expected": "TG-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TG-3",
+          "word_ids": [
+            686
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TG-3",
+          "word_ids": [
+            864
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 26,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        989,
+        460,
+        1006
+      ],
+      "expected": "EGGCRATE TRANSFER GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EGGCRATE TRANSFER GRILLE",
+          "word_ids": [
+            687,
+            688,
+            689
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EGGCRATE TRANSFER GRILLE",
+          "word_ids": [
+            191,
+            192,
+            193
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 26,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        989,
+        570,
+        1006
+      ],
+      "expected": "SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            690
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            225
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 26,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        989,
+        700,
+        1006
+      ],
+      "expected": "12x12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12x12",
+          "word_ids": [
+            691
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12x12",
+          "word_ids": [
+            266
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 26,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        989,
+        790,
+        1006
+      ],
+      "expected": "8x8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8x8",
+          "word_ids": [
+            692
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8x8",
+          "word_ids": [
+            947
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 26,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        989,
+        845,
+        1006
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            693
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            948
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 26,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        989,
+        890,
+        1006
+      ],
+      "expected": "300",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            694
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            949
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 26,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        989,
+        960,
+        1006
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            695
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            299
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 26,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        989,
+        1040,
+        1006
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            696
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            327
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 26,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        989,
+        1120,
+        1006
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            697
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            355
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 27,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        1006,
+        280,
+        1023
+      ],
+      "expected": "TG-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TG-4",
+          "word_ids": [
+            698
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TG-4",
+          "word_ids": [
+            865
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 27,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        1006,
+        460,
+        1023
+      ],
+      "expected": "LOUVERED TRANSFER GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOUVERED TRANSFER GRILLE",
+          "word_ids": [
+            699,
+            700,
+            701
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOUVERED TRANSFER GRILLE",
+          "word_ids": [
+            194,
+            195,
+            196
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 27,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        1006,
+        570,
+        1023
+      ],
+      "expected": "DUCT/SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT/SURFACE",
+          "word_ids": [
+            702
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT/SURFACE",
+          "word_ids": [
+            226
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 27,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        1006,
+        700,
+        1023
+      ],
+      "expected": "10x8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10x8",
+          "word_ids": [
+            703
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10x8",
+          "word_ids": [
+            267
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 27,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        1006,
+        790,
+        1023
+      ],
+      "expected": "8x6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8x6",
+          "word_ids": [
+            704
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8x6",
+          "word_ids": [
+            950
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 27,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        1006,
+        845,
+        1023
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            705
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            951
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 27,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        1006,
+        890,
+        1023
+      ],
+      "expected": "200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            706
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            952
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 27,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        1006,
+        960,
+        1023
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            707
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            300
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 27,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        1006,
+        1040,
+        1023
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            708
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            328
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 27,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        1006,
+        1120,
+        1023
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            709
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            356
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 28,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        220,
+        1023,
+        280,
+        1040
+      ],
+      "expected": "TG-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TG-5",
+          "word_ids": [
+            710
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TG-5",
+          "word_ids": [
+            866
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 28,
+      "column": "type",
+      "page": 44,
+      "bbox": [
+        280,
+        1023,
+        460,
+        1040
+      ],
+      "expected": "EGGCRATE TRANSFER GRILLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EGGCRATE TRANSFER GRILLE",
+          "word_ids": [
+            711,
+            712,
+            713
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EGGCRATE TRANSFER GRILLE",
+          "word_ids": [
+            197,
+            198,
+            199
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 28,
+      "column": "mounting",
+      "page": 44,
+      "bbox": [
+        460,
+        1023,
+        570,
+        1040
+      ],
+      "expected": "SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            714
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SURFACE",
+          "word_ids": [
+            227
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 28,
+      "column": "face_size_in",
+      "page": 44,
+      "bbox": [
+        570,
+        1023,
+        700,
+        1040
+      ],
+      "expected": "12x12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12x12",
+          "word_ids": [
+            715
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12x12",
+          "word_ids": [
+            268
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 28,
+      "column": "neck_size_in",
+      "page": 44,
+      "bbox": [
+        700,
+        1023,
+        790,
+        1040
+      ],
+      "expected": "8x8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8x8",
+          "word_ids": [
+            716
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8x8",
+          "word_ids": [
+            953
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 28,
+      "column": "airflow_min_CFM",
+      "page": 44,
+      "bbox": [
+        790,
+        1023,
+        845,
+        1040
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            717
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            954
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 28,
+      "column": "airflow_max_CFM",
+      "page": 44,
+      "bbox": [
+        845,
+        1023,
+        890,
+        1040
+      ],
+      "expected": "300",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            718
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            955
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 28,
+      "column": "max_NC",
+      "page": 44,
+      "bbox": [
+        890,
+        1023,
+        960,
+        1040
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            719
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            301
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 28,
+      "column": "throw_pattern",
+      "page": 44,
+      "bbox": [
+        960,
+        1023,
+        1040,
+        1040
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            720
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            329
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "row": 28,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        1040,
+        1023,
+        1120,
+        1040
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            721
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            357
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "header": "GRILLE REGISTER AND DIFFUSER SCHEDULE",
+      "page": 44,
+      "bbox": [
+        430,
+        480,
+        950,
+        525
+      ],
+      "engine": "mupdf",
+      "actual": "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "header": "GRILLE REGISTER AND DIFFUSER SCHEDULE",
+      "page": 44,
+      "bbox": [
+        430,
+        480,
+        950,
+        525
+      ],
+      "engine": "poppler",
+      "actual": "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "header": "MARK TYPE MOUNTING FACE SIZE IN NECK SIZE IN AIRFLOW CFM MIN MAX MAX NC THROW PATTERN NOTES",
+      "page": 44,
+      "bbox": [
+        220,
+        525,
+        1120,
+        559
+      ],
+      "engine": "mupdf",
+      "actual": "AIRFLOW (CFM) THROW MARK TYPE MOUNTING FACE SIZE (IN) NECK SIZE (IN) MAX NC NOTES MIN MAX PATTERN",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "header": "MARK TYPE MOUNTING FACE SIZE IN NECK SIZE IN AIRFLOW CFM MIN MAX MAX NC THROW PATTERN NOTES",
+      "page": 44,
+      "bbox": [
+        220,
+        525,
+        1120,
+        559
+      ],
+      "engine": "poppler",
+      "actual": "AIRFLOW (CFM) THROW MARK TYPE MOUNTING FACE SIZE (IN) NECK SIZE (IN) MAX NC NOTES PATTERN MIN MAX",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "air-ops-grille-register-diffuser-row-count",
+      "actual": 28,
+      "expected": 28,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

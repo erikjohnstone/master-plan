@@ -1,0 +1,29 @@
+{
+  "document_id": "28__vol1__26",
+  "module_role": "One literal controls-legend function row; no formal BAS matrix is published.",
+  "tables": [
+    {
+      "id": "M001-CONTROL-LEGEND",
+      "page": 1,
+      "sheet": "M-001",
+      "title_as_printed": "CONTROLS LEGEND",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        350,
+        510
+      ],
+      "y_ranges": [
+        [
+          235,
+          265
+        ]
+      ],
+      "rows": [
+        "AUTOMATIC CONTROL DAMPER"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "One literal legend function only; no physical count or ownership is implied."
+    }
+  ],
+  "assertions": []
+}

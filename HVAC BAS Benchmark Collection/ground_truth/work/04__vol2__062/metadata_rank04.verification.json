@@ -1,0 +1,230 @@
+{
+  "document_id": "04__vol2__062",
+  "source_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "annotation_sha256": "be887208a95be11ab41642f0dad398359052fa039a96807ad022f056b2ba1cce",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 7,
+  "checks": [
+    {
+      "assertion": "rank04-project-title",
+      "page": 3,
+      "bbox": [
+        2470,
+        1120,
+        2502,
+        1330
+      ],
+      "expected": "D-1 Testing Laboratory",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-1 Testing Laboratory",
+          "word_ids": [
+            470,
+            471,
+            472
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-1 Testing Laboratory",
+          "word_ids": [
+            598,
+            599,
+            600
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank04-project-address",
+      "page": 3,
+      "bbox": [
+        2500,
+        1110,
+        2565,
+        1330
+      ],
+      "expected": "600 W Prairie Ave Coeur d'Alene, ID 83814",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "600 W Prairie Ave Coeur d'Alene, ID 83814",
+          "word_ids": [
+            475,
+            476,
+            477,
+            478,
+            479,
+            480,
+            481,
+            482
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "600 W Prairie Ave Coeur d'Alene, ID 83814",
+          "word_ids": [
+            582,
+            583,
+            584,
+            585,
+            589,
+            590,
+            591,
+            592
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank04-project-number",
+      "page": 3,
+      "bbox": [
+        2350,
+        108,
+        2440,
+        132
+      ],
+      "expected": "Project No. 23-239",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Project No. 23-239",
+          "word_ids": [
+            451,
+            452,
+            453
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Project No. 23-239",
+          "word_ids": [
+            3,
+            4,
+            5
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank04-bid-set",
+      "page": 3,
+      "bbox": [
+        2505,
+        770,
+        2535,
+        860
+      ],
+      "expected": "BID SET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BID SET",
+          "word_ids": [
+            483,
+            484
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BID SET",
+          "word_ids": [
+            457,
+            458
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank04-issue-date",
+      "page": 3,
+      "bbox": [
+        2538,
+        770,
+        2565,
+        860
+      ],
+      "expected": "5/13/2024",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5/13/2024",
+          "word_ids": [
+            485
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5/13/2024",
+          "word_ids": [
+            481
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank04-architect-miller",
+      "page": 3,
+      "bbox": [
+        2464,
+        15,
+        2510,
+        182
+      ],
+      "expected": "MILLER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MILLER",
+          "word_ids": [
+            430
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MILLER",
+          "word_ids": [
+            363
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank04-architect-stauffer",
+      "page": 3,
+      "bbox": [
+        2505,
+        15,
+        2552,
+        256
+      ],
+      "expected": "STAUFFER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STAUFFER",
+          "word_ids": [
+            431
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STAUFFER",
+          "word_ids": [
+            364
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

@@ -1,0 +1,1022 @@
+{
+  "document_id": "18__vol2__092",
+  "source_sha256": "85613e85e63e6e3e527a722dc93a9797b2b1edd57a8ec22fc96b4a808bc0f0a5",
+  "annotation_sha256": "0002f35d9e5187ddf4670f35337a1c9fe29d05afcfe59c4b9fc83cfdce34d681",
+  "tables": 2,
+  "rows": 11,
+  "cell_assertions": 22,
+  "text_assertions": 2,
+  "checks": [
+    {
+      "table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "row": 1,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1790.0,
+        780.0,
+        1850.0,
+        796.0
+      ],
+      "expected": "AO-1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-1:",
+          "word_ids": [
+            1877
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-1:",
+          "word_ids": [
+            885
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "row": 1,
+      "column": "point_name",
+      "page": 13,
+      "bbox": [
+        1850.0,
+        780.0,
+        2150.0,
+        796.0
+      ],
+      "expected": "MODULATING CHILLED WATER VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MODULATING CHILLED WATER VALVE CONTROL",
+          "word_ids": [
+            1878,
+            1879,
+            1880,
+            1881,
+            1882
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MODULATING CHILLED WATER VALVE CONTROL",
+          "word_ids": [
+            988,
+            989,
+            990,
+            991,
+            992
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "row": 2,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1790.0,
+        796.0,
+        1850.0,
+        808.0
+      ],
+      "expected": "AI-1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-1:",
+          "word_ids": [
+            1883
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-1:",
+          "word_ids": [
+            886
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "row": 2,
+      "column": "point_name",
+      "page": 13,
+      "bbox": [
+        1850.0,
+        796.0,
+        2150.0,
+        808.0
+      ],
+      "expected": "FAN COIL DISCHARGE AIR TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN COIL DISCHARGE AIR TEMPERATURE",
+          "word_ids": [
+            1884,
+            1885,
+            1886,
+            1887,
+            1888
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN COIL DISCHARGE AIR TEMPERATURE",
+          "word_ids": [
+            993,
+            994,
+            995,
+            996,
+            997
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "row": 3,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1790.0,
+        808.0,
+        1850.0,
+        819.0
+      ],
+      "expected": "DI-1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI-1:",
+          "word_ids": [
+            1889
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI-1:",
+          "word_ids": [
+            887
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "row": 3,
+      "column": "point_name",
+      "page": 13,
+      "bbox": [
+        1850.0,
+        808.0,
+        2150.0,
+        819.0
+      ],
+      "expected": "OCCUPIED WALL SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OCCUPIED WALL SWITCH",
+          "word_ids": [
+            1890,
+            1891,
+            1892
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OCCUPIED WALL SWITCH",
+          "word_ids": [
+            998,
+            999,
+            1000
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "row": 4,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1790.0,
+        819.0,
+        1850.0,
+        830.0
+      ],
+      "expected": "DO-1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DO-1:",
+          "word_ids": [
+            1893
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DO-1:",
+          "word_ids": [
+            888
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "row": 4,
+      "column": "point_name",
+      "page": 13,
+      "bbox": [
+        1850.0,
+        819.0,
+        2150.0,
+        830.0
+      ],
+      "expected": "FAN COMMAND ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN COMMAND ON/OFF",
+          "word_ids": [
+            1894,
+            1895,
+            1896
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN COMMAND ON/OFF",
+          "word_ids": [
+            1001,
+            1002,
+            1003
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "row": 5,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1790.0,
+        830.0,
+        1850.0,
+        842.0
+      ],
+      "expected": "DO-2:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DO-2:",
+          "word_ids": [
+            1897
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DO-2:",
+          "word_ids": [
+            889
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "row": 5,
+      "column": "point_name",
+      "page": 13,
+      "bbox": [
+        1850.0,
+        830.0,
+        2150.0,
+        842.0
+      ],
+      "expected": "ELECTRIC HEAT COIL COMMAND ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ELECTRIC HEAT COIL COMMAND ON/OFF",
+          "word_ids": [
+            1898,
+            1899,
+            1900,
+            1901,
+            1902
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ELECTRIC HEAT COIL COMMAND ON/OFF",
+          "word_ids": [
+            1004,
+            1005,
+            1006,
+            1007,
+            1008
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "row": 6,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1790.0,
+        842.0,
+        1850.0,
+        853.0
+      ],
+      "expected": "COMM:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COMM:",
+          "word_ids": [
+            1903
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COMM:",
+          "word_ids": [
+            890
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "row": 6,
+      "column": "point_name",
+      "page": 13,
+      "bbox": [
+        1850.0,
+        842.0,
+        2150.0,
+        853.0
+      ],
+      "expected": "THERMOSTAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THERMOSTAT",
+          "word_ids": [
+            1904
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THERMOSTAT",
+          "word_ids": [
+            1009
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "header": "3. THE FOLLOWING SHALL BE A TYPICAL POINTS LIST FOR A FAN COIL UNIT:",
+      "page": 13,
+      "bbox": [
+        1770,
+        757,
+        2160,
+        776
+      ],
+      "engine": "mupdf",
+      "actual": "3. THE FOLLOWING SHALL BE A TYPICAL POINTS LIST FOR A FAN COIL UNIT:",
+      "pass": true
+    },
+    {
+      "table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "header": "3. THE FOLLOWING SHALL BE A TYPICAL POINTS LIST FOR A FAN COIL UNIT:",
+      "page": 13,
+      "bbox": [
+        1770,
+        757,
+        2160,
+        776
+      ],
+      "engine": "poppler",
+      "actual": "3. THE FOLLOWING SHALL BE A TYPICAL POINTS LIST FOR A FAN COIL UNIT:",
+      "pass": true
+    },
+    {
+      "table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "row": 1,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1790.0,
+        882.0,
+        1850.0,
+        899.0
+      ],
+      "expected": "AO-1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-1:",
+          "word_ids": [
+            1919
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-1:",
+          "word_ids": [
+            1025
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "row": 1,
+      "column": "point_name",
+      "page": 13,
+      "bbox": [
+        1850.0,
+        882.0,
+        2180.0,
+        899.0
+      ],
+      "expected": "MODULATING CHILLED WATER VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MODULATING CHILLED WATER VALVE CONTROL",
+          "word_ids": [
+            1920,
+            1921,
+            1922,
+            1923,
+            1924
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MODULATING CHILLED WATER VALVE CONTROL",
+          "word_ids": [
+            1030,
+            1031,
+            1032,
+            1033,
+            1034
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "row": 2,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1790.0,
+        899.0,
+        1850.0,
+        910.0
+      ],
+      "expected": "AI-2:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-2:",
+          "word_ids": [
+            1925
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-2:",
+          "word_ids": [
+            1026
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "row": 2,
+      "column": "point_name",
+      "page": 13,
+      "bbox": [
+        1850.0,
+        899.0,
+        2180.0,
+        910.0
+      ],
+      "expected": "RETURN AIR TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN AIR TEMPERATURE",
+          "word_ids": [
+            1926,
+            1927,
+            1928
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN AIR TEMPERATURE",
+          "word_ids": [
+            1035,
+            1036,
+            1037
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "row": 3,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1790.0,
+        910.0,
+        1850.0,
+        921.0
+      ],
+      "expected": "AI-1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-1:",
+          "word_ids": [
+            1929
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-1:",
+          "word_ids": [
+            1027
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "row": 3,
+      "column": "point_name",
+      "page": 13,
+      "bbox": [
+        1850.0,
+        910.0,
+        2180.0,
+        921.0
+      ],
+      "expected": "DISCHARGE AIR TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DISCHARGE AIR TEMPERATURE",
+          "word_ids": [
+            1930,
+            1931,
+            1932
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DISCHARGE AIR TEMPERATURE",
+          "word_ids": [
+            1038,
+            1039,
+            1040
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "row": 4,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1790.0,
+        921.0,
+        1850.0,
+        933.0
+      ],
+      "expected": "DO-1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DO-1:",
+          "word_ids": [
+            1933
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DO-1:",
+          "word_ids": [
+            1028
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "row": 4,
+      "column": "point_name",
+      "page": 13,
+      "bbox": [
+        1850.0,
+        921.0,
+        2180.0,
+        933.0
+      ],
+      "expected": "FAN COMMAND ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN COMMAND ON/OFF",
+          "word_ids": [
+            1934,
+            1935,
+            1936
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN COMMAND ON/OFF",
+          "word_ids": [
+            1041,
+            1042,
+            1043
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "row": 5,
+      "column": "tag",
+      "page": 13,
+      "bbox": [
+        1790.0,
+        933.0,
+        1850.0,
+        944.0
+      ],
+      "expected": "COMM:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COMM:",
+          "word_ids": [
+            1937
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COMM:",
+          "word_ids": [
+            1029
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "row": 5,
+      "column": "point_name",
+      "page": 13,
+      "bbox": [
+        1850.0,
+        933.0,
+        2180.0,
+        944.0
+      ],
+      "expected": "THERMOSTAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THERMOSTAT",
+          "word_ids": [
+            1938
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THERMOSTAT",
+          "word_ids": [
+            1044
+          ]
+        }
+      }
+    },
+    {
+      "table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "header": "3. THE FOLLOWING SHALL BE A TYPICAL POINTS LIST FOR AN AIR HANDLING UNIT:",
+      "page": 13,
+      "bbox": [
+        1770,
+        859,
+        2190,
+        878
+      ],
+      "engine": "mupdf",
+      "actual": "3. THE FOLLOWING SHALL BE A TYPICAL POINTS LIST FOR AN AIR HANDLING UNIT:",
+      "pass": true
+    },
+    {
+      "table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "header": "3. THE FOLLOWING SHALL BE A TYPICAL POINTS LIST FOR AN AIR HANDLING UNIT:",
+      "page": 13,
+      "bbox": [
+        1770,
+        859,
+        2190,
+        878
+      ],
+      "engine": "poppler",
+      "actual": "3. THE FOLLOWING SHALL BE A TYPICAL POINTS LIST FOR AN AIR HANDLING UNIT:",
+      "pass": true
+    },
+    {
+      "assertion": "m402-fcu1-oa-damper-operation",
+      "page": 13,
+      "bbox": [
+        1770,
+        950,
+        2720,
+        992
+      ],
+      "expected": "4. FCU-1 IN ISFA CONFERENCE ROOM SHALL HAVE OUTDOOR AIR DUCTWORK AND ASSOCIATED MOTORIZED DAMPER INSTALLED. OA DAMPER SHALL ONLY OPEN TO CFM INDICATED AFTER PROOF OF FCU OPERATION.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4. FCU-1 IN ISFA CONFERENCE ROOM SHALL HAVE OUTDOOR AIR DUCTWORK AND ASSOCIATED MOTORIZED DAMPER INSTALLED. OA DAMPER SHALL ONLY OPEN TO CFM INDICATED AFTER PROOF OF FCU OPERATION.",
+          "word_ids": [
+            1939,
+            1940,
+            1941,
+            1942,
+            1943,
+            1944,
+            1945,
+            1946,
+            1947,
+            1948,
+            1949,
+            1950,
+            1951,
+            1952,
+            1953,
+            1954,
+            1955,
+            1956,
+            1957,
+            1958,
+            1959,
+            1960,
+            1961,
+            1962,
+            1963,
+            1964,
+            1965,
+            1966,
+            1967
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4. FCU-1 IN ISFA CONFERENCE ROOM SHALL HAVE OUTDOOR AIR DUCTWORK AND ASSOCIATED MOTORIZED DAMPER INSTALLED. OA DAMPER SHALL ONLY OPEN TO CFM INDICATED AFTER PROOF OF FCU OPERATION.",
+          "word_ids": [
+            1644,
+            1154,
+            1155,
+            1156,
+            1157,
+            1158,
+            1159,
+            1160,
+            1161,
+            1162,
+            1163,
+            1164,
+            1165,
+            1166,
+            1167,
+            1168,
+            1169,
+            1170,
+            1171,
+            1172,
+            1173,
+            1174,
+            1175,
+            1176,
+            1177,
+            1178,
+            1179,
+            1180,
+            1181
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m402-smoke-fire-ddc-behavior",
+      "page": 13,
+      "bbox": [
+        1770,
+        996,
+        2720,
+        1070
+      ],
+      "expected": "5. THE ELECTRICAL CONTRACTOR SHALL FURNISH AND INSTALL SMOKE AND/OR HEAT DETECTORS IN AIR SUPPLY SYSTEM OVER 2000 CFM. AN ADDRESSABLE FIRE ALARM RELAY SHALL BE FURNISHED AND INSTALLED BY THE ELECTRICAL CONTRACTOR. BAS CONTRACTOR SHALL PICK UP SIGNAL FROM RELAY AND PROVIDE A PROGRAM TO STOP SUPPLY FAN INTERLOCKED WITH THE SYSTEM SENSING FIRE OR SMOKE. DDC PROGRAM SHALL ALSO SHOW FIRE IN UNIT ALARM AT TIME OF SHUT DOWN.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5. THE ELECTRICAL CONTRACTOR SHALL FURNISH AND INSTALL SMOKE AND/OR HEAT DETECTORS IN AIR SUPPLY SYSTEM OVER 2000 CFM. AN ADDRESSABLE FIRE ALARM RELAY SHALL BE FURNISHED AND INSTALLED BY THE ELECTRICAL CONTRACTOR . BAS CONTRACTOR SHALL PICK UP SIGNAL FROM RELAY AND PROVIDE A PROGRAM TO STOP SUPPLY FAN INTERLOCKED WITH THE SYSTEM SENSING FIRE OR SMOKE. DDC PROGRAM SHALL ALSO SHOW FIRE IN UNIT ALARM AT TIME OF SHUT DOWN.",
+          "word_ids": [
+            1968,
+            1969,
+            1970,
+            1971,
+            1972,
+            1973,
+            1974,
+            1975,
+            1976,
+            1977,
+            1978,
+            1979,
+            1980,
+            1981,
+            1982,
+            1983,
+            1984,
+            1985,
+            1986,
+            1987,
+            1988,
+            1989,
+            1990,
+            1991,
+            1992,
+            1993,
+            1994,
+            1995,
+            1996,
+            1997,
+            1998,
+            1999,
+            2000,
+            2001,
+            2002,
+            2003,
+            2004,
+            2005,
+            2006,
+            2007,
+            2008,
+            2009,
+            2010,
+            2011,
+            2012,
+            2013,
+            2014,
+            2015,
+            2016,
+            2017,
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024,
+            2025,
+            2026,
+            2027,
+            2028,
+            2029,
+            2030,
+            2031,
+            2032,
+            2033,
+            2034,
+            2035,
+            2036,
+            2037,
+            2038,
+            2039
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5. THE ELECTRICAL CONTRACTOR SHALL FURNISH AND INSTALL SMOKE AND/OR HEAT DETECTORS IN AIR SUPPLY SYSTEM OVER 2000 CFM. AN ADDRESSABLE FIRE ALARM RELAY SHALL BE FURNISHED AND INSTALLED BY THE ELECTRICAL CONTRACTOR . BAS CONTRACTOR SHALL PICK UP SIGNAL FROM RELAY AND PROVIDE A PROGRAM TO STOP SUPPLY FAN INTERLOCKED WITH THE SYSTEM SENSING FIRE OR SMOKE. DDC PROGRAM SHALL ALSO SHOW FIRE IN UNIT ALARM AT TIME OF SHUT DOWN.",
+          "word_ids": [
+            1153,
+            1188,
+            1189,
+            1190,
+            1191,
+            1192,
+            1193,
+            1194,
+            1195,
+            1196,
+            1197,
+            1198,
+            1199,
+            1200,
+            1201,
+            1202,
+            1203,
+            1204,
+            1205,
+            1206,
+            1207,
+            1208,
+            1209,
+            1210,
+            1211,
+            1212,
+            1213,
+            1214,
+            1215,
+            1216,
+            1217,
+            1218,
+            1219,
+            1220,
+            1221,
+            1222,
+            1223,
+            1224,
+            1225,
+            1226,
+            1227,
+            1228,
+            1229,
+            1230,
+            1231,
+            1232,
+            1233,
+            1234,
+            1235,
+            1236,
+            1237,
+            1238,
+            1239,
+            1240,
+            1241,
+            1242,
+            1243,
+            1244,
+            1245,
+            1246,
+            1247,
+            1248,
+            1249,
+            1250,
+            1251,
+            1252,
+            1253,
+            1254,
+            1255,
+            1256,
+            1257,
+            1258
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m402-typical-points-tables",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

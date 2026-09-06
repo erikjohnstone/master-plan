@@ -1,0 +1,23 @@
+{
+  "document_id": "16__vol2__069",
+  "source_sha256": "ce0c2bb973f87194f0f6ed8d68faaad2a5683129f9d0db1a73415f6051ed06f1",
+  "annotation_sha256": "7784fc6b68f489aacac8d9a1aeaee8ba583aaff002e5cf43025fcb25cee57ef2",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 0,
+  "checks": [],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "source-limitations",
+      "actual": 7,
+      "expected": 7,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

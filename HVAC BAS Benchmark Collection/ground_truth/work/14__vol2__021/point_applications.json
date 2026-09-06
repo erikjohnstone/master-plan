@@ -1,0 +1,25 @@
+{
+  "document_id": "14__vol2__021",
+  "module_role": "Explicit source-matrix application and ownership ledger. Each row is a printed M-803/M-804/M-805 controller matrix template row; a row's AI/DI/AO/DO category circles remain in the points modules and are not converted into an installed terminal count.",
+  "ledger_mode": "source_matrix_templates_v1",
+  "source_points_modules": ["points_m803.json", "points_m804_m805.json"],
+  "applications": [
+    {"id":"m803-chiller-primary-secondary","source_table":"M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX","ownership_scope":"Air-cooled chiller with primary and secondary pumping control template on M-803","source_sheet":"M-803","source_page":17},
+    {"id":"m804-lab-ahu-a","source_table":"M804-LAB-AHU-PART-A","ownership_scope":"Laboratory AHU controller template on M-804","source_sheet":"M-804","source_page":18},
+    {"id":"m804-lab-ahu-b","source_table":"M804-LAB-AHU-PART-B","ownership_scope":"Laboratory AHU controller template continuation on M-804","source_sheet":"M-804","source_page":18},
+    {"id":"m804-vav-ahu","source_table":"M804-VAV-AHU","ownership_scope":"Fume-hood/VAV AHU controller template on M-804","source_sheet":"M-804","source_page":18},
+    {"id":"m804-fume-hood-exhaust","source_table":"M804-FUME-HOOD-EXHAUST","ownership_scope":"Laboratory fume-hood exhaust controller template on M-804","source_sheet":"M-804","source_page":18},
+    {"id":"m804-general-exhaust","source_table":"M804-GENERAL-EXHAUST","ownership_scope":"General exhaust controller template on M-804","source_sheet":"M-804","source_page":18},
+    {"id":"m805-admin-ahu-base","source_table":"M805-ADMIN-AHU-BASE","ownership_scope":"Administration AHU controller template on M-805","source_sheet":"M-805","source_page":19},
+    {"id":"m805-admin-ahu-continuation","source_table":"M805-ADMIN-AHU-CONTINUATION","ownership_scope":"Administration AHU controller template continuation on M-805","source_sheet":"M-805","source_page":19},
+    {"id":"m805-vav-return","source_table":"M805-VAV-RETURN","ownership_scope":"VAV return controller template on M-805","source_sheet":"M-805","source_page":19}
+  ],
+  "listed_template_counts": {"total": 98, "source_matrix_rows": 98},
+  "expanded_template_counts": {"total": 98, "source_rows": 98},
+  "printed_assignment_summary": {"cell_bounded_source_matrix_rows":98,"outline_text_visual_matrix_rows":19,"all_transcribed_matrix_rows":117,"AI_assignments":90,"DI_assignments":45,"AO_assignments":40,"DO_assignments":25,"boiler_outline_matrix_source":"points_m803.boiler_matrix_visual_transcription","semantics":"These are category circles/references in the printed controller matrices, not a physical controller I/O-card, terminal, or device-count takeoff."},
+  "expanded_count_warning": "Ninety-eight raw-text-cell-bounded source-matrix rows are presented under their printed system scopes. An additional 19-row M-803 boiler matrix is transcribed from matching MuPDF and Poppler visual renders because its outline text is not exposed by either raw-text engine. M-803 through M-805 say not all virtual points are shown; no unprinted device ownership, controller terminal/card capacity, field wiring count, or quantity multiplier is emitted.",
+  "ownership_binding_semantics": "Matrix tag identities restart in each system table. The table/system scope is authoritative; similarly named tags in different matrices are not merged into a global device identity unless the drawings explicitly connect them.",
+  "tables": [],
+  "assertions": [],
+  "inventory_checks": [{"id":"matrix-application-scopes","records_path":["applications"],"expected":9,"unique_key":"id"}]
+}

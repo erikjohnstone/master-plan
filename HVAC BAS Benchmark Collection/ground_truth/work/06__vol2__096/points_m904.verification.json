@@ -1,0 +1,1261 @@
+{
+  "document_id": "06__vol2__096",
+  "source_sha256": "72da836a803740382b319b718c1f10d8daeff6e5dbe869f1e68ff173ea4092ec",
+  "annotation_sha256": "90a76b7b7ab36437019b708f48e5768548512c3e8d8da3ce4057bf58506237be",
+  "tables": 1,
+  "rows": 30,
+  "cell_assertions": 30,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1253,
+        780,
+        1266
+      ],
+      "expected": "AI-1 EXHAUST FAN VOLUME X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-1 EXHAUST FAN VOLUME X X",
+          "word_ids": [
+            1172,
+            1173,
+            1174,
+            1175,
+            1176,
+            1177
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-1 EXHAUST FAN VOLUME X X",
+          "word_ids": [
+            750,
+            494,
+            495,
+            496,
+            672,
+            903
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1266,
+        780,
+        1280
+      ],
+      "expected": "AI-2 OUTDOOR TEMEPRATURE (GLOBAL) X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-2 OUTDOOR TEMEPRATURE (GLOBAL) X X",
+          "word_ids": [
+            1178,
+            1179,
+            1180,
+            1181,
+            1182,
+            1183
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-2 OUTDOOR TEMEPRATURE (GLOBAL) X X",
+          "word_ids": [
+            751,
+            497,
+            498,
+            499,
+            673,
+            904
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1280,
+        780,
+        1293
+      ],
+      "expected": "AI-3 SPACE DIFFERENCIAL PRESSURE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-3 SPACE DIFFERENCIAL PRESSURE X X",
+          "word_ids": [
+            1184,
+            1185,
+            1186,
+            1187,
+            1188,
+            1189
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-3 SPACE DIFFERENCIAL PRESSURE X X",
+          "word_ids": [
+            752,
+            500,
+            501,
+            502,
+            674,
+            905
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1293,
+        780,
+        1306
+      ],
+      "expected": "AI-4 MIXED AIR TEMPERATURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-4 MIXED AIR TEMPERATURE X X X",
+          "word_ids": [
+            1190,
+            1191,
+            1192,
+            1193,
+            1194,
+            1195,
+            1196
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-4 MIXED AIR TEMPERATURE X X X",
+          "word_ids": [
+            753,
+            503,
+            504,
+            505,
+            675,
+            596,
+            906
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1306,
+        780,
+        1319
+      ],
+      "expected": "AI-5 REHEAT COIL DISCHARGE TEMPERATURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-5 REHEAT COIL DISCHARGE TEMPERATURE X X X",
+          "word_ids": [
+            1197,
+            1198,
+            1199,
+            1200,
+            1201,
+            1202,
+            1203,
+            1204
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-5 REHEAT COIL DISCHARGE TEMPERATURE X X X",
+          "word_ids": [
+            754,
+            506,
+            507,
+            508,
+            509,
+            676,
+            597,
+            907
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 6,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1319,
+        780,
+        1332
+      ],
+      "expected": "AI-6 SUPPLY AIR TEMPERATURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-6 SUPPLY AIR TEMPERATURE X X X",
+          "word_ids": [
+            1205,
+            1206,
+            1207,
+            1208,
+            1209,
+            1210,
+            1211
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-6 SUPPLY AIR TEMPERATURE X X X",
+          "word_ids": [
+            755,
+            510,
+            511,
+            512,
+            677,
+            598,
+            908
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 7,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1332,
+        780,
+        1345
+      ],
+      "expected": "AI-7 SUPPLY AIR STATIC PRESSURE (AT UNIT) X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-7 SUPPLY AIR STATIC PRESSURE (AT UNIT) X X",
+          "word_ids": [
+            1212,
+            1213,
+            1214,
+            1215,
+            1216,
+            1217,
+            1218,
+            1219,
+            1220
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-7 SUPPLY AIR STATIC PRESSURE (AT UNIT) X X",
+          "word_ids": [
+            756,
+            513,
+            514,
+            515,
+            516,
+            517,
+            518,
+            678,
+            909
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 8,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1345,
+        780,
+        1358
+      ],
+      "expected": "AI-8 SUPPLY FAN VOLUME X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-8 SUPPLY FAN VOLUME X X",
+          "word_ids": [
+            1221,
+            1222,
+            1223,
+            1224,
+            1225,
+            1226
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-8 SUPPLY FAN VOLUME X X",
+          "word_ids": [
+            757,
+            519,
+            520,
+            521,
+            679,
+            910
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 9,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1358,
+        780,
+        1371
+      ],
+      "expected": "AI-9 SPACE HUMIDITY X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-9 SPACE HUMIDITY X X X",
+          "word_ids": [
+            1227,
+            1228,
+            1229,
+            1230,
+            1231,
+            1232
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-9 SPACE HUMIDITY X X X",
+          "word_ids": [
+            758,
+            522,
+            523,
+            680,
+            599,
+            911
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 10,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1371,
+        780,
+        1384
+      ],
+      "expected": "AI-10 EXHAUST AIR TEMPERATURE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-10 EXHAUST AIR TEMPERATURE X X",
+          "word_ids": [
+            1233,
+            1234,
+            1235,
+            1236,
+            1237,
+            1238
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-10 EXHAUST AIR TEMPERATURE X X",
+          "word_ids": [
+            759,
+            524,
+            525,
+            526,
+            681,
+            912
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 11,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1384,
+        780,
+        1397
+      ],
+      "expected": "AI-11 STATIC PRESSURE 90% THRU SYSTEM X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-11 STATIC PRESSURE 90% THRU SYSTEM X X",
+          "word_ids": [
+            1239,
+            1240,
+            1241,
+            1242,
+            1243,
+            1244,
+            1245,
+            1246
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-11 STATIC PRESSURE 90% THRU SYSTEM X X",
+          "word_ids": [
+            760,
+            527,
+            528,
+            529,
+            530,
+            531,
+            682,
+            913
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 12,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1397,
+        780,
+        1411
+      ],
+      "expected": "AI-12 OUTDOOR AIRFLOW X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-12 OUTDOOR AIRFLOW X X X",
+          "word_ids": [
+            1247,
+            1248,
+            1249,
+            1250,
+            1251,
+            1252
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-12 OUTDOOR AIRFLOW X X X",
+          "word_ids": [
+            761,
+            532,
+            533,
+            683,
+            600,
+            914
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 13,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1411,
+        780,
+        1424
+      ],
+      "expected": "AI-13 RETURN WATER TEMPERATURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-13 RETURN WATER TEMPERATURE X X X",
+          "word_ids": [
+            1253,
+            1254,
+            1255,
+            1256,
+            1257,
+            1258,
+            1259
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-13 RETURN WATER TEMPERATURE X X X",
+          "word_ids": [
+            762,
+            534,
+            535,
+            536,
+            684,
+            601,
+            915
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 14,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1424,
+        780,
+        1437
+      ],
+      "expected": "AI-14 SUPPLY AIR HUMIDITY X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-14 SUPPLY AIR HUMIDITY X X",
+          "word_ids": [
+            1260,
+            1261,
+            1262,
+            1263,
+            1264,
+            1265
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-14 SUPPLY AIR HUMIDITY X X",
+          "word_ids": [
+            763,
+            537,
+            538,
+            539,
+            685,
+            916
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 15,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1437,
+        780,
+        1450
+      ],
+      "expected": "AO-1 EXHAUST FAN VFC X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-1 EXHAUST FAN VFC X X",
+          "word_ids": [
+            1266,
+            1267,
+            1268,
+            1269,
+            1270,
+            1271
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-1 EXHAUST FAN VFC X X",
+          "word_ids": [
+            764,
+            540,
+            541,
+            542,
+            686,
+            917
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 16,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1450,
+        780,
+        1463
+      ],
+      "expected": "AO-2 SUPPLY FAN VFC X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-2 SUPPLY FAN VFC X X",
+          "word_ids": [
+            1272,
+            1273,
+            1274,
+            1275,
+            1276,
+            1277
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-2 SUPPLY FAN VFC X X",
+          "word_ids": [
+            765,
+            543,
+            544,
+            545,
+            687,
+            918
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 17,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1463,
+        780,
+        1476
+      ],
+      "expected": "AO-3 REHEAT COIL VALVE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-3 REHEAT COIL VALVE X X",
+          "word_ids": [
+            1278,
+            1279,
+            1280,
+            1281,
+            1282,
+            1283
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-3 REHEAT COIL VALVE X X",
+          "word_ids": [
+            766,
+            546,
+            547,
+            548,
+            688,
+            919
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 18,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1476,
+        780,
+        1489
+      ],
+      "expected": "AO-4 COOLING COIL VALVE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-4 COOLING COIL VALVE X X",
+          "word_ids": [
+            1284,
+            1285,
+            1286,
+            1287,
+            1288,
+            1289
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-4 COOLING COIL VALVE X X",
+          "word_ids": [
+            767,
+            549,
+            550,
+            551,
+            689,
+            920
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 19,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1489,
+        780,
+        1502
+      ],
+      "expected": "AO-6 OUTDOOR AIR DAMPER X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-6 OUTDOOR AIR DAMPER X X",
+          "word_ids": [
+            1290,
+            1291,
+            1292,
+            1293,
+            1294,
+            1295
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-6 OUTDOOR AIR DAMPER X X",
+          "word_ids": [
+            768,
+            552,
+            553,
+            554,
+            690,
+            921
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 20,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1502,
+        780,
+        1515
+      ],
+      "expected": "AO-7 EXHAUST AIR DAMPER X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-7 EXHAUST AIR DAMPER X X",
+          "word_ids": [
+            1296,
+            1297,
+            1298,
+            1299,
+            1300,
+            1301
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-7 EXHAUST AIR DAMPER X X",
+          "word_ids": [
+            769,
+            555,
+            556,
+            557,
+            691,
+            922
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 21,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1515,
+        780,
+        1528
+      ],
+      "expected": "BI-1 PREFILTER ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-1 PREFILTER ALARM X X X",
+          "word_ids": [
+            1302,
+            1303,
+            1304,
+            1305,
+            1306,
+            1307
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-1 PREFILTER ALARM X X X",
+          "word_ids": [
+            770,
+            558,
+            559,
+            692,
+            602,
+            923
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 22,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1528,
+        780,
+        1542
+      ],
+      "expected": "BI-2 SAFETY LOW LIMIT STAT ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-2 SAFETY LOW LIMIT STAT ALARM X X X",
+          "word_ids": [
+            1308,
+            1309,
+            1310,
+            1311,
+            1312,
+            1313,
+            1314,
+            1315,
+            1316
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-2 SAFETY LOW LIMIT STAT ALARM X X X",
+          "word_ids": [
+            771,
+            560,
+            561,
+            562,
+            563,
+            564,
+            693,
+            603,
+            924
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 23,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1542,
+        780,
+        1555
+      ],
+      "expected": "BI-3 EXHAUST AIR LOW STATIC ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-3 EXHAUST AIR LOW STATIC ALARM X X X",
+          "word_ids": [
+            1317,
+            1318,
+            1319,
+            1320,
+            1321,
+            1322,
+            1323,
+            1324,
+            1325
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-3 EXHAUST AIR LOW STATIC ALARM X X X",
+          "word_ids": [
+            772,
+            565,
+            566,
+            567,
+            568,
+            569,
+            694,
+            604,
+            925
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 24,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1555,
+        780,
+        1568
+      ],
+      "expected": "BI-4 SUPPLY AIR HIGH STATIC ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-4 SUPPLY AIR HIGH STATIC ALARM X X X",
+          "word_ids": [
+            1326,
+            1327,
+            1328,
+            1329,
+            1330,
+            1331,
+            1332,
+            1333,
+            1334
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-4 SUPPLY AIR HIGH STATIC ALARM X X X",
+          "word_ids": [
+            773,
+            570,
+            571,
+            572,
+            573,
+            574,
+            695,
+            605,
+            926
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 25,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1568,
+        780,
+        1581
+      ],
+      "expected": "BI-5 EXHAUST FAN STATUS X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-5 EXHAUST FAN STATUS X X X",
+          "word_ids": [
+            1335,
+            1336,
+            1337,
+            1338,
+            1339,
+            1340,
+            1341
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-5 EXHAUST FAN STATUS X X X",
+          "word_ids": [
+            774,
+            575,
+            576,
+            577,
+            696,
+            606,
+            927
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 26,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1581,
+        780,
+        1594
+      ],
+      "expected": "BI-6 SUPPLY FAN STATUS X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-6 SUPPLY FAN STATUS X X X",
+          "word_ids": [
+            1342,
+            1343,
+            1344,
+            1345,
+            1346,
+            1347,
+            1348
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-6 SUPPLY FAN STATUS X X X",
+          "word_ids": [
+            775,
+            578,
+            579,
+            580,
+            697,
+            607,
+            928
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 27,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1594,
+        780,
+        1607
+      ],
+      "expected": "BI-7 UPS LOW BATTERY ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-7 UPS LOW BATTERY ALARM X X X",
+          "word_ids": [
+            1349,
+            1350,
+            1351,
+            1352,
+            1353,
+            1354,
+            1355,
+            1356
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-7 UPS LOW BATTERY ALARM X X X",
+          "word_ids": [
+            776,
+            581,
+            582,
+            583,
+            584,
+            698,
+            608,
+            929
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 28,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1607,
+        780,
+        1620
+      ],
+      "expected": "BI-8 UPS ON BATTERY ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-8 UPS ON BATTERY ALARM X X X",
+          "word_ids": [
+            1357,
+            1358,
+            1359,
+            1360,
+            1361,
+            1362,
+            1363,
+            1364
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-8 UPS ON BATTERY ALARM X X X",
+          "word_ids": [
+            777,
+            585,
+            586,
+            587,
+            588,
+            699,
+            609,
+            930
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 29,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1620,
+        780,
+        1633
+      ],
+      "expected": "BO-1 EXHAUST FAN START-STOP X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-1 EXHAUST FAN START-STOP X",
+          "word_ids": [
+            1365,
+            1366,
+            1367,
+            1368,
+            1369
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-1 EXHAUST FAN START-STOP X",
+          "word_ids": [
+            778,
+            589,
+            590,
+            591,
+            931
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "row": 30,
+      "column": "source_row_as_printed",
+      "page": 34,
+      "bbox": [
+        345,
+        1633,
+        780,
+        1648
+      ],
+      "expected": "BO-2 SUPPLY FAN START-STOP X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-2 SUPPLY FAN START-STOP X",
+          "word_ids": [
+            1370,
+            1371,
+            1372,
+            1373,
+            1374
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-2 SUPPLY FAN START-STOP X",
+          "word_ids": [
+            779,
+            592,
+            593,
+            594,
+            932
+          ]
+        }
+      }
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "header": "SCHEDULE OF DDC POINTS",
+      "page": 34,
+      "bbox": [
+        475,
+        1215,
+        615,
+        1235
+      ],
+      "engine": "mupdf",
+      "actual": "SCHEDULE OF DDC POINTS",
+      "pass": true
+    },
+    {
+      "table": "M904-DOAS-3-DDC",
+      "header": "SCHEDULE OF DDC POINTS",
+      "page": 34,
+      "bbox": [
+        475,
+        1215,
+        615,
+        1235
+      ],
+      "engine": "poppler",
+      "actual": "SCHEDULE OF DDC POINTS",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

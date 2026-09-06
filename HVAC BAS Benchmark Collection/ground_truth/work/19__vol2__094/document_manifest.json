@@ -1,0 +1,57 @@
+{
+  "id": "19__vol2__094",
+  "rank": 19,
+  "title": "Orange County Regional History Center HVAC Replacement",
+  "source_pdf": "pdf/19__vol2__094__Orange_County_Regional_History_Center_HVAC.pdf",
+  "source_sha256": "e205afccbaa16d799d33aed3151c5fd06dbe7a6836e1f1132c61aba0c70fdb45",
+  "page_count": 9,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete ground truth for all nine supplied pages of the Orange County Regional History Center HVAC Replacement set: exact project/title-block/sheet/scale review; all M-401 AHU, chiller, tower and humidifier schedule cells; M-103 preservation criteria; M-201 typed controls templates, DDC handoff instruction and sequence limitation; and schedule/plan reconciliation. No unprinted installed I/O, controller, network, valve, damper-actuator, zone-sensor or sequence data is invented.",
+  "reading_notes": [
+    "The retained corpus has all nine supplied pages. Full-page Poppler renders establish visual context; MuPDF and Poppler independently corroborate every authored schedule/environment cell and bounded assertion.",
+    "M-401 contains 4 schedules / 11 line items: five AHUs, one air-cooled chiller, one cooling tower and four electric humidifiers. A schedule row is not silently converted to a field-installed count.",
+    "M-201 has three controls schematics and typed bubbles, but no formal points matrix or standalone written sequence. It explicitly directs the contractor to match existing DDC points and existing sequence of operations, neither of which is fully supplied.",
+    "The M-103 museum environment table is valuable operating-context ground truth, but it is preservation criteria—not proof of field-sensor placement, BAS setpoint implementation or an installed point count.",
+    "Controls-caption AHU tags omit M-401's leading zero. Both source tag forms are retained without adding an unprinted aliasing or device-multiplication rule."
+  ],
+  "module_order": ["metadata", "schedules", "points", "controls_context", "equipment_reconciliation", "point_applications", "supporting_evidence"],
+  "module_sources": {
+    "schedules": ["schedules_m401"],
+    "points": ["controls_context_m201"],
+    "controls_context": ["controls_context_m201"]
+  },
+  "requirement_audit": [
+    {"id": "project_identity", "result": "reviewed_with_source_limitations_recorded", "finding": "The project name, address, Atkins title-block context, project number, CD phase and issued date are captured. Blank issue-log rows are not reclassified as revision events.", "evidence": [["modules", "metadata", "project"]]},
+    {"id": "sheet_details", "result": "reviewed_with_source_limitations_recorded", "finding": "Every supplied page has an exact sheet/title title-block witness and full-page visual-review finding.", "evidence": [["modules", "metadata", "visual_review_pages"]]},
+    {"id": "scale_verification", "result": "reviewed_with_source_limitations_recorded", "finding": "M-101/M-102/M-103 print 1/8\" = 1'-0\"; controls/schedules are no-scale and detail views are not treated as measurable plans. No graphic scale bar is supplied.", "evidence": [["modules", "metadata", "scale_semantics"]]},
+    {"id": "equipment_tags_and_classification", "result": "reviewed_with_source_limitations_recorded", "finding": "All 11 M-401 scheduled identities are classified and anchored to plan, controls-caption or exact cabinet-row context. Schedule tags and controls-caption forms remain separately recorded.", "evidence": [["modules", "equipment_reconciliation", "scheduled_families"], ["modules", "equipment_reconciliation", "primary_anchors"]]},
+    {"id": "schedule_rows_and_specs", "result": "reviewed_with_source_limitations_recorded", "finding": "Every row/cell in the four M-401 schedules is retained: 5 AHUs, 1 chiller, 1 tower and 4 humidifiers, covering airflow, fans, coils, water, filters, electrical and humidifier specifications.", "evidence": [["modules", "schedules", "tables"], ["modules", "equipment_reconciliation", "schedule_counts"]]},
+    {"id": "point_lists_and_equipment_ownership", "result": "reviewed_with_source_limitations_recorded", "finding": "M-201's typed schematic bubbles and application captions are retained as diagram source context. The supplied set prints zero formal points-matrix rows and no per-point owner/controller/wiring mapping, so no terminal or equipment-multiplied point count is created.", "evidence": [["modules", "controls_context", "schematic_templates"], ["modules", "point_applications", "installed_IO_total"]]},
+    {"id": "network_architecture", "result": "reviewed_with_source_limitations_recorded", "finding": "The sole printed architecture requirement is connection to the existing DDC system and matching existing points/sequences; protocol, transport, address, baud rate and controller model are explicitly not stated.", "evidence": [["modules", "controls_context", "network_architecture"]]},
+    {"id": "sequences_and_diagrams", "result": "reviewed_with_source_limitations_recorded", "finding": "All three M-201 controls diagram captions and their external-existing-sequence limitation are captured. No absent standalone sequence is fabricated from schematic bubbles.", "evidence": [["modules", "controls_context", "sequence_of_operations"], ["modules", "controls_context", "schematic_templates"]]},
+    {"id": "space_sensors_and_zones", "result": "reviewed_with_source_limitations_recorded", "finding": "Schematic TS/HS/DPS/FZ source roles are indexed, while the supplied roof/plans do not map space, CO2, smart-thermostat or humidity sensors to zones; physical counts remain not stated.", "evidence": [["modules", "controls_context", "sensor_and_zone_ledger"]]},
+    {"id": "source_limitations_and_conflicts", "result": "reviewed_with_source_limitations_recorded", "finding": "No standalone sequence, formal points matrix, control-valve schedule, damper-actuator schedule or installed-device roster is supplied. AHU zero-padding differs between schedule and controls captions, and preservation criteria are kept distinct from point/count claims.", "evidence": [["modules", "supporting_evidence", "source_limitations"], ["modules", "equipment_reconciliation", "control_valve_and_damper_schedule_status"]]},
+    {"id": "all_page_visual_review", "result": "reviewed_with_source_limitations_recorded", "finding": "All nine supplied pages were reviewed at full-page resolution; saved Poppler renders and page findings are embedded and hash-checked in the final record.", "evidence": [["page_review"], ["modules", "metadata", "visual_review_pages"]]},
+    {"id": "independent_corroboration", "result": "reviewed_with_source_limitations_recorded", "finding": "Build and validation rerun every module against retained MuPDF and Poppler captures. The final record stores the source hash, manifest and module digests.", "evidence": [["module_source_sha256"], ["module_sha256"]]}
+  ],
+  "page_review": [
+    {"page": 1, "review_status": "complete", "render": "reviews/19__vol2__094/p1-p1-full-poppler.png", "finding": "M-000 cover/index: project identity, title-block data and supplied nine-sheet index; no schedule or controls point list."},
+    {"page": 2, "review_status": "complete", "render": "reviews/19__vol2__094/p2-p2-full-poppler.png", "finding": "M-001 HVAC symbols/general notes; legends are not treated as installed inventory."},
+    {"page": 3, "review_status": "complete", "render": "reviews/19__vol2__094/p3-p3-full-poppler.png", "finding": "M-101 demolition roof plan: existing cooling tower/chiller/pumps and roof-AHU removal context."},
+    {"page": 4, "review_status": "complete", "render": "reviews/19__vol2__094/p4-p4-full-poppler.png", "finding": "M-102 new-work roof plan: AHU-04 through AHU-08, CH-2, CT-1 and pump context."},
+    {"page": 5, "review_status": "complete", "render": "reviews/19__vol2__094/p5-p5-full-poppler.png", "finding": "M-103 phasing: temporary chiller/pump criteria, work phases and six-row museum temperature/humidity guideline table."},
+    {"page": 6, "review_status": "complete", "render": "reviews/19__vol2__094/p6-p6-full-poppler.png", "finding": "M-201 no-scale controls: VAV AHU-4/5/8, constant-volume AHU-6 and 100%-outdoor-air AHU-7 templates. Existing-DDC/points/sequence matching requirement; no formal point matrix or standalone sequence."},
+    {"page": 7, "review_status": "complete", "render": "reviews/19__vol2__094/p7-p7-full-poppler.png", "finding": "M-301 HVAC details: piping, three-way-valve, cooling-tower/chiller and rooftop-AHU detail context; no dedicated valve/actuator schedule."},
+    {"page": 8, "review_status": "complete", "render": "reviews/19__vol2__094/p8-p8-full-poppler.png", "finding": "M-401 schedules: all four tables and eleven rows transcribed exactly."},
+    {"page": 9, "review_status": "complete", "render": "reviews/19__vol2__094/p9-p9-full-poppler.png", "finding": "S-500 structural mechanical/cooling-tower support details; no BAS point list or schedule."}
+  ],
+  "declared_checks": [
+    {"id": "supplied-pages", "path": ["modules", "metadata", "visual_review_pages"], "operation": "length", "expected": 9},
+    {"id": "full-page-review", "path": ["page_review"], "operation": "length", "expected": 9},
+    {"id": "schedule-tables", "path": ["modules", "equipment_reconciliation", "schedule_counts", "tables"], "expected": 4},
+    {"id": "schedule-rows", "path": ["modules", "equipment_reconciliation", "schedule_counts", "rows"], "expected": 11},
+    {"id": "formal-source-matrix-rows", "path": ["modules", "point_applications", "listed_template_counts", "source_rows"], "expected": 0}
+  ],
+  "completion_checks": {"every_source_page_reviewed": true, "all_explicit_objective_categories_reviewed": true, "all_populated_schedule_and_points_rows_captured": true, "source_conflicts_and_unavailable_fields_preserved": true, "two_engine_checks_current": true, "final_assembly_audit_complete": true},
+  "verification_semantics": "MuPDF and Poppler independently captured all nine supplied vector-PDF pages. Current authored schedule/environment cells and bounded text assertions are rechecked in both engines at bundle build and validation time. Parser agreement corroborates retained source text/cells and bounds; full-page Poppler review establishes visual sheet disposition, diagram relationships and source limitations. Neither process invents physical device, terminal, controller, network, valve, damper-actuator or zone-sensor quantities that are not established by the supplied PDF."
+}

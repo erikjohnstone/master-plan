@@ -1,0 +1,1049 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "ee842952fac915dcf36a15c6839a956cd2aaaa4319a9607c2c1863b3cf68cd14",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 28,
+  "checks": [
+    {
+      "assertion": "legend-bacnet-ip",
+      "page": 51,
+      "bbox": [
+        1600,
+        130,
+        1710,
+        155
+      ],
+      "expected": "BACNET IP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BACNET IP",
+          "word_ids": [
+            0,
+            1
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BACNET IP",
+          "word_ids": [
+            32,
+            33
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "legend-bacnet-mstp",
+      "page": 51,
+      "bbox": [
+        1600,
+        158,
+        1715,
+        183
+      ],
+      "expected": "BACNET MS/TP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BACNET MS/TP",
+          "word_ids": [
+            2,
+            3
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BACNET MS/TP",
+          "word_ids": [
+            36,
+            37
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "legend-uukl",
+      "page": 51,
+      "bbox": [
+        1600,
+        185,
+        1800,
+        212
+      ],
+      "expected": "BACNET MS/TP - UUKL NETWORK",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BACNET MS/TP - UUKL NETWORK",
+          "word_ids": [
+            353,
+            354,
+            355,
+            356,
+            357
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BACNET MS/TP - UUKL NETWORK",
+          "word_ids": [
+            62,
+            63,
+            64,
+            65,
+            66
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "legend-generic-network",
+      "page": 51,
+      "bbox": [
+        1600,
+        215,
+        1800,
+        252
+      ],
+      "expected": "GENERIC NETWORK AS REQUIRED FOR SYSTEM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GENERIC NETWORK AS REQUIRED FOR SYSTEM",
+          "word_ids": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GENERIC NETWORK AS REQUIRED FOR SYSTEM",
+          "word_ids": [
+            71,
+            72,
+            73,
+            74,
+            75,
+            76
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "atct-nae-location",
+      "page": 51,
+      "bbox": [
+        885,
+        105,
+        1090,
+        145
+      ],
+      "expected": "LOCATE NAE IN DDC CONTROL CABINET IN MECHANICAL ROOM 2102",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOCATE NAE IN DDC CONTROL CABINET IN MECHANICAL ROOM 2102",
+          "word_ids": [
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOCATE NAE IN DDC CONTROL CABINET IN MECHANICAL ROOM 2102",
+          "word_ids": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mtracon-nae-location",
+      "page": 51,
+      "bbox": [
+        1100,
+        535,
+        1290,
+        580
+      ],
+      "expected": "LOCATE NAE IN DDC CONTROL CABINET IN MECHANICAL ROOM 171",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOCATE NAE IN DDC CONTROL CABINET IN MECHANICAL ROOM 171",
+          "word_ids": [
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOCATE NAE IN DDC CONTROL CABINET IN MECHANICAL ROOM 171",
+          "word_ids": [
+            227,
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234,
+            235,
+            236
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "air-ops-nae-location",
+      "page": 51,
+      "bbox": [
+        965,
+        1045,
+        1170,
+        1090
+      ],
+      "expected": "LOCATE NAE IN DDC CONTROL CABINET IN MECHANICAL ROOM 152",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOCATE NAE IN DDC CONTROL CABINET IN MECHANICAL ROOM 152",
+          "word_ids": [
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOCATE NAE IN DDC CONTROL CABINET IN MECHANICAL ROOM 152",
+          "word_ids": [
+            458,
+            459,
+            460,
+            461,
+            462,
+            463,
+            464,
+            465,
+            466,
+            467
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "air-ops-boiler-master",
+      "page": 51,
+      "bbox": [
+        825,
+        1410,
+        960,
+        1470
+      ],
+      "expected": "BOILER PLANT MASTER CONTROLLER (B-AAC)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BOILER PLANT MASTER CONTROLLER (B-AAC)",
+          "word_ids": [
+            49,
+            50,
+            51,
+            52,
+            53
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BOILER PLANT MASTER CONTROLLER (B-AAC)",
+          "word_ids": [
+            412,
+            413,
+            414,
+            415,
+            416
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "air-ops-chiller-master",
+      "page": 51,
+      "bbox": [
+        970,
+        1410,
+        1120,
+        1470
+      ],
+      "expected": "CHILLER PLANT MASTER CONTROLLER (B-AAC)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLER PLANT MASTER CONTROLLER (B-AAC)",
+          "word_ids": [
+            80,
+            81,
+            82,
+            83,
+            84
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER PLANT MASTER CONTROLLER (B-AAC)",
+          "word_ids": [
+            417,
+            418,
+            419,
+            420,
+            421
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "air-ops-ahu-a1",
+      "page": 51,
+      "bbox": [
+        1150,
+        1410,
+        1235,
+        1470
+      ],
+      "expected": "AHU-A1 CONTROLLER (B-AAC)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-A1 CONTROLLER (B-AAC)",
+          "word_ids": [
+            54,
+            55,
+            56
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-A1 CONTROLLER (B-AAC)",
+          "word_ids": [
+            422,
+            423,
+            424
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "air-ops-doah-a1",
+      "page": 51,
+      "bbox": [
+        1300,
+        1410,
+        1380,
+        1470
+      ],
+      "expected": "DOAH-A1 CONTROLLER (B-AAC)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH-A1 CONTROLLER (B-AAC)",
+          "word_ids": [
+            67,
+            68,
+            69
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH-A1 CONTROLLER (B-AAC)",
+          "word_ids": [
+            425,
+            426,
+            427
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "air-ops-ahu-a2",
+      "page": 51,
+      "bbox": [
+        1450,
+        1410,
+        1530,
+        1470
+      ],
+      "expected": "AHU-A2 CONTROLLER (B-AAC)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-A2 CONTROLLER (B-AAC)",
+          "word_ids": [
+            74,
+            75,
+            76
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-A2 CONTROLLER (B-AAC)",
+          "word_ids": [
+            428,
+            429,
+            430
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "air-ops-doah-a2",
+      "page": 51,
+      "bbox": [
+        1600,
+        1410,
+        1685,
+        1470
+      ],
+      "expected": "DOAH-A2 CONTROLLER (B-AAC)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH-A2 CONTROLLER (B-AAC)",
+          "word_ids": [
+            77,
+            78,
+            79
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH-A2 CONTROLLER (B-AAC)",
+          "word_ids": [
+            432,
+            433,
+            434
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mtracon-boiler-master",
+      "page": 51,
+      "bbox": [
+        960,
+        910,
+        1100,
+        970
+      ],
+      "expected": "BOILER PLANT MASTER CONTROLLER (B-AAC)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BOILER PLANT MASTER CONTROLLER (B-AAC)",
+          "word_ids": [
+            116,
+            117,
+            118,
+            119,
+            120
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BOILER PLANT MASTER CONTROLLER (B-AAC)",
+          "word_ids": [
+            563,
+            564,
+            565,
+            566,
+            567
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mtracon-chiller-master",
+      "page": 51,
+      "bbox": [
+        1110,
+        910,
+        1250,
+        970
+      ],
+      "expected": "CHILLER PLANT MASTER CONTROLLER (B-AAC)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLER PLANT MASTER CONTROLLER (B-AAC)",
+          "word_ids": [
+            137,
+            138,
+            139,
+            140,
+            141
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER PLANT MASTER CONTROLLER (B-AAC)",
+          "word_ids": [
+            550,
+            551,
+            552,
+            553,
+            554
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mtracon-ahu-m1",
+      "page": 51,
+      "bbox": [
+        1290,
+        910,
+        1370,
+        970
+      ],
+      "expected": "AHU-M1 CONTROLLER (B-AAC)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-M1 CONTROLLER (B-AAC)",
+          "word_ids": [
+            121,
+            122,
+            123
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-M1 CONTROLLER (B-AAC)",
+          "word_ids": [
+            541,
+            542,
+            543
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mtracon-doah-m1",
+      "page": 51,
+      "bbox": [
+        1440,
+        910,
+        1520,
+        970
+      ],
+      "expected": "DOAH-M1 CONTROLLER (B-AAC)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH-M1 CONTROLLER (B-AAC)",
+          "word_ids": [
+            134,
+            135,
+            136
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH-M1 CONTROLLER (B-AAC)",
+          "word_ids": [
+            359,
+            360,
+            361
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "atct-boiler-master",
+      "page": 51,
+      "bbox": [
+        720,
+        410,
+        850,
+        470
+      ],
+      "expected": "BOILER PLANT MASTER CONTROLLER (B-AAC)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BOILER PLANT MASTER CONTROLLER (B-AAC)",
+          "word_ids": [
+            176,
+            177,
+            178,
+            179,
+            180
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BOILER PLANT MASTER CONTROLLER (B-AAC)",
+          "word_ids": [
+            314,
+            315,
+            316,
+            317,
+            318
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "atct-chw-pump-master",
+      "page": 51,
+      "bbox": [
+        880,
+        410,
+        1025,
+        470
+      ],
+      "expected": "ATCT CHW PUMP MASTER CONTROLLER (B-AAC)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ATCT CHW PUMP MASTER CONTROLLER (B-AAC)",
+          "word_ids": [
+            198,
+            199,
+            200,
+            201,
+            202,
+            203
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ATCT CHW PUMP MASTER CONTROLLER (B-AAC)",
+          "word_ids": [
+            304,
+            305,
+            306,
+            307,
+            308,
+            309
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "atct-ahu-master",
+      "page": 51,
+      "bbox": [
+        1075,
+        410,
+        1165,
+        470
+      ],
+      "expected": "AHU MASTER CONTROLLER (B-AAC)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU MASTER CONTROLLER (B-AAC)",
+          "word_ids": [
+            181,
+            182,
+            183,
+            184
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU MASTER CONTROLLER (B-AAC)",
+          "word_ids": [
+            300,
+            301,
+            302,
+            303
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "atct-doah-t1",
+      "page": 51,
+      "bbox": [
+        1230,
+        410,
+        1310,
+        470
+      ],
+      "expected": "DOAH-T1 CONTROLLER (B-AAC)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH-T1 CONTROLLER (B-AAC)",
+          "word_ids": [
+            195,
+            196,
+            197
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH-T1 CONTROLLER (B-AAC)",
+          "word_ids": [
+            293,
+            294,
+            295
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "atct-stair-press",
+      "page": 51,
+      "bbox": [
+        1370,
+        410,
+        1460,
+        470
+      ],
+      "expected": "STAIR PRESS. CONTROLLER (B-AAC)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STAIR PRESS. CONTROLLER (B-AAC)",
+          "word_ids": [
+            216,
+            217,
+            218,
+            219
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STAIR PRESS. CONTROLLER (B-AAC)",
+          "word_ids": [
+            157,
+            158,
+            159,
+            160
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "fiber-patch-interface",
+      "page": 51,
+      "bbox": [
+        245,
+        65,
+        600,
+        120
+      ],
+      "expected": "FIBER PATCH CABLE TO FIBER PATCH PANEL IN TELEMETRY PANEL. (BY MCAS CHERRY POINT)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FIBER PATCH CABLE TO FIBER PATCH PANEL IN TELEMETRY PANEL. (BY MCAS CHERRY POINT)",
+          "word_ids": [
+            259,
+            260,
+            261,
+            262,
+            263,
+            264,
+            265,
+            266,
+            267,
+            268,
+            269,
+            270,
+            271,
+            272
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FIBER PATCH CABLE TO FIBER PATCH PANEL IN TELEMETRY PANEL. (BY MCAS CHERRY POINT)",
+          "word_ids": [
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138,
+            139,
+            140,
+            141,
+            142
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "energy-meter-interface",
+      "page": 51,
+      "bbox": [
+        270,
+        195,
+        420,
+        248
+      ],
+      "expected": "CONNECT TO ENERGY METER NETWORK. (BY MCAS CHERRY POINT)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONNECT TO ENERGY METER NETWORK. (BY MCAS CHERRY POINT)",
+          "word_ids": [
+            320,
+            321,
+            322,
+            323,
+            324,
+            325,
+            326,
+            327,
+            328
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONNECT TO ENERGY METER NETWORK. (BY MCAS CHERRY POINT)",
+          "word_ids": [
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "tamper-alarm",
+      "page": 51,
+      "bbox": [
+        885,
+        55,
+        1105,
+        108
+      ],
+      "expected": "TAMPER SWITCH SHALL GENERATE ALARM TO DDC VIA NAE THAT CONTROL BOX HAS BEEN OPENED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAMPER SWITCH SHALL GENERATE ALARM TO DDC VIA NAE THAT CONTROL BOX HAS BEEN OPENED.",
+          "word_ids": [
+            273,
+            274,
+            275,
+            276,
+            277,
+            278,
+            279,
+            280,
+            281,
+            282,
+            283,
+            284,
+            285,
+            286,
+            287
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAMPER SWITCH SHALL GENERATE ALARM TO DDC VIA NAE THAT CONTROL BOX HAS BEEN OPENED.",
+          "word_ids": [
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "heat-recovery-interface",
+      "page": 51,
+      "bbox": [
+        605,
+        880,
+        810,
+        935
+      ],
+      "expected": "MSTP NAE CONNECTION TO CONVEY HEATING PLANT STATUS TO ENABLE HEAT RECOVERY CHILLER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MSTP NAE CONNECTION TO CONVEY HEATING PLANT STATUS TO ENABLE HEAT RECOVERY CHILLER",
+          "word_ids": [
+            368,
+            369,
+            370,
+            371,
+            372,
+            373,
+            374,
+            375,
+            376,
+            377,
+            378,
+            379,
+            380
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MSTP NAE CONNECTION TO CONVEY HEATING PLANT STATUS TO ENABLE HEAT RECOVERY CHILLER",
+          "word_ids": [
+            579,
+            580,
+            581,
+            582,
+            583,
+            584,
+            585,
+            586,
+            587,
+            588,
+            589,
+            590,
+            591
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "fire-protection-reference",
+      "page": 51,
+      "bbox": [
+        1485,
+        345,
+        1685,
+        390
+      ],
+      "expected": "SEE FIRE PROTECTION FOR FIRE STAIR PRESSURIZATION SEQUENCE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE FIRE PROTECTION FOR FIRE STAIR PRESSURIZATION SEQUENCE",
+          "word_ids": [
+            358,
+            359,
+            360,
+            361,
+            362,
+            363,
+            364,
+            365
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE FIRE PROTECTION FOR FIRE STAIR PRESSURIZATION SEQUENCE",
+          "word_ids": [
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "to-facp",
+      "page": 51,
+      "bbox": [
+        1475,
+        275,
+        1540,
+        303
+      ],
+      "expected": "TO FACP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TO FACP",
+          "word_ids": [
+            366,
+            367
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TO FACP",
+          "word_ids": [
+            89,
+            90
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

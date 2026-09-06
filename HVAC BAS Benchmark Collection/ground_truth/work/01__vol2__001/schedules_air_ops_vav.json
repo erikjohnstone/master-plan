@@ -1,0 +1,69 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All 27 printed VAV rows on Air Operations sheet M-602 (source PDF page 43). This is a schedule-table transcription, not a plan-installed quantity or a BAS point list. Controls ownership, room sensors and physical plan anchors remain separate work.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [43],
+    "render": "reviews/01__vol2__001/p43-schedules-poppler.png",
+    "dpi": 180,
+    "finding": "The 180-DPI M-602 rendering was visually reviewed separately from both native text engines. It confirms the complete continuous 27-row VAV grid, the wide column boundaries and the row labels through VAV-A206."
+  },
+  "tables": [
+    {
+      "id": "AIR-OPS-VAV",
+      "page": 43,
+      "sheet": "M-602",
+      "building_scope": "Air Operations",
+      "title": "VARIABLE AIR VOLUME TERMINAL BOX",
+      "classification": "Series fan-powered variable-air-volume terminal boxes with hot-water heating coils",
+      "columns": "mark|unit_type|served_by|people|design_outdoor_air_CFM|fan_airflow_CFM|max_primary_airflow_CFM|min_primary_airflow_CFM|heating_capacity_MBH|heating_EAT_F|heating_LAT_F|heating_EWT_F|heating_flowrate_GPM|max_heating_water_pressure_drop_ft_water_column|HHW_inlet_size_in|VAV_box_inlet_diameter_in|min_inlet_pressure_in_water_column|sound_level_max_NC|motor_HP|volts_phase_Hz|FLA|notes",
+      "x_edges": [160, 250, 450, 540, 585, 640, 725, 815, 905, 1000, 1040, 1095, 1155, 1260, 1370, 1445, 1535, 1610, 1685, 1760, 1850, 1910, 1980],
+      "y_ranges": [[950, 968], [968, 985], [985, 1002], [1002, 1019], [1019, 1037], [1037, 1054], [1054, 1071], [1071, 1089], [1089, 1106], [1106, 1123], [1123, 1140], [1140, 1157], [1157, 1174], [1174, 1191], [1191, 1208], [1208, 1225], [1225, 1242], [1242, 1259], [1259, 1276], [1276, 1293], [1293, 1310], [1310, 1328], [1328, 1345], [1345, 1362], [1362, 1379], [1379, 1397], [1397, 1415]],
+      "rows": [
+        "VAV-A101|SERIES FAN POWERED|AHU-A1|4|90|660|440|260|15.8|62.9|85|130|1.6|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A102|SERIES FAN POWERED|AHU-A1|13|125|350|290|240|9.8|59.1|85|130|1.0|10|3/4|6|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A103|SERIES FAN POWERED|AHU-A1|3|50|420|410|140|9.0|65.2|85|130|0.9|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A104|SERIES FAN POWERED|AHU-A1|4|50|280|180|130|7.0|62.0|85|130|0.7|10|3/4|6|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A105|SERIES FAN POWERED|AHU-A1|2|25|160|120|40|3.5|64.8|85|130|0.5|10|3/4|5|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A106A|SERIES FAN POWERED|AHU-A1|6|50|1020|1020|310|23.1|64.0|85|130|2.4|10|3/4|10|0.5|30|1/2|120/1/60|7.1|1,2,3,4,5",
+        "VAV-A106B|SERIES FAN POWERED|AHU-A1|6|80|670|550|170|14.7|64.7|85|130|1.5|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A107|SERIES FAN POWERED|AHU-A1|0|95|1290|440|200|27.1|65.6|85|130|2.8|10|3/4|12|0.5|30|1/2|120/1/60|7.1|1,2,3,4,5",
+        "VAV-A108A|SERIES FAN POWERED|AHU-A1|4|40|760|760|230|16.6|64.8|85|130|1.7|10|3/4|10|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A108B|SERIES FAN POWERED|AHU-A1|4|70|660|420|130|13.9|65.4|85|130|1.4|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A109|SERIES FAN POWERED|AHU-A1|4|55|450|400|140|10.2|64.0|85|130|1.1|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A110|SERIES FAN POWERED|AHU-A1|4|55|310|210|80|6.8|64.6|85|130|0.7|10|3/4|6|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A111|SERIES FAN POWERED|AHU-A1|9|75|380|280|170|9.4|62.2|85|130|1.0|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A112|SERIES FAN POWERED|AHU-A1|8|70|740|740|230|16.8|64.0|85|130|1.7|10|3/4|10|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A113|SERIES FAN POWERED|AHU-A1|11|105|460|380|120|11.0|62.9|85|130|1.1|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A114|SERIES FAN POWERED|AHU-A1|1|10|170|170|170|5.5|55|85|130|0.6|10|3/4|5|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A115|SERIES FAN POWERED|AHU-A2|53|470|910|910|560|24.6|62.4|85|130|2.5|10|3/4|10|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A116|SERIES FAN POWERED|AHU-A2|8|105|440|400|190|10.7|64.1|85|130|1.1|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A117|SERIES FAN POWERED|AHU-A2|3|35|300|270|90|6.8|59.5|85|130|0.7|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A118|SERIES FAN POWERED|AHU-A2|65|565|1060|1060|690|29.1|64.8|85|130|3.0|10|3/4|10|0.5|30|1/2|120/1/60|7.1|1,2,3,4,5",
+        "VAV-A201|SERIES FAN POWERED|AHU-A1|2|45|380|340|220|11.5|57.1|85|130|1.2|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A202|SERIES FAN POWERED|AHU-A1|2|35|440|390|120|9.8|64.5|85|130|1.0|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A203A|SERIES FAN POWERED|AHU-A1|25|165|560|560|310|14.2|61.5|85|130|1.5|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A203B|SERIES FAN POWERED|AHU-A1|14|110|1160|1160|580|25.4|64.8|85|130|2.6|10|3/4|10|0.5|30|1/2|120/1/60|7.1|1,2,3,4,5",
+        "VAV-A204|SERIES FAN POWERED|AHU-A1|7|75|530|500|150|11.6|64.8|85|130|1.2|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A205|SERIES FAN POWERED|AHU-A1|2|20|240|240|80|7.6|55.5|85|130|0.8|10|3/4|5|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A206|SERIES FAN POWERED|AHU-A1|1|15|270|210|120|6.6|62.2|85|130|0.7|10|3/4|6|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5"
+      ],
+      "notes": [
+        "1. PROVIDE WITH 120V/60HZ/1PH CONTROL VOLTAGE TRANSFORMER.",
+        "2. PROVIDE WITH UNIT MOUNTED DISCONNECT.",
+        "3. PROVIDE EC TYPE MOTOR. EC MOTORS SHALL BE PROVIDED WITH EQUIPMENT TO PREVENT ADDING HARMONICS TO ELECTRICAL SYSTEM (INDUCTOR, ETC.) AND SHALL BE PROGRAMMED TO PREVENT EC MOTOR OVERSPEED.",
+        "4. NUMBER OF OCCUPANTS SHOWN FOR INFORMATIONAL PURPOSES ONLY.",
+        "5. PROVIDE WITH ATTENUATOR IF REQUIRED TO ACHIEVE DESIRED NC LEVELS."
+      ],
+      "header_evidence": [
+        {"bbox": [870, 855, 1265, 885], "expected": "VARIABLE AIR VOLUME TERMINAL BOX"},
+        {"bbox": [160, 885, 1980, 949], "expected": "MARK UNIT TYPE SERVED BY OF PEOPLE DESIGN OA CFM FAN AIRFLOW CFM MAX PRIMARY AIRFLOW CFM MIN PRIMARY AIRFLOW CFM HOT WATER HEATING COIL DATA CAPACITY MBH EAT F LAT F EWT F FLOWRATE GPM MAX WATER PRESSURE DROP FT WC HHW INLET SIZE IN VAV BOX INLET DIAMETER IN MIN INLET PRESS IN WC SOUND LEVEL MAX NC ELECTRICAL MOTOR HP VOLTS PH HZ FLA NOTES"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "air-ops-vav-row-count", "records_path": ["tables", 0, "rows"], "expected": 27, "unique_key": null}
+  ],
+  "remaining_work": "Capture the M-602 construction-reference tables and later schedule pages; then reconcile VAV plan locations, thermostat/sensor mapping, valves/actuators and BAS points/sequence logic."
+}

@@ -1,0 +1,1706 @@
+{
+  "document_id": "24__vol2__019",
+  "source_sha256": "b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10",
+  "annotation_sha256": "02f3833f7fe7a4133984ed9c8b7ecfc6d6331883a9c692889acb8f5a2033d3ec",
+  "tables": 1,
+  "rows": 58,
+  "cell_assertions": 58,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M73-VAV",
+      "row": 1,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        152.251,
+        1223.215,
+        165.091
+      ],
+      "expected": "VAV-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-1",
+          "word_ids": [
+            172
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-1",
+          "word_ids": [
+            5
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 2,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        165.091,
+        1223.215,
+        177.991
+      ],
+      "expected": "VAV-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-2",
+          "word_ids": [
+            190
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-2",
+          "word_ids": [
+            6
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 3,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        177.991,
+        1223.215,
+        190.951
+      ],
+      "expected": "VAV-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-3",
+          "word_ids": [
+            208
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-3",
+          "word_ids": [
+            7
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 4,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        190.951,
+        1223.215,
+        203.911
+      ],
+      "expected": "VAV-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-4",
+          "word_ids": [
+            226
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-4",
+          "word_ids": [
+            8
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 5,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        203.911,
+        1223.215,
+        216.871
+      ],
+      "expected": "VAV-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-5",
+          "word_ids": [
+            244
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-5",
+          "word_ids": [
+            9
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 6,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        216.871,
+        1223.215,
+        229.831
+      ],
+      "expected": "VAV-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-6",
+          "word_ids": [
+            262
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-6",
+          "word_ids": [
+            10
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 7,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        229.831,
+        1223.215,
+        242.731
+      ],
+      "expected": "VAV-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-7",
+          "word_ids": [
+            280
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-7",
+          "word_ids": [
+            11
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 8,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        242.731,
+        1223.215,
+        255.631
+      ],
+      "expected": "VAV-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-8",
+          "word_ids": [
+            298
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-8",
+          "word_ids": [
+            12
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 9,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        255.631,
+        1223.215,
+        268.591
+      ],
+      "expected": "VAV-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-9",
+          "word_ids": [
+            316
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-9",
+          "word_ids": [
+            13
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 10,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        268.591,
+        1223.215,
+        281.551
+      ],
+      "expected": "VAV-10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-10",
+          "word_ids": [
+            334
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-10",
+          "word_ids": [
+            14
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 11,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        281.551,
+        1223.215,
+        294.51
+      ],
+      "expected": "VAV-11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-11",
+          "word_ids": [
+            352
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-11",
+          "word_ids": [
+            15
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 12,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        294.51,
+        1223.215,
+        307.41
+      ],
+      "expected": "VAV-12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-12",
+          "word_ids": [
+            370
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-12",
+          "word_ids": [
+            16
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 13,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        307.41,
+        1223.215,
+        320.31
+      ],
+      "expected": "VAV-13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-13",
+          "word_ids": [
+            388
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-13",
+          "word_ids": [
+            17
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 14,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        320.31,
+        1223.215,
+        333.27
+      ],
+      "expected": "VAV-14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-14",
+          "word_ids": [
+            406
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-14",
+          "word_ids": [
+            18
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 15,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        333.27,
+        1223.215,
+        346.23
+      ],
+      "expected": "VAV-15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-15",
+          "word_ids": [
+            424
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-15",
+          "word_ids": [
+            19
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 16,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        346.23,
+        1223.215,
+        359.19
+      ],
+      "expected": "VAV-16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-16",
+          "word_ids": [
+            442
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-16",
+          "word_ids": [
+            20
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 17,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        359.19,
+        1223.215,
+        372.15
+      ],
+      "expected": "VAV-17",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-17",
+          "word_ids": [
+            460
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-17",
+          "word_ids": [
+            21
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 18,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        372.15,
+        1223.215,
+        385.05
+      ],
+      "expected": "VAV-18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-18",
+          "word_ids": [
+            478
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-18",
+          "word_ids": [
+            22
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 19,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        385.05,
+        1223.215,
+        397.95
+      ],
+      "expected": "VAV-19",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-19",
+          "word_ids": [
+            496
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-19",
+          "word_ids": [
+            23
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 20,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        397.95,
+        1223.215,
+        410.91
+      ],
+      "expected": "VAV-20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-20",
+          "word_ids": [
+            514
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-20",
+          "word_ids": [
+            24
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 21,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        410.91,
+        1223.215,
+        423.87
+      ],
+      "expected": "VAV-21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-21",
+          "word_ids": [
+            532
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-21",
+          "word_ids": [
+            25
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 22,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        423.87,
+        1223.215,
+        436.83
+      ],
+      "expected": "VAV-22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-22",
+          "word_ids": [
+            550
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-22",
+          "word_ids": [
+            26
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 23,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        436.83,
+        1223.215,
+        449.73
+      ],
+      "expected": "VAV-23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-23",
+          "word_ids": [
+            568
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-23",
+          "word_ids": [
+            27
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 24,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        449.73,
+        1223.215,
+        462.63
+      ],
+      "expected": "VAV-24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-24",
+          "word_ids": [
+            586
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-24",
+          "word_ids": [
+            28
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 25,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        462.63,
+        1223.215,
+        475.59
+      ],
+      "expected": "VAV-25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-25",
+          "word_ids": [
+            604
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-25",
+          "word_ids": [
+            29
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 26,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        475.59,
+        1223.215,
+        488.55
+      ],
+      "expected": "VAV-26",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-26",
+          "word_ids": [
+            622
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-26",
+          "word_ids": [
+            30
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 27,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        488.55,
+        1223.215,
+        501.51
+      ],
+      "expected": "VAV-27",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-27",
+          "word_ids": [
+            640
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-27",
+          "word_ids": [
+            31
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 28,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        501.51,
+        1223.215,
+        514.41
+      ],
+      "expected": "VAV-28",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-28",
+          "word_ids": [
+            658
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-28",
+          "word_ids": [
+            32
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 29,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        514.41,
+        1223.215,
+        527.31
+      ],
+      "expected": "VAV-29",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-29",
+          "word_ids": [
+            676
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-29",
+          "word_ids": [
+            33
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 30,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        527.31,
+        1223.215,
+        540.27
+      ],
+      "expected": "VAV-30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-30",
+          "word_ids": [
+            694
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-30",
+          "word_ids": [
+            34
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 31,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        540.27,
+        1223.215,
+        553.23
+      ],
+      "expected": "VAV-31",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-31",
+          "word_ids": [
+            712
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-31",
+          "word_ids": [
+            35
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 32,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        553.23,
+        1223.215,
+        566.19
+      ],
+      "expected": "VAV-32",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-32",
+          "word_ids": [
+            730
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-32",
+          "word_ids": [
+            36
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 33,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        566.19,
+        1223.215,
+        579.15
+      ],
+      "expected": "VAV-33",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-33",
+          "word_ids": [
+            748
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-33",
+          "word_ids": [
+            37
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 34,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        579.15,
+        1223.215,
+        592.05
+      ],
+      "expected": "VAV-34",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-34",
+          "word_ids": [
+            766
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-34",
+          "word_ids": [
+            38
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 35,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        592.05,
+        1223.215,
+        604.949
+      ],
+      "expected": "VAV-35",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-35",
+          "word_ids": [
+            784
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-35",
+          "word_ids": [
+            39
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 36,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        604.949,
+        1223.215,
+        617.909
+      ],
+      "expected": "VAV-36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-36",
+          "word_ids": [
+            802
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-36",
+          "word_ids": [
+            40
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 37,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        617.909,
+        1223.215,
+        630.869
+      ],
+      "expected": "VAV-37",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-37",
+          "word_ids": [
+            820
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-37",
+          "word_ids": [
+            41
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 38,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        630.869,
+        1223.215,
+        643.829
+      ],
+      "expected": "VAV-38",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-38",
+          "word_ids": [
+            838
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-38",
+          "word_ids": [
+            42
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 39,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        643.829,
+        1223.215,
+        656.729
+      ],
+      "expected": "VAV-39",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-39",
+          "word_ids": [
+            856
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-39",
+          "word_ids": [
+            43
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 40,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        656.729,
+        1223.215,
+        669.629
+      ],
+      "expected": "VAV-40",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-40",
+          "word_ids": [
+            874
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-40",
+          "word_ids": [
+            44
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 41,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        669.629,
+        1223.215,
+        682.589
+      ],
+      "expected": "VAV-41",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-41",
+          "word_ids": [
+            892
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-41",
+          "word_ids": [
+            45
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 42,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        682.589,
+        1223.215,
+        695.549
+      ],
+      "expected": "VAV-42",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-42",
+          "word_ids": [
+            910
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-42",
+          "word_ids": [
+            46
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 43,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        695.549,
+        1223.215,
+        708.509
+      ],
+      "expected": "VAV-43",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-43",
+          "word_ids": [
+            928
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-43",
+          "word_ids": [
+            47
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 44,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        708.509,
+        1223.215,
+        721.469
+      ],
+      "expected": "VAV-44",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-44",
+          "word_ids": [
+            946
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-44",
+          "word_ids": [
+            48
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 45,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        721.469,
+        1223.215,
+        734.369
+      ],
+      "expected": "VAV-45",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-45",
+          "word_ids": [
+            964
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-45",
+          "word_ids": [
+            49
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 46,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        734.369,
+        1223.215,
+        747.269
+      ],
+      "expected": "VAV-46",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-46",
+          "word_ids": [
+            982
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-46",
+          "word_ids": [
+            50
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 47,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        747.269,
+        1223.215,
+        760.229
+      ],
+      "expected": "VAV-47",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-47",
+          "word_ids": [
+            1000
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-47",
+          "word_ids": [
+            51
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 48,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        760.229,
+        1223.215,
+        773.189
+      ],
+      "expected": "VAV-48",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-48",
+          "word_ids": [
+            1018
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-48",
+          "word_ids": [
+            52
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 49,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        773.189,
+        1223.215,
+        786.149
+      ],
+      "expected": "VAV-49",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-49",
+          "word_ids": [
+            1036
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-49",
+          "word_ids": [
+            53
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 50,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        786.149,
+        1223.215,
+        799.049
+      ],
+      "expected": "VAV-50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-50",
+          "word_ids": [
+            1054
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-50",
+          "word_ids": [
+            54
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 51,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        799.049,
+        1223.215,
+        811.949
+      ],
+      "expected": "VAV-51",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-51",
+          "word_ids": [
+            1072
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-51",
+          "word_ids": [
+            55
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 52,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        811.949,
+        1223.215,
+        824.909
+      ],
+      "expected": "VAV-52",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-52",
+          "word_ids": [
+            1090
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-52",
+          "word_ids": [
+            56
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 53,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        824.909,
+        1223.215,
+        837.869
+      ],
+      "expected": "VAV-53",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-53",
+          "word_ids": [
+            1108
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-53",
+          "word_ids": [
+            57
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 54,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        837.869,
+        1223.215,
+        850.829
+      ],
+      "expected": "VAV-54",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-54",
+          "word_ids": [
+            1126
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-54",
+          "word_ids": [
+            58
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 55,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        850.829,
+        1223.215,
+        863.789
+      ],
+      "expected": "VAV-55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-55",
+          "word_ids": [
+            1144
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-55",
+          "word_ids": [
+            59
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 56,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        863.789,
+        1223.215,
+        876.689
+      ],
+      "expected": "VAV-56",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-56",
+          "word_ids": [
+            1162
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-56",
+          "word_ids": [
+            60
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 57,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        876.689,
+        1223.215,
+        889.589
+      ],
+      "expected": "VAV-57",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-57",
+          "word_ids": [
+            1180
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-57",
+          "word_ids": [
+            61
+          ]
+        }
+      }
+    },
+    {
+      "table": "M73-VAV",
+      "row": 58,
+      "column": "mark",
+      "page": 16,
+      "bbox": [
+        1180.839,
+        889.589,
+        1223.215,
+        902.548
+      ],
+      "expected": "VAV-58",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-58",
+          "word_ids": [
+            1198
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-58",
+          "word_ids": [
+            62
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "schedules_m73-families",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

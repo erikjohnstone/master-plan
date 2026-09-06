@@ -1,0 +1,96 @@
+{
+  "document_id": "08__vol2__044",
+  "module_role": "Explicit source limitations and corroboration boundaries for the complete 31-page supplied set.",
+  "tables": [],
+  "source_limitations": [
+    "The literal schedule module completely captures nine selected high-value MI-503/MI-504 schedules (56 rows). Other visually reviewed schedule sheets are not silently treated as transcribed inventory rows.",
+    "MI-605 supplies a 33-row fuel-oil BACnet point list and MI-607 supplies a 63-row packaged service-water-heater BACnet object list. They are source interfaces, not final physical I/O, device, controller-card, terminal, cable or wiring counts.",
+    "Published integration language references BACnet/IP, building BAS and ALC. The source does not provide a final BAS topology, transport design, controller addresses, I/O-card layout, terminal schedule or wiring diagram.",
+    "Steam pressure-reducing valve, safety-valve, isolation-valve and meter schedule data are retained exactly within selected tables. No standalone CONTROL VALVE SCHEDULE or DAMPER ACTUATOR SCHEDULE title is asserted.",
+    "All 31 pages were visually reviewed using retained full-page Poppler renders. Every retained schedule cell, point-list cell and bounded text clause is independently verified against MuPDF and Poppler captures."
+  ],
+  "text_absence_assertions": [
+    {
+      "id": "rank08-no-control-valve-schedule-title",
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "covers_all_source_pages": true,
+      "patterns": [
+        "CONTROL\\\\s+VALVE\\\\s+SCHEDULE"
+      ],
+      "visual_review_qualification": "Native-text absence is not engineering proof; paired visual review supports only the limited finding that there is no standalone schedule title with this wording."
+    },
+    {
+      "id": "rank08-no-damper-actuator-schedule-title",
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "covers_all_source_pages": true,
+      "patterns": [
+        "DAMPER\\\\s+ACTUATOR\\\\s+SCHEDULE"
+      ],
+      "visual_review_qualification": "Native-text absence is not engineering proof; paired visual review supports only the limited finding that there is no standalone schedule title with this wording."
+    }
+  ]
+}

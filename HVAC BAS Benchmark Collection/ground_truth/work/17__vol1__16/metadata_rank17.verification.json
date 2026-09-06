@@ -1,0 +1,227 @@
+{
+  "document_id": "17__vol1__16",
+  "source_sha256": "96782a6f81077df39c2eb87f4d04e08c7e353483b596bcd97d534938593612a1",
+  "annotation_sha256": "790ae17e841418ada6fa794d1f812e5566f1b125d8fc2012625983b412ed7250",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 6,
+  "checks": [
+    {
+      "assertion": "cover-project",
+      "page": 1,
+      "bbox": [
+        850,
+        70,
+        2050,
+        240
+      ],
+      "expected": "CARSON VALLEY MIDDLE SCHOOL PHASE 1 HVAC REPLACEMENT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CARSON VALLEY MIDDLE SCHOOL PHASE 1 HVAC REPLACEMENT",
+          "word_ids": [
+            152,
+            153,
+            154,
+            155,
+            156,
+            157,
+            158,
+            159
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CARSON VALLEY MIDDLE SCHOOL PHASE 1 HVAC REPLACEMENT",
+          "word_ids": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "cover-location",
+      "page": 1,
+      "bbox": [
+        1100,
+        250,
+        1800,
+        360
+      ],
+      "expected": "1477 US HIGHWAY 395N GARDNERVILLE, NEVADA 89410",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1477 US HIGHWAY 395N GARDNERVILLE, NEVADA 89410",
+          "word_ids": [
+            144,
+            145,
+            146,
+            147,
+            148,
+            149,
+            150
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1477 US HIGHWAY 395N GARDNERVILLE, NEVADA 89410",
+          "word_ids": [
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "cover-issue-date",
+      "page": 1,
+      "bbox": [
+        2890,
+        1940,
+        2980,
+        1990
+      ],
+      "expected": "11/10/23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CLR 11/10/23 150623",
+          "word_ids": [
+            109,
+            117,
+            118
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CLR 11/10/23 150623",
+          "word_ids": [
+            952,
+            953,
+            962
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m211-scale",
+      "page": 12,
+      "bbox": [
+        1100,
+        1235,
+        1300,
+        1275
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            719,
+            720,
+            721,
+            722
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            578,
+            579,
+            580,
+            581
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m212-scale",
+      "page": 13,
+      "bbox": [
+        1325,
+        1320,
+        1520,
+        1360
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            650,
+            651,
+            652,
+            653
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            571,
+            572,
+            573,
+            574
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m221-scale",
+      "page": 17,
+      "bbox": [
+        1320,
+        1500,
+        1520,
+        1545
+      ],
+      "expected": "SCALE: 1/8\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            635,
+            636,
+            637,
+            638
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/8\" = 1'-0\"",
+          "word_ids": [
+            604,
+            605,
+            606,
+            607
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

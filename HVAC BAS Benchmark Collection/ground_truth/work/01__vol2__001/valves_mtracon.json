@@ -1,0 +1,135 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All printed MTRACON HHW and CHW control-valve schedule rows on M-613 (source PDF page 47). Rows preserve literal printed marks and are not reconciled installed quantities.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [47],
+    "render": "reviews/01__vol2__001/p47-p47-schedules-poppler.png",
+    "dpi": 180,
+    "finding": "Both M-613 MTRACON valve grids were visually reviewed at 180 DPI, including the complete 25-row VAV portion of the HHW table and the two-position chiller rows."
+  },
+  "tables": [
+    {
+      "id": "MTRACON-HHW-CONTROL-VALVE",
+      "page": 47,
+      "sheet": "M-613",
+      "building_scope": "MTRACON",
+      "title": "HHW CONTROL VALVE SCHEDULE",
+      "classification": "Heating-hot-water control valves",
+      "columns": "unit_mark|valve_mark|flowrate_GPM|valve_size_in|configuration|Cv|notes",
+      "x_edges": [200, 280, 385, 455, 510, 610, 670, 730],
+      "y_edges": [202, 219, 236, 253, 271, 288, 305, 322, 340, 357, 374, 391, 408, 426, 443, 460, 477, 495, 512, 529, 546, 564, 581, 598, 615, 633, 650, 667, 684, 702, 719, 736, 753, 771, 788, 805],
+      "rows": [
+        "CUH-M1|CV-CUH-M1-HHW|0.5|1/2|2-WAY|0.2|1",
+        "CV-CH-H-MT-1|CV-CH-H-MT-1|40.0|1|2-WAY|57.0|2,3",
+        "CV-CH-H-MT-2|CV-CH-H-MT-2|40.0|1|2-WAY|57.0|2,3",
+        "CV-HHW-BP-M|CV-HHW-BP-M|12.7|3/4|2-WAY|5.7|1",
+        "DOAH-M1|CV-DOAH-M1-HHW|11.3|1/2|2-WAY|5.0|1",
+        "FCU-M3|CV-FCU-M3-HHW|0.6|1/2|2-WAY|0.3|1",
+        "FCU-M5|CV-FCU-M5-HHW|1.1|1/2|2-WAY|0.5|1",
+        "FCU-M6|CV-FCU-M6-HHW|1.0|1/2|2-WAY|0.4|1",
+        "FCU-M7|CV-FCU-M7-HHW|2.8|1/2|2-WAY|1.3|1",
+        "UH-M1|CV-UH-M1-HHW|0.5|1/2|2-WAY|0.2|1",
+        "VAV-M101|CV-VAV-M101-HHW|1.0|1/2|2-WAY|0.4|1",
+        "VAV-M102|CV-VAV-M102-HHW|0.6|1/2|2-WAY|0.3|1",
+        "VAV-M103|CV-VAV-M103-HHW|1.5|1/2|2-WAY|0.7|1",
+        "VAV-M104|CV-VAV-M104-HHW|2.3|1/2|2-WAY|1.0|1",
+        "VAV-M105|CV-VAV-M105-HHW|1.0|1/2|2-WAY|0.4|1",
+        "VAV-M106|CV-VAV-M106-HHW|0.9|1/2|2-WAY|0.4|1",
+        "VAV-M107|CV-VAV-M107-HHW|1.5|1/2|2-WAY|0.7|1",
+        "VAV-M108|CV-VAV-M108-HHW|0.6|1/2|2-WAY|0.3|1",
+        "VAV-M109|CV-VAV-M109-HHW|5.1|1/2|2-WAY|2.3|1",
+        "VAV-M110|CV-VAV-M110-HHW|0.6|1/2|2-WAY|0.3|1",
+        "VAV-M111|CV-VAV-M111-HHW|1.7|1/2|2-WAY|0.8|1",
+        "VAV-M112|CV-VAV-M112-HHW|2.2|1/2|2-WAY|1.0|1",
+        "VAV-M113|CV-VAV-M113-HHW|1.6|1/2|2-WAY|0.7|1",
+        "VAV-M114|CV-VAV-M114-HHW|1.8|1/2|2-WAY|0.8|1",
+        "VAV-M115|CV-VAV-M115-HHW|0.7|1/2|2-WAY|0.3|1",
+        "VAV-M116|CV-VAV-M116-HHW|0.5|1/2|2-WAY|0.2|1",
+        "VAV-M117|CV-VAV-M117-HHW|0.9|1/2|2-WAY|0.4|1",
+        "VAV-M118|CV-VAV-M118-HHW|1.3|1/2|2-WAY|0.6|1",
+        "VAV-M119|CV-VAV-M119-HHW|0.5|1/2|2-WAY|0.2|1",
+        "VAV-M120|CV-VAV-M120-HHW|0.5|1/2|2-WAY|0.2|1",
+        "VAV-M121|CV-VAV-M121-HHW|0.7|1/2|2-WAY|0.3|1",
+        "VAV-M122|CV-VAV-M122-HHW|0.6|1/2|2-WAY|0.3|1",
+        "VAV-M123|CV-VAV-M123-HHW|1.5|1/2|2-WAY|0.7|1",
+        "VAV-M124|CV-VAV-M124-HHW|1.0|1/2|2-WAY|0.4|1",
+        "VAV-M125|CV-VAV-M125-HHW|1.8|1/2|2-WAY|0.8|1"
+      ],
+      "notes": [
+        "1. VALVE SHALL BE MODULATING TYPE.",
+        "2. VALVE SHALL BE TWO POSITION TYPE.",
+        "3. COORDINATE CONTROL VALVE SELECTION WITH CHILLER PROVIDED. GPM SHALL BE GREATER OF EITHER GPM SHOWN OR MINIMUM CHILLER FLOWRATE."
+      ],
+      "parser_exclusions": [
+        {"engine": "mupdf", "word_ids": [246, 253], "reason": "The 180-DPI visible rendering shows the two chiller HHW Cv values as 57.0. Hidden overlapping 17.9 vector words are excluded explicitly rather than concatenated into the displayed engineering value."},
+        {"engine": "poppler", "word_ids": [1062, 1066], "reason": "The 180-DPI visible rendering shows the two chiller HHW Cv values as 57.0. Hidden overlapping 17.9 vector words are excluded explicitly rather than concatenated into the displayed engineering value."}
+      ],
+      "header_evidence": [
+        {"bbox": [280, 130, 600, 170], "expected": "HHW CONTROL VALVE SCHEDULE"},
+        {"bbox": [200, 170, 730, 202], "expected": "UNIT MARK VALVE MARK FLOWRATE GPM VALVE SIZE IN CONFIGURATION CV NOTES"}
+      ]
+    },
+    {
+      "id": "MTRACON-CHW-CONTROL-VALVE",
+      "page": 47,
+      "sheet": "M-613",
+      "building_scope": "MTRACON",
+      "title": "CHW CONTROL VALVE SCHEDULE",
+      "classification": "Chilled-water control valves",
+      "columns": "unit_mark|valve_mark|flowrate_GPM|valve_size_in|configuration|Cv|notes",
+      "x_edges": [780, 850, 955, 1015, 1060, 1160, 1220, 1280],
+      "y_edges": [202, 219, 236, 253, 271, 288, 305, 322, 340, 357, 374, 391, 408, 426, 443, 460, 477, 495, 512, 529],
+      "rows": [
+        "AHU-M1|CV-AHU-M1-CHW|70|1 1/4|2-WAY|31.3|1",
+        "CRAH-M1A|CV-CRAH-M1A-CHW|16.5|1/2|2-WAY|7.4|1",
+        "CRAH-M1B|CV-CRAH-M1B-CHW|16.5|1/2|2-WAY|7.4|1",
+        "CRAH-M2A|CV-CRAH-M2A-CHW|15.1|1/2|2-WAY|6.7|1",
+        "CRAH-M2B|CV-CRAH-M2B-CHW|15.1|1/2|2-WAY|6.7|1",
+        "CV-CH-C-MT1|CV-CH-C-MT1|215|4|2-WAY|305.0|2,3",
+        "CV-CH-C-MT2|CV-CH-C-MT2|215|4|2-WAY|305.0|2,3",
+        "CV-CHW-BP-M|CV-CHW-BP-M|56.7|1 1/2|2-WAY|25.3|1",
+        "DOAH-M1|CV-DOAH-M1-CHW|43.2|1|2-WAY|19.3|1",
+        "FCU-M1A|CV-FCU-M1A-CHW|3.1|1/2|2-WAY|1.4|1",
+        "FCU-M1B|CV-FCU-M1B-CHW|3.1|1/2|2-WAY|1.4|1",
+        "FCU-M2A|CV-FCU-M2A-CHW|6|1/2|2-WAY|2.7|1",
+        "FCU-M2B|CV-FCU-M2B-CHW|6|1/2|2-WAY|2.7|1",
+        "FCU-M3|CV-FCU-M3-CHW|2.3|1/2|2-WAY|1.0|1",
+        "FCU-M4A|CV-FCU-M4A-CHW|13.3|1/2|2-WAY|5.9|1",
+        "FCU-M4B|CV-FCU-M4B-CHW|13.3|1/2|2-WAY|5.9|1",
+        "FCU-M5|CV-FCU-M5-CHW|3.4|1/2|2-WAY|1.5|1",
+        "FCU-M6|CV-FCU-M6-CHW|2.7|1/2|2-WAY|1.2|1",
+        "FCU-M7|CV-FCU-M7-CHW|19.3|1/2|2-WAY|8.6|1"
+      ],
+      "notes": [
+        "1. VALVE SHALL BE MODULATING TYPE.",
+        "2. VALVE SHALL BE TWO POSITION TYPE.",
+        "3. COORDINATE CONTROL VALVE SELECTION WITH CHILLER PROVIDED. GPM SHALL BE GREATER OF EITHER GPM SHOWN OR MINIMUM CHILLER FLOWRATE."
+      ],
+      "parser_exclusions": [
+        {"engine": "mupdf", "word_ids": [536, 543], "reason": "The 180-DPI visible rendering shows the two chiller CHW Cv values as 305.0. Hidden overlapping 96.0 vector words are excluded explicitly rather than concatenated into the displayed engineering value."},
+        {"engine": "poppler", "word_ids": [998, 1000], "reason": "The 180-DPI visible rendering shows the two chiller CHW Cv values as 305.0. Hidden overlapping 96.0 vector words are excluded explicitly rather than concatenated into the displayed engineering value."}
+      ],
+      "header_evidence": [
+        {"bbox": [840, 130, 1200, 170], "expected": "CHW CONTROL VALVE SCHEDULE"},
+        {"bbox": [780, 170, 1280, 202], "expected": "UNIT MARK VALVE MARK FLOWRATE GPM VALVE SIZE IN CONFIGURATION CV NOTES"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "mtracon-hhw-control-valve-row-count", "records_path": ["tables", 0, "rows"], "expected": 35},
+    {"id": "mtracon-chw-control-valve-row-count", "records_path": ["tables", 1, "rows"], "expected": 19}
+  ],
+  "source_conflicts": [
+    {
+      "table": "MTRACON-HHW-CONTROL-VALVE",
+      "finding": "The two CH-HH chiller rows visibly render Cv 57.0 while both raw captures retain an overlapped hidden 17.9 word in the same cells. The explicit engine/word-ID exclusions above preserve this visible-source decision."
+    },
+    {
+      "table": "MTRACON-CHW-CONTROL-VALVE",
+      "finding": "The two CH-C chiller rows visibly render Cv 305.0 while both raw captures retain an overlapped hidden 96.0 word in the same cells. The explicit engine/word-ID exclusions above preserve this visible-source decision."
+    }
+  ],
+  "remaining_work": "Transcribe the remaining MTRACON schedules and reconcile these printed valve schedules with the MTRACON equipment schedules, piping diagrams, plans and BAS controls without silently correcting source literals."
+}

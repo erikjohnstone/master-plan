@@ -1,0 +1,7830 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "e6b3a8e46d8cb3bffa270f1508d42f43ee1e7b55a4d7191e5f43ba7f9ae71a2e",
+  "tables": 4,
+  "rows": 62,
+  "cell_assertions": 248,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 1,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        290,
+        1720,
+        309
+      ],
+      "expected": "AI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            1418
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            1642
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 1,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        290,
+        2050,
+        309
+      ],
+      "expected": "AHU-T1B HW VALVE POSITION (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B HW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            1419,
+            1420,
+            1421,
+            1422,
+            1423
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B HW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            1643,
+            1644,
+            1645,
+            1646,
+            1647
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 1,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        290,
+        2105,
+        309
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1424
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1530
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 1,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        290,
+        2155,
+        309
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1425
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1163
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 2,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        309,
+        1720,
+        327
+      ],
+      "expected": "AI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            1426
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            1648
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 2,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        309,
+        2050,
+        327
+      ],
+      "expected": "AHU-T1B SA TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B SA TEMPERATURE",
+          "word_ids": [
+            1427,
+            1428,
+            1429
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B SA TEMPERATURE",
+          "word_ids": [
+            1649,
+            1650,
+            1651
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 2,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        309,
+        2105,
+        327
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1430
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1531
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 2,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        309,
+        2155,
+        327
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1431
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1164
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 3,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        327,
+        1720,
+        344
+      ],
+      "expected": "AI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            1432
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            1652
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 3,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        327,
+        2050,
+        344
+      ],
+      "expected": "AHU-T1B SA FAN STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B SA FAN STATUS",
+          "word_ids": [
+            1433,
+            1434,
+            1435,
+            1436
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B SA FAN STATUS",
+          "word_ids": [
+            1653,
+            1654,
+            1655,
+            1656
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 3,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        327,
+        2105,
+        344
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1437
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1532
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 3,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        327,
+        2155,
+        344
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1438
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1165
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 4,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        344,
+        1720,
+        361
+      ],
+      "expected": "AI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI04",
+          "word_ids": [
+            1439
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI04",
+          "word_ids": [
+            1657
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 4,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        344,
+        2050,
+        361
+      ],
+      "expected": "AHU-T1B SA FAN AIRFLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B SA FAN AIRFLOW",
+          "word_ids": [
+            1440,
+            1441,
+            1442,
+            1443
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B SA FAN AIRFLOW",
+          "word_ids": [
+            1658,
+            1659,
+            1660,
+            1661
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 4,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        344,
+        2105,
+        361
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1444
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1533
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 4,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        344,
+        2155,
+        361
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1445
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1166
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 5,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        361,
+        1720,
+        378
+      ],
+      "expected": "AI05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI05",
+          "word_ids": [
+            1446
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI05",
+          "word_ids": [
+            1662
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 5,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        361,
+        2050,
+        378
+      ],
+      "expected": "AHU-T1B FAN SPEED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B FAN SPEED (FEEDBACK)",
+          "word_ids": [
+            1447,
+            1448,
+            1449,
+            1450
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B FAN SPEED (FEEDBACK)",
+          "word_ids": [
+            1663,
+            1664,
+            1665,
+            1666
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 5,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        361,
+        2105,
+        378
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1451
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1534
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 5,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        361,
+        2155,
+        378
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1452
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1167
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 6,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        378,
+        1720,
+        395
+      ],
+      "expected": "AI06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI06",
+          "word_ids": [
+            1453
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI06",
+          "word_ids": [
+            1667
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 6,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        378,
+        2050,
+        395
+      ],
+      "expected": "MIN OA AIRFLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MIN OA AIRFLOW",
+          "word_ids": [
+            1454,
+            1455,
+            1456
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MIN OA AIRFLOW",
+          "word_ids": [
+            1668,
+            1669,
+            1670
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 6,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        378,
+        2105,
+        395
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1457
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1535
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 6,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        378,
+        2155,
+        395
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1458
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1168
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 7,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        395,
+        1720,
+        412
+      ],
+      "expected": "AI07",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI07",
+          "word_ids": [
+            1459
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI07",
+          "word_ids": [
+            1671
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 7,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        395,
+        2050,
+        412
+      ],
+      "expected": "AHU-T1B CHW VALVE POSITION (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B CHW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            1460,
+            1461,
+            1462,
+            1463,
+            1464
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B CHW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            1672,
+            1673,
+            1674,
+            1675,
+            1676
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 7,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        395,
+        2105,
+        412
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1465
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1536
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 7,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        395,
+        2155,
+        412
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1466
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1169
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 8,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        412,
+        1720,
+        429
+      ],
+      "expected": "AI08",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI08",
+          "word_ids": [
+            1467
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI08",
+          "word_ids": [
+            1677
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 8,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        412,
+        2050,
+        429
+      ],
+      "expected": "AHU-T1B CC DISCHARGE TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B CC DISCHARGE TEMPERATURE",
+          "word_ids": [
+            1468,
+            1469,
+            1470,
+            1471
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B CC DISCHARGE TEMPERATURE",
+          "word_ids": [
+            1678,
+            1679,
+            1680,
+            1681
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 8,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        412,
+        2105,
+        429
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1472
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1537
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 8,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        412,
+        2155,
+        429
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1473
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1170
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 9,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        429,
+        1720,
+        446
+      ],
+      "expected": "AI09",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI09",
+          "word_ids": [
+            1474
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI09",
+          "word_ids": [
+            1682
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 9,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        429,
+        2050,
+        446
+      ],
+      "expected": "AHU-T1B MA TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B MA TEMPERATURE",
+          "word_ids": [
+            1475,
+            1476,
+            1477
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B MA TEMPERATURE",
+          "word_ids": [
+            1683,
+            1684,
+            1685
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 9,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        429,
+        2105,
+        446
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1478
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1538
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 9,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        429,
+        2155,
+        446
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1479
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1171
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 10,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        446,
+        1720,
+        464
+      ],
+      "expected": "AI10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI10",
+          "word_ids": [
+            1480
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI10",
+          "word_ids": [
+            1686
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 10,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        446,
+        2050,
+        464
+      ],
+      "expected": "AHU-T1A HW VALVE POSITION (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A HW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            1481,
+            1482,
+            1483,
+            1484,
+            1485
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A HW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            1687,
+            1688,
+            1689,
+            1690,
+            1691
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 10,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        446,
+        2105,
+        464
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1486
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1539
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 10,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        446,
+        2155,
+        464
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1487
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1172
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 11,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        464,
+        1720,
+        481
+      ],
+      "expected": "AI11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI11",
+          "word_ids": [
+            1488
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI11",
+          "word_ids": [
+            1692
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 11,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        464,
+        2050,
+        481
+      ],
+      "expected": "AHU-T1A SA TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A SA TEMPERATURE",
+          "word_ids": [
+            1489,
+            1490,
+            1491
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A SA TEMPERATURE",
+          "word_ids": [
+            1693,
+            1694,
+            1695
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 11,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        464,
+        2105,
+        481
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1492
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1540
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 11,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        464,
+        2155,
+        481
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1493
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1173
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 12,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        481,
+        1720,
+        498
+      ],
+      "expected": "AI12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI12",
+          "word_ids": [
+            1494
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI12",
+          "word_ids": [
+            1696
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 12,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        481,
+        2050,
+        498
+      ],
+      "expected": "AHU-T1A SA FAN STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A SA FAN STATUS",
+          "word_ids": [
+            1495,
+            1496,
+            1497,
+            1498
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A SA FAN STATUS",
+          "word_ids": [
+            1697,
+            1698,
+            1699,
+            1700
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 12,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        481,
+        2105,
+        498
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1499
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1541
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 12,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        481,
+        2155,
+        498
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1500
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1174
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 13,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        498,
+        1720,
+        515
+      ],
+      "expected": "AI13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI13",
+          "word_ids": [
+            1501
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI13",
+          "word_ids": [
+            1701
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 13,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        498,
+        2050,
+        515
+      ],
+      "expected": "AHU-T1A SA FAN AIRFLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A SA FAN AIRFLOW",
+          "word_ids": [
+            1502,
+            1503,
+            1504,
+            1505
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A SA FAN AIRFLOW",
+          "word_ids": [
+            1702,
+            1703,
+            1704,
+            1705
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 13,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        498,
+        2105,
+        515
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1506
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1542
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 13,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        498,
+        2155,
+        515
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1507
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1175
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 14,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        515,
+        1720,
+        532
+      ],
+      "expected": "AI14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI14",
+          "word_ids": [
+            1508
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI14",
+          "word_ids": [
+            1706
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 14,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        515,
+        2050,
+        532
+      ],
+      "expected": "AHU-T1A FAN SPEED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A FAN SPEED (FEEDBACK)",
+          "word_ids": [
+            1509,
+            1510,
+            1511,
+            1512
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A FAN SPEED (FEEDBACK)",
+          "word_ids": [
+            1707,
+            1708,
+            1709,
+            1710
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 14,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        515,
+        2105,
+        532
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1513
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1543
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 14,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        515,
+        2155,
+        532
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1514
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1176
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 15,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        532,
+        1720,
+        549
+      ],
+      "expected": "AI15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI15",
+          "word_ids": [
+            1515
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI15",
+          "word_ids": [
+            1711
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 15,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        532,
+        2050,
+        549
+      ],
+      "expected": "AHU-T1A CHW VALVE POSITION (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A CHW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            1516,
+            1517,
+            1518,
+            1519,
+            1520
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A CHW VALVE POSITION (FEEDBACK)",
+          "word_ids": [
+            1712,
+            1713,
+            1714,
+            1715,
+            1716
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 15,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        532,
+        2105,
+        549
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1521
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1544
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 15,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        532,
+        2155,
+        549
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1522
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1177
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 16,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        549,
+        1720,
+        566
+      ],
+      "expected": "AI16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI16",
+          "word_ids": [
+            1523
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI16",
+          "word_ids": [
+            1717
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 16,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        549,
+        2050,
+        566
+      ],
+      "expected": "AHU-T1A CC DISCHARGE TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A CC DISCHARGE TEMPERATURE",
+          "word_ids": [
+            1524,
+            1525,
+            1526,
+            1527
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A CC DISCHARGE TEMPERATURE",
+          "word_ids": [
+            1718,
+            1719,
+            1720,
+            1721
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 16,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        549,
+        2105,
+        566
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1528
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1545
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 16,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        549,
+        2155,
+        566
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1529
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1178
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 17,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        566,
+        1720,
+        584
+      ],
+      "expected": "AI17",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI17",
+          "word_ids": [
+            1530
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI17",
+          "word_ids": [
+            1722
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 17,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        566,
+        2050,
+        584
+      ],
+      "expected": "AHU-T1A MA TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A MA TEMPERATURE",
+          "word_ids": [
+            1531,
+            1532,
+            1533
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A MA TEMPERATURE",
+          "word_ids": [
+            1723,
+            1724,
+            1725
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 17,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        566,
+        2105,
+        584
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1534
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1546
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 17,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        566,
+        2155,
+        584
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1535
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1179
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 18,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        584,
+        1720,
+        601
+      ],
+      "expected": "AI18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI18",
+          "word_ids": [
+            1536
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI18",
+          "word_ids": [
+            1726
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 18,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        584,
+        2050,
+        601
+      ],
+      "expected": "HIGH LIMIT HUMIDISTAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH LIMIT HUMIDISTAT",
+          "word_ids": [
+            1537,
+            1538,
+            1539
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH LIMIT HUMIDISTAT",
+          "word_ids": [
+            1727,
+            1728,
+            1729
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 18,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        584,
+        2105,
+        601
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1540
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1547
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 18,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        584,
+        2155,
+        601
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1541
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1180
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 19,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        601,
+        1720,
+        618
+      ],
+      "expected": "AI19",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI19",
+          "word_ids": [
+            1542
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI19",
+          "word_ids": [
+            1730
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 19,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        601,
+        2050,
+        618
+      ],
+      "expected": "SPACE HUMIDITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPACE HUMIDITY",
+          "word_ids": [
+            1543,
+            1544
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPACE HUMIDITY",
+          "word_ids": [
+            1731,
+            1732
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 19,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        601,
+        2105,
+        618
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1545
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1548
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 19,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        601,
+        2155,
+        618
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1546
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1181
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 20,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        618,
+        1720,
+        635
+      ],
+      "expected": "AI20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI20",
+          "word_ids": [
+            1547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI20",
+          "word_ids": [
+            1733
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 20,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        618,
+        2050,
+        635
+      ],
+      "expected": "SPACE THERMOSTAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPACE THERMOSTAT",
+          "word_ids": [
+            1548,
+            1549
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPACE THERMOSTAT",
+          "word_ids": [
+            1734,
+            1735
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 20,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        618,
+        2105,
+        635
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1550
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1549
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 20,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        618,
+        2155,
+        635
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1551
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1182
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 21,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        635,
+        1720,
+        654
+      ],
+      "expected": "AI21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI21",
+          "word_ids": [
+            1552
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI21",
+          "word_ids": [
+            1736
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 21,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        635,
+        2050,
+        654
+      ],
+      "expected": "HUMIDIFIER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDIFIER CONTROL",
+          "word_ids": [
+            1553,
+            1554
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDIFIER CONTROL",
+          "word_ids": [
+            1737,
+            1738
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 21,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        635,
+        2105,
+        654
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1555
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1550
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "row": 21,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        635,
+        2155,
+        654
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1556
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1183
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "header": "POINTS LIST AHU T1A TIB",
+      "page": 65,
+      "bbox": [
+        1780,
+        225,
+        2040,
+        262
+      ],
+      "engine": "mupdf",
+      "actual": "POINTS LIST AHU-T1A/TIB",
+      "pass": true
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "header": "POINTS LIST AHU T1A TIB",
+      "page": 65,
+      "bbox": [
+        1780,
+        225,
+        2040,
+        262
+      ],
+      "engine": "poppler",
+      "actual": "POINTS LIST AHU-T1A/TIB",
+      "pass": true
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 65,
+      "bbox": [
+        1650,
+        251,
+        2155,
+        279
+      ],
+      "engine": "mupdf",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "header": "MARK DESCRIPTION ALARM TREND",
+      "page": 65,
+      "bbox": [
+        1650,
+        251,
+        2155,
+        279
+      ],
+      "engine": "poppler",
+      "actual": "MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "header": "ANALOG INPUT",
+      "page": 65,
+      "bbox": [
+        1640,
+        272,
+        1740,
+        290
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-AHU-AI",
+      "header": "ANALOG INPUT",
+      "page": 65,
+      "bbox": [
+        1640,
+        272,
+        1740,
+        290
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 1,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        687,
+        1720,
+        706
+      ],
+      "expected": "AO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            1559
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            1186
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 1,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        687,
+        2050,
+        706
+      ],
+      "expected": "AHU-T1B HW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B HW VALVE CONTROL",
+          "word_ids": [
+            1560,
+            1561,
+            1562,
+            1563
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B HW VALVE CONTROL",
+          "word_ids": [
+            1187,
+            1188,
+            1189,
+            1190
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 1,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        687,
+        2105,
+        706
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1564
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1219
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 1,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        687,
+        2155,
+        706
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1565
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1226
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 2,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        706,
+        1720,
+        724
+      ],
+      "expected": "AO02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            1566
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            1191
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 2,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        706,
+        2050,
+        724
+      ],
+      "expected": "AHU-T1B FAN SPEED CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B FAN SPEED CONTROL",
+          "word_ids": [
+            1567,
+            1568,
+            1569,
+            1570
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B FAN SPEED CONTROL",
+          "word_ids": [
+            1192,
+            1193,
+            1194,
+            1195
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 2,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        706,
+        2105,
+        724
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1571
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1220
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 2,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        706,
+        2155,
+        724
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1572
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1227
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 3,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        724,
+        1720,
+        741
+      ],
+      "expected": "AO03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO03",
+          "word_ids": [
+            1573
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO03",
+          "word_ids": [
+            1196
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 3,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        724,
+        2050,
+        741
+      ],
+      "expected": "AHU-T1B CHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B CHW VALVE CONTROL",
+          "word_ids": [
+            1574,
+            1575,
+            1576,
+            1577
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B CHW VALVE CONTROL",
+          "word_ids": [
+            1197,
+            1198,
+            1199,
+            1200
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 3,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        724,
+        2105,
+        741
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1578
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1221
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 3,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        724,
+        2155,
+        741
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1579
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1228
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 4,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        741,
+        1720,
+        758
+      ],
+      "expected": "AO04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO04",
+          "word_ids": [
+            1580
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO04",
+          "word_ids": [
+            1201
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 4,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        741,
+        2050,
+        758
+      ],
+      "expected": "AHU-T1A HW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A HW VALVE CONTROL",
+          "word_ids": [
+            1581,
+            1582,
+            1583,
+            1584
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A HW VALVE CONTROL",
+          "word_ids": [
+            1202,
+            1203,
+            1204,
+            1205
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 4,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        741,
+        2105,
+        758
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1585
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1222
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 4,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        741,
+        2155,
+        758
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1586
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1229
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 5,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        758,
+        1720,
+        775
+      ],
+      "expected": "AO05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO05",
+          "word_ids": [
+            1587
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO05",
+          "word_ids": [
+            1206
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 5,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        758,
+        2050,
+        775
+      ],
+      "expected": "AHU-T1A FAN SPEED CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A FAN SPEED CONTROL",
+          "word_ids": [
+            1588,
+            1589,
+            1590,
+            1591
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A FAN SPEED CONTROL",
+          "word_ids": [
+            1207,
+            1208,
+            1209,
+            1210
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 5,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        758,
+        2105,
+        775
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1592
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1223
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 5,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        758,
+        2155,
+        775
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1593
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1230
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 6,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        775,
+        1720,
+        792
+      ],
+      "expected": "AO06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO06",
+          "word_ids": [
+            1594
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO06",
+          "word_ids": [
+            1211
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 6,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        775,
+        2050,
+        792
+      ],
+      "expected": "AHU-T1A CHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A CHW VALVE CONTROL",
+          "word_ids": [
+            1595,
+            1596,
+            1597,
+            1598
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A CHW VALVE CONTROL",
+          "word_ids": [
+            1212,
+            1213,
+            1214,
+            1215
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 6,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        775,
+        2105,
+        792
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1599
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1224
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 6,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        775,
+        2155,
+        792
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1600
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1231
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 7,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        792,
+        1720,
+        810
+      ],
+      "expected": "AO07",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO07",
+          "word_ids": [
+            1601
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO07",
+          "word_ids": [
+            1216
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 7,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        792,
+        2050,
+        810
+      ],
+      "expected": "HUMIDIFIER OUTPUT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDIFIER OUTPUT",
+          "word_ids": [
+            1602,
+            1603
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDIFIER OUTPUT",
+          "word_ids": [
+            1217,
+            1218
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 7,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        792,
+        2105,
+        810
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1604
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1225
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "row": 7,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        792,
+        2155,
+        810
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1605
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1232
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 65,
+      "bbox": [
+        1640,
+        661,
+        1740,
+        687
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-AHU-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 65,
+      "bbox": [
+        1640,
+        661,
+        1740,
+        687
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 1,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        842,
+        1720,
+        861
+      ],
+      "expected": "BI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            1608
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            1235
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 1,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        842,
+        2050,
+        861
+      ],
+      "expected": "AHU-T1B MERV 8 FILTER STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B MERV 8 FILTER STATUS",
+          "word_ids": [
+            1609,
+            1610,
+            1611,
+            1612,
+            1613
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B MERV 8 FILTER STATUS",
+          "word_ids": [
+            1236,
+            1237,
+            1238,
+            1239,
+            1240
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 1,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        842,
+        2105,
+        861
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1614
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1401
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 1,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        842,
+        2155,
+        861
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1615
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1427
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 2,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        861,
+        1720,
+        879
+      ],
+      "expected": "BI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            1616
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            1241
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 2,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        861,
+        2050,
+        879
+      ],
+      "expected": "AHU-T1B SA DUCT SMOKE DETECTOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B SA DUCT SMOKE DETECTOR",
+          "word_ids": [
+            1617,
+            1618,
+            1619,
+            1620,
+            1621
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B SA DUCT SMOKE DETECTOR",
+          "word_ids": [
+            1242,
+            1243,
+            1244,
+            1245,
+            1246
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 2,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        861,
+        2105,
+        879
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1622
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1402
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 2,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        861,
+        2155,
+        879
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1623
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1428
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 3,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        879,
+        1720,
+        896
+      ],
+      "expected": "BI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            1624
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            1247
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 3,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        879,
+        2050,
+        896
+      ],
+      "expected": "AHU-T1B MERV 13 FILTER STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B MERV 13 FILTER STATUS",
+          "word_ids": [
+            1625,
+            1626,
+            1627,
+            1628,
+            1629
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B MERV 13 FILTER STATUS",
+          "word_ids": [
+            1248,
+            1249,
+            1250,
+            1251,
+            1252
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 3,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        879,
+        2105,
+        896
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1630
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1403
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 3,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        879,
+        2155,
+        896
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1631
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1429
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 4,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        896,
+        1720,
+        913
+      ],
+      "expected": "BI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            1632
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            1253
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 4,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        896,
+        2050,
+        913
+      ],
+      "expected": "AHU-T1B VFD FAULT STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B VFD FAULT STATUS",
+          "word_ids": [
+            1633,
+            1634,
+            1635,
+            1636
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B VFD FAULT STATUS",
+          "word_ids": [
+            1254,
+            1255,
+            1256,
+            1257
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 4,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        896,
+        2105,
+        913
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1637
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1404
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 4,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        896,
+        2155,
+        913
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1638
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1430
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 5,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        913,
+        1720,
+        930
+      ],
+      "expected": "BI05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI05",
+          "word_ids": [
+            1639
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI05",
+          "word_ids": [
+            1258
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 5,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        913,
+        2050,
+        930
+      ],
+      "expected": "MINIMUM OA DAMPER POSITION CLOSED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MINIMUM OA DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            1640,
+            1641,
+            1642,
+            1643,
+            1644,
+            1645
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MINIMUM OA DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            1259,
+            1260,
+            1261,
+            1262,
+            1263,
+            1264
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 5,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        913,
+        2105,
+        930
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1646
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1405
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 5,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        913,
+        2155,
+        930
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1647
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1431
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 6,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        930,
+        1720,
+        947
+      ],
+      "expected": "BI06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI06",
+          "word_ids": [
+            1648
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI06",
+          "word_ids": [
+            1265
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 6,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        930,
+        2050,
+        947
+      ],
+      "expected": "MINIMUM OA DAMPER POSITION OPEN (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MINIMUM OA DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            1649,
+            1650,
+            1651,
+            1652,
+            1653,
+            1654
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MINIMUM OA DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            1266,
+            1267,
+            1268,
+            1269,
+            1270,
+            1271
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 6,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        930,
+        2105,
+        947
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1655
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1406
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 6,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        930,
+        2155,
+        947
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1656
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1432
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 7,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        947,
+        1720,
+        964
+      ],
+      "expected": "BI07",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI07",
+          "word_ids": [
+            1657
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI07",
+          "word_ids": [
+            1272
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 7,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        947,
+        2050,
+        964
+      ],
+      "expected": "REDUNDANT OA DAMPER POSITION CLOSED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "REDUNDANT OA DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            1658,
+            1659,
+            1660,
+            1661,
+            1662,
+            1663
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "REDUNDANT OA DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            1273,
+            1274,
+            1275,
+            1276,
+            1277,
+            1278
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 7,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        947,
+        2105,
+        964
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1664
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1407
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 7,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        947,
+        2155,
+        964
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1665
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1433
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 8,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        964,
+        1720,
+        981
+      ],
+      "expected": "BI08",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI08",
+          "word_ids": [
+            1666
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI08",
+          "word_ids": [
+            1279
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 8,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        964,
+        2050,
+        981
+      ],
+      "expected": "REDUNDANT OA DAMPER POSITION OPEN (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "REDUNDANT OA DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            1667,
+            1668,
+            1669,
+            1670,
+            1671,
+            1672
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "REDUNDANT OA DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            1280,
+            1281,
+            1282,
+            1283,
+            1284,
+            1285
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 8,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        964,
+        2105,
+        981
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1673
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1408
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 8,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        964,
+        2155,
+        981
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1674
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1434
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 9,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        981,
+        1720,
+        999
+      ],
+      "expected": "BI09",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI09",
+          "word_ids": [
+            1675
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI09",
+          "word_ids": [
+            1286
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 9,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        981,
+        2050,
+        999
+      ],
+      "expected": "AHU-T1A MERV 8 FILTER STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A MERV 8 FILTER STATUS",
+          "word_ids": [
+            1676,
+            1677,
+            1678,
+            1679,
+            1680
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A MERV 8 FILTER STATUS",
+          "word_ids": [
+            1287,
+            1288,
+            1289,
+            1290,
+            1291
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 9,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        981,
+        2105,
+        999
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1681
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1409
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 9,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        981,
+        2155,
+        999
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1682
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1435
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 10,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        999,
+        1720,
+        1016
+      ],
+      "expected": "BI10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI10",
+          "word_ids": [
+            1683
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI10",
+          "word_ids": [
+            1292
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 10,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        999,
+        2050,
+        1016
+      ],
+      "expected": "AHU-T1A SA DUCT SMOKE DETECTOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A SA DUCT SMOKE DETECTOR",
+          "word_ids": [
+            1684,
+            1685,
+            1686,
+            1687,
+            1688
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A SA DUCT SMOKE DETECTOR",
+          "word_ids": [
+            1293,
+            1294,
+            1295,
+            1296,
+            1297
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 10,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        999,
+        2105,
+        1016
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1689
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1410
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 10,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        999,
+        2155,
+        1016
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1690
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1436
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 11,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1016,
+        1720,
+        1033
+      ],
+      "expected": "BI11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI11",
+          "word_ids": [
+            1691
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI11",
+          "word_ids": [
+            1298
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 11,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1016,
+        2050,
+        1033
+      ],
+      "expected": "AHU-T1A MERV 13 FILTER STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A MERV 13 FILTER STATUS",
+          "word_ids": [
+            1692,
+            1693,
+            1694,
+            1695,
+            1696
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A MERV 13 FILTER STATUS",
+          "word_ids": [
+            1299,
+            1300,
+            1301,
+            1302,
+            1303
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 11,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1016,
+        2105,
+        1033
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1697
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1411
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 11,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1016,
+        2155,
+        1033
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1698
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1437
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 12,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1033,
+        1720,
+        1050
+      ],
+      "expected": "BI12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI12",
+          "word_ids": [
+            1699
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI12",
+          "word_ids": [
+            1304
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 12,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1033,
+        2050,
+        1050
+      ],
+      "expected": "AHU-T1A VFD FAULT STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A VFD FAULT STATUS",
+          "word_ids": [
+            1700,
+            1701,
+            1702,
+            1703
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A VFD FAULT STATUS",
+          "word_ids": [
+            1305,
+            1306,
+            1307,
+            1308
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 12,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1033,
+        2105,
+        1050
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1704
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1412
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 12,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1033,
+        2155,
+        1050
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1705
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1438
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 13,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1050,
+        1720,
+        1067
+      ],
+      "expected": "BI13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI13",
+          "word_ids": [
+            1706
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI13",
+          "word_ids": [
+            1309
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 13,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1050,
+        2050,
+        1067
+      ],
+      "expected": "AHU-T1A RA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A RA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            1707,
+            1708,
+            1709,
+            1710,
+            1711,
+            1712,
+            1713
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A RA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            1310,
+            1311,
+            1312,
+            1313,
+            1314,
+            1315,
+            1316
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 13,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1050,
+        2105,
+        1067
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1714
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1413
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 13,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1050,
+        2155,
+        1067
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1715
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1439
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 14,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1067,
+        1720,
+        1085
+      ],
+      "expected": "BI14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI14",
+          "word_ids": [
+            1716
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI14",
+          "word_ids": [
+            1317
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 14,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1067,
+        2050,
+        1085
+      ],
+      "expected": "AHU-T1A RA ISOLATION DAMPER POSITION OPEN (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A RA ISOLATION DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            1717,
+            1718,
+            1719,
+            1720,
+            1721,
+            1722,
+            1723
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A RA ISOLATION DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            1318,
+            1319,
+            1320,
+            1321,
+            1322,
+            1323,
+            1324
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 14,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1067,
+        2105,
+        1085
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1724
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1414
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 14,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1067,
+        2155,
+        1085
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1725
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1440
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 15,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1085,
+        1720,
+        1102
+      ],
+      "expected": "BI15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI15",
+          "word_ids": [
+            1726
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI15",
+          "word_ids": [
+            1325
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 15,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1085,
+        2050,
+        1102
+      ],
+      "expected": "AHU-T1B RA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B RA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            1727,
+            1728,
+            1729,
+            1730,
+            1731,
+            1732,
+            1733
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B RA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            1326,
+            1327,
+            1328,
+            1329,
+            1330,
+            1331,
+            1332
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 15,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1085,
+        2105,
+        1102
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1734
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1415
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 15,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1085,
+        2155,
+        1102
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1735
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1441
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 16,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1102,
+        1720,
+        1119
+      ],
+      "expected": "BI16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI16",
+          "word_ids": [
+            1736
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI16",
+          "word_ids": [
+            1333
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 16,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1102,
+        2050,
+        1119
+      ],
+      "expected": "AHU-T1B RA ISOLATION DAMPER POSITION OPEN (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B RA ISOLATION DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            1737,
+            1738,
+            1739,
+            1740,
+            1741,
+            1742,
+            1743
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B RA ISOLATION DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            1334,
+            1335,
+            1336,
+            1337,
+            1338,
+            1339,
+            1340
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 16,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1102,
+        2105,
+        1119
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1744
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1416
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 16,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1102,
+        2155,
+        1119
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1745
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1442
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 17,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1119,
+        1720,
+        1136
+      ],
+      "expected": "BI17",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI17",
+          "word_ids": [
+            1746
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI17",
+          "word_ids": [
+            1341
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 17,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1119,
+        2050,
+        1136
+      ],
+      "expected": "AHU-T1B SA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B SA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            1747,
+            1748,
+            1749,
+            1750,
+            1751,
+            1752,
+            1753
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B SA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            1342,
+            1343,
+            1344,
+            1345,
+            1346,
+            1347,
+            1348
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 17,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1119,
+        2105,
+        1136
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1754
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1417
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 17,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1119,
+        2155,
+        1136
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1755
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1443
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 18,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1136,
+        1720,
+        1153
+      ],
+      "expected": "BI18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI18",
+          "word_ids": [
+            1756
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI18",
+          "word_ids": [
+            1349
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 18,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1136,
+        2050,
+        1153
+      ],
+      "expected": "AHU-T1B SA ISOLATION DAMPER POSITION OPEN (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B SA ISOLATION DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            1757,
+            1758,
+            1759,
+            1760,
+            1761,
+            1762,
+            1763
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B SA ISOLATION DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            1350,
+            1351,
+            1352,
+            1353,
+            1354,
+            1355,
+            1356
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 18,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1136,
+        2105,
+        1153
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1764
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1418
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 18,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1136,
+        2155,
+        1153
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1765
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1444
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 19,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1153,
+        1720,
+        1170
+      ],
+      "expected": "BI19",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI19",
+          "word_ids": [
+            1766
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI19",
+          "word_ids": [
+            1357
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 19,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1153,
+        2050,
+        1170
+      ],
+      "expected": "AHU-T1A SA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A SA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            1767,
+            1768,
+            1769,
+            1770,
+            1771,
+            1772,
+            1773
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A SA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)",
+          "word_ids": [
+            1358,
+            1359,
+            1360,
+            1361,
+            1362,
+            1363,
+            1364
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 19,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1153,
+        2105,
+        1170
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1774
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1419
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 19,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1153,
+        2155,
+        1170
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1775
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1445
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 20,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1170,
+        1720,
+        1187
+      ],
+      "expected": "BI20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI20",
+          "word_ids": [
+            1776
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI20",
+          "word_ids": [
+            1365
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 20,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1170,
+        2050,
+        1187
+      ],
+      "expected": "AHU-T1A SA ISOLATION DAMPER POSITION OPEN (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A SA ISOLATION DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            1777,
+            1778,
+            1779,
+            1780,
+            1781,
+            1782,
+            1783
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A SA ISOLATION DAMPER POSITION OPEN (FEEDBACK)",
+          "word_ids": [
+            1366,
+            1367,
+            1368,
+            1369,
+            1370,
+            1371,
+            1372
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 20,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1170,
+        2105,
+        1187
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1784
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1420
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 20,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1170,
+        2155,
+        1187
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1785
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1446
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 21,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1187,
+        1720,
+        1205
+      ],
+      "expected": "BI21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI21",
+          "word_ids": [
+            1786
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI21",
+          "word_ids": [
+            1373
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 21,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1187,
+        2050,
+        1205
+      ],
+      "expected": "ATFP EMERGENCY SHUTDOWN SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ATFP EMERGENCY SHUTDOWN SWITCH",
+          "word_ids": [
+            1787,
+            1788,
+            1789,
+            1790
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ATFP EMERGENCY SHUTDOWN SWITCH",
+          "word_ids": [
+            1374,
+            1375,
+            1376,
+            1377
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 21,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1187,
+        2105,
+        1205
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1791
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1421
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 21,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1187,
+        2155,
+        1205
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1792
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1447
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 22,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1205,
+        1720,
+        1222
+      ],
+      "expected": "BI22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI22",
+          "word_ids": [
+            1793
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI22",
+          "word_ids": [
+            1378
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 22,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1205,
+        2050,
+        1222
+      ],
+      "expected": "AHU-T1A FREEZESTAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A FREEZESTAT",
+          "word_ids": [
+            1794,
+            1795
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A FREEZESTAT",
+          "word_ids": [
+            1379,
+            1380
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 22,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1205,
+        2105,
+        1222
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1796
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1422
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 22,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1205,
+        2155,
+        1222
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1797
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1448
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 23,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1222,
+        1720,
+        1239
+      ],
+      "expected": "BI23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI23",
+          "word_ids": [
+            1798
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI23",
+          "word_ids": [
+            1381
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 23,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1222,
+        2050,
+        1239
+      ],
+      "expected": "AHU-T1B FREEZESTAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B FREEZESTAT",
+          "word_ids": [
+            1799,
+            1800
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B FREEZESTAT",
+          "word_ids": [
+            1382,
+            1383
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 23,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1222,
+        2105,
+        1239
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1801
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1423
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 23,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1222,
+        2155,
+        1239
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1802
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1449
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 24,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1239,
+        1720,
+        1256
+      ],
+      "expected": "BI24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI24",
+          "word_ids": [
+            1803
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI24",
+          "word_ids": [
+            1384
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 24,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1239,
+        2050,
+        1256
+      ],
+      "expected": "ATCT AHU DDC RESET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ATCT AHU DDC RESET",
+          "word_ids": [
+            1804,
+            1805,
+            1806,
+            1807
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ATCT AHU DDC RESET",
+          "word_ids": [
+            1385,
+            1386,
+            1387,
+            1388
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 24,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1239,
+        2105,
+        1256
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1808
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1424
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 24,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1239,
+        2155,
+        1256
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1809
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1450
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 25,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1256,
+        1720,
+        1273
+      ],
+      "expected": "BI25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI25",
+          "word_ids": [
+            1810
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI25",
+          "word_ids": [
+            1389
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 25,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1256,
+        2050,
+        1273
+      ],
+      "expected": "AHU-T1A HIGH LIMIT STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A HIGH LIMIT STATIC PRESSURE",
+          "word_ids": [
+            1811,
+            1812,
+            1813,
+            1814,
+            1815
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A HIGH LIMIT STATIC PRESSURE",
+          "word_ids": [
+            1390,
+            1391,
+            1392,
+            1393,
+            1394
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 25,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1256,
+        2105,
+        1273
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1816
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1425
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 25,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1256,
+        2155,
+        1273
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1817
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1451
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 26,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1273,
+        1720,
+        1292
+      ],
+      "expected": "BI26",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI26",
+          "word_ids": [
+            1818
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI26",
+          "word_ids": [
+            1395
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 26,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1273,
+        2050,
+        1292
+      ],
+      "expected": "AHU-T1B HIGH LIMIT STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B HIGH LIMIT STATIC PRESSURE",
+          "word_ids": [
+            1819,
+            1820,
+            1821,
+            1822,
+            1823
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B HIGH LIMIT STATIC PRESSURE",
+          "word_ids": [
+            1396,
+            1397,
+            1398,
+            1399,
+            1400
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 26,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1273,
+        2105,
+        1292
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1824
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1426
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "row": 26,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1273,
+        2155,
+        1292
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1825
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1452
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "header": "BINARY INPUT",
+      "page": 65,
+      "bbox": [
+        1640,
+        816,
+        1740,
+        842
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-AHU-BI",
+      "header": "BINARY INPUT",
+      "page": 65,
+      "bbox": [
+        1640,
+        816,
+        1740,
+        842
+      ],
+      "engine": "poppler",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 1,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1325,
+        1720,
+        1344
+      ],
+      "expected": "BO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            1828
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            1455
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 1,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1325,
+        2050,
+        1344
+      ],
+      "expected": "AHU-T1B FAN START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B FAN START/STOP",
+          "word_ids": [
+            1829,
+            1830,
+            1831
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B FAN START/STOP",
+          "word_ids": [
+            1456,
+            1457,
+            1458
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 1,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1325,
+        2105,
+        1344
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1832
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1497
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 1,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1325,
+        2155,
+        1344
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1833
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1505
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 2,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1344,
+        1720,
+        1361
+      ],
+      "expected": "BO02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO02",
+          "word_ids": [
+            1834
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO02",
+          "word_ids": [
+            1459
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 2,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1344,
+        2050,
+        1361
+      ],
+      "expected": "MINIMUM OA DAMPER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MINIMUM OA DAMPER CONTROL",
+          "word_ids": [
+            1835,
+            1836,
+            1837,
+            1838
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MINIMUM OA DAMPER CONTROL",
+          "word_ids": [
+            1460,
+            1461,
+            1462,
+            1463
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 2,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1344,
+        2105,
+        1361
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1839
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1498
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 2,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1344,
+        2155,
+        1361
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1840
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1506
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 3,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1361,
+        1720,
+        1378
+      ],
+      "expected": "BO03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO03",
+          "word_ids": [
+            1841
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO03",
+          "word_ids": [
+            1464
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 3,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1361,
+        2050,
+        1378
+      ],
+      "expected": "REDUNDANT OA DAMPER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "REDUNDANT OA DAMPER CONTROL",
+          "word_ids": [
+            1842,
+            1843,
+            1844,
+            1845
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "REDUNDANT OA DAMPER CONTROL",
+          "word_ids": [
+            1465,
+            1466,
+            1467,
+            1468
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 3,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1361,
+        2105,
+        1378
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1846
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1499
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 3,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1361,
+        2155,
+        1378
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1847
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1507
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 4,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1378,
+        1720,
+        1395
+      ],
+      "expected": "BO04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO04",
+          "word_ids": [
+            1848
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO04",
+          "word_ids": [
+            1469
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 4,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1378,
+        2050,
+        1395
+      ],
+      "expected": "AHU-T1A FAN START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A FAN START/STOP",
+          "word_ids": [
+            1849,
+            1850,
+            1851
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A FAN START/STOP",
+          "word_ids": [
+            1470,
+            1471,
+            1472
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 4,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1378,
+        2105,
+        1395
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1852
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1500
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 4,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1378,
+        2155,
+        1395
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1853
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1508
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 5,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1395,
+        1720,
+        1412
+      ],
+      "expected": "BO05",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO05",
+          "word_ids": [
+            1854
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO05",
+          "word_ids": [
+            1473
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 5,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1395,
+        2050,
+        1412
+      ],
+      "expected": "AHU-T1A RA ISOLATION DAMPER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A RA ISOLATION DAMPER CONTROL",
+          "word_ids": [
+            1855,
+            1856,
+            1857,
+            1858,
+            1859
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A RA ISOLATION DAMPER CONTROL",
+          "word_ids": [
+            1474,
+            1475,
+            1476,
+            1477,
+            1478
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 5,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1395,
+        2105,
+        1412
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1860
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1501
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 5,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1395,
+        2155,
+        1412
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1861
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1509
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 6,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1412,
+        1720,
+        1429
+      ],
+      "expected": "BO06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO06",
+          "word_ids": [
+            1862
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO06",
+          "word_ids": [
+            1479
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 6,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1412,
+        2050,
+        1429
+      ],
+      "expected": "AHU-T1B RA ISOLATION DAMPER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B RA ISOLATION DAMPER CONTROL",
+          "word_ids": [
+            1863,
+            1864,
+            1865,
+            1866,
+            1867
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B RA ISOLATION DAMPER CONTROL",
+          "word_ids": [
+            1480,
+            1481,
+            1482,
+            1483,
+            1484
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 6,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1412,
+        2105,
+        1429
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1868
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1502
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 6,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1412,
+        2155,
+        1429
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1869
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1510
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 7,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1429,
+        1720,
+        1447
+      ],
+      "expected": "BO07",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO07",
+          "word_ids": [
+            1870
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO07",
+          "word_ids": [
+            1485
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 7,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1429,
+        2050,
+        1447
+      ],
+      "expected": "AHU-T1B SA ISOLATION DAMPER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B SA ISOLATION DAMPER CONTROL",
+          "word_ids": [
+            1871,
+            1872,
+            1873,
+            1874,
+            1875
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B SA ISOLATION DAMPER CONTROL",
+          "word_ids": [
+            1486,
+            1487,
+            1488,
+            1489,
+            1490
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 7,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1429,
+        2105,
+        1447
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1876
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1503
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 7,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1429,
+        2155,
+        1447
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1877
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1511
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 8,
+      "column": "mark",
+      "page": 65,
+      "bbox": [
+        1650,
+        1447,
+        1720,
+        1465
+      ],
+      "expected": "BO08",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO08",
+          "word_ids": [
+            1878
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO08",
+          "word_ids": [
+            1491
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 8,
+      "column": "description",
+      "page": 65,
+      "bbox": [
+        1720,
+        1447,
+        2050,
+        1465
+      ],
+      "expected": "AHU-T1A SA ISOLATION DAMPER CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A SA ISOLATION DAMPER CONTROL",
+          "word_ids": [
+            1879,
+            1880,
+            1881,
+            1882,
+            1883
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A SA ISOLATION DAMPER CONTROL",
+          "word_ids": [
+            1492,
+            1493,
+            1494,
+            1495,
+            1496
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 8,
+      "column": "alarm",
+      "page": 65,
+      "bbox": [
+        2050,
+        1447,
+        2105,
+        1465
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1884
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1504
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "row": 8,
+      "column": "trend",
+      "page": 65,
+      "bbox": [
+        2105,
+        1447,
+        2155,
+        1465
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1885
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1512
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "header": "BINARY OUTPUT",
+      "page": 65,
+      "bbox": [
+        1640,
+        1299,
+        1740,
+        1325
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "ATCT-AHU-BO",
+      "header": "BINARY OUTPUT",
+      "page": 65,
+      "bbox": [
+        1640,
+        1299,
+        1740,
+        1325
+      ],
+      "engine": "poppler",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "atct-ahu-ai-count",
+      "actual": 21,
+      "expected": 21,
+      "pass": true
+    },
+    {
+      "id": "atct-ahu-ao-count",
+      "actual": 7,
+      "expected": 7,
+      "pass": true
+    },
+    {
+      "id": "atct-ahu-bi-count",
+      "actual": 26,
+      "expected": 26,
+      "pass": true
+    },
+    {
+      "id": "atct-ahu-bo-count",
+      "actual": 8,
+      "expected": 8,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

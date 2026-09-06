@@ -1,0 +1,179 @@
+{
+  "document_id": "16__vol2__069",
+  "module_role": "M4.0/M4.1 controls ground truth: source-layered hydronic sequences, the explicitly printed VFD/chiller integration lists, controls/network context and sensor-count limits. It does not convert schematic symbols or an open-ended manufacturer integration list into unsupported installed-I/O or device quantities.",
+  "source_sheets": ["M4.0", "M4.1"],
+  "source_pages": [6, 7],
+  "source_layer_rule": {
+    "as_printed": "TEXT IN GREY NOTES EXISTING CONTROL SEQUENCE. TEXT IN BOLD NOTES UPDATED CONTROL SEQUENCES.",
+    "visual_verification": "Verified on the Poppler page renders. In the retained MuPDF capture, the grey narrative spans have color 11776947 and the bold update spans have color 0; that capture attribute supports but does not replace the rendered-page review.",
+    "interpretation_rule": "The existing-grey and updated-bold source text is retained in separate layers. It is not collapsed into an invented final sequence where the update does not expressly supersede a grey clause.",
+    "assertion_ids": ["m40-layer-rule", "m41-layer-rule"]
+  },
+  "network_architecture": {
+    "existing_control_system_as_printed": "EXISTING DELTA CONTROL SYSTEM",
+    "protocols_as_printed": ["BACnet"],
+    "protocol_context": [
+      "M4.0 says the existing hot-water system has existing hot-water boilers with a BACnet interface and that new components shall be integrated into the existing Delta control system.",
+      "M4.1 labels a CHILLER SYSTEM INTEGRATION PANEL (BACnet)(E)."
+    ],
+    "diagram_components_as_printed": ["GLOBAL CONTROLLER(E)", "OPERATOR TERMINAL (E) DDC SOFTWARE (E)", "OPERATOR INTERFACE(E)", "INTERNET(E)", "PUMP UNIT CONTROLLERS(E)", "AIR HANDLER UNIT CONTROLLERS(E)", "CHILLER UNIT CONTROLLERS(E)"],
+    "transport_addressing_baud_rate_controller_model": {"status": "not_stated_in_supplied_set", "value": null},
+    "assertion_ids": ["m40-general-system", "m41-general-system", "m41-bacnet-integration-panel"]
+  },
+  "control_symbol_legend": {
+    "definitions_as_printed": {"AI": "ANALOG INPUT", "DI": "DIGITAL INPUT", "AO": "ANALOG OUTPUT", "DO": "DIGITAL OUTPUT", "DA": "DAMPER ACTUATOR", "TV": "TEMPERATURE CONTROL VALVE", "BCV": "BYPASS CONTROL VALVE", "TT": "TEMPERATURE TRANSMITTER", "PT": "PRESSURE TRANSMITTER", "CSR": "CURRENT SENSING RELAY"},
+    "quantity_rule": "The legend is a symbol key, not an installed-equipment, damper-actuator, or control-valve schedule. Its entries are not counted as field devices.",
+    "assertion_ids": ["m40-ai", "m40-di", "m40-ao", "m40-do", "m40-valve", "m40-da", "m40-tt", "m40-pt", "m40-csr"]
+  },
+  "controls_schedule_ledger": {
+    "control_valve_schedule": {"status": "not_present", "value": null, "basis": "All nine supplied pages were visually reviewed; no dedicated control-valve schedule is present. M3.0 has a note to install a new 3-way valve, and M4.0 contains a symbol legend and BCV-1 schematic label, neither of which is a valve schedule."},
+    "damper_actuator_schedule": {"status": "not_present", "value": null, "basis": "All nine supplied pages were visually reviewed; no dedicated damper-actuator schedule is present. M4.0 contains DA as a legend definition only."},
+    "physical_schedule_line_item_count": {"status": "not_stated", "value": null, "basis": "No valve or damper-actuator schedule exists from which a schedule count can be made."}
+  },
+  "sequences": [
+    {
+      "id": "heating-water-existing-grey",
+      "sheet": "M4.0",
+      "source_layer": "existing_grey",
+      "title": "EXISTING HEATING WATER SYSTEM SEQUENCE OF OPERATION",
+      "statements": [
+        {"id": "enable-conditions", "text": "THE HEATING WATER SYSTEM SHALL BE ENABLED WHENEVER BOTH OF THE FOLLOWING CONDITION EXISTS: OUTSIDE AIR TEMPERATURE DECREASES TO THE HEATING ENABLE SET POINT FOR 10 CONSECUTIVE MINUTES; THERE IS A CALL FOR HEAT FROM AT LEAST ONE ZONE BASED ON A HEATING COIL CONTROL VALVE MINIMUM POSITION OF 25% OPEN FOR 30 CONSECUTIVE SECONDS.", "assertion_ids": ["m40-grey-enable"]},
+        {"id": "lead-pump", "text": "SEND AN ENABLE COMMAND TO THE LEAD HEATING WATER PUMP; validate running status through the VFD control interface; enable the standby pump on a lead-pump failure and alarm if the standby pump fails to start.", "assertion_ids": ["m40-grey-lead-pump"]},
+        {"id": "differential-pressure", "text": "THE DDC CONTROLLER SHALL MODULATE THE VFD BASED ON A DIFFERENTIAL PRESSURE SETPOINT (ADJUSTABLE) LOCATED ACROSS THE PIPING ASSEMBLY; the setpoint is coordinated between balance and control contractors and must allow adequate flow to all hot-water heating coils.", "assertion_ids": ["m40-grey-vfd-dp"]},
+        {"id": "boiler-enable", "text": "SEND AN ENABLE COMMAND TO THE BOILER SYSTEM'S UNIT CONTROLLER; validate through the UCP; on lead-boiler failure enable the lag boiler; alarm if either boiler fails to start.", "assertion_ids": ["m40-grey-boiler-enable"]},
+        {"id": "lead-lag-and-lockout", "text": "DDC lead/lag control of heating-water pumps includes monthly lead rotation, manual/operator overrides, and lockout prevention: minimum 10 minutes run and 5 minutes off before restart except for manual or occupied/unoccupied scheduling control.", "assertion_ids": ["m40-grey-lead-lag", "m40-grey-short-cycle"]},
+        {"id": "heating-enable-setpoint", "text": "THE HEATING ENABLE SET POINT SHALL BE SET AT 60°F.", "assertion_ids": ["m40-grey-heating-enable-setpoint"]}
+      ]
+    },
+    {
+      "id": "heating-water-updated-bold",
+      "sheet": "M4.0",
+      "source_layer": "updated_bold_black",
+      "title": "UPDATED CONTROL SEQUENCES ON EXISTING HEATING WATER SYSTEM SHEET",
+      "statements": [
+        {"id": "boiler-pump-disable", "text": "EACH BOILER SHALL DISABLE ITS OWN BOILER PUMP RESPECTIVELY.", "assertion_ids": ["m40-bold-boiler-pump-disable"]},
+        {"id": "bypass-lockout", "text": "THE BYPASS CONTROL VALVE (BCV-1) SHALL BE DISABLE AND LOCKED OUT.", "assertion_ids": ["m40-bold-bcv-lockout"]},
+        {"id": "boiler-pump-enable", "text": "EACH BOILER SHALL ENABLE THE RESPECTIVE BOILER PUMP BEFORE FIRING THE BOILER. IF EITHER BOILER PUMP FAILS TO START, THE RESPECTIVE BOILER SHALL NOT ENABLE AND AN ALARM OF THE EVENT SHALL BE SENT TO THE OPERATOR'S WORKSTATION.", "assertion_ids": ["m40-bold-boiler-pump-enable"]},
+        {"id": "boiler-uCP", "text": "WHEN A RUNNING STATUS FROM THE BOILER UNIT CONTROL PANEL (UCP) HAS BEEN CONFIRMED, THE HEATING WATER SYSTEM SHALL CONTINUE TO OPERATE UNDER ITS OWN INTERNAL CONTROLS BY PROVIDING LEAD / LAG SEQUENCING AND ADJUSTING THEIR OWN RAMPING AND LOADING RATES. THE DDC CONTROLLER SHALL SEND THE UNIT CONTROL PANEL A HEATING WATER SUPPLY TEMPERATURE SET POINT TO MAINTAIN.", "assertion_ids": ["m40-bold-boiler-ucp"]},
+        {"id": "supply-temp-reset", "text": "Heating-water supply temperature reset is based on heating-coil-control-valve positions: first enabled maximum 140°F +/- 1°F, decreasing linearly to 100°F while all heating-coil control valves are 90% open or less; it reverses toward maximum when three or more are over 90%, and resets to maximum if one or more reach 100% for 60 consecutive seconds. All stated values are adjustable where printed.", "assertion_ids": ["m40-bold-hws-reset"]}
+      ]
+    },
+    {
+      "id": "chilled-water-existing-grey",
+      "sheet": "M4.1",
+      "source_layer": "existing_grey",
+      "title": "EXISTING CHILLED WATER SYSTEM SEQUENCE OF OPERATION",
+      "statements": [
+        {"id": "enable-conditions", "text": "THE CHILLED WATER SYSTEM SHALL BE ENABLED WHENEVER ONE OF THE FOLLOWING CONDITIONS EXIST: outside-air temperature rises to the cooling enable set point for 10 consecutive minutes; buffer-tank temperature rises above 45°F for 30 seconds; or there is a call for dehumidification.", "assertion_ids": ["m41-grey-enable"]},
+        {"id": "chiller-uCP", "text": "SEND AN ENABLE COMMAND TO THE AIR-COOLED CHILLER'S UNIT CONTROL PANEL (UCP), validate chiller running status through the UCP, alarm on a failed start, and provide the UCP a chilled-water supply-temperature set point after confirmation.", "assertion_ids": ["m41-grey-chiller-enable"]},
+        {"id": "disable-conditions", "text": "THE CHILLED WATER SYSTEM SHALL BE DISABLED WHENEVER BOTH OF THE FOLLOWING CONDITIONS EXIST: outside-air temperature decreases 2° (adjustable) or more below the cooling-enable set point for 10 consecutive minutes (adjustable), and buffer-tank temperature falls below 45°F for 30 seconds.", "assertion_ids": ["m41-grey-disable"]},
+        {"id": "lead-standby-and-cooldown", "text": "DDC lead/standby primary-pump control provides automatic rotation by runtime, fixed rotation, or calendar date with manual/operator override. Cooldown disables the chilled-water system 10 minutes before occupied-to-unoccupied switchover of the last air-valve system to use residual cooling capacity in the piping system.", "assertion_ids": ["m41-grey-lead-standby", "m41-grey-cooldown"]},
+        {"id": "chw-reset", "text": "CHILLED WATER SUPPLY TEMPERATURE SET POINT RESET is based on outdoor-air temperature: 60°F outdoor / 55°F supply and 75°F outdoor / 45°F supply, as printed.", "assertion_ids": ["m41-grey-chw-reset"]}
+      ]
+    },
+    {
+      "id": "chilled-water-updated-bold",
+      "sheet": "M4.1",
+      "source_layer": "updated_bold_black",
+      "title": "UPDATED CONTROL SEQUENCES ON EXISTING CHILLED WATER SYSTEM SHEET",
+      "statements": [
+        {"id": "lead-pump-start", "text": "SEND AN ENABLE COMMAND TO THE LEAD CHILLED WATER PUMP; validate running status through the current sensing relay; if the lead pump fails to start, enable the standby pump; if the standby pump fails to start, alarm the operator's workstation.", "assertion_ids": ["m41-bold-pump-enable"]},
+        {"id": "lead-pump-stop", "text": "SEND A DISABLE COMMAND TO THE LEAD CHILLED WATER PUMP. When the chilled-water system is disabled, the lead primary chilled-water pump continues for 10 consecutive minutes; validate running status through the current sensing relay and alarm if the pump fails to stop.", "assertion_ids": ["m41-bold-pump-disable"]}
+      ]
+    }
+  ],
+  "sensor_and_zone_ledger": {
+    "physical_count_scope": "The supplied plans/schedules do not map space sensors, CO2 sensors, or smart thermostats to zones. Schematic transmitter symbols are not converted to plan-installed device counts.",
+    "counts": {"space_sensors": {"status": "not_stated", "value": null}, "CO2_sensors": {"status": "not_stated", "value": null}, "smart_thermostats": {"status": "not_stated", "value": null}},
+    "logical_source_items": [
+      {"id": "M40-PT-E", "classification": "Existing pressure-transmitter schematic label", "zone_or_system": "heating-water system", "physical_sensor_count": {"status": "not_stated", "value": null}},
+      {"id": "M40-TT-E", "classification": "Existing temperature-transmitter schematic labels", "zone_or_system": "heating-water system", "physical_sensor_count": {"status": "not_stated", "value": null}},
+      {"id": "M41-CHILLER-TEMPERATURES", "classification": "Entering and leaving chilled-water temperature points in manufacturer integration list", "zone_or_system": "chiller", "physical_sensor_count": {"status": "not_stated", "value": null}},
+      {"id": "M41-CHILLER-REFRIGERANT", "classification": "Evaporator saturated refrigerant pressure and temperature in manufacturer integration list", "zone_or_system": "all compressor circuits", "physical_sensor_count": {"status": "not_stated", "value": null}}
+    ]
+  },
+  "tables": [
+    {
+      "id": "M40-VFD-INTERFACE-POINTS",
+      "page": 6,
+      "sheet": "M4.0",
+      "title": "VFD POINTS LIST",
+      "classification": "Open-ended VFD control-interface requirements; source does not print AI/AO/DI/DO types or an equipment-instance multiplier.",
+      "columns": "tag|point_name",
+      "x_edges": [1855, 1870, 1960],
+      "y_ranges": [[1215,1227],[1227,1239],[1239,1250],[1250,1264]],
+      "rows": ["1.|ENABLE/DISABLE", "2.|ALARMS", "3.|HERTZ", "4.|SPEED CONTROL"],
+      "header_evidence": [{"bbox": [1830,1188,2210,1218], "expected": "VFD POINTS LIST THE VFD CONTROL INTERFACE SHALL PROVIDE BUT NOT BE LIMITED TO THE FOLLOWING"}]
+    },
+    {
+      "id": "M41-CHILLER-INTEGRATION-POINTS",
+      "page": 7,
+      "sheet": "M4.1",
+      "title": "CHILLER POINTS LIST",
+      "classification": "Open-ended chiller integration-module points mapped to the operator workstation. Types are not printed; this is not a field-wired I/O count.",
+      "columns": "tag|point_name",
+      "x_edges": [230, 245, 800],
+      "y_ranges": [[1064,1076],[1076,1088],[1088,1099],[1099,1110],[1110,1121],[1121,1133],[1133,1144],[1144,1155],[1155,1167]],
+      "rows": ["1.|CHILLER ENABLE / DISABLE .", "2.|CHILLER ENABLE / DISABLE STATUS .", "3.|ENTERING CHILLED WATER TEMPERATURE.", "4.|LEAVING CHILLED WATER TEMPERATURE.", "5.|CHILLED WATER SET POINT.", "6.|PERCENT TOTAL CAPACITY.", "7.|ALARM STATE.", "8.|CURRENT ALARMS.", "9.|ALL COMPRESSOR CIRCUITS:"],
+      "header_evidence": [{"bbox": [195,1018,800,1058], "expected": "CHILLER POINTS LIST ALL AVAILABLE CHILLER POINTS SUPPORTED BY THE CHILLER'S INTEGRATION MODULE SHALL BE MAPPED TO THE OPERATOR'S WORKSTATION POINTS SHALL INCLUDE BUT NOT BE LIMITED TO THE FOLLOWING"}]
+    },
+    {
+      "id": "M41-CHILLER-COMPRESSOR-CIRCUIT-POINTS",
+      "page": 7,
+      "sheet": "M4.1",
+      "title": "CHILLER POINTS LIST - ALL COMPRESSOR CIRCUITS",
+      "classification": "Sub-items of the open-ended chiller integration list; no AI/AO/DI/DO type is printed.",
+      "columns": "tag|point_name",
+      "x_edges": [250, 265, 800],
+      "y_ranges": [[1167,1178],[1178,1190],[1190,1203]],
+      "rows": ["a.|EVAPORATOR SATURATED REFRIGERANT PRESSURE", "b.|EVAPORATOR SATURATED REFRIGERANT TEMPERATURE", "c.|EXV POSITION"],
+      "header_evidence": [{"bbox": [230,1153,480,1168], "expected": "ALL COMPRESSOR CIRCUITS"}]
+    }
+  ],
+  "point_list_accounting": {
+    "listed_logical_rows": {"vfd_interface": 4, "chiller_integration": 12, "total_visible_rows": 16},
+    "physical_I_O_count": {"status": "not_stated", "value": null, "basis": "Both printed lists are expressly open-ended / not limited; neither prints point types or a field-wiring/count basis. The chiller list additionally applies to all available points supported by an integration module."},
+    "ai_ao_di_do_count": {"status": "not_stated", "value": null, "basis": "The M4.0 legend defines the four symbol meanings, but the VFD and chiller lists do not classify their rows with those symbols."}
+  },
+  "assertions": [
+    {"id": "m40-layer-rule", "page": 6, "bbox": [1260,815,1710,838], "expected": "TEXT IN GREY NOTES EXISTING CONTROL SEQUENCE. TEXT IN BOLD NOTES UPDATED CONTROL SEQUENCES.", "mode": "contains"},
+    {"id": "m41-layer-rule", "page": 7, "bbox": [195,335,645,358], "expected": "TEXT IN GREY NOTES EXISTING CONTROL SEQUENCE. TEXT IN BOLD NOTES UPDATED CONTROL SEQUENCES.", "mode": "contains"},
+    {"id": "m40-general-system", "page": 6, "bbox": [1260,738,1805,812], "expected": "THE EXISTING HOT WATER HEATING SYSTEM CONSISTS OF (2) NEW VARIABLE SPEED PRIMARY HOT WATER PUMPS", "mode": "contains"},
+    {"id": "m41-general-system", "page": 7, "bbox": [195,270,780,332], "expected": "NEW COMPONENTS SHALL BE INTEGRATED INTO THE EXISTING DELTA CONTROL SYSTEM.", "mode": "contains"},
+    {"id": "m41-bacnet-integration-panel", "page": 7, "bbox": [2080,880,2215,925], "expected": "CHILLER SYSTEM INTEGRATION PANEL (BACnet)(E)", "mode": "contains"},
+    {"id": "m40-ai", "page": 6, "bbox": [210,165,650,205], "expected": "ANALOG INPUT", "mode": "contains"},
+    {"id": "m40-di", "page": 6, "bbox": [210,220,650,255], "expected": "DIGITAL INPUT", "mode": "contains"},
+    {"id": "m40-ao", "page": 6, "bbox": [130,255,650,290], "expected": "AO ANALOG OUTPUT", "mode": "contains"},
+    {"id": "m40-do", "page": 6, "bbox": [210,300,650,340], "expected": "DIGITAL OUTPUT", "mode": "contains"},
+    {"id": "m40-valve", "page": 6, "bbox": [130,390,650,425], "expected": "3-WAY, 2-WAY CONTROL VALVE", "mode": "contains"},
+    {"id": "m40-da", "page": 6, "bbox": [860,365,1150,393], "expected": "DA DAMPER ACTUATOR", "mode": "contains"},
+    {"id": "m40-tt", "page": 6, "bbox": [860,635,1150,660], "expected": "TT TEMPERATURE TRANSMITTER", "mode": "contains"},
+    {"id": "m40-pt", "page": 6, "bbox": [860,615,1150,640], "expected": "PT PRESSURE TRANSMITTER", "mode": "contains"},
+    {"id": "m40-csr", "page": 6, "bbox": [860,325,1150,350], "expected": "CSR CURRENT SENSING RELAY", "mode": "contains"},
+    {"id": "m40-grey-enable", "page": 6, "bbox": [1260,840,1800,925], "expected": "THE HEATING WATER SYSTEM SHALL BE ENABLED WHENEVER BOTH OF THE FOLLOWING CONDITION EXISTS", "mode": "contains"},
+    {"id": "m40-grey-lead-pump", "page": 6, "bbox": [1260,950,1795,1014], "expected": "SEND AN ENABLE COMMAND TO THE LEAD HEATING WATER PUMP.", "mode": "contains"},
+    {"id": "m40-grey-vfd-dp", "page": 6, "bbox": [1260,1007,1810,1058], "expected": "THE DDC CONTROLLER SHALL MODULATE THE VFD BASED ON A DIFFERENTIAL PRESSURE SETPOINT", "mode": "contains"},
+    {"id": "m40-grey-boiler-enable", "page": 6, "bbox": [1260,1065,1800,1120], "expected": "SEND AN ENABLE COMMAND TO THE BOILER SYSTEM'S UNIT CONTROLLER.", "mode": "contains"},
+    {"id": "m40-grey-lead-lag", "page": 6, "bbox": [1830,915,2365,1010], "expected": "THE DDC CONTROLLER SHALL PROVIDE LEAD/LAG CONTROL OF THE HEATING WATER PUMPS.", "mode": "contains"},
+    {"id": "m40-grey-short-cycle", "page": 6, "bbox": [1260,1248,1810,1445], "expected": "EACH PUMP SHALL OPERATE FOR A MINIMUM OF 10 CONSECUTIVE MINUTES", "mode": "contains"},
+    {"id": "m40-grey-heating-enable-setpoint", "page": 6, "bbox": [1260,1448,1800,1470], "expected": "THE HEATING ENABLE SET POINT SHALL BE SET AT 60°F.", "mode": "contains"},
+    {"id": "m40-bold-boiler-pump-disable", "page": 6, "bbox": [1830,858,2160,885], "expected": "EACH BOILER SHALL DISABLE ITS OWN BOILER PUMP RESPECTIVELY.", "mode": "contains"},
+    {"id": "m40-bold-bcv-lockout", "page": 6, "bbox": [1830,1007,2140,1040], "expected": "THE BYPASS CONTROL VALVE (BCV-1) SHALL BE DISABLE AND LOCKED OUT.", "mode": "contains"},
+    {"id": "m40-bold-boiler-pump-enable", "page": 6, "bbox": [1260,1108,1810,1150], "expected": "EACH BOILER SHALL ENABLE THE RESPECTIVE BOILER PUMP BEFORE FIRING THE BOILER.", "mode": "contains"},
+    {"id": "m40-bold-boiler-ucp", "page": 6, "bbox": [1260,1145,1810,1208], "expected": "WHEN A RUNNING STATUS FROM THE BOILER UNIT CONTROL PANEL (UCP) HAS BEEN CONFIRMED", "mode": "contains"},
+    {"id": "m40-bold-hws-reset", "page": 6, "bbox": [1830,1042,2370,1150], "expected": "THE HEATING WATER SUPPLY TEMPERATURE SET POINT SHALL BE RESET BY THE DDC CONTROLLER BASED ON THE POSITION OF THE HEATING WATER COIL CONTROL VALVES.", "mode": "contains"},
+    {"id": "m41-grey-enable", "page": 7, "bbox": [195,355,780,435], "expected": "THE CHILLED WATER SYSTEM SHALL BE ENABLED WHENEVER ONE OF THE FOLLOWING CONDITIONS EXIST", "mode": "contains"},
+    {"id": "m41-grey-chiller-enable", "page": 7, "bbox": [195,515,785,608], "expected": "SEND AN ENABLE COMMAND TO THE AIR-COOLED CHILLER'S UNIT CONTROL PANEL (UCP).", "mode": "contains"},
+    {"id": "m41-grey-disable", "page": 7, "bbox": [195,628,790,695], "expected": "THE CHILLED WATER SYSTEM SHALL BE DISABLED WHENEVER BOTH OF THE FOLLOWING CONDITIONS EXIST", "mode": "contains"},
+    {"id": "m41-grey-lead-standby", "page": 7, "bbox": [195,832,790,875], "expected": "THE DDC CONTROLLER SHALL PROVIDE LEAD / STAND-BY CONTROL OF THE PRIMARY CHILLED WATER PUMPS.", "mode": "contains"},
+    {"id": "m41-grey-cooldown", "page": 7, "bbox": [195,880,790,932], "expected": "THE CHILLED WATER SYSTEM SHALL BE DISABLED 10 MINUTES PRIOR TO THE SWITCHOVER", "mode": "contains"},
+    {"id": "m41-grey-chw-reset", "page": 7, "bbox": [195,935,790,1015], "expected": "CHILLED WATER SUPPLY TEMPERATURE SET POINT RESET SCHEDULE", "mode": "contains"},
+    {"id": "m41-bold-pump-enable", "page": 7, "bbox": [195,458,780,515], "expected": "SEND AN ENABLE COMMAND TO THE LEAD CHILLED WATER PUMP.", "mode": "contains"},
+    {"id": "m41-bold-pump-disable", "page": 7, "bbox": [195,765,780,830], "expected": "SEND A DISABLE COMMAND TO THE LEAD CHILLED WATER PUMP.", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "two-layered-system-sequences", "records_path": ["sequences"], "expected": 4, "unique_key": "id"},
+    {"id": "controls-source-tables", "records_path": ["tables"], "expected": 3, "unique_key": "id"},
+    {"id": "logical-sensor-source-items", "records_path": ["sensor_and_zone_ledger", "logical_source_items"], "expected": 4, "unique_key": "id"}
+  ]
+}

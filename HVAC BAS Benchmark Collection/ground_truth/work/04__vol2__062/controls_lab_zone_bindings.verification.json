@@ -1,0 +1,1745 @@
+{
+  "document_id": "04__vol2__062",
+  "source_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "annotation_sha256": "b0ca0fc0dfc8add7eade0437f3a84c5b9046118aeddc9f6285b4ed34d94a16f6",
+  "tables": 3,
+  "rows": 9,
+  "cell_assertions": 49,
+  "text_assertions": 4,
+  "checks": [
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 1,
+      "column": "lab_space",
+      "page": 20,
+      "bbox": [
+        170,
+        234,
+        275,
+        250
+      ],
+      "expected": "ASPHALT LAB 117",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ASPHALT LAB 117",
+          "word_ids": [
+            935,
+            936,
+            937
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ASPHALT LAB 117",
+          "word_ids": [
+            2,
+            3,
+            4
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 1,
+      "column": "supply_air_valve",
+      "page": 20,
+      "bbox": [
+        275,
+        234,
+        330,
+        250
+      ],
+      "expected": "SAV-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SAV-7",
+          "word_ids": [
+            938
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SAV-7",
+          "word_ids": [
+            14
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 1,
+      "column": "general_exhaust_valve",
+      "page": 20,
+      "bbox": [
+        330,
+        234,
+        400,
+        250
+      ],
+      "expected": "GEV-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GEV-5",
+          "word_ids": [
+            939
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GEV-5",
+          "word_ids": [
+            18
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 1,
+      "column": "snorkel_exhaust_valve",
+      "page": 20,
+      "bbox": [
+        400,
+        234,
+        480,
+        250
+      ],
+      "expected": "SEV-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEV-5",
+          "word_ids": [
+            940
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEV-5",
+          "word_ids": [
+            22
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 1,
+      "column": "heating_coil",
+      "page": 20,
+      "bbox": [
+        480,
+        234,
+        550,
+        250
+      ],
+      "expected": "HC-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-7",
+          "word_ids": [
+            941
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-7",
+          "word_ids": [
+            26
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 1,
+      "column": "heating_valve",
+      "page": 20,
+      "bbox": [
+        550,
+        234,
+        610,
+        250
+      ],
+      "expected": "CV-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-7",
+          "word_ids": [
+            942
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-7",
+          "word_ids": [
+            30
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 2,
+      "column": "lab_space",
+      "page": 20,
+      "bbox": [
+        170,
+        250,
+        275,
+        261
+      ],
+      "expected": "ASPHALT LAB 124",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ASPHALT LAB 124",
+          "word_ids": [
+            943,
+            944,
+            945
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ASPHALT LAB 124",
+          "word_ids": [
+            5,
+            6,
+            7
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 2,
+      "column": "supply_air_valve",
+      "page": 20,
+      "bbox": [
+        275,
+        250,
+        330,
+        261
+      ],
+      "expected": "SAV-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SAV-3",
+          "word_ids": [
+            946
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SAV-3",
+          "word_ids": [
+            15
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 2,
+      "column": "general_exhaust_valve",
+      "page": 20,
+      "bbox": [
+        330,
+        250,
+        400,
+        261
+      ],
+      "expected": "GEV-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GEV-1",
+          "word_ids": [
+            947
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GEV-1",
+          "word_ids": [
+            19
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 2,
+      "column": "snorkel_exhaust_valve",
+      "page": 20,
+      "bbox": [
+        400,
+        250,
+        480,
+        261
+      ],
+      "expected": "SEV-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEV-3",
+          "word_ids": [
+            948
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEV-3",
+          "word_ids": [
+            23
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 2,
+      "column": "heating_coil",
+      "page": 20,
+      "bbox": [
+        480,
+        250,
+        550,
+        261
+      ],
+      "expected": "HC-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-3",
+          "word_ids": [
+            949
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-3",
+          "word_ids": [
+            27
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 2,
+      "column": "heating_valve",
+      "page": 20,
+      "bbox": [
+        550,
+        250,
+        610,
+        261
+      ],
+      "expected": "CV-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-3",
+          "word_ids": [
+            950
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-3",
+          "word_ids": [
+            31
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 3,
+      "column": "lab_space",
+      "page": 20,
+      "bbox": [
+        170,
+        261,
+        275,
+        273
+      ],
+      "expected": "GENERAL LAB 125",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GENERAL LAB 125",
+          "word_ids": [
+            951,
+            952,
+            953
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GENERAL LAB 125",
+          "word_ids": [
+            8,
+            9,
+            10
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 3,
+      "column": "supply_air_valve",
+      "page": 20,
+      "bbox": [
+        275,
+        261,
+        330,
+        273
+      ],
+      "expected": "SAV-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SAV-9",
+          "word_ids": [
+            954
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SAV-9",
+          "word_ids": [
+            16
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 3,
+      "column": "general_exhaust_valve",
+      "page": 20,
+      "bbox": [
+        330,
+        261,
+        400,
+        273
+      ],
+      "expected": "GEV-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GEV-2",
+          "word_ids": [
+            955
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GEV-2",
+          "word_ids": [
+            20
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 3,
+      "column": "snorkel_exhaust_valve",
+      "page": 20,
+      "bbox": [
+        400,
+        261,
+        480,
+        273
+      ],
+      "expected": "N/A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "N/A",
+          "word_ids": [
+            956
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "N/A",
+          "word_ids": [
+            24
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 3,
+      "column": "heating_coil",
+      "page": 20,
+      "bbox": [
+        480,
+        261,
+        550,
+        273
+      ],
+      "expected": "HC-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-9",
+          "word_ids": [
+            957
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-9",
+          "word_ids": [
+            28
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 3,
+      "column": "heating_valve",
+      "page": 20,
+      "bbox": [
+        550,
+        261,
+        610,
+        273
+      ],
+      "expected": "CV-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-9",
+          "word_ids": [
+            958
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-9",
+          "word_ids": [
+            32
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 4,
+      "column": "lab_space",
+      "page": 20,
+      "bbox": [
+        170,
+        273,
+        275,
+        285
+      ],
+      "expected": "RESIDENCY LAB 131",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RESIDENCY LAB 131",
+          "word_ids": [
+            959,
+            960,
+            961
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RESIDENCY LAB 131",
+          "word_ids": [
+            11,
+            12,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 4,
+      "column": "supply_air_valve",
+      "page": 20,
+      "bbox": [
+        275,
+        273,
+        330,
+        285
+      ],
+      "expected": "SAV-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SAV-1",
+          "word_ids": [
+            962
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SAV-1",
+          "word_ids": [
+            17
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 4,
+      "column": "general_exhaust_valve",
+      "page": 20,
+      "bbox": [
+        330,
+        273,
+        400,
+        285
+      ],
+      "expected": "GEV-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GEV-1",
+          "word_ids": [
+            963
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GEV-1",
+          "word_ids": [
+            21
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 4,
+      "column": "snorkel_exhaust_valve",
+      "page": 20,
+      "bbox": [
+        400,
+        273,
+        480,
+        285
+      ],
+      "expected": "SEV-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEV-1",
+          "word_ids": [
+            964
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEV-1",
+          "word_ids": [
+            25
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 4,
+      "column": "heating_coil",
+      "page": 20,
+      "bbox": [
+        480,
+        273,
+        550,
+        285
+      ],
+      "expected": "HC-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-1",
+          "word_ids": [
+            965
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-1",
+          "word_ids": [
+            29
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-MULTIPLE-HOODS-LAB-BINDINGS",
+      "row": 4,
+      "column": "heating_valve",
+      "page": 20,
+      "bbox": [
+        550,
+        273,
+        610,
+        285
+      ],
+      "expected": "CV-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-1",
+          "word_ids": [
+            966
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-1",
+          "word_ids": [
+            33
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-SNORKEL-LAB-BINDINGS",
+      "row": 1,
+      "column": "lab_space",
+      "page": 20,
+      "bbox": [
+        1235,
+        260,
+        1370,
+        277
+      ],
+      "expected": "RESIDENCY NOISE ROOM 130",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RESIDENCY NOISE ROOM 130",
+          "word_ids": [
+            1706,
+            1707,
+            1708,
+            1709
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RESIDENCY NOISE ROOM 130",
+          "word_ids": [
+            320,
+            321,
+            322,
+            323
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-SNORKEL-LAB-BINDINGS",
+      "row": 1,
+      "column": "supply_air_valve",
+      "page": 20,
+      "bbox": [
+        1370,
+        260,
+        1420,
+        277
+      ],
+      "expected": "SAV-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SAV-8",
+          "word_ids": [
+            1710
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SAV-8",
+          "word_ids": [
+            327
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-SNORKEL-LAB-BINDINGS",
+      "row": 1,
+      "column": "snorkel_exhaust_valve",
+      "page": 20,
+      "bbox": [
+        1420,
+        260,
+        1500,
+        277
+      ],
+      "expected": "SEV-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEV-2",
+          "word_ids": [
+            1711
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEV-2",
+          "word_ids": [
+            329
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-SNORKEL-LAB-BINDINGS",
+      "row": 1,
+      "column": "heating_coil",
+      "page": 20,
+      "bbox": [
+        1500,
+        260,
+        1560,
+        277
+      ],
+      "expected": "HC-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-8",
+          "word_ids": [
+            1712
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-8",
+          "word_ids": [
+            331
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-SNORKEL-LAB-BINDINGS",
+      "row": 1,
+      "column": "heating_valve",
+      "page": 20,
+      "bbox": [
+        1560,
+        260,
+        1620,
+        277
+      ],
+      "expected": "CV-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-8",
+          "word_ids": [
+            1713
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-8",
+          "word_ids": [
+            333
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-SNORKEL-LAB-BINDINGS",
+      "row": 2,
+      "column": "lab_space",
+      "page": 20,
+      "bbox": [
+        1235,
+        277,
+        1370,
+        292
+      ],
+      "expected": "MATERIAL LAB 118",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MATERIAL LAB 118",
+          "word_ids": [
+            1714,
+            1715,
+            1716
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MATERIAL LAB 118",
+          "word_ids": [
+            324,
+            325,
+            326
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-SNORKEL-LAB-BINDINGS",
+      "row": 2,
+      "column": "supply_air_valve",
+      "page": 20,
+      "bbox": [
+        1370,
+        277,
+        1420,
+        292
+      ],
+      "expected": "SAV-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SAV-6",
+          "word_ids": [
+            1717
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SAV-6",
+          "word_ids": [
+            328
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-SNORKEL-LAB-BINDINGS",
+      "row": 2,
+      "column": "snorkel_exhaust_valve",
+      "page": 20,
+      "bbox": [
+        1420,
+        277,
+        1500,
+        292
+      ],
+      "expected": "SEV-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEV-4",
+          "word_ids": [
+            1718
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEV-4",
+          "word_ids": [
+            330
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-SNORKEL-LAB-BINDINGS",
+      "row": 2,
+      "column": "heating_coil",
+      "page": 20,
+      "bbox": [
+        1500,
+        277,
+        1560,
+        292
+      ],
+      "expected": "HC-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-6",
+          "word_ids": [
+            1719
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-6",
+          "word_ids": [
+            332
+          ]
+        }
+      }
+    },
+    {
+      "table": "M64-SNORKEL-LAB-BINDINGS",
+      "row": 2,
+      "column": "heating_valve",
+      "page": 20,
+      "bbox": [
+        1560,
+        277,
+        1620,
+        292
+      ],
+      "expected": "CV-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-6",
+          "word_ids": [
+            1720
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-6",
+          "word_ids": [
+            334
+          ]
+        }
+      }
+    },
+    {
+      "table": "M65-GENERAL-EXHAUST-LAB-BINDINGS",
+      "row": 1,
+      "column": "lab_space",
+      "page": 21,
+      "bbox": [
+        450,
+        286,
+        560,
+        303
+      ],
+      "expected": "CONCRETE 119",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONCRETE 119",
+          "word_ids": [
+            294,
+            295
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONCRETE 119",
+          "word_ids": [
+            79,
+            80
+          ]
+        }
+      }
+    },
+    {
+      "table": "M65-GENERAL-EXHAUST-LAB-BINDINGS",
+      "row": 1,
+      "column": "supply_air_valve",
+      "page": 21,
+      "bbox": [
+        560,
+        286,
+        615,
+        303
+      ],
+      "expected": "SAV-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SAV-5",
+          "word_ids": [
+            296
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SAV-5",
+          "word_ids": [
+            87
+          ]
+        }
+      }
+    },
+    {
+      "table": "M65-GENERAL-EXHAUST-LAB-BINDINGS",
+      "row": 1,
+      "column": "general_exhaust_valve",
+      "page": 21,
+      "bbox": [
+        615,
+        286,
+        690,
+        303
+      ],
+      "expected": "GEV-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GEV-6",
+          "word_ids": [
+            297
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GEV-6",
+          "word_ids": [
+            90
+          ]
+        }
+      }
+    },
+    {
+      "table": "M65-GENERAL-EXHAUST-LAB-BINDINGS",
+      "row": 1,
+      "column": "heating_coil",
+      "page": 21,
+      "bbox": [
+        690,
+        286,
+        750,
+        303
+      ],
+      "expected": "HC-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-5",
+          "word_ids": [
+            298
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-5",
+          "word_ids": [
+            93
+          ]
+        }
+      }
+    },
+    {
+      "table": "M65-GENERAL-EXHAUST-LAB-BINDINGS",
+      "row": 1,
+      "column": "heating_valve",
+      "page": 21,
+      "bbox": [
+        750,
+        286,
+        800,
+        303
+      ],
+      "expected": "CV-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-5",
+          "word_ids": [
+            299
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-5",
+          "word_ids": [
+            96
+          ]
+        }
+      }
+    },
+    {
+      "table": "M65-GENERAL-EXHAUST-LAB-BINDINGS",
+      "row": 2,
+      "column": "lab_space",
+      "page": 21,
+      "bbox": [
+        450,
+        303,
+        560,
+        314
+      ],
+      "expected": "MATERIAL LAB 118",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MATERIAL LAB 118",
+          "word_ids": [
+            300,
+            301,
+            302
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MATERIAL LAB 118",
+          "word_ids": [
+            81,
+            82,
+            83
+          ]
+        }
+      }
+    },
+    {
+      "table": "M65-GENERAL-EXHAUST-LAB-BINDINGS",
+      "row": 2,
+      "column": "supply_air_valve",
+      "page": 21,
+      "bbox": [
+        560,
+        303,
+        615,
+        314
+      ],
+      "expected": "SAV-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SAV-2",
+          "word_ids": [
+            303
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SAV-2",
+          "word_ids": [
+            88
+          ]
+        }
+      }
+    },
+    {
+      "table": "M65-GENERAL-EXHAUST-LAB-BINDINGS",
+      "row": 2,
+      "column": "general_exhaust_valve",
+      "page": 21,
+      "bbox": [
+        615,
+        303,
+        690,
+        314
+      ],
+      "expected": "GEV-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GEV-7",
+          "word_ids": [
+            304
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GEV-7",
+          "word_ids": [
+            91
+          ]
+        }
+      }
+    },
+    {
+      "table": "M65-GENERAL-EXHAUST-LAB-BINDINGS",
+      "row": 2,
+      "column": "heating_coil",
+      "page": 21,
+      "bbox": [
+        690,
+        303,
+        750,
+        314
+      ],
+      "expected": "HC-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-2",
+          "word_ids": [
+            305
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-2",
+          "word_ids": [
+            94
+          ]
+        }
+      }
+    },
+    {
+      "table": "M65-GENERAL-EXHAUST-LAB-BINDINGS",
+      "row": 2,
+      "column": "heating_valve",
+      "page": 21,
+      "bbox": [
+        750,
+        303,
+        800,
+        314
+      ],
+      "expected": "CV-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-2",
+          "word_ids": [
+            306
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-2",
+          "word_ids": [
+            97
+          ]
+        }
+      }
+    },
+    {
+      "table": "M65-GENERAL-EXHAUST-LAB-BINDINGS",
+      "row": 3,
+      "column": "lab_space",
+      "page": 21,
+      "bbox": [
+        450,
+        314,
+        560,
+        326
+      ],
+      "expected": "D-1 LAB 123",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D-1 LAB 123",
+          "word_ids": [
+            307,
+            308,
+            309
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D-1 LAB 123",
+          "word_ids": [
+            84,
+            85,
+            86
+          ]
+        }
+      }
+    },
+    {
+      "table": "M65-GENERAL-EXHAUST-LAB-BINDINGS",
+      "row": 3,
+      "column": "supply_air_valve",
+      "page": 21,
+      "bbox": [
+        560,
+        314,
+        615,
+        326
+      ],
+      "expected": "SAV-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SAV-4",
+          "word_ids": [
+            310
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SAV-4",
+          "word_ids": [
+            89
+          ]
+        }
+      }
+    },
+    {
+      "table": "M65-GENERAL-EXHAUST-LAB-BINDINGS",
+      "row": 3,
+      "column": "general_exhaust_valve",
+      "page": 21,
+      "bbox": [
+        615,
+        314,
+        690,
+        326
+      ],
+      "expected": "GEV-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GEV-4",
+          "word_ids": [
+            311
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GEV-4",
+          "word_ids": [
+            92
+          ]
+        }
+      }
+    },
+    {
+      "table": "M65-GENERAL-EXHAUST-LAB-BINDINGS",
+      "row": 3,
+      "column": "heating_coil",
+      "page": 21,
+      "bbox": [
+        690,
+        314,
+        750,
+        326
+      ],
+      "expected": "HC-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HC-4",
+          "word_ids": [
+            312
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HC-4",
+          "word_ids": [
+            95
+          ]
+        }
+      }
+    },
+    {
+      "table": "M65-GENERAL-EXHAUST-LAB-BINDINGS",
+      "row": 3,
+      "column": "heating_valve",
+      "page": 21,
+      "bbox": [
+        750,
+        314,
+        800,
+        326
+      ],
+      "expected": "CV-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-4",
+          "word_ids": [
+            313
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-4",
+          "word_ids": [
+            98
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m64-multiple-hood-sensor",
+      "page": 20,
+      "bbox": [
+        170,
+        85,
+        650,
+        116
+      ],
+      "expected": "SPACE TEMPERATURE AND HUMIDITY SENSOR. THE CONTROL CONTRACTOR SHALL PROVIDE A NEW DDC CONTROL PACKAGE DEDICATED TO THE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GENERAL EXHAUST VALVE, (1) VARIABLE VOLUME / PRESSURE INDEPENDENT CANOPY HOOD EXHAUST VALVE, (1) VARIABLE VOLUME / PRESSURE INDEPENDENT SNORKEL EXHAUST VALVE, TWO WALL SWITCHES, AND A SPACE TEMPERATURE AND HUMIDITY SENSOR. THE CONTROL CONTRACTOR SHALL PROVIDE A NEW DDC CONTROL PACKAGE DEDICATED TO THE",
+          "word_ids": [
+            794,
+            795,
+            796,
+            797,
+            798,
+            799,
+            800,
+            801,
+            802,
+            803,
+            804,
+            805,
+            806,
+            807,
+            808,
+            809,
+            810,
+            811,
+            812,
+            813,
+            814,
+            815,
+            816,
+            817,
+            818,
+            819,
+            820,
+            821,
+            822,
+            823,
+            824,
+            825,
+            826,
+            827,
+            828,
+            829,
+            830,
+            831,
+            832,
+            833,
+            834,
+            835,
+            836,
+            837,
+            838
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GENERAL EXHAUST VALVE, (1) VARIABLE VOLUME / PRESSURE INDEPENDENT CANOPY HOOD EXHAUST VALVE, (1) VARIABLE VOLUME / PRESSURE INDEPENDENT SNORKEL EXHAUST VALVE, TWO WALL SWITCHES, AND A SPACE TEMPERATURE AND HUMIDITY SENSOR. THE CONTROL CONTRACTOR SHALL PROVIDE A NEW DDC CONTROL PACKAGE DEDICATED TO THE",
+          "word_ids": [
+            2492,
+            2493,
+            2494,
+            2495,
+            2496,
+            2497,
+            2498,
+            2499,
+            2500,
+            2501,
+            2502,
+            2503,
+            2504,
+            2505,
+            2506,
+            2507,
+            2508,
+            2509,
+            2510,
+            2511,
+            2512,
+            2513,
+            2514,
+            2515,
+            2516,
+            2517,
+            2518,
+            2519,
+            2520,
+            2521,
+            2522,
+            2523,
+            2524,
+            2525,
+            2526,
+            2527,
+            2528,
+            2529,
+            2530,
+            2531,
+            2532,
+            2533,
+            2534,
+            2535,
+            2536
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m64-integration-gateway",
+      "page": 20,
+      "bbox": [
+        170,
+        132,
+        650,
+        150
+      ],
+      "expected": "THE AIR VALVE MANUFACTURER SHALL PROVIDE AN INTEGRATION GATEWAY TO FACILITATE COMMUNICATION BETWEEN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THE AIR VALVE MANUFACTURER SHALL PROVIDE AN INTEGRATION GATEWAY TO FACILITATE COMMUNICATION BETWEEN",
+          "word_ids": [
+            844,
+            845,
+            846,
+            847,
+            848,
+            849,
+            850,
+            851,
+            852,
+            853,
+            854,
+            855,
+            856
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THE AIR VALVE MANUFACTURER SHALL PROVIDE AN INTEGRATION GATEWAY TO FACILITATE COMMUNICATION BETWEEN",
+          "word_ids": [
+            2369,
+            2370,
+            2371,
+            2372,
+            2373,
+            2374,
+            2375,
+            2376,
+            2377,
+            2378,
+            2379,
+            2380,
+            2381
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m65-general-exhaust-sensor",
+      "page": 21,
+      "bbox": [
+        450,
+        105,
+        900,
+        125
+      ],
+      "expected": "INDEPENDENT GENERAL EXHAUST VALVE, AND A SPACE TEMPERATURE AND HUMIDITY SENSOR. THE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INDEPENDENT GENERAL EXHAUST VALVE, AND A SPACE TEMPERATURE AND HUMIDITY SENSOR. THE CONTROL",
+          "word_ids": [
+            149,
+            150,
+            151,
+            152,
+            153,
+            154,
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            161
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INDEPENDENT GENERAL EXHAUST VALVE, AND A SPACE TEMPERATURE AND HUMIDITY SENSOR. THE CONTROL",
+          "word_ids": [
+            1540,
+            1541,
+            1542,
+            1543,
+            1544,
+            1545,
+            1546,
+            1547,
+            1548,
+            1549,
+            1550,
+            1551,
+            1552
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m65-unit-heater-thermostat",
+      "page": 21,
+      "bbox": [
+        1660,
+        870,
+        2050,
+        892
+      ],
+      "expected": "WHEN THE ABOVE CONDITION EXISTS THE THERMOSTAT SHALL SEQUENCE THE FOLLOWING:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WHEN THE ABOVE CONDITION EXISTS THE THERMOSTAT SHALL SEQUENCE THE FOLLOWING:",
+          "word_ids": [
+            1512,
+            1513,
+            1514,
+            1515,
+            1516,
+            1517,
+            1518,
+            1519,
+            1520,
+            1521,
+            1522
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WHEN THE ABOVE CONDITION EXISTS THE THERMOSTAT SHALL SEQUENCE THE FOLLOWING:",
+          "word_ids": [
+            1114,
+            1115,
+            1116,
+            1117,
+            1118,
+            1119,
+            1120,
+            1121,
+            1122,
+            1123,
+            1124
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "rank04-lab-zone-binding-tables",
+      "actual": 3,
+      "expected": 3,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

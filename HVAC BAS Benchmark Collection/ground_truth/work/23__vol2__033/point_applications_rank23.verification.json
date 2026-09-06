@@ -1,0 +1,23 @@
+{
+  "document_id": "23__vol2__033",
+  "source_sha256": "235fa6719258c64a8fe48b139e5c5e080a260e558432a63e13d682e2169e507d",
+  "annotation_sha256": "b7dfdb5e540ef83a0eaed0311d7b565bde8c622d15e3128bfa125cafb57690bc",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 0,
+  "checks": [],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "rank23-point-matrix-applications",
+      "actual": 5,
+      "expected": 5,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

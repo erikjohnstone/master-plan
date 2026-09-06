@@ -1,0 +1,1053 @@
+{
+  "document_id": "18__vol2__092",
+  "source_sha256": "85613e85e63e6e3e527a722dc93a9797b2b1edd57a8ec22fc96b4a808bc0f0a5",
+  "annotation_sha256": "a560edec7c30f1fb88e4c2bf6d6c4ad15d2b030bf47e15dfc38653c6d25b8e65",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 33,
+  "checks": [
+    {
+      "assertion": "project-name",
+      "page": 2,
+      "bbox": [
+        2770,
+        1660,
+        2990,
+        1730
+      ],
+      "expected": "PROJECT: GUARANTEED RATE FIELD - HVAC / AHU RENOVATION - PHASE IX",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PROJECT: GUARANTEED RATE FIELD - HVAC / AHU RENOVATION - PHASE IX",
+          "word_ids": [
+            236,
+            246,
+            247,
+            248,
+            249,
+            250,
+            251,
+            252,
+            253,
+            254,
+            255,
+            256
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PROJECT: GUARANTEED RATE FIELD - HVAC / AHU RENOVATION - PHASE IX",
+          "word_ids": [
+            228,
+            229,
+            230,
+            231,
+            232,
+            233,
+            234,
+            235,
+            236,
+            237,
+            238,
+            239
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "project-site",
+      "page": 2,
+      "bbox": [
+        2770,
+        1730,
+        2990,
+        1770
+      ],
+      "expected": "333 WEST 35TH STREET CHICAGO, IL 60616",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "333 WEST 35TH STREET CHICAGO, IL 60616",
+          "word_ids": [
+            239,
+            240,
+            241,
+            242,
+            243,
+            244,
+            245
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "333 WEST 35TH STREET CHICAGO, IL 60616",
+          "word_ids": [
+            240,
+            241,
+            242,
+            243,
+            244,
+            245,
+            246
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "project-issue",
+      "page": 2,
+      "bbox": [
+        2770,
+        1440,
+        2990,
+        1470
+      ],
+      "expected": "10.07.2019 ISSUED FOR BID",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.07.2019 ISSUED FOR BID",
+          "word_ids": [
+            257,
+            258,
+            259,
+            260
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.07.2019 ISSUED FOR BID",
+          "word_ids": [
+            224,
+            225,
+            226,
+            227
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "project-number",
+      "page": 2,
+      "bbox": [
+        2770,
+        1940,
+        2980,
+        1970
+      ],
+      "expected": "PROJECT NO: 19165",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PROJECT NO: 19165",
+          "word_ids": [
+            211,
+            212,
+            206
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PROJECT NO: 19165",
+          "word_ids": [
+            276,
+            277,
+            278
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m002-scale",
+      "page": 2,
+      "bbox": [
+        2770,
+        1965,
+        2990,
+        1990
+      ],
+      "expected": "SCALE: 1/32\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/32\" = 1'-0\"",
+          "word_ids": [
+            219,
+            274,
+            275,
+            276
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/32\" = 1'-0\"",
+          "word_ids": [
+            279,
+            280,
+            281,
+            282
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m003-scale",
+      "page": 3,
+      "bbox": [
+        2770,
+        1965,
+        2990,
+        1990
+      ],
+      "expected": "SCALE: 1/32\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/32\" = 1'-0\"",
+          "word_ids": [
+            82,
+            137,
+            138,
+            139
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/32\" = 1'-0\"",
+          "word_ids": [
+            134,
+            135,
+            136,
+            137
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m004-scale",
+      "page": 4,
+      "bbox": [
+        2770,
+        1965,
+        2990,
+        1990
+      ],
+      "expected": "SCALE: 1/32\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/32\" = 1'-0\"",
+          "word_ids": [
+            63,
+            118,
+            119,
+            120
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/32\" = 1'-0\"",
+          "word_ids": [
+            115,
+            116,
+            117,
+            118
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/1/drawing-title",
+      "page": 1,
+      "bbox": [
+        2770,
+        1785,
+        2980,
+        1850
+      ],
+      "expected": "MECHANICAL COVER PAGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL COVER PAGE",
+          "word_ids": [
+            79,
+            80,
+            81
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL COVER PAGE",
+          "word_ids": [
+            2514,
+            2515,
+            2516
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/1/sheet-number",
+      "page": 1,
+      "bbox": [
+        2770,
+        2025,
+        2980,
+        2080
+      ],
+      "expected": "M0.01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M0.01",
+          "word_ids": [
+            78
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M0.01",
+          "word_ids": [
+            2542
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/2/drawing-title",
+      "page": 2,
+      "bbox": [
+        2770,
+        1785,
+        2980,
+        1850
+      ],
+      "expected": "SERVICE LEVEL OVERALL MECHANICAL PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SERVICE LEVEL OVERALL MECHANICAL PLAN",
+          "word_ids": [
+            269,
+            270,
+            271,
+            272,
+            273
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SERVICE LEVEL OVERALL MECHANICAL PLAN",
+          "word_ids": [
+            262,
+            263,
+            264,
+            265,
+            266
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/2/sheet-number",
+      "page": 2,
+      "bbox": [
+        2770,
+        2025,
+        2980,
+        2080
+      ],
+      "expected": "M0.02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M0.02",
+          "word_ids": [
+            268
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M0.02",
+          "word_ids": [
+            285
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/3/drawing-title",
+      "page": 3,
+      "bbox": [
+        2770,
+        1785,
+        2980,
+        1850
+      ],
+      "expected": "LEVEL 200 OVERALL MECHANICAL PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LEVEL 200 OVERALL MECHANICAL PLAN",
+          "word_ids": [
+            132,
+            133,
+            134,
+            135,
+            136
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LEVEL 200 OVERALL MECHANICAL PLAN",
+          "word_ids": [
+            82,
+            83,
+            84,
+            85,
+            86
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/3/sheet-number",
+      "page": 3,
+      "bbox": [
+        2770,
+        2025,
+        2980,
+        2080
+      ],
+      "expected": "M0.03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M0.03",
+          "word_ids": [
+            131
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M0.03",
+          "word_ids": [
+            140
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/4/drawing-title",
+      "page": 4,
+      "bbox": [
+        2770,
+        1785,
+        2980,
+        1850
+      ],
+      "expected": "LEVEL 400 OVERALL MECHANICAL PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LEVEL 400 OVERALL MECHANICAL PLAN",
+          "word_ids": [
+            113,
+            114,
+            115,
+            116,
+            117
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LEVEL 400 OVERALL MECHANICAL PLAN",
+          "word_ids": [
+            98,
+            99,
+            100,
+            101,
+            102
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/4/sheet-number",
+      "page": 4,
+      "bbox": [
+        2770,
+        2025,
+        2980,
+        2080
+      ],
+      "expected": "M0.04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M0.04",
+          "word_ids": [
+            112
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M0.04",
+          "word_ids": [
+            121
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/5/drawing-title",
+      "page": 5,
+      "bbox": [
+        2770,
+        1785,
+        2980,
+        1850
+      ],
+      "expected": "SERVICE LEVEL MECHANICAL WORK PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SERVICE LEVEL MECHANICAL WORK PLAN",
+          "word_ids": [
+            150,
+            151,
+            152,
+            153,
+            154
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SERVICE LEVEL MECHANICAL WORK PLAN",
+          "word_ids": [
+            321,
+            322,
+            323,
+            324,
+            325
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/5/sheet-number",
+      "page": 5,
+      "bbox": [
+        2770,
+        2025,
+        2980,
+        2080
+      ],
+      "expected": "M1.01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M1.01",
+          "word_ids": [
+            149
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M1.01",
+          "word_ids": [
+            364
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/6/drawing-title",
+      "page": 6,
+      "bbox": [
+        2770,
+        1785,
+        2980,
+        1850
+      ],
+      "expected": "SERVICE LEVEL MECHANICAL WORK PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SERVICE LEVEL MECHANICAL WORK PLAN",
+          "word_ids": [
+            252,
+            253,
+            254,
+            255,
+            256
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SERVICE LEVEL MECHANICAL WORK PLAN",
+          "word_ids": [
+            446,
+            447,
+            448,
+            449,
+            450
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/6/sheet-number",
+      "page": 6,
+      "bbox": [
+        2770,
+        2025,
+        2980,
+        2080
+      ],
+      "expected": "M1.02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M1.02",
+          "word_ids": [
+            251
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M1.02",
+          "word_ids": [
+            489
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/7/drawing-title",
+      "page": 7,
+      "bbox": [
+        2770,
+        1785,
+        2980,
+        1850
+      ],
+      "expected": "SERVICE LEVEL MECHANICAL WORK PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SERVICE LEVEL MECHANICAL WORK PLAN",
+          "word_ids": [
+            115,
+            116,
+            117,
+            118,
+            119
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SERVICE LEVEL MECHANICAL WORK PLAN",
+          "word_ids": [
+            204,
+            205,
+            206,
+            207,
+            208
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/7/sheet-number",
+      "page": 7,
+      "bbox": [
+        2770,
+        2025,
+        2980,
+        2080
+      ],
+      "expected": "M1.03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M1.03",
+          "word_ids": [
+            114
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M1.03",
+          "word_ids": [
+            247
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/8/drawing-title",
+      "page": 8,
+      "bbox": [
+        2770,
+        1785,
+        2980,
+        1850
+      ],
+      "expected": "200 LEVEL MECHANICAL WORK PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "200 LEVEL MECHANICAL WORK PLAN",
+          "word_ids": [
+            158,
+            159,
+            160,
+            161,
+            162
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "200 LEVEL MECHANICAL WORK PLAN",
+          "word_ids": [
+            438,
+            439,
+            440,
+            441,
+            442
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/8/sheet-number",
+      "page": 8,
+      "bbox": [
+        2770,
+        2025,
+        2980,
+        2080
+      ],
+      "expected": "M1.21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M1.21",
+          "word_ids": [
+            157
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M1.21",
+          "word_ids": [
+            481
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/9/drawing-title",
+      "page": 9,
+      "bbox": [
+        2770,
+        1785,
+        2980,
+        1850
+      ],
+      "expected": "400 LEVEL MECHANICAL WORK PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "400 LEVEL MECHANICAL WORK PLAN",
+          "word_ids": [
+            728,
+            729,
+            730,
+            731,
+            732
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "400 LEVEL MECHANICAL WORK PLAN",
+          "word_ids": [
+            722,
+            723,
+            724,
+            725,
+            726
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/9/sheet-number",
+      "page": 9,
+      "bbox": [
+        2770,
+        2025,
+        2980,
+        2080
+      ],
+      "expected": "M1.41",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M1.41",
+          "word_ids": [
+            727
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M1.41",
+          "word_ids": [
+            765
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/10/drawing-title",
+      "page": 10,
+      "bbox": [
+        2770,
+        1785,
+        2980,
+        1850
+      ],
+      "expected": "MECHANICAL DETAILS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL DETAILS",
+          "word_ids": [
+            1769,
+            1770
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL DETAILS",
+          "word_ids": [
+            1606,
+            1607
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/10/sheet-number",
+      "page": 10,
+      "bbox": [
+        2770,
+        2025,
+        2980,
+        2080
+      ],
+      "expected": "M2.01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M2.01",
+          "word_ids": [
+            1768
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M2.01",
+          "word_ids": [
+            1775
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/11/drawing-title",
+      "page": 11,
+      "bbox": [
+        2770,
+        1785,
+        2980,
+        1850
+      ],
+      "expected": "MECHANICAL SCHEDULES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL SCHEDULES",
+          "word_ids": [
+            1580,
+            1581
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL SCHEDULES",
+          "word_ids": [
+            1478,
+            1479
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/11/sheet-number",
+      "page": 11,
+      "bbox": [
+        2770,
+        2025,
+        2980,
+        2080
+      ],
+      "expected": "M3.01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M3.01",
+          "word_ids": [
+            1579
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M3.01",
+          "word_ids": [
+            1584
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/12/drawing-title",
+      "page": 12,
+      "bbox": [
+        2770,
+        1785,
+        2980,
+        1850
+      ],
+      "expected": "MECHANICAL SPECIFICATIONS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL SPECIFICATIONS",
+          "word_ids": [
+            6507,
+            6508
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL SPECIFICATIONS",
+          "word_ids": [
+            6492,
+            6493
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/12/sheet-number",
+      "page": 12,
+      "bbox": [
+        2770,
+        2025,
+        2980,
+        2080
+      ],
+      "expected": "M4.01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M4.01",
+          "word_ids": [
+            6506
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M4.01",
+          "word_ids": [
+            6511
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/13/drawing-title",
+      "page": 13,
+      "bbox": [
+        2770,
+        1785,
+        2980,
+        1850
+      ],
+      "expected": "MECHANICAL SPECIFICATIONS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL SPECIFICATIONS",
+          "word_ids": [
+            2838,
+            2839
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL SPECIFICATIONS",
+          "word_ids": [
+            2682,
+            2683
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/13/sheet-number",
+      "page": 13,
+      "bbox": [
+        2770,
+        2025,
+        2980,
+        2080
+      ],
+      "expected": "M4.02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M4.02",
+          "word_ids": [
+            2837
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M4.02",
+          "word_ids": [
+            2842
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "full-page-visual-review",
+      "actual": 13,
+      "expected": 13,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

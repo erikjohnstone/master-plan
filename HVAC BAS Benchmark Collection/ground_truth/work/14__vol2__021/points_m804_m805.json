@@ -1,0 +1,158 @@
+{
+  "document_id": "14__vol2__021",
+  "module_role": "Printed M-804 and M-805 DDC controller input/output matrix ground truth. Each listed row may carry multiple category assignments; the assignments are logical/physical circles as drawn, not a contractor terminal-count inference.",
+  "source_sheets": ["M-804", "M-805"],
+  "tables": [
+    {
+      "id": "M804-LAB-AHU-PART-A", "page": 18, "sheet": "M-804", "title": "LAB AHU POINT MATRIX — PART A", "classification": "DDC input/output matrix rows", "columns": "tag|point_name", "x_edges": [280,325,1250],
+      "y_ranges": [[1555,1574],[1575,1593],[1594,1612],[1613,1631],[1632,1650],[1651,1669],[1670,1688],[1689,1707],[1708,1726],[1727,1745],[1746,1764],[1765,1783],[1784,1802]],
+      "rows": ["AFMS-1|OUTDOOR AIR FLOW MONITORING STATION","DA-1|OUTDOOR AIR DAMPER","VFD-1|VARIABLE FREQUENCY DRIVE 1","DP-1|DIFFERENTIAL PRESSURE 1","DP-2|DIFFERENTIAL PRESSURE 2","FS-1|AIR FREEZE STAT","HS-1|HUMIDITY SENSOR 1","HS-2|HUMIDITY SENSOR 2","HS-3|HUMIDITY SENSOR 3","MP-1|AHU MICROPROCESSOR","SD-1|OUTSIDE AIR SMOKE DETECTOR","SD-2|SUPPLY AIR SMOKE DETECTOR","SP-1|SUPPLY AIR DUCT STATIC PRESSURE"],
+      "listed_point_counts": {"source_matrix_rows": 13}, "header_evidence": [{"bbox": [220,1470,1550,1560], "expected": "DDC CONTROLLER INPUT/OUTPUT SUMMARY"}]
+    },
+    {
+      "id": "M804-LAB-AHU-PART-B", "page": 18, "sheet": "M-804", "title": "LAB AHU POINT MATRIX — PART B", "classification": "DDC input/output matrix rows", "columns": "tag|point_name", "x_edges": [280,325,1250],
+      "y_ranges": [[1797,1815],[1816,1834],[1835,1853],[1854,1872],[1873,1891],[1892,1910],[1911,1929],[1930,1948]],
+      "rows": ["HS-1|HIGH STATIC SAFETY SENSOR","DSP-1|DOWN DUCT STATIC PRESSURE","TS-1|TEMPERATURE SENSOR 1","TS-2|TEMPERATURE SENSOR 2","TS-3|TEMPERATURE SENSOR 3","TS-4|TEMPERATURE SENSOR 4","V-1|VALVE MODULATION 1","V-2|VALVE MODULATION 2"],
+      "listed_point_counts": {"source_matrix_rows": 8}
+    },
+    {
+      "id": "M804-VAV-AHU", "page": 18, "sheet": "M-804", "title": "FUME HOOD / VAV AHU POINT MATRIX", "classification": "DDC input/output matrix rows", "columns": "tag|point_name", "x_edges": [280,325,1250],
+      "y_ranges": [[1965,1983],[1984,2002],[2003,2021],[2022,2040],[2041,2059],[2060,2078],[2079,2097],[2098,2116],[2117,2135],[2136,2154],[2155,2173]],
+      "rows": ["PT-1|SUPPLY AIR DUCT STATIC PRESSURE","VFD-1|VARIABLE FREQUENCY DRIVE 1","VFD-2|VARIABLE FREQUENCY DRIVE 2","VFD-3|VARIABLE FREQUENCY DRIVE 3","AFMS-1|EXHAUST AIR FLOW MONITORING STATION 1","AFMS-2|EXHAUST AIR FLOW MONITORING STATION 2","AFMS-3|EXHAUST AIR FLOW MONITORING STATION 3","DA-1|EXHAUST AIR DAMPER 1","DA-2|EXHAUST AIR DAMPER 2","DA-3|EXHAUST AIR DAMPER 3","DA-4|OUTSIDE AIR DAMPER 4"],
+      "listed_point_counts": {"source_matrix_rows": 11}
+    },
+    {
+      "id": "M804-FUME-HOOD-EXHAUST", "page": 18, "sheet": "M-804", "title": "LAB FUME HOOD EXHAUST SYSTEM", "classification": "DDC input/output matrix rows", "columns": "tag|point_name", "x_edges": [1440,1480,1900],
+      "y_ranges": [[1671,1689],[1690,1708],[1709,1727],[1728,1746],[1747,1765]],
+      "rows": ["VFD-1|VARIABLE FREQUENCY DRIVE 1","VFD-2|VARIABLE FREQUENCY DRIVE 2","SP-1|STATIC PRESSURE SENSOR","VS-1|EXHAUST VALVE 1","VS-2|EXHAUST VALVE 2"],
+      "listed_point_counts": {"source_matrix_rows": 5}, "header_evidence": [{"bbox": [1400,1570,2500,1670], "expected": "DDC CONTROLLER INPUT/OUTPUT SUMMARY"}]
+    },
+    {
+      "id": "M804-GENERAL-EXHAUST", "page": 18, "sheet": "M-804", "title": "GENERAL EXHAUST SYSTEM", "classification": "DDC input/output matrix rows", "columns": "tag|point_name", "x_edges": [1970,2010,2450],
+      "y_ranges": [[2000,2018],[2019,2037],[2038,2056],[2057,2075],[2076,2094]],
+      "rows": ["VFD-1|VARIABLE FREQUENCY DRIVE 1","VFD-2|VARIABLE FREQUENCY DRIVE 2","SP-1|STATIC PRESSURE SENSOR","VS-1|EXHAUST VALVE 1","VS-2|EXHAUST VALVE 2"],
+      "listed_point_counts": {"source_matrix_rows": 5}, "header_evidence": [{"bbox": [1900,1900,3050,2000], "expected": "DDC CONTROLLER INPUT/OUTPUT SUMMARY"}]
+    },
+    {
+      "id": "M805-ADMIN-AHU-BASE", "page": 19, "sheet": "M-805", "title": "ADMIN AHU POINT MATRIX — BASE", "classification": "DDC input/output matrix rows", "columns": "tag|point_name", "x_edges": [220,260,1250],
+      "y_ranges": [[1653,1672],[1673,1691],[1692,1710],[1711,1729],[1730,1748],[1749,1767],[1768,1786],[1787,1805],[1806,1824],[1825,1843],[1844,1862],[1863,1881],[1882,1900],[1901,1918],[1919,1928],[1929,1947],[1948,1967],[1968,1986],[1987,2004],[2005,2023]],
+      "rows": ["AFMS-1|OUTDOOR AIR FLOW MONITORING STATION","AFMS-2|RELIEF AIR FLOW MONITORING STATION","DA-1-1|OUTDOOR AIR DAMPER (MIN)","DA-1-2|OUTDOOR AIR DAMPER (MAX)","DA-2|RELIEF AIR DAMPER","DA-3|BYPASS DAMPER","VFD-1|VARIABLE FREQUENCY DRIVE 1","VFD-2|VARIABLE FREQUENCY DRIVE 2","DP-1|DIFFERENTIAL PRESSURE 1","DP-2|DIFFERENTIAL PRESSURE 2","DP-3|DIFFERENTIAL PRESSURE 3","DSP-1|DOWN DUCT STATIC PRESSURE","FS-1|AIR FREEZE STAT","HS-1|HUMIDITY SENSOR 1","HS-2|HUMIDITY SENSOR 2","HS-3|HUMIDITY SENSOR 3","SD-1|SUPPLY AIR SMOKE DETECTOR","SD-2|RETURN AIR SMOKE DETECTOR","SP-1|STATIC PRESSURE","SP-2|STATIC PRESSURE"],
+      "source_matrix_row_count": 20, "header_evidence": [{"bbox": [190,1570,1540,1655], "expected": "DDC CONTROLLER INPUT/OUTPUT SUMMARY"}]
+    },
+    {
+      "id": "M805-ADMIN-AHU-CONTINUATION", "page": 19, "sheet": "M-805", "title": "ADMIN AHU POINT MATRIX — CONTINUATION", "classification": "DDC input/output matrix rows", "columns": "tag|point_name", "x_edges": [220,260,1250],
+      "y_ranges": [[2024,2042],[2043,2061],[2062,2080],[2081,2099],[2100,2118],[2119,2137],[2138,2156],[2157,2175],[2176,2194],[2195,2213]],
+      "rows": ["HS-1|SUPPLY HIGH STATIC PRESSURE","HS-2|EXHAUST HIGH STATIC PRESSURE","TS-1|TEMPERATURE SENSOR 1","TS-2|TEMPERATURE SENSOR 2","TS-3|TEMPERATURE SENSOR 3","TS-4|TEMPERATURE SENSOR 4","TS-5|TEMPERATURE SENSOR 5","TS-6|TEMPERATURE SENSOR 6","V-1|VALVE MODULATION 1","V-2|VALVE MODULATION 2"],
+      "listed_point_counts": {"source_matrix_rows": 10}
+    },
+    {
+      "id": "M805-VAV-RETURN", "page": 19, "sheet": "M-805", "title": "VAV RETURN POINT MATRIX", "classification": "DDC input/output matrix rows", "columns": "tag|point_name", "x_edges": [1715,1760,2450],
+      "y_ranges": [[1828,1846],[1847,1865],[1866,1884]],
+      "rows": ["AFMS-1|AIR FLOW MONITORING STATION","DO-1|DAMPER ACTUATOR","SP-1|STATIC PRESSURE SENSOR"],
+      "listed_point_counts": {"source_matrix_rows": 3}
+    }
+  ],
+  "normalization": {"AFMS": "source_matrix_rows", "DA": "source_matrix_rows", "DA-1": "source_matrix_rows", "VFD": "source_matrix_rows", "DP": "source_matrix_rows", "FS": "source_matrix_rows", "HS": "source_matrix_rows", "MP": "source_matrix_rows", "SD": "source_matrix_rows", "SP": "source_matrix_rows", "DSP": "source_matrix_rows", "TS": "source_matrix_rows", "V": "source_matrix_rows", "PT": "source_matrix_rows", "VS": "source_matrix_rows", "DO": "source_matrix_rows"},
+  "printed_matrix_assignments": {
+    "M804-LAB-AHU-PART-A": [
+      {"tag":"AFMS-1","point_name":"OUTDOOR AIR FLOW MONITORING STATION","physical_or_logical_as_drawn":"logical_circle","AI":["mass-air-flow"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"DA-1","point_name":"OUTDOOR AIR DAMPER","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":["end switch"],"AO":[],"DO":["open/close"]},
+      {"tag":"VFD-1","point_name":"VARIABLE FREQUENCY DRIVE 1","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":["status/proof"],"AO":["variable speed control"],"DO":["start/stop"]},
+      {"tag":"DP-1","point_name":"DIFFERENTIAL PRESSURE 1","physical_or_logical_as_drawn":"logical_circle","AI":["pressure"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"DP-2","point_name":"DIFFERENTIAL PRESSURE 2","physical_or_logical_as_drawn":"logical_circle","AI":["pressure"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"FS-1","point_name":"AIR FREEZE STAT","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":["auxiliary contacts"],"AO":[],"DO":[]},
+      {"tag":"HS-1","point_name":"HUMIDITY SENSOR 1","physical_or_logical_as_drawn":"logical_circle","AI":["humidity"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"HS-2","point_name":"HUMIDITY SENSOR 2","physical_or_logical_as_drawn":"logical_circle","AI":["humidity"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"HS-3","point_name":"HUMIDITY SENSOR 3","physical_or_logical_as_drawn":"logical_circle","AI":["humidity"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"MP-1","point_name":"AHU MICROPROCESSOR","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":[],"AO":[],"DO":[]},
+      {"tag":"SD-1","point_name":"OUTSIDE AIR SMOKE DETECTOR","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":["status/proof","auxiliary contacts"],"AO":[],"DO":[]},
+      {"tag":"SD-2","point_name":"SUPPLY AIR SMOKE DETECTOR","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":["status/proof","auxiliary contacts"],"AO":[],"DO":[]},
+      {"tag":"SP-1","point_name":"SUPPLY AIR DUCT STATIC PRESSURE","physical_or_logical_as_drawn":"logical_circle","AI":["pressure"],"DI":[],"AO":[],"DO":[]}
+    ],
+    "M804-LAB-AHU-PART-B": [
+      {"tag":"HS-1","point_name":"HIGH STATIC SAFETY SENSOR","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":["status/proof"],"AO":[],"DO":[]},
+      {"tag":"DSP-1","point_name":"DOWN DUCT STATIC PRESSURE","physical_or_logical_as_drawn":"logical_circle","AI":["pressure"],"DI":[],"AO":["variable speed control"],"DO":[]},
+      {"tag":"TS-1","point_name":"TEMPERATURE SENSOR 1","physical_or_logical_as_drawn":"logical_circle","AI":["temperature"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"TS-2","point_name":"TEMPERATURE SENSOR 2","physical_or_logical_as_drawn":"logical_circle","AI":["temperature"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"TS-3","point_name":"TEMPERATURE SENSOR 3","physical_or_logical_as_drawn":"logical_circle","AI":["temperature"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"TS-4","point_name":"TEMPERATURE SENSOR 4","physical_or_logical_as_drawn":"logical_circle","AI":["temperature"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"V-1","point_name":"VALVE MODULATION 1","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":[],"AO":["valve modulation"],"DO":[]},
+      {"tag":"V-2","point_name":"VALVE MODULATION 2","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":[],"AO":["valve modulation"],"DO":[]}
+    ],
+    "M804-VAV-AHU": [
+      {"tag":"PT-1","point_name":"SUPPLY AIR DUCT STATIC PRESSURE","physical_or_logical_as_drawn":"logical_circle","AI":["pressure"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"VFD-1","point_name":"VARIABLE FREQUENCY DRIVE 1","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":["status/proof"],"AO":["variable speed control"],"DO":["start/stop"]},
+      {"tag":"VFD-2","point_name":"VARIABLE FREQUENCY DRIVE 2","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":["status/proof"],"AO":["variable speed control"],"DO":["start/stop"]},
+      {"tag":"VFD-3","point_name":"VARIABLE FREQUENCY DRIVE 3","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":["status/proof"],"AO":["variable speed control"],"DO":["start/stop"]},
+      {"tag":"AFMS-1","point_name":"EXHAUST AIR FLOW MONITORING STATION 1","physical_or_logical_as_drawn":"logical_circle","AI":["flow"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"AFMS-2","point_name":"EXHAUST AIR FLOW MONITORING STATION 2","physical_or_logical_as_drawn":"logical_circle","AI":["flow"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"AFMS-3","point_name":"EXHAUST AIR FLOW MONITORING STATION 3","physical_or_logical_as_drawn":"logical_circle","AI":["flow"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"DA-1","point_name":"EXHAUST AIR DAMPER 1","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":["end switch"],"AO":["valve modulation"],"DO":[]},
+      {"tag":"DA-2","point_name":"EXHAUST AIR DAMPER 2","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":["end switch"],"AO":["valve modulation"],"DO":[]},
+      {"tag":"DA-3","point_name":"EXHAUST AIR DAMPER 3","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":["end switch"],"AO":["valve modulation"],"DO":[]},
+      {"tag":"DA-4","point_name":"OUTSIDE AIR DAMPER 4","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":["end switch"],"AO":["valve modulation"],"DO":[]}
+    ],
+    "M804-FUME-HOOD-EXHAUST": [
+      {"tag":"VFD-1","point_name":"VARIABLE FREQUENCY DRIVE 1","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":["status/proof"],"AO":["variable speed control"],"DO":["start/stop"]},
+      {"tag":"VFD-2","point_name":"VARIABLE FREQUENCY DRIVE 2","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":["status/proof"],"AO":["variable speed control"],"DO":["start/stop"]},
+      {"tag":"SP-1","point_name":"STATIC PRESSURE SENSOR","physical_or_logical_as_drawn":"logical_circle","AI":["pressure"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"VS-1","point_name":"EXHAUST VALVE 1","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":[],"AO":["valve modulation"],"DO":[]},
+      {"tag":"VS-2","point_name":"EXHAUST VALVE 2","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":[],"AO":["valve modulation"],"DO":[]}
+    ],
+    "M804-GENERAL-EXHAUST": [
+      {"tag":"VFD-1","point_name":"VARIABLE FREQUENCY DRIVE 1","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":["status/proof"],"AO":["variable speed control"],"DO":["start/stop"]},
+      {"tag":"VFD-2","point_name":"VARIABLE FREQUENCY DRIVE 2","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":["status/proof"],"AO":["variable speed control"],"DO":["start/stop"]},
+      {"tag":"SP-1","point_name":"STATIC PRESSURE SENSOR","physical_or_logical_as_drawn":"logical_circle","AI":["pressure"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"VS-1","point_name":"EXHAUST VALVE 1","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":[],"AO":["valve modulation"],"DO":[]},
+      {"tag":"VS-2","point_name":"EXHAUST VALVE 2","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":[],"AO":["valve modulation"],"DO":[]}
+    ],
+    "M805-ADMIN-AHU-BASE": [
+      {"tag":"AFMS-1","point_name":"OUTDOOR AIR FLOW MONITORING STATION","physical_or_logical_as_drawn":"logical_circle","AI":["flow"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"AFMS-2","point_name":"RELIEF AIR FLOW MONITORING STATION","physical_or_logical_as_drawn":"logical_circle","AI":["flow"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"DA-1-1","point_name":"OUTDOOR AIR DAMPER (MIN)","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":[],"AO":["valve modulation"],"DO":[]},
+      {"tag":"DA-1-2","point_name":"OUTDOOR AIR DAMPER (MAX)","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":[],"AO":["valve modulation"],"DO":[]},
+      {"tag":"DA-2","point_name":"RELIEF AIR DAMPER","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":[],"AO":["valve modulation"],"DO":[]},
+      {"tag":"DA-3","point_name":"BYPASS DAMPER","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":[],"AO":["valve modulation"],"DO":[]},
+      {"tag":"VFD-1","point_name":"VARIABLE FREQUENCY DRIVE 1","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":[],"AO":["variable speed control"],"DO":["on/off"]},
+      {"tag":"VFD-2","point_name":"VARIABLE FREQUENCY DRIVE 2","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":[],"AO":["variable speed control"],"DO":["on/off"]},
+      {"tag":"DP-1","point_name":"DIFFERENTIAL PRESSURE 1","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":["status/proof"],"AO":[],"DO":[]},
+      {"tag":"DP-2","point_name":"DIFFERENTIAL PRESSURE 2","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":["status/proof"],"AO":[],"DO":[]},
+      {"tag":"DP-3","point_name":"DIFFERENTIAL PRESSURE 3","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":["status/proof"],"AO":[],"DO":[]},
+      {"tag":"DSP-1","point_name":"DOWN DUCT STATIC PRESSURE","physical_or_logical_as_drawn":"logical_circle","AI":["pressure"],"DI":[],"AO":["variable speed control"],"DO":[]},
+      {"tag":"FS-1","point_name":"AIR FREEZE STAT","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":["auxiliary contacts"],"AO":[],"DO":[]},
+      {"tag":"HS-1","point_name":"HUMIDITY SENSOR 1","physical_or_logical_as_drawn":"logical_circle","AI":["humidity"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"HS-2","point_name":"HUMIDITY SENSOR 2","physical_or_logical_as_drawn":"logical_circle","AI":["humidity"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"HS-3","point_name":"HUMIDITY SENSOR 3","physical_or_logical_as_drawn":"logical_circle","AI":["humidity"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"SD-1","point_name":"SUPPLY AIR SMOKE DETECTOR","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":["status/proof","auxiliary contacts"],"AO":[],"DO":[]},
+      {"tag":"SD-2","point_name":"RETURN AIR SMOKE DETECTOR","physical_or_logical_as_drawn":"logical_circle","AI":[],"DI":["status/proof","auxiliary contacts"],"AO":[],"DO":[]},
+      {"tag":"SP-1","point_name":"STATIC PRESSURE","physical_or_logical_as_drawn":"logical_circle","AI":["pressure"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"SP-2","point_name":"STATIC PRESSURE","physical_or_logical_as_drawn":"logical_circle","AI":["pressure"],"DI":[],"AO":[],"DO":[]}
+    ],
+    "M805-ADMIN-AHU-CONTINUATION": [
+      {"tag":"HS-1","point_name":"SUPPLY HIGH STATIC PRESSURE","physical_or_logical_as_drawn":"logical_circle","AI":["pressure"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"HS-2","point_name":"EXHAUST HIGH STATIC PRESSURE","physical_or_logical_as_drawn":"logical_circle","AI":["pressure"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"TS-1","point_name":"TEMPERATURE SENSOR 1","physical_or_logical_as_drawn":"logical_circle","AI":["temperature"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"TS-2","point_name":"TEMPERATURE SENSOR 2","physical_or_logical_as_drawn":"logical_circle","AI":["temperature"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"TS-3","point_name":"TEMPERATURE SENSOR 3","physical_or_logical_as_drawn":"logical_circle","AI":["temperature"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"TS-4","point_name":"TEMPERATURE SENSOR 4","physical_or_logical_as_drawn":"logical_circle","AI":["temperature"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"TS-5","point_name":"TEMPERATURE SENSOR 5","physical_or_logical_as_drawn":"logical_circle","AI":["temperature"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"TS-6","point_name":"TEMPERATURE SENSOR 6","physical_or_logical_as_drawn":"logical_circle","AI":["temperature"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"V-1","point_name":"VALVE MODULATION 1","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":[],"AO":["valve modulation"],"DO":[]},
+      {"tag":"V-2","point_name":"VALVE MODULATION 2","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":[],"AO":["valve modulation"],"DO":[]}
+    ],
+    "M805-VAV-RETURN": [
+      {"tag":"AFMS-1","point_name":"AIR FLOW MONITORING STATION","physical_or_logical_as_drawn":"logical_circle","AI":["flow"],"DI":[],"AO":[],"DO":[]},
+      {"tag":"DO-1","point_name":"DAMPER ACTUATOR","physical_or_logical_as_drawn":"logical_circle","AI":["positive feedback"],"DI":[],"AO":["valve modulation"],"DO":[]},
+      {"tag":"SP-1","point_name":"STATIC PRESSURE SENSOR","physical_or_logical_as_drawn":"logical_circle","AI":["pressure"],"DI":[],"AO":[],"DO":[]}
+    ],
+    "counts_by_assignment_not_terminal_count": {"M804_source_rows": 42, "M804_AI_assignments": 31, "M804_DI_assignments": 18, "M804_AO_assignments": 19, "M804_DO_assignments": 9, "M805_source_rows": 33, "M805_AI_assignments": 25, "M805_DI_assignments": 8, "M805_AO_assignments": 10, "M805_DO_assignments": 2},
+    "qualification": "The matrix circle notation is retained exactly as a row-to-category assignment. Its logical/physical legend and the sheet note that virtual points are incomplete prohibit converting these values into a quoted installed controller-terminal count."
+  },
+  "assertions": [
+    {"id":"m804-lab-virtual-points-note","page":18,"bbox":[220,2165,1550,2205],"expected":"NOT ALL VIRTUAL POINTS ARE SHOWN. PROVIDE ALL POINTS REQUIRED FOR SOFTWARE OPERATION."},
+    {"id":"m805-virtual-points-note","page":19,"bbox":[190,2200,1540,2250],"expected":"NOT ALL VIRTUAL POINTS ARE SHOWN. PROVIDE ALL POINTS REQUIRED FOR SOFTWARE OPERATION."}
+  ],
+  "inventory_checks": [
+    {"id":"m804-m805-table-count","records_path":["tables"],"expected":8}
+  ]
+}

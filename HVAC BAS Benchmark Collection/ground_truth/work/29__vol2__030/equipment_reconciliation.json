@@ -1,0 +1,16 @@
+{
+  "document_id": "29__vol2__030",
+  "module_role": "Literal schedule row and schedule-title boundary.",
+  "tables": [],
+  "ledger_mode": "literal_schedule_rows_v1",
+  "schedule_counts": {
+    "tables": 1,
+    "rows": 3,
+    "interpretation": "Three literal two-pipe fan-coil rows, not installed totals."
+  },
+  "control_valve_and_damper_schedule_status": {
+    "control_valve_schedule": "No standalone control-valve schedule is claimed from the retained set.",
+    "damper_actuator_schedule": "M-602 publishes damper schedules but no standalone damper-actuator schedule is claimed."
+  },
+  "source_boundary": "No physical BAS takeoff is inferred."
+}

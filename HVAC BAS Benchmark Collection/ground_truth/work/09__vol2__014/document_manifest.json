@@ -1,0 +1,413 @@
+{
+  "id": "09__vol2__014",
+  "rank": 9,
+  "title": "Missoula Fire Sciences Laboratory Mechanical Upgrade",
+  "source_pdf": "pdf/09__vol2__014__Missoula_Fire_Sciences_Laboratory_Mechanical_Upgrade.pdf",
+  "source_sha256": "f208e34965aba62b3752f39b2691e2a418ac823bd99dbaadfb2e7b06391fc7ff",
+  "page_count": 28,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete source-bounded Rank 09 ground truth for the supplied 28-page Missoula Fire Sciences Laboratory Mechanical Upgrade set: full page-by-page visual review; project/sheet/scale boundaries; complete 17-row M0.3 CONTROL DAMPER SCHEDULE; four selected central-equipment schedule tables / 10 literal rows; BMS/DDC/legend context; and 34 bounded controls/sequence clauses. The record does not fabricate installed equipment/sensor/actuator/valve/damper quantities, formal BAS point rows, controller I/O/cards/terminals/wiring, BAS topology/addressing, distances, or an untranscribed schedule corpus.",
+  "reading_notes": [
+    "All 28 pages have retained Poppler full-page renders and a completed visual-review disposition. Every selected schedule cell and bounded source clause is rechecked on every build/verify run against independently captured MuPDF and Poppler evidence.",
+    "M0.3 is especially valuable for BAS takeoff evaluation: it publishes 17 literal control-damper rows with function, maximum CFM, mounting, control mode and failure position, while its notes cover end switches, actuator torque, low/line-voltage power and existing-damper DDC integration.",
+    "M0.2/M0.4 provide selected condensing-unit, boiler, gas-fired steam-generator and pump schedules plus bounded DDC, P/E, staging, gateway and fuel-shutoff source clauses.",
+    "M9.6/M9.7 control diagrams define source terms/symbols and show controls context, but the supplied drawings do not include a conventional control-points table. No row-level I/O list is inferred from those graphics."
+  ],
+  "verification_semantics": "The bundle verifier reruns independent MuPDF and Poppler checks for every retained schedule cell and bounded text assertion, and hashes the source PDF, modules, manifest and all cited full-page renders. It validates source evidence and annotation integrity rather than performing automated takeoff or engineering inference.",
+  "module_order": [
+    "metadata",
+    "schedules",
+    "points",
+    "controls_context",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "metadata": [
+      "metadata_rank09"
+    ],
+    "schedules": [
+      "schedules_m03_dampers",
+      "schedules_core_equipment"
+    ],
+    "points": [
+      "points_rank09"
+    ],
+    "controls_context": [
+      "controls_sequences"
+    ],
+    "equipment_reconciliation": [
+      "equipment_reconciliation_rank09"
+    ],
+    "point_applications": [
+      "point_applications_rank09"
+    ],
+    "supporting_evidence": [
+      "supporting_evidence_rank09"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Printed project, project number, facility and issue context are retained.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every supplied PDF page has a sheet identifier, title and complete visual-review disposition.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "No global scale is claimed; mixed plans, schedules, diagrams, details and sections are not converted into a document-wide quantity scale.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Selected M0.2-M0.4 schedule tables retain literal rows rather than invented installed quantities.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "schedule_counts"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Five high-value schedule tables retain 27 literal central-equipment/damper rows, including size, capacity, control and fail-state fields where printed.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "No formal source point-list matrix is published; the no-row status and count boundary are explicit.",
+      "evidence": [
+        [
+          "modules",
+          "points",
+          "point_list_status"
+        ],
+        [
+          "modules",
+          "point_applications",
+          "expanded_template_counts"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Published BMS/DDC/P-E/gateway context is retained while topology/addressing/controller-hardware information is marked unavailable.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Bounded clauses retain compressor staging, AHU changeover, damper, boiler, pump, steam-generator and pneumatic/electric interface contexts.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sequence_inventory"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Sensor/valve/damper symbol context and majority-zone-voting language are retained without an unprinted installed-device count.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sensors_and_control_symbol_context"
+        ],
+        [
+          "modules",
+          "controls_context",
+          "sequence_inventory"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Schedule-corpus, point-list, valve, actuator, network and physical-count boundaries are explicit.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "control_valve_and_damper_schedule_status"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 28 supplied pages have retained full-page render evidence and completed review findings.",
+      "evidence": [
+        [
+          "page_review"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every authored module is rechecked against independent MuPDF and Poppler captures during bundle verification.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p1-p1-full-poppler.png",
+      "finding": "Mechanical notes, HVAC/BAS/control legends, sensor/valve symbols, commissioning and source limitations visually reviewed."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p2-p2-full-poppler.png",
+      "finding": "Mechanical schedules and AHU/condensing-unit control notes visually reviewed; selected condensing-unit rows captured."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p3-p3-full-poppler.png",
+      "finding": "Mechanical schedules visually reviewed; the complete 17-row CONTROL DAMPER SCHEDULE is captured."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p4-p4-full-poppler.png",
+      "finding": "Mechanical schedules and central-equipment control notes visually reviewed; selected boiler, steam-generator and pump rows captured."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p5-p5-full-poppler.png",
+      "finding": "MEP coordination schedule visually reviewed; retained as source context."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p6-p6-full-poppler.png",
+      "finding": "Mechanical demolition plans visually reviewed; retained as source context."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p7-p7-full-poppler.png",
+      "finding": "Mechanical demolition plans visually reviewed; retained as source context."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p8-p8-full-poppler.png",
+      "finding": "Mechanical demolition plans visually reviewed; retained as source context."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p9-p9-full-poppler.png",
+      "finding": "Mechanical demolition plan visually reviewed; retained as source context."
+    },
+    {
+      "page": 10,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p10-p10-full-poppler.png",
+      "finding": "Mechanical demolition plans visually reviewed; retained as source context."
+    },
+    {
+      "page": 11,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p11-p11-full-poppler.png",
+      "finding": "Enlarged mechanical demolition drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 12,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p12-p12-full-poppler.png",
+      "finding": "Mechanical demolition section drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 13,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p13-p13-full-poppler.png",
+      "finding": "Mechanical demolition section drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 14,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p14-p14-full-poppler.png",
+      "finding": "Mechanical plan drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 15,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p15-p15-full-poppler.png",
+      "finding": "Mechanical plan drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 16,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p16-p16-full-poppler.png",
+      "finding": "Mechanical plan drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 17,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p17-p17-full-poppler.png",
+      "finding": "Mechanical plan drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 18,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p18-p18-full-poppler.png",
+      "finding": "Mechanical plan drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 19,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p19-p19-full-poppler.png",
+      "finding": "Enlarged mechanical plan drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 20,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p20-p20-full-poppler.png",
+      "finding": "Mechanical section drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 21,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p21-p21-full-poppler.png",
+      "finding": "Mechanical section drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 22,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p22-p22-full-poppler.png",
+      "finding": "Mechanical details visually reviewed; retained as source context."
+    },
+    {
+      "page": 23,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p23-p23-full-poppler.png",
+      "finding": "Mechanical details including referenced control-valve context visually reviewed; retained as source context."
+    },
+    {
+      "page": 24,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p24-p24-full-poppler.png",
+      "finding": "Mechanical enlarged plans visually reviewed; retained as source context."
+    },
+    {
+      "page": 25,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p25-p25-full-poppler.png",
+      "finding": "Mechanical detail drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 26,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p26-p26-full-poppler.png",
+      "finding": "Control diagrams visually reviewed; retained as source context."
+    },
+    {
+      "page": 27,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p27-p27-full-poppler.png",
+      "finding": "AHU control diagrams, low-voltage damper note and P/E enable thresholds visually reviewed and bounded clauses captured."
+    },
+    {
+      "page": 28,
+      "review_status": "complete",
+      "render": "reviews/09__vol2__014/p28-p28-full-poppler.png",
+      "finding": "Hot-water and unit-heater DDC diagrams plus BAS/control-symbol definitions visually reviewed and bounded clauses captured."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "rank09-full-page-review",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 28
+    },
+    {
+      "id": "rank09-schedule-table-count",
+      "path": [
+        "modules",
+        "schedules",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 5
+    },
+    {
+      "id": "rank09-point-table-count",
+      "path": [
+        "modules",
+        "points",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 0
+    }
+  ],
+  "completion_checks": {
+    "all_28_pages_visually_reviewed": true,
+    "all_authoring_modules_dual_engine_verified_at_build": true,
+    "source_limitations_explicit": true,
+    "required_objectives_covered": true
+  }
+}

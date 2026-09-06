@@ -1,0 +1,9426 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "0770bb0bef60c688f29d5a9fc76b38f66e7cea89e76c1c2f35901407d293674e",
+  "tables": 2,
+  "rows": 46,
+  "cell_assertions": 322,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        775.065,
+        1455.24,
+        792.301
+      ],
+      "expected": "AHU-T1A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A",
+          "word_ids": [
+            962
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A",
+          "word_ids": [
+            1298
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        775.065,
+        1547.61,
+        792.301
+      ],
+      "expected": "AHU-T1A-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A-HHW",
+          "word_ids": [
+            963
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A-HHW",
+          "word_ids": [
+            1299
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        775.065,
+        1608.32,
+        792.301
+      ],
+      "expected": "6.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6.5",
+          "word_ids": [
+            964
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6.5",
+          "word_ids": [
+            1300
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        775.065,
+        1654.32,
+        792.301
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            965
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1301
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        775.065,
+        1742.28,
+        792.301
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            966
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1302
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        775.065,
+        1769.808,
+        792.301
+      ],
+      "expected": "2.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.9",
+          "word_ids": [
+            967
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.9",
+          "word_ids": [
+            673
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        775.065,
+        1810.8,
+        792.301
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            968
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            674
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        792.301,
+        1455.24,
+        809.641
+      ],
+      "expected": "AHU-T1B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B",
+          "word_ids": [
+            969
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B",
+          "word_ids": [
+            1303
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        792.301,
+        1547.61,
+        809.641
+      ],
+      "expected": "AHU-T1B-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B-HHW",
+          "word_ids": [
+            970
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B-HHW",
+          "word_ids": [
+            1304
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        792.301,
+        1608.32,
+        809.641
+      ],
+      "expected": "6.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6.5",
+          "word_ids": [
+            971
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6.5",
+          "word_ids": [
+            1305
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        792.301,
+        1654.32,
+        809.641
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            972
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1306
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        792.301,
+        1742.28,
+        809.641
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            973
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1307
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        792.301,
+        1769.808,
+        809.641
+      ],
+      "expected": "2.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.9",
+          "word_ids": [
+            974
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.9",
+          "word_ids": [
+            675
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        792.301,
+        1810.8,
+        809.641
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            975
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            676
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        809.641,
+        1455.24,
+        826.873
+      ],
+      "expected": "CUH-T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CUH-T1",
+          "word_ids": [
+            976
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CUH-T1",
+          "word_ids": [
+            1308
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        809.641,
+        1547.61,
+        826.873
+      ],
+      "expected": "CUH-T1-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CUH-T1-HHW",
+          "word_ids": [
+            977
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CUH-T1-HHW",
+          "word_ids": [
+            1309
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        809.641,
+        1608.32,
+        826.873
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            978
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1310
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        809.641,
+        1654.32,
+        826.873
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            979
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1311
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        809.641,
+        1742.28,
+        826.873
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            980
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1312
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        809.641,
+        1769.808,
+        826.873
+      ],
+      "expected": "0.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.2",
+          "word_ids": [
+            981
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.2",
+          "word_ids": [
+            677
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        809.641,
+        1810.8,
+        826.873
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            982
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            678
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        826.873,
+        1455.24,
+        843.905
+      ],
+      "expected": "CUH-T2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CUH-T2",
+          "word_ids": [
+            983
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CUH-T2",
+          "word_ids": [
+            1313
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        826.873,
+        1547.61,
+        843.905
+      ],
+      "expected": "CUH-T2-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CUH-T2-HHW",
+          "word_ids": [
+            984
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CUH-T2-HHW",
+          "word_ids": [
+            1314
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        826.873,
+        1608.32,
+        843.905
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            985
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1315
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        826.873,
+        1654.32,
+        843.905
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            986
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1316
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        826.873,
+        1742.28,
+        843.905
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            987
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1317
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        826.873,
+        1769.808,
+        843.905
+      ],
+      "expected": "0.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.2",
+          "word_ids": [
+            988
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.2",
+          "word_ids": [
+            679
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        826.873,
+        1810.8,
+        843.905
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            989
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            680
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        843.905,
+        1455.24,
+        861.361
+      ],
+      "expected": "CV-HHW-BP-T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-HHW-BP-T",
+          "word_ids": [
+            990
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-HHW-BP-T",
+          "word_ids": [
+            1318
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        843.905,
+        1547.61,
+        861.361
+      ],
+      "expected": "HHW-BP-T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHW-BP-T",
+          "word_ids": [
+            991
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHW-BP-T",
+          "word_ids": [
+            1319
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        843.905,
+        1608.32,
+        861.361
+      ],
+      "expected": "8.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8.1",
+          "word_ids": [
+            992
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8.1",
+          "word_ids": [
+            1320
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        843.905,
+        1654.32,
+        861.361
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            993
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1321
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        843.905,
+        1742.28,
+        861.361
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            994
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1322
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        843.905,
+        1769.808,
+        861.361
+      ],
+      "expected": "3.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.6",
+          "word_ids": [
+            995
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.6",
+          "word_ids": [
+            681
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        843.905,
+        1810.8,
+        861.361
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            996
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            682
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        861.361,
+        1455.24,
+        878.64
+      ],
+      "expected": "DOAH-T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH-T1",
+          "word_ids": [
+            997
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH-T1",
+          "word_ids": [
+            1323
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        861.361,
+        1547.61,
+        878.64
+      ],
+      "expected": "DOAH-T1-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH-T1-HHW",
+          "word_ids": [
+            998
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH-T1-HHW",
+          "word_ids": [
+            1324
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        861.361,
+        1608.32,
+        878.64
+      ],
+      "expected": "2.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.6",
+          "word_ids": [
+            999
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.6",
+          "word_ids": [
+            1325
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        861.361,
+        1654.32,
+        878.64
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1000
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1326
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        861.361,
+        1742.28,
+        878.64
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1001
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1327
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        861.361,
+        1769.808,
+        878.64
+      ],
+      "expected": "1.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            1002
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            683
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        861.361,
+        1810.8,
+        878.64
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1003
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            684
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        878.64,
+        1455.24,
+        895.777
+      ],
+      "expected": "FCU-T2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T2",
+          "word_ids": [
+            1004
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T2",
+          "word_ids": [
+            1328
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        878.64,
+        1547.61,
+        895.777
+      ],
+      "expected": "FCU-T2-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T2-HHW",
+          "word_ids": [
+            1005
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T2-HHW",
+          "word_ids": [
+            1329
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        878.64,
+        1608.32,
+        895.777
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1006
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1330
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        878.64,
+        1654.32,
+        895.777
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1007
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1331
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        878.64,
+        1742.28,
+        895.777
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1008
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1332
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        878.64,
+        1769.808,
+        895.777
+      ],
+      "expected": "0.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.2",
+          "word_ids": [
+            1009
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.2",
+          "word_ids": [
+            685
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        878.64,
+        1810.8,
+        895.777
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1010
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            686
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        895.777,
+        1455.24,
+        913.08
+      ],
+      "expected": "FCU-T3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T3",
+          "word_ids": [
+            1011
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T3",
+          "word_ids": [
+            1333
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        895.777,
+        1547.61,
+        913.08
+      ],
+      "expected": "FCU-T3-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T3-HHW",
+          "word_ids": [
+            1012
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T3-HHW",
+          "word_ids": [
+            1334
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        895.777,
+        1608.32,
+        913.08
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1013
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1335
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        895.777,
+        1654.32,
+        913.08
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1014
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1336
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        895.777,
+        1742.28,
+        913.08
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1015
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1337
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        895.777,
+        1769.808,
+        913.08
+      ],
+      "expected": "0.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.2",
+          "word_ids": [
+            1016
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.2",
+          "word_ids": [
+            687
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        895.777,
+        1810.8,
+        913.08
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1017
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            688
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        913.08,
+        1455.24,
+        930.36
+      ],
+      "expected": "FCU-T4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T4",
+          "word_ids": [
+            1018
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T4",
+          "word_ids": [
+            1338
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        913.08,
+        1547.61,
+        930.36
+      ],
+      "expected": "FCU-T4-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T4-HHW",
+          "word_ids": [
+            1019
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T4-HHW",
+          "word_ids": [
+            1339
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        913.08,
+        1608.32,
+        930.36
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1020
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1340
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        913.08,
+        1654.32,
+        930.36
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1021
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1341
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        913.08,
+        1742.28,
+        930.36
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1022
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1342
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        913.08,
+        1769.808,
+        930.36
+      ],
+      "expected": "0.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.2",
+          "word_ids": [
+            1023
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.2",
+          "word_ids": [
+            689
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        913.08,
+        1810.8,
+        930.36
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1024
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            690
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        930.36,
+        1455.24,
+        947.6
+      ],
+      "expected": "FCU-T6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T6",
+          "word_ids": [
+            1025
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T6",
+          "word_ids": [
+            1343
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        930.36,
+        1547.61,
+        947.6
+      ],
+      "expected": "FCU-T6-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T6-HHW",
+          "word_ids": [
+            1026
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T6-HHW",
+          "word_ids": [
+            1344
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        930.36,
+        1608.32,
+        947.6
+      ],
+      "expected": "1.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            1027
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            1345
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        930.36,
+        1654.32,
+        947.6
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1028
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1346
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        930.36,
+        1742.28,
+        947.6
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1029
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1347
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        930.36,
+        1769.808,
+        947.6
+      ],
+      "expected": "0.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            1030
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            691
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        930.36,
+        1810.8,
+        947.6
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1031
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            692
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        947.6,
+        1455.24,
+        964.22
+      ],
+      "expected": "FCU-T7A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T7A",
+          "word_ids": [
+            1032
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T7A",
+          "word_ids": [
+            1348
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        947.6,
+        1547.61,
+        964.22
+      ],
+      "expected": "FCU-T7A-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T7A-HHW",
+          "word_ids": [
+            1033
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T7A-HHW",
+          "word_ids": [
+            1349
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        947.6,
+        1608.32,
+        964.22
+      ],
+      "expected": "3.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.2",
+          "word_ids": [
+            1034
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.2",
+          "word_ids": [
+            1350
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        947.6,
+        1654.32,
+        964.22
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1035
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1351
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        947.6,
+        1742.28,
+        964.22
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1036
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1352
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        947.6,
+        1769.808,
+        964.22
+      ],
+      "expected": "1.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            1037
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            693
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        947.6,
+        1810.8,
+        964.22
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1038
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            694
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        964.22,
+        1455.24,
+        981.698
+      ],
+      "expected": "FCU-T7B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T7B",
+          "word_ids": [
+            1039
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T7B",
+          "word_ids": [
+            1353
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        964.22,
+        1547.61,
+        981.698
+      ],
+      "expected": "FCU-T7B-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T7B-HHW",
+          "word_ids": [
+            1040
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T7B-HHW",
+          "word_ids": [
+            1354
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        964.22,
+        1608.32,
+        981.698
+      ],
+      "expected": "3.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.2",
+          "word_ids": [
+            1041
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.2",
+          "word_ids": [
+            1355
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        964.22,
+        1654.32,
+        981.698
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1042
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1356
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        964.22,
+        1742.28,
+        981.698
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1043
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1357
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        964.22,
+        1769.808,
+        981.698
+      ],
+      "expected": "1.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            1044
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.4",
+          "word_ids": [
+            695
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        964.22,
+        1810.8,
+        981.698
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1045
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            696
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        981.698,
+        1455.24,
+        999.064
+      ],
+      "expected": "FCU-T8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T8",
+          "word_ids": [
+            1046
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T8",
+          "word_ids": [
+            1358
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        981.698,
+        1547.61,
+        999.064
+      ],
+      "expected": "FCU-T8-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T8-HHW",
+          "word_ids": [
+            1047
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T8-HHW",
+          "word_ids": [
+            1359
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        981.698,
+        1608.32,
+        999.064
+      ],
+      "expected": "0.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            1048
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            1360
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        981.698,
+        1654.32,
+        999.064
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1049
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1361
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        981.698,
+        1742.28,
+        999.064
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1050
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1362
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        981.698,
+        1769.808,
+        999.064
+      ],
+      "expected": "0.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.3",
+          "word_ids": [
+            1051
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.3",
+          "word_ids": [
+            697
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        981.698,
+        1810.8,
+        999.064
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1052
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            698
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        999.064,
+        1455.24,
+        1016.392
+      ],
+      "expected": "FCU-T9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T9",
+          "word_ids": [
+            1053
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T9",
+          "word_ids": [
+            1363
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        999.064,
+        1547.61,
+        1016.392
+      ],
+      "expected": "FCU-T9-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T9-HHW",
+          "word_ids": [
+            1054
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T9-HHW",
+          "word_ids": [
+            1364
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        999.064,
+        1608.32,
+        1016.392
+      ],
+      "expected": "0.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            1055
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            1365
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        999.064,
+        1654.32,
+        1016.392
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1056
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1366
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        999.064,
+        1742.28,
+        1016.392
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1057
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1367
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        999.064,
+        1769.808,
+        1016.392
+      ],
+      "expected": "0.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.3",
+          "word_ids": [
+            1058
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.3",
+          "word_ids": [
+            699
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        999.064,
+        1810.8,
+        1016.392
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1059
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            700
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        1016.392,
+        1455.24,
+        1033.648
+      ],
+      "expected": "FCU-T10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T10",
+          "word_ids": [
+            1060
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T10",
+          "word_ids": [
+            1368
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        1016.392,
+        1547.61,
+        1033.648
+      ],
+      "expected": "FCU-T10-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T10-HHW",
+          "word_ids": [
+            1061
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T10-HHW",
+          "word_ids": [
+            1369
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        1016.392,
+        1608.32,
+        1033.648
+      ],
+      "expected": "0.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            1062
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            1370
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        1016.392,
+        1654.32,
+        1033.648
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1063
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1371
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        1016.392,
+        1742.28,
+        1033.648
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1064
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1372
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        1016.392,
+        1769.808,
+        1033.648
+      ],
+      "expected": "0.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.3",
+          "word_ids": [
+            1065
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.3",
+          "word_ids": [
+            701
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        1016.392,
+        1810.8,
+        1033.648
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1066
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            702
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        1033.648,
+        1455.24,
+        1050.976
+      ],
+      "expected": "FCU-T11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T11",
+          "word_ids": [
+            1067
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T11",
+          "word_ids": [
+            1373
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        1033.648,
+        1547.61,
+        1050.976
+      ],
+      "expected": "FCU-T11-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T11-HHW",
+          "word_ids": [
+            1068
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T11-HHW",
+          "word_ids": [
+            1374
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        1033.648,
+        1608.32,
+        1050.976
+      ],
+      "expected": "0.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            1069
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            1375
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        1033.648,
+        1654.32,
+        1050.976
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1070
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1376
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        1033.648,
+        1742.28,
+        1050.976
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1071
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1377
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        1033.648,
+        1769.808,
+        1050.976
+      ],
+      "expected": "0.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.3",
+          "word_ids": [
+            1072
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.3",
+          "word_ids": [
+            703
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        1033.648,
+        1810.8,
+        1050.976
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1073
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            704
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        1050.976,
+        1455.24,
+        1068.192
+      ],
+      "expected": "FCU-T12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T12",
+          "word_ids": [
+            1074
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T12",
+          "word_ids": [
+            1378
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        1050.976,
+        1547.61,
+        1068.192
+      ],
+      "expected": "FCU-T12-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T12-HHW",
+          "word_ids": [
+            1075
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T12-HHW",
+          "word_ids": [
+            1379
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        1050.976,
+        1608.32,
+        1068.192
+      ],
+      "expected": "1.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.7",
+          "word_ids": [
+            1076
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.7",
+          "word_ids": [
+            1380
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        1050.976,
+        1654.32,
+        1068.192
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1077
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1381
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        1050.976,
+        1742.28,
+        1068.192
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1078
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1382
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        1050.976,
+        1769.808,
+        1068.192
+      ],
+      "expected": "0.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.8",
+          "word_ids": [
+            1079
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.8",
+          "word_ids": [
+            705
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        1050.976,
+        1810.8,
+        1068.192
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1080
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            706
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        1068.192,
+        1455.24,
+        1085.44
+      ],
+      "expected": "FCU-T13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T13",
+          "word_ids": [
+            1081
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T13",
+          "word_ids": [
+            1383
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        1068.192,
+        1547.61,
+        1085.44
+      ],
+      "expected": "FCU-T13-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T13-HHW",
+          "word_ids": [
+            1082
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T13-HHW",
+          "word_ids": [
+            1384
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        1068.192,
+        1608.32,
+        1085.44
+      ],
+      "expected": "0.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            1083
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            1385
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        1068.192,
+        1654.32,
+        1085.44
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1084
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1386
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        1068.192,
+        1742.28,
+        1085.44
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1085
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1387
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        1068.192,
+        1769.808,
+        1085.44
+      ],
+      "expected": "0.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.3",
+          "word_ids": [
+            1086
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.3",
+          "word_ids": [
+            707
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        1068.192,
+        1810.8,
+        1085.44
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1087
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            708
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        1085.44,
+        1455.24,
+        1102.768
+      ],
+      "expected": "FCU-T14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T14",
+          "word_ids": [
+            1088
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T14",
+          "word_ids": [
+            1388
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        1085.44,
+        1547.61,
+        1102.768
+      ],
+      "expected": "FCU-T14-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T14-HHW",
+          "word_ids": [
+            1089
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T14-HHW",
+          "word_ids": [
+            1389
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        1085.44,
+        1608.32,
+        1102.768
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1090
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1390
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        1085.44,
+        1654.32,
+        1102.768
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1091
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1391
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        1085.44,
+        1742.28,
+        1102.768
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1092
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1392
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        1085.44,
+        1769.808,
+        1102.768
+      ],
+      "expected": "0.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.2",
+          "word_ids": [
+            1093
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.2",
+          "word_ids": [
+            709
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        1085.44,
+        1810.8,
+        1102.768
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1094
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            710
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        1102.768,
+        1455.24,
+        1119.938
+      ],
+      "expected": "FCU-T15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T15",
+          "word_ids": [
+            1095
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T15",
+          "word_ids": [
+            1393
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        1102.768,
+        1547.61,
+        1119.938
+      ],
+      "expected": "FCU-T15-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T15-HHW",
+          "word_ids": [
+            1096
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T15-HHW",
+          "word_ids": [
+            1394
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        1102.768,
+        1608.32,
+        1119.938
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1097
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1395
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        1102.768,
+        1654.32,
+        1119.938
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1098
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1396
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        1102.768,
+        1742.28,
+        1119.938
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1099
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1397
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        1102.768,
+        1769.808,
+        1119.938
+      ],
+      "expected": "0.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.2",
+          "word_ids": [
+            1100
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.2",
+          "word_ids": [
+            711
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        1102.768,
+        1810.8,
+        1119.938
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1101
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            712
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        1119.938,
+        1455.24,
+        1138.034
+      ],
+      "expected": "FCU-T16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T16",
+          "word_ids": [
+            1102
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T16",
+          "word_ids": [
+            1398
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        1119.938,
+        1547.61,
+        1138.034
+      ],
+      "expected": "FCU-T16-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T16-HHW",
+          "word_ids": [
+            1103
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T16-HHW",
+          "word_ids": [
+            1399
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        1119.938,
+        1608.32,
+        1138.034
+      ],
+      "expected": "1.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.3",
+          "word_ids": [
+            1104
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.3",
+          "word_ids": [
+            1400
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        1119.938,
+        1654.32,
+        1138.034
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1105
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1401
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        1119.938,
+        1742.28,
+        1138.034
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1106
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1402
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        1119.938,
+        1769.808,
+        1138.034
+      ],
+      "expected": "0.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            1107
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            713
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        1119.938,
+        1810.8,
+        1138.034
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1108
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            714
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 22,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1369.32,
+        1138.034,
+        1455.24,
+        1168.98
+      ],
+      "expected": "HHWC-DOAH-T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHWC-DOAH-T1",
+          "word_ids": [
+            1109
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHWC-DOAH-T1",
+          "word_ids": [
+            1407
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 22,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1455.24,
+        1138.034,
+        1547.61,
+        1168.98
+      ],
+      "expected": "HHWC-DOAH-T1-HHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHWC-DOAH-T1- HHW",
+          "word_ids": [
+            1110,
+            1111
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHWC-DOAH-T1- HHW",
+          "word_ids": [
+            1403,
+            1408
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 22,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1547.61,
+        1138.034,
+        1608.32,
+        1168.98
+      ],
+      "expected": "1.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            1112
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            1404
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 22,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        1608.32,
+        1138.034,
+        1654.32,
+        1168.98
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1113
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1405
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 22,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        1654.32,
+        1138.034,
+        1742.28,
+        1168.98
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1114
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1406
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 22,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        1742.28,
+        1138.034,
+        1769.808,
+        1168.98
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1115
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            715
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "row": 22,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        1769.808,
+        1138.034,
+        1810.8,
+        1168.98
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1116
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            716
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "header": "HHW CONTROL VALVE SCHEDULE UNIT MARK VALVE MARK FLOWRATE GPM VALVE SIZE IN CONFIGURATION Cv NOTES",
+      "page": 49,
+      "bbox": [
+        1369,
+        713,
+        1811,
+        775
+      ],
+      "engine": "mupdf",
+      "actual": "HHW CONTROL VALVE SCHEDULE FLOWRATE VALVE UNIT MARK VALVE MARK (GPM) SIZE (IN) CONFIGURATION Cv NOTES",
+      "pass": true
+    },
+    {
+      "table": "ATCT-HHW-CONTROL-VALVE",
+      "header": "HHW CONTROL VALVE SCHEDULE UNIT MARK VALVE MARK FLOWRATE GPM VALVE SIZE IN CONFIGURATION Cv NOTES",
+      "page": 49,
+      "bbox": [
+        1369,
+        713,
+        1811,
+        775
+      ],
+      "engine": "poppler",
+      "actual": "HHW CONTROL VALVE SCHEDULE FLOWRATE VALVE UNIT MARK VALVE MARK (GPM) SIZE (IN) CONFIGURATION Cv NOTES",
+      "pass": true
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        775.065,
+        1892.64,
+        792.301
+      ],
+      "expected": "AHU-T1A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A",
+          "word_ids": [
+            1133
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A",
+          "word_ids": [
+            885
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        775.065,
+        1979.159,
+        792.301
+      ],
+      "expected": "AHU-T1A-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1A-CHW",
+          "word_ids": [
+            1134
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1A-CHW",
+          "word_ids": [
+            886
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        775.065,
+        2040.667,
+        792.301
+      ],
+      "expected": "32.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "32.0",
+          "word_ids": [
+            1135
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "32.0",
+          "word_ids": [
+            887
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        775.065,
+        2089.673,
+        792.301
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1136
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            888
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        775.065,
+        2177.165,
+        792.301
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1137
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            889
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        775.065,
+        2206.075,
+        792.301
+      ],
+      "expected": "14.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14.3",
+          "word_ids": [
+            1138
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14.3",
+          "word_ids": [
+            890
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        775.065,
+        2245.312,
+        792.301
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1139
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            891
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        792.301,
+        1892.64,
+        809.641
+      ],
+      "expected": "AHU-T1B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B",
+          "word_ids": [
+            1140
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B",
+          "word_ids": [
+            892
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        792.301,
+        1979.159,
+        809.641
+      ],
+      "expected": "AHU-T1B-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-T1B-CHW",
+          "word_ids": [
+            1141
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-T1B-CHW",
+          "word_ids": [
+            893
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        792.301,
+        2040.667,
+        809.641
+      ],
+      "expected": "32.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "32.0",
+          "word_ids": [
+            1142
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "32.0",
+          "word_ids": [
+            894
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        792.301,
+        2089.673,
+        809.641
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1143
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            895
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        792.301,
+        2177.165,
+        809.641
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1144
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            896
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        792.301,
+        2206.075,
+        809.641
+      ],
+      "expected": "14.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14.3",
+          "word_ids": [
+            1145
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14.3",
+          "word_ids": [
+            897
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        792.301,
+        2245.312,
+        809.641
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1146
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            898
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        809.641,
+        1892.64,
+        826.873
+      ],
+      "expected": "CRAH-T1A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CRAH-T1A",
+          "word_ids": [
+            1147
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CRAH-T1A",
+          "word_ids": [
+            899
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        809.641,
+        1979.159,
+        826.873
+      ],
+      "expected": "CRAH-T1A-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CRAH-T1A-CHW",
+          "word_ids": [
+            1148
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CRAH-T1A-CHW",
+          "word_ids": [
+            900
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        809.641,
+        2040.667,
+        826.873
+      ],
+      "expected": "27.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "27.0",
+          "word_ids": [
+            1149
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "27.0",
+          "word_ids": [
+            901
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        809.641,
+        2089.673,
+        826.873
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1150
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            902
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        809.641,
+        2177.165,
+        826.873
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1151
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            903
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        809.641,
+        2206.075,
+        826.873
+      ],
+      "expected": "12.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12.1",
+          "word_ids": [
+            1152
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12.1",
+          "word_ids": [
+            904
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        809.641,
+        2245.312,
+        826.873
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1153
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            905
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        826.873,
+        1892.64,
+        843.905
+      ],
+      "expected": "CRAH-T1B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CRAH-T1B",
+          "word_ids": [
+            1154
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CRAH-T1B",
+          "word_ids": [
+            906
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        826.873,
+        1979.159,
+        843.905
+      ],
+      "expected": "CRAH-T1B-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CRAH-T1B-CHW",
+          "word_ids": [
+            1155
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CRAH-T1B-CHW",
+          "word_ids": [
+            907
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        826.873,
+        2040.667,
+        843.905
+      ],
+      "expected": "27.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "27.0",
+          "word_ids": [
+            1156
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "27.0",
+          "word_ids": [
+            908
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        826.873,
+        2089.673,
+        843.905
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1157
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            909
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        826.873,
+        2177.165,
+        843.905
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1158
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            910
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        826.873,
+        2206.075,
+        843.905
+      ],
+      "expected": "12.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12.1",
+          "word_ids": [
+            1159
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12.1",
+          "word_ids": [
+            911
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        826.873,
+        2245.312,
+        843.905
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1160
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            912
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        843.905,
+        1892.64,
+        861.361
+      ],
+      "expected": "CV-CHW-BP-T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-CHW-BP-T",
+          "word_ids": [
+            1161
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-CHW-BP-T",
+          "word_ids": [
+            913
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        843.905,
+        1979.159,
+        861.361
+      ],
+      "expected": "CHW-BP-T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHW-BP-T",
+          "word_ids": [
+            1162
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHW-BP-T",
+          "word_ids": [
+            914
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        843.905,
+        2040.667,
+        861.361
+      ],
+      "expected": "38.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "38.8",
+          "word_ids": [
+            1163
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "38.8",
+          "word_ids": [
+            915
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        843.905,
+        2089.673,
+        861.361
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1164
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            916
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        843.905,
+        2177.165,
+        861.361
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1165
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            917
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        843.905,
+        2206.075,
+        861.361
+      ],
+      "expected": "17.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "17.3",
+          "word_ids": [
+            1166
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "17.3",
+          "word_ids": [
+            918
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        843.905,
+        2245.312,
+        861.361
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1167
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            919
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        861.361,
+        1892.64,
+        878.64
+      ],
+      "expected": "DOAH-T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH-T1",
+          "word_ids": [
+            1168
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH-T1",
+          "word_ids": [
+            920
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        861.361,
+        1979.159,
+        878.64
+      ],
+      "expected": "DOAH-T1-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH-T1-CHW",
+          "word_ids": [
+            1169
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH-T1-CHW",
+          "word_ids": [
+            921
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        861.361,
+        2040.667,
+        878.64
+      ],
+      "expected": "14.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14.8",
+          "word_ids": [
+            1170
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14.8",
+          "word_ids": [
+            922
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        861.361,
+        2089.673,
+        878.64
+      ],
+      "expected": "3/4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            1171
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3/4",
+          "word_ids": [
+            923
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        861.361,
+        2177.165,
+        878.64
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1172
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            924
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        861.361,
+        2206.075,
+        878.64
+      ],
+      "expected": "6.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6.6",
+          "word_ids": [
+            1173
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6.6",
+          "word_ids": [
+            925
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        861.361,
+        2245.312,
+        878.64
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1174
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            926
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        878.64,
+        1892.64,
+        895.777
+      ],
+      "expected": "FCU-T1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T1",
+          "word_ids": [
+            1175
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T1",
+          "word_ids": [
+            927
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        878.64,
+        1979.159,
+        895.777
+      ],
+      "expected": "FCU-T1-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T1-CHW",
+          "word_ids": [
+            1176
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T1-CHW",
+          "word_ids": [
+            928
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        878.64,
+        2040.667,
+        895.777
+      ],
+      "expected": "1.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            1177
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            929
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        878.64,
+        2089.673,
+        895.777
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1178
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            930
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        878.64,
+        2177.165,
+        895.777
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1179
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            931
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        878.64,
+        2206.075,
+        895.777
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1180
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            932
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        878.64,
+        2245.312,
+        895.777
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1181
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            933
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        895.777,
+        1892.64,
+        913.08
+      ],
+      "expected": "FCU-T2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T2",
+          "word_ids": [
+            1182
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T2",
+          "word_ids": [
+            934
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        895.777,
+        1979.159,
+        913.08
+      ],
+      "expected": "FCU-T2-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T2-CHW",
+          "word_ids": [
+            1183
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T2-CHW",
+          "word_ids": [
+            935
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        895.777,
+        2040.667,
+        913.08
+      ],
+      "expected": "0.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.9",
+          "word_ids": [
+            1184
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.9",
+          "word_ids": [
+            936
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        895.777,
+        2089.673,
+        913.08
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1185
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            937
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        895.777,
+        2177.165,
+        913.08
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1186
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            938
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        895.777,
+        2206.075,
+        913.08
+      ],
+      "expected": "0.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            1187
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            939
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        895.777,
+        2245.312,
+        913.08
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1188
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            940
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        913.08,
+        1892.64,
+        930.36
+      ],
+      "expected": "FCU-T3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T3",
+          "word_ids": [
+            1189
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T3",
+          "word_ids": [
+            941
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        913.08,
+        1979.159,
+        930.36
+      ],
+      "expected": "FCU-T3-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T3-CHW",
+          "word_ids": [
+            1190
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T3-CHW",
+          "word_ids": [
+            942
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        913.08,
+        2040.667,
+        930.36
+      ],
+      "expected": "0.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.9",
+          "word_ids": [
+            1191
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.9",
+          "word_ids": [
+            943
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        913.08,
+        2089.673,
+        930.36
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1192
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            944
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        913.08,
+        2177.165,
+        930.36
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1193
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            945
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        913.08,
+        2206.075,
+        930.36
+      ],
+      "expected": "0.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            1194
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            946
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        913.08,
+        2245.312,
+        930.36
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1195
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            947
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        930.36,
+        1892.64,
+        947.6
+      ],
+      "expected": "FCU-T4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T4",
+          "word_ids": [
+            1196
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T4",
+          "word_ids": [
+            948
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        930.36,
+        1979.159,
+        947.6
+      ],
+      "expected": "FCU-T4-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T4-CHW",
+          "word_ids": [
+            1197
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T4-CHW",
+          "word_ids": [
+            949
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        930.36,
+        2040.667,
+        947.6
+      ],
+      "expected": "0.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.9",
+          "word_ids": [
+            1198
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.9",
+          "word_ids": [
+            950
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        930.36,
+        2089.673,
+        947.6
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1199
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            951
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        930.36,
+        2177.165,
+        947.6
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1200
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            952
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        930.36,
+        2206.075,
+        947.6
+      ],
+      "expected": "0.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            1201
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            953
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        930.36,
+        2245.312,
+        947.6
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1202
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            954
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        947.6,
+        1892.64,
+        964.22
+      ],
+      "expected": "FCU-T5A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T5A",
+          "word_ids": [
+            1203
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T5A",
+          "word_ids": [
+            955
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        947.6,
+        1979.159,
+        964.22
+      ],
+      "expected": "FCU-T5A-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T5A-CHW",
+          "word_ids": [
+            1204
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T5A-CHW",
+          "word_ids": [
+            956
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        947.6,
+        2040.667,
+        964.22
+      ],
+      "expected": "6.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6.7",
+          "word_ids": [
+            1205
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6.7",
+          "word_ids": [
+            957
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        947.6,
+        2089.673,
+        964.22
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1206
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            958
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        947.6,
+        2177.165,
+        964.22
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1207
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            959
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        947.6,
+        2206.075,
+        964.22
+      ],
+      "expected": "3.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.0",
+          "word_ids": [
+            1208
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.0",
+          "word_ids": [
+            960
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        947.6,
+        2245.312,
+        964.22
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1209
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            961
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        964.22,
+        1892.64,
+        981.698
+      ],
+      "expected": "FCU-T5B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T5B",
+          "word_ids": [
+            1210
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T5B",
+          "word_ids": [
+            962
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        964.22,
+        1979.159,
+        981.698
+      ],
+      "expected": "FCU-T5B-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T5B-CHW",
+          "word_ids": [
+            1211
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T5B-CHW",
+          "word_ids": [
+            963
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        964.22,
+        2040.667,
+        981.698
+      ],
+      "expected": "6.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6.7",
+          "word_ids": [
+            1212
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6.7",
+          "word_ids": [
+            964
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        964.22,
+        2089.673,
+        981.698
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1213
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            965
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        964.22,
+        2177.165,
+        981.698
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1214
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            966
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        964.22,
+        2206.075,
+        981.698
+      ],
+      "expected": "3.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.0",
+          "word_ids": [
+            1215
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.0",
+          "word_ids": [
+            967
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        964.22,
+        2245.312,
+        981.698
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1216
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            968
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        981.698,
+        1892.64,
+        999.064
+      ],
+      "expected": "FCU-T6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T6",
+          "word_ids": [
+            1217
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T6",
+          "word_ids": [
+            969
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        981.698,
+        1979.159,
+        999.064
+      ],
+      "expected": "FCU-T6-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T6-CHW",
+          "word_ids": [
+            1218
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T6-CHW",
+          "word_ids": [
+            970
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        981.698,
+        2040.667,
+        999.064
+      ],
+      "expected": "5.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.5",
+          "word_ids": [
+            1219
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.5",
+          "word_ids": [
+            971
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        981.698,
+        2089.673,
+        999.064
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1220
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            972
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        981.698,
+        2177.165,
+        999.064
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1221
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            973
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        981.698,
+        2206.075,
+        999.064
+      ],
+      "expected": "2.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            1222
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            974
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        981.698,
+        2245.312,
+        999.064
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1223
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            975
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        999.064,
+        1892.64,
+        1016.392
+      ],
+      "expected": "FCU-T7A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T7A",
+          "word_ids": [
+            1224
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T7A",
+          "word_ids": [
+            976
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        999.064,
+        1979.159,
+        1016.392
+      ],
+      "expected": "FCU-T7A-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T7A-CHW",
+          "word_ids": [
+            1225
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T7A-CHW",
+          "word_ids": [
+            977
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        999.064,
+        2040.667,
+        1016.392
+      ],
+      "expected": "10.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.7",
+          "word_ids": [
+            1226
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.7",
+          "word_ids": [
+            978
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        999.064,
+        2089.673,
+        1016.392
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1227
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            979
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        999.064,
+        2177.165,
+        1016.392
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1228
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            980
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        999.064,
+        2206.075,
+        1016.392
+      ],
+      "expected": "4.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4.8",
+          "word_ids": [
+            1229
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4.8",
+          "word_ids": [
+            981
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        999.064,
+        2245.312,
+        1016.392
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1230
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            982
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        1016.392,
+        1892.64,
+        1033.648
+      ],
+      "expected": "FCU-T7B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T7B",
+          "word_ids": [
+            1231
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T7B",
+          "word_ids": [
+            983
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        1016.392,
+        1979.159,
+        1033.648
+      ],
+      "expected": "FCU-T7B-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T7B-CHW",
+          "word_ids": [
+            1232
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T7B-CHW",
+          "word_ids": [
+            984
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        1016.392,
+        2040.667,
+        1033.648
+      ],
+      "expected": "10.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.7",
+          "word_ids": [
+            1233
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.7",
+          "word_ids": [
+            985
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        1016.392,
+        2089.673,
+        1033.648
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1234
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            986
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        1016.392,
+        2177.165,
+        1033.648
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1235
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            987
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        1016.392,
+        2206.075,
+        1033.648
+      ],
+      "expected": "4.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4.8",
+          "word_ids": [
+            1236
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4.8",
+          "word_ids": [
+            988
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        1016.392,
+        2245.312,
+        1033.648
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1237
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            989
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        1033.648,
+        1892.64,
+        1050.976
+      ],
+      "expected": "FCU-T8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T8",
+          "word_ids": [
+            1238
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T8",
+          "word_ids": [
+            990
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        1033.648,
+        1979.159,
+        1050.976
+      ],
+      "expected": "FCU-T8-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T8-CHW",
+          "word_ids": [
+            1239
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T8-CHW",
+          "word_ids": [
+            991
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        1033.648,
+        2040.667,
+        1050.976
+      ],
+      "expected": "1.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            1240
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            992
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        1033.648,
+        2089.673,
+        1050.976
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1241
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            993
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        1033.648,
+        2177.165,
+        1050.976
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1242
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            994
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        1033.648,
+        2206.075,
+        1050.976
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1243
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            995
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        1033.648,
+        2245.312,
+        1050.976
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1244
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            996
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        1050.976,
+        1892.64,
+        1068.192
+      ],
+      "expected": "FCU-T9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T9",
+          "word_ids": [
+            1245
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T9",
+          "word_ids": [
+            997
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        1050.976,
+        1979.159,
+        1068.192
+      ],
+      "expected": "FCU-9-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-9-CHW",
+          "word_ids": [
+            1246
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-9-CHW",
+          "word_ids": [
+            998
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        1050.976,
+        2040.667,
+        1068.192
+      ],
+      "expected": "1.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            1247
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            999
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        1050.976,
+        2089.673,
+        1068.192
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1248
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1000
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        1050.976,
+        2177.165,
+        1068.192
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1249
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1001
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        1050.976,
+        2206.075,
+        1068.192
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1250
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1002
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        1050.976,
+        2245.312,
+        1068.192
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1251
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1003
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        1068.192,
+        1892.64,
+        1085.44
+      ],
+      "expected": "FCU-T10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T10",
+          "word_ids": [
+            1252
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T10",
+          "word_ids": [
+            1004
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        1068.192,
+        1979.159,
+        1085.44
+      ],
+      "expected": "FCU-T10-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T10-CHW",
+          "word_ids": [
+            1253
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T10-CHW",
+          "word_ids": [
+            1005
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        1068.192,
+        2040.667,
+        1085.44
+      ],
+      "expected": "1.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            1254
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            1006
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        1068.192,
+        2089.673,
+        1085.44
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1255
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1007
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        1068.192,
+        2177.165,
+        1085.44
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1256
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1008
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        1068.192,
+        2206.075,
+        1085.44
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1257
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1009
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        1068.192,
+        2245.312,
+        1085.44
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1258
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1010
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        1085.44,
+        1892.64,
+        1102.768
+      ],
+      "expected": "FCU-T11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T11",
+          "word_ids": [
+            1259
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T11",
+          "word_ids": [
+            1011
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        1085.44,
+        1979.159,
+        1102.768
+      ],
+      "expected": "FCU-T11-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T11-CHW",
+          "word_ids": [
+            1260
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T11-CHW",
+          "word_ids": [
+            1012
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        1085.44,
+        2040.667,
+        1102.768
+      ],
+      "expected": "1.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            1261
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            1013
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        1085.44,
+        2089.673,
+        1102.768
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1262
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1014
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        1085.44,
+        2177.165,
+        1102.768
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1263
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1015
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        1085.44,
+        2206.075,
+        1102.768
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1264
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1016
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        1085.44,
+        2245.312,
+        1102.768
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1265
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1017
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        1102.768,
+        1892.64,
+        1119.938
+      ],
+      "expected": "FCU-T12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T12",
+          "word_ids": [
+            1266
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T12",
+          "word_ids": [
+            1018
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        1102.768,
+        1979.159,
+        1119.938
+      ],
+      "expected": "FCU-T12-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T12-CHW",
+          "word_ids": [
+            1267
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T12-CHW",
+          "word_ids": [
+            1019
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        1102.768,
+        2040.667,
+        1119.938
+      ],
+      "expected": "6.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6.7",
+          "word_ids": [
+            1268
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6.7",
+          "word_ids": [
+            1020
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        1102.768,
+        2089.673,
+        1119.938
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1269
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1021
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        1102.768,
+        2177.165,
+        1119.938
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1270
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1022
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        1102.768,
+        2206.075,
+        1119.938
+      ],
+      "expected": "3.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.0",
+          "word_ids": [
+            1271
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.0",
+          "word_ids": [
+            1023
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        1102.768,
+        2245.312,
+        1119.938
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1272
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1024
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        1119.938,
+        1892.64,
+        1138.034
+      ],
+      "expected": "FCU-T13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T13",
+          "word_ids": [
+            1273
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T13",
+          "word_ids": [
+            1025
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        1119.938,
+        1979.159,
+        1138.034
+      ],
+      "expected": "FCU-T13-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T13-CHW",
+          "word_ids": [
+            1274
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T13-CHW",
+          "word_ids": [
+            1026
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        1119.938,
+        2040.667,
+        1138.034
+      ],
+      "expected": "2.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.2",
+          "word_ids": [
+            1275
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.2",
+          "word_ids": [
+            1027
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        1119.938,
+        2089.673,
+        1138.034
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1276
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1028
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        1119.938,
+        2177.165,
+        1138.034
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1277
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1029
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        1119.938,
+        2206.075,
+        1138.034
+      ],
+      "expected": "1.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            1278
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            1030
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        1119.938,
+        2245.312,
+        1138.034
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1279
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1031
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 22,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        1138.034,
+        1892.64,
+        1154.625
+      ],
+      "expected": "FCU-T14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T14",
+          "word_ids": [
+            1280
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T14",
+          "word_ids": [
+            1032
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 22,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        1138.034,
+        1979.159,
+        1154.625
+      ],
+      "expected": "FCU-T14-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T14-CHW",
+          "word_ids": [
+            1281
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T14-CHW",
+          "word_ids": [
+            1033
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 22,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        1138.034,
+        2040.667,
+        1154.625
+      ],
+      "expected": "1.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            1282
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            1034
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 22,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        1138.034,
+        2089.673,
+        1154.625
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1283
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1035
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 22,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        1138.034,
+        2177.165,
+        1154.625
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1284
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1036
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 22,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        1138.034,
+        2206.075,
+        1154.625
+      ],
+      "expected": "0.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            1285
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            1037
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 22,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        1138.034,
+        2245.312,
+        1154.625
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1286
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1038
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 23,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        1154.625,
+        1892.64,
+        1168.98
+      ],
+      "expected": "FCU-T15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T15",
+          "word_ids": [
+            1287
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T15",
+          "word_ids": [
+            1039
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 23,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        1154.625,
+        1979.159,
+        1168.98
+      ],
+      "expected": "FCU-T15-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T15-CHW",
+          "word_ids": [
+            1288
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T15-CHW",
+          "word_ids": [
+            1040
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 23,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        1154.625,
+        2040.667,
+        1168.98
+      ],
+      "expected": "1.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.5",
+          "word_ids": [
+            1289
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.5",
+          "word_ids": [
+            1041
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 23,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        1154.625,
+        2089.673,
+        1168.98
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1290
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1042
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 23,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        1154.625,
+        2177.165,
+        1168.98
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1291
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1043
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 23,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        1154.625,
+        2206.075,
+        1168.98
+      ],
+      "expected": "0.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.7",
+          "word_ids": [
+            1292
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.7",
+          "word_ids": [
+            1044
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 23,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        1154.625,
+        2245.312,
+        1168.98
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1293
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1045
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 24,
+      "column": "unit_mark",
+      "page": 49,
+      "bbox": [
+        1818.309,
+        1168.98,
+        1892.64,
+        1187.12
+      ],
+      "expected": "FCU-T16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T16",
+          "word_ids": [
+            1294
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T16",
+          "word_ids": [
+            1046
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 24,
+      "column": "valve_mark",
+      "page": 49,
+      "bbox": [
+        1892.64,
+        1168.98,
+        1979.159,
+        1187.12
+      ],
+      "expected": "FCU-T16-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-T16-CHW",
+          "word_ids": [
+            1295
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-T16-CHW",
+          "word_ids": [
+            1047
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 24,
+      "column": "flowrate_GPM",
+      "page": 49,
+      "bbox": [
+        1979.159,
+        1168.98,
+        2040.667,
+        1187.12
+      ],
+      "expected": "1.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            1296
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            1048
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 24,
+      "column": "valve_size_in",
+      "page": 49,
+      "bbox": [
+        2040.667,
+        1168.98,
+        2089.673,
+        1187.12
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1297
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1049
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 24,
+      "column": "configuration",
+      "page": 49,
+      "bbox": [
+        2089.673,
+        1168.98,
+        2177.165,
+        1187.12
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1298
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1050
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 24,
+      "column": "Cv",
+      "page": 49,
+      "bbox": [
+        2177.165,
+        1168.98,
+        2206.075,
+        1187.12
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1299
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1051
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "row": 24,
+      "column": "notes",
+      "page": 49,
+      "bbox": [
+        2206.075,
+        1168.98,
+        2245.312,
+        1187.12
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1300
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1052
+          ]
+        }
+      }
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "header": "CHW CONTROL VALVE SCHEDULE UNIT MARK VALVE MARK FLOWRATE GPM VALVE SIZE IN CONFIGURATION Cv NOTES",
+      "page": 49,
+      "bbox": [
+        1818,
+        713,
+        2246,
+        775
+      ],
+      "engine": "mupdf",
+      "actual": "CHW CONTROL VALVE SCHEDULE FLOWRATE VALVE UNIT MARK VALVE MARK (GPM) SIZE (IN) CONFIGURATION Cv NOTES",
+      "pass": true
+    },
+    {
+      "table": "ATCT-CHW-CONTROL-VALVE",
+      "header": "CHW CONTROL VALVE SCHEDULE UNIT MARK VALVE MARK FLOWRATE GPM VALVE SIZE IN CONFIGURATION Cv NOTES",
+      "page": 49,
+      "bbox": [
+        1818,
+        713,
+        2246,
+        775
+      ],
+      "engine": "poppler",
+      "actual": "CHW CONTROL VALVE SCHEDULE FLOWRATE VALVE UNIT MARK VALVE MARK (GPM) SIZE (IN) CONFIGURATION Cv NOTES",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "atct-hhw-control-valve-row-count",
+      "actual": 22,
+      "expected": 22,
+      "pass": true
+    },
+    {
+      "id": "atct-chw-control-valve-row-count",
+      "actual": 24,
+      "expected": 24,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

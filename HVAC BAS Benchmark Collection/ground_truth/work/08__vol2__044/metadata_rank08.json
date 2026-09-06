@@ -1,0 +1,290 @@
+{
+  "document_id": "08__vol2__044",
+  "module_role": "Project/title-block facts, sheet identifier ledger, scale boundary and complete visual-review disposition for all supplied source pages.",
+  "tables": [],
+  "project": {
+    "project_name_as_printed": "REPLACE MAIN BOILERS",
+    "project_number_as_printed": "528A8-17-805",
+    "facility_as_printed": "Samuel S. Stratton VA Medical Center, 113 Holland Ave., Albany, New York 12208",
+    "issue_as_printed": "100% CONSTRUCTION DOCUMENTS",
+    "issue_date_as_printed": "06/05/2024",
+    "assertion_ids": [
+      "rank08-project",
+      "rank08-number",
+      "rank08-issue",
+      "rank08-facility-line-1",
+      "rank08-facility-line-2",
+      "rank08-issue-date"
+    ]
+  },
+  "sheet_details": {
+    "sheet_ledger_semantics": "All 31 supplied PDF pages have a retained full-page Poppler render and a completed visual-review disposition. Sheet identifiers are transcribed from the reviewed drawing title blocks."
+  },
+  "scale_semantics": {
+    "takeoff_scale_status": "No global drawing scale is asserted. This set mixes schematics, schedules, controls diagrams, details and plan-like sheets; no local scale is promoted into a document-wide quantity conversion.",
+    "printed_local_view_scales_observed": [],
+    "boundary": "Schedule and schematic facts are retained as text/table source facts, not as distance-based takeoff quantities."
+  },
+  "visual_review_pages": [
+    {
+      "page": 1,
+      "sheet": "ID-101",
+      "render": "reviews/08__vol2__044/p1-p1-full-poppler.png",
+      "finding": "Source mechanical/controls drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 2,
+      "sheet": "ID-102",
+      "render": "reviews/08__vol2__044/p2-p2-full-poppler.png",
+      "finding": "Source mechanical/controls drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 3,
+      "sheet": "ID-201",
+      "render": "reviews/08__vol2__044/p3-p3-full-poppler.png",
+      "finding": "Source mechanical/controls drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 4,
+      "sheet": "ID-202",
+      "render": "reviews/08__vol2__044/p4-p4-full-poppler.png",
+      "finding": "Source mechanical/controls drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 5,
+      "sheet": "ID-301",
+      "render": "reviews/08__vol2__044/p5-p5-full-poppler.png",
+      "finding": "Source mechanical/controls drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 6,
+      "sheet": "ID-302",
+      "render": "reviews/08__vol2__044/p6-p6-full-poppler.png",
+      "finding": "Source mechanical/controls drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 7,
+      "sheet": "MI-101",
+      "render": "reviews/08__vol2__044/p7-p7-full-poppler.png",
+      "finding": "Mechanical drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 8,
+      "sheet": "MI-102",
+      "render": "reviews/08__vol2__044/p8-p8-full-poppler.png",
+      "finding": "Mechanical drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 9,
+      "sheet": "MI-201",
+      "render": "reviews/08__vol2__044/p9-p9-full-poppler.png",
+      "finding": "Mechanical drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 10,
+      "sheet": "MI-202",
+      "render": "reviews/08__vol2__044/p10-p10-full-poppler.png",
+      "finding": "Mechanical drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 11,
+      "sheet": "MI-301",
+      "render": "reviews/08__vol2__044/p11-p11-full-poppler.png",
+      "finding": "Mechanical drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 12,
+      "sheet": "MI-302",
+      "render": "reviews/08__vol2__044/p12-p12-full-poppler.png",
+      "finding": "Mechanical drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 13,
+      "sheet": "MI-303",
+      "render": "reviews/08__vol2__044/p13-p13-full-poppler.png",
+      "finding": "Mechanical drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 14,
+      "sheet": "MI-401",
+      "render": "reviews/08__vol2__044/p14-p14-full-poppler.png",
+      "finding": "Mechanical detail/installation drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 15,
+      "sheet": "MI-402",
+      "render": "reviews/08__vol2__044/p15-p15-full-poppler.png",
+      "finding": "Mechanical detail/installation drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 16,
+      "sheet": "MI-403",
+      "render": "reviews/08__vol2__044/p16-p16-full-poppler.png",
+      "finding": "Mechanical detail/installation drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 17,
+      "sheet": "MI-404",
+      "render": "reviews/08__vol2__044/p17-p17-full-poppler.png",
+      "finding": "Mechanical detail/installation drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 18,
+      "sheet": "MI-405",
+      "render": "reviews/08__vol2__044/p18-p18-full-poppler.png",
+      "finding": "Mechanical detail/installation drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 19,
+      "sheet": "MI-406",
+      "render": "reviews/08__vol2__044/p19-p19-full-poppler.png",
+      "finding": "Mechanical detail and sequence drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 20,
+      "sheet": "MI-407",
+      "render": "reviews/08__vol2__044/p20-p20-full-poppler.png",
+      "finding": "Mechanical detail and sequence drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 21,
+      "sheet": "MI-501",
+      "render": "reviews/08__vol2__044/p21-p21-full-poppler.png",
+      "finding": "Mechanical schedules reviewed: boilers, fans, pumps, fuel-oil pumps and unit heaters."
+    },
+    {
+      "page": 22,
+      "sheet": "MI-502",
+      "render": "reviews/08__vol2__044/p22-p22-full-poppler.png",
+      "finding": "Mechanical schedules reviewed: storage/deaerator/blowdown tanks, chemical feed, economizers, louvers and AC equipment."
+    },
+    {
+      "page": 23,
+      "sheet": "MI-503",
+      "render": "reviews/08__vol2__044/p23-p23-full-poppler.png",
+      "finding": "High-value boiler-plant schedules reviewed and nine selected schedule tables captured in the literal schedule module."
+    },
+    {
+      "page": 24,
+      "sheet": "MI-504",
+      "render": "reviews/08__vol2__044/p24-p24-full-poppler.png",
+      "finding": "High-value isolation, fuel-oil, day-tank and condensate-pump schedules reviewed and captured in the literal schedule module."
+    },
+    {
+      "page": 25,
+      "sheet": "MI-601",
+      "render": "reviews/08__vol2__044/p25-p25-full-poppler.png",
+      "finding": "Mechanical controls drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 26,
+      "sheet": "MI-602",
+      "render": "reviews/08__vol2__044/p26-p26-full-poppler.png",
+      "finding": "Mechanical controls drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 27,
+      "sheet": "MI-603",
+      "render": "reviews/08__vol2__044/p27-p27-full-poppler.png",
+      "finding": "Mechanical controls drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 28,
+      "sheet": "MI-604",
+      "render": "reviews/08__vol2__044/p28-p28-full-poppler.png",
+      "finding": "Mechanical controls drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 29,
+      "sheet": "MI-605",
+      "render": "reviews/08__vol2__044/p29-p29-full-poppler.png",
+      "finding": "Fuel-oil system control diagram, sequence and 33-row BACnet point list fully reviewed and captured."
+    },
+    {
+      "page": 30,
+      "sheet": "MI-606",
+      "render": "reviews/08__vol2__044/p30-p30-full-poppler.png",
+      "finding": "Mechanical controls drawing reviewed; retained as visual context."
+    },
+    {
+      "page": 31,
+      "sheet": "MI-607",
+      "render": "reviews/08__vol2__044/p31-p31-full-poppler.png",
+      "finding": "Packaged domestic-water-heater diagram, integration notes and 63-row BACnet object list fully reviewed and captured."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "rank08-project",
+      "page": 29,
+      "bbox": [
+        2530,
+        1918,
+        2740,
+        1950
+      ],
+      "expected": "REPLACE MAIN BOILERS",
+      "mode": "exact"
+    },
+    {
+      "id": "rank08-number",
+      "page": 29,
+      "bbox": [
+        2820,
+        1918,
+        2940,
+        1950
+      ],
+      "expected": "528A8-17-805",
+      "mode": "exact"
+    },
+    {
+      "id": "rank08-issue",
+      "page": 29,
+      "bbox": [
+        2250,
+        1918,
+        2460,
+        1965
+      ],
+      "expected": "100% CONSTRUCTION DOCUMENTS",
+      "mode": "exact"
+    },
+    {
+      "id": "rank08-facility-line-1",
+      "page": 29,
+      "bbox": [
+        2530,
+        2000,
+        2795,
+        2018
+      ],
+      "expected": "Samuel S. Stratton VA Medical Center, 113 Holland Ave.,",
+      "mode": "exact"
+    },
+    {
+      "id": "rank08-facility-line-2",
+      "page": 29,
+      "bbox": [
+        2530,
+        2010,
+        2660,
+        2030
+      ],
+      "expected": "Albany, New York 12208",
+      "mode": "exact"
+    },
+    {
+      "id": "rank08-issue-date",
+      "page": 29,
+      "bbox": [
+        2530,
+        2048,
+        2600,
+        2070
+      ],
+      "expected": "06/05/2024",
+      "mode": "exact"
+    }
+  ]
+}

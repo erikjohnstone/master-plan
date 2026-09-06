@@ -1,0 +1,6679 @@
+{
+  "document_id": "12__vol2__028",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "annotation_sha256": "83e25102e90f6e7ffcfa714c6da6299d8ae753c4bf45c1545e0dd92286368fc8",
+  "tables": 1,
+  "rows": 34,
+  "cell_assertions": 238,
+  "text_assertions": 1,
+  "checks": [
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 1,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        705,
+        1540,
+        726
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            74
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            171
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 1,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        705,
+        1870,
+        726
+      ],
+      "expected": "BOILER 1 STATUS*",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BOILER 1 STATUS*",
+          "word_ids": [
+            113,
+            114,
+            115
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BOILER 1 STATUS*",
+          "word_ids": [
+            205,
+            206,
+            207
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 1,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        705,
+        1910,
+        726
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 1,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        705,
+        1955,
+        726
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 1,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        705,
+        2000,
+        726
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            97
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            333
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 1,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        705,
+        2040,
+        726
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 1,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        705,
+        2100,
+        726
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 2,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        726,
+        1540,
+        746
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            80
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            172
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 2,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        726,
+        1870,
+        746
+      ],
+      "expected": "BOILER 1 ON/OFF*",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BOILER 1 ON/OFF*",
+          "word_ids": [
+            103,
+            104,
+            105
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BOILER 1 ON/OFF*",
+          "word_ids": [
+            208,
+            209,
+            210
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 2,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        726,
+        1910,
+        746
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 2,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        726,
+        1955,
+        746
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 2,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        726,
+        2000,
+        746
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 2,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        726,
+        2040,
+        746
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            96
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            334
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 2,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        726,
+        2100,
+        746
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 3,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        746,
+        1540,
+        766
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            81
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            173
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 3,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        746,
+        1870,
+        766
+      ],
+      "expected": "BOILER 1 FAILURE*",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BOILER 1 FAILURE*",
+          "word_ids": [
+            93,
+            94,
+            95
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BOILER 1 FAILURE*",
+          "word_ids": [
+            211,
+            212,
+            213
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 3,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        746,
+        1910,
+        766
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 3,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        746,
+        1955,
+        766
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 3,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        746,
+        2000,
+        766
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 3,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        746,
+        2040,
+        766
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 3,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        746,
+        2100,
+        766
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            98
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            335
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 4,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        766,
+        1540,
+        786
+      ],
+      "expected": "4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            82
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            174
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 4,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        766,
+        1870,
+        786
+      ],
+      "expected": "BOILER 1 LOAD*",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BOILER 1 LOAD*",
+          "word_ids": [
+            116,
+            117,
+            118
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BOILER 1 LOAD*",
+          "word_ids": [
+            214,
+            215,
+            216
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 4,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        766,
+        1910,
+        786
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            112
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            336
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 4,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        766,
+        1955,
+        786
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 4,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        766,
+        2000,
+        786
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 4,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        766,
+        2040,
+        786
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 4,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        766,
+        2100,
+        786
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 5,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        786,
+        1540,
+        806
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            83
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            175
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 5,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        786,
+        1870,
+        806
+      ],
+      "expected": "HWP PRESSURE DROP ACROSS BOILER 1*",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP PRESSURE DROP ACROSS BOILER 1*",
+          "word_ids": [
+            142,
+            143,
+            144,
+            145,
+            146,
+            147
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP PRESSURE DROP ACROSS BOILER 1*",
+          "word_ids": [
+            217,
+            218,
+            219,
+            220,
+            221,
+            222
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 5,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        786,
+        1910,
+        806
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            270
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            337
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 5,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        786,
+        1955,
+        806
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 5,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        786,
+        2000,
+        806
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 5,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        786,
+        2040,
+        806
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 5,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        786,
+        2100,
+        806
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 6,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        806,
+        1540,
+        826
+      ],
+      "expected": "6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            84
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            176
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 6,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        806,
+        1870,
+        826
+      ],
+      "expected": "BOILER 1 PROOF OF FLOW*",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BOILER 1 PROOF OF FLOW*",
+          "word_ids": [
+            165,
+            166,
+            167,
+            168,
+            169
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BOILER 1 PROOF OF FLOW*",
+          "word_ids": [
+            223,
+            224,
+            225,
+            226,
+            227
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 6,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        806,
+        1910,
+        826
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 6,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        806,
+        1955,
+        826
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 6,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        806,
+        2000,
+        826
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            269
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            338
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 6,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        806,
+        2040,
+        826
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 6,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        806,
+        2100,
+        826
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            410
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            339
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 7,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        826,
+        1540,
+        846
+      ],
+      "expected": "7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "7",
+          "word_ids": [
+            85
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "7",
+          "word_ids": [
+            177
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 7,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        826,
+        1870,
+        846
+      ],
+      "expected": "BOILER 1 LOW WATER FLOW ALARM*",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BOILER 1 LOW WATER FLOW ALARM*",
+          "word_ids": [
+            148,
+            149,
+            150,
+            151,
+            152,
+            153
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BOILER 1 LOW WATER FLOW ALARM*",
+          "word_ids": [
+            228,
+            229,
+            230,
+            231,
+            232,
+            233
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 7,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        826,
+        1910,
+        846
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 7,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        826,
+        1955,
+        846
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 7,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        826,
+        2000,
+        846
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 7,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        826,
+        2040,
+        846
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 7,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        826,
+        2100,
+        846
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            268
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            340
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 8,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        846,
+        1540,
+        865
+      ],
+      "expected": "8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            86
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            178
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 8,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        846,
+        1870,
+        865
+      ],
+      "expected": "BCP 1 STATUS VIA CT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BCP 1 STATUS VIA CT",
+          "word_ids": [
+            125,
+            126,
+            127,
+            128,
+            129
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BCP 1 STATUS VIA CT",
+          "word_ids": [
+            234,
+            235,
+            236,
+            237,
+            238
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 8,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        846,
+        1910,
+        865
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 8,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        846,
+        1955,
+        865
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 8,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        846,
+        2000,
+        865
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            263
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            341
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 8,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        846,
+        2040,
+        865
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 8,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        846,
+        2100,
+        865
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 9,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        865,
+        1540,
+        884
+      ],
+      "expected": "9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9",
+          "word_ids": [
+            87
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9",
+          "word_ids": [
+            179
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 9,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        865,
+        1870,
+        884
+      ],
+      "expected": "BCP 1 ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BCP 1 ON/OFF",
+          "word_ids": [
+            122,
+            123,
+            124
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BCP 1 ON/OFF",
+          "word_ids": [
+            239,
+            240,
+            241
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 9,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        865,
+        1910,
+        884
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 9,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        865,
+        1955,
+        884
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 9,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        865,
+        2000,
+        884
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 9,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        865,
+        2040,
+        884
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            262
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            342
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 9,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        865,
+        2100,
+        884
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 10,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        884,
+        1540,
+        903
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            88
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            180
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 10,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        884,
+        1870,
+        903
+      ],
+      "expected": "BCP 1 FAILURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BCP 1 FAILURE",
+          "word_ids": [
+            119,
+            120,
+            121
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BCP 1 FAILURE",
+          "word_ids": [
+            242,
+            243,
+            244
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 10,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        884,
+        1910,
+        903
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 10,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        884,
+        1955,
+        903
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 10,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        884,
+        2000,
+        903
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 10,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        884,
+        2040,
+        903
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 10,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        884,
+        2100,
+        903
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            264
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            343
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 11,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        903,
+        1540,
+        923
+      ],
+      "expected": "11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            89
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11",
+          "word_ids": [
+            181
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 11,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        903,
+        1870,
+        923
+      ],
+      "expected": "BCP 2 STATUS VIA CT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BCP 2 STATUS VIA CT",
+          "word_ids": [
+            212,
+            213,
+            214,
+            215,
+            216
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BCP 2 STATUS VIA CT",
+          "word_ids": [
+            245,
+            246,
+            247,
+            248,
+            249
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 11,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        903,
+        1910,
+        923
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 11,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        903,
+        1955,
+        923
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 11,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        903,
+        2000,
+        923
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            266
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            344
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 11,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        903,
+        2040,
+        923
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 11,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        903,
+        2100,
+        923
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 12,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        923,
+        1540,
+        942
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            90
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            182
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 12,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        923,
+        1870,
+        942
+      ],
+      "expected": "BCP 2 ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BCP 2 ON/OFF",
+          "word_ids": [
+            209,
+            210,
+            211
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BCP 2 ON/OFF",
+          "word_ids": [
+            250,
+            251,
+            252
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 12,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        923,
+        1910,
+        942
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 12,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        923,
+        1955,
+        942
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 12,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        923,
+        2000,
+        942
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 12,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        923,
+        2040,
+        942
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            265
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            345
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 12,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        923,
+        2100,
+        942
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 13,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        942,
+        1540,
+        962
+      ],
+      "expected": "13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "13",
+          "word_ids": [
+            91
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "13",
+          "word_ids": [
+            183
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 13,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        942,
+        1870,
+        962
+      ],
+      "expected": "BCP 2 FAILURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BCP 2 FAILURE",
+          "word_ids": [
+            206,
+            207,
+            208
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BCP 2 FAILURE",
+          "word_ids": [
+            253,
+            254,
+            255
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 13,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        942,
+        1910,
+        962
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 13,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        942,
+        1955,
+        962
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 13,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        942,
+        2000,
+        962
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 13,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        942,
+        2040,
+        962
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 13,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        942,
+        2100,
+        962
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            267
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            346
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 14,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        962,
+        1540,
+        982
+      ],
+      "expected": "14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            92
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            184
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 14,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        962,
+        1870,
+        982
+      ],
+      "expected": "HWP 1 STATUS VIA CT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP 1 STATUS VIA CT",
+          "word_ids": [
+            194,
+            195,
+            196,
+            197,
+            198
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP 1 STATUS VIA CT",
+          "word_ids": [
+            256,
+            257,
+            258,
+            259,
+            260
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 14,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        962,
+        1910,
+        982
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 14,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        962,
+        1955,
+        982
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 14,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        962,
+        2000,
+        982
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            255
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            347
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 14,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        962,
+        2040,
+        982
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 14,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        962,
+        2100,
+        982
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 15,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        982,
+        1540,
+        1001
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            99
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            185
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 15,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        982,
+        1870,
+        1001
+      ],
+      "expected": "HWP 1 ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP 1 ON/OFF",
+          "word_ids": [
+            191,
+            192,
+            193
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP 1 ON/OFF",
+          "word_ids": [
+            261,
+            262,
+            263
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 15,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        982,
+        1910,
+        1001
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 15,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        982,
+        1955,
+        1001
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 15,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        982,
+        2000,
+        1001
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 15,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        982,
+        2040,
+        1001
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            254
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            348
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 15,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        982,
+        2100,
+        1001
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 16,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1001,
+        1540,
+        1021
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            100
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            186
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 16,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1001,
+        1870,
+        1021
+      ],
+      "expected": "HWP 1 FAILURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP 1 FAILURE",
+          "word_ids": [
+            188,
+            189,
+            190
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP 1 FAILURE",
+          "word_ids": [
+            264,
+            265,
+            266
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 16,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1001,
+        1910,
+        1021
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 16,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1001,
+        1955,
+        1021
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 16,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1001,
+        2000,
+        1021
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 16,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1001,
+        2040,
+        1021
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 16,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1001,
+        2100,
+        1021
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            256
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            349
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 17,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1021,
+        1540,
+        1040
+      ],
+      "expected": "17",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "17",
+          "word_ids": [
+            101
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "17",
+          "word_ids": [
+            187
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 17,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1021,
+        1870,
+        1040
+      ],
+      "expected": "HWP 1 SPEED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP 1 SPEED",
+          "word_ids": [
+            199,
+            200,
+            201
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP 1 SPEED",
+          "word_ids": [
+            267,
+            268,
+            269
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 17,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1021,
+        1910,
+        1040
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 17,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1021,
+        1955,
+        1040
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            257
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            350
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 17,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1021,
+        2000,
+        1040
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 17,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1021,
+        2040,
+        1040
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 17,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1021,
+        2100,
+        1040
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 18,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1040,
+        1540,
+        1060
+      ],
+      "expected": "18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            102
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            188
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 18,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1040,
+        1870,
+        1060
+      ],
+      "expected": "HWP 1 ECM FAULT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP 1 ECM FAULT",
+          "word_ids": [
+            202,
+            203,
+            204,
+            205
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP 1 ECM FAULT",
+          "word_ids": [
+            270,
+            271,
+            272,
+            273
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 18,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1040,
+        1910,
+        1060
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            271
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            351
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 18,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1040,
+        1955,
+        1060
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 18,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1040,
+        2000,
+        1060
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 18,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1040,
+        2040,
+        1060
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 18,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1040,
+        2100,
+        1060
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            408
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            352
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 19,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1060,
+        1540,
+        1080
+      ],
+      "expected": "19",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "19",
+          "word_ids": [
+            110
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "19",
+          "word_ids": [
+            189
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 19,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1060,
+        1870,
+        1080
+      ],
+      "expected": "HWP 2 STATUS VIA CT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP 2 STATUS VIA CT",
+          "word_ids": [
+            223,
+            224,
+            225,
+            226,
+            227
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP 2 STATUS VIA CT",
+          "word_ids": [
+            274,
+            275,
+            276,
+            277,
+            278
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 19,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1060,
+        1910,
+        1080
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 19,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1060,
+        1955,
+        1080
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 19,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1060,
+        2000,
+        1080
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            259
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            353
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 19,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1060,
+        2040,
+        1080
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 19,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1060,
+        2100,
+        1080
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 20,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1080,
+        1540,
+        1100
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            106
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            190
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 20,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1080,
+        1870,
+        1100
+      ],
+      "expected": "HWP 2 ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP 2 ON/OFF",
+          "word_ids": [
+            220,
+            221,
+            222
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP 2 ON/OFF",
+          "word_ids": [
+            279,
+            280,
+            281
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 20,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1080,
+        1910,
+        1100
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 20,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1080,
+        1955,
+        1100
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 20,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1080,
+        2000,
+        1100
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 20,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1080,
+        2040,
+        1100
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            258
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            354
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 20,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1080,
+        2100,
+        1100
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 21,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1100,
+        1540,
+        1119
+      ],
+      "expected": "21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            107
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            191
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 21,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1100,
+        1870,
+        1119
+      ],
+      "expected": "HWP 2 FAILURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP 2 FAILURE",
+          "word_ids": [
+            217,
+            218,
+            219
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP 2 FAILURE",
+          "word_ids": [
+            282,
+            283,
+            284
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 21,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1100,
+        1910,
+        1119
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 21,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1100,
+        1955,
+        1119
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 21,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1100,
+        2000,
+        1119
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 21,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1100,
+        2040,
+        1119
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 21,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1100,
+        2100,
+        1119
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            260
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            355
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 22,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1119,
+        1540,
+        1138
+      ],
+      "expected": "22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            108
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            192
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 22,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1119,
+        1870,
+        1138
+      ],
+      "expected": "HWP 2 SPEED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP 2 SPEED",
+          "word_ids": [
+            228,
+            229,
+            230
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP 2 SPEED",
+          "word_ids": [
+            285,
+            286,
+            287
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 22,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1119,
+        1910,
+        1138
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 22,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1119,
+        1955,
+        1138
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            261
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            356
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 22,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1119,
+        2000,
+        1138
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 22,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1119,
+        2040,
+        1138
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 22,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1119,
+        2100,
+        1138
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 23,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1138,
+        1540,
+        1157
+      ],
+      "expected": "23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            109
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            193
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 23,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1138,
+        1870,
+        1157
+      ],
+      "expected": "HWP 2 ECM FAULT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP 2 ECM FAULT",
+          "word_ids": [
+            231,
+            232,
+            233,
+            234
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP 2 ECM FAULT",
+          "word_ids": [
+            288,
+            289,
+            290,
+            291
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 23,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1138,
+        1910,
+        1157
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            272
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            357
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 23,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1138,
+        1955,
+        1157
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 23,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1138,
+        2000,
+        1157
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 23,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1138,
+        2040,
+        1157
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 23,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1138,
+        2100,
+        1157
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            409
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            359
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 24,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1157,
+        1540,
+        1177
+      ],
+      "expected": "24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            111
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            194
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 24,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1157,
+        1870,
+        1177
+      ],
+      "expected": "HWS DIFFERENTIAL PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWS DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            172,
+            173,
+            174
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWS DIFFERENTIAL PRESSURE",
+          "word_ids": [
+            292,
+            293,
+            294
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 24,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1157,
+        1910,
+        1177
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            273
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            358
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 24,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1157,
+        1955,
+        1177
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 24,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1157,
+        2000,
+        1177
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 24,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1157,
+        2040,
+        1177
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 24,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1157,
+        2100,
+        1177
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 25,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1177,
+        1540,
+        1196
+      ],
+      "expected": "25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            161
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            195
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 25,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1177,
+        1870,
+        1196
+      ],
+      "expected": "HWS DIFFERENTIAL PRESSURE SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWS DIFFERENTIAL PRESSURE SETPOINT",
+          "word_ids": [
+            175,
+            176,
+            177,
+            178
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWS DIFFERENTIAL PRESSURE SETPOINT",
+          "word_ids": [
+            295,
+            296,
+            297,
+            298
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 25,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1177,
+        1910,
+        1196
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 25,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1177,
+        1955,
+        1196
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            274
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            360
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 25,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1177,
+        2000,
+        1196
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 25,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1177,
+        2040,
+        1196
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 25,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1177,
+        2100,
+        1196
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 26,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1196,
+        1540,
+        1216
+      ],
+      "expected": "26",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "26",
+          "word_ids": [
+            162
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "26",
+          "word_ids": [
+            196
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 26,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1196,
+        1870,
+        1216
+      ],
+      "expected": "HIGH/LOW HWS TEMPERATURE*",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH/LOW HWS TEMPERATURE*",
+          "word_ids": [
+            130,
+            131,
+            132
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH/LOW HWS TEMPERATURE*",
+          "word_ids": [
+            299,
+            300,
+            301
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 26,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1196,
+        1910,
+        1216
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            275
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            362
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 26,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1196,
+        1955,
+        1216
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 26,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1196,
+        2000,
+        1216
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 26,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1196,
+        2040,
+        1216
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 26,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1196,
+        2100,
+        1216
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            361
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 27,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1216,
+        1540,
+        1235
+      ],
+      "expected": "27",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "27",
+          "word_ids": [
+            163
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "27",
+          "word_ids": [
+            197
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 27,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1216,
+        1870,
+        1235
+      ],
+      "expected": "HWS TEMPERATURE SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWS TEMPERATURE SETPOINT",
+          "word_ids": [
+            133,
+            134,
+            135
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWS TEMPERATURE SETPOINT",
+          "word_ids": [
+            302,
+            303,
+            304
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 27,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1216,
+        1910,
+        1235
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 27,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1216,
+        1955,
+        1235
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            276
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            363
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 27,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1216,
+        2000,
+        1235
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 27,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1216,
+        2040,
+        1235
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 27,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1216,
+        2100,
+        1235
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 28,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1235,
+        1540,
+        1255
+      ],
+      "expected": "28",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "28",
+          "word_ids": [
+            164
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "28",
+          "word_ids": [
+            198
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 28,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1235,
+        1870,
+        1255
+      ],
+      "expected": "HWR TEMPERATURE*",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWR TEMPERATURE*",
+          "word_ids": [
+            136,
+            137
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWR TEMPERATURE*",
+          "word_ids": [
+            305,
+            306
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 28,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1235,
+        1910,
+        1255
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            277
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            364
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 28,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1235,
+        1955,
+        1255
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 28,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1235,
+        2000,
+        1255
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 28,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1235,
+        2040,
+        1255
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 28,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1235,
+        2100,
+        1255
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 29,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1255,
+        1540,
+        1274
+      ],
+      "expected": "29",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "29",
+          "word_ids": [
+            170
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "29",
+          "word_ids": [
+            199
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 29,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1255,
+        1870,
+        1274
+      ],
+      "expected": "HWS BYPASS VALVE POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWS BYPASS VALVE POSITION",
+          "word_ids": [
+            138,
+            139,
+            140,
+            141
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWS BYPASS VALVE POSITION",
+          "word_ids": [
+            307,
+            308,
+            309,
+            310
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 29,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1255,
+        1910,
+        1274
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            278
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            365
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 29,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1255,
+        1955,
+        1274
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 29,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1255,
+        2000,
+        1274
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 29,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1255,
+        2040,
+        1274
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 29,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1255,
+        2100,
+        1274
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 30,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1274,
+        1540,
+        1294
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            171
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            200
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 30,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1274,
+        1870,
+        1294
+      ],
+      "expected": "OUTSIDE AIR TEMPERATURE (GLOBAL)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMPERATURE (GLOBAL)",
+          "word_ids": [
+            154,
+            155,
+            156,
+            157
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMPERATURE (GLOBAL)",
+          "word_ids": [
+            311,
+            312,
+            313,
+            314
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 30,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1274,
+        1910,
+        1294
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            279
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            366
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 30,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1274,
+        1955,
+        1294
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 30,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1274,
+        2000,
+        1294
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 30,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1274,
+        2040,
+        1294
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 30,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1274,
+        2100,
+        1294
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 31,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1294,
+        1540,
+        1313
+      ],
+      "expected": "31",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "31",
+          "word_ids": [
+            179
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "31",
+          "word_ids": [
+            201
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 31,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1294,
+        1870,
+        1313
+      ],
+      "expected": "EMERGENCY SHUTDOWN (GLOBAL)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EMERGENCY SHUTDOWN (GLOBAL)",
+          "word_ids": [
+            158,
+            159,
+            160
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EMERGENCY SHUTDOWN (GLOBAL)",
+          "word_ids": [
+            315,
+            316,
+            317
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 31,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1294,
+        1910,
+        1313
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 31,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1294,
+        1955,
+        1313
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 31,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1294,
+        2000,
+        1313
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            406
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            367
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 31,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1294,
+        2040,
+        1313
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 31,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1294,
+        2100,
+        1313
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            280
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            368
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 32,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1313,
+        1540,
+        1333
+      ],
+      "expected": "32",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "32",
+          "word_ids": [
+            180
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "32",
+          "word_ids": [
+            202
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 32,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1313,
+        1870,
+        1333
+      ],
+      "expected": "HEATING WATER SYSTEM FLOW RATE (GPM)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HEATING WATER SYSTEM FLOW RATE (GPM)",
+          "word_ids": [
+            284,
+            285,
+            286,
+            287,
+            288,
+            289
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HEATING WATER SYSTEM FLOW RATE (GPM)",
+          "word_ids": [
+            318,
+            319,
+            320,
+            321,
+            322,
+            323
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 32,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1313,
+        1910,
+        1333
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            290
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            369
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 32,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1313,
+        1955,
+        1333
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 32,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1313,
+        2000,
+        1333
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 32,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1313,
+        2040,
+        1333
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 32,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1313,
+        2100,
+        1333
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 33,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1333,
+        1540,
+        1352
+      ],
+      "expected": "33",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "33",
+          "word_ids": [
+            235
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "33",
+          "word_ids": [
+            203
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 33,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1333,
+        1870,
+        1352
+      ],
+      "expected": "FREEZE PROTECTION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FREEZE PROTECTION",
+          "word_ids": [
+            292,
+            293
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FREEZE PROTECTION",
+          "word_ids": [
+            324,
+            325
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 33,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1333,
+        1910,
+        1352
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 33,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1333,
+        1955,
+        1352
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 33,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1333,
+        2000,
+        1352
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 33,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1333,
+        2040,
+        1352
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 33,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1333,
+        2100,
+        1352
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            294
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            371
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 34,
+      "column": "tag",
+      "page": 4,
+      "bbox": [
+        1500,
+        1352,
+        1540,
+        1374
+      ],
+      "expected": "34",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "34",
+          "word_ids": [
+            379
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "34",
+          "word_ids": [
+            204
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 34,
+      "column": "point_name",
+      "page": 4,
+      "bbox": [
+        1540,
+        1352,
+        1870,
+        1374
+      ],
+      "expected": "CO SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CO SENSOR",
+          "word_ids": [
+            380,
+            381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CO SENSOR",
+          "word_ids": [
+            326,
+            327
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 34,
+      "column": "AI",
+      "page": 4,
+      "bbox": [
+        1870,
+        1352,
+        1910,
+        1374
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            382
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            370
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 34,
+      "column": "AO",
+      "page": 4,
+      "bbox": [
+        1910,
+        1352,
+        1955,
+        1374
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 34,
+      "column": "DI",
+      "page": 4,
+      "bbox": [
+        1955,
+        1352,
+        2000,
+        1374
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 34,
+      "column": "DO",
+      "page": 4,
+      "bbox": [
+        2000,
+        1352,
+        2040,
+        1374
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "row": 34,
+      "column": "ALARM",
+      "page": 4,
+      "bbox": [
+        2040,
+        1352,
+        2100,
+        1374
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            405
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            372
+          ]
+        }
+      }
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "header": "BAS INPUT/OUTPUT POINT LIST",
+      "page": 4,
+      "bbox": [
+        1710,
+        652,
+        1900,
+        675
+      ],
+      "engine": "mupdf",
+      "actual": "BAS INPUT/OUTPUT POINT LIST",
+      "pass": true
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "header": "BAS INPUT/OUTPUT POINT LIST",
+      "page": 4,
+      "bbox": [
+        1710,
+        652,
+        1900,
+        675
+      ],
+      "engine": "poppler",
+      "actual": "BAS INPUT/OUTPUT POINT LIST",
+      "pass": true
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "header": "TAG POINT NAME AI AO DI DO ALARM",
+      "page": 4,
+      "bbox": [
+        1500,
+        682,
+        2100,
+        707
+      ],
+      "engine": "mupdf",
+      "actual": "TAG POINT NAME AI AO DI DO ALARM",
+      "pass": true
+    },
+    {
+      "table": "M508-HEATING-WATER-SYSTEM",
+      "header": "TAG POINT NAME AI AO DI DO ALARM",
+      "page": 4,
+      "bbox": [
+        1500,
+        682,
+        2100,
+        707
+      ],
+      "engine": "poppler",
+      "actual": "TAG POINT NAME AI AO DI DO ALARM",
+      "pass": true
+    },
+    {
+      "assertion": "m508-asterisk-note",
+      "page": 4,
+      "bbox": [
+        1600,
+        1375,
+        1940,
+        1400
+      ],
+      "expected": "* INDICATES POINT PULLED FROM BOILER CONTROLLER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "* INDICATES POINT PULLED FROM BOILER CONTROLLER",
+          "word_ids": [
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "* INDICATES POINT PULLED FROM BOILER CONTROLLER",
+          "word_ids": [
+            373,
+            374,
+            375,
+            376,
+            377,
+            378,
+            379
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "heating-water-io-matrix",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

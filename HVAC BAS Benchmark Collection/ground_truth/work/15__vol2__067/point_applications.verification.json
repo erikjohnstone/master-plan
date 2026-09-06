@@ -1,0 +1,33 @@
+{
+  "document_id": "15__vol2__067",
+  "source_sha256": "254931f1c37ac5afb3b9ad70d21ae7c2001c2f645c29ca8d92c4aefdc294fa1d",
+  "annotation_sha256": "d7d7ba5b7dbd33de68826b428a6f88da8d8f7874c1ad05602aea707f9c6651e4",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 0,
+  "checks": [],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "linked-point-applications",
+      "pass": true,
+      "applications": 0,
+      "listed_rows": 0,
+      "expanded_logical_rows": 0,
+      "warning": "Expanded logical occurrences are not unique physical I/O."
+    },
+    {
+      "id": "unexpanded-point-applications",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {
+    "points_m63.json": "fddfcb0872f6aaa3d5a3eeddfff21e49396863009fec6ef85b8383121c521898"
+  },
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

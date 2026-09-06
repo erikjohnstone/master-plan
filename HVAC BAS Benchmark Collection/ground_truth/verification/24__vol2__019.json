@@ -1,0 +1,158 @@
+{
+  "id": "24__vol2__019",
+  "record_sha256": "2ff3fe978c15410e80292fdcd7536cb427d8cc317bdcdb61cc4f842ae70e3709",
+  "checked_utc": "2026-09-05T05:31:40.765987+00:00",
+  "errors": [],
+  "modules": {
+    "metadata": {
+      "components": [
+        {
+          "annotation_sha256": "a90d63f1581732161043a9ae3c83da3b905b6ad6bd9c47e1fe744619d3dcd49f",
+          "cell_assertions": 0,
+          "text_assertions": 4,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 4,
+      "pass": true
+    },
+    "schedules": {
+      "components": [
+        {
+          "annotation_sha256": "78e3a189799e4c451b36baaf041639ef1c9beeb75521530696c971c3cf0380f7",
+          "cell_assertions": 25,
+          "text_assertions": 0,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "adf981be72e923721863323471b5d3700c6ca662d9991d279d75a3fb39c0ce31",
+          "cell_assertions": 49,
+          "text_assertions": 0,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "02f3833f7fe7a4133984ed9c8b7ecfc6d6331883a9c692889acb8f5a2033d3ec",
+          "cell_assertions": 58,
+          "text_assertions": 0,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "299e98d9ee31b0a1c2a21b353d137596167a4a3a246c7cb53249526e9e595f01",
+          "cell_assertions": 1044,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 1176,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "points": {
+      "components": [
+        {
+          "annotation_sha256": "9f7c4b79e67e62a9da97b22c6cc13144e2c683d954f08371b49bc9bd46551c24",
+          "cell_assertions": 474,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 474,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "controls_context": {
+      "components": [
+        {
+          "annotation_sha256": "e7f5dd821e49d2ed4dd24790f8f8e68a1621845c25868b1bbed42a5205395fb0",
+          "cell_assertions": 0,
+          "text_assertions": 9,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 9,
+      "pass": true
+    },
+    "equipment_reconciliation": {
+      "components": [
+        {
+          "annotation_sha256": "317a0ab2253bc4cb44ceb706dc24ad7127da1a1a3dafc16efea733878115ccdd",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "point_applications": {
+      "components": [
+        {
+          "annotation_sha256": "7d7bf6f0dcfe1e5c43c89e941013121bfc8931bdffedc84b2f7b3e4cc58b555e",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "supporting_evidence": {
+      "components": [
+        {
+          "annotation_sha256": "ed969106ee3443153aaf7ecc500a65917a08ec8db5701b580dc00cc41745c72e",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    }
+  },
+  "source_files_sha256": {
+    "work/24__vol2__019/document_manifest.json": "0dc83284b0a10425ecb1724da3b9579aa71107056579b4776a990bbf72ffa7aa",
+    "work/24__vol2__019/metadata.json": "a90d63f1581732161043a9ae3c83da3b905b6ad6bd9c47e1fe744619d3dcd49f",
+    "work/24__vol2__019/schedules_m71.json": "78e3a189799e4c451b36baaf041639ef1c9beeb75521530696c971c3cf0380f7",
+    "work/24__vol2__019/schedules_m72.json": "adf981be72e923721863323471b5d3700c6ca662d9991d279d75a3fb39c0ce31",
+    "work/24__vol2__019/schedules_m73.json": "02f3833f7fe7a4133984ed9c8b7ecfc6d6331883a9c692889acb8f5a2033d3ec",
+    "work/24__vol2__019/schedules_m73_performance.json": "299e98d9ee31b0a1c2a21b353d137596167a4a3a246c7cb53249526e9e595f01",
+    "work/24__vol2__019/points_m83_m88.json": "9f7c4b79e67e62a9da97b22c6cc13144e2c683d954f08371b49bc9bd46551c24",
+    "work/24__vol2__019/controls_context.json": "e7f5dd821e49d2ed4dd24790f8f8e68a1621845c25868b1bbed42a5205395fb0",
+    "work/24__vol2__019/equipment_reconciliation.json": "317a0ab2253bc4cb44ceb706dc24ad7127da1a1a3dafc16efea733878115ccdd",
+    "work/24__vol2__019/point_applications.json": "7d7bf6f0dcfe1e5c43c89e941013121bfc8931bdffedc84b2f7b3e4cc58b555e",
+    "work/24__vol2__019/supporting_evidence.json": "ed969106ee3443153aaf7ecc500a65917a08ec8db5701b580dc00cc41745c72e",
+    "reviews/24__vol2__019/p1-p1-full-poppler.png": "9d78f1dbde622c064e15d98b21b0e125968b4f22227baf4db971b4d911e05228",
+    "reviews/24__vol2__019/p2-p2-full-poppler.png": "ba664412817709bebdf18d49b9df3f8e75cc4d358cf706dfd7e028e6384862d7",
+    "reviews/24__vol2__019/p3-p3-full-poppler.png": "037800acbcb392329442cb0b917f429bf24556bbb7e59df408b79dab68f1705c",
+    "reviews/24__vol2__019/p4-p4-full-poppler.png": "dfac6dadfe03db64b3fbabb1aee388d157b4e20a0efa075a2cfa9a9196c14cb7",
+    "reviews/24__vol2__019/p5-p5-full-poppler.png": "a1d9ed7306e5bd8878c5ccc8389c5960db7b3227e2a083518d607c8f5449e7ea",
+    "reviews/24__vol2__019/p6-p6-full-poppler.png": "5b3f6d727c7d4009da5b5ce43def1f6a15d430c54774ff9a70cfd25cb120aeb0",
+    "reviews/24__vol2__019/p7-p7-full-poppler.png": "d06881a9ee5dcbdf9849c8fd41dc76995daedd5a21361169f5519282095ab388",
+    "reviews/24__vol2__019/p8-p8-full-poppler.png": "20a88c9fb0b68958fe3bbe17cae41fdfc1b30176e024053c22502fa6a62630a2",
+    "reviews/24__vol2__019/p9-p9-full-poppler.png": "2cb1fbf70597157bcc9be11f67af158f1737084d9be5c7280e345b2a3f7c5a61",
+    "reviews/24__vol2__019/p10-p10-full-poppler.png": "90011bd1669caa7a82cbdb7c370570173e0d3976968ef1fc487a69f58ed4cb6e",
+    "reviews/24__vol2__019/p11-p11-full-poppler.png": "3486e8375e24f0998eeef8d3947a503058fa7714598fde7710ebd07a6e82eacc",
+    "reviews/24__vol2__019/p12-p12-full-poppler.png": "469cee313fcc62568b4e8472872cee8cd6a0d5ec5c6516823f238f1cc91f9d40",
+    "reviews/24__vol2__019/p13-p13-full-poppler.png": "247f8b36b5d904a77d2d4769f7232b958c57f906e441b193c880b8a5f9778dfb",
+    "reviews/24__vol2__019/p14-p14-full-poppler.png": "fec7cdef03343289ef7f92d095b63394ae6bec389532bdddeb0dbeb703a23a1d",
+    "reviews/24__vol2__019/p15-p15-full-poppler.png": "7ae14f57bec059401de0766628f33987ca444dab9d3f1c644af748848a11b9a6",
+    "reviews/24__vol2__019/p16-p16-full-poppler.png": "ad7b0caf923eeb2312b633c89248c8d4c6c1573a96a4ae98b0f57835b2cd5a86",
+    "reviews/24__vol2__019/p17-p17-full-poppler.png": "5c88b5288d5226b9b3e38d18f19038ef564a66515db7492f3e458e8608c5104c",
+    "reviews/24__vol2__019/p18-p18-full-poppler.png": "869c378e2caa57cf9de86fc50429770958399bdbe68fe968344007894780141b",
+    "reviews/24__vol2__019/p19-p19-full-poppler.png": "8819e48df8090bcccf0d1cdeec3396596d87ef899da1ef5af95daa7e6dc74445",
+    "reviews/24__vol2__019/p20-p20-full-poppler.png": "e5d78b671a7e985fca6073791d77c155fdb1bcc6ffd67a7d404fac6a71f6ffa0",
+    "reviews/24__vol2__019/p21-p21-full-poppler.png": "238b6b547395f05c6852db049284d38325720ec66822b3ed4d51ecdcc2227327",
+    "reviews/24__vol2__019/p22-p22-full-poppler.png": "f79638aff092b828769bcd45107fb034535b88418ca91f59111471a539d594e5",
+    "reviews/24__vol2__019/p23-p23-full-poppler.png": "906efe9b060254ae6f29c84a6bffb98db72a8ad32cf7bf4d8487ff6930b85764",
+    "reviews/24__vol2__019/p24-p24-full-poppler.png": "34b57ebccb7fae57f9de784a5f1e1b85a4d40779505440dddf9eda0711d2f95a"
+  },
+  "scope": "Rechecks every embedded authored module against MuPDF and Poppler, exact bundle/source identity, authored page/requirement coverage and review-file integrity. Visual interpretation and completeness are coordinator audit assertions, not automatic parser proof.",
+  "bounded_assertions": 1663,
+  "independent_engine_checks": 3326,
+  "pass": true
+}

@@ -1,0 +1,602 @@
+{
+  "document_id": "01__vol2__001",
+  "module_role": "Final project, scale and complete 75-page visual-review context for the Cherry Point HVAC/BAS source set. It deliberately separates plan/schematic visual context from schedule and BAS template ledgers.",
+  "project": {
+    "project_name_as_printed": "FY20 P-228 ATC TOWER AND AIR OPERATIONS",
+    "location_as_printed": "MCAS CHERRY POINT, CHERRY POINT, NC",
+    "navfac_command_as_printed": "NAVAL FACILITIES ENGINEERING COMMAND - MID-ATLANTIC",
+    "firm_as_printed_in_title_block": "BURNS & MCDONNELL",
+    "issue_as_printed": "ISSUED FOR CONSTRUCTION",
+    "issue_date_as_printed": "11/19/19",
+    "project_number_as_printed": "1596300"
+  },
+  "scope": "Complete full-page visual review for the supplied 75-page Cherry Point Air Traffic Tower and Air Operations mechanical and controls source. The record preserves source-bounded schedule identities/specifications, point-list templates, control/network/sequence information and hydronic schematics. It does not infer installed quantities from plan symbols, reuse a template row as a field-device count, or invent unavailable actuator/card/address data.",
+  "source_scope": {
+    "source_pdf": "pdf/01__vol2__001__Cherry_Point_Air_Traffic_Tower_and_Air_Operations.pdf",
+    "page_count": 75,
+    "schedule_sheets": [
+      "M-601",
+      "M-602",
+      "M-603",
+      "M-611",
+      "M-612",
+      "M-613",
+      "M-621",
+      "M-622"
+    ],
+    "controls_sheets": [
+      "MI700",
+      "MI701",
+      "MI702",
+      "MI703",
+      "MI704",
+      "MI705",
+      "MI710",
+      "MI711",
+      "MI712",
+      "MI713",
+      "MI720",
+      "MI721",
+      "MI722",
+      "MI723",
+      "MI730",
+      "MI731",
+      "MI732",
+      "MI740",
+      "MI741",
+      "MI742",
+      "MI743",
+      "MI744"
+    ]
+  },
+  "scale_semantics": {
+    "printed_view_scales_observed": [
+      "1/16 in = 1 ft-0 in",
+      "3/32 in = 1 ft-0 in",
+      "1/8 in = 1 ft-0 in",
+      "1/4 in = 1 ft-0 in",
+      "1/2 in = 1 ft-0 in"
+    ],
+    "takeoff_scale_status": "Multiple printed view scales and graphic scale bars are visually present on plan/section/enlarged-plan sheets; no single document-wide scale is asserted.",
+    "bar_scale_status": "Graphic bars were visually observed on the inspected plan/section/enlarged-plan sheets (for example MS101/MS102, MH/MP plans, M-301/M-311/M-321, M-401/M-411/M-421). Details, schedules, controls and schematic sheets are not scale-derived unless a local scale is printed."
+  },
+  "visual_review_pages": [
+    {
+      "page": 1,
+      "sheet": "M-001",
+      "title": "MECHANICAL LEGEND, ABREVIATIONS AND NOTES",
+      "render": "reviews/01__vol2__001/p1-p1-full-poppler.png",
+      "finding": "M-001 mechanical abbreviations, symbols, notes and controls cross-references."
+    },
+    {
+      "page": 2,
+      "sheet": "M-002",
+      "title": "MECHANICAL INFORMATION",
+      "render": "reviews/01__vol2__001/p2-p2-full-poppler.png",
+      "finding": "M-002 mechanical information and general drawing notes."
+    },
+    {
+      "page": 3,
+      "sheet": "MS101",
+      "title": "MECHANICAL SITE PLAN - AIR OPS",
+      "render": "reviews/01__vol2__001/p3-p3-full-poppler.png",
+      "finding": "MS101 Air Operations mechanical site plan; chilled-water plant and site-routing context."
+    },
+    {
+      "page": 4,
+      "sheet": "MS102",
+      "title": "MECHANICAL SITE PLAN - MTRACON / ATCT",
+      "render": "reviews/01__vol2__001/p4-p4-full-poppler.png",
+      "finding": "MS102 MTRACON/ATCT mechanical site plan; site chilled-water equipment and routing context."
+    },
+    {
+      "page": 5,
+      "sheet": "MH100",
+      "title": "AIR OPS - FIRST FLOOR MECHANICAL DUCTWORK PLAN - OVERALL",
+      "render": "reviews/01__vol2__001/p5-p5-full-poppler.png",
+      "finding": "MH100 Air Operations first-floor overall ductwork plan with graphic bar and system layout."
+    },
+    {
+      "page": 6,
+      "sheet": "MH101",
+      "title": "AIR OPS - FIRST FLOOR MECHANICAL DUCTWORK PLAN - AREA A",
+      "render": "reviews/01__vol2__001/p6-p6-full-poppler.png",
+      "finding": "MH101 Air Operations first-floor Area A ductwork plan; VAV/FCU, supply/return/exhaust and motorized-damper context."
+    },
+    {
+      "page": 7,
+      "sheet": "MH102",
+      "title": "AIR OPS - FIRST FLOOR MECHANICAL DUCTWORK PLAN - AREA B",
+      "render": "reviews/01__vol2__001/p7-p7-full-poppler.png",
+      "finding": "MH102 Air Operations first-floor Area B ductwork plan."
+    },
+    {
+      "page": 8,
+      "sheet": "MH103",
+      "title": "AIR OPS - FIRST FLOOR MECHANICAL DUCTWORK PLAN - AREA C",
+      "render": "reviews/01__vol2__001/p8-p8-full-poppler.png",
+      "finding": "MH103 Air Operations first-floor Area C ductwork plan."
+    },
+    {
+      "page": 9,
+      "sheet": "MH104",
+      "title": "AIR OPS - SECOND FLOOR MECHANICAL DUCTWORK PLAN - AREA A",
+      "render": "reviews/01__vol2__001/p9-p9-full-poppler.png",
+      "finding": "MH104 Air Operations second-floor Area A ductwork plan."
+    },
+    {
+      "page": 10,
+      "sheet": "MH105",
+      "title": "MECHANICAL ROOF PLAN OVERALL",
+      "render": "reviews/01__vol2__001/p10-p10-full-poppler.png",
+      "finding": "MH105 overall mechanical roof plan with printed scale and graphic bar."
+    },
+    {
+      "page": 11,
+      "sheet": "MH106",
+      "title": "AIR OPS FIRST MECHANICAL ROOF PLAN - AREA B",
+      "render": "reviews/01__vol2__001/p11-p11-full-poppler.png",
+      "finding": "MH106 Air Operations roof ductwork plan, Area B."
+    },
+    {
+      "page": 12,
+      "sheet": "MH111",
+      "title": "MTRACON - MECHANICAL DUCTWORK PLAN",
+      "render": "reviews/01__vol2__001/p12-p12-full-poppler.png",
+      "finding": "MH111 MTRACON ductwork plan; dense MTRACON AHU/VAV/FCU/CRAH context."
+    },
+    {
+      "page": 13,
+      "sheet": "MH112",
+      "title": "MTRACON - MECHANICAL DUCTWORK ROOF PLAN",
+      "render": "reviews/01__vol2__001/p13-p13-full-poppler.png",
+      "finding": "MH112 MTRACON roof ductwork plan."
+    },
+    {
+      "page": 14,
+      "sheet": "MH121",
+      "title": "ATCT- MECHANICAL DUCTWORK PLAN - FLRS 1, 2, 3 & 5",
+      "render": "reviews/01__vol2__001/p14-p14-full-poppler.png",
+      "finding": "MH121 ATCT ductwork plan for floors 1, 2, 3 and 5."
+    },
+    {
+      "page": 15,
+      "sheet": "MH122",
+      "title": "ATCT - MECHANICAL DUCTWORK PLAN - FLRS 7, 8, 9, & 10",
+      "render": "reviews/01__vol2__001/p15-p15-full-poppler.png",
+      "finding": "MH122 ATCT ductwork plan for floors 7 through 10."
+    },
+    {
+      "page": 16,
+      "sheet": "MH123",
+      "title": "ATCT - MECHANICAL DUCTWORK PLAN - FLR 11 & 12",
+      "render": "reviews/01__vol2__001/p16-p16-full-poppler.png",
+      "finding": "MH123 ATCT ductwork plan for floors 11 and 12."
+    },
+    {
+      "page": 17,
+      "sheet": "MP100",
+      "title": "AIR OPS - FIRST FLOOR MECHANICAL PIPING FLOOR PLAN - OVERALL",
+      "render": "reviews/01__vol2__001/p17-p17-full-poppler.png",
+      "finding": "MP100 Air Operations first-floor overall piping plan."
+    },
+    {
+      "page": 18,
+      "sheet": "MP101",
+      "title": "AIR OPS FIRST FLOOR MECHANICAL PIPING FLOOR PLAN - AREA A",
+      "render": "reviews/01__vol2__001/p18-p18-full-poppler.png",
+      "finding": "MP101 Air Operations first-floor Area A piping plan."
+    },
+    {
+      "page": 19,
+      "sheet": "MP102",
+      "title": "AIR OPS FIRST FLOOR MECHANICAL PIPING FLOOR PLAN - AREA B",
+      "render": "reviews/01__vol2__001/p19-p19-full-poppler.png",
+      "finding": "MP102 Air Operations first-floor Area B piping plan."
+    },
+    {
+      "page": 20,
+      "sheet": "MP103",
+      "title": "AIR OPS FIRST FLOOR MECHANICAL PIPING FLOOR PLAN - AREA C",
+      "render": "reviews/01__vol2__001/p20-p20-full-poppler.png",
+      "finding": "MP103 Air Operations first-floor Area C piping plan."
+    },
+    {
+      "page": 21,
+      "sheet": "MP104",
+      "title": "AIR OPS SECOND FLOOR MECHANICAL PIPING FLOOR PLAN - AREA A",
+      "render": "reviews/01__vol2__001/p21-p21-full-poppler.png",
+      "finding": "MP104 Air Operations second-floor Area A piping plan."
+    },
+    {
+      "page": 22,
+      "sheet": "MP111",
+      "title": "MTRACON - MECHANICAL PIPING PLAN",
+      "render": "reviews/01__vol2__001/p22-p22-full-poppler.png",
+      "finding": "MP111 MTRACON piping plan."
+    },
+    {
+      "page": 23,
+      "sheet": "MP121",
+      "title": "ATCT - MECHANICAL PIPING PLAN - 1, 3 & 5",
+      "render": "reviews/01__vol2__001/p23-p23-full-poppler.png",
+      "finding": "MP121 ATCT piping plan for floors 1, 3 and 5."
+    },
+    {
+      "page": 24,
+      "sheet": "MP122",
+      "title": "ATCT - MECHANICAL PIPING PLAN - FLRS 7, 8, 9 & 10",
+      "render": "reviews/01__vol2__001/p24-p24-full-poppler.png",
+      "finding": "MP122 ATCT piping plan for floors 7 through 10."
+    },
+    {
+      "page": 25,
+      "sheet": "MP123",
+      "title": "ATCT - MECHANICAL PIPING PLAN - FLR 11 & 12",
+      "render": "reviews/01__vol2__001/p25-p25-full-poppler.png",
+      "finding": "MP123 ATCT piping plan for floors 11 and 12."
+    },
+    {
+      "page": 26,
+      "sheet": "M-301",
+      "title": "AIR OPS - MECHANICAL SECTIONS",
+      "render": "reviews/01__vol2__001/p26-p26-full-poppler.png",
+      "finding": "M-301 sections through Air Operations mechanical rooms, AHU/DOAH, boilers, pumps and piping."
+    },
+    {
+      "page": 27,
+      "sheet": "M-311",
+      "title": "MTRACON - MECHANICAL SECTIONS",
+      "render": "reviews/01__vol2__001/p27-p27-full-poppler.png",
+      "finding": "M-311 MTRACON mechanical-room sections with AHU-M1, DOAH-M1, boilers, pumps and piping."
+    },
+    {
+      "page": 28,
+      "sheet": "M-321",
+      "title": "ATCT - MECHANICAL SECTION",
+      "render": "reviews/01__vol2__001/p28-p28-full-poppler.png",
+      "finding": "M-321 ATCT sections through AHU-T1A/T1B and floor-11 HVAC systems."
+    },
+    {
+      "page": 29,
+      "sheet": "M-401",
+      "title": "AIR OPS - MECHANICAL ENLARGED PLANS",
+      "render": "reviews/01__vol2__001/p29-p29-full-poppler.png",
+      "finding": "M-401 enlarged Air Operations duct and piping mechanical-room plans."
+    },
+    {
+      "page": 30,
+      "sheet": "M-411",
+      "title": "MTRACON - MECHANICAL ENLARGED PLANS",
+      "render": "reviews/01__vol2__001/p30-p30-full-poppler.png",
+      "finding": "M-411 enlarged MTRACON duct and piping mechanical-room plans."
+    },
+    {
+      "page": 31,
+      "sheet": "M-421",
+      "title": "ATCT - MECHANICAL ENLARGED PLANS",
+      "render": "reviews/01__vol2__001/p31-p31-full-poppler.png",
+      "finding": "M-421 enlarged ATCT mechanical-room duct and piping plans."
+    },
+    {
+      "page": 32,
+      "sheet": "M-501",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/01__vol2__001/p32-p32-full-poppler.png",
+      "finding": "M-501 hydronic service details: separators, vents, tank, shutdown, strainers and drains."
+    },
+    {
+      "page": 33,
+      "sheet": "M-502",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/01__vol2__001/p33-p33-full-poppler.png",
+      "finding": "M-502 hydronic piping, heat-trace, coil and penetration details."
+    },
+    {
+      "page": 34,
+      "sheet": "M-503",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/01__vol2__001/p34-p34-full-poppler.png",
+      "finding": "M-503 duct takeoff and FCU/CUH hydronic connection details."
+    },
+    {
+      "page": 35,
+      "sheet": "M-504",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/01__vol2__001/p35-p35-full-poppler.png",
+      "finding": "M-504 FCU/CRAH, series fan-powered VAV, humidifier and computer-room air-handler details."
+    },
+    {
+      "page": 36,
+      "sheet": "M-505",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/01__vol2__001/p36-p36-full-poppler.png",
+      "finding": "M-505 ATFP seismic cable-bracing details for suspended mechanical equipment and inline pumps."
+    },
+    {
+      "page": 37,
+      "sheet": "M-506",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/01__vol2__001/p37-p37-full-poppler.png",
+      "finding": "M-506 low-velocity ductwork, elbows, diffuser and manual-balancing-damper details."
+    },
+    {
+      "page": 38,
+      "sheet": "M-507",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/01__vol2__001/p38-p38-full-poppler.png",
+      "finding": "M-507 condensate traps, minimum drain-size table, inline-fan and below-grade piping details."
+    },
+    {
+      "page": 39,
+      "sheet": "M-508",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/01__vol2__001/p39-p39-full-poppler.png",
+      "finding": "M-508 air-cooled chiller, heat-recovery chiller and condensing-boiler connection details."
+    },
+    {
+      "page": 40,
+      "sheet": "M-509",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/01__vol2__001/p40-p40-full-poppler.png",
+      "finding": "M-509 DOAH/AHU configuration, pump and upblast centrifugal-fan details."
+    },
+    {
+      "page": 41,
+      "sheet": "M-510",
+      "title": "MECHANICAL DETAILS",
+      "render": "reviews/01__vol2__001/p41-p41-full-poppler.png",
+      "finding": "M-510 fire/smoke/control damper and inline-pump details; source contains damper construction, not an actuator schedule."
+    },
+    {
+      "page": 42,
+      "sheet": "M-601",
+      "title": "AIR OPS - MECHANICAL SCHEDULES",
+      "render": "reviews/01__vol2__001/p42-p42-full-poppler.png",
+      "finding": "M-601 Air Operations schedules: AHU, DOAH, FCU, pumps and boilers."
+    },
+    {
+      "page": 43,
+      "sheet": "M-602",
+      "title": "AIR OPS - MECHANICAL SCHEDULES",
+      "render": "reviews/01__vol2__001/p43-p43-full-poppler.png",
+      "finding": "M-602 Air Operations schedules: unit heaters, duct/piping construction, humidifier and 27 VAV terminal rows."
+    },
+    {
+      "page": 44,
+      "sheet": "M-603",
+      "title": "AIR OPS - MECHANICAL SCHEDULES",
+      "render": "reviews/01__vol2__001/p44-p44-full-poppler.png",
+      "finding": "M-603 Air Operations schedules: chiller, fan, air-device, HHW/CHW control-valve, dehumidifier and related schedules."
+    },
+    {
+      "page": 45,
+      "sheet": "M-611",
+      "title": "MTRACON - MECHANICAL SCHEDULES",
+      "render": "reviews/01__vol2__001/p45-p45-full-poppler.png",
+      "finding": "M-611 MTRACON schedules: AHU, FCU, pumps, boilers, heat-recovery chillers and CRAHs."
+    },
+    {
+      "page": 46,
+      "sheet": "M-612",
+      "title": "MTRACON - MECHANICAL SCHEDULES",
+      "render": "reviews/01__vol2__001/p46-p46-full-poppler.png",
+      "finding": "M-612 MTRACON schedules: VAV, DOAH, duct/piping construction, vibration isolation and range hoods."
+    },
+    {
+      "page": 47,
+      "sheet": "M-613",
+      "title": "MTRACON - MECHANICAL SCHEDULES",
+      "render": "reviews/01__vol2__001/p47-p47-full-poppler.png",
+      "finding": "M-613 MTRACON HHW/CHW valve, air-device, humidifier, dehumidifier, fan and expansion-tank schedules."
+    },
+    {
+      "page": 48,
+      "sheet": "M-621",
+      "title": "ATCT - MECHANICAL SCHEDULES",
+      "render": "reviews/01__vol2__001/p48-p48-full-poppler.png",
+      "finding": "M-621 ATCT schedules: AHU, FCU, CRAH, humidifier, fan, boiler, cabinet heater and pumps."
+    },
+    {
+      "page": 49,
+      "sheet": "M-622",
+      "title": "ATCT - MECHANICAL SCHEDULES",
+      "render": "reviews/01__vol2__001/p49-p49-full-poppler.png",
+      "finding": "M-622 ATCT schedules: DOAH, HHW/CHW valve, vibration isolation, air separator, silencer and air-device tables."
+    },
+    {
+      "page": 50,
+      "sheet": "MI700",
+      "title": "MECHANICAL CONTROLS GENERAL NOTES, LEGEND AND ABBREVIATIONS",
+      "render": "reviews/01__vol2__001/p50-p50-full-poppler.png",
+      "finding": "MI700 controls symbols/abbreviations: AI/AO/BI/BO, motorized/control/fire-smoke damper, sensor and thermostat semantics."
+    },
+    {
+      "page": 51,
+      "sheet": "MI701",
+      "title": "DDC SYSTEM SCHEMATIC NETWORK ARCHITECTURE DIAGRAM",
+      "render": "reviews/01__vol2__001/p51-p51-full-poppler.png",
+      "finding": "MI701 DDC system network diagram with BACnet IP, BACnet MS/TP, UUKL and generic network legend plus controllers/cabinets."
+    },
+    {
+      "page": 52,
+      "sheet": "MI702",
+      "title": "AIR OPS / MTRACON - DOAH CONTROL SCHEMATIC AND POINTS LIST",
+      "render": "reviews/01__vol2__001/p52-p52-full-poppler.png",
+      "finding": "MI702 Air Ops/MTRACON DOAH schematic and typed points list."
+    },
+    {
+      "page": 53,
+      "sheet": "MI703",
+      "title": "AIR OPS / MTRACON - DOAH SEQUENCE OF OPERATION",
+      "render": "reviews/01__vol2__001/p53-p53-full-poppler.png",
+      "finding": "MI703 Air Ops/MTRACON DOAH written sequence of operation."
+    },
+    {
+      "page": 54,
+      "sheet": "MI704",
+      "title": "AIR OPS / MTRACON - AHU CONTROL SCHEMATIC AND POINTS LIST",
+      "render": "reviews/01__vol2__001/p54-p54-full-poppler.png",
+      "finding": "MI704 Air Ops/MTRACON AHU schematic and typed points list."
+    },
+    {
+      "page": 55,
+      "sheet": "MI705",
+      "title": "AIR OPS / MTRACON - AHU SEQUENCE OF OPERATION",
+      "render": "reviews/01__vol2__001/p55-p55-full-poppler.png",
+      "finding": "MI705 Air Ops/MTRACON AHU written sequence of operation."
+    },
+    {
+      "page": 56,
+      "sheet": "MI710",
+      "title": "AIR OPS - CHW SYSTEM CONTROL SCHEMATIC AND POINTS LIST",
+      "render": "reviews/01__vol2__001/p56-p56-full-poppler.png",
+      "finding": "MI710 Air Operations chilled-water system control schematic and typed points list."
+    },
+    {
+      "page": 57,
+      "sheet": "MI711",
+      "title": "AIR OPS - CHW SYSTEM SEQUENCE OF OPERATION",
+      "render": "reviews/01__vol2__001/p57-p57-full-poppler.png",
+      "finding": "MI711 Air Operations chilled-water written sequence of operation."
+    },
+    {
+      "page": 58,
+      "sheet": "MI712",
+      "title": "AIR OPS - HHW SYSTEM CONTROL SCHEMATIC AND POINTS LIST",
+      "render": "reviews/01__vol2__001/p58-p58-full-poppler.png",
+      "finding": "MI712 Air Operations heating-hot-water system control schematic and typed points list."
+    },
+    {
+      "page": 59,
+      "sheet": "MI713",
+      "title": "AIR OPS - HHW SYSTEM SEQUENCE OF OPERATION",
+      "render": "reviews/01__vol2__001/p59-p59-full-poppler.png",
+      "finding": "MI713 Air Operations heating-hot-water written sequence of operation."
+    },
+    {
+      "page": 60,
+      "sheet": "MI720",
+      "title": "MTRACON/ATCT - CHW SYSTEM CONTROL SCHEMATIC AND POINTS LIST",
+      "render": "reviews/01__vol2__001/p60-p60-full-poppler.png",
+      "finding": "MI720 MTRACON/ATCT chilled-water control schematic and typed points list."
+    },
+    {
+      "page": 61,
+      "sheet": "MI721",
+      "title": "MTRACON/ATCT - CHW SYSTEM SEQUENCE OF OPERATION",
+      "render": "reviews/01__vol2__001/p61-p61-full-poppler.png",
+      "finding": "MI721 MTRACON/ATCT chilled-water written sequence of operation."
+    },
+    {
+      "page": 62,
+      "sheet": "MI722",
+      "title": "MTRACON/ATCT - HHW SYSTEM CONTROL SCHEMATIC AND POINTS LIST",
+      "render": "reviews/01__vol2__001/p62-p62-full-poppler.png",
+      "finding": "MI722 MTRACON/ATCT heating-hot-water schematic and typed points lists."
+    },
+    {
+      "page": 63,
+      "sheet": "MI723",
+      "title": "MTRACON/ATCT - HHW SYSTEM SEQUENCE OF OPERATION",
+      "render": "reviews/01__vol2__001/p63-p63-full-poppler.png",
+      "finding": "MI723 MTRACON/ATCT heating-hot-water written sequence of operation."
+    },
+    {
+      "page": 64,
+      "sheet": "MI730",
+      "title": "ATCT - DOAH CONTROL SCHEMATIC AND POINT LIST",
+      "render": "reviews/01__vol2__001/p64-p64-full-poppler.png",
+      "finding": "MI730 ATCT DOAH-T1 schematic, typed points list and full written sequence."
+    },
+    {
+      "page": 65,
+      "sheet": "MI731",
+      "title": "ATCT - AHU CONTROL SCHEMATIC AND POINT LIST",
+      "render": "reviews/01__vol2__001/p65-p65-full-poppler.png",
+      "finding": "MI731 ATCT AHU schematic, typed points list and sequence including thermostat/humidity context."
+    },
+    {
+      "page": 66,
+      "sheet": "MI732",
+      "title": "ATCT - STAIRWELL PRESSURIZATION SCHEMATIC",
+      "render": "reviews/01__vol2__001/p66-p66-full-poppler.png",
+      "finding": "MI732 ATCT stairwell-pressurization schematic and typed points list."
+    },
+    {
+      "page": 67,
+      "sheet": "MI740",
+      "title": "MECHANICAL CONTROLS",
+      "render": "reviews/01__vol2__001/p67-p67-full-poppler.png",
+      "finding": "MI740 FCU (cooling/heating) and unit-heater templates, point lists and sequences."
+    },
+    {
+      "page": 68,
+      "sheet": "MI741",
+      "title": "MECHANICAL CONTROLS",
+      "render": "reviews/01__vol2__001/p68-p68-full-poppler.png",
+      "finding": "MI741 CRAH and series-fan-powered VAV schematics, point lists and sequences."
+    },
+    {
+      "page": 69,
+      "sheet": "MI742",
+      "title": "MECHANICAL CONTROLS",
+      "render": "reviews/01__vol2__001/p69-p69-full-poppler.png",
+      "finding": "MI742 humidifier, exhaust, bathroom exhaust and elevator-machine-room control templates/point lists/sequences."
+    },
+    {
+      "page": 70,
+      "sheet": "MI743",
+      "title": "MECHANCIAL CONTROLS",
+      "render": "reviews/01__vol2__001/p70-p70-full-poppler.png",
+      "finding": "MI743 Air Operations heating and ventilating controls, typed points list and sequence."
+    },
+    {
+      "page": 71,
+      "sheet": "MI744",
+      "title": "MECHANICAL CONTROLS",
+      "render": "reviews/01__vol2__001/p71-p71-full-poppler.png",
+      "finding": "MI744 occupied FCU and SFPVAV/redundant-FCU templates, point lists and sequence."
+    },
+    {
+      "page": 72,
+      "sheet": "M-801",
+      "title": "AIR OPS - CHILLED WATER PIPING SCHEMATIC",
+      "render": "reviews/01__vol2__001/p72-p72-full-poppler.png",
+      "finding": "M-801 Air Operations chilled-water piping schematic."
+    },
+    {
+      "page": 73,
+      "sheet": "M-802",
+      "title": "AIR OPS - HEATING HOT WATER PIPING SCHEMATIC",
+      "render": "reviews/01__vol2__001/p73-p73-full-poppler.png",
+      "finding": "M-802 Air Operations heating-hot-water piping schematic."
+    },
+    {
+      "page": 74,
+      "sheet": "M-803",
+      "title": "MTRACON/ATCT - CHILLED WATER PIPING SCHEMATIC",
+      "render": "reviews/01__vol2__001/p74-p74-full-poppler.png",
+      "finding": "M-803 MTRACON/ATCT chilled-water piping schematic."
+    },
+    {
+      "page": 75,
+      "sheet": "M-804",
+      "title": "MTRACON/ATCT - HEATING HOT WATER PIPING SCHEMATIC",
+      "render": "reviews/01__vol2__001/p75-p75-full-poppler.png",
+      "finding": "M-804 MTRACON/ATCT heating-hot-water piping schematic."
+    }
+  ],
+  "tables": [],
+  "assertions": [],
+  "inventory_checks": [
+    {
+      "id": "final-full-page-review-ledger",
+      "records_path": [
+        "visual_review_pages"
+      ],
+      "expected": 75,
+      "unique_key": "page"
+    }
+  ]
+}

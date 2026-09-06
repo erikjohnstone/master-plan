@@ -1,0 +1,939 @@
+{
+  "document_id": "12__vol2__028",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "annotation_sha256": "bbcfd6e1e217ead6f261f95e5dd0fda6102cee9bab86fbfe1706b2f0e6fd6c2d",
+  "tables": 2,
+  "rows": 2,
+  "cell_assertions": 29,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "mark",
+      "page": 9,
+      "bbox": [
+        130,
+        1002,
+        180,
+        1025
+      ],
+      "expected": "B-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B-1",
+          "word_ids": [
+            754
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B-1",
+          "word_ids": [
+            1368
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "input_mbh_min",
+      "page": 9,
+      "bbox": [
+        180,
+        1002,
+        230,
+        1025
+      ],
+      "expected": "60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            755
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            1360
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "input_mbh_max",
+      "page": 9,
+      "bbox": [
+        230,
+        1002,
+        275,
+        1025
+      ],
+      "expected": "160",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "160",
+          "word_ids": [
+            756
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "160",
+          "word_ids": [
+            1361
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "output_mbh_min",
+      "page": 9,
+      "bbox": [
+        275,
+        1002,
+        320,
+        1025
+      ],
+      "expected": "55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55",
+          "word_ids": [
+            757
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55",
+          "word_ids": [
+            1362
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "output_mbh_max",
+      "page": 9,
+      "bbox": [
+        320,
+        1002,
+        370,
+        1025
+      ],
+      "expected": "146",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "146",
+          "word_ids": [
+            758
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "146",
+          "word_ids": [
+            1363
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "heating_capacity_mbh",
+      "page": 9,
+      "bbox": [
+        370,
+        1002,
+        430,
+        1025
+      ],
+      "expected": "146",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "146",
+          "word_ids": [
+            759
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "146",
+          "word_ids": [
+            1364
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "efficiency_afue",
+      "page": 9,
+      "bbox": [
+        430,
+        1002,
+        500,
+        1025
+      ],
+      "expected": "95%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "95%",
+          "word_ids": [
+            760
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "95%",
+          "word_ids": [
+            1377
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "max_operating_pressure_psi",
+      "page": 9,
+      "bbox": [
+        500,
+        1002,
+        600,
+        1025
+      ],
+      "expected": "60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            761
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            1378
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "ewt_f",
+      "page": 9,
+      "bbox": [
+        600,
+        1002,
+        650,
+        1025
+      ],
+      "expected": "100",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            762
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100",
+          "word_ids": [
+            1380
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "lwt_f",
+      "page": 9,
+      "bbox": [
+        650,
+        1002,
+        715,
+        1025
+      ],
+      "expected": "140",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "140",
+          "word_ids": [
+            763
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "140",
+          "word_ids": [
+            1389
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "boiler_pressure_drop_ft",
+      "page": 9,
+      "bbox": [
+        715,
+        1002,
+        790,
+        1025
+      ],
+      "expected": "15.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15.8",
+          "word_ids": [
+            764
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15.8",
+          "word_ids": [
+            1387
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "max_gpm",
+      "page": 9,
+      "bbox": [
+        790,
+        1002,
+        840,
+        1025
+      ],
+      "expected": "15.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15.4",
+          "word_ids": [
+            765
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15.4",
+          "word_ids": [
+            1388
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "volt_ph_hz",
+      "page": 9,
+      "bbox": [
+        840,
+        1002,
+        920,
+        1025
+      ],
+      "expected": "120/1/60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            766
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120/1/60",
+          "word_ids": [
+            1394
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "rated_current_a",
+      "page": 9,
+      "bbox": [
+        920,
+        1002,
+        990,
+        1025
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            767
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            1404
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "tank_weight_lbs",
+      "page": 9,
+      "bbox": [
+        990,
+        1002,
+        1070,
+        1025
+      ],
+      "expected": "155",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "155",
+          "word_ids": [
+            768
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "155",
+          "word_ids": [
+            1405
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "fouling_factor_hr_sq_ft_f_btu",
+      "page": 9,
+      "bbox": [
+        1070,
+        1002,
+        1175,
+        1025
+      ],
+      "expected": "0.002",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.002",
+          "word_ids": [
+            769
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.002",
+          "word_ids": [
+            1406
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "length_in",
+      "page": 9,
+      "bbox": [
+        1175,
+        1002,
+        1215,
+        1025
+      ],
+      "expected": "17.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "17.8",
+          "word_ids": [
+            770
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "17.8",
+          "word_ids": [
+            1410
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "width_in",
+      "page": 9,
+      "bbox": [
+        1215,
+        1002,
+        1250,
+        1025
+      ],
+      "expected": "14.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14.2",
+          "word_ids": [
+            771
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14.2",
+          "word_ids": [
+            1411
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "height_in",
+      "page": 9,
+      "bbox": [
+        1250,
+        1002,
+        1285,
+        1025
+      ],
+      "expected": "41.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "41.0",
+          "word_ids": [
+            772
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "41.0",
+          "word_ids": [
+            1412
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 9,
+      "bbox": [
+        1285,
+        1002,
+        1435,
+        1025
+      ],
+      "expected": "VITODENS/200-W B2HA-45",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VITODENS/200-W B2HA - 45",
+          "word_ids": [
+            773,
+            774,
+            775,
+            776
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VITODENS/200-W B2HA - 45",
+          "word_ids": [
+            1416,
+            1417,
+            1418,
+            1419
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "row": 1,
+      "column": "notes",
+      "page": 9,
+      "bbox": [
+        1435,
+        1002,
+        1500,
+        1025
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            777
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            1420
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-BOILER",
+      "header": "BOILER SCHEDULE",
+      "page": 9,
+      "bbox": [
+        130,
+        920,
+        300,
+        945
+      ],
+      "engine": "mupdf",
+      "actual": "BOILER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-BOILER",
+      "header": "BOILER SCHEDULE",
+      "page": 9,
+      "bbox": [
+        130,
+        920,
+        300,
+        945
+      ],
+      "engine": "poppler",
+      "actual": "BOILER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-UNIT-HEATER",
+      "row": 1,
+      "column": "mark",
+      "page": 9,
+      "bbox": [
+        1535,
+        980,
+        1615,
+        1000
+      ],
+      "expected": "UH-1 & UH-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UH-1 & UH-2",
+          "word_ids": [
+            894,
+            895,
+            896
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UH-1 & UH-2",
+          "word_ids": [
+            1430,
+            1431,
+            1432
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-UNIT-HEATER",
+      "row": 1,
+      "column": "serves",
+      "page": 9,
+      "bbox": [
+        1615,
+        980,
+        1730,
+        1000
+      ],
+      "expected": "MECHANICAL 108",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL 108",
+          "word_ids": [
+            897,
+            898
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL 108",
+          "word_ids": [
+            1433,
+            1434
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-UNIT-HEATER",
+      "row": 1,
+      "column": "heat_input_mbh",
+      "page": 9,
+      "bbox": [
+        1730,
+        980,
+        1800,
+        1000
+      ],
+      "expected": "24.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24.9",
+          "word_ids": [
+            899
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24.9",
+          "word_ids": [
+            1435
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-UNIT-HEATER",
+      "row": 1,
+      "column": "gas_type",
+      "page": 9,
+      "bbox": [
+        1800,
+        980,
+        1875,
+        1000
+      ],
+      "expected": "NATURAL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NATURAL",
+          "word_ids": [
+            900
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NATURAL",
+          "word_ids": [
+            1436
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-UNIT-HEATER",
+      "row": 1,
+      "column": "amps",
+      "page": 9,
+      "bbox": [
+        1875,
+        980,
+        1925,
+        1000
+      ],
+      "expected": "1.80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.80",
+          "word_ids": [
+            901
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.80",
+          "word_ids": [
+            1437
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-UNIT-HEATER",
+      "row": 1,
+      "column": "volt_ph",
+      "page": 9,
+      "bbox": [
+        1925,
+        980,
+        1985,
+        1000
+      ],
+      "expected": "115/1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "115/1",
+          "word_ids": [
+            902
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "115/1",
+          "word_ids": [
+            1438
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-UNIT-HEATER",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 9,
+      "bbox": [
+        1985,
+        980,
+        2105,
+        1000
+      ],
+      "expected": "REZNOR/UDAS-300",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "REZNOR/UDAS-300",
+          "word_ids": [
+            903
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "REZNOR/UDAS-300",
+          "word_ids": [
+            1439
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-UNIT-HEATER",
+      "row": 1,
+      "column": "notes",
+      "page": 9,
+      "bbox": [
+        2105,
+        980,
+        2180,
+        1000
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            904
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            1440
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-UNIT-HEATER",
+      "header": "UNIT HEATER SCHEDULE",
+      "page": 9,
+      "bbox": [
+        1530,
+        920,
+        1740,
+        945
+      ],
+      "engine": "mupdf",
+      "actual": "UNIT HEATER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-UNIT-HEATER",
+      "header": "UNIT HEATER SCHEDULE",
+      "page": 9,
+      "bbox": [
+        1530,
+        920,
+        1740,
+        945
+      ],
+      "engine": "poppler",
+      "actual": "UNIT HEATER SCHEDULE",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m601-boiler-row-count",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "id": "m601-unit-heater-row-count",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

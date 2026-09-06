@@ -1,0 +1,16 @@
+{
+  "document_id": "30__vol2__058",
+  "module_role": "Literal CWGP VFD point-map/schedule boundary and visual control-panel schedule disclosure.",
+  "tables": [],
+  "ledger_mode": "literal_schedule_rows_v1",
+  "schedule_counts": {
+    "tables": 1,
+    "rows": 6,
+    "interpretation": "Six literal CWGP-1 VFD mapping rows. J002 visually publishes TCP-M15/TCP-M16 control panels, but its table text is not usable as a dual-engine row matrix and is retained via bounded visual assertions only."
+  },
+  "control_valve_and_damper_schedule_status": {
+    "control_valve_schedule": "J001 index names a Mechanical Controls\u2014Control Valve Schedule and J608/J610 publish ACHE bypass modulating valve feedback/position; no complete physical valve schedule is inferred beyond the bounded source contexts.",
+    "damper_actuator_schedule": "No standalone damper-actuator schedule is claimed from this record."
+  },
+  "source_boundary": "No physical BAS takeoff is inferred from visual schedules, diagrams or network charts."
+}

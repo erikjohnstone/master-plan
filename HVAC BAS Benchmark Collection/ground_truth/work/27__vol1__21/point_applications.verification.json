@@ -1,0 +1,16 @@
+{
+  "document_id": "27__vol1__21",
+  "source_sha256": "e47047c7322d16d44854dd5aa738f3d76087cc47f446927b00d8afc04a128f65",
+  "annotation_sha256": "284ce52106287ae9308f4d756abb1c1d3d0e7fbb1c154a59ce356ee781be4d0f",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 0,
+  "checks": [],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

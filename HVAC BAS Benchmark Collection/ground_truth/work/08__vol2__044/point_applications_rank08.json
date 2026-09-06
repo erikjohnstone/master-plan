@@ -1,0 +1,23 @@
+{
+  "document_id": "08__vol2__044",
+  "module_role": "Explicit application scopes for every literal MI-605/MI-607 published point-list row.",
+  "tables": [],
+  "ledger_mode": "literal_source_row_matrices_v1",
+  "applications": [
+    {
+      "id": "generator-fuel-oil-system",
+      "source_table": "MI605-FUEL-OIL-BACNET",
+      "ownership_scope": "Literal source matrix for the generator fuel-oil system only; no final controller terminal, I/O card, wire, or physical owner is printed."
+    },
+    {
+      "id": "packaged-service-water-heater",
+      "source_table": "MI607-SERVICE-WATER-HEATER",
+      "ownership_scope": "Literal package BACnet object list for each heater interface as printed; it does not state a final controller-card, terminal, wire, or field-device count."
+    }
+  ],
+  "expanded_template_counts": {
+    "source_rows": 96,
+    "total": 96
+  },
+  "expanded_count_warning": "96 is the count of literal published source rows. It is not a final installed BAS point, controller, I/O, terminal, cable, sensor, valve, or device total."
+}

@@ -1,0 +1,29 @@
+{
+  "document_id": "27__vol1__21",
+  "module_role": "Literal schedule evidence.",
+  "tables": [
+    {
+      "id": "P-201-BOOSTER-PUMP",
+      "page": 30,
+      "sheet": "P-201",
+      "title_as_printed": "DOMESTIC WATER BOOSTER PUMP SCHEDULE",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        100,
+        2500
+      ],
+      "y_ranges": [
+        [
+          1200,
+          1240
+        ]
+      ],
+      "rows": [
+        "BP-1 GRUNDFOS CRE MULTI-E 10-3 HYDRO WATER PACKAGED, 2-PUMP BOOSTER VARIABLE DOMESTIC SYSTEM SPEED 3 100 50 25 60 3550 3 460 / 3 / 60 14 8.96 GALLON ACCEPTANCE GALLON TANK"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Literal source row only; it is not an installed quantity, controller binding, ownership or wiring assertion."
+    }
+  ],
+  "assertions": []
+}

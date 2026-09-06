@@ -1,0 +1,145 @@
+{
+  "document_id": "10__vol2__040",
+  "source_sha256": "2337ee9ae5483fd440d98967f23f63f8337d7f6dc8d3024cd494c29e129a1dc2",
+  "annotation_sha256": "5c40f8e36a3b2cf03711ea6ac1e473bee0dc86d7e378702fcae9361267e9607a",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 4,
+  "checks": [
+    {
+      "assertion": "r10-project",
+      "page": 1,
+      "bbox": [
+        2535,
+        1922,
+        2789,
+        1963
+      ],
+      "expected": "EXPAND STERILE PROCESSING SERVICE (SPS)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXPAND STERILE PROCESSING SERVICE (SPS)",
+          "word_ids": [
+            2288,
+            2289,
+            2290,
+            2291,
+            2292
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXPAND STERILE PROCESSING SERVICE (SPS)",
+          "word_ids": [
+            2961,
+            2962,
+            2963,
+            2964,
+            2965
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "r10-facility",
+      "page": 1,
+      "bbox": [
+        2537,
+        2004,
+        2760,
+        2015
+      ],
+      "expected": "Captain James A. Lovell Federal Healthcare Center",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Captain James A. Lovell Federal Healthcare Center",
+          "word_ids": [
+            2381,
+            2382,
+            2383,
+            2384,
+            2385,
+            2386,
+            2387
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Captain James A. Lovell Federal Healthcare Center",
+          "word_ids": [
+            2993,
+            2994,
+            2995,
+            2996,
+            2997,
+            2998,
+            2999
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "r10-issue-date",
+      "page": 1,
+      "bbox": [
+        2537,
+        2052,
+        2589,
+        2064
+      ],
+      "expected": "11/29/2022",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11/29/2022",
+          "word_ids": [
+            2287
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11/29/2022",
+          "word_ids": [
+            3013
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "r10-sheet",
+      "page": 1,
+      "bbox": [
+        2866,
+        2032,
+        2916,
+        2056
+      ],
+      "expected": "M000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M000",
+          "word_ids": [
+            2414
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M000",
+          "word_ids": [
+            3017
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

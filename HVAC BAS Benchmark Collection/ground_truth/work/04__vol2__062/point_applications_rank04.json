@@ -1,0 +1,37 @@
+{
+  "document_id": "04__vol2__062",
+  "module_role": "Explicit source-table application scopes for the published M6.2/M6.3 points. Each output row remains a literal source-list occurrence, not a projected sitewide hardware count.",
+  "tables": [],
+  "ledger_mode": "source_matrix_templates_v1",
+  "applications": [
+    {
+      "id": "m62-boiler-published-points",
+      "source_table": "M62-BOILER-PUBLISHED-POINTS-LEDGER",
+      "ownership_scope": "Published M6.2 boiler point-list template. The page says available boiler points shall be mapped and the listed points are non-exhaustive; no individual physical device owner is printed."
+    },
+    {
+      "id": "m62-vfd-published-points",
+      "source_table": "M62-VFD-PUBLISHED-POINTS-LEDGER",
+      "ownership_scope": "Published M6.2 heating-water VFD control-interface point-list template; the list is non-exhaustive and does not assign rows to an individual VFD."
+    },
+    {
+      "id": "m63-ahu-writeable-points",
+      "source_table": "M63-AHU-WRITEABLE-POINTS-LEDGER",
+      "ownership_scope": "AHU-1 M6.3 Writeable published point-list template; access class is printed, but physical I/O type/terminal ownership is not."
+    },
+    {
+      "id": "m63-ahu-readable-points",
+      "source_table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "ownership_scope": "AHU-1 M6.3 Readable published point-list template; access class is printed, but physical I/O type/terminal ownership is not."
+    }
+  ],
+  "listed_template_counts": {
+    "source_rows": 25,
+    "total": 25
+  },
+  "expanded_template_counts": {
+    "source_rows": 25,
+    "total": 25
+  },
+  "expanded_count_warning": "25 is the number of literal published source-list rows, not an installed BAS point, controller-card, terminal, wiring or device total."
+}

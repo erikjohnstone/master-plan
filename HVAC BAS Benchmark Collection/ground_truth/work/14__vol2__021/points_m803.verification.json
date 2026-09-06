@@ -1,0 +1,1754 @@
+{
+  "document_id": "14__vol2__021",
+  "source_sha256": "4d883afdd3b2d94ea2e14621dc49df77bc10ca0548bfd077c436420c43ae75f8",
+  "annotation_sha256": "92157cc63af5e70a8e72e2363a876a72bdcdb8ead80019e69a733398535f339a",
+  "tables": 1,
+  "rows": 23,
+  "cell_assertions": 46,
+  "text_assertions": 4,
+  "checks": [
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 1,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        1717,
+        1755,
+        1736
+      ],
+      "expected": "DPS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DPS-1",
+          "word_ids": [
+            1525
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DPS-1",
+          "word_ids": [
+            299
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 1,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        1717,
+        2050,
+        1736
+      ],
+      "expected": "DIFFERENTIAL PRESSURE 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE 1",
+          "word_ids": [
+            1526,
+            1527,
+            1528
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE 1",
+          "word_ids": [
+            300,
+            301,
+            302
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 2,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        1737,
+        1755,
+        1756
+      ],
+      "expected": "DPS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DPS-2",
+          "word_ids": [
+            1529
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DPS-2",
+          "word_ids": [
+            303
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 2,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        1737,
+        2050,
+        1756
+      ],
+      "expected": "DIFFERENTIAL PRESSURE 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE 2",
+          "word_ids": [
+            1530,
+            1531,
+            1532
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE 2",
+          "word_ids": [
+            304,
+            305,
+            306
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 3,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        1757,
+        1755,
+        1776
+      ],
+      "expected": "DPS-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DPS-3",
+          "word_ids": [
+            1533
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DPS-3",
+          "word_ids": [
+            307
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 3,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        1757,
+        2050,
+        1776
+      ],
+      "expected": "DIFFERENTIAL PRESSURE 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE 3",
+          "word_ids": [
+            1534,
+            1535,
+            1536
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE 3",
+          "word_ids": [
+            308,
+            309,
+            310
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 4,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        1777,
+        1755,
+        1796
+      ],
+      "expected": "CP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-1",
+          "word_ids": [
+            1537
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-1",
+          "word_ids": [
+            311
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 4,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        1777,
+        2050,
+        1796
+      ],
+      "expected": "CHILLER PUMP 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLER PUMP 1",
+          "word_ids": [
+            1538,
+            1539,
+            1540
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER PUMP 1",
+          "word_ids": [
+            312,
+            313,
+            314
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 5,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        1797,
+        1755,
+        1816
+      ],
+      "expected": "CP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-2",
+          "word_ids": [
+            1541
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-2",
+          "word_ids": [
+            315
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 5,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        1797,
+        2050,
+        1816
+      ],
+      "expected": "CHILLER PUMP 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLER PUMP 2",
+          "word_ids": [
+            1542,
+            1543,
+            1544
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER PUMP 2",
+          "word_ids": [
+            316,
+            317,
+            318
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 6,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        1817,
+        1755,
+        1836
+      ],
+      "expected": "CP-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-3",
+          "word_ids": [
+            1545
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-3",
+          "word_ids": [
+            319
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 6,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        1817,
+        2050,
+        1836
+      ],
+      "expected": "CHILLER PUMP 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLER PUMP 3",
+          "word_ids": [
+            1546,
+            1547,
+            1548
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER PUMP 3",
+          "word_ids": [
+            320,
+            321,
+            322
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 7,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        1837,
+        1755,
+        1856
+      ],
+      "expected": "CP-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CP-4",
+          "word_ids": [
+            1549
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CP-4",
+          "word_ids": [
+            323
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 7,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        1837,
+        2050,
+        1856
+      ],
+      "expected": "CHILLER PUMP 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLER PUMP 4",
+          "word_ids": [
+            1550,
+            1551,
+            1552
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER PUMP 4",
+          "word_ids": [
+            324,
+            325,
+            326
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 8,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        1857,
+        1755,
+        1876
+      ],
+      "expected": "FM-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FM-1",
+          "word_ids": [
+            1553
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FM-1",
+          "word_ids": [
+            327
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 8,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        1857,
+        2050,
+        1876
+      ],
+      "expected": "FLOW METER 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FLOW METER 1",
+          "word_ids": [
+            1554,
+            1555,
+            1556
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FLOW METER 1",
+          "word_ids": [
+            328,
+            329,
+            330
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 9,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        1877,
+        1755,
+        1896
+      ],
+      "expected": "FM-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FM-2",
+          "word_ids": [
+            1557
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FM-2",
+          "word_ids": [
+            331
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 9,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        1877,
+        2050,
+        1896
+      ],
+      "expected": "FLOW METER 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FLOW METER 2",
+          "word_ids": [
+            1558,
+            1559,
+            1560
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FLOW METER 2",
+          "word_ids": [
+            332,
+            333,
+            334
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 10,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        1897,
+        1755,
+        1916
+      ],
+      "expected": "VFD-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD-1",
+          "word_ids": [
+            1561
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD-1",
+          "word_ids": [
+            335
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 10,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        1897,
+        2050,
+        1916
+      ],
+      "expected": "VARIABLE FREQUENCY DRIVE 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 1",
+          "word_ids": [
+            1562,
+            1563,
+            1564,
+            1565
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 1",
+          "word_ids": [
+            336,
+            337,
+            338,
+            339
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 11,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        1917,
+        1755,
+        1936
+      ],
+      "expected": "VFD-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD-2",
+          "word_ids": [
+            1566
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD-2",
+          "word_ids": [
+            340
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 11,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        1917,
+        2050,
+        1936
+      ],
+      "expected": "VARIABLE FREQUENCY DRIVE 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 2",
+          "word_ids": [
+            1567,
+            1568,
+            1569,
+            1570
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 2",
+          "word_ids": [
+            341,
+            342,
+            343,
+            344
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 12,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        1937,
+        1755,
+        1956
+      ],
+      "expected": "VFD-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD-3",
+          "word_ids": [
+            1571
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD-3",
+          "word_ids": [
+            345
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 12,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        1937,
+        2050,
+        1956
+      ],
+      "expected": "VARIABLE FREQUENCY DRIVE 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 3",
+          "word_ids": [
+            1572,
+            1573,
+            1574,
+            1575
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 3",
+          "word_ids": [
+            346,
+            347,
+            348,
+            349
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 13,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        1957,
+        1755,
+        1976
+      ],
+      "expected": "VFD-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD-4",
+          "word_ids": [
+            1576
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD-4",
+          "word_ids": [
+            350
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 13,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        1957,
+        2050,
+        1976
+      ],
+      "expected": "VARIABLE FREQUENCY DRIVE 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 4",
+          "word_ids": [
+            1577,
+            1578,
+            1579,
+            1580
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 4",
+          "word_ids": [
+            351,
+            352,
+            353,
+            354
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 14,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        1977,
+        1755,
+        1996
+      ],
+      "expected": "TS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-1",
+          "word_ids": [
+            1581
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-1",
+          "word_ids": [
+            355
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 14,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        1977,
+        2050,
+        1996
+      ],
+      "expected": "TEMPERATURE SENSOR 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 1",
+          "word_ids": [
+            1582,
+            1583,
+            1584
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 1",
+          "word_ids": [
+            356,
+            357,
+            358
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 15,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        1997,
+        1755,
+        2016
+      ],
+      "expected": "TS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-2",
+          "word_ids": [
+            1585
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-2",
+          "word_ids": [
+            359
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 15,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        1997,
+        2050,
+        2016
+      ],
+      "expected": "TEMPERATURE SENSOR 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 2",
+          "word_ids": [
+            1586,
+            1587,
+            1588
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 2",
+          "word_ids": [
+            360,
+            361,
+            362
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 16,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        2017,
+        1755,
+        2036
+      ],
+      "expected": "TS-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-3",
+          "word_ids": [
+            1589
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-3",
+          "word_ids": [
+            363
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 16,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        2017,
+        2050,
+        2036
+      ],
+      "expected": "TEMPERATURE SENSOR 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 3",
+          "word_ids": [
+            1590,
+            1591,
+            1592
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 3",
+          "word_ids": [
+            364,
+            365,
+            366
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 17,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        2037,
+        1755,
+        2056
+      ],
+      "expected": "TS-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-4",
+          "word_ids": [
+            1593
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-4",
+          "word_ids": [
+            367
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 17,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        2037,
+        2050,
+        2056
+      ],
+      "expected": "TEMPERATURE SENSOR 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 4",
+          "word_ids": [
+            1594,
+            1595,
+            1596
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 4",
+          "word_ids": [
+            368,
+            369,
+            370
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 18,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        2057,
+        1755,
+        2076
+      ],
+      "expected": "TS-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-5",
+          "word_ids": [
+            1597
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-5",
+          "word_ids": [
+            371
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 18,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        2057,
+        2050,
+        2076
+      ],
+      "expected": "TEMPERATURE SENSOR 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 5",
+          "word_ids": [
+            1598,
+            1599,
+            1600
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 5",
+          "word_ids": [
+            372,
+            373,
+            374
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 19,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        2077,
+        1755,
+        2096
+      ],
+      "expected": "TS-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-6",
+          "word_ids": [
+            1601
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-6",
+          "word_ids": [
+            375
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 19,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        2077,
+        2050,
+        2096
+      ],
+      "expected": "TEMPERATURE SENSOR 6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 6",
+          "word_ids": [
+            1602,
+            1603,
+            1604
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 6",
+          "word_ids": [
+            376,
+            377,
+            378
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 20,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        2097,
+        1755,
+        2116
+      ],
+      "expected": "TS-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-7",
+          "word_ids": [
+            1605
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-7",
+          "word_ids": [
+            379
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 20,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        2097,
+        2050,
+        2116
+      ],
+      "expected": "TEMPERATURE SENSOR 7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 7",
+          "word_ids": [
+            1606,
+            1607,
+            1608
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 7",
+          "word_ids": [
+            380,
+            381,
+            382
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 21,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        2117,
+        1755,
+        2134
+      ],
+      "expected": "TS-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-8",
+          "word_ids": [
+            1609
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-8",
+          "word_ids": [
+            383
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 21,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        2117,
+        2050,
+        2134
+      ],
+      "expected": "TEMPERATURE SENSOR 8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 8",
+          "word_ids": [
+            1610,
+            1611,
+            1612
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 8",
+          "word_ids": [
+            384,
+            385,
+            386
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 22,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        2135,
+        1755,
+        2149
+      ],
+      "expected": "V-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-1",
+          "word_ids": [
+            1613
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-1",
+          "word_ids": [
+            387
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 22,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        2135,
+        2050,
+        2149
+      ],
+      "expected": "VALVE MODULATION 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VALVE MODULATION 1",
+          "word_ids": [
+            1614,
+            1615,
+            1616
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VALVE MODULATION 1",
+          "word_ids": [
+            388,
+            389,
+            390
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 23,
+      "column": "tag",
+      "page": 17,
+      "bbox": [
+        1710,
+        2150,
+        1755,
+        2168
+      ],
+      "expected": "V-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-2",
+          "word_ids": [
+            1617
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-2",
+          "word_ids": [
+            391
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "row": 23,
+      "column": "point_name",
+      "page": 17,
+      "bbox": [
+        1755,
+        2150,
+        2050,
+        2168
+      ],
+      "expected": "VALVE MODULATION 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VALVE MODULATION 2",
+          "word_ids": [
+            1618,
+            1619,
+            1620
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VALVE MODULATION 2",
+          "word_ids": [
+            392,
+            393,
+            394
+          ]
+        }
+      }
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "header": "AIR COOLED CHILLER WITH PRIMARY AND SECONDARY PUMPING POINT LIST TABLE DDC CONTROLLER INPUT OUTPUT SUMMARY ANALOG IN ANALOG OUT BINARY IN BINARY OUT TRENDING GENERAL TAG ID DESCRIPTION",
+      "page": 17,
+      "bbox": [
+        1650,
+        1525,
+        3050,
+        1720
+      ],
+      "engine": "mupdf",
+      "actual": "AIR COOLED CHILLER WITH PRIMARY AND SECONDARY PUMPING POINT LIST TABLE DDC CONTROLLER INPUT/OUTPUT SUMMARY DDC CONTROLLER INPUT/OUTPUT LEGEND ANALOG IN ANALOG OUT BINARY IN BINARY OUT TRENDING GENERAL 5 1 FLOW POINT OPEN LOG LOG LOG ALARM EVERY EVERY TEXT SWITCH SWITCH BY EVENT ADJUSTMENT SPEED/LEVEL/FL OW STATUS/PROOF MISCELLANEOU S MINUTES HOUR TEMPERATURE POINT ALARM STATUS + VALVE MODULATION OPEN/CLOSE START/STOP MESSAGE CONTROL DEVICE CARBON MONOXIDE POSITIVE FEEDBACK PRESSURE AUXILIARY CONTACTS EXCEPTION LOG CURRENT HUMIDITY MASS-AIR VARIABLE SPEED CONTROL CONTROL PERCENT HIGH/LOW SUMMARY SUMMARY GRAPHIC DISPLAY CARBON DIOXIDE ON/OFF TREND AUDIBLE FLOW FLOW TREND TREND EMAIL END TIME ALL TAG ID DESCRIPTION",
+      "pass": true
+    },
+    {
+      "table": "M803-CHILLER-PRIMARY-SECONDARY-POINT-MATRIX",
+      "header": "AIR COOLED CHILLER WITH PRIMARY AND SECONDARY PUMPING POINT LIST TABLE DDC CONTROLLER INPUT OUTPUT SUMMARY ANALOG IN ANALOG OUT BINARY IN BINARY OUT TRENDING GENERAL TAG ID DESCRIPTION",
+      "page": 17,
+      "bbox": [
+        1650,
+        1525,
+        3050,
+        1720
+      ],
+      "engine": "poppler",
+      "actual": "AIR COOLED CHILLER WITH PRIMARY AND SECONDARY PUMPING POINT LIST TABLE DDC CONTROLLER INPUT/OUTPUT SUMMARY DDC CONTROLLER INPUT/OUTPUT LEGEND ANALOG IN ANALOG OUT BINARY IN BINARY OUT TRENDING GENERAL 5 1 FLOW POINT OPEN LOG LOG LOG ALARM EVERY EVERY TEXT SWITCH SWITCH BY EVENT ADJUSTMENT SPEED/LEVEL/FL OW STATUS/PROOF MISCELLANEOU S MINUTES HOUR TEMPERATURE POINT ALARM STATUS + VALVE MODULATION OPEN/CLOSE START/STOP MESSAGE CONTROL DEVICE CARBON MONOXIDE POSITIVE FEEDBACK PRESSURE AUXILIARY CONTACTS EXCEPTION LOG CURRENT HUMIDITY MASS-AIR VARIABLE SPEED CONTROL CONTROL PERCENT HIGH/LOW SUMMARY SUMMARY GRAPHIC DISPLAY CARBON DIOXIDE ON/OFF TREND AUDIBLE FLOW FLOW TREND TREND EMAIL END TIME ALL TAG ID DESCRIPTION",
+      "pass": true
+    },
+    {
+      "assertion": "m803-chiller-matrix-title",
+      "page": 17,
+      "bbox": [
+        1650,
+        1525,
+        3050,
+        1585
+      ],
+      "expected": "AIR COOLED CHILLER WITH PRIMARY AND SECONDARY PUMPING POINT LIST TABLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIR COOLED CHILLER WITH PRIMARY AND SECONDARY PUMPING POINT LIST TABLE",
+          "word_ids": [
+            1697,
+            1698,
+            1699,
+            1700,
+            1701,
+            1702,
+            1703,
+            1704,
+            1705,
+            1706,
+            1707
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIR COOLED CHILLER WITH PRIMARY AND SECONDARY PUMPING POINT LIST TABLE",
+          "word_ids": [
+            516,
+            517,
+            518,
+            519,
+            520,
+            521,
+            522,
+            523,
+            524,
+            525,
+            526
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m803-virtual-points-note",
+      "page": 17,
+      "bbox": [
+        1650,
+        2370,
+        3050,
+        2440
+      ],
+      "expected": "2. NOT ALL VIRTUAL POINTS ARE SHOWN. PROVIDE ALL POINTS REQUIRED FOR SOFTWARE OPERATION.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NUMBER OF PURGE CYCLES OVER THE LAST 7 DAYS NOTE: 1. LOCKOUT ALARM WHEN UNIT IS DE-ENERGIZED. PROVIDE 15-MINUTE STARTUP DELAY PRIOR TO ENABLING ALARM. 2. NOT ALL VIRTUAL POINTS ARE SHOWN. PROVIDE ALL POINTS REQUIRED FOR SOFTWARE OPERATION.",
+          "word_ids": [
+            1658,
+            1659,
+            1660,
+            1661,
+            1662,
+            1663,
+            1664,
+            1665,
+            1666,
+            1667,
+            1668,
+            1669,
+            1670,
+            1671,
+            1672,
+            1673,
+            1674,
+            1675,
+            1676,
+            1677,
+            1678,
+            1679,
+            1680,
+            1681,
+            1682,
+            1683,
+            1684,
+            1685,
+            1686,
+            1687,
+            1688,
+            1689,
+            1690,
+            1691,
+            1692,
+            1693,
+            1694,
+            1695,
+            1696
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NUMBER OF PURGE CYCLES OVER THE LAST 7 DAYS NOTE: 1. LOCKOUT ALARM WHEN UNIT IS DE-ENERGIZED. PROVIDE 15-MINUTE STARTUP DELAY PRIOR TO ENABLING ALARM. 2. NOT ALL VIRTUAL POINTS ARE SHOWN. PROVIDE ALL POINTS REQUIRED FOR SOFTWARE OPERATION.",
+          "word_ids": [
+            2512,
+            2513,
+            2514,
+            2515,
+            2516,
+            2517,
+            2518,
+            2519,
+            2520,
+            2521,
+            2522,
+            2523,
+            2524,
+            2525,
+            2526,
+            2527,
+            2528,
+            2529,
+            2530,
+            2531,
+            2532,
+            2533,
+            2534,
+            2535,
+            2536,
+            2537,
+            2538,
+            2539,
+            2540,
+            2541,
+            2542,
+            2543,
+            2544,
+            2545,
+            2546,
+            2547,
+            2548,
+            2549,
+            2550
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m803-chiller-4to20-command",
+      "page": 17,
+      "bbox": [
+        2060,
+        1065,
+        2540,
+        1084
+      ],
+      "expected": "TRANSMITTING A 4 TO 20 MA DC SIGNAL TO MODULATE PUMP SPEED FROM MINIMUM TO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STOPPING MOTOR AND BY TRANSMITTING A 4 TO 20 MA DC SIGNAL TO MODULATE PUMP SPEED FROM MINIMUM TO",
+          "word_ids": [
+            2023,
+            2024,
+            2025,
+            2026,
+            2027,
+            2028,
+            2029,
+            2030,
+            2031,
+            2032,
+            2033,
+            2034,
+            2035,
+            2036,
+            2037,
+            2038,
+            2039,
+            2040,
+            2041
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STOPPING MOTOR AND BY TRANSMITTING A 4 TO 20 MA DC SIGNAL TO MODULATE PUMP SPEED FROM MINIMUM TO",
+          "word_ids": [
+            1757,
+            1758,
+            1759,
+            1760,
+            1761,
+            1762,
+            1763,
+            1764,
+            1765,
+            1766,
+            1767,
+            1768,
+            1769,
+            1770,
+            1771,
+            1772,
+            1773,
+            1774,
+            1775
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m803-chiller-mode-title",
+      "page": 17,
+      "bbox": [
+        2080,
+        1402,
+        2360,
+        1420
+      ],
+      "expected": "ICE STORAGE SYSTEM OPERATES IN ONE OF THREE MODES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ICE STORAGE SYSTEM OPERATES IN ONE OF THREE MODES:",
+          "word_ids": [
+            2278,
+            2279,
+            2280,
+            2281,
+            2282,
+            2283,
+            2284,
+            2285,
+            2286
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ICE STORAGE SYSTEM OPERATES IN ONE OF THREE MODES:",
+          "word_ids": [
+            1355,
+            1356,
+            1357,
+            1358,
+            1359,
+            1360,
+            1361,
+            1362,
+            1363
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m803-chiller-printed-matrix-rows",
+      "actual": 23,
+      "expected": 23,
+      "pass": true
+    },
+    {
+      "id": "m803-chiller-matrix-assignment-rows",
+      "actual": 23,
+      "expected": 23,
+      "pass": true
+    },
+    {
+      "id": "m803-chiller-logical-telemetry-rows",
+      "actual": 12,
+      "expected": 12,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

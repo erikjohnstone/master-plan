@@ -1,0 +1,49 @@
+{
+  "document_id": "12__vol2__028",
+  "module_role": "M-507 chilled-water P&ID context. This sheet contains the exact BAS I/O matrix in the companion module and a schematic/PRV design note; it does not print a written chilled-water sequence of operations.",
+  "source_sheet": "M-507",
+  "source_page": 3,
+  "network_architecture": {
+    "protocols_as_printed": [],
+    "operator_interface_as_printed": [],
+    "transport": {"status": "not_stated_on_M-507", "value": null},
+    "addressing_baud_rate_controller_model": {"status": "not_stated_on_M-507", "value": null},
+    "limitation": "M-507 identifies selected I/O as pulled from the chiller controller, but does not name a BAS protocol, controller model, transport, or addressing method. The separate M-509 written sequence is the source for BACNET requirements."
+  },
+  "written_sequence_of_operations": {
+    "status": "not_present_on_source_sheet",
+    "value": null,
+    "review_basis": "Full-page visual review and dual-engine text capture show a chilled-water P&ID, PRV note, and BAS I/O point list rather than a written sequence-of-operations block. M-509, not this sheet, supplies the written chilled-water sequence."
+  },
+  "p_and_id_context": {
+    "title": "CHILLED WATER SYSTEM P&ID",
+    "scale": "NOT TO SCALE",
+    "system_scope": "The P&ID labels CH-1, CHP-1, CHP-2, and CI-1. These are schematic labels only; the supplied excerpt has no plan/equipment schedule basis for converting them to installation quantities.",
+    "bypass_valve": "2-WAY CHILLED WATER BYPASS VALVE LOCATED AT END OF LOOP",
+    "controller_ownership_note": "* INDICATES POINT PULLED FROM CHILLER CONTROLLER",
+    "makeup_water_note": "The PRV note requires 4 to 5 PSI at the highest pipe elevation, same-elevation tie-in of makeup water with the expansion tank and air separator, contractor field verification of tie-in elevation, and a printed PRV-setpoint formula.",
+    "field_connection_note": "The potable-water connection is field-verified and references Plumbing Sheet PP-302; it is not an asserted installed connection location."
+  },
+  "sensor_and_zone_ledger": {
+    "source_items": [],
+    "counts": {
+      "space_sensors": {"status": "not_stated", "value": null},
+      "physical_sensor_count": {"status": "not_stated", "value": null}
+    },
+    "limitation": "M-507 is a schematic and point matrix, without plans or a sensor schedule. Point-level indications remain in points_m507_chw_template.json and are not converted to physical sensor counts or zone assignments."
+  },
+  "tables": [],
+  "assertions": [
+    {"id": "m507-pid-title", "page": 3, "bbox": [1135,1435,1530,1485], "expected": "CHILLED WATER SYSTEM P&ID", "mode": "contains"},
+    {"id": "m507-not-to-scale", "page": 3, "bbox": [1135,1460,1230,1490], "expected": "NOT TO SCALE", "mode": "contains"},
+    {"id": "m507-prv-pressure-basis", "page": 3, "bbox": [850,895,1160,935], "expected": "PRV IS DESIGNED TO MAINTAIN 4 TO 5 PSI AT THE HIGHEST ELEVATION OF PIPE IN THE SYSTEM.", "mode": "contains"},
+    {"id": "m507-prv-tie-in", "page": 3, "bbox": [835,940,1165,995], "expected": "THE MAKEUP WATER PIPE SHALL TIE INTO THE SYSTEM AT THE SAME ELEVATION AS THE EXPANSION TANK AND THE AIR SEPARATOR.", "mode": "contains"},
+    {"id": "m507-prv-formula", "page": 3, "bbox": [910,1050,1165,1100], "expected": "PRV PRESSURE = (MAX. HEIGHT RETURN PIPE - HEIGHT MAKEUP WATER PIPE", "mode": "contains"},
+    {"id": "m507-bypass-at-loop-end", "page": 3, "bbox": [2030,420,2180,505], "expected": "2-WAY CHILLED WATER BYPASS VALVE LOCATED AT END OF LOOP", "mode": "contains"},
+    {"id": "m507-chiller-controller-note", "page": 3, "bbox": [1540,1310,1900,1335], "expected": "* INDICATES POINT PULLED FROM CHILLER CONTROLLER", "mode": "contains"},
+    {"id": "m507-field-verify", "page": 3, "bbox": [1125,1235,1245,1345], "expected": "FROM POTABLE WATER LINE (FIELD VERIFY", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "m507-pid-context-assertions", "records_path": ["assertions"], "expected": 8, "unique_key": "id"}
+  ]
+}

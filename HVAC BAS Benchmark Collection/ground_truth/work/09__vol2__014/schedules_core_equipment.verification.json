@@ -1,0 +1,4367 @@
+{
+  "document_id": "09__vol2__014",
+  "source_sha256": "f208e34965aba62b3752f39b2691e2a418ac823bd99dbaadfb2e7b06391fc7ff",
+  "annotation_sha256": "a42e07baf19041db1182645d6d59c742a0e7d994a124a677b683c2e03377ea30",
+  "tables": 4,
+  "rows": 10,
+  "cell_assertions": 142,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 1,
+      "column": "mark",
+      "page": 2,
+      "bbox": [
+        102,
+        1236,
+        170,
+        1249
+      ],
+      "expected": "CU-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CU-A1",
+          "word_ids": [
+            84
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CU-A1",
+          "word_ids": [
+            1894
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 1,
+      "column": "base_bid_or_alternate",
+      "page": 2,
+      "bbox": [
+        170,
+        1236,
+        320,
+        1249
+      ],
+      "expected": "ALTERNATE 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALTERNATE 1",
+          "word_ids": [
+            85,
+            86
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALTERNATE 1",
+          "word_ids": [
+            1890,
+            1891
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 1,
+      "column": "serves",
+      "page": 2,
+      "bbox": [
+        320,
+        1236,
+        400,
+        1249
+      ],
+      "expected": "AHU-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-A1",
+          "word_ids": [
+            87
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-A1",
+          "word_ids": [
+            1884
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 1,
+      "column": "manufacturer",
+      "page": 2,
+      "bbox": [
+        400,
+        1236,
+        485,
+        1249
+      ],
+      "expected": "AAON",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AAON",
+          "word_ids": [
+            88
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AAON",
+          "word_ids": [
+            1341
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 1,
+      "column": "model_number",
+      "page": 2,
+      "bbox": [
+        485,
+        1236,
+        580,
+        1249
+      ],
+      "expected": "CNA-105",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CNA-105",
+          "word_ids": [
+            89
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CNA-105",
+          "word_ids": [
+            1343
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 1,
+      "column": "capacity_mbh",
+      "page": 2,
+      "bbox": [
+        580,
+        1236,
+        650,
+        1249
+      ],
+      "expected": "1,169",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,169",
+          "word_ids": [
+            90
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,169",
+          "word_ids": [
+            1350
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 1,
+      "column": "eer_ahri_design",
+      "page": 2,
+      "bbox": [
+        650,
+        1236,
+        745,
+        1249
+      ],
+      "expected": "12.9 21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12.9 21",
+          "word_ids": [
+            91,
+            92
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12.9 21",
+          "word_ids": [
+            1351,
+            1352
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 1,
+      "column": "refrigerant",
+      "page": 2,
+      "bbox": [
+        745,
+        1236,
+        820,
+        1249
+      ],
+      "expected": "R-410A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R-410A",
+          "word_ids": [
+            93
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R-410A",
+          "word_ids": [
+            1363
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 1,
+      "column": "suction_temperature",
+      "page": 2,
+      "bbox": [
+        820,
+        1236,
+        905,
+        1249
+      ],
+      "expected": "40°F",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "40°F",
+          "word_ids": [
+            94
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "40°F",
+          "word_ids": [
+            1364
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 1,
+      "column": "cooling_stages",
+      "page": 2,
+      "bbox": [
+        905,
+        1236,
+        1010,
+        1249
+      ],
+      "expected": "2 VARIABLE SPEED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2 VARIABLE SPEED",
+          "word_ids": [
+            95,
+            96,
+            97
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2 VARIABLE SPEED",
+          "word_ids": [
+            1365,
+            1366,
+            1367
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 1,
+      "column": "condenser_fans",
+      "page": 2,
+      "bbox": [
+        1010,
+        1236,
+        1080,
+        1249
+      ],
+      "expected": "8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            98
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            1368
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 1,
+      "column": "length_top_inches",
+      "page": 2,
+      "bbox": [
+        1080,
+        1236,
+        1160,
+        1249
+      ],
+      "expected": "152",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "152",
+          "word_ids": [
+            99
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "152",
+          "word_ids": [
+            1381
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 1,
+      "column": "length_base_inches",
+      "page": 2,
+      "bbox": [
+        1160,
+        1236,
+        1240,
+        1249
+      ],
+      "expected": "152",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "152",
+          "word_ids": [
+            100
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "152",
+          "word_ids": [
+            1382
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 1,
+      "column": "width_inches",
+      "page": 2,
+      "bbox": [
+        1240,
+        1236,
+        1280,
+        1249
+      ],
+      "expected": "142",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "142",
+          "word_ids": [
+            101
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "142",
+          "word_ids": [
+            1383
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 1,
+      "column": "height_inches",
+      "page": 2,
+      "bbox": [
+        1280,
+        1236,
+        1325,
+        1249
+      ],
+      "expected": "104",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "104",
+          "word_ids": [
+            102
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "104",
+          "word_ids": [
+            1388
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 1,
+      "column": "weight_lbs",
+      "page": 2,
+      "bbox": [
+        1325,
+        1236,
+        1370,
+        1249
+      ],
+      "expected": "5,905",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5,905",
+          "word_ids": [
+            103
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5,905",
+          "word_ids": [
+            1389
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 1,
+      "column": "additional_details",
+      "page": 2,
+      "bbox": [
+        1370,
+        1236,
+        1450,
+        1249
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            104,
+            105
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1392,
+            1393
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 2,
+      "column": "mark",
+      "page": 2,
+      "bbox": [
+        102,
+        1264,
+        170,
+        1277
+      ],
+      "expected": "CU-A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CU-A2",
+          "word_ids": [
+            106
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CU-A2",
+          "word_ids": [
+            1889
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 2,
+      "column": "base_bid_or_alternate",
+      "page": 2,
+      "bbox": [
+        170,
+        1264,
+        320,
+        1277
+      ],
+      "expected": "BASE BID OR ALT. 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BASE BID OR ALT. 3",
+          "word_ids": [
+            107,
+            108,
+            109,
+            110,
+            111
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BASE BID OR ALT. 3",
+          "word_ids": [
+            1879,
+            1880,
+            1881,
+            1882,
+            1883
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 2,
+      "column": "serves",
+      "page": 2,
+      "bbox": [
+        320,
+        1264,
+        400,
+        1277
+      ],
+      "expected": "AHU-A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-A2",
+          "word_ids": [
+            112
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-A2",
+          "word_ids": [
+            1340
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 2,
+      "column": "manufacturer",
+      "page": 2,
+      "bbox": [
+        400,
+        1264,
+        485,
+        1277
+      ],
+      "expected": "AAON",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AAON",
+          "word_ids": [
+            113
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AAON",
+          "word_ids": [
+            1342
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 2,
+      "column": "model_number",
+      "page": 2,
+      "bbox": [
+        485,
+        1264,
+        580,
+        1277
+      ],
+      "expected": "CFA-025",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CFA-025",
+          "word_ids": [
+            114
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CFA-025",
+          "word_ids": [
+            1344
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 2,
+      "column": "capacity_mbh",
+      "page": 2,
+      "bbox": [
+        580,
+        1264,
+        650,
+        1277
+      ],
+      "expected": "282.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "282.5",
+          "word_ids": [
+            115
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "282.5",
+          "word_ids": [
+            1353
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 2,
+      "column": "eer_ahri_design",
+      "page": 2,
+      "bbox": [
+        650,
+        1264,
+        745,
+        1277
+      ],
+      "expected": "- 11.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "- 11.2",
+          "word_ids": [
+            116,
+            117
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "- 11.2",
+          "word_ids": [
+            1354,
+            1355
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 2,
+      "column": "refrigerant",
+      "page": 2,
+      "bbox": [
+        745,
+        1264,
+        820,
+        1277
+      ],
+      "expected": "R-410A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R-410A",
+          "word_ids": [
+            118
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R-410A",
+          "word_ids": [
+            1369
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 2,
+      "column": "suction_temperature",
+      "page": 2,
+      "bbox": [
+        820,
+        1264,
+        905,
+        1277
+      ],
+      "expected": "44°F",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "44°F",
+          "word_ids": [
+            119
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "44°F",
+          "word_ids": [
+            1370
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 2,
+      "column": "cooling_stages",
+      "page": 2,
+      "bbox": [
+        905,
+        1264,
+        1010,
+        1277
+      ],
+      "expected": "1 VAR. + 1 ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 VAR. + 1 ON/OFF",
+          "word_ids": [
+            120,
+            121,
+            122,
+            123,
+            124
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 VAR. + 1 ON/OFF",
+          "word_ids": [
+            1394,
+            1395,
+            1396,
+            1397,
+            1398
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 2,
+      "column": "condenser_fans",
+      "page": 2,
+      "bbox": [
+        1010,
+        1264,
+        1080,
+        1277
+      ],
+      "expected": "4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            125
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            1399
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 2,
+      "column": "length_top_inches",
+      "page": 2,
+      "bbox": [
+        1080,
+        1264,
+        1160,
+        1277
+      ],
+      "expected": "91",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "91",
+          "word_ids": [
+            126
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "91",
+          "word_ids": [
+            1400
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 2,
+      "column": "length_base_inches",
+      "page": 2,
+      "bbox": [
+        1160,
+        1264,
+        1240,
+        1277
+      ],
+      "expected": "58.25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "58.25",
+          "word_ids": [
+            127
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "58.25",
+          "word_ids": [
+            1401
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 2,
+      "column": "width_inches",
+      "page": 2,
+      "bbox": [
+        1240,
+        1264,
+        1280,
+        1277
+      ],
+      "expected": "61.25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "61.25",
+          "word_ids": [
+            128
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "61.25",
+          "word_ids": [
+            1402
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 2,
+      "column": "height_inches",
+      "page": 2,
+      "bbox": [
+        1280,
+        1264,
+        1325,
+        1277
+      ],
+      "expected": "62",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "62",
+          "word_ids": [
+            129
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "62",
+          "word_ids": [
+            1403
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 2,
+      "column": "weight_lbs",
+      "page": 2,
+      "bbox": [
+        1325,
+        1264,
+        1370,
+        1277
+      ],
+      "expected": "1,519",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,519",
+          "word_ids": [
+            130
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,519",
+          "word_ids": [
+            1404
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 2,
+      "column": "additional_details",
+      "page": 2,
+      "bbox": [
+        1370,
+        1264,
+        1450,
+        1277
+      ],
+      "expected": "SEE BE LOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BE LOW",
+          "word_ids": [
+            131,
+            132,
+            133
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BE LOW",
+          "word_ids": [
+            1405,
+            1406,
+            1407
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 3,
+      "column": "mark",
+      "page": 2,
+      "bbox": [
+        102,
+        1282,
+        170,
+        1305
+      ],
+      "expected": "CU-B1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CU-B1",
+          "word_ids": [
+            134
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CU-B1",
+          "word_ids": [
+            1821
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 3,
+      "column": "base_bid_or_alternate",
+      "page": 2,
+      "bbox": [
+        170,
+        1282,
+        320,
+        1305
+      ],
+      "expected": "BASE BID",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BASE BID",
+          "word_ids": [
+            135,
+            136
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BASE BID",
+          "word_ids": [
+            1371,
+            1372
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 3,
+      "column": "serves",
+      "page": 2,
+      "bbox": [
+        320,
+        1282,
+        400,
+        1305
+      ],
+      "expected": "(E) B WING MZ AHU",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(E) B WING MZ AHU",
+          "word_ids": [
+            137,
+            138,
+            139,
+            140,
+            141
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(E) B WING MZ AHU",
+          "word_ids": [
+            1576,
+            1577,
+            1578,
+            1579,
+            1587
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 3,
+      "column": "manufacturer",
+      "page": 2,
+      "bbox": [
+        400,
+        1282,
+        485,
+        1305
+      ],
+      "expected": "AAON",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AAON",
+          "word_ids": [
+            142
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AAON",
+          "word_ids": [
+            1580
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 3,
+      "column": "model_number",
+      "page": 2,
+      "bbox": [
+        485,
+        1282,
+        580,
+        1305
+      ],
+      "expected": "CFA-050",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CFA-050",
+          "word_ids": [
+            143
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CFA-050",
+          "word_ids": [
+            1581
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 3,
+      "column": "capacity_mbh",
+      "page": 2,
+      "bbox": [
+        580,
+        1282,
+        650,
+        1305
+      ],
+      "expected": "566.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "566.7",
+          "word_ids": [
+            144
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "566.7",
+          "word_ids": [
+            1582
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 3,
+      "column": "eer_ahri_design",
+      "page": 2,
+      "bbox": [
+        650,
+        1282,
+        745,
+        1305
+      ],
+      "expected": "- 11.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "- 11.5",
+          "word_ids": [
+            145,
+            146
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "- 11.5",
+          "word_ids": [
+            1583,
+            1584
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 3,
+      "column": "refrigerant",
+      "page": 2,
+      "bbox": [
+        745,
+        1282,
+        820,
+        1305
+      ],
+      "expected": "R-410A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R-410A",
+          "word_ids": [
+            147
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R-410A",
+          "word_ids": [
+            1585
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 3,
+      "column": "suction_temperature",
+      "page": 2,
+      "bbox": [
+        820,
+        1282,
+        905,
+        1305
+      ],
+      "expected": "44°F",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "44°F",
+          "word_ids": [
+            148
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "44°F",
+          "word_ids": [
+            1586
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 3,
+      "column": "cooling_stages",
+      "page": 2,
+      "bbox": [
+        905,
+        1282,
+        1010,
+        1305
+      ],
+      "expected": "1 VAR. + 1 ON/OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 VAR. + 1 ON/OFF",
+          "word_ids": [
+            149,
+            150,
+            151,
+            152,
+            153
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 VAR. + 1 ON/OFF",
+          "word_ids": [
+            1408,
+            1409,
+            1410,
+            1411,
+            1412
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 3,
+      "column": "condenser_fans",
+      "page": 2,
+      "bbox": [
+        1010,
+        1282,
+        1080,
+        1305
+      ],
+      "expected": "4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            154
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            1413
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 3,
+      "column": "length_top_inches",
+      "page": 2,
+      "bbox": [
+        1080,
+        1282,
+        1160,
+        1305
+      ],
+      "expected": "120 .5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120 .5",
+          "word_ids": [
+            155,
+            156
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120 .5",
+          "word_ids": [
+            1414,
+            1415
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 3,
+      "column": "length_base_inches",
+      "page": 2,
+      "bbox": [
+        1160,
+        1282,
+        1240,
+        1305
+      ],
+      "expected": "104.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "104.5",
+          "word_ids": [
+            157
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "104.5",
+          "word_ids": [
+            1416
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 3,
+      "column": "width_inches",
+      "page": 2,
+      "bbox": [
+        1240,
+        1282,
+        1280,
+        1305
+      ],
+      "expected": "82.25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "82.25",
+          "word_ids": [
+            158
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "82.25",
+          "word_ids": [
+            1417
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 3,
+      "column": "height_inches",
+      "page": 2,
+      "bbox": [
+        1280,
+        1282,
+        1325,
+        1305
+      ],
+      "expected": "68.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "68.5",
+          "word_ids": [
+            159
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "68.5",
+          "word_ids": [
+            1418
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 3,
+      "column": "weight_lbs",
+      "page": 2,
+      "bbox": [
+        1325,
+        1282,
+        1370,
+        1305
+      ],
+      "expected": "2,547",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,547",
+          "word_ids": [
+            160
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,547",
+          "word_ids": [
+            1419
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "row": 3,
+      "column": "additional_details",
+      "page": 2,
+      "bbox": [
+        1370,
+        1282,
+        1450,
+        1305
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            161,
+            162
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1420,
+            1421
+          ]
+        }
+      }
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "header": "AIR-COOLED CONDENSING UNIT SCHEDULE",
+      "page": 2,
+      "bbox": [
+        102,
+        1147,
+        650,
+        1181
+      ],
+      "engine": "mupdf",
+      "actual": "AIR-COOLED CONDENSING UNIT SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M02-AIR-COOLED-CONDENSING-UNITS",
+      "header": "AIR-COOLED CONDENSING UNIT SCHEDULE",
+      "page": 2,
+      "bbox": [
+        102,
+        1147,
+        650,
+        1181
+      ],
+      "engine": "poppler",
+      "actual": "AIR-COOLED CONDENSING UNIT SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 1,
+      "column": "mark",
+      "page": 4,
+      "bbox": [
+        117,
+        465,
+        175,
+        478
+      ],
+      "expected": "B-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B-A1",
+          "word_ids": [
+            413
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B-A1",
+          "word_ids": [
+            522
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 1,
+      "column": "input_mbh",
+      "page": 4,
+      "bbox": [
+        175,
+        465,
+        255,
+        478
+      ],
+      "expected": "2,500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,500",
+          "word_ids": [
+            414
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,500",
+          "word_ids": [
+            390
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 1,
+      "column": "output_mbh",
+      "page": 4,
+      "bbox": [
+        255,
+        465,
+        340,
+        478
+      ],
+      "expected": "2,300",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,300",
+          "word_ids": [
+            415
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,300",
+          "word_ids": [
+            391
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 1,
+      "column": "ahri_thermal_efficiency",
+      "page": 4,
+      "bbox": [
+        340,
+        465,
+        415,
+        478
+      ],
+      "expected": "92.0%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "92.0%",
+          "word_ids": [
+            416
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "92.0%",
+          "word_ids": [
+            392
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 1,
+      "column": "type",
+      "page": 4,
+      "bbox": [
+        415,
+        465,
+        495,
+        478
+      ],
+      "expected": "FIRE-TUBE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FIRE-TUBE",
+          "word_ids": [
+            417
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FIRE-TUBE",
+          "word_ids": [
+            393
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 1,
+      "column": "manufacturer",
+      "page": 4,
+      "bbox": [
+        495,
+        465,
+        580,
+        478
+      ],
+      "expected": "LOCHINVAR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOCHINVAR",
+          "word_ids": [
+            418
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOCHINVAR",
+          "word_ids": [
+            394
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 1,
+      "column": "model_number",
+      "page": 4,
+      "bbox": [
+        580,
+        465,
+        690,
+        478
+      ],
+      "expected": "CREST FBN2500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CREST FBN2500",
+          "word_ids": [
+            419,
+            420
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CREST FBN2500",
+          "word_ids": [
+            395,
+            396
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 1,
+      "column": "combustion_air",
+      "page": 4,
+      "bbox": [
+        690,
+        465,
+        780,
+        478
+      ],
+      "expected": "8\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8\"",
+          "word_ids": [
+            421
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8\"",
+          "word_ids": [
+            397
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 1,
+      "column": "vent",
+      "page": 4,
+      "bbox": [
+        780,
+        465,
+        860,
+        478
+      ],
+      "expected": "9\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9\"",
+          "word_ids": [
+            422
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9\"",
+          "word_ids": [
+            398
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 1,
+      "column": "turndown",
+      "page": 4,
+      "bbox": [
+        860,
+        465,
+        960,
+        478
+      ],
+      "expected": "20:1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20:1",
+          "word_ids": [
+            423
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20:1",
+          "word_ids": [
+            399
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 1,
+      "column": "gas_connection",
+      "page": 4,
+      "bbox": [
+        960,
+        465,
+        1098,
+        478
+      ],
+      "expected": "2\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2\"",
+          "word_ids": [
+            424
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2\"",
+          "word_ids": [
+            400
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 1,
+      "column": "working_fluid",
+      "page": 4,
+      "bbox": [
+        1098,
+        465,
+        1230,
+        478
+      ],
+      "expected": "40% PROPYLENE GLYCOL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "40% PROPYLENE GLYCOL",
+          "word_ids": [
+            425,
+            426,
+            427
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "40% PROPYLENE GLYCOL",
+          "word_ids": [
+            401,
+            402,
+            403
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 1,
+      "column": "wet_weight_lbs",
+      "page": 4,
+      "bbox": [
+        1230,
+        465,
+        1280,
+        478
+      ],
+      "expected": "3652",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3652",
+          "word_ids": [
+            428
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3652",
+          "word_ids": [
+            404
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 1,
+      "column": "additional_details",
+      "page": 4,
+      "bbox": [
+        1280,
+        465,
+        1390,
+        478
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            429,
+            430
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            405,
+            406
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 2,
+      "column": "mark",
+      "page": 4,
+      "bbox": [
+        117,
+        488,
+        175,
+        501
+      ],
+      "expected": "B-A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "B-A2",
+          "word_ids": [
+            431
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "B-A2",
+          "word_ids": [
+            407
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 2,
+      "column": "input_mbh",
+      "page": 4,
+      "bbox": [
+        175,
+        488,
+        255,
+        501
+      ],
+      "expected": "2,500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,500",
+          "word_ids": [
+            432
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,500",
+          "word_ids": [
+            408
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 2,
+      "column": "output_mbh",
+      "page": 4,
+      "bbox": [
+        255,
+        488,
+        340,
+        501
+      ],
+      "expected": "2,300",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,300",
+          "word_ids": [
+            433
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,300",
+          "word_ids": [
+            409
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 2,
+      "column": "ahri_thermal_efficiency",
+      "page": 4,
+      "bbox": [
+        340,
+        488,
+        415,
+        501
+      ],
+      "expected": "92.0%",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "92.0%",
+          "word_ids": [
+            434
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "92.0%",
+          "word_ids": [
+            410
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 2,
+      "column": "type",
+      "page": 4,
+      "bbox": [
+        415,
+        488,
+        495,
+        501
+      ],
+      "expected": "FIRE-TUBE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FIRE-TUBE",
+          "word_ids": [
+            435
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FIRE-TUBE",
+          "word_ids": [
+            411
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 2,
+      "column": "manufacturer",
+      "page": 4,
+      "bbox": [
+        495,
+        488,
+        580,
+        501
+      ],
+      "expected": "LOCHINVAR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOCHINVAR",
+          "word_ids": [
+            436
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOCHINVAR",
+          "word_ids": [
+            412
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 2,
+      "column": "model_number",
+      "page": 4,
+      "bbox": [
+        580,
+        488,
+        690,
+        501
+      ],
+      "expected": "CREST FBN2500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CREST FBN2500",
+          "word_ids": [
+            437,
+            438
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CREST FBN2500",
+          "word_ids": [
+            413,
+            414
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 2,
+      "column": "combustion_air",
+      "page": 4,
+      "bbox": [
+        690,
+        488,
+        780,
+        501
+      ],
+      "expected": "8\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8\"",
+          "word_ids": [
+            439
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8\"",
+          "word_ids": [
+            415
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 2,
+      "column": "vent",
+      "page": 4,
+      "bbox": [
+        780,
+        488,
+        860,
+        501
+      ],
+      "expected": "9\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "9\"",
+          "word_ids": [
+            440
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "9\"",
+          "word_ids": [
+            416
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 2,
+      "column": "turndown",
+      "page": 4,
+      "bbox": [
+        860,
+        488,
+        960,
+        501
+      ],
+      "expected": "20:1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20:1",
+          "word_ids": [
+            441
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20:1",
+          "word_ids": [
+            417
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 2,
+      "column": "gas_connection",
+      "page": 4,
+      "bbox": [
+        960,
+        488,
+        1098,
+        501
+      ],
+      "expected": "2\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2\"",
+          "word_ids": [
+            442
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2\"",
+          "word_ids": [
+            418
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 2,
+      "column": "working_fluid",
+      "page": 4,
+      "bbox": [
+        1098,
+        488,
+        1230,
+        501
+      ],
+      "expected": "40% PROPYLENE GLYCOL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "40% PROPYLENE GLYCOL",
+          "word_ids": [
+            443,
+            444,
+            445
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "40% PROPYLENE GLYCOL",
+          "word_ids": [
+            419,
+            420,
+            421
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 2,
+      "column": "wet_weight_lbs",
+      "page": 4,
+      "bbox": [
+        1230,
+        488,
+        1280,
+        501
+      ],
+      "expected": "3652",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3652",
+          "word_ids": [
+            446
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3652",
+          "word_ids": [
+            422
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "row": 2,
+      "column": "additional_details",
+      "page": 4,
+      "bbox": [
+        1280,
+        488,
+        1390,
+        501
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            447,
+            448
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            423,
+            424
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "header": "CONDENSING BOILER SCHEDULE",
+      "page": 4,
+      "bbox": [
+        117,
+        376,
+        527,
+        411
+      ],
+      "engine": "mupdf",
+      "actual": "CONDENSING BOILER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M04-CONDENSING-BOILERS",
+      "header": "CONDENSING BOILER SCHEDULE",
+      "page": 4,
+      "bbox": [
+        117,
+        376,
+        527,
+        411
+      ],
+      "engine": "poppler",
+      "actual": "CONDENSING BOILER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 1,
+      "column": "mark",
+      "page": 4,
+      "bbox": [
+        1413,
+        481,
+        1470,
+        505
+      ],
+      "expected": "SG-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SG-A1",
+          "word_ids": [
+            1100
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SG-A1",
+          "word_ids": [
+            847
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 1,
+      "column": "serves",
+      "page": 4,
+      "bbox": [
+        1470,
+        481,
+        1530,
+        505
+      ],
+      "expected": "SAM-A1 IN AHU-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SAM-A1 IN AHU-A1",
+          "word_ids": [
+            1101,
+            1102,
+            1103
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SAM-A1 IN AHU-A1",
+          "word_ids": [
+            848,
+            849,
+            850
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 1,
+      "column": "manufacturer",
+      "page": 4,
+      "bbox": [
+        1530,
+        481,
+        1590,
+        505
+      ],
+      "expected": "NORTEC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NORTEC",
+          "word_ids": [
+            1104
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NORTEC",
+          "word_ids": [
+            851
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 1,
+      "column": "model_number",
+      "page": 4,
+      "bbox": [
+        1590,
+        481,
+        1660,
+        505
+      ],
+      "expected": "GSTC-400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GSTC-400",
+          "word_ids": [
+            1105
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GSTC-400",
+          "word_ids": [
+            852
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 1,
+      "column": "gas_input_max_mbh",
+      "page": 4,
+      "bbox": [
+        1660,
+        481,
+        1705,
+        505
+      ],
+      "expected": "560",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "560",
+          "word_ids": [
+            1106
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "560",
+          "word_ids": [
+            853
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 1,
+      "column": "ignition",
+      "page": 4,
+      "bbox": [
+        1705,
+        481,
+        1800,
+        505
+      ],
+      "expected": "HOT SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT SURFACE",
+          "word_ids": [
+            1107,
+            1108
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT SURFACE",
+          "word_ids": [
+            854,
+            855
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 1,
+      "column": "vent_flue_size",
+      "page": 4,
+      "bbox": [
+        1800,
+        481,
+        1860,
+        505
+      ],
+      "expected": "5\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5\"",
+          "word_ids": [
+            1109
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5\"",
+          "word_ids": [
+            856
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 1,
+      "column": "steam_output_max_lbhr",
+      "page": 4,
+      "bbox": [
+        1860,
+        481,
+        1925,
+        505
+      ],
+      "expected": "420",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "420",
+          "word_ids": [
+            1110
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "420",
+          "word_ids": [
+            857
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 1,
+      "column": "steam_output_min_lbhr",
+      "page": 4,
+      "bbox": [
+        1925,
+        481,
+        1980,
+        505
+      ],
+      "expected": "25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            1111
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            858
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 1,
+      "column": "steam_pressure",
+      "page": 4,
+      "bbox": [
+        1980,
+        481,
+        2070,
+        505
+      ],
+      "expected": "ATMOSPHERIC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ATMOSPHERIC",
+          "word_ids": [
+            1112
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ATMOSPHERIC",
+          "word_ids": [
+            859
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 1,
+      "column": "outlet_diameter",
+      "page": 4,
+      "bbox": [
+        2070,
+        481,
+        2125,
+        505
+      ],
+      "expected": "4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4\"",
+          "word_ids": [
+            1113
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4\"",
+          "word_ids": [
+            860
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 1,
+      "column": "weight_lbs",
+      "page": 4,
+      "bbox": [
+        2125,
+        481,
+        2190,
+        505
+      ],
+      "expected": "992",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "992",
+          "word_ids": [
+            1114
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "992",
+          "word_ids": [
+            861
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 1,
+      "column": "notes",
+      "page": 4,
+      "bbox": [
+        2190,
+        481,
+        2300,
+        505
+      ],
+      "expected": "ALL BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALL BELOW",
+          "word_ids": [
+            1115,
+            1116
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALL BELOW",
+          "word_ids": [
+            862,
+            863
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 2,
+      "column": "mark",
+      "page": 4,
+      "bbox": [
+        1413,
+        508,
+        1470,
+        532
+      ],
+      "expected": "SG-A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SG-A2",
+          "word_ids": [
+            1117
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SG-A2",
+          "word_ids": [
+            864
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 2,
+      "column": "serves",
+      "page": 4,
+      "bbox": [
+        1470,
+        508,
+        1530,
+        532
+      ],
+      "expected": "SAM-A2 IN AHU-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SAM-A2 IN AHU-A1",
+          "word_ids": [
+            1118,
+            1119,
+            1120
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SAM-A2 IN AHU-A1",
+          "word_ids": [
+            865,
+            866,
+            867
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 2,
+      "column": "manufacturer",
+      "page": 4,
+      "bbox": [
+        1530,
+        508,
+        1590,
+        532
+      ],
+      "expected": "NORTEC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NORTEC",
+          "word_ids": [
+            1121
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NORTEC",
+          "word_ids": [
+            868
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 2,
+      "column": "model_number",
+      "page": 4,
+      "bbox": [
+        1590,
+        508,
+        1660,
+        532
+      ],
+      "expected": "GSTC-400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GSTC-400",
+          "word_ids": [
+            1122
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GSTC-400",
+          "word_ids": [
+            869
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 2,
+      "column": "gas_input_max_mbh",
+      "page": 4,
+      "bbox": [
+        1660,
+        508,
+        1705,
+        532
+      ],
+      "expected": "560",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "560",
+          "word_ids": [
+            1123
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "560",
+          "word_ids": [
+            870
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 2,
+      "column": "ignition",
+      "page": 4,
+      "bbox": [
+        1705,
+        508,
+        1800,
+        532
+      ],
+      "expected": "HOT SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT SURFACE",
+          "word_ids": [
+            1124,
+            1125
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT SURFACE",
+          "word_ids": [
+            871,
+            872
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 2,
+      "column": "vent_flue_size",
+      "page": 4,
+      "bbox": [
+        1800,
+        508,
+        1860,
+        532
+      ],
+      "expected": "5\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5\"",
+          "word_ids": [
+            1126
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5\"",
+          "word_ids": [
+            873
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 2,
+      "column": "steam_output_max_lbhr",
+      "page": 4,
+      "bbox": [
+        1860,
+        508,
+        1925,
+        532
+      ],
+      "expected": "420",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "420",
+          "word_ids": [
+            1127
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "420",
+          "word_ids": [
+            874
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 2,
+      "column": "steam_output_min_lbhr",
+      "page": 4,
+      "bbox": [
+        1925,
+        508,
+        1980,
+        532
+      ],
+      "expected": "25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            1128
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            875
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 2,
+      "column": "steam_pressure",
+      "page": 4,
+      "bbox": [
+        1980,
+        508,
+        2070,
+        532
+      ],
+      "expected": "ATMOSPHERIC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ATMOSPHERIC",
+          "word_ids": [
+            1129
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ATMOSPHERIC",
+          "word_ids": [
+            876
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 2,
+      "column": "outlet_diameter",
+      "page": 4,
+      "bbox": [
+        2070,
+        508,
+        2125,
+        532
+      ],
+      "expected": "4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4\"",
+          "word_ids": [
+            1130
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4\"",
+          "word_ids": [
+            877
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 2,
+      "column": "weight_lbs",
+      "page": 4,
+      "bbox": [
+        2125,
+        508,
+        2190,
+        532
+      ],
+      "expected": "992",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "992",
+          "word_ids": [
+            1131
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "992",
+          "word_ids": [
+            878
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 2,
+      "column": "notes",
+      "page": 4,
+      "bbox": [
+        2190,
+        508,
+        2300,
+        532
+      ],
+      "expected": "ALL BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALL BELOW",
+          "word_ids": [
+            1132,
+            1133
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALL BELOW",
+          "word_ids": [
+            879,
+            880
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 3,
+      "column": "mark",
+      "page": 4,
+      "bbox": [
+        1413,
+        533,
+        1470,
+        557
+      ],
+      "expected": "SG-A3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SG-A3",
+          "word_ids": [
+            1134
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SG-A3",
+          "word_ids": [
+            881
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 3,
+      "column": "serves",
+      "page": 4,
+      "bbox": [
+        1470,
+        533,
+        1530,
+        557
+      ],
+      "expected": "SAM-A3 IN AHU-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SAM-A3 IN AHU-A1",
+          "word_ids": [
+            1135,
+            1136,
+            1137
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SAM-A3 IN AHU-A1",
+          "word_ids": [
+            882,
+            883,
+            884
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 3,
+      "column": "manufacturer",
+      "page": 4,
+      "bbox": [
+        1530,
+        533,
+        1590,
+        557
+      ],
+      "expected": "NORTEC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NORTEC",
+          "word_ids": [
+            1138
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NORTEC",
+          "word_ids": [
+            885
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 3,
+      "column": "model_number",
+      "page": 4,
+      "bbox": [
+        1590,
+        533,
+        1660,
+        557
+      ],
+      "expected": "GSTC-400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GSTC-400",
+          "word_ids": [
+            1139
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GSTC-400",
+          "word_ids": [
+            886
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 3,
+      "column": "gas_input_max_mbh",
+      "page": 4,
+      "bbox": [
+        1660,
+        533,
+        1705,
+        557
+      ],
+      "expected": "560",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "560",
+          "word_ids": [
+            1140
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "560",
+          "word_ids": [
+            887
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 3,
+      "column": "ignition",
+      "page": 4,
+      "bbox": [
+        1705,
+        533,
+        1800,
+        557
+      ],
+      "expected": "HOT SURFACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT SURFACE",
+          "word_ids": [
+            1141,
+            1142
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT SURFACE",
+          "word_ids": [
+            888,
+            889
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 3,
+      "column": "vent_flue_size",
+      "page": 4,
+      "bbox": [
+        1800,
+        533,
+        1860,
+        557
+      ],
+      "expected": "5\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5\"",
+          "word_ids": [
+            1143
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5\"",
+          "word_ids": [
+            890
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 3,
+      "column": "steam_output_max_lbhr",
+      "page": 4,
+      "bbox": [
+        1860,
+        533,
+        1925,
+        557
+      ],
+      "expected": "420",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "420",
+          "word_ids": [
+            1144
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "420",
+          "word_ids": [
+            891
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 3,
+      "column": "steam_output_min_lbhr",
+      "page": 4,
+      "bbox": [
+        1925,
+        533,
+        1980,
+        557
+      ],
+      "expected": "25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            1145
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            892
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 3,
+      "column": "steam_pressure",
+      "page": 4,
+      "bbox": [
+        1980,
+        533,
+        2070,
+        557
+      ],
+      "expected": "ATMOSPHERIC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ATMOSPHERIC",
+          "word_ids": [
+            1146
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ATMOSPHERIC",
+          "word_ids": [
+            893
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 3,
+      "column": "outlet_diameter",
+      "page": 4,
+      "bbox": [
+        2070,
+        533,
+        2125,
+        557
+      ],
+      "expected": "4\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4\"",
+          "word_ids": [
+            1147
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4\"",
+          "word_ids": [
+            894
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 3,
+      "column": "weight_lbs",
+      "page": 4,
+      "bbox": [
+        2125,
+        533,
+        2190,
+        557
+      ],
+      "expected": "992",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "992",
+          "word_ids": [
+            1148
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "992",
+          "word_ids": [
+            895
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "row": 3,
+      "column": "notes",
+      "page": 4,
+      "bbox": [
+        2190,
+        533,
+        2300,
+        557
+      ],
+      "expected": "ALL BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALL BELOW",
+          "word_ids": [
+            1149,
+            1150
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALL BELOW",
+          "word_ids": [
+            896,
+            897
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "header": "GAS-FIRED STEAM GENERATOR SCHEDULE",
+      "page": 4,
+      "bbox": [
+        1413,
+        384,
+        1956,
+        419
+      ],
+      "engine": "mupdf",
+      "actual": "GAS-FIRED STEAM GENERATOR SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M04-GAS-FIRED-STEAM-GENERATORS",
+      "header": "GAS-FIRED STEAM GENERATOR SCHEDULE",
+      "page": 4,
+      "bbox": [
+        1413,
+        384,
+        1956,
+        419
+      ],
+      "engine": "poppler",
+      "actual": "GAS-FIRED STEAM GENERATOR SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 1,
+      "column": "mark",
+      "page": 4,
+      "bbox": [
+        117,
+        923,
+        170,
+        945
+      ],
+      "expected": "HWP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP-1",
+          "word_ids": [
+            702
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP-1",
+          "word_ids": [
+            1207
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 1,
+      "column": "system",
+      "page": 4,
+      "bbox": [
+        170,
+        923,
+        250,
+        945
+      ],
+      "expected": "HOT WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT WATER",
+          "word_ids": [
+            703,
+            704
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT WATER",
+          "word_ids": [
+            1208,
+            1209
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 1,
+      "column": "manufacturer",
+      "page": 4,
+      "bbox": [
+        250,
+        923,
+        340,
+        945
+      ],
+      "expected": "TACO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TACO",
+          "word_ids": [
+            705
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TACO",
+          "word_ids": [
+            1210
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 1,
+      "column": "model_number",
+      "page": 4,
+      "bbox": [
+        340,
+        923,
+        450,
+        945
+      ],
+      "expected": "FI 2510C",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FI 2510C",
+          "word_ids": [
+            706,
+            707
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FI 2510C",
+          "word_ids": [
+            1211,
+            1212
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 1,
+      "column": "type",
+      "page": 4,
+      "bbox": [
+        450,
+        923,
+        565,
+        945
+      ],
+      "expected": "BASE-MOUNTED, END-SUCTION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BASE-MOUNTED, END-SUCTION",
+          "word_ids": [
+            708,
+            709
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BASE-MOUNTED, END-SUCTION",
+          "word_ids": [
+            1220,
+            1221
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 1,
+      "column": "working_fluid",
+      "page": 4,
+      "bbox": [
+        565,
+        923,
+        710,
+        945
+      ],
+      "expected": "40% PROPYLENE GLYCOL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "40% PROPYLENE GLYCOL",
+          "word_ids": [
+            710,
+            711,
+            712
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "40% PROPYLENE GLYCOL",
+          "word_ids": [
+            1242,
+            1243,
+            1244
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 1,
+      "column": "flow_rate_gpm",
+      "page": 4,
+      "bbox": [
+        710,
+        923,
+        810,
+        945
+      ],
+      "expected": "162.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "162.5",
+          "word_ids": [
+            713
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "162.5",
+          "word_ids": [
+            1245
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 1,
+      "column": "head_loss_ft",
+      "page": 4,
+      "bbox": [
+        810,
+        923,
+        910,
+        945
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            714
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            1246
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 1,
+      "column": "motor_speed_rpm",
+      "page": 4,
+      "bbox": [
+        910,
+        923,
+        1040,
+        945
+      ],
+      "expected": "1750",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1750",
+          "word_ids": [
+            715
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1750",
+          "word_ids": [
+            1247
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 1,
+      "column": "impeller_dia_inches",
+      "page": 4,
+      "bbox": [
+        1040,
+        923,
+        1165,
+        945
+      ],
+      "expected": "7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "7",
+          "word_ids": [
+            716
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "7",
+          "word_ids": [
+            1248
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 1,
+      "column": "variable_speed",
+      "page": 4,
+      "bbox": [
+        1165,
+        923,
+        1270,
+        945
+      ],
+      "expected": "VFD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD",
+          "word_ids": [
+            717
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD",
+          "word_ids": [
+            1249
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 1,
+      "column": "additional_details",
+      "page": 4,
+      "bbox": [
+        1270,
+        923,
+        1400,
+        945
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            718,
+            719
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1250,
+            1251
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 2,
+      "column": "mark",
+      "page": 4,
+      "bbox": [
+        117,
+        945,
+        170,
+        969
+      ],
+      "expected": "HWP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HWP-2",
+          "word_ids": [
+            720
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HWP-2",
+          "word_ids": [
+            1213
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 2,
+      "column": "system",
+      "page": 4,
+      "bbox": [
+        170,
+        945,
+        250,
+        969
+      ],
+      "expected": "HOT WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HOT WATER",
+          "word_ids": [
+            721,
+            722
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HOT WATER",
+          "word_ids": [
+            1214,
+            1215
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 2,
+      "column": "manufacturer",
+      "page": 4,
+      "bbox": [
+        250,
+        945,
+        340,
+        969
+      ],
+      "expected": "TACO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TACO",
+          "word_ids": [
+            723
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TACO",
+          "word_ids": [
+            1216
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 2,
+      "column": "model_number",
+      "page": 4,
+      "bbox": [
+        340,
+        945,
+        450,
+        969
+      ],
+      "expected": "FI 2510C",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FI 2510C",
+          "word_ids": [
+            724,
+            725
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FI 2510C",
+          "word_ids": [
+            1217,
+            1218
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 2,
+      "column": "type",
+      "page": 4,
+      "bbox": [
+        450,
+        945,
+        565,
+        969
+      ],
+      "expected": "BASE-MOUNTED, END-SUCTION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BASE-MOUNTED, END-SUCTION",
+          "word_ids": [
+            726,
+            727
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BASE-MOUNTED, END-SUCTION",
+          "word_ids": [
+            1222,
+            1223
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 2,
+      "column": "working_fluid",
+      "page": 4,
+      "bbox": [
+        565,
+        945,
+        710,
+        969
+      ],
+      "expected": "40% PROPYLENE GLYCOL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "40% PROPYLENE GLYCOL",
+          "word_ids": [
+            728,
+            729,
+            730
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "40% PROPYLENE GLYCOL",
+          "word_ids": [
+            1252,
+            1253,
+            1254
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 2,
+      "column": "flow_rate_gpm",
+      "page": 4,
+      "bbox": [
+        710,
+        945,
+        810,
+        969
+      ],
+      "expected": "162.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "162.5",
+          "word_ids": [
+            731
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "162.5",
+          "word_ids": [
+            1255
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 2,
+      "column": "head_loss_ft",
+      "page": 4,
+      "bbox": [
+        810,
+        945,
+        910,
+        969
+      ],
+      "expected": "50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            732
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "50",
+          "word_ids": [
+            1256
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 2,
+      "column": "motor_speed_rpm",
+      "page": 4,
+      "bbox": [
+        910,
+        945,
+        1040,
+        969
+      ],
+      "expected": "1750",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1750",
+          "word_ids": [
+            733
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1750",
+          "word_ids": [
+            1257
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 2,
+      "column": "impeller_dia_inches",
+      "page": 4,
+      "bbox": [
+        1040,
+        945,
+        1165,
+        969
+      ],
+      "expected": "7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "7",
+          "word_ids": [
+            734
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "7",
+          "word_ids": [
+            1258
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 2,
+      "column": "variable_speed",
+      "page": 4,
+      "bbox": [
+        1165,
+        945,
+        1270,
+        969
+      ],
+      "expected": "VFD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD",
+          "word_ids": [
+            735
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD",
+          "word_ids": [
+            1259
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "row": 2,
+      "column": "additional_details",
+      "page": 4,
+      "bbox": [
+        1270,
+        945,
+        1400,
+        969
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            736,
+            737
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1260,
+            1261
+          ]
+        }
+      }
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "header": "PUMP SCHEDULE",
+      "page": 4,
+      "bbox": [
+        117,
+        860,
+        332,
+        894
+      ],
+      "engine": "mupdf",
+      "actual": "PUMP SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M04-HOT-WATER-PUMPS",
+      "header": "PUMP SCHEDULE",
+      "page": 4,
+      "bbox": [
+        117,
+        860,
+        332,
+        894
+      ],
+      "engine": "poppler",
+      "actual": "PUMP SCHEDULE",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

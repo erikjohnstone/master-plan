@@ -1,0 +1,1863 @@
+{
+  "document_id": "22__vol2__012",
+  "source_sha256": "b008fd1b72a48adc5ccbacfa74fcf377dd93bbd30c4b8d2ebec2c540a6248711",
+  "annotation_sha256": "bf74da32f30788494ba801b93090c5f4f9da5b9b0fde4cd33daed563a8bd54c6",
+  "tables": 6,
+  "rows": 24,
+  "cell_assertions": 24,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M601-WATER-COOLED-CHILLERS",
+      "row": 1,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        560,
+        201,
+        2260,
+        221
+      ],
+      "expected": "CH-1 DAIKIN WMC060DDSNA MAG. BEARING 300.0 WATER 162.8 598.5 6.93 56 44.0 0.0001 WATER 912.3 14.6 85 94.3 0.00025 R-513A A1 1,093 0.5851 0.3407 188.6 55.2 94.5 15531 480 / 3 65,000 286 350 1-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-1 DAIKIN WMC060DDSNA MAG. BEARING 300.0 WATER 162.8 598.5 6.93 56 44.0 0.0001 WATER 912.3 14.6 85 94.3 0.00025 R-513A A1 1,093 0.5851 0.3407 188.6 55.2 94.5 15531 480 / 3 65,000 286 350 1-9",
+          "word_ids": [
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-1 DAIKIN WMC060DDSNA MAG. BEARING 300.0 WATER 162.8 598.5 6.93 56 44.0 0.0001 WATER 912.3 14.6 85 94.3 0.00025 R-513A A1 1,093 0.5851 0.3407 188.6 55.2 94.5 15531 480 / 3 65,000 286 350 1-9",
+          "word_ids": [
+            47,
+            48,
+            49,
+            50,
+            51,
+            40,
+            52,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            148,
+            151,
+            166,
+            172,
+            175,
+            178,
+            189,
+            192,
+            209,
+            203,
+            206,
+            222,
+            225,
+            228,
+            231,
+            241,
+            242,
+            243,
+            250,
+            253,
+            256,
+            260
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-WATER-COOLED-CHILLERS",
+      "row": 2,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        560,
+        221,
+        2260,
+        236
+      ],
+      "expected": "CH-2 DAIKIN WMC060DDSNA MAG. BEARING 300.0 WATER 162.8 598.5 6.93 56 44.0 0.0001 WATER 912.3 14.6 85 94.3 0.00025 R-513A A1 1,093 0.5851 0.3407 188.6 55.2 94.5 15531 480 / 3 65,000 286 350 1-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-2 DAIKIN WMC060DDSNA MAG. BEARING 300.0 WATER 162.8 598.5 6.93 56 44.0 0.0001 WATER 912.3 14.6 85 94.3 0.00025 R-513A A1 1,093 0.5851 0.3407 188.6 55.2 94.5 15531 480 / 3 65,000 286 350 1-9",
+          "word_ids": [
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138,
+            139,
+            140,
+            141,
+            142,
+            143,
+            144,
+            145,
+            146,
+            147,
+            148,
+            149,
+            150,
+            151,
+            152,
+            153
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-2 DAIKIN WMC060DDSNA MAG. BEARING 300.0 WATER 162.8 598.5 6.93 56 44.0 0.0001 WATER 912.3 14.6 85 94.3 0.00025 R-513A A1 1,093 0.5851 0.3407 188.6 55.2 94.5 15531 480 / 3 65,000 286 350 1-9",
+          "word_ids": [
+            60,
+            61,
+            62,
+            63,
+            64,
+            53,
+            65,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            149,
+            152,
+            167,
+            173,
+            176,
+            179,
+            190,
+            193,
+            210,
+            204,
+            207,
+            223,
+            226,
+            229,
+            232,
+            244,
+            245,
+            246,
+            251,
+            254,
+            257,
+            261
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-WATER-COOLED-CHILLERS",
+      "row": 3,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        560,
+        236,
+        2260,
+        251
+      ],
+      "expected": "CH-3 DAIKIN WMC060DDSNA MAG. BEARING 300.0 WATER 162.8 598.5 6.93 56 44.0 0.0001 WATER 912.3 14.6 85 94.3 0.00025 R-513A A1 1,093 0.5851 0.3407 188.6 55.2 94.5 15531 480 / 3 65,000 286 350 1-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-3 DAIKIN WMC060DDSNA MAG. BEARING 300.0 WATER 162.8 598.5 6.93 56 44.0 0.0001 WATER 912.3 14.6 85 94.3 0.00025 R-513A A1 1,093 0.5851 0.3407 188.6 55.2 94.5 15531 480 / 3 65,000 286 350 1-9",
+          "word_ids": [
+            154,
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            161,
+            162,
+            163,
+            164,
+            165,
+            166,
+            167,
+            168,
+            169,
+            170,
+            171,
+            172,
+            173,
+            174,
+            175,
+            176,
+            177,
+            178,
+            179,
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-3 DAIKIN WMC060DDSNA MAG. BEARING 300.0 WATER 162.8 598.5 6.93 56 44.0 0.0001 WATER 912.3 14.6 85 94.3 0.00025 R-513A A1 1,093 0.5851 0.3407 188.6 55.2 94.5 15531 480 / 3 65,000 286 350 1-9",
+          "word_ids": [
+            73,
+            74,
+            75,
+            76,
+            77,
+            66,
+            78,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            150,
+            153,
+            168,
+            174,
+            177,
+            180,
+            191,
+            194,
+            211,
+            205,
+            208,
+            224,
+            227,
+            230,
+            233,
+            247,
+            248,
+            249,
+            252,
+            255,
+            258,
+            262
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-WATER-COOLED-CHILLERS",
+      "header": "WATER-COOLED CHILLER SCHEDULE",
+      "page": 19,
+      "bbox": [
+        560,
+        110,
+        950,
+        140
+      ],
+      "engine": "mupdf",
+      "actual": "WATER-COOLED CHILLER SCHEDULE:",
+      "pass": true
+    },
+    {
+      "table": "M601-WATER-COOLED-CHILLERS",
+      "header": "WATER-COOLED CHILLER SCHEDULE",
+      "page": 19,
+      "bbox": [
+        560,
+        110,
+        950,
+        140
+      ],
+      "engine": "poppler",
+      "actual": "WATER-COOLED CHILLER SCHEDULE:",
+      "pass": true
+    },
+    {
+      "table": "M601-COOLING-TOWERS",
+      "row": 1,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1190,
+        507,
+        2265,
+        537
+      ],
+      "expected": "INDUCED DRAFT 480V / 3PH / CT-1 MARLEY AV6807RAN 1 300 900 95 85 78.7 2 1 25 70 9 kW 20 12,810 1-14 CROSSFLOW 60 HZ",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INDUCED DRAFT 480V / 3PH / CT-1 MARLEY AV6807RAN 1 300 900 95 85 78.7 2 1 25 70 9 kW 20 12,810 1-14 CROSSFLOW 60 HZ",
+          "word_ids": [
+            1128,
+            1129,
+            1137,
+            1138,
+            1139,
+            1140,
+            1125,
+            1126,
+            1127,
+            1131,
+            1132,
+            1133,
+            1134,
+            1135,
+            1136,
+            1143,
+            1144,
+            1145,
+            1146,
+            1147,
+            1148,
+            1149,
+            1150,
+            1151,
+            1130,
+            1141,
+            1142
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INDUCED DRAFT 480V / 3PH / CT-1 MARLEY AV6807RAN 1 300 900 95 85 78.7 2 1 25 70 9 kW 20 12,810 1-14 CROSSFLOW 60 HZ",
+          "word_ids": [
+            611,
+            612,
+            620,
+            621,
+            622,
+            623,
+            608,
+            609,
+            610,
+            614,
+            615,
+            616,
+            617,
+            618,
+            619,
+            626,
+            627,
+            628,
+            629,
+            630,
+            631,
+            632,
+            633,
+            634,
+            613,
+            624,
+            625
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-COOLING-TOWERS",
+      "row": 2,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1190,
+        537,
+        2265,
+        567
+      ],
+      "expected": "INDUCED DRAFT 480V / 3PH / CT-2 MARLEY AV6807RAN 1 300 900 95 85 78.7 2 1 25 70 9 kW 20 12,810 1-14 CROSSFLOW 60 HZ",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INDUCED DRAFT 480V / 3PH / CT-2 MARLEY AV6807RAN 1 300 900 95 85 78.7 2 1 25 70 9 kW 20 12,810 1-14 CROSSFLOW 60 HZ",
+          "word_ids": [
+            1155,
+            1156,
+            1164,
+            1165,
+            1166,
+            1167,
+            1152,
+            1153,
+            1154,
+            1158,
+            1159,
+            1160,
+            1161,
+            1162,
+            1163,
+            1170,
+            1171,
+            1172,
+            1173,
+            1174,
+            1175,
+            1176,
+            1177,
+            1178,
+            1157,
+            1168,
+            1169
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INDUCED DRAFT 480V / 3PH / CT-2 MARLEY AV6807RAN 1 300 900 95 85 78.7 2 1 25 70 9 kW 20 12,810 1-14 CROSSFLOW 60 HZ",
+          "word_ids": [
+            638,
+            639,
+            647,
+            648,
+            649,
+            650,
+            635,
+            636,
+            637,
+            641,
+            642,
+            643,
+            644,
+            645,
+            646,
+            653,
+            654,
+            655,
+            656,
+            657,
+            658,
+            659,
+            660,
+            661,
+            640,
+            651,
+            652
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-COOLING-TOWERS",
+      "row": 3,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1190,
+        567,
+        2265,
+        597
+      ],
+      "expected": "INDUCED DRAFT 480V / 3PH / CT-3 MARLEY AV6807RAN 1 300 900 95 85 78.7 2 1 25 70 9 kW 20 12,810 1-14 CROSSFLOW 60 HZ",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INDUCED DRAFT 480V / 3PH / CT-3 MARLEY AV6807RAN 1 300 900 95 85 78.7 2 1 25 70 9 kW 20 12,810 1-14 CROSSFLOW 60 HZ",
+          "word_ids": [
+            1182,
+            1183,
+            1191,
+            1192,
+            1193,
+            1194,
+            1179,
+            1180,
+            1181,
+            1185,
+            1186,
+            1187,
+            1188,
+            1189,
+            1190,
+            1197,
+            1198,
+            1199,
+            1200,
+            1201,
+            1202,
+            1203,
+            1204,
+            1205,
+            1184,
+            1195,
+            1196
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INDUCED DRAFT 480V / 3PH / CT-3 MARLEY AV6807RAN 1 300 900 95 85 78.7 2 1 25 70 9 kW 20 12,810 1-14 CROSSFLOW 60 HZ",
+          "word_ids": [
+            665,
+            666,
+            674,
+            675,
+            676,
+            677,
+            662,
+            663,
+            664,
+            668,
+            669,
+            670,
+            671,
+            672,
+            673,
+            680,
+            681,
+            682,
+            683,
+            684,
+            685,
+            686,
+            687,
+            688,
+            667,
+            678,
+            679
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-COOLING-TOWERS",
+      "header": "COOLING TOWER SCHEDULE",
+      "page": 19,
+      "bbox": [
+        1180,
+        415,
+        1500,
+        440
+      ],
+      "engine": "mupdf",
+      "actual": "COOLING TOWER SCHEDULE:",
+      "pass": true
+    },
+    {
+      "table": "M601-COOLING-TOWERS",
+      "header": "COOLING TOWER SCHEDULE",
+      "page": 19,
+      "bbox": [
+        1180,
+        415,
+        1500,
+        440
+      ],
+      "engine": "poppler",
+      "actual": "COOLING TOWER SCHEDULE:",
+      "pass": true
+    },
+    {
+      "table": "M601-EXPANSION-TANK",
+      "row": 1,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1110,
+        955,
+        2268,
+        974
+      ],
+      "expected": "ET-1 CHILLED WATER BELL & GOSSETT B300 54.96 28.75 80.0 80.0 40 / 100 40 / 100 5,000 WATER 125 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ET-1 CHILLED WATER BELL & GOSSETT B300 54.96 28.75 80.0 80.0 40 / 100 40 / 100 5,000 WATER 125 1",
+          "word_ids": [
+            842,
+            843,
+            844,
+            845,
+            846,
+            847,
+            848,
+            849,
+            850,
+            851,
+            852,
+            853,
+            854,
+            855,
+            856,
+            857,
+            858,
+            859,
+            860,
+            861,
+            862
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ET-1 CHILLED WATER BELL & GOSSETT B300 54.96 28.75 80.0 80.0 40 / 100 40 / 100 5,000 WATER 125 1",
+          "word_ids": [
+            1009,
+            1010,
+            1011,
+            1012,
+            1013,
+            1014,
+            1015,
+            1034,
+            1035,
+            1036,
+            1042,
+            1051,
+            1052,
+            1053,
+            1054,
+            1055,
+            1056,
+            1057,
+            1064,
+            1065,
+            1066
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-EXPANSION-TANK",
+      "header": "EXPANSION TANK SCHEDULE",
+      "page": 19,
+      "bbox": [
+        1110,
+        885,
+        1430,
+        915
+      ],
+      "engine": "mupdf",
+      "actual": "EXPANSION TANK SCHEDULE:",
+      "pass": true
+    },
+    {
+      "table": "M601-EXPANSION-TANK",
+      "header": "EXPANSION TANK SCHEDULE",
+      "page": 19,
+      "bbox": [
+        1110,
+        885,
+        1430,
+        915
+      ],
+      "engine": "poppler",
+      "actual": "EXPANSION TANK SCHEDULE:",
+      "pass": true
+    },
+    {
+      "table": "M601-AIR-SEPARATORS",
+      "row": 1,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        760,
+        1129,
+        1405,
+        1149
+      ],
+      "expected": "AS-1 CHILLED WATER BELL & GOSSETT RL-12F 4,800 291 12 3,538 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AS-1 CHILLED WATER BELL & GOSSETT RL-12F 4,800 291 12 3,538 1",
+          "word_ids": [
+            754,
+            755,
+            756,
+            757,
+            758,
+            759,
+            760,
+            761,
+            762,
+            763,
+            764,
+            765
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AS-1 CHILLED WATER BELL & GOSSETT RL-12F 4,800 291 12 3,538 1",
+          "word_ids": [
+            1101,
+            1104,
+            1105,
+            1112,
+            1113,
+            1114,
+            1136,
+            1135,
+            1139,
+            1142,
+            1141,
+            1497
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-SEPARATORS",
+      "row": 2,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        760,
+        1158,
+        1405,
+        1179
+      ],
+      "expected": "HEATING AS-2 BELL & GOSSETT RL-10F 3,600 150 10 2,052 1 HOT WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HEATING AS-2 BELL & GOSSETT RL-10F 3,600 150 10 2,052 1 HOT WATER",
+          "word_ids": [
+            767,
+            766,
+            770,
+            771,
+            772,
+            773,
+            774,
+            775,
+            776,
+            777,
+            778,
+            768,
+            769
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HEATING AS-2 BELL & GOSSETT RL-10F 3,600 150 10 2,052 1 HOT WATER",
+          "word_ids": [
+            1106,
+            1102,
+            1115,
+            1116,
+            1117,
+            1138,
+            1137,
+            1140,
+            1144,
+            1143,
+            1432,
+            1107,
+            1108
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-SEPARATORS",
+      "header": "AIR SEPARATOR SCHEDULE",
+      "page": 19,
+      "bbox": [
+        760,
+        1060,
+        1065,
+        1090
+      ],
+      "engine": "mupdf",
+      "actual": "AIR SEPARATOR SCHEDULE:",
+      "pass": true
+    },
+    {
+      "table": "M601-AIR-SEPARATORS",
+      "header": "AIR SEPARATOR SCHEDULE",
+      "page": 19,
+      "bbox": [
+        760,
+        1060,
+        1065,
+        1090
+      ],
+      "engine": "poppler",
+      "actual": "AIR SEPARATOR SCHEDULE:",
+      "pass": true
+    },
+    {
+      "table": "M601-CHEMICAL-FEEDERS",
+      "row": 1,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1030,
+        1337,
+        1405,
+        1354
+      ],
+      "expected": "CF-1 NEPTUNE CHW SYSTEM DBFC-5 5 GAL. 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CF-1 NEPTUNE CHW SYSTEM DBFC-5 5 GAL. 1",
+          "word_ids": [
+            1048,
+            1049,
+            1050,
+            1051,
+            1052,
+            1053,
+            1054,
+            1055
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CF-1 NEPTUNE CHW SYSTEM DBFC-5 5 GAL. 1",
+          "word_ids": [
+            1472,
+            1473,
+            1474,
+            1475,
+            1476,
+            1477,
+            1478,
+            1479
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHEMICAL-FEEDERS",
+      "row": 2,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1030,
+        1354,
+        1405,
+        1371
+      ],
+      "expected": "CF-2 NEPTUNE HHW SYSTEM DBFC-5 5 GAL. 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CF-2 NEPTUNE HHW SYSTEM DBFC-5 5 GAL. 1",
+          "word_ids": [
+            1056,
+            1057,
+            1058,
+            1059,
+            1060,
+            1061,
+            1062,
+            1063
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CF-2 NEPTUNE HHW SYSTEM DBFC-5 5 GAL. 1",
+          "word_ids": [
+            1480,
+            1481,
+            1482,
+            1483,
+            1484,
+            1485,
+            1486,
+            1487
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHEMICAL-FEEDERS",
+      "header": "CHEMICAL FEEDER SCHEDULE",
+      "page": 19,
+      "bbox": [
+        1030,
+        1270,
+        1335,
+        1305
+      ],
+      "engine": "mupdf",
+      "actual": "CHEMICAL FEEDER SCHEDULE:",
+      "pass": true
+    },
+    {
+      "table": "M601-CHEMICAL-FEEDERS",
+      "header": "CHEMICAL FEEDER SCHEDULE",
+      "page": 19,
+      "bbox": [
+        1030,
+        1270,
+        1335,
+        1305
+      ],
+      "engine": "poppler",
+      "actual": "CHEMICAL FEEDER SCHEDULE:",
+      "pass": true
+    },
+    {
+      "table": "M601-PUMPS",
+      "row": 1,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1440,
+        1145,
+        2269,
+        1175
+      ],
+      "expected": "CONDENSER CWP-1 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 80 900 1698 30 480 40 3 1-2 WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONDENSER CWP-1 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 80 900 1698 30 480 40 3 1-2 WATER",
+          "word_ids": [
+            438,
+            433,
+            434,
+            435,
+            436,
+            437,
+            440,
+            441,
+            442,
+            443,
+            444,
+            445,
+            446,
+            447,
+            448,
+            449,
+            450,
+            451,
+            439
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONDENSER CWP-1 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 80 900 1698 30 480 40 3 1-2 WATER",
+          "word_ids": [
+            1156,
+            1151,
+            1152,
+            1153,
+            1154,
+            1155,
+            1158,
+            1159,
+            1160,
+            1161,
+            1162,
+            1163,
+            1164,
+            1165,
+            1166,
+            1167,
+            1168,
+            1169,
+            1157
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMPS",
+      "row": 2,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1440,
+        1175,
+        2269,
+        1205
+      ],
+      "expected": "CONDENSER CWP-2 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 80 900 1698 30 480 40 3 1-2 WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONDENSER CWP-2 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 80 900 1698 30 480 40 3 1-2 WATER",
+          "word_ids": [
+            457,
+            452,
+            453,
+            454,
+            455,
+            456,
+            459,
+            460,
+            461,
+            462,
+            463,
+            464,
+            465,
+            466,
+            467,
+            468,
+            469,
+            470,
+            458
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONDENSER CWP-2 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 80 900 1698 30 480 40 3 1-2 WATER",
+          "word_ids": [
+            1175,
+            1170,
+            1171,
+            1172,
+            1173,
+            1174,
+            1177,
+            1178,
+            1179,
+            1180,
+            1181,
+            1182,
+            1183,
+            1184,
+            1185,
+            1186,
+            1187,
+            1188,
+            1176
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMPS",
+      "row": 3,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1440,
+        1205,
+        2269,
+        1235
+      ],
+      "expected": "CONDENSER CWP-3 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 80 900 1698 30 480 40 3 1-2 WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONDENSER CWP-3 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 80 900 1698 30 480 40 3 1-2 WATER",
+          "word_ids": [
+            476,
+            471,
+            472,
+            473,
+            474,
+            475,
+            478,
+            479,
+            480,
+            481,
+            482,
+            483,
+            484,
+            485,
+            486,
+            487,
+            488,
+            489,
+            477
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONDENSER CWP-3 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 80 900 1698 30 480 40 3 1-2 WATER",
+          "word_ids": [
+            1194,
+            1189,
+            1190,
+            1191,
+            1192,
+            1193,
+            1196,
+            1197,
+            1198,
+            1199,
+            1200,
+            1201,
+            1202,
+            1203,
+            1204,
+            1205,
+            1206,
+            1207,
+            1195
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMPS",
+      "row": 4,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1440,
+        1235,
+        2269,
+        1265
+      ],
+      "expected": "PRIMARY - CHILLED PCHP-1 BELL & GOSSETT e-1510 END SUCTION 5\" 4\" 45 600 1650 10 480 14 3 1-2 WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRIMARY - CHILLED PCHP-1 BELL & GOSSETT e-1510 END SUCTION 5\" 4\" 45 600 1650 10 480 14 3 1-2 WATER",
+          "word_ids": [
+            495,
+            496,
+            497,
+            490,
+            491,
+            492,
+            493,
+            494,
+            499,
+            500,
+            501,
+            502,
+            503,
+            504,
+            505,
+            506,
+            507,
+            508,
+            509,
+            510,
+            498
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRIMARY - CHILLED PCHP-1 BELL & GOSSETT e-1510 END SUCTION 5\" 4\" 45 600 1650 10 480 14 3 1-2 WATER",
+          "word_ids": [
+            1213,
+            1214,
+            1215,
+            1208,
+            1209,
+            1210,
+            1211,
+            1212,
+            1216,
+            1217,
+            1219,
+            1220,
+            1221,
+            1222,
+            1223,
+            1224,
+            1225,
+            1226,
+            1227,
+            1228,
+            1218
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMPS",
+      "row": 5,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1440,
+        1265,
+        2269,
+        1295
+      ],
+      "expected": "PRIMARY - CHILLED PCHP-2 BELL & GOSSETT e-1510 END SUCTION 5\" 4\" 45 600 1650 10 480 14 3 1-2 WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRIMARY - CHILLED PCHP-2 BELL & GOSSETT e-1510 END SUCTION 5\" 4\" 45 600 1650 10 480 14 3 1-2 WATER",
+          "word_ids": [
+            516,
+            517,
+            518,
+            511,
+            512,
+            513,
+            514,
+            515,
+            520,
+            521,
+            522,
+            523,
+            524,
+            525,
+            526,
+            527,
+            528,
+            529,
+            530,
+            531,
+            519
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRIMARY - CHILLED PCHP-2 BELL & GOSSETT e-1510 END SUCTION 5\" 4\" 45 600 1650 10 480 14 3 1-2 WATER",
+          "word_ids": [
+            1234,
+            1235,
+            1236,
+            1229,
+            1230,
+            1231,
+            1232,
+            1233,
+            1237,
+            1238,
+            1240,
+            1241,
+            1242,
+            1243,
+            1244,
+            1245,
+            1246,
+            1247,
+            1248,
+            1249,
+            1239
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMPS",
+      "row": 6,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1440,
+        1295,
+        2269,
+        1325
+      ],
+      "expected": "PRIMARY - CHILLED PCHP-3 BELL & GOSSETT e-1510 END SUCTION 5\" 4\" 45 600 1650 10 480 14 3 1-2 WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRIMARY - CHILLED PCHP-3 BELL & GOSSETT e-1510 END SUCTION 5\" 4\" 45 600 1650 10 480 14 3 1-2 WATER",
+          "word_ids": [
+            537,
+            538,
+            539,
+            532,
+            533,
+            534,
+            535,
+            536,
+            541,
+            542,
+            543,
+            544,
+            545,
+            546,
+            547,
+            548,
+            549,
+            550,
+            551,
+            552,
+            540
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRIMARY - CHILLED PCHP-3 BELL & GOSSETT e-1510 END SUCTION 5\" 4\" 45 600 1650 10 480 14 3 1-2 WATER",
+          "word_ids": [
+            1255,
+            1256,
+            1257,
+            1250,
+            1251,
+            1252,
+            1253,
+            1254,
+            1258,
+            1259,
+            1261,
+            1262,
+            1263,
+            1264,
+            1265,
+            1266,
+            1267,
+            1268,
+            1269,
+            1270,
+            1260
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMPS",
+      "row": 7,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1440,
+        1325,
+        2269,
+        1355
+      ],
+      "expected": "SECONDARY - SCHP-1 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 100 1200 1645 50 480 65 3 1-2 CHILLED WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SECONDARY - SCHP-1 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 100 1200 1645 50 480 65 3 1-2 CHILLED WATER",
+          "word_ids": [
+            558,
+            559,
+            553,
+            554,
+            555,
+            556,
+            557,
+            562,
+            563,
+            564,
+            565,
+            566,
+            567,
+            568,
+            569,
+            570,
+            571,
+            572,
+            573,
+            560,
+            561
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SECONDARY - SCHP-1 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 100 1200 1645 50 480 65 3 1-2 CHILLED WATER",
+          "word_ids": [
+            1276,
+            1277,
+            1271,
+            1272,
+            1273,
+            1274,
+            1275,
+            1280,
+            1281,
+            1282,
+            1283,
+            1284,
+            1285,
+            1286,
+            1287,
+            1288,
+            1289,
+            1290,
+            1291,
+            1278,
+            1279
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMPS",
+      "row": 8,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1440,
+        1355,
+        2269,
+        1385
+      ],
+      "expected": "SECONDARY - SCHP-2 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 100 1200 1645 50 480 65 3 1-2 CHILLED WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SECONDARY - SCHP-2 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 100 1200 1645 50 480 65 3 1-2 CHILLED WATER",
+          "word_ids": [
+            579,
+            580,
+            574,
+            575,
+            576,
+            577,
+            578,
+            583,
+            584,
+            585,
+            586,
+            587,
+            588,
+            589,
+            590,
+            591,
+            592,
+            593,
+            594,
+            581,
+            582
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SECONDARY - SCHP-2 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 100 1200 1645 50 480 65 3 1-2 CHILLED WATER",
+          "word_ids": [
+            1297,
+            1298,
+            1292,
+            1293,
+            1294,
+            1295,
+            1296,
+            1301,
+            1302,
+            1303,
+            1304,
+            1305,
+            1306,
+            1307,
+            1308,
+            1309,
+            1310,
+            1311,
+            1312,
+            1299,
+            1300
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMPS",
+      "row": 9,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1440,
+        1385,
+        2269,
+        1415
+      ],
+      "expected": "PRIMARY - HEATING PHWP-1 BELL & GOSSETT e-1510 END SUCTION 4\" 3\" 45 340 1615 7.5 480 11 3 1-2 HW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRIMARY - HEATING PHWP-1 BELL & GOSSETT e-1510 END SUCTION 4\" 3\" 45 340 1615 7.5 480 11 3 1-2 HW",
+          "word_ids": [
+            600,
+            601,
+            602,
+            595,
+            596,
+            597,
+            598,
+            599,
+            604,
+            605,
+            606,
+            607,
+            608,
+            609,
+            610,
+            611,
+            612,
+            613,
+            614,
+            615,
+            603
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRIMARY - HEATING PHWP-1 BELL & GOSSETT e-1510 END SUCTION 4\" 3\" 45 340 1615 7.5 480 11 3 1-2 HW",
+          "word_ids": [
+            1318,
+            1319,
+            1320,
+            1313,
+            1314,
+            1315,
+            1316,
+            1317,
+            1321,
+            1322,
+            1324,
+            1325,
+            1326,
+            1327,
+            1328,
+            1329,
+            1330,
+            1331,
+            1332,
+            1333,
+            1323
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMPS",
+      "row": 10,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1440,
+        1415,
+        2269,
+        1445
+      ],
+      "expected": "PRIMARY - HEATING PHWP-2 BELL & GOSSETT e-1510 END SUCTION 4\" 3\" 45 340 1615 7.5 480 11 3 1-2 HW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRIMARY - HEATING PHWP-2 BELL & GOSSETT e-1510 END SUCTION 4\" 3\" 45 340 1615 7.5 480 11 3 1-2 HW",
+          "word_ids": [
+            621,
+            622,
+            623,
+            616,
+            617,
+            618,
+            619,
+            620,
+            625,
+            626,
+            627,
+            628,
+            629,
+            630,
+            631,
+            632,
+            633,
+            634,
+            635,
+            636,
+            624
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRIMARY - HEATING PHWP-2 BELL & GOSSETT e-1510 END SUCTION 4\" 3\" 45 340 1615 7.5 480 11 3 1-2 HW",
+          "word_ids": [
+            1339,
+            1340,
+            1341,
+            1334,
+            1335,
+            1336,
+            1337,
+            1338,
+            1342,
+            1343,
+            1345,
+            1346,
+            1347,
+            1348,
+            1349,
+            1350,
+            1351,
+            1352,
+            1353,
+            1354,
+            1344
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMPS",
+      "row": 11,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1440,
+        1445,
+        2269,
+        1475
+      ],
+      "expected": "PRIMARY - HEATING PHWP-3 BELL & GOSSETT e-1510 END SUCTION 4\" 3\" 45 340 1615 7.5 480 11 3 1-2 HW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRIMARY - HEATING PHWP-3 BELL & GOSSETT e-1510 END SUCTION 4\" 3\" 45 340 1615 7.5 480 11 3 1-2 HW",
+          "word_ids": [
+            642,
+            643,
+            644,
+            637,
+            638,
+            639,
+            640,
+            641,
+            646,
+            647,
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            654,
+            655,
+            656,
+            657,
+            645
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRIMARY - HEATING PHWP-3 BELL & GOSSETT e-1510 END SUCTION 4\" 3\" 45 340 1615 7.5 480 11 3 1-2 HW",
+          "word_ids": [
+            1372,
+            1373,
+            1374,
+            1367,
+            1368,
+            1369,
+            1370,
+            1371,
+            1375,
+            1376,
+            1378,
+            1379,
+            1380,
+            1381,
+            1382,
+            1383,
+            1384,
+            1385,
+            1386,
+            1387,
+            1377
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMPS",
+      "row": 12,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1440,
+        1475,
+        2269,
+        1505
+      ],
+      "expected": "SECONDARY - SHWP-1 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 100 1000 1680 40 480 52 3 1-2 HEATING HW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SECONDARY - SHWP-1 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 100 1000 1680 40 480 52 3 1-2 HEATING HW",
+          "word_ids": [
+            663,
+            664,
+            658,
+            659,
+            660,
+            661,
+            662,
+            667,
+            668,
+            669,
+            670,
+            671,
+            672,
+            673,
+            674,
+            675,
+            676,
+            677,
+            678,
+            665,
+            666
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SECONDARY - SHWP-1 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 100 1000 1680 40 480 52 3 1-2 HEATING HW",
+          "word_ids": [
+            1395,
+            1396,
+            1390,
+            1391,
+            1392,
+            1393,
+            1394,
+            1399,
+            1400,
+            1401,
+            1402,
+            1403,
+            1404,
+            1405,
+            1406,
+            1407,
+            1408,
+            1409,
+            1410,
+            1397,
+            1398
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMPS",
+      "row": 13,
+      "column": "literal_source_row_as_printed",
+      "page": 19,
+      "bbox": [
+        1440,
+        1505,
+        2269,
+        1535
+      ],
+      "expected": "SECONDARY - SHWP-2 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 100 1000 1680 40 480 52 3 1-2 HEATING HW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SECONDARY - SHWP-2 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 100 1000 1680 40 480 52 3 1-2 HEATING HW",
+          "word_ids": [
+            684,
+            685,
+            679,
+            680,
+            681,
+            682,
+            683,
+            688,
+            689,
+            690,
+            691,
+            692,
+            693,
+            694,
+            695,
+            696,
+            697,
+            698,
+            699,
+            686,
+            687
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SECONDARY - SHWP-2 BELL & GOSSETT e-1510 END SUCTION 6\" 5\" 100 1000 1680 40 480 52 3 1-2 HEATING HW",
+          "word_ids": [
+            1416,
+            1417,
+            1411,
+            1412,
+            1413,
+            1414,
+            1415,
+            1420,
+            1421,
+            1422,
+            1423,
+            1424,
+            1425,
+            1426,
+            1427,
+            1428,
+            1429,
+            1430,
+            1431,
+            1418,
+            1419
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-PUMPS",
+      "header": "PUMP SCHEDULE",
+      "page": 19,
+      "bbox": [
+        1440,
+        1060,
+        1630,
+        1090
+      ],
+      "engine": "mupdf",
+      "actual": "PUMP SCHEDULE:",
+      "pass": true
+    },
+    {
+      "table": "M601-PUMPS",
+      "header": "PUMP SCHEDULE",
+      "page": 19,
+      "bbox": [
+        1440,
+        1060,
+        1630,
+        1090
+      ],
+      "engine": "poppler",
+      "actual": "PUMP SCHEDULE:",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

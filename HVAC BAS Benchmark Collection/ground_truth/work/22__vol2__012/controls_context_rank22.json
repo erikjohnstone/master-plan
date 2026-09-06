@@ -1,0 +1,540 @@
+{
+  "document_id": "22__vol2__012",
+  "module_role": "Source-bounded M701 staged-chiller sequence of operation, M601 BACnet interface note, M702 water-controls diagram sensor notes, and E601 VFD controls-interface context.",
+  "tables": [],
+  "assertions": [
+    {
+      "id": "m601-bacnet-mstp",
+      "page": 19,
+      "bbox": [
+        580,
+        340,
+        870,
+        357
+      ],
+      "expected": "PROVIDE UNIT WITH BACnet MS/TP COMMUNICATION INTERFACE.",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-primary-secondary-system",
+      "page": 20,
+      "bbox": [
+        1674,
+        195,
+        2300,
+        211
+      ],
+      "expected": "GENERAL: THE CHILLED WATER SYSTEM IS A PRIMARY-SECONDARY FLOW SYSTEM WITH THREE (3) CHILLERS, THREE (3) PRIMARY CHILLED",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-system-redundancy",
+      "page": 20,
+      "bbox": [
+        1674,
+        218,
+        2310,
+        245
+      ],
+      "expected": "FOR N+1 REDUNDANCY. THE COOLING SYSTEM SHALL BE CONTROLLED FROM THE BUILDING AUTOMATION CONTROL SYSTEM (BAS) AS",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-seasonal-operator-enable",
+      "page": 20,
+      "bbox": [
+        1745,
+        263,
+        2295,
+        279
+      ],
+      "expected": "OPERATOR SHALL HAVE ON/OFF SEASONAL ENABLE/DISABLE THAT REQUIRES OPERATOR INTERVENTION.",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-oat-enable-threshold",
+      "page": 20,
+      "bbox": [
+        1674,
+        274,
+        2300,
+        301
+      ],
+      "expected": "OVERRIDE IS SET TO ENABLE AND IF THE OUTSIDE AIR TEMPERATURE IS ABOVE 55 DEGREES (ADJUSTABLE) WITH A 5 DEGREE DEADBAND",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-bas-chiller-control",
+      "page": 20,
+      "bbox": [
+        1760,
+        308,
+        2280,
+        324
+      ],
+      "expected": "THE BAS SHALL CONTROL THE STARTING AND STOPPING OF THE CHILLERS, SET THE CHILLED WATER SETPOINT",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-operator-selectable-leadlag",
+      "page": 20,
+      "bbox": [
+        1674,
+        320,
+        2290,
+        346
+      ],
+      "expected": "CHILLER STATUS, AND MONITOR CHILLER LOAD CAPACITY.  THE CHILLERS SHALL BE CONTROLLED BY A LEAD/LAG STRATEGY WHICH IS",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-lead-valve-pump-sequencing",
+      "page": 20,
+      "bbox": [
+        1674,
+        388,
+        2300,
+        414
+      ],
+      "expected": "PROVEN. THE CHILLED WATER ISOLATION VALVE FOR THE LEAD CHILLER SHALL OPEN AND THE LEAD CHILLED WATER PUMP SHALL START",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-lead-chiller-flow-proven",
+      "page": 20,
+      "bbox": [
+        1674,
+        445,
+        2160,
+        461
+      ],
+      "expected": "WATER AND CONDENSER WATER FLOW SWITCHES MAKE, THE CHILLER SHALL START VIA INTERNAL LOGIC.",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-lag-chiller-minimum-flow",
+      "page": 20,
+      "bbox": [
+        1674,
+        479,
+        2310,
+        505
+      ],
+      "expected": "LAG CHILLER SHALL SLOWLY OPEN WHILE THE LAG PRIMARY CHILLED WATER PUMP IS ENABLED AND THE SPEED IS SLOWLY INCREASED NOT",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-secondary-dp-vfd",
+      "page": 20,
+      "bbox": [
+        1674,
+        626,
+        2310,
+        653
+      ],
+      "expected": "MODULATE THE LEAD SECONDARY CHILLED WATER PUMP VFD TO MAINTAIN CHILLED WATER SYSTEM DIFFERENTIAL SETPOINT. INITIALLY SE",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-secondary-dp-alarm",
+      "page": 20,
+      "bbox": [
+        1674,
+        649,
+        2310,
+        676
+      ],
+      "expected": "SYSTEM BALANCING.  IF A SYSTEM DP READING FALLS OUTSIDE THE RANGE OF 9-15 PSI (ADJUSTABLE) THE CONTROLLER SHALL GENERATE A",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-lag-pump-alarm",
+      "page": 20,
+      "bbox": [
+        1674,
+        672,
+        2310,
+        699
+      ],
+      "expected": "AT THE BAS.  THE LAG CHILLED WATER PUMP SHALL BE ENABLED IF THE LEAD CHILLED WATER PUMP IS IN AN ALARM CONDITION PREVENTIN",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-stage-up-capacity",
+      "page": 20,
+      "bbox": [
+        1674,
+        717,
+        2310,
+        733
+      ],
+      "expected": "ACTUAL CHILLER CAPACITY OF LEAD CHILLER IS >70% (ADJ.) FOR 5 MINUTES (ADJ.) AND ONLY (1) CHILLER IS CURRENTLY RUNNING, THE BAS",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-stage-down-capacity",
+      "page": 20,
+      "bbox": [
+        1674,
+        740,
+        2290,
+        767
+      ],
+      "expected": "CONDITION PREVENTING IT FROM OPERATING. THE BAS SHALL STAGE DOWN FROM (2) CHILLERS TO (1) IF THE ACTUAL CAPACITY OF ALL",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-two-chiller-limit",
+      "page": 20,
+      "bbox": [
+        1674,
+        751,
+        2280,
+        778
+      ],
+      "expected": "ACTIVE CHILLERS IS <25% FOR 10 MINUTES (ADJ.). ONLY (2) CHILLERS SHALL BE ALLOWED TO OPERATE AT ANY TIME.",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-chws-reset",
+      "page": 20,
+      "bbox": [
+        1674,
+        786,
+        2280,
+        812
+      ],
+      "expected": "THE CHILLED WATER SUPPLY TEMPERATURE SETPOINT SHALL BE RESET LINEARLY BASED ON",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-chws-reset-75f",
+      "page": 20,
+      "bbox": [
+        1700,
+        830,
+        1850,
+        846
+      ],
+      "expected": "75 deg F 44 deg F",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-chws-reset-65f",
+      "page": 20,
+      "bbox": [
+        1700,
+        842,
+        1850,
+        858
+      ],
+      "expected": "65 deg F 48 deg F",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-tower-wetbulb-reset",
+      "page": 20,
+      "bbox": [
+        1790,
+        865,
+        2270,
+        880
+      ],
+      "expected": "AN OUTSIDE AIR WET BULB TEMPERATURE SHALL BE CALCULATED BY THE BAS AND SHALL RESET THE",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-tower-wetbulb-60f",
+      "page": 20,
+      "bbox": [
+        1680,
+        909,
+        1840,
+        926
+      ],
+      "expected": "60 deg F 65 deg F",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-tower-wetbulb-75f",
+      "page": 20,
+      "bbox": [
+        1680,
+        921,
+        1840,
+        938
+      ],
+      "expected": "75 deg F 85 deg F",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-tower-vfd-modulation",
+      "page": 20,
+      "bbox": [
+        1674,
+        944,
+        2310,
+        971
+      ],
+      "expected": "SETPOINT BY MODULATING THE COOLING TOWER FAN VFD.  COOLING TOWER FAN SPEED SHALL INCREASE IF THE WATER TEMPERATURE IS",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-bypass-in-cold",
+      "page": 20,
+      "bbox": [
+        1674,
+        1000,
+        2305,
+        1028
+      ],
+      "expected": "OPERATING AND THE OUTSIDE AIR TEMPERATURE IS BELOW 45 DEGREES THE BYPASS VALVE SHALL COMMANDED TO 100% OPEN",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-condenser-pump-lead-command",
+      "page": 20,
+      "bbox": [
+        1830,
+        1035,
+        2300,
+        1050
+      ],
+      "expected": "THE LEAD CONDENSER WATER PUMP SHALL BE ENABLED BY A COMMAND BEING SENT TO A CHILLER.",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-condenser-pump-lag-alarm",
+      "page": 20,
+      "bbox": [
+        1674,
+        1068,
+        2300,
+        1096
+      ],
+      "expected": "BY AN OPERATOR AT THE BAS.  THE LAG CONDENSER WATER PUMP SHALL BE ENABLED IF THE LEAD CONDENSER WATER PUMP IS IN AN",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-tower-level-monitoring",
+      "page": 20,
+      "bbox": [
+        1790,
+        1126,
+        2300,
+        1153
+      ],
+      "expected": "THE  BAS SHALL MONITOR THE COOLING TOWER BASIN FILL LEVELS. TOWER FILL SHALL BE BY MECHANICAL FILL",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-tower-high-level-alarm",
+      "page": 20,
+      "bbox": [
+        1674,
+        1171,
+        2165,
+        1187
+      ],
+      "expected": "IF THE WATER LEVEL IN THE BASIN REACHES THE HIGH LEVEL SETPOINT, AN ALARM SHALL BE GENERATED.",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-tower-low-level-alarm",
+      "page": 20,
+      "bbox": [
+        1674,
+        1193,
+        2165,
+        1210
+      ],
+      "expected": "IF THE WATER LEVEL IN THE BASIN REACHES THE LOW LEVEL SET POINT, AN ALARM SHALL BE GENERATED.",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-runtime-weekly-manual-switchover",
+      "page": 20,
+      "bbox": [
+        1674,
+        1227,
+        2310,
+        1255
+      ],
+      "expected": "HAVE SELECT LEAD/LAG SWITCHOVER FROM THE FOLLOWING OPTIONS: RUNTIME HOURS (168 HOURS, ADJUSTABLE), WEEKLY (TUESDAYS @",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-refrigerant-purge",
+      "page": 20,
+      "bbox": [
+        1800,
+        1273,
+        2305,
+        1300
+      ],
+      "expected": "UPON RECEIVING AN ALARM SIGNAL FROM THE REFRIGERANT MONITORING SYSTEM, THE BAS SHALL INITIATE",
+      "mode": "contains"
+    },
+    {
+      "id": "m701-purge-equipment-logic",
+      "page": 20,
+      "bbox": [
+        1674,
+        1307,
+        2275,
+        1334
+      ],
+      "expected": "PURGE MODE: ALL EQUIPMENT IN MECHANICAL ROOM WILL SHUT DOWN. SF-1 DAMPER WILL OPEN AND SF-1 AND EF-2",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-retain-existing-sensor",
+      "page": 21,
+      "bbox": [
+        1895,
+        130,
+        2260,
+        158
+      ],
+      "expected": "EXISTING SENSOR/DEVICE TO REMAIN. CONTROLS CONTRACTOR SHALL VERIFY",
+      "mode": "contains"
+    },
+    {
+      "id": "m702-new-temperature-sensor",
+      "page": 21,
+      "bbox": [
+        1895,
+        175,
+        2260,
+        193
+      ],
+      "expected": "PROVIDE NEW TEMPERATURE SENSOR IN EXISTING TO REMAIN THERMOWELL.",
+      "mode": "contains"
+    },
+    {
+      "id": "e601-vfd-division-26",
+      "page": 27,
+      "bbox": [
+        960,
+        435,
+        1260,
+        452
+      ],
+      "expected": "VFD TO BE PROVIDED BY DIVISION 26 AND INSTALLED BY DIVISION 26.",
+      "mode": "contains"
+    },
+    {
+      "id": "e601-vfd-controls-interface",
+      "page": 27,
+      "bbox": [
+        960,
+        463,
+        1530,
+        479
+      ],
+      "expected": "PROVIDE WITH CONTROLS INTERFACE BOARD FOR SINGLE TERMINATION BY CONTROLS CONTRACTOR FOR START/STOP, PROOF, SPEED",
+      "mode": "contains"
+    },
+    {
+      "id": "e601-vfd-controls-interface-input",
+      "page": 27,
+      "bbox": [
+        960,
+        475,
+        1280,
+        491
+      ],
+      "expected": "OUTPUT, AND SPEED INPUT. COORDINATE WITH CONTROLS CONTRACTOR.",
+      "mode": "contains"
+    }
+  ],
+  "network_architecture": {
+    "published_integration": [
+      "M601 requires a BACnet MS/TP communication interface for the scheduled chillers.",
+      "M701 says the cooling system is controlled from the building automation control system (BAS).",
+      "E601 requires a VFD controls interface board for a single controls-contractor termination for start/stop, proof, speed output and speed input."
+    ],
+    "assertion_ids": [
+      "m601-bacnet-mstp",
+      "m701-system-redundancy",
+      "e601-vfd-controls-interface",
+      "e601-vfd-controls-interface-input"
+    ],
+    "boundary": "The supplied sheets do not publish controller addresses, router/network topology, trunk/media design, controller/card assignment, terminal schedules, wiring terminations, device serial numbers, BACnet object lists, or installed controller quantities."
+  },
+  "sequence_inventory": [
+    {
+      "id": "m701-chiller-enable-lead-lag-and-staging",
+      "sheet": "M701",
+      "assertion_ids": [
+        "m701-primary-secondary-system",
+        "m701-seasonal-operator-enable",
+        "m701-bas-chiller-control",
+        "m701-lead-valve-pump-sequencing",
+        "m701-lag-chiller-minimum-flow",
+        "m701-stage-up-capacity",
+        "m701-stage-down-capacity",
+        "m701-two-chiller-limit"
+      ]
+    },
+    {
+      "id": "m701-secondary-chilled-water-dp",
+      "sheet": "M701",
+      "assertion_ids": [
+        "m701-secondary-dp-vfd",
+        "m701-secondary-dp-alarm",
+        "m701-lag-pump-alarm"
+      ]
+    },
+    {
+      "id": "m701-temperature-and-tower-control",
+      "sheet": "M701",
+      "assertion_ids": [
+        "m701-chws-reset",
+        "m701-chws-reset-75f",
+        "m701-chws-reset-65f",
+        "m701-tower-wetbulb-reset",
+        "m701-tower-vfd-modulation",
+        "m701-bypass-in-cold"
+      ]
+    },
+    {
+      "id": "m701-condenser-pumps-tower-level-and-rotation",
+      "sheet": "M701",
+      "assertion_ids": [
+        "m701-condenser-pump-lead-command",
+        "m701-condenser-pump-lag-alarm",
+        "m701-tower-level-monitoring",
+        "m701-tower-high-level-alarm",
+        "m701-tower-low-level-alarm",
+        "m701-runtime-weekly-manual-switchover"
+      ]
+    },
+    {
+      "id": "m701-refrigerant-monitor-purge",
+      "sheet": "M701",
+      "assertion_ids": [
+        "m701-refrigerant-purge",
+        "m701-purge-equipment-logic"
+      ]
+    }
+  ],
+  "sensors_and_control_symbol_context": {
+    "published_context": "M701 references outside-air dry-bulb and wet-bulb calculations, chilled-water and condenser-water differential-pressure control, flow switches, basin level monitoring and refrigerant monitoring. M702 says existing sensors/devices remain and calls for a new temperature sensor in an existing thermowell.",
+    "assertion_ids": [
+      "m701-oat-enable-threshold",
+      "m701-lead-chiller-flow-proven",
+      "m701-secondary-dp-vfd",
+      "m701-tower-wetbulb-reset",
+      "m701-tower-level-monitoring",
+      "m701-refrigerant-purge",
+      "m702-retain-existing-sensor",
+      "m702-new-temperature-sensor"
+    ],
+    "boundary": "The sequence and diagram notes are not transformed into a counted physical sensor, thermostat, zone, actuator, damper, valve, controller, terminal, relay, wire, or I/O-device inventory. M701's separately retained formal point matrix is the authoritative source for listed points and its printed hardwired I/O flags."
+  },
+  "control_boundaries": [
+    "All conditional control logic remains source-bounded. No source clause is expanded into physical equipment or field-device quantities.",
+    "The M601 BACnet note and E601 VFD controls-interface notes establish only the quoted integration/interface requirements, not a complete BAS design or connection schedule."
+  ]
+}

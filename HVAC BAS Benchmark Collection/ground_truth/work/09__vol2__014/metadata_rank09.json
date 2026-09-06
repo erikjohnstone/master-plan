@@ -1,0 +1,275 @@
+{
+  "document_id": "09__vol2__014",
+  "module_role": "Project/title-block facts, full supplied-sheet ledger, scale boundary and complete visual-review disposition for all source pages.",
+  "tables": [],
+  "project": {
+    "project_name_as_printed": "FIRE SCIENCES LABORATORY MECHANICAL UPGRADES",
+    "project_number_as_printed": "15044.10",
+    "facility_as_printed": "USFS / ROCKY MOUNTAIN RESEARCH STATION",
+    "issue_as_printed": "CONSTRUCTION DOCUMENTS",
+    "assertion_ids": [
+      "rank09-project",
+      "rank09-number",
+      "rank09-facility",
+      "rank09-first-sheet"
+    ]
+  },
+  "sheet_details": {
+    "sheet_ledger_semantics": "All 28 supplied PDF pages have a retained full-page Poppler render and a completed visual-review disposition. Sheet identifiers and titles are transcribed from reviewed title blocks."
+  },
+  "scale_semantics": {
+    "takeoff_scale_status": "No global drawing scale is asserted. The set mixes schedules, diagrams, notes, plans, details and sections; no local scale is promoted into a document-wide quantity conversion.",
+    "printed_local_view_scales_observed": [
+      "N.T.S. appears on individual control-detail views."
+    ],
+    "boundary": "Schedule, legend and schematic facts are retained as source-bound text/table facts, not distance-based takeoff quantities."
+  },
+  "visual_review_pages": [
+    {
+      "page": 1,
+      "sheet": "M0.1",
+      "title": "MECH NOTES & LEGENDS",
+      "render": "reviews/09__vol2__014/p1-p1-full-poppler.png",
+      "finding": "Mechanical notes, HVAC/BAS/control legends, sensor/valve symbols, commissioning and source limitations visually reviewed."
+    },
+    {
+      "page": 2,
+      "sheet": "M0.2",
+      "title": "MECH SCHEDULES",
+      "render": "reviews/09__vol2__014/p2-p2-full-poppler.png",
+      "finding": "Mechanical schedules and AHU/condensing-unit control notes visually reviewed; selected condensing-unit rows captured."
+    },
+    {
+      "page": 3,
+      "sheet": "M0.3",
+      "title": "MECH SCHEDULES CONTINUED",
+      "render": "reviews/09__vol2__014/p3-p3-full-poppler.png",
+      "finding": "Mechanical schedules visually reviewed; the complete 17-row CONTROL DAMPER SCHEDULE is captured."
+    },
+    {
+      "page": 4,
+      "sheet": "M0.4",
+      "title": "MECH SCHEDULES CONTINUED",
+      "render": "reviews/09__vol2__014/p4-p4-full-poppler.png",
+      "finding": "Mechanical schedules and central-equipment control notes visually reviewed; selected boiler, steam-generator and pump rows captured."
+    },
+    {
+      "page": 5,
+      "sheet": "M0.5",
+      "title": "MEP COORDINATION SCHEDULE",
+      "render": "reviews/09__vol2__014/p5-p5-full-poppler.png",
+      "finding": "MEP coordination schedule visually reviewed; retained as source context."
+    },
+    {
+      "page": 6,
+      "sheet": "MD2.0",
+      "title": "'A' WING MECH DEMO PLANS",
+      "render": "reviews/09__vol2__014/p6-p6-full-poppler.png",
+      "finding": "Mechanical demolition plans visually reviewed; retained as source context."
+    },
+    {
+      "page": 7,
+      "sheet": "MD2.1",
+      "title": "'A' WING MECH DEMO PLANS",
+      "render": "reviews/09__vol2__014/p7-p7-full-poppler.png",
+      "finding": "Mechanical demolition plans visually reviewed; retained as source context."
+    },
+    {
+      "page": 8,
+      "sheet": "MD2.2",
+      "title": "'A' WING MECH DEMO PLANS",
+      "render": "reviews/09__vol2__014/p8-p8-full-poppler.png",
+      "finding": "Mechanical demolition plans visually reviewed; retained as source context."
+    },
+    {
+      "page": 9,
+      "sheet": "MD2.3",
+      "title": "'B' & 'C' WING MECH DEMO",
+      "render": "reviews/09__vol2__014/p9-p9-full-poppler.png",
+      "finding": "Mechanical demolition plan visually reviewed; retained as source context."
+    },
+    {
+      "page": 10,
+      "sheet": "MD2.4",
+      "title": "'B' WING - MECH DEMO PLANS",
+      "render": "reviews/09__vol2__014/p10-p10-full-poppler.png",
+      "finding": "Mechanical demolition plans visually reviewed; retained as source context."
+    },
+    {
+      "page": 11,
+      "sheet": "MD3.1",
+      "title": "ENLARGED MECH DEMO",
+      "render": "reviews/09__vol2__014/p11-p11-full-poppler.png",
+      "finding": "Enlarged mechanical demolition drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 12,
+      "sheet": "MD5.1",
+      "title": "'A' WING MECH DEMO SECTIONS",
+      "render": "reviews/09__vol2__014/p12-p12-full-poppler.png",
+      "finding": "Mechanical demolition section drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 13,
+      "sheet": "MD5.2",
+      "title": "'A' WING MECH DEMO SECTIONS",
+      "render": "reviews/09__vol2__014/p13-p13-full-poppler.png",
+      "finding": "Mechanical demolition section drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 14,
+      "sheet": "M2.0",
+      "title": "'A' WING MECH PLANS",
+      "render": "reviews/09__vol2__014/p14-p14-full-poppler.png",
+      "finding": "Mechanical plan drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 15,
+      "sheet": "M2.1",
+      "title": "'A' WING MECH PLANS",
+      "render": "reviews/09__vol2__014/p15-p15-full-poppler.png",
+      "finding": "Mechanical plan drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 16,
+      "sheet": "M2.2",
+      "title": "'A' WING MECH PLANS",
+      "render": "reviews/09__vol2__014/p16-p16-full-poppler.png",
+      "finding": "Mechanical plan drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 17,
+      "sheet": "M2.3",
+      "title": "'B' & 'C' WING MECH PLANS",
+      "render": "reviews/09__vol2__014/p17-p17-full-poppler.png",
+      "finding": "Mechanical plan drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 18,
+      "sheet": "M2.4",
+      "title": "'B' WING MECH PLANS",
+      "render": "reviews/09__vol2__014/p18-p18-full-poppler.png",
+      "finding": "Mechanical plan drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 19,
+      "sheet": "M3.1",
+      "title": "ENLARGED MECHANICAL PLANS",
+      "render": "reviews/09__vol2__014/p19-p19-full-poppler.png",
+      "finding": "Enlarged mechanical plan drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 20,
+      "sheet": "M5.1",
+      "title": "'A' WING MECH SECTION",
+      "render": "reviews/09__vol2__014/p20-p20-full-poppler.png",
+      "finding": "Mechanical section drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 21,
+      "sheet": "M5.2",
+      "title": "'A' WING MECH SECTION",
+      "render": "reviews/09__vol2__014/p21-p21-full-poppler.png",
+      "finding": "Mechanical section drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 22,
+      "sheet": "M9.1",
+      "title": "MECH DETAILS",
+      "render": "reviews/09__vol2__014/p22-p22-full-poppler.png",
+      "finding": "Mechanical details visually reviewed; retained as source context."
+    },
+    {
+      "page": 23,
+      "sheet": "M9.2",
+      "title": "MECH DETAILS CONTINUED",
+      "render": "reviews/09__vol2__014/p23-p23-full-poppler.png",
+      "finding": "Mechanical details including referenced control-valve context visually reviewed; retained as source context."
+    },
+    {
+      "page": 24,
+      "sheet": "M9.3",
+      "title": "MECHANICAL ENLARGED PLANS",
+      "render": "reviews/09__vol2__014/p24-p24-full-poppler.png",
+      "finding": "Mechanical enlarged plans visually reviewed; retained as source context."
+    },
+    {
+      "page": 25,
+      "sheet": "M9.4",
+      "title": "MECH DETAILS CONTINUED",
+      "render": "reviews/09__vol2__014/p25-p25-full-poppler.png",
+      "finding": "Mechanical detail drawings visually reviewed; retained as source context."
+    },
+    {
+      "page": 26,
+      "sheet": "M9.5",
+      "title": "CONTROL DIAGRAMS",
+      "render": "reviews/09__vol2__014/p26-p26-full-poppler.png",
+      "finding": "Control diagrams visually reviewed; retained as source context."
+    },
+    {
+      "page": 27,
+      "sheet": "M9.6",
+      "title": "CONTROL DIAGRAMS",
+      "render": "reviews/09__vol2__014/p27-p27-full-poppler.png",
+      "finding": "AHU control diagrams, low-voltage damper note and P/E enable thresholds visually reviewed and bounded clauses captured."
+    },
+    {
+      "page": 28,
+      "sheet": "M9.7",
+      "title": "CONTROL DIAGRAMS",
+      "render": "reviews/09__vol2__014/p28-p28-full-poppler.png",
+      "finding": "Hot-water and unit-heater DDC diagrams plus BAS/control-symbol definitions visually reviewed and bounded clauses captured."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "rank09-project",
+      "page": 1,
+      "bbox": [
+        1978,
+        1412,
+        2287,
+        1464
+      ],
+      "expected": "FIRE SCIENCES LABORATORY MECHANICAL UPGRADES",
+      "mode": "exact"
+    },
+    {
+      "id": "rank09-number",
+      "page": 1,
+      "bbox": [
+        1697,
+        1205,
+        1750,
+        1221
+      ],
+      "expected": "15044.10",
+      "mode": "exact"
+    },
+    {
+      "id": "rank09-facility",
+      "page": 1,
+      "bbox": [
+        2014,
+        1497,
+        2251,
+        1510
+      ],
+      "expected": "USFS / ROCKY MOUNTAIN RESEARCH STATION",
+      "mode": "exact"
+    },
+    {
+      "id": "rank09-first-sheet",
+      "page": 1,
+      "bbox": [
+        1878,
+        1426,
+        1944,
+        1463
+      ],
+      "expected": "M0.1",
+      "mode": "exact"
+    }
+  ]
+}

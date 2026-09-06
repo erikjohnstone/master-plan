@@ -1,0 +1,103 @@
+{
+  "document_id": "19__vol2__094",
+  "module_role": "M-201 controls ground truth: three typed schematic templates, the existing-DDC handoff requirement, and limits on sequence, point and installed-device claims. The source does not publish a formal BAS points matrix or a standalone written sequence of operations.",
+  "source_sheet": "M-201",
+  "source_page": 6,
+  "network_architecture": {
+    "existing_control_system_as_printed": "EXISTING DDC SYSTEM",
+    "integration_requirement": "CONNECT CONTROLLER TO EXISTING DDC SYSTEM. MATCH EXISTING DDC POINTS AND EXISTING SEQUENCE OF OPERATIONS.",
+    "protocol_transport_addressing_baud_rate_controller_model": {"status": "not_stated_in_supplied_set", "value": null},
+    "point_transport_per_schematic_symbol": {"status": "not_stated", "value": null},
+    "assertion_ids": ["m201-vav-existing-ddc", "m201-cv-existing-ddc", "m201-doas-existing-ddc"]
+  },
+  "sequence_of_operations": {
+    "status": "not_printed_as_a_standalone_sequence",
+    "source_requirement": "Each schematic requires matching the existing sequence of operations; the existing sequence text is not included in the supplied nine pages.",
+    "deductions_not_made": ["No enable/disable logic, setpoint, reset, alarm, lead-lag, scheduling or failure behavior is inferred from the diagram bubbles.", "No final sequence is manufactured from the instruction to match an external existing sequence."],
+    "assertion_ids": ["m201-vav-existing-ddc", "m201-cv-existing-ddc", "m201-doas-existing-ddc"]
+  },
+  "schematic_templates": [
+    {
+      "id": "M201-DETAIL-1-VAV",
+      "detail": "1",
+      "caption": "VARIABLE AIR VOLUME AHU-4, AHU-5 & AHU-8 CONTROLS",
+      "schedule_tag_relationship": "The caption prints AHU-4/AHU-5/AHU-8 while M-401 prints zero-padded AHU-04/AHU-05/AHU-08. The two printed tag forms are retained; no unprinted controller-instance multiplier is assumed.",
+      "diagram_source_symbols": [
+        {"element": "TS-1", "type_as_printed": "AI", "literal_role": "temperature-sensor schematic label"},
+        {"element": "HS-1", "type_as_printed": "AI", "literal_role": "HI-LIMIT HUMIDITY SENSOR"},
+        {"element": "DM-1", "type_as_printed": "DO", "literal_role": "SMOKE MODE OUTSIDE AIR damper schematic label"},
+        {"element": "DM-2", "type_as_printed": "AO", "literal_role": "damper schematic label"},
+        {"element": "DPS-1", "type_as_printed": "DI", "literal_role": "filter differential-pressure-switch schematic label"},
+        {"element": "TS-3", "type_as_printed": "AI", "literal_role": "temperature-sensor schematic label"},
+        {"element": "FZ-1", "type_as_printed": "not_stated_adjacent_to_label", "literal_role": "FREEZESTAT schematic label"},
+        {"element": "HUMIDIFIER", "type_as_printed": "AO", "literal_role": "humidifier schematic label"},
+        {"element": "DPS-2", "type_as_printed": "DI", "literal_role": "fan differential-pressure-switch schematic label"},
+        {"element": "VFD", "type_as_printed": "DO / DI / AO / AI", "literal_role": "VFD schematic interface bubbles"},
+        {"element": "TS-4", "type_as_printed": "AI", "literal_role": "temperature-sensor schematic label"},
+        {"element": "EXISTING 3-WAY VALVE TO REMAIN", "type_as_printed": "AO", "literal_role": "existing chilled-water valve schematic callout"}
+      ],
+      "quantity_rule": "These are symbols and bubble types in a template schematic. They are not a formal point list and are not multiplied by the three captioned AHUs into an installed terminal count.",
+      "assertion_ids": ["m201-vav-caption", "m201-vav-existing-ddc"]
+    },
+    {
+      "id": "M201-DETAIL-2-CV",
+      "detail": "2",
+      "caption": "CONSTANT VOLUME AHU-6 CONTROLS",
+      "schedule_tag_relationship": "M-401 prints AHU-06; the controls caption prints AHU-6.",
+      "diagram_source_symbols": [
+        {"element": "DM-1", "type_as_printed": "DO", "literal_role": "outside-air damper schematic label"},
+        {"element": "ELECTRIC HEAT", "type_as_printed": "DO", "literal_role": "electric-heat schematic bubble"},
+        {"element": "DPS-2", "type_as_printed": "DI", "literal_role": "fan differential-pressure-switch schematic label"},
+        {"element": "TS-1", "type_as_printed": "AI", "literal_role": "temperature-sensor schematic label"},
+        {"element": "TS-2", "type_as_printed": "AI", "literal_role": "temperature-sensor schematic label"},
+        {"element": "CV-1", "type_as_printed": "AO", "literal_role": "existing 3-way valve to remain"}
+      ],
+      "quantity_rule": "This is diagram-only source context, not an equipment-specific terminal schedule or complete controller I/O count.",
+      "assertion_ids": ["m201-cv-caption", "m201-cv-existing-ddc"]
+    },
+    {
+      "id": "M201-DETAIL-3-DOAS",
+      "detail": "3",
+      "caption": "100% DEDICATED OUTDOOR AIR SYSTEM AHU-7 CONTROLS",
+      "schedule_tag_relationship": "M-401 prints AHU-07; the controls caption prints AHU-7.",
+      "diagram_source_symbols": {"status": "full schematic visually reviewed", "value": "The full-page review establishes that Detail 3 is a diagrammatic controls template. Its point bubbles are not recast as a separate typed points table because the supplied source does not print one."},
+      "quantity_rule": "No physical I/O count or field-device multiplier is stated for AHU-7.",
+      "assertion_ids": ["m201-doas-caption", "m201-doas-existing-ddc"]
+    }
+  ],
+  "sensor_and_zone_ledger": {
+    "physical_count_scope": "No plans in the supplied set map controls sensors to zones or rooms. M-201 labels several schematic sensors, but diagram symbols are not converted to physical quantities.",
+    "counts": {
+      "space_sensors": {"status": "not_stated", "value": null},
+      "CO2_sensors": {"status": "not_stated", "value": null},
+      "smart_thermostats": {"status": "not_stated", "value": null},
+      "humidity_sensors": {"status": "not_stated_as_a_physical_count", "value": null}
+    },
+    "source_role_examples": [
+      {"id": "M201-HS-1", "role": "HI-LIMIT HUMIDITY SENSOR", "scope": "VAV schematic source template", "physical_count": {"status": "not_stated", "value": null}},
+      {"id": "M201-TS", "role": "TS-1 through TS-4 labels", "scope": "schematic source templates", "physical_count": {"status": "not_stated", "value": null}},
+      {"id": "M201-DPS", "role": "DPS-1/DPS-2 labels", "scope": "schematic source templates", "physical_count": {"status": "not_stated", "value": null}},
+      {"id": "M201-FZ", "role": "FZ-1 FREEZESTAT", "scope": "schematic source templates", "physical_count": {"status": "not_stated", "value": null}}
+    ]
+  },
+  "controls_schedule_ledger": {
+    "control_valve_schedule": {"status": "not_present", "value": null, "basis": "All nine supplied pages were visually reviewed. M-201 calls out existing 3-way valves and M-301 depicts valve details, but no dedicated control-valve schedule is printed."},
+    "damper_actuator_schedule": {"status": "not_present", "value": null, "basis": "All nine supplied pages were visually reviewed. M-201 labels DM-1/DM-2 schematic dampers, but no dedicated damper-actuator schedule is printed."},
+    "physical_schedule_line_item_count": {"status": "not_stated", "value": null}
+  },
+  "tables": [],
+  "assertions": [
+    {"id": "m201-vav-caption", "page": 6, "bbox": [1720,675,2470,700], "expected": "VARIABLE AIR VOLUME AHU-4, AHU-5 & AHU-8 CONTROLS", "mode": "contains"},
+    {"id": "m201-cv-caption", "page": 6, "bbox": [1820,1300,2330,1345], "expected": "CONSTANT VOLUME AHU-6 CONTROLS", "mode": "contains"},
+    {"id": "m201-doas-caption", "page": 6, "bbox": [1700,1920,2470,1965], "expected": "100% DEDICATED OUTDOOR AIR SYSTEM AHU-7 CONTROLS", "mode": "contains"},
+    {"id": "m201-vav-existing-ddc", "page": 6, "bbox": [1945,590,2560,660], "expected": "CONNECT CONTROLLER TO EXISTING DDC SYSTEM. MATCH EXISTING DDC POINTS AND EXISTING SEQUENCE OF OPERATIONS.", "mode": "contains"},
+    {"id": "m201-cv-existing-ddc", "page": 6, "bbox": [1980,1220,2600,1300], "expected": "CONNECT CONTROLLER TO EXISTING DDC SYSTEM. MATCH EXISTING DDC POINTS AND EXISTING SEQUENCE OF OPERATIONS.", "mode": "contains"},
+    {"id": "m201-doas-existing-ddc", "page": 6, "bbox": [1950,1845,2600,1920], "expected": "CONNECT CONTROLLER TO EXISTING DDC SYSTEM. MATCH EXISTING DDC POINTS AND EXISTING SEQUENCE OF OPERATIONS.", "mode": "contains"},
+    {"id": "m201-as-built", "page": 6, "bbox": [1945,590,2480,625], "expected": "THE ABOVE SCHEMATIC IS BASED ON EXISTING AS-BUILT DRAWINGS.", "mode": "contains"},
+    {"id": "m201-factory-sensors", "page": 6, "bbox": [1945,610,2480,640], "expected": "SENSORS ARE FACTORY INSTALLED.", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "controls-schematic-templates", "records_path": ["schematic_templates"], "expected": 3, "unique_key": "id"},
+    {"id": "logical-sensor-source-examples", "records_path": ["sensor_and_zone_ledger", "source_role_examples"], "expected": 4, "unique_key": "id"}
+  ]
+}

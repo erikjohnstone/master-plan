@@ -1,0 +1,16 @@
+{
+  "document_id": "06__vol2__096",
+  "module_role": "Presentation mode for the complete literal schedule-row corpus. It deliberately retains each corroborated schedule row without manufacturing clean equipment identities, placement counts, or plan quantities.",
+  "tables": [],
+  "ledger_mode": "literal_schedule_rows_v1",
+  "schedule_counts": {
+    "tables": 25,
+    "rows": 239,
+    "interpretation": "25 complete schedule tables and 239 literal schedule rows are retained verbatim in schedule components. Blank source cells and merged/vertical headings are not converted to claimed values."
+  },
+  "control_valve_and_damper_schedule_status": {
+    "control_valve_schedule": "No standalone control-valve schedule is supplied on M600-M603; coil/plant schedules and control sequences are retained without inferring valve tags/specifications.",
+    "damper_actuator_schedule": "Present: M603 publishes 24 motorized-damper schedule rows with tags, dimensions, 24V, normally-open/closed state, quantity, manufacturer and model. No torque, signal type, spring-return state or controller terminal is added where not printed."
+  },
+  "source_boundary": "Schedule text is a source reference and is not treated as proof of installed location/multiplicity or a physical equipment takeoff."
+}

@@ -1,0 +1,8474 @@
+{
+  "document_id": "11__vol1__05",
+  "source_sha256": "78755d16240f834ee429960526cadab8edec205b65df36a70c171ab4d4b993db",
+  "annotation_sha256": "557709c7addfa0054ff229f5043b42d48750af5e1954aa271d02aadb6a787e91",
+  "tables": 1,
+  "rows": 21,
+  "cell_assertions": 273,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 1,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        815,
+        1930,
+        824
+      ],
+      "expected": "1-TP28-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP28-1",
+          "word_ids": [
+            3365
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP28-1",
+          "word_ids": [
+            2036
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 1,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        815,
+        2045,
+        824
+      ],
+      "expected": "LEVEL 3 KITCHEN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LEVEL 3 KITCHEN",
+          "word_ids": [
+            3366,
+            3367,
+            3368
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LEVEL 3 KITCHEN",
+          "word_ids": [
+            2292,
+            2293,
+            2294
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 1,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        815,
+        2185,
+        824
+      ],
+      "expected": "RH-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RH-1",
+          "word_ids": [
+            3369
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RH-1",
+          "word_ids": [
+            2352
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 1,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        815,
+        2250,
+        824
+      ],
+      "expected": "106",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "106",
+          "word_ids": [
+            3370
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "106",
+          "word_ids": [
+            2400
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 1,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        815,
+        2320,
+        824
+      ],
+      "expected": "[ 48 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 48 ]",
+          "word_ids": [
+            3371,
+            3372,
+            3373
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 48 ]",
+          "word_ids": [
+            2401,
+            2402,
+            2403
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 1,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        815,
+        2400,
+        824
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3374
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2489
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 1,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        815,
+        2470,
+        824
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3375,
+            3376,
+            3377
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2490,
+            2491,
+            2492
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 1,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        815,
+        2540,
+        824
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3378
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2578
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 1,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        815,
+        2600,
+        824
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3379,
+            3380,
+            3381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2579,
+            2580,
+            2581
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 1,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        815,
+        2670,
+        824
+      ],
+      "expected": "F&T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            3382
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            2664
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 1,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        815,
+        2740,
+        824
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            3383
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            2686
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 1,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        815,
+        2800,
+        824
+      ],
+      "expected": "[ 19 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            3384,
+            3385,
+            3386
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            2710,
+            2711,
+            2712
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 1,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        815,
+        2885,
+        824
+      ],
+      "expected": "(1) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            3387,
+            3388
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            2774,
+            2775
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 2,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        828,
+        1930,
+        837
+      ],
+      "expected": "1-TP28-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP28-2",
+          "word_ids": [
+            3389
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP28-2",
+          "word_ids": [
+            2037
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 2,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        828,
+        2045,
+        837
+      ],
+      "expected": "LEVEL 3 KITCHEN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LEVEL 3 KITCHEN",
+          "word_ids": [
+            3390,
+            3391,
+            3392
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LEVEL 3 KITCHEN",
+          "word_ids": [
+            2295,
+            2296,
+            2297
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 2,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        828,
+        2185,
+        837
+      ],
+      "expected": "RH-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RH-2",
+          "word_ids": [
+            3393
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RH-2",
+          "word_ids": [
+            2353
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 2,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        828,
+        2250,
+        837
+      ],
+      "expected": "106",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "106",
+          "word_ids": [
+            3394
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "106",
+          "word_ids": [
+            2404
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 2,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        828,
+        2320,
+        837
+      ],
+      "expected": "[ 48 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 48 ]",
+          "word_ids": [
+            3395,
+            3396,
+            3397
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 48 ]",
+          "word_ids": [
+            2405,
+            2406,
+            2407
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 2,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        828,
+        2400,
+        837
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3398
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2493
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 2,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        828,
+        2470,
+        837
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3399,
+            3400,
+            3401
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2494,
+            2495,
+            2496
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 2,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        828,
+        2540,
+        837
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3402
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2582
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 2,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        828,
+        2600,
+        837
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3403,
+            3404,
+            3405
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2583,
+            2584,
+            2585
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 2,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        828,
+        2670,
+        837
+      ],
+      "expected": "F&T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            3406
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            2665
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 2,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        828,
+        2740,
+        837
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            3407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            2687
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 2,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        828,
+        2800,
+        837
+      ],
+      "expected": "[ 19 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            3408,
+            3409,
+            3410
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            2713,
+            2714,
+            2715
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 2,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        828,
+        2885,
+        837
+      ],
+      "expected": "(1) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            3411,
+            3412
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            2776,
+            2777
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 3,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        841,
+        1930,
+        850
+      ],
+      "expected": "1-TP28-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP28-3",
+          "word_ids": [
+            3413
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP28-3",
+          "word_ids": [
+            2038
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 3,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        841,
+        2045,
+        850
+      ],
+      "expected": "LEVEL 3 KITCHEN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LEVEL 3 KITCHEN",
+          "word_ids": [
+            3414,
+            3415,
+            3416
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LEVEL 3 KITCHEN",
+          "word_ids": [
+            2298,
+            2299,
+            2300
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 3,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        841,
+        2185,
+        850
+      ],
+      "expected": "RH-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RH-3",
+          "word_ids": [
+            3417
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RH-3",
+          "word_ids": [
+            2354
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 3,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        841,
+        2250,
+        850
+      ],
+      "expected": "106",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "106",
+          "word_ids": [
+            3418
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "106",
+          "word_ids": [
+            2408
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 3,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        841,
+        2320,
+        850
+      ],
+      "expected": "[ 48 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 48 ]",
+          "word_ids": [
+            3419,
+            3420,
+            3421
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 48 ]",
+          "word_ids": [
+            2409,
+            2410,
+            2411
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 3,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        841,
+        2400,
+        850
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3422
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2497
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 3,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        841,
+        2470,
+        850
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3423,
+            3424,
+            3425
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2498,
+            2499,
+            2500
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 3,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        841,
+        2540,
+        850
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3426
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2586
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 3,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        841,
+        2600,
+        850
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3427,
+            3428,
+            3429
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2587,
+            2588,
+            2589
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 3,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        841,
+        2670,
+        850
+      ],
+      "expected": "F&T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            3430
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            2666
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 3,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        841,
+        2740,
+        850
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            3431
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            2688
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 3,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        841,
+        2800,
+        850
+      ],
+      "expected": "[ 19 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            3432,
+            3433,
+            3434
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            2716,
+            2717,
+            2718
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 3,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        841,
+        2885,
+        850
+      ],
+      "expected": "(1) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            3435,
+            3436
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            2778,
+            2779
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 4,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        854,
+        1930,
+        863
+      ],
+      "expected": "1-TP28-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP28-4",
+          "word_ids": [
+            3437
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP28-4",
+          "word_ids": [
+            2039
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 4,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        854,
+        2045,
+        863
+      ],
+      "expected": "LEVEL 3 DINING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LEVEL 3 DINING",
+          "word_ids": [
+            3438,
+            3439,
+            3440
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LEVEL 3 DINING",
+          "word_ids": [
+            2301,
+            2302,
+            2303
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 4,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        854,
+        2185,
+        863
+      ],
+      "expected": "RH-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RH-4",
+          "word_ids": [
+            3441
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RH-4",
+          "word_ids": [
+            2355
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 4,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        854,
+        2250,
+        863
+      ],
+      "expected": "106",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "106",
+          "word_ids": [
+            3442
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "106",
+          "word_ids": [
+            2412
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 4,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        854,
+        2320,
+        863
+      ],
+      "expected": "[ 48 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 48 ]",
+          "word_ids": [
+            3443,
+            3444,
+            3445
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 48 ]",
+          "word_ids": [
+            2413,
+            2414,
+            2415
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 4,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        854,
+        2400,
+        863
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3446
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2501
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 4,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        854,
+        2470,
+        863
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3447,
+            3448,
+            3449
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2502,
+            2503,
+            2504
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 4,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        854,
+        2540,
+        863
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3450
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2590
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 4,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        854,
+        2600,
+        863
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3451,
+            3452,
+            3453
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2591,
+            2592,
+            2593
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 4,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        854,
+        2670,
+        863
+      ],
+      "expected": "F&T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            3454
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            2667
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 4,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        854,
+        2740,
+        863
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            3455
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            2689
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 4,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        854,
+        2800,
+        863
+      ],
+      "expected": "[ 19 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            3456,
+            3457,
+            3458
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            2719,
+            2720,
+            2721
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 4,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        854,
+        2885,
+        863
+      ],
+      "expected": "(1) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            3459,
+            3460
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            2780,
+            2781
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 5,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        867,
+        1930,
+        876
+      ],
+      "expected": "1-TP28-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP28-5",
+          "word_ids": [
+            3461
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP28-5",
+          "word_ids": [
+            2040
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 5,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        867,
+        2045,
+        876
+      ],
+      "expected": "LEVEL 3 KITCHEN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LEVEL 3 KITCHEN",
+          "word_ids": [
+            3462,
+            3463,
+            3464
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LEVEL 3 KITCHEN",
+          "word_ids": [
+            2304,
+            2305,
+            2306
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 5,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        867,
+        2185,
+        876
+      ],
+      "expected": "RH-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RH-5",
+          "word_ids": [
+            3465
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RH-5",
+          "word_ids": [
+            2356
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 5,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        867,
+        2250,
+        876
+      ],
+      "expected": "106",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "106",
+          "word_ids": [
+            3466
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "106",
+          "word_ids": [
+            2416
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 5,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        867,
+        2320,
+        876
+      ],
+      "expected": "[ 48 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 48 ]",
+          "word_ids": [
+            3467,
+            3468,
+            3469
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 48 ]",
+          "word_ids": [
+            2417,
+            2418,
+            2419
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 5,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        867,
+        2400,
+        876
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3470
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2505
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 5,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        867,
+        2470,
+        876
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3471,
+            3472,
+            3473
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2506,
+            2507,
+            2508
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 5,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        867,
+        2540,
+        876
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3474
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2594
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 5,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        867,
+        2600,
+        876
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3475,
+            3476,
+            3477
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2595,
+            2596,
+            2597
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 5,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        867,
+        2670,
+        876
+      ],
+      "expected": "F&T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            3478
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            2668
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 5,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        867,
+        2740,
+        876
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            3479
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            2690
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 5,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        867,
+        2800,
+        876
+      ],
+      "expected": "[ 19 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            3480,
+            3481,
+            3482
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            2722,
+            2723,
+            2724
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 5,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        867,
+        2885,
+        876
+      ],
+      "expected": "(1) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            3483,
+            3484
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            2782,
+            2783
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 6,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        880,
+        1930,
+        889
+      ],
+      "expected": "1-TP28-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP28-6",
+          "word_ids": [
+            3485
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP28-6",
+          "word_ids": [
+            2041
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 6,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        880,
+        2045,
+        889
+      ],
+      "expected": "LEVEL 3 DINING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LEVEL 3 DINING",
+          "word_ids": [
+            3486,
+            3487,
+            3488
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LEVEL 3 DINING",
+          "word_ids": [
+            2307,
+            2308,
+            2309
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 6,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        880,
+        2185,
+        889
+      ],
+      "expected": "RH-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RH-6",
+          "word_ids": [
+            3489
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RH-6",
+          "word_ids": [
+            2357
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 6,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        880,
+        2250,
+        889
+      ],
+      "expected": "34",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "34",
+          "word_ids": [
+            3490
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "34",
+          "word_ids": [
+            2420
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 6,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        880,
+        2320,
+        889
+      ],
+      "expected": "[ 15 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 15 ]",
+          "word_ids": [
+            3491,
+            3492,
+            3493
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 15 ]",
+          "word_ids": [
+            2421,
+            2422,
+            2423
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 6,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        880,
+        2400,
+        889
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3494
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2509
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 6,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        880,
+        2470,
+        889
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3495,
+            3496,
+            3497
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2510,
+            2511,
+            2512
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 6,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        880,
+        2540,
+        889
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3498
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2598
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 6,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        880,
+        2600,
+        889
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3499,
+            3500,
+            3501
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2599,
+            2600,
+            2601
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 6,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        880,
+        2670,
+        889
+      ],
+      "expected": "F&T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            3502
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            2669
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 6,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        880,
+        2740,
+        889
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            3503
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            2691
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 6,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        880,
+        2800,
+        889
+      ],
+      "expected": "[ 19 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            3504,
+            3505,
+            3506
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            2725,
+            2726,
+            2727
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 6,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        880,
+        2885,
+        889
+      ],
+      "expected": "(1) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            3507,
+            3508
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            2784,
+            2785
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 7,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        893,
+        1930,
+        902
+      ],
+      "expected": "1-TP28-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP28-7",
+          "word_ids": [
+            3509
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP28-7",
+          "word_ids": [
+            2042
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 7,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        893,
+        2045,
+        902
+      ],
+      "expected": "LEVEL 3 DINING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LEVEL 3 DINING",
+          "word_ids": [
+            3510,
+            3511,
+            3512
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LEVEL 3 DINING",
+          "word_ids": [
+            2310,
+            2311,
+            2312
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 7,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        893,
+        2185,
+        902
+      ],
+      "expected": "RH-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RH-7",
+          "word_ids": [
+            3513
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RH-7",
+          "word_ids": [
+            2358
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 7,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        893,
+        2250,
+        902
+      ],
+      "expected": "44",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "44",
+          "word_ids": [
+            3514
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "44",
+          "word_ids": [
+            2424
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 7,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        893,
+        2320,
+        902
+      ],
+      "expected": "[ 20 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 20 ]",
+          "word_ids": [
+            3515,
+            3516,
+            3517
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 20 ]",
+          "word_ids": [
+            2425,
+            2426,
+            2427
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 7,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        893,
+        2400,
+        902
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3518
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2513
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 7,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        893,
+        2470,
+        902
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3519,
+            3520,
+            3521
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2514,
+            2515,
+            2516
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 7,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        893,
+        2540,
+        902
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3522
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2602
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 7,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        893,
+        2600,
+        902
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3523,
+            3524,
+            3525
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2603,
+            2604,
+            2605
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 7,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        893,
+        2670,
+        902
+      ],
+      "expected": "F&T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            3526
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            2670
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 7,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        893,
+        2740,
+        902
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            3527
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            2692
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 7,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        893,
+        2800,
+        902
+      ],
+      "expected": "[ 19 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            3528,
+            3529,
+            3530
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            2728,
+            2729,
+            2730
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 7,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        893,
+        2885,
+        902
+      ],
+      "expected": "(1) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            3531,
+            3532
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            2786,
+            2787
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 8,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        906,
+        1930,
+        915
+      ],
+      "expected": "1-TP28-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP28-8",
+          "word_ids": [
+            3533
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP28-8",
+          "word_ids": [
+            2043
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 8,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        906,
+        2045,
+        915
+      ],
+      "expected": "LEVEL 3 DINING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LEVEL 3 DINING",
+          "word_ids": [
+            3534,
+            3535,
+            3536
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LEVEL 3 DINING",
+          "word_ids": [
+            2313,
+            2314,
+            2315
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 8,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        906,
+        2185,
+        915
+      ],
+      "expected": "RH-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RH-8",
+          "word_ids": [
+            3537
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RH-8",
+          "word_ids": [
+            2359
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 8,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        906,
+        2250,
+        915
+      ],
+      "expected": "61",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "61",
+          "word_ids": [
+            3538
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "61",
+          "word_ids": [
+            2428
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 8,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        906,
+        2320,
+        915
+      ],
+      "expected": "[ 28 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 28 ]",
+          "word_ids": [
+            3539,
+            3540,
+            3541
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 28 ]",
+          "word_ids": [
+            2429,
+            2430,
+            2431
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 8,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        906,
+        2400,
+        915
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3542
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2517
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 8,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        906,
+        2470,
+        915
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3543,
+            3544,
+            3545
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2518,
+            2519,
+            2520
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 8,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        906,
+        2540,
+        915
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3546
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2606
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 8,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        906,
+        2600,
+        915
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3547,
+            3548,
+            3549
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2607,
+            2608,
+            2609
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 8,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        906,
+        2670,
+        915
+      ],
+      "expected": "F&T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            3550
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            2671
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 8,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        906,
+        2740,
+        915
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            3551
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            2693
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 8,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        906,
+        2800,
+        915
+      ],
+      "expected": "[ 19 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            3552,
+            3553,
+            3554
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            2731,
+            2732,
+            2733
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 8,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        906,
+        2885,
+        915
+      ],
+      "expected": "(1) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            3555,
+            3556
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            2788,
+            2789
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 9,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        919,
+        1930,
+        928
+      ],
+      "expected": "1-TP28-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP28-9",
+          "word_ids": [
+            3557
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP28-9",
+          "word_ids": [
+            2044
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 9,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        919,
+        2045,
+        928
+      ],
+      "expected": "LEVEL 3 DINING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LEVEL 3 DINING",
+          "word_ids": [
+            3558,
+            3559,
+            3560
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LEVEL 3 DINING",
+          "word_ids": [
+            2316,
+            2317,
+            2318
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 9,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        919,
+        2185,
+        928
+      ],
+      "expected": "RH-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RH-9",
+          "word_ids": [
+            3561
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RH-9",
+          "word_ids": [
+            2360
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 9,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        919,
+        2250,
+        928
+      ],
+      "expected": "95",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "95",
+          "word_ids": [
+            3562
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "95",
+          "word_ids": [
+            2432
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 9,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        919,
+        2320,
+        928
+      ],
+      "expected": "[ 43 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 43 ]",
+          "word_ids": [
+            3563,
+            3564,
+            3565
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 43 ]",
+          "word_ids": [
+            2433,
+            2434,
+            2435
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 9,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        919,
+        2400,
+        928
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3566
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2521
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 9,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        919,
+        2470,
+        928
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3567,
+            3568,
+            3569
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2522,
+            2523,
+            2524
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 9,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        919,
+        2540,
+        928
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3570
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2610
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 9,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        919,
+        2600,
+        928
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3571,
+            3572,
+            3573
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2611,
+            2612,
+            2613
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 9,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        919,
+        2670,
+        928
+      ],
+      "expected": "F&T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            3574
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            2672
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 9,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        919,
+        2740,
+        928
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            3575
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            2694
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 9,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        919,
+        2800,
+        928
+      ],
+      "expected": "[ 19 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            3576,
+            3577,
+            3578
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            2734,
+            2735,
+            2736
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 9,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        919,
+        2885,
+        928
+      ],
+      "expected": "(1) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            3579,
+            3580
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            2790,
+            2791
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 10,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        931,
+        1930,
+        941
+      ],
+      "expected": "1-TP28-10A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP28-10A",
+          "word_ids": [
+            3581
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP28-10A",
+          "word_ids": [
+            2045
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 10,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        931,
+        2045,
+        941
+      ],
+      "expected": "THIRD FLOOR ROOF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THIRD FLOOR ROOF",
+          "word_ids": [
+            3582,
+            3583,
+            3584
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THIRD FLOOR ROOF",
+          "word_ids": [
+            2319,
+            2320,
+            2321
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 10,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        931,
+        2185,
+        941
+      ],
+      "expected": "AC-28 HEATING COIL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AC-28 HEATING COIL",
+          "word_ids": [
+            3585,
+            3586,
+            3587
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AC-28 HEATING COIL",
+          "word_ids": [
+            2361,
+            2362,
+            2363
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 10,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        931,
+        2250,
+        941
+      ],
+      "expected": "630",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "630",
+          "word_ids": [
+            3588
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "630",
+          "word_ids": [
+            2436
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 10,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        931,
+        2320,
+        941
+      ],
+      "expected": "[ 290 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 290 ]",
+          "word_ids": [
+            3589,
+            3590,
+            3591
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 290 ]",
+          "word_ids": [
+            2437,
+            2438,
+            2439
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 10,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        931,
+        2400,
+        941
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3592
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2525
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 10,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        931,
+        2470,
+        941
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3593,
+            3594,
+            3595
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2526,
+            2527,
+            2528
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 10,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        931,
+        2540,
+        941
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3596
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2614
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 10,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        931,
+        2600,
+        941
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3597,
+            3598,
+            3599
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2615,
+            2616,
+            2617
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 10,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        931,
+        2670,
+        941
+      ],
+      "expected": "F&T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            3600
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            2673
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 10,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        931,
+        2740,
+        941
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            3601
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            2695
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 10,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        931,
+        2800,
+        941
+      ],
+      "expected": "[ 19 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            3602,
+            3603,
+            3604
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            2737,
+            2738,
+            2739
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 10,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        931,
+        2885,
+        941
+      ],
+      "expected": "(1) (5) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1) (5) (6)",
+          "word_ids": [
+            3605,
+            3606,
+            3607
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1) (5) (6)",
+          "word_ids": [
+            2792,
+            2793,
+            2794
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 11,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        944,
+        1930,
+        954
+      ],
+      "expected": "1-TP28-10B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP28-10B",
+          "word_ids": [
+            3608
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP28-10B",
+          "word_ids": [
+            2046
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 11,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        944,
+        2045,
+        954
+      ],
+      "expected": "THIRD FLOOR ROOF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THIRD FLOOR ROOF",
+          "word_ids": [
+            3609,
+            3610,
+            3611
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THIRD FLOOR ROOF",
+          "word_ids": [
+            2322,
+            2323,
+            2324
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 11,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        944,
+        2185,
+        954
+      ],
+      "expected": "AC-28 HEATING COIL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AC-28 HEATING COIL",
+          "word_ids": [
+            3612,
+            3613,
+            3614
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AC-28 HEATING COIL",
+          "word_ids": [
+            2364,
+            2365,
+            2366
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 11,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        944,
+        2250,
+        954
+      ],
+      "expected": "333",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "333",
+          "word_ids": [
+            3615
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "333",
+          "word_ids": [
+            2440
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 11,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        944,
+        2320,
+        954
+      ],
+      "expected": "[ 150 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 150 ]",
+          "word_ids": [
+            3616,
+            3617,
+            3618
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 150 ]",
+          "word_ids": [
+            2441,
+            2442,
+            2443
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 11,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        944,
+        2400,
+        954
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3619
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2529
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 11,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        944,
+        2470,
+        954
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3620,
+            3621,
+            3622
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2530,
+            2531,
+            2532
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 11,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        944,
+        2540,
+        954
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3623
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2618
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 11,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        944,
+        2600,
+        954
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3624,
+            3625,
+            3626
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2619,
+            2620,
+            2621
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 11,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        944,
+        2670,
+        954
+      ],
+      "expected": "F&T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            3627
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            2674
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 11,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        944,
+        2740,
+        954
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            3628
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            2696
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 11,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        944,
+        2800,
+        954
+      ],
+      "expected": "[ 19 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            3629,
+            3630,
+            3631
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            2740,
+            2741,
+            2742
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 11,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        944,
+        2885,
+        954
+      ],
+      "expected": "(1) (5) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1) (5) (6)",
+          "word_ids": [
+            3632,
+            3633,
+            3634
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1) (5) (6)",
+          "word_ids": [
+            2795,
+            2796,
+            2797
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 12,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        957,
+        1930,
+        967
+      ],
+      "expected": "1-TP28-11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP28-11",
+          "word_ids": [
+            3635
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP28-11",
+          "word_ids": [
+            2047
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 12,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        957,
+        2045,
+        967
+      ],
+      "expected": "THIRD FLOOR ROOF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THIRD FLOOR ROOF",
+          "word_ids": [
+            3636,
+            3637,
+            3638
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THIRD FLOOR ROOF",
+          "word_ids": [
+            2325,
+            2326,
+            2327
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 12,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        957,
+        2185,
+        967
+      ],
+      "expected": "AC-28 DRIP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AC-28 DRIP",
+          "word_ids": [
+            3639,
+            3640
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AC-28 DRIP",
+          "word_ids": [
+            2367,
+            2368
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 12,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        957,
+        2250,
+        967
+      ],
+      "expected": "18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            3641
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            2444
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 12,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        957,
+        2320,
+        967
+      ],
+      "expected": "[ 8 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 8 ]",
+          "word_ids": [
+            3642,
+            3643,
+            3644
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 8 ]",
+          "word_ids": [
+            2445,
+            2446,
+            2447
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 12,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        957,
+        2400,
+        967
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            3645
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            2533
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 12,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        957,
+        2470,
+        967
+      ],
+      "expected": "[ 140 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 140 ]",
+          "word_ids": [
+            3646,
+            3647,
+            3648
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 140 ]",
+          "word_ids": [
+            2534,
+            2535,
+            2536
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 12,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        957,
+        2540,
+        967
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            3649
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            2622
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 12,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        957,
+        2600,
+        967
+      ],
+      "expected": "[ 140 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 140 ]",
+          "word_ids": [
+            3650,
+            3651,
+            3652
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 140 ]",
+          "word_ids": [
+            2623,
+            2624,
+            2625
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 12,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        957,
+        2670,
+        967
+      ],
+      "expected": "IBT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "IBT",
+          "word_ids": [
+            3653
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "IBT",
+          "word_ids": [
+            2675
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 12,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        957,
+        2740,
+        967
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            3654
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            2697
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 12,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        957,
+        2800,
+        967
+      ],
+      "expected": "[ 19 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            3655,
+            3656,
+            3657
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            2743,
+            2744,
+            2745
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 12,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        957,
+        2885,
+        967
+      ],
+      "expected": "(3) (4) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(3) (4) (6)",
+          "word_ids": [
+            3658,
+            3659,
+            3660
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(3) (4) (6)",
+          "word_ids": [
+            2798,
+            2799,
+            2800
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 13,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        970,
+        1930,
+        980
+      ],
+      "expected": "1-TP36-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP36-1",
+          "word_ids": [
+            3661
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP36-1",
+          "word_ids": [
+            2048
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 13,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        970,
+        2045,
+        980
+      ],
+      "expected": "P10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "P10",
+          "word_ids": [
+            3662
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "P10",
+          "word_ids": [
+            2328
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 13,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        970,
+        2185,
+        980
+      ],
+      "expected": "AC-36 HEATING COIL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AC-36 HEATING COIL",
+          "word_ids": [
+            3663,
+            3664,
+            3665
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AC-36 HEATING COIL",
+          "word_ids": [
+            2369,
+            2370,
+            2371
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 13,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        970,
+        2250,
+        980
+      ],
+      "expected": "2325",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2325",
+          "word_ids": [
+            3666
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2325",
+          "word_ids": [
+            2448
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 13,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        970,
+        2320,
+        980
+      ],
+      "expected": "[ 1100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 1100 ]",
+          "word_ids": [
+            3667,
+            3668,
+            3669
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 1100 ]",
+          "word_ids": [
+            2449,
+            2450,
+            2451
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 13,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        970,
+        2400,
+        980
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            3670
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            2537
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 13,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        970,
+        2470,
+        980
+      ],
+      "expected": "[ 69 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            3671,
+            3672,
+            3673
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            2538,
+            2539,
+            2540
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 13,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        970,
+        2540,
+        980
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            3674
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            2626
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 13,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        970,
+        2600,
+        980
+      ],
+      "expected": "[ 69 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            3675,
+            3676,
+            3677
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            2627,
+            2628,
+            2629
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 13,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        970,
+        2670,
+        980
+      ],
+      "expected": "F&T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            3678
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            2676
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 13,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        970,
+        2740,
+        980
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            3679
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            2698
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 13,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        970,
+        2800,
+        980
+      ],
+      "expected": "[ 50 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 50 ]",
+          "word_ids": [
+            3680,
+            3681,
+            3682
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 50 ]",
+          "word_ids": [
+            2746,
+            2747,
+            2748
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 13,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        970,
+        2885,
+        980
+      ],
+      "expected": "(1) (2) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1) (2) (6)",
+          "word_ids": [
+            3683,
+            3684,
+            3685
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1) (2) (6)",
+          "word_ids": [
+            2801,
+            2802,
+            2803
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 14,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        983,
+        1930,
+        993
+      ],
+      "expected": "1-TP36-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP36-2",
+          "word_ids": [
+            3686
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP36-2",
+          "word_ids": [
+            2049
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 14,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        983,
+        2045,
+        993
+      ],
+      "expected": "P10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "P10",
+          "word_ids": [
+            3687
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "P10",
+          "word_ids": [
+            2329
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 14,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        983,
+        2185,
+        993
+      ],
+      "expected": "AC-36 DRIP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AC-36 DRIP",
+          "word_ids": [
+            3688,
+            3689
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AC-36 DRIP",
+          "word_ids": [
+            2372,
+            2373
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 14,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        983,
+        2250,
+        993
+      ],
+      "expected": "360",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "360",
+          "word_ids": [
+            3690
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "360",
+          "word_ids": [
+            2452
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 14,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        983,
+        2320,
+        993
+      ],
+      "expected": "[ 440 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 440 ]",
+          "word_ids": [
+            3691,
+            3692,
+            3693
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 440 ]",
+          "word_ids": [
+            2453,
+            2454,
+            2455
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 14,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        983,
+        2400,
+        993
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3694
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2541
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 14,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        983,
+        2470,
+        993
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3695,
+            3696,
+            3697
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2542,
+            2543,
+            2544
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 14,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        983,
+        2540,
+        993
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3698
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2630
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 14,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        983,
+        2600,
+        993
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3699,
+            3700,
+            3701
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2631,
+            2632,
+            2633
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 14,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        983,
+        2670,
+        993
+      ],
+      "expected": "IBT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "IBT",
+          "word_ids": [
+            3702
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "IBT",
+          "word_ids": [
+            2677
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 14,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        983,
+        2740,
+        993
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            3703
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            2699
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 14,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        983,
+        2800,
+        993
+      ],
+      "expected": "[ 19 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            3704,
+            3705,
+            3706
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            2749,
+            2750,
+            2751
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 14,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        983,
+        2885,
+        993
+      ],
+      "expected": "(3) (4) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(3) (4) (6)",
+          "word_ids": [
+            3707,
+            3708,
+            3709
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(3) (4) (6)",
+          "word_ids": [
+            2804,
+            2805,
+            2806
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 15,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        996,
+        1930,
+        1006
+      ],
+      "expected": "1-TP36TEMP-1A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP36TEMP-1A",
+          "word_ids": [
+            3710
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP36TEMP-1A",
+          "word_ids": [
+            2050
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 15,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        996,
+        2045,
+        1006
+      ],
+      "expected": "NINTH FLOOR ROOF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NINTH FLOOR ROOF",
+          "word_ids": [
+            3711,
+            3712,
+            3713
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NINTH FLOOR ROOF",
+          "word_ids": [
+            2330,
+            2331,
+            2332
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 15,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        996,
+        2185,
+        1006
+      ],
+      "expected": "AC-36TEMP HEATING COIL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AC-36TEMP HEATING COIL",
+          "word_ids": [
+            3714,
+            3715,
+            3716
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AC-36TEMP HEATING COIL",
+          "word_ids": [
+            2374,
+            2375,
+            2376
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 15,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        996,
+        2250,
+        1006
+      ],
+      "expected": "1067",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1067",
+          "word_ids": [
+            3717
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1067",
+          "word_ids": [
+            2456
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 15,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        996,
+        2320,
+        1006
+      ],
+      "expected": "[ 480 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 480 ]",
+          "word_ids": [
+            3718,
+            3719,
+            3720
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 480 ]",
+          "word_ids": [
+            2457,
+            2458,
+            2459
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 15,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        996,
+        2400,
+        1006
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            3721
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            2545
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 15,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        996,
+        2470,
+        1006
+      ],
+      "expected": "[ 69 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            3722,
+            3723,
+            3724
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            2546,
+            2547,
+            2548
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 15,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        996,
+        2540,
+        1006
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            3725
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            2634
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 15,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        996,
+        2600,
+        1006
+      ],
+      "expected": "[ 69 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            3726,
+            3727,
+            3728
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            2635,
+            2636,
+            2637
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 15,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        996,
+        2670,
+        1006
+      ],
+      "expected": "F&T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            3729
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            2678
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 15,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        996,
+        2740,
+        1006
+      ],
+      "expected": "1.25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.25",
+          "word_ids": [
+            3730
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.25",
+          "word_ids": [
+            2700
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 15,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        996,
+        2800,
+        1006
+      ],
+      "expected": "[ 31 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 31 ]",
+          "word_ids": [
+            3731,
+            3732,
+            3733
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 31 ]",
+          "word_ids": [
+            2752,
+            2753,
+            2754
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 15,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        996,
+        2885,
+        1006
+      ],
+      "expected": "(1) (5) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1) (5) (6)",
+          "word_ids": [
+            3734,
+            3735,
+            3736
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1) (5) (6)",
+          "word_ids": [
+            2807,
+            2808,
+            2809
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 16,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        1009,
+        1930,
+        1019
+      ],
+      "expected": "1-TP36TEMP-1B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP36TEMP-1B",
+          "word_ids": [
+            3737
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP36TEMP-1B",
+          "word_ids": [
+            2051
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 16,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        1009,
+        2045,
+        1019
+      ],
+      "expected": "NINTH FLOOR ROOF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NINTH FLOOR ROOF",
+          "word_ids": [
+            3738,
+            3739,
+            3740
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NINTH FLOOR ROOF",
+          "word_ids": [
+            2333,
+            2334,
+            2335
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 16,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        1009,
+        2185,
+        1019
+      ],
+      "expected": "AC-36TEMP HEATING COIL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AC-36TEMP HEATING COIL",
+          "word_ids": [
+            3741,
+            3742,
+            3743
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AC-36TEMP HEATING COIL",
+          "word_ids": [
+            2377,
+            2378,
+            2379
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 16,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        1009,
+        2250,
+        1019
+      ],
+      "expected": "638",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "638",
+          "word_ids": [
+            3744
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "638",
+          "word_ids": [
+            2460
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 16,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        1009,
+        2320,
+        1019
+      ],
+      "expected": "[ 290 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 290 ]",
+          "word_ids": [
+            3745,
+            3746,
+            3747
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 290 ]",
+          "word_ids": [
+            2461,
+            2462,
+            2463
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 16,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        1009,
+        2400,
+        1019
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            3748
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            2549
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 16,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        1009,
+        2470,
+        1019
+      ],
+      "expected": "[ 69 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            3749,
+            3750,
+            3751
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            2550,
+            2551,
+            2552
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 16,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        1009,
+        2540,
+        1019
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            3752
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            2638
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 16,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        1009,
+        2600,
+        1019
+      ],
+      "expected": "[ 69 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            3753,
+            3754,
+            3755
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            2639,
+            2640,
+            2641
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 16,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        1009,
+        2670,
+        1019
+      ],
+      "expected": "F&T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            3756
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            2679
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 16,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        1009,
+        2740,
+        1019
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            3757
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2701
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 16,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        1009,
+        2800,
+        1019
+      ],
+      "expected": "[ 25 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 25 ]",
+          "word_ids": [
+            3758,
+            3759,
+            3760
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 25 ]",
+          "word_ids": [
+            2755,
+            2756,
+            2757
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 16,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        1009,
+        2885,
+        1019
+      ],
+      "expected": "(1) (5) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1) (5) (6)",
+          "word_ids": [
+            3761,
+            3762,
+            3763
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1) (5) (6)",
+          "word_ids": [
+            2810,
+            2811,
+            2812
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 17,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        1022,
+        1930,
+        1031
+      ],
+      "expected": "1-TP36TEMP-1C",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP36TEMP-1C",
+          "word_ids": [
+            3764
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP36TEMP-1C",
+          "word_ids": [
+            2052
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 17,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        1022,
+        2045,
+        1031
+      ],
+      "expected": "NINTH FLOOR ROOF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NINTH FLOOR ROOF",
+          "word_ids": [
+            3765,
+            3766,
+            3767
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NINTH FLOOR ROOF",
+          "word_ids": [
+            2336,
+            2337,
+            2338
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 17,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        1022,
+        2185,
+        1031
+      ],
+      "expected": "AC-36TEMP HEATING COIL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AC-36TEMP HEATING COIL",
+          "word_ids": [
+            3768,
+            3769,
+            3770
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AC-36TEMP HEATING COIL",
+          "word_ids": [
+            2380,
+            2381,
+            2382
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 17,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        1022,
+        2250,
+        1031
+      ],
+      "expected": "638",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "638",
+          "word_ids": [
+            3771
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "638",
+          "word_ids": [
+            2464
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 17,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        1022,
+        2320,
+        1031
+      ],
+      "expected": "[ 290 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 290 ]",
+          "word_ids": [
+            3772,
+            3773,
+            3774
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 290 ]",
+          "word_ids": [
+            2465,
+            2466,
+            2467
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 17,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        1022,
+        2400,
+        1031
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            3775
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            2553
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 17,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        1022,
+        2470,
+        1031
+      ],
+      "expected": "[ 69 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            3776,
+            3777,
+            3778
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            2554,
+            2555,
+            2556
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 17,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        1022,
+        2540,
+        1031
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            3779
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            2642
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 17,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        1022,
+        2600,
+        1031
+      ],
+      "expected": "[ 69 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            3780,
+            3781,
+            3782
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            2643,
+            2644,
+            2645
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 17,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        1022,
+        2670,
+        1031
+      ],
+      "expected": "F&T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            3783
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            2680
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 17,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        1022,
+        2740,
+        1031
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            3784
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2702
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 17,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        1022,
+        2800,
+        1031
+      ],
+      "expected": "[ 25 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 25 ]",
+          "word_ids": [
+            3785,
+            3786,
+            3787
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 25 ]",
+          "word_ids": [
+            2758,
+            2759,
+            2760
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 17,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        1022,
+        2885,
+        1031
+      ],
+      "expected": "(1) (5) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1) (5) (6)",
+          "word_ids": [
+            3788,
+            3789,
+            3790
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1) (5) (6)",
+          "word_ids": [
+            2813,
+            2814,
+            2815
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 18,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        1035,
+        1930,
+        1044
+      ],
+      "expected": "1-TP36TEMP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP36TEMP-2",
+          "word_ids": [
+            3791
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP36TEMP-2",
+          "word_ids": [
+            2053
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 18,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        1035,
+        2045,
+        1044
+      ],
+      "expected": "NINTH FLOOR ROOF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NINTH FLOOR ROOF",
+          "word_ids": [
+            3792,
+            3793,
+            3794
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NINTH FLOOR ROOF",
+          "word_ids": [
+            2339,
+            2340,
+            2341
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 18,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        1035,
+        2185,
+        1044
+      ],
+      "expected": "AC-36TEMP DRIP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AC-36TEMP DRIP",
+          "word_ids": [
+            3795,
+            3796
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AC-36TEMP DRIP",
+          "word_ids": [
+            2383,
+            2384
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 18,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        1035,
+        2250,
+        1044
+      ],
+      "expected": "22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            3797
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "22",
+          "word_ids": [
+            2468
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 18,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        1035,
+        2320,
+        1044
+      ],
+      "expected": "[ 10 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 10 ]",
+          "word_ids": [
+            3798,
+            3799,
+            3800
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 10 ]",
+          "word_ids": [
+            2469,
+            2470,
+            2471
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 18,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        1035,
+        2400,
+        1044
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3801
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2557
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 18,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        1035,
+        2470,
+        1044
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3802,
+            3803,
+            3804
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2558,
+            2559,
+            2560
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 18,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        1035,
+        2540,
+        1044
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3805
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2646
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 18,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        1035,
+        2600,
+        1044
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3806,
+            3807,
+            3808
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2647,
+            2648,
+            2649
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 18,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        1035,
+        2670,
+        1044
+      ],
+      "expected": "IBT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "IBT",
+          "word_ids": [
+            3809
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "IBT",
+          "word_ids": [
+            2681
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 18,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        1035,
+        2740,
+        1044
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            3810
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            2703
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 18,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        1035,
+        2800,
+        1044
+      ],
+      "expected": "[ 19 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            3811,
+            3812,
+            3813
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            2761,
+            2762,
+            2763
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 18,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        1035,
+        2885,
+        1044
+      ],
+      "expected": "(3) (4) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(3) (4) (6)",
+          "word_ids": [
+            3814,
+            3815,
+            3816
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(3) (4) (6)",
+          "word_ids": [
+            2816,
+            2817,
+            2818
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 19,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        1048,
+        1930,
+        1057
+      ],
+      "expected": "1-TP57-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP57-1",
+          "word_ids": [
+            3817
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP57-1",
+          "word_ids": [
+            2054
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 19,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        1048,
+        2045,
+        1057
+      ],
+      "expected": "NINTH FLOOR ROOF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NINTH FLOOR ROOF",
+          "word_ids": [
+            3818,
+            3819,
+            3820
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NINTH FLOOR ROOF",
+          "word_ids": [
+            2342,
+            2343,
+            2344
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 19,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        1048,
+        2185,
+        1057
+      ],
+      "expected": "AC-57 HEATING COIL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AC-57 HEATING COIL",
+          "word_ids": [
+            3821,
+            3822,
+            3823
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AC-57 HEATING COIL",
+          "word_ids": [
+            2385,
+            2386,
+            2387
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 19,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        1048,
+        2250,
+        1057
+      ],
+      "expected": "303",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "303",
+          "word_ids": [
+            3824
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "303",
+          "word_ids": [
+            2472
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 19,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        1048,
+        2320,
+        1057
+      ],
+      "expected": "[ 140 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 140 ]",
+          "word_ids": [
+            3825,
+            3826,
+            3827
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 140 ]",
+          "word_ids": [
+            2473,
+            2474,
+            2475
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 19,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        1048,
+        2400,
+        1057
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            3828
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            2561
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 19,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        1048,
+        2470,
+        1057
+      ],
+      "expected": "[ 69 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            3829,
+            3830,
+            3831
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            2562,
+            2563,
+            2564
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 19,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        1048,
+        2540,
+        1057
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            3832
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            2650
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 19,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        1048,
+        2600,
+        1057
+      ],
+      "expected": "[ 69 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            3833,
+            3834,
+            3835
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 69 ]",
+          "word_ids": [
+            2651,
+            2652,
+            2653
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 19,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        1048,
+        2670,
+        1057
+      ],
+      "expected": "F&T",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            3836
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F&T",
+          "word_ids": [
+            2682
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 19,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        1048,
+        2740,
+        1057
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            3837
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            2704
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 19,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        1048,
+        2800,
+        1057
+      ],
+      "expected": "[ 19 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            3838,
+            3839,
+            3840
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            2764,
+            2765,
+            2766
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 19,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        1048,
+        2885,
+        1057
+      ],
+      "expected": "(1) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            3841,
+            3842
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(1) (6)",
+          "word_ids": [
+            2819,
+            2820
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 20,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        1061,
+        1930,
+        1070
+      ],
+      "expected": "1-TP57-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP57-2",
+          "word_ids": [
+            3843
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP57-2",
+          "word_ids": [
+            2055
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 20,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        1061,
+        2045,
+        1070
+      ],
+      "expected": "NINTH FLOOR ROOF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NINTH FLOOR ROOF",
+          "word_ids": [
+            3844,
+            3845,
+            3846
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NINTH FLOOR ROOF",
+          "word_ids": [
+            2345,
+            2346,
+            2347
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 20,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        1061,
+        2185,
+        1070
+      ],
+      "expected": "AC-57 DRIP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AC-57 DRIP",
+          "word_ids": [
+            3847,
+            3848
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AC-57 DRIP",
+          "word_ids": [
+            2388,
+            2389
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 20,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        1061,
+        2250,
+        1070
+      ],
+      "expected": "14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            3849
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            2476
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 20,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        1061,
+        2320,
+        1070
+      ],
+      "expected": "[ 6 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 6 ]",
+          "word_ids": [
+            3850,
+            3851,
+            3852
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 6 ]",
+          "word_ids": [
+            2477,
+            2478,
+            2479
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 20,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        1061,
+        2400,
+        1070
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3853
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2565
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 20,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        1061,
+        2470,
+        1070
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3854,
+            3855,
+            3856
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2566,
+            2567,
+            2568
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 20,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        1061,
+        2540,
+        1070
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3857
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2654
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 20,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        1061,
+        2600,
+        1070
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3858,
+            3859,
+            3860
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2655,
+            2656,
+            2657
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 20,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        1061,
+        2670,
+        1070
+      ],
+      "expected": "IBT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "IBT",
+          "word_ids": [
+            3861
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "IBT",
+          "word_ids": [
+            2683
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 20,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        1061,
+        2740,
+        1070
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            3862
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            2705
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 20,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        1061,
+        2800,
+        1070
+      ],
+      "expected": "[ 19 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            3863,
+            3864,
+            3865
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            2767,
+            2768,
+            2769
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 20,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        1061,
+        2885,
+        1070
+      ],
+      "expected": "(3) (4) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(3) (4) (6)",
+          "word_ids": [
+            3866,
+            3867,
+            3868
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(3) (4) (6)",
+          "word_ids": [
+            2821,
+            2822,
+            2823
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 21,
+      "column": "mark",
+      "page": 39,
+      "bbox": [
+        1850,
+        1074,
+        1930,
+        1083
+      ],
+      "expected": "1-TP57-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1-TP57-3",
+          "word_ids": [
+            3869
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1-TP57-3",
+          "word_ids": [
+            2056
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 21,
+      "column": "location",
+      "page": 39,
+      "bbox": [
+        1930,
+        1074,
+        2045,
+        1083
+      ],
+      "expected": "P10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "P10",
+          "word_ids": [
+            3870
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "P10",
+          "word_ids": [
+            2348
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 21,
+      "column": "system_or_service",
+      "page": 39,
+      "bbox": [
+        2045,
+        1074,
+        2185,
+        1083
+      ],
+      "expected": "MECH ROOM DRIP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECH ROOM DRIP",
+          "word_ids": [
+            3871,
+            3872,
+            3873
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECH ROOM DRIP",
+          "word_ids": [
+            2390,
+            2391,
+            2392
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 21,
+      "column": "capacity_lbhr",
+      "page": 39,
+      "bbox": [
+        2185,
+        1074,
+        2250,
+        1083
+      ],
+      "expected": "33",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "33",
+          "word_ids": [
+            3874
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "33",
+          "word_ids": [
+            2480
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 21,
+      "column": "capacity_kghr",
+      "page": 39,
+      "bbox": [
+        2250,
+        1074,
+        2320,
+        1083
+      ],
+      "expected": "[ 15 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 15 ]",
+          "word_ids": [
+            3875,
+            3876,
+            3877
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 15 ]",
+          "word_ids": [
+            2481,
+            2482,
+            2483
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 21,
+      "column": "min_diff_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2320,
+        1074,
+        2400,
+        1083
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3878
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2569
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 21,
+      "column": "min_diff_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2400,
+        1074,
+        2470,
+        1083
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3879,
+            3880,
+            3881
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2570,
+            2571,
+            2572
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 21,
+      "column": "min_inlet_pressure_psi",
+      "page": 39,
+      "bbox": [
+        2470,
+        1074,
+        2540,
+        1083
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            3882
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            2658
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 21,
+      "column": "min_inlet_pressure_kpa",
+      "page": 39,
+      "bbox": [
+        2540,
+        1074,
+        2600,
+        1083
+      ],
+      "expected": "[ 100 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            3883,
+            3884,
+            3885
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 100 ]",
+          "word_ids": [
+            2659,
+            2660,
+            2661
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 21,
+      "column": "trap_type",
+      "page": 39,
+      "bbox": [
+        2600,
+        1074,
+        2670,
+        1083
+      ],
+      "expected": "IBT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "IBT",
+          "word_ids": [
+            3886
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "IBT",
+          "word_ids": [
+            2684
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 21,
+      "column": "trap_size_inches",
+      "page": 39,
+      "bbox": [
+        2670,
+        1074,
+        2740,
+        1083
+      ],
+      "expected": "0.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            3887
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.75",
+          "word_ids": [
+            2706
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 21,
+      "column": "trap_size_mm",
+      "page": 39,
+      "bbox": [
+        2740,
+        1074,
+        2800,
+        1083
+      ],
+      "expected": "[ 19 ]",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            3888,
+            3889,
+            3890
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "[ 19 ]",
+          "word_ids": [
+            2770,
+            2771,
+            2772
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "row": 21,
+      "column": "notes",
+      "page": 39,
+      "bbox": [
+        2800,
+        1074,
+        2885,
+        1083
+      ],
+      "expected": "(3) (4) (6)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(3) (4) (6)",
+          "word_ids": [
+            3891,
+            3892,
+            3893
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(3) (4) (6)",
+          "word_ids": [
+            2824,
+            2825,
+            2826
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "header": "BUILDING STEAM TRAP SCHEDULE",
+      "page": 39,
+      "bbox": [
+        2205,
+        644,
+        2526,
+        663
+      ],
+      "engine": "mupdf",
+      "actual": "BUILDING STEAM TRAP SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "MH601-BUILDING-STEAM-TRAPS",
+      "header": "BUILDING STEAM TRAP SCHEDULE",
+      "page": 39,
+      "bbox": [
+        2205,
+        644,
+        2526,
+        663
+      ],
+      "engine": "poppler",
+      "actual": "BUILDING STEAM TRAP SCHEDULE",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

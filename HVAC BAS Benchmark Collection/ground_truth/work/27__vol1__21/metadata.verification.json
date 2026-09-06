@@ -1,0 +1,81 @@
+{
+  "document_id": "27__vol1__21",
+  "source_sha256": "e47047c7322d16d44854dd5aa738f3d76087cc47f446927b00d8afc04a128f65",
+  "annotation_sha256": "1887912de364b251dc18aed3d5922854f987f95f43ec02c6dbaa76097385e2f2",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 2,
+  "checks": [
+    {
+      "assertion": "cover-project",
+      "page": 1,
+      "bbox": [
+        990,
+        80,
+        1360,
+        140
+      ],
+      "expected": "ORANGE COUNTY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ORANGE COUNTY",
+          "word_ids": [
+            147,
+            148
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ORANGE COUNTY",
+          "word_ids": [
+            16,
+            17
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "cover-location",
+      "page": 1,
+      "bbox": [
+        970,
+        245,
+        1370,
+        345
+      ],
+      "expected": "BLOOMSBURY ROAD ORANGE, VA 22960",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BLOOMSBURY ROAD ORANGE, VA 22960",
+          "word_ids": [
+            152,
+            153,
+            154,
+            155,
+            156
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BLOOMSBURY ROAD ORANGE, VA 22960",
+          "word_ids": [
+            21,
+            22,
+            23,
+            24,
+            25
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

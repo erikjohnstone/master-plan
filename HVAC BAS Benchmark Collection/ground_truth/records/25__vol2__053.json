@@ -1,0 +1,3738 @@
+{
+  "id": "25__vol2__053",
+  "rank": 25,
+  "title": "Houston VA Emergency Room Expansion",
+  "source_pdf": "pdf/25__vol2__053__Houston_VA_Emergency_Room_Expansion.pdf",
+  "source_sha256": "7eaefacf7f42a077e98d3fa1fd01bc96f03a03d444e29ffda7838895dc2e1d57",
+  "page_count": 12,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete ground truth for all twelve supplied Houston VA Emergency Room Expansion mechanical sheets: title-block/project/sheet review; all 69 rows and 778 cells in MH601's seven schedules; all 19 MH502 VAV point-matrix rows; written VAV and isolation-room sequences; explicit schedule-to-point-template boundary; and manual-ball-valve/air-device/filter classification limits. No unprinted installed I/O total, controller terminal count, BAS protocol, network topology, valve actuator/Cv/fail position, damper-actuator schedule, or point-matrix-to-equipment multiplier is invented.",
+  "reading_notes": [
+    "All twelve supplied pages were reviewed as full-page 180 DPI Poppler renders. MuPDF and Poppler independently corroborate every authored schedule/points cell and bounded text assertion.",
+    "MH601 has seven populated schedules and 69 source rows: 20 single-duct terminals, 1 series fan-powered terminal, 8 air-device type rows, 2 filter rows, and 38 heating-hot-water supply/return BALL VALVE rows.",
+    "The 38 valve rows are literal tagged manual ball valves with service, size and flow. Because the schedule has no actuator, Cv, control signal or fail position, they are deliberately excluded from BAS control-valve/actuator counts.",
+    "MH502's 19-row VAV terminal unit point list is a printed point-function matrix with no terminal equipment-tag column or source binding to MH601 schedule rows. Its listed hardware/software totals are not multiplied into installed I/O or controller-terminal totals.",
+    "MH502 nevertheless contains high-value written behavior: continuous VAV operation, occupied/unoccupied airflow and reheat logic, discharge-temperature/humidity alarms, and isolation-room differential-pressure, HEPA-filter, lead/standby-fan, VFD and fan-alarm sequences."
+  ],
+  "module_order": [
+    "metadata",
+    "schedules",
+    "points",
+    "controls_context",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "schedules": [
+      "schedules_mh601"
+    ],
+    "points": [
+      "points_mh502"
+    ],
+    "controls_context": [
+      "controls_context_mh502"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Project title, Houston site, VA project number, building number and date are captured from the repeated title block; blank revision-log structure is not treated as a revision event.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every supplied page has exact title and sheet-number witnesses plus a full-page visual finding.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The repeated title block has no document-wide scale field. Geometric takeoff must read each view's local scale and no universal conversion is inferred.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Twenty-one terminal marks are retained as scheduled terminal identities. Air-device rows, filter service rows and the 38 manual-ball-valve tags remain separately classified rather than converted into BAS equipment/actuator quantities.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "scheduled_families"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "primary_anchors"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 778 source cells of the 69 populated MH601 schedule rows are retained, including terminal airflows/coils, air-device fields, filters and ball-valve service/size/flow.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "schedule_counts"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Nineteen exact MH502 VAV matrix rows are retained. The source supplies neither terminal tags in that matrix nor row-level controller/wiring/ownership; zero unprinted instance applications are emitted.",
+      "evidence": [
+        [
+          "modules",
+          "points",
+          "tables"
+        ],
+        [
+          "modules",
+          "point_applications",
+          "installed_IO_total"
+        ],
+        [
+          "modules",
+          "point_applications",
+          "ownership_binding_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "No BAS vendor, protocol, transport, controller/panel model, address or topology is stated in the supplied twelve sheets.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "VAV operation and isolation-room pressure/filter/fan sequences are captured from MH502. The source does not state that the point template applies to every MH601 terminal.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sequences"
+        ],
+        [
+          "modules",
+          "controls_context",
+          "point_matrix_context"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Temperature, airflow, humidity, pressure and filter-pressure roles appear in MH502, but no installed sensor schedule or plan-mapped physical sensor count is stated.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sensor_and_zone_ledger"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Manual ball-valve rows are not recast as BAS control valves, the point matrix is unexpanded, and air-device/filter source rows are not silently made into plan quantities.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "control_valve_and_damper_schedule_status"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All twelve supplied pages were reviewed at full-page resolution; saved Poppler renders and page dispositions are embedded and hash-checked.",
+      "evidence": [
+        [
+          "page_review"
+        ],
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Bundle build and validation rerun every authored module against retained MuPDF and Poppler captures, then record current source/manifest/module digests.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ],
+        [
+          "module_sha256"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/25__vol2__053/p1-p1-full-poppler-poppler.png",
+      "finding": "M-001 mechanical legend, abbreviations and general notes; no populated schedule or point matrix."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/25__vol2__053/p2-p2-full-poppler-poppler.png",
+      "finding": "MD101 first-floor ceiling HVAC demolition plan; plan context."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/25__vol2__053/p3-p3-full-poppler-poppler.png",
+      "finding": "MD102 first-floor interstitial HVAC demolition plan; plan context."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/25__vol2__053/p4-p4-full-poppler-poppler.png",
+      "finding": "MD103 first-floor interstitial mechanical-piping demolition plan; plan context."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/25__vol2__053/p5-p5-full-poppler-poppler.png",
+      "finding": "MH101 first-floor ceiling plan; plan context."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/25__vol2__053/p6-p6-full-poppler-poppler.png",
+      "finding": "MH102 first-floor interstitial composite HVAC plan; plan context."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/25__vol2__053/p7-p7-full-poppler-poppler.png",
+      "finding": "MH103 first-floor interstitial HVAC supply plan; plan context."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/25__vol2__053/p8-p8-full-poppler-poppler.png",
+      "finding": "MH104 first-floor interstitial HVAC exhaust/return plan; plan context."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/25__vol2__053/p9-p9-full-poppler-poppler.png",
+      "finding": "MP101 first-floor interstitial mechanical piping plan; plan context."
+    },
+    {
+      "page": 10,
+      "review_status": "complete",
+      "render": "reviews/25__vol2__053/p10-p10-full-poppler-poppler.png",
+      "finding": "MH501 mechanical details; no populated control-valve schedule."
+    },
+    {
+      "page": 11,
+      "review_status": "complete",
+      "render": "reviews/25__vol2__053/p11-p11-full-poppler-poppler.png",
+      "finding": "MH502 mechanical controls: VAV schematic/matrix and VAV/isolation-room sequences."
+    },
+    {
+      "page": 12,
+      "review_status": "complete",
+      "render": "reviews/25__vol2__053/p12-p12-full-poppler-poppler.png",
+      "finding": "MH601 mechanical schedules: seven populated schedule tables / 69 rows, transcribed cell-for-cell."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "supplied-pages",
+      "path": [
+        "modules",
+        "metadata",
+        "visual_review_pages"
+      ],
+      "operation": "length",
+      "expected": 12
+    },
+    {
+      "id": "full-page-review",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 12
+    },
+    {
+      "id": "schedule-tables",
+      "path": [
+        "modules",
+        "equipment_reconciliation",
+        "schedule_counts",
+        "tables"
+      ],
+      "expected": 7
+    },
+    {
+      "id": "schedule-rows",
+      "path": [
+        "modules",
+        "equipment_reconciliation",
+        "schedule_counts",
+        "rows"
+      ],
+      "expected": 69
+    },
+    {
+      "id": "source-point-rows",
+      "path": [
+        "modules",
+        "point_applications",
+        "listed_template_counts",
+        "source_rows"
+      ],
+      "expected": 19
+    }
+  ],
+  "completion_checks": {
+    "every_source_page_reviewed": true,
+    "all_explicit_objective_categories_reviewed": true,
+    "all_populated_schedule_and_points_rows_captured": true,
+    "source_conflicts_and_unavailable_fields_preserved": true,
+    "two_engine_checks_current": true,
+    "final_assembly_audit_complete": true
+  },
+  "verification_semantics": "MuPDF and Poppler independently captured all twelve supplied vector-PDF pages. Current authored schedule/points cells and bounded text assertions are rechecked by both engines at build and validation time. Parser agreement corroborates literal source text/cells and their declared bounds; full-page Poppler review establishes page disposition, visual table/detail context and source limitations. Neither process creates missing device quantities, point/terminal counts, controller/panel details, network attributes, actuator/Cv/fail-position fields, aliases or zone mappings.",
+  "schema_version": "authored-module-bundle-v1",
+  "bundle_manifest": "work/25__vol2__053/document_manifest.json",
+  "bundle_manifest_sha256": "dac5a7d813edc3b5ed7a66890217d8ca582929d57553f0acff164c098b6c41fd",
+  "review_render_sha256": {
+    "reviews/25__vol2__053/p1-p1-full-poppler-poppler.png": "b85d009203526bcbebcadea663b5824657b77bcc44e3f16c1e85845860a2e6ec",
+    "reviews/25__vol2__053/p2-p2-full-poppler-poppler.png": "77edaff4bbb4681768f064a9f5106b466d044dcb71c03143efddb64b1032e744",
+    "reviews/25__vol2__053/p3-p3-full-poppler-poppler.png": "d8409f729e0c09759ef351c36deb7510ef1838588fb6d77940c93450d7433421",
+    "reviews/25__vol2__053/p4-p4-full-poppler-poppler.png": "4942417ad559d2021c8aa56379a4dee735ccaed4862089342fd3017f2c2de4e5",
+    "reviews/25__vol2__053/p5-p5-full-poppler-poppler.png": "e38cd8e1432a4031e012d00b663b8b01f304703ff26b85ef4968560dfe908645",
+    "reviews/25__vol2__053/p6-p6-full-poppler-poppler.png": "419c7df0a7e5ce43224253038155a664da64e2f9c4f75e464b1451d8165fe537",
+    "reviews/25__vol2__053/p7-p7-full-poppler-poppler.png": "3e1b1c3492039f2856bdc7f6fbf7295e98cd0cee196f5d5e81f1312bf29fd7e5",
+    "reviews/25__vol2__053/p8-p8-full-poppler-poppler.png": "9949f941b02590e04308e5d9555e98e5ed1581cf05c82398f6ccdf4f63da2ba1",
+    "reviews/25__vol2__053/p9-p9-full-poppler-poppler.png": "4a7f4e28ac9e876a7ca278b05deacceacdbbdf8ea350af2de07cb92d4d8aadff",
+    "reviews/25__vol2__053/p10-p10-full-poppler-poppler.png": "d6907c2eb1bd73c1cb964c6c57d7b048ba57096c86ce17b233b9d182e35cd6d9",
+    "reviews/25__vol2__053/p11-p11-full-poppler-poppler.png": "8308fe55f0903a482050b5173aae588db8929c19b3a0b50bef290e194791db13",
+    "reviews/25__vol2__053/p12-p12-full-poppler-poppler.png": "e89f035adbf625c469dfa2b3938ae41df30909da6298dbb59194bba1f2d6c4a1"
+  },
+  "modules": {
+    "metadata": {
+      "document_id": "25__vol2__053",
+      "module_role": "Exact project/title-block/sheet context and complete full-page visual-review ledger for the supplied twelve-sheet Houston VA Emergency Room Expansion set.",
+      "scope": "Complete ground truth for the twelve supplied mechanical sheets only. It does not claim that unprovided disciplines, revisions, submittals, controller drawings or record documents are part of the source.",
+      "project": {
+        "name": "RENOVATE/EXPAND EMERGENCY ROOM SYSTEM",
+        "site": "2002 HOLCOMBE BOULEVARD, HOUSTON, TX 77030 4298",
+        "va_project_number": "580-17-101",
+        "building_number": "# 1",
+        "acg_project_number": "16-352",
+        "date": "MARCH 15, 2019",
+        "revision_date": {
+          "status": "not_stated_in_supplied_title_blocks",
+          "value": null,
+          "note": "Blank revision-log heading/rows are not reclassified as revision events."
+        }
+      },
+      "scale_semantics": {
+        "finding": "All twelve supplied pages were visually reviewed. The repeated title block does not print a document-wide scale field. Plan/detail captions and graphical scales must be read view by view; no universal measurable conversion is inferred from the title block.",
+        "global_measured_takeoff_warning": "The exact schedule/points cells are source-grounded. Any geometric takeoff should read the local drawing-view scale rather than applying an invented global factor."
+      },
+      "visual_review_pages": [
+        {
+          "page": 1,
+          "sheet": "M-001",
+          "title": "MECHANICAL LEGEND, ABBREVIATIONS, AND GENERAL NOTES",
+          "review_status": "complete",
+          "finding": "Mechanical legend, abbreviations and general-notes sheet; context only, with no populated schedule or point matrix.",
+          "render": "reviews/25__vol2__053/p1-p1-full-poppler-poppler.png"
+        },
+        {
+          "page": 2,
+          "sheet": "MD101",
+          "title": "FIRST FLOOR CEILING HVAC DEMOLITION PLAN",
+          "review_status": "complete",
+          "finding": "First-floor ceiling HVAC demolition plan; spatial/demolition context rather than a schedule or BAS point matrix.",
+          "render": "reviews/25__vol2__053/p2-p2-full-poppler-poppler.png"
+        },
+        {
+          "page": 3,
+          "sheet": "MD102",
+          "title": "FIRST FLOOR INTERSTITIAL HVAC DEMOLITION PLAN",
+          "review_status": "complete",
+          "finding": "First-floor interstitial HVAC demolition plan; spatial/demolition context.",
+          "render": "reviews/25__vol2__053/p3-p3-full-poppler-poppler.png"
+        },
+        {
+          "page": 4,
+          "sheet": "MD103",
+          "title": "FIRST FLOOR INTERSTITIAL MECHANICAL PIPING DEMOLITION PLAN",
+          "review_status": "complete",
+          "finding": "First-floor interstitial mechanical-piping demolition plan; spatial/demolition context.",
+          "render": "reviews/25__vol2__053/p4-p4-full-poppler-poppler.png"
+        },
+        {
+          "page": 5,
+          "sheet": "MH101",
+          "title": "FIRST FLOOR CEILING PLAN",
+          "review_status": "complete",
+          "finding": "First-floor ceiling HVAC plan; plan context for new work and air-device placement, not a quantified schedule.",
+          "render": "reviews/25__vol2__053/p5-p5-full-poppler-poppler.png"
+        },
+        {
+          "page": 6,
+          "sheet": "MH102",
+          "title": "FIRST FLOOR INTERSTITIAL COMPOSITE HVAC PLAN",
+          "review_status": "complete",
+          "finding": "First-floor interstitial composite HVAC plan; plan context for airside systems.",
+          "render": "reviews/25__vol2__053/p6-p6-full-poppler-poppler.png"
+        },
+        {
+          "page": 7,
+          "sheet": "MH103",
+          "title": "FIRST FLOOR INTERSTITIAL HVAC SUPPLY PLAN",
+          "review_status": "complete",
+          "finding": "First-floor interstitial HVAC supply plan; plan context for supply-air systems.",
+          "render": "reviews/25__vol2__053/p7-p7-full-poppler-poppler.png"
+        },
+        {
+          "page": 8,
+          "sheet": "MH104",
+          "title": "FIRST FLOOR INTERSTITIAL HVAC EXHAUST/RETURN PLAN",
+          "review_status": "complete",
+          "finding": "First-floor interstitial HVAC exhaust/return plan; plan context for return/exhaust systems.",
+          "render": "reviews/25__vol2__053/p8-p8-full-poppler-poppler.png"
+        },
+        {
+          "page": 9,
+          "sheet": "MP101",
+          "title": "FIRST FLOOR INTERSTITIAL MECHANICAL PIPING PLAN",
+          "review_status": "complete",
+          "finding": "First-floor interstitial mechanical piping plan; plan context for heating-hot-water piping and valves.",
+          "render": "reviews/25__vol2__053/p9-p9-full-poppler-poppler.png"
+        },
+        {
+          "page": 10,
+          "sheet": "MH501",
+          "title": "MECHANICAL DETAILS",
+          "review_status": "complete",
+          "finding": "Mechanical details sheet; includes construction/detail context but no populated project control-valve schedule.",
+          "render": "reviews/25__vol2__053/p10-p10-full-poppler-poppler.png"
+        },
+        {
+          "page": 11,
+          "sheet": "MH502",
+          "title": "MECHANICAL CONTROLS",
+          "review_status": "complete",
+          "finding": "Mechanical-controls sheet with VAV terminal schematic, a 19-row point-function matrix, VAV sequence and isolation-room control sequence/diagram; no per-unit controller roster is printed.",
+          "render": "reviews/25__vol2__053/p11-p11-full-poppler-poppler.png"
+        },
+        {
+          "page": 12,
+          "sheet": "MH601",
+          "title": "MECHANICAL SCHEDULES",
+          "review_status": "complete",
+          "finding": "Seven populated schedules: single-duct and series fan-powered terminal units, exhaust/return/supply air-device types, filters and heating-hot-water ball valves. All 69 source rows are transcribed cell-for-cell.",
+          "render": "reviews/25__vol2__053/p12-p12-full-poppler-poppler.png"
+        }
+      ],
+      "tables": [],
+      "assertion_groups": [
+        {
+          "id": "all-sheet-title-blocks",
+          "covers_all_source_pages": true,
+          "templates": [
+            {
+              "id": "drawing-title",
+              "field": "title",
+              "bbox": [
+                2140,
+                1920,
+                2480,
+                1990
+              ],
+              "mode": "exact"
+            },
+            {
+              "id": "sheet-number",
+              "field": "sheet_number",
+              "bbox": [
+                2830,
+                2010,
+                2950,
+                2055
+              ],
+              "mode": "exact"
+            }
+          ],
+          "records": [
+            {
+              "id": "1",
+              "page": 1,
+              "title": "MECHANICAL LEGEND, ABBREVIATIONS, AND GENERAL NOTES",
+              "sheet_number": "M-001"
+            },
+            {
+              "id": "2",
+              "page": 2,
+              "title": "FIRST FLOOR CEILING HVAC DEMOLITION PLAN",
+              "sheet_number": "MD101"
+            },
+            {
+              "id": "3",
+              "page": 3,
+              "title": "FIRST FLOOR INTERSTITIAL HVAC DEMOLITION PLAN",
+              "sheet_number": "MD102"
+            },
+            {
+              "id": "4",
+              "page": 4,
+              "title": "FIRST FLOOR INTERSTITIAL MECHANICAL PIPING DEMOLITION PLAN",
+              "sheet_number": "MD103"
+            },
+            {
+              "id": "5",
+              "page": 5,
+              "title": "FIRST FLOOR CEILING PLAN",
+              "sheet_number": "MH101"
+            },
+            {
+              "id": "6",
+              "page": 6,
+              "title": "FIRST FLOOR INTERSTITIAL COMPOSITE HVAC PLAN",
+              "sheet_number": "MH102"
+            },
+            {
+              "id": "7",
+              "page": 7,
+              "title": "FIRST FLOOR INTERSTITIAL HVAC SUPPLY PLAN",
+              "sheet_number": "MH103"
+            },
+            {
+              "id": "8",
+              "page": 8,
+              "title": "FIRST FLOOR INTERSTITIAL HVAC EXHAUST/RETURN PLAN",
+              "sheet_number": "MH104"
+            },
+            {
+              "id": "9",
+              "page": 9,
+              "title": "FIRST FLOOR INTERSTITIAL MECHANICAL PIPING PLAN",
+              "sheet_number": "MP101"
+            },
+            {
+              "id": "10",
+              "page": 10,
+              "title": "MECHANICAL DETAILS",
+              "sheet_number": "MH501"
+            },
+            {
+              "id": "11",
+              "page": 11,
+              "title": "MECHANICAL CONTROLS",
+              "sheet_number": "MH502"
+            },
+            {
+              "id": "12",
+              "page": 12,
+              "title": "MECHANICAL SCHEDULES",
+              "sheet_number": "MH601"
+            }
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "project-name",
+          "page": 12,
+          "bbox": [
+            2535,
+            1920,
+            2810,
+            1968
+          ],
+          "expected": "RENOVATE/EXPAND EMERGENCY ROOM SYSTEM",
+          "mode": "exact"
+        },
+        {
+          "id": "project-site",
+          "page": 12,
+          "bbox": [
+            2190,
+            2010,
+            2480,
+            2055
+          ],
+          "expected": "2002 HOLCOMBE BOULEVARD, HOUSTON, TX 77030 4298",
+          "mode": "exact"
+        },
+        {
+          "id": "va-project-number",
+          "page": 12,
+          "bbox": [
+            2855,
+            1920,
+            2930,
+            1941
+          ],
+          "expected": "580-17-101",
+          "mode": "exact"
+        },
+        {
+          "id": "project-date",
+          "page": 12,
+          "bbox": [
+            2540,
+            2055,
+            2650,
+            2075
+          ],
+          "expected": "MARCH 15, 2019",
+          "mode": "exact"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "full-page-visual-review",
+          "records_path": [
+            "visual_review_pages"
+          ],
+          "expected": 12,
+          "unique_key": "page"
+        }
+      ]
+    },
+    "schedules": {
+      "document_id": "25__vol2__053",
+      "module_role": "Exact MH601 schedule cells. Every table remains in its printed schedule scope; plain ball valves, air devices and terminal-unit type rows are not reclassified as BAS control valves or controller instances.",
+      "source_sheet": "MH601",
+      "source_page": 12,
+      "tables": [
+        {
+          "id": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+          "page": 12,
+          "sheet": "MH601",
+          "title": "SINGLE DUCT AIR TERMINAL UNIT SCHEDULE",
+          "classification": "Existing terminal-unit reference schedule",
+          "columns": "mark|location|room_served|system_air_handling|vav_size|airflow_max|airflow_min|airflow_reheat|control_type|control_sequence|reheat_elec|reheat_hw|coil_rows|coil_eat|coil_lat|coil_ewt|coil_lwt|coil_flow|coil_capacity|remarks",
+          "x_edges": [
+            150.72,
+            222.721,
+            356.64,
+            529.2,
+            618.72,
+            674.521,
+            721.32,
+            770.52,
+            821.52,
+            893.521,
+            989.64,
+            1043.639,
+            1097.64,
+            1152.361,
+            1204.68,
+            1251.6,
+            1323.601,
+            1397.503,
+            1467.601,
+            1553.761,
+            1622.761
+          ],
+          "y_edges": [
+            197.999,
+            210.961,
+            223.92,
+            236.88,
+            249.72,
+            262.843,
+            275.64,
+            288.599,
+            301.593,
+            314.399,
+            327.361,
+            340.321,
+            353.28,
+            366.24,
+            379.2,
+            392.04,
+            405.0,
+            417.959,
+            430.953,
+            443.707,
+            456.719
+          ],
+          "rows": [
+            "TU26-11|FIRST FLOOR INTERSTITIAL|1A-728|100-AH26|8\"|115|35|60|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.21 GPM|2,600 Btu/h|3",
+            "TU26-12|FIRST FLOOR INTERSTITIAL|C1A-701|100-AH26|14\"|1120|335|560|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|1.94 GPM|24,300 Btu/h|3",
+            "TU26-34|FIRST FLOOR INTERSTITIAL|1A-794, 1A-795, 1A-796|100-AH26|10\"|825|300|550|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|2.75 GPM|18,000 Btu/h|3",
+            "TU26-40|FIRST FLOOR INTERSTITIAL|C1A-703|100-AH26|14\"|690|200|345|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|1.20 GPM|15,000 Btu/h|3",
+            "TU26-41|FIRST FLOOR INTERSTITIAL|1A-735|100-AH26|6\"|125|40|65|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.23 GPM|2,800 Btu/h|1,2",
+            "TU26-46|FIRST FLOOR INTERSTITIAL|C1A-701|100-AH26|14\"|750|225|375|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|1.30 GPM|16,300 Btu/h|3",
+            "TU26-52|FIRST FLOOR INTERSTITIAL|1A-722|100-AH26|12\"|115|35|60|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.21 GPM|2,600 Btu/h|3",
+            "TU26-60|FIRST FLOOR INTERSTITIAL|1A-765, CORRIDOR|100-AH26|14\"|1050|315|525|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|1.82 GPM|22,800 Btu/h|1,2",
+            "TU26-61|FIRST FLOOR INTERSTITIAL|1A-736|100-AH26|8\"|125|40|65|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.23 GPM|2,800 Btu/h|1,2",
+            "TU26-62|FIRST FLOOR INTERSTITIAL|1A-737|100-AH26|8\"|125|40|65|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.23 GPM|2,800 Btu/h|1,2",
+            "TU26-63|FIRST FLOOR INTERSTITIAL|1A-738|100-AH26|8\"|125|40|65|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.23 GPM|2,800 Btu/h|1,2",
+            "TU26-64|FIRST FLOOR INTERSTITIAL|1A-727|100-AH26|8\"|120|40|60|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.21 GPM|2,600 Btu/h|1,2",
+            "TU26-65|FIRST FLOOR INTERSTITIAL|1A-721, 1A-740, 1A-740A|100-AH26|6\"|155|50|80|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.28 GPM|3,500 Btu/h|1,2",
+            "TU26-66|FIRST FLOOR INTERSTITIAL|1A-726|100-AH26|8\"|120|40|60|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.21 GPM|2,600 Btu/h|1,2",
+            "TU26-67|FIRST FLOOR INTERSTITIAL|1A-734, 1A-734A|100-AH26|8\"|175|55|90|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.31 GPM|3,900 Btu/h|1,2",
+            "TU26-68|FIRST FLOOR INTERSTITIAL|1A-729, 1A-730, 1A-731, CORRIDOR|100-AH26|14\"|1185|360|595|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|2.07 GPM|25,800 Btu/h|1,2",
+            "TU26-69|FIRST FLOOR INTERSTITIAL|1A-733|100-AH26|8\"|110|40|55|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.19 GPM|2,400 Btu/h|1,2",
+            "TU26-70|FIRST FLOOR INTERSTITIAL|1A-732|100-AH26|8\"|110|40|55|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.19 GPM|2,400 Btu/h|1,2",
+            "TU26-71|FIRST FLOOR INTERSTITIAL|1A-724|100-AH26|8\"|120|40|60|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.21 GPM|2,600 Btu/h|1,2",
+            "TU26-72|FIRST FLOOR INTERSTITIAL|1A-723|100-AH26|8\"|120|40|60|VAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.21 GPM|2,600 Btu/h|1,2"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                150,
+                128,
+                1623,
+                198
+              ],
+              "expected": "SINGLE DUCT AIR TERMINAL UNIT SCHEDULE MARK LOCATION ROOM SERVED SYSTEM AIR HANDLING VAV SIZE AIRFLOW CONTROL TYPE CONTROL SEQUENCE REHEAT HEATING COIL REMARKS"
+            }
+          ]
+        },
+        {
+          "id": "AD-MH601-EXHAUST",
+          "page": 12,
+          "sheet": "MH601",
+          "title": "AIR DEVICE SCHEDULE (EXHAUST)",
+          "classification": "Air-device type reference schedule; not a field-instance count.",
+          "columns": "mark|type|airflow_min|airflow_max|max_apd|mounting|panel_frame_size|neck_size|max_nc|damper|finish|material|remarks",
+          "x_edges": [
+            1790.639,
+            1862.698,
+            1988.804,
+            2053.441,
+            2118.243,
+            2190.246,
+            2262.249,
+            2352.248,
+            2417.036,
+            2471.043,
+            2543.046,
+            2615.049,
+            2705.048,
+            2777.03
+          ],
+          "y_edges": [
+            197.999,
+            210.961,
+            223.92
+          ],
+          "rows": [
+            "EG-A|SQUARE CONE|0|100|0.10 in-wg|CEILING|24x24|6x6|20|No|WHITE|STEEL|1,2",
+            "EG-B|SQUARE CONE|100|200|0.10 in-wg|CEILING|24x24|8X8|20|No|WHITE|STEEL|1,2"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1790,
+                128,
+                2779,
+                198
+              ],
+              "expected": "AIR DEVICE SCHEDULE EXHAUST MARK TYPE AIRFLOW MAX APD MOUNTING PANEL FRAME SIZE NECK SIZE MAX NC DAMPER FINISH MATERIAL REMARKS"
+            }
+          ]
+        },
+        {
+          "id": "AD-MH601-RETURN",
+          "page": 12,
+          "sheet": "MH601",
+          "title": "AIR DEVICE SCHEDULE (RETURN)",
+          "classification": "Air-device type reference schedule; not a field-instance count.",
+          "columns": "mark|type|airflow_min|airflow_max|max_apd|mounting|panel_frame_size|neck_size|max_nc|damper_diffuser|finish|material|description|remarks",
+          "x_edges": [
+            1790.639,
+            1862.698,
+            1988.804,
+            2053.441,
+            2118.243,
+            2187.958,
+            2264.64,
+            2354.639,
+            2419.448,
+            2473.434,
+            2545.437,
+            2617.44,
+            2707.439,
+            2779.442,
+            2850.002
+          ],
+          "y_edges": [
+            371.88,
+            384.72,
+            397.68,
+            410.639,
+            423.599
+          ],
+          "rows": [
+            "RG-A|EGG CRATE|0|100|0.16 in-wg|CEILING|24x24|6\"Ø|20|Yes||STEEL|RETURN|1,2,3",
+            "RG-B|EGG CRATE|100|200|0.11 in-wg|CEILING|24x24|8\"Ø|20|Yes||STEEL|RETURN|1,2,3",
+            "RG-C|EGG CRATE|200|350|0.11 in-wg|CEILING|24x24|10\"Ø|20|Yes||STEEL|RETURN|1,2,3",
+            "RG-D|EGG CRATE|350|600|0.10 in-wg|CEILING|24x24|12\"Ø|20|Yes||STEEL|RETURN|1,2,3"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1790,
+                302,
+                2851,
+                372
+              ],
+              "expected": "AIR DEVICE SCHEDULE RETURN MARK TYPE AIRFLOW MAX APD MOUNTING PANEL FRAME SIZE NECK SIZE MAX NC DAMPER DIFFUSER FINISH MATERIAL DESCRIPTION REMARKS"
+            }
+          ]
+        },
+        {
+          "id": "AD-MH601-SUPPLY",
+          "page": 12,
+          "sheet": "MH601",
+          "title": "AIR DEVICE SCHEDULE (SUPPLY)",
+          "classification": "Air-device type reference schedule; not a field-instance count.",
+          "columns": "mark|type|airflow_min|airflow_max|max_apd|mounting|panel_frame_size|neck_size_round|neck_size_rect|damper|finish|material|remarks",
+          "x_edges": [
+            1790.639,
+            1862.698,
+            1988.804,
+            2053.441,
+            2118.243,
+            2190.246,
+            2262.249,
+            2352.248,
+            2417.036,
+            2481.845,
+            2554.322,
+            2625.83,
+            2715.907,
+            2787.832
+          ],
+          "y_edges": [
+            571.561,
+            584.521,
+            597.48
+          ],
+          "rows": [
+            "SD-A|SQUARE CONE|0|125|0.07 in-wg|CEILING|24x24|6\"|--|No|WHITE|STEEL|1,2",
+            "SD-B|SQUARE CONE|125|230|0.07 in-wg|CEILING|24x24|8\"|--|No|WHITE|STEEL|1,2"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1790,
+                503,
+                2788,
+                559
+              ],
+              "expected": "AIR DEVICE SCHEDULE SUPPLY MARK TYPE AIRFLOW MAX APD MOUNTING PANEL FRAME SIZE NECK SIZE ROUND RECT DAMPER MATERIAL REMARKS"
+            }
+          ]
+        },
+        {
+          "id": "TU-MH601-SERIES-FAN-POWERED",
+          "page": 12,
+          "sheet": "MH601",
+          "title": "SERIES FAN POWERED AIR TERMINAL UNIT SCHEDULE",
+          "classification": "Existing terminal-unit reference schedule.",
+          "columns": "mark|location|room_served|system_air_handling|vav_size|airflow_max|airflow_min|airflow_reheat|control_type|control_sequence|reheat_elec|reheat_hw|coil_rows|coil_eat|coil_lat|coil_ewt|coil_lwt|coil_flow|coil_capacity|remarks",
+          "x_edges": [
+            150.72,
+            222.721,
+            356.64,
+            529.2,
+            618.72,
+            674.521,
+            721.32,
+            770.52,
+            821.52,
+            893.521,
+            989.64,
+            1043.639,
+            1097.64,
+            1152.361,
+            1204.68,
+            1251.6,
+            1323.601,
+            1397.503,
+            1467.601,
+            1553.761,
+            1625.76
+          ],
+          "y_edges": [
+            606.085,
+            619.079
+          ],
+          "rows": [
+            "TU26-73|FIRST FLOOR INTERSTITIAL|1A-791, 1A-790A|100-AH26|6\"|275|275|275|CAV|5°F DEADBAND|No|Yes|1|55 °F|95 °F|180 °F|155 °F|0.00 GPM|0 Btu/h|1,2"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                150,
+                536,
+                1626,
+                606
+              ],
+              "expected": "SERIES FAN POWERED AIR TERMINAL UNIT SCHEDULE MARK LOCATION ROOM SERVED SYSTEM AIR HANDLING VAV SIZE AIRFLOW CONTROL TYPE CONTROL SEQUENCE REHEAT HEATING COIL REMARKS"
+            }
+          ]
+        },
+        {
+          "id": "AF-MH601",
+          "page": 12,
+          "sheet": "MH601",
+          "title": "AIR FILTER SCHEDULE",
+          "classification": "Filter type/service schedule; source rows have no discrete field filter tags.",
+          "columns": "location|area_or_bldg_served|system_or_service|merv_rating|apd_initial|apd_changeover|housing_type|cartridge_count|cartridge_size|cartridge_arrangement|remarks",
+          "x_edges": [
+            1790.639,
+            1862.698,
+            1988.804,
+            2133.353,
+            2205.356,
+            2277.359,
+            2349.362,
+            2464.797,
+            2554.322,
+            2648.649,
+            2756.643,
+            2846.642
+          ],
+          "y_edges": [
+            745.32,
+            758.28,
+            771.24
+          ],
+          "rows": [
+            "ROOF||PE ISOLATION|7|0.25 in-wg|0.75 in-wg|SIDE LOAD|1|2\" THICK|1 WIDE BY 1 HIGH|1",
+            "ROOF||PE ISOLATION|HEPA|1.00 in-wg|2.25 in-wg|BAG-IN / BAG-OUT|1|27\" x 30\" x 24\"|1 WIDE BY 1 HIGH|1"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1790,
+                676,
+                2847,
+                746
+              ],
+              "expected": "AIR FILTER SCHEDULE LOCATION AREA BLDG SERVED SYSTEM SERVICE MERV RATING APD INITIAL CHANGEOVER HOUSING TYPE CARTRIDGES SIZE ARRANGEMENT REMARKS"
+            }
+          ]
+        },
+        {
+          "id": "V-MH601-BALL-VALVES",
+          "page": 12,
+          "sheet": "MH601",
+          "title": "VALVE SCHEDULE",
+          "classification": "Manual heating-hot-water supply/return ball-valve schedule; no actuator, Cv, control signal, or fail position is printed, so these are not BAS control valves.",
+          "columns": "mark|system_or_service|type|size|flow|remarks",
+          "x_edges": [
+            1790.639,
+            1862.698,
+            2017.537,
+            2125.561,
+            2215.56,
+            2287.563,
+            2373.83
+          ],
+          "y_edges": [
+            905.879,
+            918.838,
+            931.8,
+            944.76,
+            957.72,
+            970.56,
+            983.52,
+            996.479,
+            1009.439,
+            1022.401,
+            1035.36,
+            1048.201,
+            1061.16,
+            1074.12,
+            1087.08,
+            1100.039,
+            1112.88,
+            1125.839,
+            1138.799,
+            1151.761,
+            1164.72,
+            1177.561,
+            1190.52,
+            1203.48,
+            1216.44,
+            1229.399,
+            1242.359,
+            1255.199,
+            1268.161,
+            1281.121,
+            1294.08,
+            1307.04,
+            1319.88,
+            1332.84,
+            1345.8,
+            1358.759,
+            1371.719,
+            1384.679,
+            1397.519
+          ],
+          "rows": [
+            "V-HHWR-11|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+            "V-HHWR-12|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|1.94 GPM|1",
+            "V-HHWR-40|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|1.20 GPM|1",
+            "V-HHWR-41|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.23 GPM|1",
+            "V-HHWR-46|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|1.30 GPM|1",
+            "V-HHWR-52|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+            "V-HHWR-60|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|1.82 GPM|1",
+            "V-HHWR-61|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.23 GPM|1",
+            "V-HHWR-62|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.23 GPM|1",
+            "V-HHWR-63|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.23 GPM|1",
+            "V-HHWR-64|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+            "V-HHWR-65|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.28 GPM|1",
+            "V-HHWR-66|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+            "V-HHWR-67|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.31 GPM|1",
+            "V-HHWR-68|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|2.07 GPM|1",
+            "V-HHWR-69|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.19 GPM|1",
+            "V-HHWR-70|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.19 GPM|1",
+            "V-HHWR-71|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+            "V-HHWR-72|HEATING HOT WATER RETURN|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+            "V-HHWS-11|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+            "V-HHWS-12|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|1.94 GPM|1",
+            "V-HHWS-40|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|1.20 GPM|1",
+            "V-HHWS-41|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.23 GPM|1",
+            "V-HHWS-46|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|1.30 GPM|1",
+            "V-HHWS-52|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+            "V-HHWS-60|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|1.82 GPM|1",
+            "V-HHWS-61|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.23 GPM|1",
+            "V-HHWS-62|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.23 GPM|1",
+            "V-HHWS-63|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.23 GPM|1",
+            "V-HHWS-64|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+            "V-HHWS-65|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.28 GPM|1",
+            "V-HHWS-66|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+            "V-HHWS-67|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.31 GPM|1",
+            "V-HHWS-68|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|2.07 GPM|1",
+            "V-HHWS-69|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.19 GPM|1",
+            "V-HHWS-70|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.19 GPM|1",
+            "V-HHWS-71|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1",
+            "V-HHWS-72|HEATING HOT WATER SUPPLY|BALL VALVE|3/4\"-3/4\"|0.21 GPM|1"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1790,
+                850,
+                2374,
+                894
+              ],
+              "expected": "VALVE SCHEDULE MARK SYSTEM SERVICE TYPE SIZE FLOW REMARKS"
+            }
+          ]
+        }
+      ],
+      "assertions": [],
+      "inventory_checks": [
+        {
+          "id": "mh601-populated-tables",
+          "records_path": [
+            "tables"
+          ],
+          "expected": 7,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "points": {
+      "document_id": "25__vol2__053",
+      "module_role": "Exact MH502 VAV terminal-unit point-list matrix. This preserves the printed hardware/software/alarm/trend/graphic flags; it does not turn the template into an installed controller-terminal total.",
+      "source_sheet": "MH502",
+      "source_page": 11,
+      "tables": [
+        {
+          "id": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+          "page": 11,
+          "sheet": "MH502",
+          "title": "VAV TERMINAL UNIT POINT LIST",
+          "classification": "VAV terminal-unit points matrix",
+          "columns": "point_name|AI|AO|BI|BO|AV|BV|LOOP|SCHED|TREND|ALARM|show_on_graphic",
+          "x_edges": [
+            2194.802,
+            2430.352,
+            2455.192,
+            2479.928,
+            2504.643,
+            2530.802,
+            2555.641,
+            2578.811,
+            2612.514,
+            2654.524,
+            2696.514,
+            2745.368,
+            2868.369
+          ],
+          "y_edges": [
+            638.88,
+            654.239,
+            669.601,
+            684.84,
+            700.08,
+            715.319,
+            729.6,
+            743.879,
+            758.16,
+            772.439,
+            786.72,
+            801.119,
+            815.4,
+            829.679,
+            843.96,
+            857.52,
+            871.801,
+            886.08,
+            900.361,
+            914.759
+          ],
+          "rows": [
+            "ZONE TEMPERATURE|X||||||||X||X",
+            "ZONE TEMPERATURE SETPOINT|X||||||||||X",
+            "AIRFLOW|X||||||||X||X",
+            "DISCHARGE AIR TEMPERATURE|X||||||||X||X",
+            "ZONE DAMPER||X|||||||||X",
+            "REHEATING VALVE||X|||||||X||X",
+            "MAXIMUM OCCUPIED AIRFLOW SETPOINT|||||X||||X||X",
+            "HEATING MODE||||||X|||X||",
+            "HEATING SETPOINT|||||||||X||X",
+            "COOLING SETPOINT|||||||||X||X",
+            "HIGH ZONE TEMPERATURE||||||||||X|",
+            "LOW ZONE TEMPERATURE||||||||||X|",
+            "HIGH DISCHARGE TEMPERATURE||||||||||X|",
+            "LOW DISCHARGE TEMPERATURE||||||||||X|",
+            "HIGH ZONE HUMIDITY||||||||||X|",
+            "MINIMUM OCCUPIED AIR FLOW SETPOINT|||||X||||X||X",
+            "MINIMUM UNOCCUPIED AIRFLOW SETPOINT|||||X||||X||X",
+            "ZONE HUMIDITY|X||||||||X||",
+            "ZONE HUMIDITY SETPOINT|X||||||||X||"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                2180,
+                980,
+                2530,
+                1005
+              ],
+              "expected": "VAV TERMINAL UNIT POINT LIST"
+            }
+          ]
+        }
+      ],
+      "assertions": [],
+      "inventory_checks": [
+        {
+          "id": "mh502-vav-point-list-rows",
+          "records_path": [
+            "tables"
+          ],
+          "expected": 1,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "controls_context": {
+      "document_id": "25__vol2__053",
+      "module_role": "MH502 controls ground truth. It preserves the printed VAV and isolation-room sequences alongside the MH502 template point matrix without manufacturing controller instances, wiring counts, or network details.",
+      "source_sheet": "MH502",
+      "source_page": 11,
+      "network_architecture": {
+        "control_system_or_vendor": {
+          "status": "not_stated",
+          "value": null
+        },
+        "protocol": {
+          "status": "not_stated",
+          "value": null
+        },
+        "transport": {
+          "status": "not_stated",
+          "value": null
+        },
+        "controller_model_or_panel": {
+          "status": "not_stated",
+          "value": null
+        },
+        "addressing_or_network_topology": {
+          "status": "not_stated",
+          "value": null
+        }
+      },
+      "controls_schedule_ledger": {
+        "control_valve_schedule": {
+          "status": "not_present_as_a_control_valve_schedule",
+          "value": null,
+          "basis": "MH502 prints an AO reheat-valve schematic/sequence, and MH601 prints 38 heating-hot-water BALL VALVE rows. Neither sheet prints a control-valve schedule with actuator, Cv, control signal, or fail-position fields."
+        },
+        "damper_actuator_schedule": {
+          "status": "not_present",
+          "value": null,
+          "basis": "MH502 depicts an AO zone damper and sequence behavior, but the supplied set contains no damper-actuator schedule."
+        },
+        "physical_schedule_line_item_count": {
+          "status": "not_stated",
+          "value": null,
+          "basis": "The only printed valve rows are the MH601 manual-ball-valve schedule, which is retained separately and not recast as a BAS control-valve schedule."
+        }
+      },
+      "point_matrix_context": {
+        "source_table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+        "source_rows": 19,
+        "printed_matrix_totals": {
+          "hardware": 8,
+          "software": 21
+        },
+        "interpretation_rule": "The MH502 VAV terminal-unit list is a point-function template. It is not row-mapped to the 20 MH601 single-duct terminal rows or TU26-73, so printed matrix totals are not expanded into project-wide physical I/O totals.",
+        "source_roles": [
+          "zone temperature and zone-temperature setpoint",
+          "airflow and discharge-air temperature",
+          "AO zone damper and AO reheating valve",
+          "occupied/unoccupied airflow setpoints and heating mode",
+          "zone humidity/humidity setpoint and high humidity alarm"
+        ]
+      },
+      "sequences": [
+        {
+          "id": "vav-run-conditions-and-zone-setpoints",
+          "scope": "VAV terminal unit",
+          "source_behavior": "The unit runs continuously, maintaining 75°F adjustable cooling and 70°F adjustable heating setpoints; occupants can adjust the zone temperature heating and cooling setpoints at the zone sensor.",
+          "assertion_ids": [
+            "mh502-vav-run-conditions",
+            "mh502-vav-setpoint-adjust"
+          ]
+        },
+        {
+          "id": "vav-occupied-flow-and-reheat",
+          "scope": "VAV terminal unit occupied mode",
+          "source_behavior": "Above cooling setpoint, the zone damper modulates between minimum occupied airflow and maximum cooling airflow until satisfied. Between cooling and heating setpoints it maintains minimum required zone airflow. Below heating setpoint it modulates the heating valve open; if warm AHU air is available it also modulates the zone damper between minimum occupied and maximum heating airflow until satisfied.",
+          "assertion_ids": [
+            "mh502-vav-occupied"
+          ]
+        },
+        {
+          "id": "vav-unoccupied-flow-and-reheat",
+          "scope": "VAV terminal unit unoccupied mode",
+          "source_behavior": "The zone damper controls to minimum unoccupied airflow. Above cooling setpoint it modulates to maximum cooling airflow; below unoccupied heating setpoint the controller modulates the heating valve open and, if warm AHU air is available, modulates the damper between minimum unoccupied airflow and auxiliary heating airflow until satisfied.",
+          "assertion_ids": [
+            "mh502-vav-unoccupied"
+          ]
+        },
+        {
+          "id": "vav-discharge-temperature-and-humidity-alarms",
+          "scope": "VAV terminal unit",
+          "source_behavior": "The controller measures discharge-air temperature and limits hot-water valve position when discharge air is more than 15°F adjustable above zone temperature. High discharge temperature is greater than 100°F adjustable; low is less than 50°F adjustable. A space relative-humidity value above 60% initiates a visible alarm in the affected OR and at the DDC monitoring station.",
+          "assertion_ids": [
+            "mh502-vav-discharge-limit",
+            "mh502-vav-discharge-alarms",
+            "mh502-vav-humidity-alarm"
+          ]
+        },
+        {
+          "id": "isolation-room-pressure-control",
+          "scope": "Isolation room",
+          "source_behavior": "The DDC system modulates the exhaust-air venturi valve to maintain +0.01 inches water gauge to the corridor, opening below that value for more than five seconds and closing above it for more than five seconds. Low differential pressure below 0.00 inches for more than 15 seconds causes a local visual alarm and DDC-monitoring-station alarm.",
+          "assertion_ids": [
+            "mh502-isolation-pressure",
+            "mh502-isolation-pressure-alarm"
+          ]
+        },
+        {
+          "id": "isolation-room-filter-monitoring",
+          "scope": "Isolation room HEPA pre-filter and HEPA filter",
+          "source_behavior": "The DDC system monitors differential pressure across the HEPA pre-filter and HEPA filter; alarms occur above 1.0 inches water gauge for the pre-filter and 2.0 inches water gauge for the HEPA filter. The HEPA filter also receives a visual Magnehelic gauge.",
+          "assertion_ids": [
+            "mh502-isolation-filters"
+          ]
+        },
+        {
+          "id": "isolation-room-lead-standby-fans",
+          "scope": "Isolation room two-fan system",
+          "source_behavior": "The two fans operate lead/standby. The lead runs first with the standby isolation damper closed; on lead failure, the standby runs with the lead isolation damper closed. Lead rotation is user-selectable manually, by adjustable runtime, weekly, or monthly. VFD output modulates from duct static pressure ahead of the filter, with the setpoint determined during TAB.",
+          "assertion_ids": [
+            "mh502-isolation-lead-standby",
+            "mh502-isolation-vfd"
+          ]
+        },
+        {
+          "id": "isolation-room-fan-alarms",
+          "scope": "Both isolation-room fans",
+          "source_behavior": "Alarms include failure when commanded on but status is off, running in hand when commanded off but status is on, and runtime exceeded when status runtime exceeds a user-definable limit.",
+          "assertion_ids": [
+            "mh502-isolation-fan-alarms"
+          ]
+        }
+      ],
+      "sensor_and_zone_ledger": {
+        "source_typed_roles": "MH502 prints temperature, airflow, humidity, space-pressure, and filter-pressure roles in a VAV point template, sequences, and an isolation-room schematic. It does not provide an installed sensor schedule or plan-mapped physical sensor count.",
+        "physical_sensor_count": {
+          "status": "not_stated",
+          "value": null
+        },
+        "zone_mapping": {
+          "status": "not_stated",
+          "value": null
+        },
+        "written_visual_indicator": "The isolation-room sequence calls for a ball-thru-wall manual pressure differential indicator between the ante room and corridor; this is not counted as a BAS point or sensor instance."
+      },
+      "source_limitations": [
+        "No BAS vendor, protocol, controller/panel model, address, transport, or network topology is printed in the supplied 12-page set.",
+        "No MH502 control-sequence statement identifies which, if any, of the twenty MH601 single-duct terminal schedule rows are the represented VAV template instances.",
+        "MH601's valve table provides plain ball-valve service/size/flow rows only; it cannot supply actuator, fail-position, Cv, or BAS control-valve takeoff fields."
+      ],
+      "tables": [],
+      "assertions": [
+        {
+          "id": "mh502-vav-run-conditions",
+          "page": 11,
+          "bbox": [
+            1420,
+            189,
+            1710,
+            241
+          ],
+          "expected": "RUN CONDITIONS - CONTINUOUS: THE UNIT SHALL RUN CONTINUOUSLY AND SHALL MAINTAIN: • A 75°F (ADJ.) COOLING SETPOINT. • A 70°F (ADJ.) HEATING SETPOINT.",
+          "mode": "contains"
+        },
+        {
+          "id": "mh502-vav-setpoint-adjust",
+          "page": 11,
+          "bbox": [
+            1420,
+            310,
+            1950,
+            344
+          ],
+          "expected": "THE OCCUPANT SHALL BE ABLE TO ADJUST THE ZONE TEMPERATURE HEATING AND COOLING SETPOINTS AT THE ZONE SENSOR.",
+          "mode": "contains"
+        },
+        {
+          "id": "mh502-vav-occupied",
+          "page": 11,
+          "bbox": [
+            1420,
+            397,
+            1950,
+            517
+          ],
+          "expected": "WHEN ZONE TEMPERATURE IS GREATER THAN ITS COOLING SETPOINT, THE ZONE DAMPER SHALL MODULATE BETWEEN THE MINIMUM OCCUPIED AIRFLOW (ADJ.) AND THE MAXIMUM COOLING AIRFLOW (ADJ.) UNTIL THE ZONE IS SATISFIED.",
+          "mode": "contains"
+        },
+        {
+          "id": "mh502-vav-unoccupied",
+          "page": 11,
+          "bbox": [
+            1420,
+            527,
+            1955,
+            648
+          ],
+          "expected": "WHEN THE ZONE IS UNOCCUPIED THE ZONE DAMPER SHALL CONTROL TO ITS MINIMUM UNOCCUPIED AIRFLOW (ADJ.).",
+          "mode": "contains"
+        },
+        {
+          "id": "mh502-vav-discharge-limit",
+          "page": 11,
+          "bbox": [
+            1420,
+            701,
+            1950,
+            735
+          ],
+          "expected": "THE CONTROLLER SHALL MEASURE THE DISCHARGE AIR TEMPERATURE AND LIMIT HOT WATER VALVE POSITION IF THE DISCHARGE AIR TEMPERATURE IS MORE THAN 15°F (ADJ.) ABOVE THE ZONE TEMPERATURE.",
+          "mode": "contains"
+        },
+        {
+          "id": "mh502-vav-discharge-alarms",
+          "page": 11,
+          "bbox": [
+            1420,
+            777,
+            1920,
+            811
+          ],
+          "expected": "HIGH DISCHARGE AIR TEMP: IF THE DISCHARGE AIR TEMPERATURE IS GREATER THAN 100°F (ADJ.).",
+          "mode": "contains"
+        },
+        {
+          "id": "mh502-vav-humidity-alarm",
+          "page": 11,
+          "bbox": [
+            1420,
+            820,
+            1910,
+            855
+          ],
+          "expected": "HIGH HUMIDITY: IF THE SPACE RELATIVE HUMIDITY RISES ABOVE 60% A VISIBLE ALARM SHALL BE INITIATED IN THE AFFECTED OR AND AT THE DDC MONITORING STATION.",
+          "mode": "contains"
+        },
+        {
+          "id": "mh502-isolation-pressure",
+          "page": 11,
+          "bbox": [
+            540,
+            257,
+            1210,
+            302
+          ],
+          "expected": "THE DDC SYSTEM SHALL MODULATE THE EXHAUST AIR VENTURI VALVE TO MAINTAIN A SET POINT OF +0.01 INCHES WATER GAUGE TO THE CORRIDOR.",
+          "mode": "contains"
+        },
+        {
+          "id": "mh502-isolation-pressure-alarm",
+          "page": 11,
+          "bbox": [
+            540,
+            312,
+            1200,
+            346
+          ],
+          "expected": "LOW DIFFERENTIAL PRESSURE IF THE PRESSURE FALLS BELOW 0.00 INCHES FOR MORE THAN 15 SECONDS. A LOCAL VISUAL ALARM SHALL BE INDICATED AND AN ALARM SHALL BE ANNUNCIATED AT THE DDC MONITORING STATION.",
+          "mode": "contains"
+        },
+        {
+          "id": "mh502-isolation-filters",
+          "page": 11,
+          "bbox": [
+            540,
+            388,
+            1210,
+            465
+          ],
+          "expected": "THE DDC SYSTEM SHALL MONITOR THE DIFFERENTIAL PRESSURE ACROSS THE HEPA PRE-FILTER AND THE HEPA FILTER. THE HEPA FILTER SHALL BE PROVIDED WITH A VISUAL MANGEHELIC GAUGE AS WELL.",
+          "mode": "contains"
+        },
+        {
+          "id": "mh502-isolation-lead-standby",
+          "page": 11,
+          "bbox": [
+            540,
+            475,
+            1145,
+            520
+          ],
+          "expected": "FAN CONTROL: THE TWO FANS SHALL OPERATE IN A LEAD / STANDBY FASHION. • THE LEAD FAN SHALL RUN FIRST AND THE STANDBY FAN ISOLATION DAMPER SHALL BE CLOSED. • ON FAILURE OF THE LEAD FAN, THE STANDBY FAN SHALL RUN AND THE LEAD FAN ISOLATION DAMPER SHALL BE CLOSED.",
+          "mode": "contains"
+        },
+        {
+          "id": "mh502-isolation-vfd",
+          "page": 11,
+          "bbox": [
+            540,
+            594,
+            1210,
+            618
+          ],
+          "expected": "UPON A FALL IN DUCT STATIC PRESSURE AHEAD OF THE FILTER AT A SET POINT AS DETERMINED DURING TAB, THE VFD SHALL MODULATE UP. ON A RISE THE VFD SHALL MODULATE DOWN.",
+          "mode": "contains"
+        },
+        {
+          "id": "mh502-isolation-fan-alarms",
+          "page": 11,
+          "bbox": [
+            540,
+            628,
+            930,
+            673
+          ],
+          "expected": "ALARMS TO BOTH FANS SHALL BE PROVIDED AS FOLLOWS: • FAILURE: COMMANDED ON, BUT THE STATUS IS OFF. • RUNNING IN HAND: COMMANDED OFF, BUT THE STATUS IS ON. • RUNTIME EXCEEDED: STATUS RUN TIME EXCEEDS A USER DEFINABLE LIMIT.",
+          "mode": "contains"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "mh502-written-sequences",
+          "records_path": [
+            "sequences"
+          ],
+          "expected": 8,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "equipment_reconciliation": {
+      "document_id": "25__vol2__053",
+      "module_role": "Reconciles every MH601 schedule table to its literal printed scope. Terminal tags, air-device types, filter service rows and manual ball-valve tags are kept distinct rather than silently converted into a single field-equipment, actuator, or BAS-control inventory.",
+      "schedule_registry_schema": {
+        "namespace_separator": "-",
+        "identity_columns": {
+          "tag": "mark"
+        },
+        "anchor_records_path": [
+          "primary_anchors"
+        ],
+        "non_instance_table_ids": [
+          "AD-MH601-EXHAUST",
+          "AD-MH601-RETURN",
+          "AD-MH601-SUPPLY",
+          "AF-MH601",
+          "V-MH601-BALL-VALVES"
+        ]
+      },
+      "scheduled_families": [
+        {
+          "module": "schedules_mh601.json",
+          "bundle_module": "schedules",
+          "table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+          "rows": 20,
+          "class": "Single-duct VAV terminal-unit schedule mark",
+          "tag": [
+            "TU26-11",
+            "TU26-12",
+            "TU26-34",
+            "TU26-40",
+            "TU26-41",
+            "TU26-46",
+            "TU26-52",
+            "TU26-60",
+            "TU26-61",
+            "TU26-62",
+            "TU26-63",
+            "TU26-64",
+            "TU26-65",
+            "TU26-66",
+            "TU26-67",
+            "TU26-68",
+            "TU26-69",
+            "TU26-70",
+            "TU26-71",
+            "TU26-72"
+          ]
+        },
+        {
+          "module": "schedules_mh601.json",
+          "bundle_module": "schedules",
+          "table": "AD-MH601-EXHAUST",
+          "rows": 2,
+          "class": "Exhaust air-device type",
+          "tag": [
+            "EG-A",
+            "EG-B"
+          ]
+        },
+        {
+          "module": "schedules_mh601.json",
+          "bundle_module": "schedules",
+          "table": "AD-MH601-RETURN",
+          "rows": 4,
+          "class": "Return air-device type",
+          "tag": [
+            "RG-A",
+            "RG-B",
+            "RG-C",
+            "RG-D"
+          ]
+        },
+        {
+          "module": "schedules_mh601.json",
+          "bundle_module": "schedules",
+          "table": "AD-MH601-SUPPLY",
+          "rows": 2,
+          "class": "Supply air-device type",
+          "tag": [
+            "SD-A",
+            "SD-B"
+          ]
+        },
+        {
+          "module": "schedules_mh601.json",
+          "bundle_module": "schedules",
+          "table": "TU-MH601-SERIES-FAN-POWERED",
+          "rows": 1,
+          "class": "Series fan-powered air terminal-unit schedule mark",
+          "tag": [
+            "TU26-73"
+          ]
+        },
+        {
+          "module": "schedules_mh601.json",
+          "bundle_module": "schedules",
+          "table": "AF-MH601",
+          "rows": 2,
+          "class": "Filter service/type row without a printed discrete equipment tag"
+        },
+        {
+          "module": "schedules_mh601.json",
+          "bundle_module": "schedules",
+          "table": "V-MH601-BALL-VALVES",
+          "rows": 38,
+          "class": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+          "tag": [
+            "V-HHWR-11",
+            "V-HHWR-12",
+            "V-HHWR-40",
+            "V-HHWR-41",
+            "V-HHWR-46",
+            "V-HHWR-52",
+            "V-HHWR-60",
+            "V-HHWR-61",
+            "V-HHWR-62",
+            "V-HHWR-63",
+            "V-HHWR-64",
+            "V-HHWR-65",
+            "V-HHWR-66",
+            "V-HHWR-67",
+            "V-HHWR-68",
+            "V-HHWR-69",
+            "V-HHWR-70",
+            "V-HHWR-71",
+            "V-HHWR-72",
+            "V-HHWS-11",
+            "V-HHWS-12",
+            "V-HHWS-40",
+            "V-HHWS-41",
+            "V-HHWS-46",
+            "V-HHWS-52",
+            "V-HHWS-60",
+            "V-HHWS-61",
+            "V-HHWS-62",
+            "V-HHWS-63",
+            "V-HHWS-64",
+            "V-HHWS-65",
+            "V-HHWS-66",
+            "V-HHWS-67",
+            "V-HHWS-68",
+            "V-HHWS-69",
+            "V-HHWS-70",
+            "V-HHWS-71",
+            "V-HHWS-72"
+          ]
+        }
+      ],
+      "schedule_counts": {
+        "tables": 7,
+        "rows": 69,
+        "building_scoped_tag_identities_including_outlet_types": 67,
+        "other_scheduled_tag_identities": 21
+      },
+      "primary_anchors": [
+        {
+          "id": "TU-TU26-11",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-11; FIRST FLOOR INTERSTITIAL / 1A-728."
+        },
+        {
+          "id": "TU-TU26-12",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-12; FIRST FLOOR INTERSTITIAL / C1A-701."
+        },
+        {
+          "id": "TU-TU26-34",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-34; rooms 1A-794, 1A-795, 1A-796."
+        },
+        {
+          "id": "TU-TU26-40",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-40; C1A-703."
+        },
+        {
+          "id": "TU-TU26-41",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-41; 1A-735."
+        },
+        {
+          "id": "TU-TU26-46",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-46; C1A-701."
+        },
+        {
+          "id": "TU-TU26-52",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-52; 1A-722."
+        },
+        {
+          "id": "TU-TU26-60",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-60; 1A-765, CORRIDOR."
+        },
+        {
+          "id": "TU-TU26-61",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-61; 1A-736."
+        },
+        {
+          "id": "TU-TU26-62",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-62; 1A-737."
+        },
+        {
+          "id": "TU-TU26-63",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-63; 1A-738."
+        },
+        {
+          "id": "TU-TU26-64",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-64; 1A-727."
+        },
+        {
+          "id": "TU-TU26-65",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-65; rooms 1A-721, 1A-740, 1A-740A."
+        },
+        {
+          "id": "TU-TU26-66",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-66; 1A-726."
+        },
+        {
+          "id": "TU-TU26-67",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-67; rooms 1A-734, 1A-734A."
+        },
+        {
+          "id": "TU-TU26-68",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-68; rooms 1A-729, 1A-730, 1A-731, CORRIDOR. Room text is not split into additional terminal identities."
+        },
+        {
+          "id": "TU-TU26-69",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-69; 1A-733."
+        },
+        {
+          "id": "TU-TU26-70",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-70; 1A-732."
+        },
+        {
+          "id": "TU-TU26-71",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-71; 1A-724."
+        },
+        {
+          "id": "TU-TU26-72",
+          "scope": "Scheduled single-duct terminal",
+          "visual_anchor": "MH601 single-duct terminal schedule row TU26-72; 1A-723."
+        },
+        {
+          "id": "TU-TU26-73",
+          "scope": "Scheduled series fan-powered terminal",
+          "visual_anchor": "MH601 series fan-powered terminal schedule row TU26-73; rooms 1A-791, 1A-790A."
+        }
+      ],
+      "plan_and_detail_reconciliation": [
+        {
+          "id": "mh601-terminal-schedule-scope",
+          "sheet": "MH601",
+          "finding": "Twenty single-duct and one series fan-powered terminal marks are literal schedule identities. Multi-room cells remain literal source cells and are not expanded into per-room terminal counts."
+        },
+        {
+          "id": "mh601-air-device-type-scope",
+          "sheet": "MH601",
+          "finding": "EG, RG and SD rows are air-device types/ranges, not plan-counted installed outlet instances; they remain schedule-row type identities."
+        },
+        {
+          "id": "mh601-filter-service-scope",
+          "sheet": "MH601",
+          "finding": "The two filter rows both print ROOF location with no distinct equipment mark, so they are retained as source service/type rows rather than forced into duplicate physical identity keys."
+        },
+        {
+          "id": "mh601-valve-not-basc-control",
+          "sheet": "MH601",
+          "finding": "All 38 valve rows print BALL VALVE with heating-hot-water supply/return service, size and flow. The source does not print Cv, actuator, control signal or fail position, so they are retained as manual ball-valve tags and excluded from BAS control-valve/actuator quantities."
+        }
+      ],
+      "control_valve_and_damper_schedule_status": {
+        "control_valve_schedule": {
+          "status": "not_present_as_BAS_control_valve_schedule",
+          "value": null,
+          "note": "MH601 has a populated 38-row manual BALL VALVE schedule. It has no actuator, Cv, BAS signal, or fail-position fields, so it is not recast as a BAS control-valve schedule."
+        },
+        "damper_actuator_schedule": {
+          "status": "not_present",
+          "value": null,
+          "note": "Air-device schedule rows state damper/damper-diffuser properties but no damper actuator schedule, actuator model, torque, signal or fail position is printed."
+        }
+      },
+      "source_conflicts": [],
+      "valve_aliases": [],
+      "additional_identities": [],
+      "tables": [],
+      "assertions": [],
+      "inventory_checks": [
+        {
+          "id": "scheduled-families",
+          "records_path": [
+            "scheduled_families"
+          ],
+          "expected": 7,
+          "unique_key": "table"
+        },
+        {
+          "id": "scheduled-primary-anchors",
+          "records_path": [
+            "primary_anchors"
+          ],
+          "expected": 21,
+          "unique_key": "id"
+        },
+        {
+          "id": "plan-detail-reconciliation",
+          "records_path": [
+            "plan_and_detail_reconciliation"
+          ],
+          "expected": 4,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "point_applications": {
+      "document_id": "25__vol2__053",
+      "module_role": "Unexpanded printed-matrix ledger. MH502's VAV terminal unit point list has point-name and flag columns but no equipment-instance tag column or source rule binding the template to the twenty MH601 VAV schedule rows or the one series fan-powered row.",
+      "ledger_mode": "printed_matrix_unexpanded_v1",
+      "source_points_composite": "points_mh502 holds the 19 printed VAV terminal point-function rows, including hardware/software flag columns and source totals.",
+      "ownership_binding_semantics": "The points matrix does not print field equipment tags, controller identities, I/O terminal ownership, wiring method or protocol. Written sequences identify DDC behavior but do not create row-level installed-point assignments.",
+      "expanded_count_warning": "Nineteen is the number of printed source matrix rows. Zero is intentionally the number of emitted instance applications: no multiplier from the schedule is source-stated, so no field I/O or controller-terminal count is manufactured.",
+      "applications": [],
+      "listed_template_counts": {
+        "source_rows": 19,
+        "tables": 1,
+        "printed_hardware_total": 8,
+        "printed_software_total": 21
+      },
+      "expanded_template_counts": {
+        "total": 0
+      },
+      "installed_IO_total": {
+        "status": "not_stated_in_supplied_set",
+        "value": null,
+        "reason": "No installed equipment-instance point matrix, controller schedule, panel terminal list, network point export, or source multiplier is supplied."
+      },
+      "point_transport": {
+        "status": "not_stated_per_symbol",
+        "value": null,
+        "note": "No protocol or transport is assigned to individual MH502 matrix rows."
+      },
+      "tables": [],
+      "assertions": [],
+      "inventory_checks": [
+        {
+          "id": "unexpanded-source-point-applications",
+          "records_path": [
+            "applications"
+          ],
+          "expected": 0,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "supporting_evidence": {
+      "document_id": "25__vol2__053",
+      "module_role": "Supporting full-set evidence and source limitations qualifying use of the MH502 point matrix and MH601 schedules for BAS takeoff.",
+      "source_limitations": [
+        "MH502's 19 VAV terminal point-function rows have no terminal-equipment tag column and no printed rule applying them to the twenty MH601 VAV rows or TU26-73. They remain an unexpanded source template.",
+        "The supplied twelve-sheet set prints no BAS vendor, network protocol, controller/panel model, addressing, transport or point-to-controller terminal schedule.",
+        "MH601's populated VALVE SCHEDULE contains 38 heating-hot-water supply/return BALL VALVE rows. It does not print control-valve Cv, actuator, control signal or fail position.",
+        "The printed air-device rows are type/range schedules, and the two filter rows have no distinct equipment mark. Neither is treated as an installed plan quantity without an explicit source binding."
+      ],
+      "tables": [],
+      "assertions": [
+        {
+          "id": "mh502-vav-sequence-title",
+          "page": 11,
+          "bbox": [
+            1420,
+            899,
+            1825,
+            935
+          ],
+          "expected": "VAV TERMINAL SEQUENCE OF OPERATION",
+          "mode": "contains"
+        },
+        {
+          "id": "mh601-valve-schedule-title",
+          "page": 12,
+          "bbox": [
+            1790,
+            849,
+            2375,
+            894
+          ],
+          "expected": "VALVE SCHEDULE MARK SYSTEM AND/OR SERVICE TYPE SIZE FLOW REMARKS",
+          "mode": "contains"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "supporting-source-limitations",
+          "records_path": [
+            "source_limitations"
+          ],
+          "expected": 4
+        }
+      ]
+    }
+  },
+  "module_sha256": {
+    "metadata": "516c2fec72e3878f51508d43f1e467badab07f61da1b4cdafbfb407c52d4a257",
+    "schedules": "a56cc2980c220e8c54d2e211fc0dfee0cd0ff6c3b702c7136feba1c6c6a9218e",
+    "points": "8b288125a5044e426b7ac04a0a84198e4e7b0c873b16b44e54c118dade01b7c1",
+    "controls_context": "6e844caf70222e0ae77abfef49de1990cf961304a6c557f66c4a73fb48c6028e",
+    "equipment_reconciliation": "f3f55bb0e92fa8276284eca00765cd635b296f5e52e0eef1072160cd7146eb8a",
+    "point_applications": "040758138466fb624654c7927872ffb8cabe712568bd24f9bb505c801badcd4e",
+    "supporting_evidence": "b603d834fb9e68d90faf47036584347ed20b46c8be7784f871c58adbd5bf955a"
+  },
+  "module_source_sha256": {
+    "metadata": {
+      "metadata": "516c2fec72e3878f51508d43f1e467badab07f61da1b4cdafbfb407c52d4a257"
+    },
+    "schedules": {
+      "schedules_mh601": "a56cc2980c220e8c54d2e211fc0dfee0cd0ff6c3b702c7136feba1c6c6a9218e"
+    },
+    "points": {
+      "points_mh502": "8b288125a5044e426b7ac04a0a84198e4e7b0c873b16b44e54c118dade01b7c1"
+    },
+    "controls_context": {
+      "controls_context_mh502": "6e844caf70222e0ae77abfef49de1990cf961304a6c557f66c4a73fb48c6028e"
+    },
+    "equipment_reconciliation": {
+      "equipment_reconciliation": "f3f55bb0e92fa8276284eca00765cd635b296f5e52e0eef1072160cd7146eb8a"
+    },
+    "point_applications": {
+      "point_applications": "040758138466fb624654c7927872ffb8cabe712568bd24f9bb505c801badcd4e"
+    },
+    "supporting_evidence": {
+      "supporting_evidence": "b603d834fb9e68d90faf47036584347ed20b46c8be7784f871c58adbd5bf955a"
+    }
+  },
+  "equipment_inventory": [
+    {
+      "id": "TU-TU26-11",
+      "tag": "TU26-11",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 1,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-11",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-728",
+        "system_air_handling": "100-AH26",
+        "vav_size": "8\"",
+        "airflow_max": "115",
+        "airflow_min": "35",
+        "airflow_reheat": "60",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "0.21 GPM",
+        "coil_capacity": "2,600 Btu/h",
+        "remarks": "3"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-11",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-11; FIRST FLOOR INTERSTITIAL / 1A-728."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-12",
+      "tag": "TU26-12",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 2,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-12",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "C1A-701",
+        "system_air_handling": "100-AH26",
+        "vav_size": "14\"",
+        "airflow_max": "1120",
+        "airflow_min": "335",
+        "airflow_reheat": "560",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "1.94 GPM",
+        "coil_capacity": "24,300 Btu/h",
+        "remarks": "3"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-12",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-12; FIRST FLOOR INTERSTITIAL / C1A-701."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-34",
+      "tag": "TU26-34",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 3,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-34",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-794, 1A-795, 1A-796",
+        "system_air_handling": "100-AH26",
+        "vav_size": "10\"",
+        "airflow_max": "825",
+        "airflow_min": "300",
+        "airflow_reheat": "550",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "2.75 GPM",
+        "coil_capacity": "18,000 Btu/h",
+        "remarks": "3"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-34",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-34; rooms 1A-794, 1A-795, 1A-796."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-40",
+      "tag": "TU26-40",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 4,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-40",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "C1A-703",
+        "system_air_handling": "100-AH26",
+        "vav_size": "14\"",
+        "airflow_max": "690",
+        "airflow_min": "200",
+        "airflow_reheat": "345",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "1.20 GPM",
+        "coil_capacity": "15,000 Btu/h",
+        "remarks": "3"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-40",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-40; C1A-703."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-41",
+      "tag": "TU26-41",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 5,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-41",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-735",
+        "system_air_handling": "100-AH26",
+        "vav_size": "6\"",
+        "airflow_max": "125",
+        "airflow_min": "40",
+        "airflow_reheat": "65",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "0.23 GPM",
+        "coil_capacity": "2,800 Btu/h",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-41",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-41; 1A-735."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-46",
+      "tag": "TU26-46",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 6,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-46",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "C1A-701",
+        "system_air_handling": "100-AH26",
+        "vav_size": "14\"",
+        "airflow_max": "750",
+        "airflow_min": "225",
+        "airflow_reheat": "375",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "1.30 GPM",
+        "coil_capacity": "16,300 Btu/h",
+        "remarks": "3"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-46",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-46; C1A-701."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-52",
+      "tag": "TU26-52",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 7,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-52",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-722",
+        "system_air_handling": "100-AH26",
+        "vav_size": "12\"",
+        "airflow_max": "115",
+        "airflow_min": "35",
+        "airflow_reheat": "60",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "0.21 GPM",
+        "coil_capacity": "2,600 Btu/h",
+        "remarks": "3"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-52",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-52; 1A-722."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-60",
+      "tag": "TU26-60",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 8,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-60",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-765, CORRIDOR",
+        "system_air_handling": "100-AH26",
+        "vav_size": "14\"",
+        "airflow_max": "1050",
+        "airflow_min": "315",
+        "airflow_reheat": "525",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "1.82 GPM",
+        "coil_capacity": "22,800 Btu/h",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-60",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-60; 1A-765, CORRIDOR."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-61",
+      "tag": "TU26-61",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 9,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-61",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-736",
+        "system_air_handling": "100-AH26",
+        "vav_size": "8\"",
+        "airflow_max": "125",
+        "airflow_min": "40",
+        "airflow_reheat": "65",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "0.23 GPM",
+        "coil_capacity": "2,800 Btu/h",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-61",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-61; 1A-736."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-62",
+      "tag": "TU26-62",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 10,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-62",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-737",
+        "system_air_handling": "100-AH26",
+        "vav_size": "8\"",
+        "airflow_max": "125",
+        "airflow_min": "40",
+        "airflow_reheat": "65",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "0.23 GPM",
+        "coil_capacity": "2,800 Btu/h",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-62",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-62; 1A-737."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-63",
+      "tag": "TU26-63",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 11,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-63",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-738",
+        "system_air_handling": "100-AH26",
+        "vav_size": "8\"",
+        "airflow_max": "125",
+        "airflow_min": "40",
+        "airflow_reheat": "65",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "0.23 GPM",
+        "coil_capacity": "2,800 Btu/h",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-63",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-63; 1A-738."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-64",
+      "tag": "TU26-64",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 12,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-64",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-727",
+        "system_air_handling": "100-AH26",
+        "vav_size": "8\"",
+        "airflow_max": "120",
+        "airflow_min": "40",
+        "airflow_reheat": "60",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "0.21 GPM",
+        "coil_capacity": "2,600 Btu/h",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-64",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-64; 1A-727."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-65",
+      "tag": "TU26-65",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 13,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-65",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-721, 1A-740, 1A-740A",
+        "system_air_handling": "100-AH26",
+        "vav_size": "6\"",
+        "airflow_max": "155",
+        "airflow_min": "50",
+        "airflow_reheat": "80",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "0.28 GPM",
+        "coil_capacity": "3,500 Btu/h",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-65",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-65; rooms 1A-721, 1A-740, 1A-740A."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-66",
+      "tag": "TU26-66",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 14,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-66",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-726",
+        "system_air_handling": "100-AH26",
+        "vav_size": "8\"",
+        "airflow_max": "120",
+        "airflow_min": "40",
+        "airflow_reheat": "60",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "0.21 GPM",
+        "coil_capacity": "2,600 Btu/h",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-66",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-66; 1A-726."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-67",
+      "tag": "TU26-67",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 15,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-67",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-734, 1A-734A",
+        "system_air_handling": "100-AH26",
+        "vav_size": "8\"",
+        "airflow_max": "175",
+        "airflow_min": "55",
+        "airflow_reheat": "90",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "0.31 GPM",
+        "coil_capacity": "3,900 Btu/h",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-67",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-67; rooms 1A-734, 1A-734A."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-68",
+      "tag": "TU26-68",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 16,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-68",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-729, 1A-730, 1A-731, CORRIDOR",
+        "system_air_handling": "100-AH26",
+        "vav_size": "14\"",
+        "airflow_max": "1185",
+        "airflow_min": "360",
+        "airflow_reheat": "595",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "2.07 GPM",
+        "coil_capacity": "25,800 Btu/h",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-68",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-68; rooms 1A-729, 1A-730, 1A-731, CORRIDOR. Room text is not split into additional terminal identities."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-69",
+      "tag": "TU26-69",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 17,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-69",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-733",
+        "system_air_handling": "100-AH26",
+        "vav_size": "8\"",
+        "airflow_max": "110",
+        "airflow_min": "40",
+        "airflow_reheat": "55",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "0.19 GPM",
+        "coil_capacity": "2,400 Btu/h",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-69",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-69; 1A-733."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-70",
+      "tag": "TU26-70",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 18,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-70",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-732",
+        "system_air_handling": "100-AH26",
+        "vav_size": "8\"",
+        "airflow_max": "110",
+        "airflow_min": "40",
+        "airflow_reheat": "55",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "0.19 GPM",
+        "coil_capacity": "2,400 Btu/h",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-70",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-70; 1A-732."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-71",
+      "tag": "TU26-71",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 19,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-71",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-724",
+        "system_air_handling": "100-AH26",
+        "vav_size": "8\"",
+        "airflow_max": "120",
+        "airflow_min": "40",
+        "airflow_reheat": "60",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "0.21 GPM",
+        "coil_capacity": "2,600 Btu/h",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-71",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-71; 1A-724."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-72",
+      "tag": "TU26-72",
+      "classification": "Single-duct VAV terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SINGLE-DUCT-AIR-TERMINAL",
+      "source_row": 20,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-72",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-723",
+        "system_air_handling": "100-AH26",
+        "vav_size": "8\"",
+        "airflow_max": "120",
+        "airflow_min": "40",
+        "airflow_reheat": "60",
+        "control_type": "VAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "0.21 GPM",
+        "coil_capacity": "2,600 Btu/h",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-72",
+        "scope": "Scheduled single-duct terminal",
+        "visual_anchor": "MH601 single-duct terminal schedule row TU26-72; 1A-723."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "AD-EG-A",
+      "tag": "EG-A",
+      "classification": "Exhaust air-device type",
+      "identity_column": "mark",
+      "source_table": "AD-MH601-EXHAUST",
+      "source_row": 1,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "EG-A",
+        "type": "SQUARE CONE",
+        "airflow_min": "0",
+        "airflow_max": "100",
+        "max_apd": "0.10 in-wg",
+        "mounting": "CEILING",
+        "panel_frame_size": "24x24",
+        "neck_size": "6x6",
+        "max_nc": "20",
+        "damper": "No",
+        "finish": "WHITE",
+        "material": "STEEL",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "AD-EG-B",
+      "tag": "EG-B",
+      "classification": "Exhaust air-device type",
+      "identity_column": "mark",
+      "source_table": "AD-MH601-EXHAUST",
+      "source_row": 2,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "EG-B",
+        "type": "SQUARE CONE",
+        "airflow_min": "100",
+        "airflow_max": "200",
+        "max_apd": "0.10 in-wg",
+        "mounting": "CEILING",
+        "panel_frame_size": "24x24",
+        "neck_size": "8X8",
+        "max_nc": "20",
+        "damper": "No",
+        "finish": "WHITE",
+        "material": "STEEL",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "AD-RG-A",
+      "tag": "RG-A",
+      "classification": "Return air-device type",
+      "identity_column": "mark",
+      "source_table": "AD-MH601-RETURN",
+      "source_row": 1,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "RG-A",
+        "type": "EGG CRATE",
+        "airflow_min": "0",
+        "airflow_max": "100",
+        "max_apd": "0.16 in-wg",
+        "mounting": "CEILING",
+        "panel_frame_size": "24x24",
+        "neck_size": "6\"Ø",
+        "max_nc": "20",
+        "damper_diffuser": "Yes",
+        "finish": "",
+        "material": "STEEL",
+        "description": "RETURN",
+        "remarks": "1,2,3"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "AD-RG-B",
+      "tag": "RG-B",
+      "classification": "Return air-device type",
+      "identity_column": "mark",
+      "source_table": "AD-MH601-RETURN",
+      "source_row": 2,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "RG-B",
+        "type": "EGG CRATE",
+        "airflow_min": "100",
+        "airflow_max": "200",
+        "max_apd": "0.11 in-wg",
+        "mounting": "CEILING",
+        "panel_frame_size": "24x24",
+        "neck_size": "8\"Ø",
+        "max_nc": "20",
+        "damper_diffuser": "Yes",
+        "finish": "",
+        "material": "STEEL",
+        "description": "RETURN",
+        "remarks": "1,2,3"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "AD-RG-C",
+      "tag": "RG-C",
+      "classification": "Return air-device type",
+      "identity_column": "mark",
+      "source_table": "AD-MH601-RETURN",
+      "source_row": 3,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "RG-C",
+        "type": "EGG CRATE",
+        "airflow_min": "200",
+        "airflow_max": "350",
+        "max_apd": "0.11 in-wg",
+        "mounting": "CEILING",
+        "panel_frame_size": "24x24",
+        "neck_size": "10\"Ø",
+        "max_nc": "20",
+        "damper_diffuser": "Yes",
+        "finish": "",
+        "material": "STEEL",
+        "description": "RETURN",
+        "remarks": "1,2,3"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "AD-RG-D",
+      "tag": "RG-D",
+      "classification": "Return air-device type",
+      "identity_column": "mark",
+      "source_table": "AD-MH601-RETURN",
+      "source_row": 4,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "RG-D",
+        "type": "EGG CRATE",
+        "airflow_min": "350",
+        "airflow_max": "600",
+        "max_apd": "0.10 in-wg",
+        "mounting": "CEILING",
+        "panel_frame_size": "24x24",
+        "neck_size": "12\"Ø",
+        "max_nc": "20",
+        "damper_diffuser": "Yes",
+        "finish": "",
+        "material": "STEEL",
+        "description": "RETURN",
+        "remarks": "1,2,3"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "AD-SD-A",
+      "tag": "SD-A",
+      "classification": "Supply air-device type",
+      "identity_column": "mark",
+      "source_table": "AD-MH601-SUPPLY",
+      "source_row": 1,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "SD-A",
+        "type": "SQUARE CONE",
+        "airflow_min": "0",
+        "airflow_max": "125",
+        "max_apd": "0.07 in-wg",
+        "mounting": "CEILING",
+        "panel_frame_size": "24x24",
+        "neck_size_round": "6\"",
+        "neck_size_rect": "--",
+        "damper": "No",
+        "finish": "WHITE",
+        "material": "STEEL",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "AD-SD-B",
+      "tag": "SD-B",
+      "classification": "Supply air-device type",
+      "identity_column": "mark",
+      "source_table": "AD-MH601-SUPPLY",
+      "source_row": 2,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "SD-B",
+        "type": "SQUARE CONE",
+        "airflow_min": "125",
+        "airflow_max": "230",
+        "max_apd": "0.07 in-wg",
+        "mounting": "CEILING",
+        "panel_frame_size": "24x24",
+        "neck_size_round": "8\"",
+        "neck_size_rect": "--",
+        "damper": "No",
+        "finish": "WHITE",
+        "material": "STEEL",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "TU-TU26-73",
+      "tag": "TU26-73",
+      "classification": "Series fan-powered air terminal-unit schedule mark",
+      "identity_column": "mark",
+      "source_table": "TU-MH601-SERIES-FAN-POWERED",
+      "source_row": 1,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "TU26-73",
+        "location": "FIRST FLOOR INTERSTITIAL",
+        "room_served": "1A-791, 1A-790A",
+        "system_air_handling": "100-AH26",
+        "vav_size": "6\"",
+        "airflow_max": "275",
+        "airflow_min": "275",
+        "airflow_reheat": "275",
+        "control_type": "CAV",
+        "control_sequence": "5°F DEADBAND",
+        "reheat_elec": "No",
+        "reheat_hw": "Yes",
+        "coil_rows": "1",
+        "coil_eat": "55 °F",
+        "coil_lat": "95 °F",
+        "coil_ewt": "180 °F",
+        "coil_lwt": "155 °F",
+        "coil_flow": "0.00 GPM",
+        "coil_capacity": "0 Btu/h",
+        "remarks": "1,2"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "TU-TU26-73",
+        "scope": "Scheduled series fan-powered terminal",
+        "visual_anchor": "MH601 series fan-powered terminal schedule row TU26-73; rooms 1A-791, 1A-790A."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-11",
+      "tag": "V-HHWR-11",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 1,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-11",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.21 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-12",
+      "tag": "V-HHWR-12",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 2,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-12",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "1.94 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-40",
+      "tag": "V-HHWR-40",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 3,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-40",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "1.20 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-41",
+      "tag": "V-HHWR-41",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 4,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-41",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.23 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-46",
+      "tag": "V-HHWR-46",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 5,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-46",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "1.30 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-52",
+      "tag": "V-HHWR-52",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 6,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-52",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.21 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-60",
+      "tag": "V-HHWR-60",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 7,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-60",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "1.82 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-61",
+      "tag": "V-HHWR-61",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 8,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-61",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.23 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-62",
+      "tag": "V-HHWR-62",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 9,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-62",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.23 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-63",
+      "tag": "V-HHWR-63",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 10,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-63",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.23 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-64",
+      "tag": "V-HHWR-64",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 11,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-64",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.21 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-65",
+      "tag": "V-HHWR-65",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 12,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-65",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.28 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-66",
+      "tag": "V-HHWR-66",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 13,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-66",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.21 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-67",
+      "tag": "V-HHWR-67",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 14,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-67",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.31 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-68",
+      "tag": "V-HHWR-68",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 15,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-68",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "2.07 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-69",
+      "tag": "V-HHWR-69",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 16,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-69",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.19 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-70",
+      "tag": "V-HHWR-70",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 17,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-70",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.19 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-71",
+      "tag": "V-HHWR-71",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 18,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-71",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.21 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWR-72",
+      "tag": "V-HHWR-72",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 19,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWR-72",
+        "system_or_service": "HEATING HOT WATER RETURN",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.21 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-11",
+      "tag": "V-HHWS-11",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 20,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-11",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.21 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-12",
+      "tag": "V-HHWS-12",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 21,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-12",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "1.94 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-40",
+      "tag": "V-HHWS-40",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 22,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-40",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "1.20 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-41",
+      "tag": "V-HHWS-41",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 23,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-41",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.23 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-46",
+      "tag": "V-HHWS-46",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 24,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-46",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "1.30 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-52",
+      "tag": "V-HHWS-52",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 25,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-52",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.21 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-60",
+      "tag": "V-HHWS-60",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 26,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-60",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "1.82 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-61",
+      "tag": "V-HHWS-61",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 27,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-61",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.23 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-62",
+      "tag": "V-HHWS-62",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 28,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-62",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.23 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-63",
+      "tag": "V-HHWS-63",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 29,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-63",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.23 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-64",
+      "tag": "V-HHWS-64",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 30,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-64",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.21 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-65",
+      "tag": "V-HHWS-65",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 31,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-65",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.28 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-66",
+      "tag": "V-HHWS-66",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 32,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-66",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.21 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-67",
+      "tag": "V-HHWS-67",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 33,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-67",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.31 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-68",
+      "tag": "V-HHWS-68",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 34,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-68",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "2.07 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-69",
+      "tag": "V-HHWS-69",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 35,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-69",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.19 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-70",
+      "tag": "V-HHWS-70",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 36,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-70",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.19 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-71",
+      "tag": "V-HHWS-71",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 37,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-71",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.21 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "V-V-HHWS-72",
+      "tag": "V-HHWS-72",
+      "classification": "Heating-hot-water manual ball-valve schedule tag; not a BAS control valve",
+      "identity_column": "mark",
+      "source_table": "V-MH601-BALL-VALVES",
+      "source_row": 38,
+      "source_page": 12,
+      "literal_schedule_row": {
+        "mark": "V-HHWS-72",
+        "system_or_service": "HEATING HOT WATER SUPPLY",
+        "type": "BALL VALVE",
+        "size": "3/4\"-3/4\"",
+        "flow": "0.21 GPM",
+        "remarks": "1"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    }
+  ],
+  "point_application_ledger": []
+}

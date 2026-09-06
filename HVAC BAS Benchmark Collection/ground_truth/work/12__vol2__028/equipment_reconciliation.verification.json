@@ -1,0 +1,37 @@
+{
+  "document_id": "12__vol2__028",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "annotation_sha256": "fe1b6be917837dd7fb7bce851f2939f1e02b13381b4d3feae007e6461cfae3ea",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 0,
+  "checks": [],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "linked-schedule-registry",
+      "pass": true,
+      "tables": 8,
+      "rows": 65,
+      "identities": 32,
+      "primary_anchors": 0
+    },
+    {
+      "id": "scheduled-source-tables",
+      "actual": 8,
+      "expected": 8,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {
+    "schedules_m505_silencer_esp.json": "641b3222eccd6f98955a0e8754e862f4ef7d21f11949cb62cd3b2a68081ebb65",
+    "schedules_m601_fcu.json": "84ff30cd4148dd74c20a7f34959a65fec391e85e04503bfcdfc26b07ee4c23c5",
+    "schedules_m601_doas.json": "581a0ef2e2e6a7160ed3c150565e82ba7fe7e57b3ae07760813f54c64873835e",
+    "schedules_m601_boiler_unit_heater.json": "bbcfd6e1e217ead6f261f95e5dd0fda6102cee9bab86fbfe1706b2f0e6fd6c2d",
+    "schedules_m601_chiller_exhaust.json": "68f86d7a3dce7127c3fe2a1c1b6402bff701a757c8d4dbe6f95e5d112b447869"
+  },
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

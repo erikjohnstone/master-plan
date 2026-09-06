@@ -1,0 +1,76 @@
+{
+  "document_id": "18__vol2__092",
+  "module_role": "Exact project/title-block/sheet/scale context and complete full-page visual-review ledger for the supplied thirteen-sheet set.",
+  "scope": "Complete ground truth for the thirteen supplied sheets only. The ledger does not assert that unprovided disciplines, revisions, records or controller submittals are part of the source.",
+  "project": {
+    "name": "GUARANTEED RATE FIELD - HVAC / AHU RENOVATION - PHASE IX",
+    "site": "333 WEST 35TH STREET, CHICAGO, IL 60616",
+    "project_number": "19165",
+    "issue": "ISSUED FOR BID",
+    "issue_date": "10.07.2019",
+    "document_date_context": "Repeated title-block issue line",
+    "revision_date": {"status": "not_stated_in_supplied_title_blocks", "value": null, "note": "Blank revision-log heading/rows are not reclassified as revision events."}
+  },
+  "scale_semantics": {
+    "finding": "All thirteen supplied pages were visually reviewed. M0.02/M0.03/M0.04 print 1/32\" = 1'-0\"; the M1 work-plan sheets print VARIES; M2.01/M3.01/M4.01/M4.02 print AS NOTED. The cover does not establish a plan scale. No source page is treated as having a universal measurable scale when its title block says VARIES or AS NOTED.",
+    "overview_plan_sheets": [
+      {"page": 2, "sheet": "M0.02", "scale": "1/32\" = 1'-0\""},
+      {"page": 3, "sheet": "M0.03", "scale": "1/32\" = 1'-0\""},
+      {"page": 4, "sheet": "M0.04", "scale": "1/32\" = 1'-0\""}
+    ],
+    "global_measured_takeoff_warning": "Per-view scales may need to be read from individual captions on VARIES/AS NOTED sheets; no global conversion is invented from the title block."
+  },
+  "visual_review_pages": [
+    {"page": 1, "sheet": "M0.01", "title": "MECHANICAL COVER PAGE", "review_status": "complete", "finding": "Cover/index, title-block identity and supplied thirteen-sheet index; no equipment schedule or BAS points list.", "render": "reviews/18__vol2__092/p1-p1-full-poppler-poppler.png"},
+    {"page": 2, "sheet": "M0.02", "title": "SERVICE LEVEL OVERALL MECHANICAL PLAN", "review_status": "complete", "finding": "Service-level overall mechanical plan at 1/32\" = 1'-0\"; spatial plan context, not a schedule or formal controls matrix.", "render": "reviews/18__vol2__092/p2-p2-full-poppler-poppler.png"},
+    {"page": 3, "sheet": "M0.03", "title": "LEVEL 200 OVERALL MECHANICAL PLAN", "review_status": "complete", "finding": "Level-200 overall mechanical plan at 1/32\" = 1'-0\"; plan context for work areas/equipment labels.", "render": "reviews/18__vol2__092/p3-p3-full-poppler-poppler.png"},
+    {"page": 4, "sheet": "M0.04", "title": "LEVEL 400 OVERALL MECHANICAL PLAN", "review_status": "complete", "finding": "Level-400 overall mechanical plan at 1/32\" = 1'-0\"; plan context for work areas/equipment labels.", "render": "reviews/18__vol2__092/p4-p4-full-poppler-poppler.png"},
+    {"page": 5, "sheet": "M1.01", "title": "SERVICE LEVEL MECHANICAL WORK PLAN", "review_status": "complete", "finding": "Service-level mechanical work-plan sheet; title block prints VARIES and the page is reviewed as plan/detail context rather than a single global scale.", "render": "reviews/18__vol2__092/p5-p5-full-poppler-poppler.png"},
+    {"page": 6, "sheet": "M1.02", "title": "SERVICE LEVEL MECHANICAL WORK PLAN", "review_status": "complete", "finding": "Second service-level mechanical work-plan sheet; title block prints VARIES.", "render": "reviews/18__vol2__092/p6-p6-full-poppler-poppler.png"},
+    {"page": 7, "sheet": "M1.03", "title": "SERVICE LEVEL MECHANICAL WORK PLAN", "review_status": "complete", "finding": "Third service-level mechanical work-plan sheet; title block prints VARIES.", "render": "reviews/18__vol2__092/p7-p7-full-poppler-poppler.png"},
+    {"page": 8, "sheet": "M1.21", "title": "200 LEVEL MECHANICAL WORK PLAN", "review_status": "complete", "finding": "200-level mechanical work plan; title block prints VARIES and no plan symbol is transformed into a points count.", "render": "reviews/18__vol2__092/p8-p8-full-poppler-poppler.png"},
+    {"page": 9, "sheet": "M1.41", "title": "400 LEVEL MECHANICAL WORK PLAN", "review_status": "complete", "finding": "400-level mechanical work plan; title block prints VARIES.", "render": "reviews/18__vol2__092/p9-p9-full-poppler-poppler.png"},
+    {"page": 10, "sheet": "M2.01", "title": "MECHANICAL DETAILS", "review_status": "complete", "finding": "Mechanical details, including a valve-tag/valve-chart sample detail. Its sample graphic is not treated as a populated project control-valve schedule.", "render": "reviews/18__vol2__092/p10-p10-full-poppler-poppler.png"},
+    {"page": 11, "sheet": "M3.01", "title": "MECHANICAL SCHEDULES", "review_status": "complete", "finding": "Eight populated schedule tables: chiller, fan coils, automatic control dampers, condensing units, grilles/registers/diffusers, DX coil, mechanical/electrical coordination and refrigeration. All 20 source rows are transcribed cell-for-cell.", "render": "reviews/18__vol2__092/p11-p11-full-poppler-poppler.png"},
+    {"page": 12, "sheet": "M4.01", "title": "MECHANICAL SPECIFICATIONS", "review_status": "complete", "finding": "Mechanical specification/general-requirements sheet; title block prints AS NOTED.", "render": "reviews/18__vol2__092/p12-p12-full-poppler-poppler.png"},
+    {"page": 13, "sheet": "M4.02", "title": "MECHANICAL SPECIFICATIONS", "review_status": "complete", "finding": "Mechanical controls/specifications page with two printed typical points lists, BAS integration/wiring/safety requirements and limited explicit sequences; not an installed per-device I/O matrix.", "render": "reviews/18__vol2__092/p13-p13-full-poppler-poppler.png"}
+  ],
+  "tables": [],
+  "assertion_groups": [
+    {
+      "id": "all-sheet-title-blocks",
+      "covers_all_source_pages": true,
+      "templates": [
+        {"id": "drawing-title", "field": "title", "bbox": [2770,1785,2980,1850], "mode": "exact"},
+        {"id": "sheet-number", "field": "sheet_number", "bbox": [2770,2025,2980,2080], "mode": "exact"}
+      ],
+      "records": [
+        {"id": "1", "page": 1, "title": "MECHANICAL COVER PAGE", "sheet_number": "M0.01"},
+        {"id": "2", "page": 2, "title": "SERVICE LEVEL OVERALL MECHANICAL PLAN", "sheet_number": "M0.02"},
+        {"id": "3", "page": 3, "title": "LEVEL 200 OVERALL MECHANICAL PLAN", "sheet_number": "M0.03"},
+        {"id": "4", "page": 4, "title": "LEVEL 400 OVERALL MECHANICAL PLAN", "sheet_number": "M0.04"},
+        {"id": "5", "page": 5, "title": "SERVICE LEVEL MECHANICAL WORK PLAN", "sheet_number": "M1.01"},
+        {"id": "6", "page": 6, "title": "SERVICE LEVEL MECHANICAL WORK PLAN", "sheet_number": "M1.02"},
+        {"id": "7", "page": 7, "title": "SERVICE LEVEL MECHANICAL WORK PLAN", "sheet_number": "M1.03"},
+        {"id": "8", "page": 8, "title": "200 LEVEL MECHANICAL WORK PLAN", "sheet_number": "M1.21"},
+        {"id": "9", "page": 9, "title": "400 LEVEL MECHANICAL WORK PLAN", "sheet_number": "M1.41"},
+        {"id": "10", "page": 10, "title": "MECHANICAL DETAILS", "sheet_number": "M2.01"},
+        {"id": "11", "page": 11, "title": "MECHANICAL SCHEDULES", "sheet_number": "M3.01"},
+        {"id": "12", "page": 12, "title": "MECHANICAL SPECIFICATIONS", "sheet_number": "M4.01"},
+        {"id": "13", "page": 13, "title": "MECHANICAL SPECIFICATIONS", "sheet_number": "M4.02"}
+      ]
+    }
+  ],
+  "assertions": [
+    {"id": "project-name", "page": 2, "bbox": [2770,1660,2990,1730], "expected": "PROJECT: GUARANTEED RATE FIELD - HVAC / AHU RENOVATION - PHASE IX", "mode": "exact"},
+    {"id": "project-site", "page": 2, "bbox": [2770,1730,2990,1770], "expected": "333 WEST 35TH STREET CHICAGO, IL 60616", "mode": "exact"},
+    {"id": "project-issue", "page": 2, "bbox": [2770,1440,2990,1470], "expected": "10.07.2019 ISSUED FOR BID", "mode": "exact"},
+    {"id": "project-number", "page": 2, "bbox": [2770,1940,2980,1970], "expected": "PROJECT NO: 19165", "mode": "exact"},
+    {"id": "m002-scale", "page": 2, "bbox": [2770,1965,2990,1990], "expected": "SCALE: 1/32\" = 1'-0\"", "mode": "exact"},
+    {"id": "m003-scale", "page": 3, "bbox": [2770,1965,2990,1990], "expected": "SCALE: 1/32\" = 1'-0\"", "mode": "exact"},
+    {"id": "m004-scale", "page": 4, "bbox": [2770,1965,2990,1990], "expected": "SCALE: 1/32\" = 1'-0\"", "mode": "exact"}
+  ],
+  "inventory_checks": [
+    {"id": "full-page-visual-review", "records_path": ["visual_review_pages"], "expected": 13, "unique_key": "page"}
+  ]
+}

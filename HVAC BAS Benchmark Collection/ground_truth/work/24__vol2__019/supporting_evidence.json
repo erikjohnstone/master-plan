@@ -1,0 +1,62 @@
+{
+  "document_id": "24__vol2__019",
+  "module_role": "Full-set qualification and explicit source limitations for the Eglin AFB NICoE mechanical and BAS ground-truth record.",
+  "source_limitations": [
+    "The 132 marks are schedule identities, not an automatic installed-equipment or plan-symbol count. M7.2 GRD marks are explicitly schedule types, and no plan placement multiplier is invented.",
+    "The five point schedules have 158 literal AI/DI/AO/DO template rows. Repeated tags are represented by their table and source row; this is not a final controller-card, terminal, wiring or installed-field-point total.",
+    "M8.2 identifies Ethernet/Cat-6 and MSTP trunks, but it does not publish a final controller make/model list, IP-address plan, BACnet instance map, switch/router design, panel count, I/O-card count or field-wiring schedule.",
+    "The source has mechanical valve/damper details and sequence behavior, including separate AHU damper actuators/analog I/O, but no tabular control-valve or damper-actuator schedule gives Cv, actuator model/torque, signal, fail action, tag or installed quantity.",
+    "Thermostat, room-sensor and CO2/pressure references are source-template or diagram scoped except the AHU sequence's stated minimum of three space pressure sensors. The supplied pages do not establish a facility-wide installed sensor/thermostat total.",
+    "All 24 pages were reviewed visually at full page. The two text engines corroborate every authored schedule tag/performance cell, point-function cell and bounded control assertion, but parser agreement does not itself prove physical plan quantities or unsupplied configuration."
+  ],
+  "visual_evidence": [
+    {
+      "purpose": "M8.2 network architecture visual review",
+      "render": "reviews/24__vol2__019/p18-p18-full-poppler.png",
+      "engine": "poppler"
+    },
+    {
+      "purpose": "M8.3 chilled-water sequence and point matrix visual review",
+      "render": "reviews/24__vol2__019/p19-p19-full-poppler.png",
+      "engine": "poppler"
+    },
+    {
+      "purpose": "M8.5 AHU point matrix visual review",
+      "render": "reviews/24__vol2__019/p21-p21-full-poppler.png",
+      "engine": "poppler"
+    },
+    {
+      "purpose": "M8.6 AHU written-sequence visual review",
+      "render": "reviews/24__vol2__019/p22-p22-full-poppler.png",
+      "engine": "poppler"
+    },
+    {
+      "purpose": "M8.7 VAV controls visual review",
+      "render": "reviews/24__vol2__019/p23-p23-full-poppler.png",
+      "engine": "poppler"
+    },
+    {
+      "purpose": "M8.8 miscellaneous controls visual review",
+      "render": "reviews/24__vol2__019/p24-p24-full-poppler.png",
+      "engine": "poppler"
+    }
+  ],
+  "tables": [],
+  "assertions": [],
+  "inventory_checks": [
+    {
+      "id": "rank24-source-limitations",
+      "records_path": [
+        "source_limitations"
+      ],
+      "expected": 6
+    },
+    {
+      "id": "rank24-supporting-visual-evidence",
+      "records_path": [
+        "visual_evidence"
+      ],
+      "expected": 6
+    }
+  ]
+}

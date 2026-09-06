@@ -1,0 +1,5044 @@
+{
+  "document_id": "14__vol2__021",
+  "source_sha256": "4d883afdd3b2d94ea2e14621dc49df77bc10ca0548bfd077c436420c43ae75f8",
+  "annotation_sha256": "269df2297ec5775fea1cb3ffd64333e7860f25cfda2dc9a7df5a2accf0bb58f0",
+  "tables": 8,
+  "rows": 75,
+  "cell_assertions": 150,
+  "text_assertions": 2,
+  "checks": [
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 1,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1555,
+        325,
+        1574
+      ],
+      "expected": "AFMS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AFMS-1",
+          "word_ids": [
+            2411
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AFMS-1",
+          "word_ids": [
+            2217
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 1,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1555,
+        1250,
+        1574
+      ],
+      "expected": "OUTDOOR AIR FLOW MONITORING STATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTDOOR AIR FLOW MONITORING STATION",
+          "word_ids": [
+            2412,
+            2413,
+            2414,
+            2415,
+            2416
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTDOOR AIR FLOW MONITORING STATION",
+          "word_ids": [
+            2218,
+            2219,
+            2220,
+            2221,
+            2222
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 2,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1575,
+        325,
+        1593
+      ],
+      "expected": "DA-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DA-1",
+          "word_ids": [
+            2417
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DA-1",
+          "word_ids": [
+            2223
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 2,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1575,
+        1250,
+        1593
+      ],
+      "expected": "OUTDOOR AIR DAMPER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTDOOR AIR DAMPER",
+          "word_ids": [
+            2418,
+            2419,
+            2420
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTDOOR AIR DAMPER",
+          "word_ids": [
+            2224,
+            2225,
+            2226
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 3,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1594,
+        325,
+        1612
+      ],
+      "expected": "VFD-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD-1",
+          "word_ids": [
+            2421
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD-1",
+          "word_ids": [
+            2227
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 3,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1594,
+        1250,
+        1612
+      ],
+      "expected": "VARIABLE FREQUENCY DRIVE 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 1",
+          "word_ids": [
+            2422,
+            2423,
+            2424,
+            2425
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 1",
+          "word_ids": [
+            2228,
+            2229,
+            2230,
+            2231
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 4,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1613,
+        325,
+        1631
+      ],
+      "expected": "DP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DP-1",
+          "word_ids": [
+            2426
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DP-1",
+          "word_ids": [
+            2232
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 4,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1613,
+        1250,
+        1631
+      ],
+      "expected": "DIFFERENTIAL PRESSURE 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE 1",
+          "word_ids": [
+            2427,
+            2428,
+            2429
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE 1",
+          "word_ids": [
+            2233,
+            2234,
+            2235
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 5,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1632,
+        325,
+        1650
+      ],
+      "expected": "DP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DP-2",
+          "word_ids": [
+            2430
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DP-2",
+          "word_ids": [
+            2236
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 5,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1632,
+        1250,
+        1650
+      ],
+      "expected": "DIFFERENTIAL PRESSURE 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE 2",
+          "word_ids": [
+            2431,
+            2432,
+            2433
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE 2",
+          "word_ids": [
+            2237,
+            2238,
+            2239
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 6,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1651,
+        325,
+        1669
+      ],
+      "expected": "FS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FS-1",
+          "word_ids": [
+            2434
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FS-1",
+          "word_ids": [
+            2240
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 6,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1651,
+        1250,
+        1669
+      ],
+      "expected": "AIR FREEZE STAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIR FREEZE STAT",
+          "word_ids": [
+            2435,
+            2436,
+            2437
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIR FREEZE STAT",
+          "word_ids": [
+            2241,
+            2242,
+            2243
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 7,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1670,
+        325,
+        1688
+      ],
+      "expected": "HS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HS-1",
+          "word_ids": [
+            2438
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HS-1",
+          "word_ids": [
+            2244
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 7,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1670,
+        1250,
+        1688
+      ],
+      "expected": "HUMIDITY SENSOR 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDITY SENSOR 1",
+          "word_ids": [
+            2439,
+            2440,
+            2441
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDITY SENSOR 1",
+          "word_ids": [
+            2245,
+            2246,
+            2247
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 8,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1689,
+        325,
+        1707
+      ],
+      "expected": "HS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HS-2",
+          "word_ids": [
+            2442
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HS-2",
+          "word_ids": [
+            2253
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 8,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1689,
+        1250,
+        1707
+      ],
+      "expected": "HUMIDITY SENSOR 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDITY SENSOR 2",
+          "word_ids": [
+            2443,
+            2444,
+            2445
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDITY SENSOR 2",
+          "word_ids": [
+            2254,
+            2255,
+            2256
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 9,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1708,
+        325,
+        1726
+      ],
+      "expected": "HS-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HS-3",
+          "word_ids": [
+            2446
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HS-3",
+          "word_ids": [
+            2262
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 9,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1708,
+        1250,
+        1726
+      ],
+      "expected": "HUMIDITY SENSOR 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDITY SENSOR 3",
+          "word_ids": [
+            2447,
+            2448,
+            2449
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDITY SENSOR 3",
+          "word_ids": [
+            2263,
+            2264,
+            2265
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 10,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1727,
+        325,
+        1745
+      ],
+      "expected": "MP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MP-1",
+          "word_ids": [
+            2450
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MP-1",
+          "word_ids": [
+            2270
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 10,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1727,
+        1250,
+        1745
+      ],
+      "expected": "AHU MICROPROCESSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU MICROPROCESSOR",
+          "word_ids": [
+            2451,
+            2452
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU MICROPROCESSOR",
+          "word_ids": [
+            2271,
+            2272
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 11,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1746,
+        325,
+        1764
+      ],
+      "expected": "SD-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-1",
+          "word_ids": [
+            2453
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-1",
+          "word_ids": [
+            2277
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 11,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1746,
+        1250,
+        1764
+      ],
+      "expected": "OUTSIDE AIR SMOKE DETECTOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE AIR SMOKE DETECTOR",
+          "word_ids": [
+            2454,
+            2455,
+            2456,
+            2457
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE AIR SMOKE DETECTOR",
+          "word_ids": [
+            2278,
+            2279,
+            2280,
+            2281
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 12,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1765,
+        325,
+        1783
+      ],
+      "expected": "SD-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-2",
+          "word_ids": [
+            2458
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-2",
+          "word_ids": [
+            2286
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 12,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1765,
+        1250,
+        1783
+      ],
+      "expected": "SUPPLY AIR SMOKE DETECTOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR SMOKE DETECTOR",
+          "word_ids": [
+            2459,
+            2460,
+            2461,
+            2462
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR SMOKE DETECTOR",
+          "word_ids": [
+            2287,
+            2288,
+            2289,
+            2290
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 13,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1784,
+        325,
+        1802
+      ],
+      "expected": "SP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SP-1",
+          "word_ids": [
+            2463
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SP-1",
+          "word_ids": [
+            2291
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "row": 13,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1784,
+        1250,
+        1802
+      ],
+      "expected": "SUPPLY AIR DUCT STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR DUCT STATIC PRESSURE",
+          "word_ids": [
+            2464,
+            2465,
+            2466,
+            2467,
+            2468
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR DUCT STATIC PRESSURE",
+          "word_ids": [
+            2292,
+            2293,
+            2294,
+            2295,
+            2296
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "header": "DDC CONTROLLER INPUT/OUTPUT SUMMARY",
+      "page": 18,
+      "bbox": [
+        220,
+        1470,
+        1550,
+        1560
+      ],
+      "engine": "mupdf",
+      "actual": "DDC CONTROLLER INPUT/OUTPUT LEGEND ANALOG IN ANALOG OUT BINARY IN BINARY OUT TRENDING GENERAL 5 1 POINT FLOW OPEN LOG LOG LOG ALARM EVERY EVERY TEXT SWITCH BY ADJUSTMENT SPEED/LEVEL/FL OW SWITCH EVENT TEMPERATURE STATUS/PROOF MISCELLANEOU S MINUTES HOUR POINT ALARM STATUS VALVE MODULATION OPEN/CLOSE START/STOP + MESSAGE CARBON MONOXIDE POSITIVE PRESSURE AUXILIARY CONTACTS EXCEPTION LOG CONTROL DEVICE CURRENT HUMIDITY MASS-AIR FEEDBACK VARIABLE SPEED CONTROL CONTROL PERCENT HIGH/LOW SUMMARY SUMMARY GRAPHIC CARBON DIOXIDE ON/OFF TREND AUDIBLE DISPLAY FLOW FLOW TREND TREND EMAIL END ALL TIME TAG ID DESCRIPTION",
+      "pass": true
+    },
+    {
+      "table": "M804-LAB-AHU-PART-A",
+      "header": "DDC CONTROLLER INPUT/OUTPUT SUMMARY",
+      "page": 18,
+      "bbox": [
+        220,
+        1470,
+        1550,
+        1560
+      ],
+      "engine": "poppler",
+      "actual": "DDC CONTROLLER INPUT/OUTPUT LEGEND ANALOG IN ANALOG OUT BINARY IN BINARY OUT TRENDING GENERAL 5 1 POINT FLOW OPEN LOG LOG LOG ALARM EVERY EVERY TEXT SWITCH BY ADJUSTMENT SPEED/LEVEL/FL OW SWITCH EVENT TEMPERATURE STATUS/PROOF MISCELLANEOU S MINUTES HOUR POINT ALARM STATUS VALVE MODULATION OPEN/CLOSE START/STOP + MESSAGE CARBON MONOXIDE POSITIVE PRESSURE AUXILIARY CONTACTS EXCEPTION LOG CONTROL DEVICE CURRENT HUMIDITY MASS-AIR FEEDBACK VARIABLE SPEED CONTROL CONTROL PERCENT HIGH/LOW SUMMARY SUMMARY GRAPHIC CARBON DIOXIDE ON/OFF TREND AUDIBLE DISPLAY FLOW FLOW TREND TREND EMAIL END ALL TIME TAG ID DESCRIPTION",
+      "pass": true
+    },
+    {
+      "table": "M804-LAB-AHU-PART-B",
+      "row": 1,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1797,
+        325,
+        1815
+      ],
+      "expected": "HS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HS-1",
+          "word_ids": [
+            2469
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HS-1",
+          "word_ids": [
+            2297
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-B",
+      "row": 1,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1797,
+        1250,
+        1815
+      ],
+      "expected": "HIGH STATIC SAFETY SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH STATIC SAFETY SENSOR",
+          "word_ids": [
+            2470,
+            2471,
+            2472,
+            2473
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH STATIC SAFETY SENSOR",
+          "word_ids": [
+            2298,
+            2299,
+            2300,
+            2301
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-B",
+      "row": 2,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1816,
+        325,
+        1834
+      ],
+      "expected": "DSP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DSP-1",
+          "word_ids": [
+            2474
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DSP-1",
+          "word_ids": [
+            2302
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-B",
+      "row": 2,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1816,
+        1250,
+        1834
+      ],
+      "expected": "DOWN DUCT STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOWN DUCT STATIC PRESSURE",
+          "word_ids": [
+            2475,
+            2476,
+            2477,
+            2478
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOWN DUCT STATIC PRESSURE",
+          "word_ids": [
+            2303,
+            2304,
+            2305,
+            2306
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-B",
+      "row": 3,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1835,
+        325,
+        1853
+      ],
+      "expected": "TS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-1",
+          "word_ids": [
+            2479
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-1",
+          "word_ids": [
+            2307
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-B",
+      "row": 3,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1835,
+        1250,
+        1853
+      ],
+      "expected": "TEMPERATURE SENSOR 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 1",
+          "word_ids": [
+            2480,
+            2481,
+            2482
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 1",
+          "word_ids": [
+            2308,
+            2309,
+            2310
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-B",
+      "row": 4,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1854,
+        325,
+        1872
+      ],
+      "expected": "TS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-2",
+          "word_ids": [
+            2483
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-2",
+          "word_ids": [
+            2311
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-B",
+      "row": 4,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1854,
+        1250,
+        1872
+      ],
+      "expected": "TEMPERATURE SENSOR 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 2",
+          "word_ids": [
+            2484,
+            2485,
+            2486
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 2",
+          "word_ids": [
+            2312,
+            2313,
+            2314
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-B",
+      "row": 5,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1873,
+        325,
+        1891
+      ],
+      "expected": "TS-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-3",
+          "word_ids": [
+            2487
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-3",
+          "word_ids": [
+            2315
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-B",
+      "row": 5,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1873,
+        1250,
+        1891
+      ],
+      "expected": "TEMPERATURE SENSOR 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 3",
+          "word_ids": [
+            2488,
+            2489,
+            2490
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 3",
+          "word_ids": [
+            2316,
+            2317,
+            2318
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-B",
+      "row": 6,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1892,
+        325,
+        1910
+      ],
+      "expected": "TS-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-4",
+          "word_ids": [
+            2491
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-4",
+          "word_ids": [
+            2319
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-B",
+      "row": 6,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1892,
+        1250,
+        1910
+      ],
+      "expected": "TEMPERATURE SENSOR 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 4",
+          "word_ids": [
+            2492,
+            2493,
+            2494
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 4",
+          "word_ids": [
+            2320,
+            2321,
+            2322
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-B",
+      "row": 7,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1911,
+        325,
+        1929
+      ],
+      "expected": "V-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-1",
+          "word_ids": [
+            2495
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-1",
+          "word_ids": [
+            2323
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-B",
+      "row": 7,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1911,
+        1250,
+        1929
+      ],
+      "expected": "VALVE MODULATION 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VALVE MODULATION 1",
+          "word_ids": [
+            2496,
+            2497,
+            2498
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VALVE MODULATION 1",
+          "word_ids": [
+            2324,
+            2325,
+            2326
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-B",
+      "row": 8,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1930,
+        325,
+        1948
+      ],
+      "expected": "V-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-2",
+          "word_ids": [
+            2499
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-2",
+          "word_ids": [
+            2327
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-LAB-AHU-PART-B",
+      "row": 8,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1930,
+        1250,
+        1948
+      ],
+      "expected": "VALVE MODULATION 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VALVE MODULATION 2",
+          "word_ids": [
+            2500,
+            2501,
+            2502
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VALVE MODULATION 2",
+          "word_ids": [
+            2328,
+            2329,
+            2330
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 1,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1965,
+        325,
+        1983
+      ],
+      "expected": "PT-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PT-1",
+          "word_ids": [
+            2505
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PT-1",
+          "word_ids": [
+            2613
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 1,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1965,
+        1250,
+        1983
+      ],
+      "expected": "SUPPLY AIR DUCT STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR DUCT STATIC PRESSURE",
+          "word_ids": [
+            2506,
+            2507,
+            2508,
+            2509,
+            2510
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR DUCT STATIC PRESSURE",
+          "word_ids": [
+            2606,
+            2607,
+            2608,
+            2609,
+            2610
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 2,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        1984,
+        325,
+        2002
+      ],
+      "expected": "VFD-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD-1",
+          "word_ids": [
+            2511
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD-1",
+          "word_ids": [
+            2604
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 2,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        1984,
+        1250,
+        2002
+      ],
+      "expected": "VARIABLE FREQUENCY DRIVE 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 1",
+          "word_ids": [
+            2512,
+            2513,
+            2514,
+            2515
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 1",
+          "word_ids": [
+            2599,
+            2600,
+            2601,
+            2602
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 3,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        2003,
+        325,
+        2021
+      ],
+      "expected": "VFD-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD-2",
+          "word_ids": [
+            2516
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD-2",
+          "word_ids": [
+            2591
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 3,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        2003,
+        1250,
+        2021
+      ],
+      "expected": "VARIABLE FREQUENCY DRIVE 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 2",
+          "word_ids": [
+            2517,
+            2518,
+            2519,
+            2520
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 2",
+          "word_ids": [
+            2585,
+            2586,
+            2587,
+            2588
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 4,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        2022,
+        325,
+        2040
+      ],
+      "expected": "VFD-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD-3",
+          "word_ids": [
+            2521
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD-3",
+          "word_ids": [
+            2567
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 4,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        2022,
+        1250,
+        2040
+      ],
+      "expected": "VARIABLE FREQUENCY DRIVE 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 3",
+          "word_ids": [
+            2522,
+            2523,
+            2524,
+            2525
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 3",
+          "word_ids": [
+            2561,
+            2562,
+            2563,
+            2564
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 5,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        2041,
+        325,
+        2059
+      ],
+      "expected": "AFMS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AFMS-1",
+          "word_ids": [
+            2526
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AFMS-1",
+          "word_ids": [
+            2550
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 5,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        2041,
+        1250,
+        2059
+      ],
+      "expected": "EXHAUST AIR FLOW MONITORING STATION 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST AIR FLOW MONITORING STATION 1",
+          "word_ids": [
+            2527,
+            2528,
+            2529,
+            2530,
+            2531,
+            2532
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST AIR FLOW MONITORING STATION 1",
+          "word_ids": [
+            2542,
+            2543,
+            2544,
+            2545,
+            2546,
+            2547
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 6,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        2060,
+        325,
+        2078
+      ],
+      "expected": "AFMS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AFMS-2",
+          "word_ids": [
+            2533
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AFMS-2",
+          "word_ids": [
+            2534
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 6,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        2060,
+        1250,
+        2078
+      ],
+      "expected": "EXHAUST AIR FLOW MONITORING STATION 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST AIR FLOW MONITORING STATION 2",
+          "word_ids": [
+            2534,
+            2535,
+            2536,
+            2537,
+            2538,
+            2539
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST AIR FLOW MONITORING STATION 2",
+          "word_ids": [
+            2527,
+            2528,
+            2529,
+            2530,
+            2531,
+            2532
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 7,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        2079,
+        325,
+        2097
+      ],
+      "expected": "AFMS-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AFMS-3",
+          "word_ids": [
+            2540
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AFMS-3",
+          "word_ids": [
+            2511
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 7,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        2079,
+        1250,
+        2097
+      ],
+      "expected": "EXHAUST AIR FLOW MONITORING STATION 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST AIR FLOW MONITORING STATION 3",
+          "word_ids": [
+            2541,
+            2542,
+            2543,
+            2544,
+            2545,
+            2546
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST AIR FLOW MONITORING STATION 3",
+          "word_ids": [
+            2502,
+            2503,
+            2504,
+            2505,
+            2506,
+            2507
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 8,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        2098,
+        325,
+        2116
+      ],
+      "expected": "DA-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DA-1",
+          "word_ids": [
+            2547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DA-1",
+          "word_ids": [
+            2487
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 8,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        2098,
+        1250,
+        2116
+      ],
+      "expected": "EXHAUST AIR DAMPER 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST AIR DAMPER 1",
+          "word_ids": [
+            2548,
+            2549,
+            2550,
+            2551
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST AIR DAMPER 1",
+          "word_ids": [
+            2480,
+            2481,
+            2482,
+            2483
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 9,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        2117,
+        325,
+        2135
+      ],
+      "expected": "DA-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DA-2",
+          "word_ids": [
+            2552
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DA-2",
+          "word_ids": [
+            2477
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 9,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        2117,
+        1250,
+        2135
+      ],
+      "expected": "EXHAUST AIR DAMPER 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST AIR DAMPER 2",
+          "word_ids": [
+            2553,
+            2554,
+            2555,
+            2556
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST AIR DAMPER 2",
+          "word_ids": [
+            2471,
+            2472,
+            2473,
+            2474
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 10,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        2136,
+        325,
+        2154
+      ],
+      "expected": "DA-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DA-3",
+          "word_ids": [
+            2557
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DA-3",
+          "word_ids": [
+            2457
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 10,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        2136,
+        1250,
+        2154
+      ],
+      "expected": "EXHAUST AIR DAMPER 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST AIR DAMPER 3",
+          "word_ids": [
+            2558,
+            2559,
+            2560,
+            2561
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST AIR DAMPER 3",
+          "word_ids": [
+            2458,
+            2459,
+            2460,
+            2461
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 11,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        280,
+        2155,
+        325,
+        2173
+      ],
+      "expected": "DA-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DA-4",
+          "word_ids": [
+            2562
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DA-4",
+          "word_ids": [
+            2462
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-VAV-AHU",
+      "row": 11,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        325,
+        2155,
+        1250,
+        2173
+      ],
+      "expected": "OUTSIDE AIR DAMPER 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE AIR DAMPER 4",
+          "word_ids": [
+            2563,
+            2564,
+            2565,
+            2566
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE AIR DAMPER 4",
+          "word_ids": [
+            2463,
+            2464,
+            2465,
+            2466
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-FUME-HOOD-EXHAUST",
+      "row": 1,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1440,
+        1671,
+        1480,
+        1689
+      ],
+      "expected": "VFD-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD-1",
+          "word_ids": [
+            2697
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD-1",
+          "word_ids": [
+            2248
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-FUME-HOOD-EXHAUST",
+      "row": 1,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        1480,
+        1671,
+        1900,
+        1689
+      ],
+      "expected": "VARIABLE FREQUENCY DRIVE 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 1",
+          "word_ids": [
+            2698,
+            2699,
+            2700,
+            2701
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 1",
+          "word_ids": [
+            2249,
+            2250,
+            2251,
+            2252
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-FUME-HOOD-EXHAUST",
+      "row": 2,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1440,
+        1690,
+        1480,
+        1708
+      ],
+      "expected": "VFD-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD-2",
+          "word_ids": [
+            2702
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD-2",
+          "word_ids": [
+            2257
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-FUME-HOOD-EXHAUST",
+      "row": 2,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        1480,
+        1690,
+        1900,
+        1708
+      ],
+      "expected": "VARIABLE FREQUENCY DRIVE 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 2",
+          "word_ids": [
+            2703,
+            2704,
+            2705,
+            2706
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 2",
+          "word_ids": [
+            2258,
+            2259,
+            2260,
+            2261
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-FUME-HOOD-EXHAUST",
+      "row": 3,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1440,
+        1709,
+        1480,
+        1727
+      ],
+      "expected": "SP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SP-1",
+          "word_ids": [
+            2707
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SP-1",
+          "word_ids": [
+            2266
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-FUME-HOOD-EXHAUST",
+      "row": 3,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        1480,
+        1709,
+        1900,
+        1727
+      ],
+      "expected": "STATIC PRESSURE SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATIC PRESSURE SENSOR",
+          "word_ids": [
+            2708,
+            2709,
+            2710
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATIC PRESSURE SENSOR",
+          "word_ids": [
+            2267,
+            2268,
+            2269
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-FUME-HOOD-EXHAUST",
+      "row": 4,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1440,
+        1728,
+        1480,
+        1746
+      ],
+      "expected": "VS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VS-1",
+          "word_ids": [
+            2711
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VS-1",
+          "word_ids": [
+            2273
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-FUME-HOOD-EXHAUST",
+      "row": 4,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        1480,
+        1728,
+        1900,
+        1746
+      ],
+      "expected": "EXHAUST VALVE 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST VALVE 1",
+          "word_ids": [
+            2712,
+            2713,
+            2714
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST VALVE 1",
+          "word_ids": [
+            2274,
+            2275,
+            2276
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-FUME-HOOD-EXHAUST",
+      "row": 5,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1440,
+        1747,
+        1480,
+        1765
+      ],
+      "expected": "VS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VS-2",
+          "word_ids": [
+            2715
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VS-2",
+          "word_ids": [
+            2282
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-FUME-HOOD-EXHAUST",
+      "row": 5,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        1480,
+        1747,
+        1900,
+        1765
+      ],
+      "expected": "EXHAUST VALVE 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST VALVE 2",
+          "word_ids": [
+            2716,
+            2717,
+            2718
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST VALVE 2",
+          "word_ids": [
+            2283,
+            2284,
+            2285
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-FUME-HOOD-EXHAUST",
+      "header": "DDC CONTROLLER INPUT/OUTPUT SUMMARY",
+      "page": 18,
+      "bbox": [
+        1400,
+        1570,
+        2500,
+        1670
+      ],
+      "engine": "mupdf",
+      "actual": "DDC CONTROLLER INPUT/OUTPUT SUMMARY DDC CONTROLLER INPUT/OUTPUT LEGEND ANALOG IN ANALOG OUT BINARY IN BINARY OUT TRENDING GENERAL 5 1 FLOW POINT LOG OPEN LOG LOG ALARM EVERY EVERY TEXT SWITCH BY SWITCH EVENT ADJUSTMENT SPEED/LEVEL/FL OW STATUS/PROOF MISCELLANEOU S MINUTES HOUR TEMPERATURE POINT ALARM STATUS + VALVE MODULATION OPEN/CLOSE START/STOP LOG MESSAGE CONTROL DEVICE CARBON MONOXIDE POSITIVE FEEDBACK PRESSURE VARIABLE AUXILIARY CONTACTS HIGH/LOW EXCEPTION SUMMARY SUMMARY CARBON DIOXIDE CURRENT HUMIDITY MASS-AIR SPEED CONTROL CONTROL PERCENT TREND AUDIBLE GRAPHIC DISPLAY ON/OFF TREND TREND FLOW FLOW TIME EMAIL END ALL TAG ID DESCRIPTION",
+      "pass": true
+    },
+    {
+      "table": "M804-FUME-HOOD-EXHAUST",
+      "header": "DDC CONTROLLER INPUT/OUTPUT SUMMARY",
+      "page": 18,
+      "bbox": [
+        1400,
+        1570,
+        2500,
+        1670
+      ],
+      "engine": "poppler",
+      "actual": "DDC CONTROLLER INPUT/OUTPUT SUMMARY DDC CONTROLLER INPUT/OUTPUT LEGEND ANALOG IN ANALOG OUT BINARY IN BINARY OUT TRENDING GENERAL 5 1 FLOW POINT LOG OPEN LOG LOG ALARM EVERY EVERY TEXT SWITCH BY SWITCH EVENT ADJUSTMENT SPEED/LEVEL/FL OW STATUS/PROOF MISCELLANEOU S MINUTES HOUR TEMPERATURE POINT ALARM STATUS + VALVE MODULATION OPEN/CLOSE START/STOP LOG MESSAGE CONTROL DEVICE CARBON MONOXIDE POSITIVE FEEDBACK PRESSURE VARIABLE AUXILIARY CONTACTS HIGH/LOW EXCEPTION SUMMARY SUMMARY CARBON DIOXIDE CURRENT HUMIDITY MASS-AIR SPEED CONTROL CONTROL PERCENT TREND AUDIBLE GRAPHIC DISPLAY ON/OFF TREND TREND FLOW FLOW TIME EMAIL END ALL TAG ID DESCRIPTION",
+      "pass": true
+    },
+    {
+      "table": "M804-GENERAL-EXHAUST",
+      "row": 1,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1970,
+        2000,
+        2010,
+        2018
+      ],
+      "expected": "VFD-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD-1",
+          "word_ids": [
+            2862
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD-1",
+          "word_ids": [
+            2581
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-GENERAL-EXHAUST",
+      "row": 1,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        2010,
+        2000,
+        2450,
+        2018
+      ],
+      "expected": "VARIABLE FREQUENCY DRIVE 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 1",
+          "word_ids": [
+            2863,
+            2864,
+            2865,
+            2866
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 1",
+          "word_ids": [
+            2574,
+            2575,
+            2576,
+            2577
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-GENERAL-EXHAUST",
+      "row": 2,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1970,
+        2019,
+        2010,
+        2037
+      ],
+      "expected": "VFD-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD-2",
+          "word_ids": [
+            2867
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD-2",
+          "word_ids": [
+            2558
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-GENERAL-EXHAUST",
+      "row": 2,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        2010,
+        2019,
+        2450,
+        2037
+      ],
+      "expected": "VARIABLE FREQUENCY DRIVE 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 2",
+          "word_ids": [
+            2868,
+            2869,
+            2870,
+            2871
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 2",
+          "word_ids": [
+            2552,
+            2553,
+            2554,
+            2555
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-GENERAL-EXHAUST",
+      "row": 3,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1970,
+        2038,
+        2010,
+        2056
+      ],
+      "expected": "SP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SP-1",
+          "word_ids": [
+            2872
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SP-1",
+          "word_ids": [
+            2540
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-GENERAL-EXHAUST",
+      "row": 3,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        2010,
+        2038,
+        2450,
+        2056
+      ],
+      "expected": "STATIC PRESSURE SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATIC PRESSURE SENSOR",
+          "word_ids": [
+            2873,
+            2874,
+            2875
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATIC PRESSURE SENSOR",
+          "word_ids": [
+            2536,
+            2537,
+            2538
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-GENERAL-EXHAUST",
+      "row": 4,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1970,
+        2057,
+        2010,
+        2075
+      ],
+      "expected": "VS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VS-1",
+          "word_ids": [
+            2876
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VS-1",
+          "word_ids": [
+            2523
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-GENERAL-EXHAUST",
+      "row": 4,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        2010,
+        2057,
+        2450,
+        2075
+      ],
+      "expected": "EXHAUST VALVE 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST VALVE 1",
+          "word_ids": [
+            2877,
+            2878,
+            2879
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST VALVE 1",
+          "word_ids": [
+            2516,
+            2517,
+            2518
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-GENERAL-EXHAUST",
+      "row": 5,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1970,
+        2076,
+        2010,
+        2094
+      ],
+      "expected": "VS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VS-2",
+          "word_ids": [
+            2880
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VS-2",
+          "word_ids": [
+            2498
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-GENERAL-EXHAUST",
+      "row": 5,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        2010,
+        2076,
+        2450,
+        2094
+      ],
+      "expected": "EXHAUST VALVE 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST VALVE 2",
+          "word_ids": [
+            2881,
+            2882,
+            2883
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST VALVE 2",
+          "word_ids": [
+            2492,
+            2493,
+            2494
+          ]
+        }
+      }
+    },
+    {
+      "table": "M804-GENERAL-EXHAUST",
+      "header": "DDC CONTROLLER INPUT/OUTPUT SUMMARY",
+      "page": 18,
+      "bbox": [
+        1900,
+        1900,
+        3050,
+        2000
+      ],
+      "engine": "mupdf",
+      "actual": "DDC CONTROLLER INPUT/OUTPUT SUMMARY DDC CONTROLLER INPUT/OUTPUT LEGEND ANALOG IN ANALOG OUT BINARY IN BINARY OUT TRENDING GENERAL 5 1 FLOW POINT OPEN LOG LOG LOG ALARM SWITCH EVERY EVERY TEXT BY SWITCH EVENT TEMPERATURE ADJUSTMENT SPEED/LEVEL/FL OW STATUS/PROOF MISCELLANEOU S MINUTES HOUR ALARM STATUS VALVE MODULATION POINT + MESSAGE OPEN/CLOSE START/STOP EXCEPTION LOG CONTROL DEVICE CARBON MONOXIDE CURRENT HUMIDITY MASS-AIR POSITIVE FEEDBACK PRESSURE VARIABLE SPEED CONTROL CONTROL AUXILIARY CONTACTS HIGH/LOW SUMMARY SUMMARY CARBON DIOXIDE PERCENT TREND AUDIBLE GRAPHIC DISPLAY ON/OFF TREND TREND FLOW FLOW TIME EMAIL END ALL TAG ID DESCRIPTION",
+      "pass": true
+    },
+    {
+      "table": "M804-GENERAL-EXHAUST",
+      "header": "DDC CONTROLLER INPUT/OUTPUT SUMMARY",
+      "page": 18,
+      "bbox": [
+        1900,
+        1900,
+        3050,
+        2000
+      ],
+      "engine": "poppler",
+      "actual": "DDC CONTROLLER INPUT/OUTPUT SUMMARY DDC CONTROLLER INPUT/OUTPUT LEGEND ANALOG IN ANALOG OUT BINARY IN BINARY OUT TRENDING GENERAL 5 1 FLOW POINT OPEN LOG LOG LOG ALARM SWITCH EVERY EVERY TEXT BY SWITCH EVENT TEMPERATURE ADJUSTMENT SPEED/LEVEL/FL OW STATUS/PROOF MISCELLANEOU S MINUTES HOUR ALARM STATUS VALVE MODULATION POINT + MESSAGE OPEN/CLOSE START/STOP EXCEPTION LOG CONTROL DEVICE CARBON MONOXIDE CURRENT HUMIDITY MASS-AIR POSITIVE FEEDBACK PRESSURE VARIABLE SPEED CONTROL CONTROL AUXILIARY CONTACTS HIGH/LOW SUMMARY SUMMARY CARBON DIOXIDE PERCENT TREND AUDIBLE GRAPHIC DISPLAY ON/OFF TREND TREND FLOW FLOW TIME EMAIL END ALL TAG ID DESCRIPTION",
+      "pass": true
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 1,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1653,
+        260,
+        1672
+      ],
+      "expected": "AFMS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AFMS-1",
+          "word_ids": [
+            2446
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AFMS-1",
+          "word_ids": [
+            2388
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 1,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1653,
+        1250,
+        1672
+      ],
+      "expected": "OUTDOOR AIR FLOW MONITORING STATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTDOOR AIR FLOW MONITORING STATION",
+          "word_ids": [
+            2447,
+            2448,
+            2449,
+            2450,
+            2451
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTDOOR AIR FLOW MONITORING STATION",
+          "word_ids": [
+            2379,
+            2380,
+            2381,
+            2382,
+            2383
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 2,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1673,
+        260,
+        1691
+      ],
+      "expected": "AFMS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AFMS-2",
+          "word_ids": [
+            2452
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AFMS-2",
+          "word_ids": [
+            2372
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 2,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1673,
+        1250,
+        1691
+      ],
+      "expected": "RELIEF AIR FLOW MONITORING STATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RELIEF AIR FLOW MONITORING STATION",
+          "word_ids": [
+            2453,
+            2454,
+            2455,
+            2456,
+            2457
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RELIEF AIR FLOW MONITORING STATION",
+          "word_ids": [
+            2365,
+            2366,
+            2367,
+            2368,
+            2369
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 3,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1692,
+        260,
+        1710
+      ],
+      "expected": "DA-1-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DA-1-1",
+          "word_ids": [
+            2458
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DA-1-1",
+          "word_ids": [
+            2362
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 3,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1692,
+        1250,
+        1710
+      ],
+      "expected": "OUTDOOR AIR DAMPER (MIN)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTDOOR AIR DAMPER (MIN)",
+          "word_ids": [
+            2459,
+            2460,
+            2461,
+            2462
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTDOOR AIR DAMPER (MIN)",
+          "word_ids": [
+            2357,
+            2358,
+            2359,
+            2360
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 4,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1711,
+        260,
+        1729
+      ],
+      "expected": "DA-1-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DA-1-2",
+          "word_ids": [
+            2463
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DA-1-2",
+          "word_ids": [
+            2354
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 4,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1711,
+        1250,
+        1729
+      ],
+      "expected": "OUTDOOR AIR DAMPER (MAX)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTDOOR AIR DAMPER (MAX)",
+          "word_ids": [
+            2464,
+            2465,
+            2466,
+            2467
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTDOOR AIR DAMPER (MAX)",
+          "word_ids": [
+            2348,
+            2349,
+            2350,
+            2351
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 5,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1730,
+        260,
+        1748
+      ],
+      "expected": "DA-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DA-2",
+          "word_ids": [
+            2468
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DA-2",
+          "word_ids": [
+            2346
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 5,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1730,
+        1250,
+        1748
+      ],
+      "expected": "RELIEF AIR DAMPER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RELIEF AIR DAMPER",
+          "word_ids": [
+            2469,
+            2470,
+            2471
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RELIEF AIR DAMPER",
+          "word_ids": [
+            2342,
+            2343,
+            2344
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 6,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1749,
+        260,
+        1767
+      ],
+      "expected": "DA-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DA-3",
+          "word_ids": [
+            2472
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DA-3",
+          "word_ids": [
+            2339
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 6,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1749,
+        1250,
+        1767
+      ],
+      "expected": "BYPASS DAMPER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BYPASS DAMPER",
+          "word_ids": [
+            2473,
+            2474
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BYPASS DAMPER",
+          "word_ids": [
+            2334,
+            2335
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 7,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1768,
+        260,
+        1786
+      ],
+      "expected": "VFD-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD-1",
+          "word_ids": [
+            2475
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD-1",
+          "word_ids": [
+            2326
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 7,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1768,
+        1250,
+        1786
+      ],
+      "expected": "VARIABLE FREQUENCY DRIVE 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 1",
+          "word_ids": [
+            2476,
+            2477,
+            2478,
+            2479
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 1",
+          "word_ids": [
+            2316,
+            2317,
+            2318,
+            2319
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 8,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1787,
+        260,
+        1805
+      ],
+      "expected": "VFD-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD-2",
+          "word_ids": [
+            2480
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD-2",
+          "word_ids": [
+            2311
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 8,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1787,
+        1250,
+        1805
+      ],
+      "expected": "VARIABLE FREQUENCY DRIVE 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 2",
+          "word_ids": [
+            2481,
+            2482,
+            2483,
+            2484
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VARIABLE FREQUENCY DRIVE 2",
+          "word_ids": [
+            2303,
+            2304,
+            2305,
+            2306
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 9,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1806,
+        260,
+        1824
+      ],
+      "expected": "DP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DP-1",
+          "word_ids": [
+            2485
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DP-1",
+          "word_ids": [
+            2296
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 9,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1806,
+        1250,
+        1824
+      ],
+      "expected": "DIFFERENTIAL PRESSURE 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE 1",
+          "word_ids": [
+            2486,
+            2487,
+            2488
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE 1",
+          "word_ids": [
+            2292,
+            2293,
+            2294
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 10,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1825,
+        260,
+        1843
+      ],
+      "expected": "DP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DP-2",
+          "word_ids": [
+            2489
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DP-2",
+          "word_ids": [
+            2287
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 10,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1825,
+        1250,
+        1843
+      ],
+      "expected": "DIFFERENTIAL PRESSURE 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE 2",
+          "word_ids": [
+            2490,
+            2491,
+            2492
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE 2",
+          "word_ids": [
+            2283,
+            2284,
+            2285
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 11,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1844,
+        260,
+        1862
+      ],
+      "expected": "DP-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DP-3",
+          "word_ids": [
+            2493
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DP-3",
+          "word_ids": [
+            2279
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 11,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1844,
+        1250,
+        1862
+      ],
+      "expected": "DIFFERENTIAL PRESSURE 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE 3",
+          "word_ids": [
+            2494,
+            2495,
+            2496
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE 3",
+          "word_ids": [
+            2274,
+            2275,
+            2276
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 12,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1863,
+        260,
+        1881
+      ],
+      "expected": "DSP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DSP-1",
+          "word_ids": [
+            2497
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DSP-1",
+          "word_ids": [
+            2271
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 12,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1863,
+        1250,
+        1881
+      ],
+      "expected": "DOWN DUCT STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOWN DUCT STATIC PRESSURE",
+          "word_ids": [
+            2498,
+            2499,
+            2500,
+            2501
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOWN DUCT STATIC PRESSURE",
+          "word_ids": [
+            2260,
+            2261,
+            2262,
+            2263
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 13,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1882,
+        260,
+        1900
+      ],
+      "expected": "FS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FS-1",
+          "word_ids": [
+            2502
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FS-1",
+          "word_ids": [
+            2254
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 13,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1882,
+        1250,
+        1900
+      ],
+      "expected": "AIR FREEZE STAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIR FREEZE STAT",
+          "word_ids": [
+            2503,
+            2504,
+            2505
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIR FREEZE STAT",
+          "word_ids": [
+            2245,
+            2246,
+            2247
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 14,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1901,
+        260,
+        1918
+      ],
+      "expected": "HS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HS-1",
+          "word_ids": [
+            2506
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HS-1",
+          "word_ids": [
+            2240
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 14,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1901,
+        1250,
+        1918
+      ],
+      "expected": "HUMIDITY SENSOR 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDITY SENSOR 1",
+          "word_ids": [
+            2507,
+            2508,
+            2509
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDITY SENSOR 1",
+          "word_ids": [
+            2231,
+            2232,
+            2233
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 15,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1919,
+        260,
+        1928
+      ],
+      "expected": "HS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HS-2",
+          "word_ids": [
+            2510
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HS-2",
+          "word_ids": [
+            2227
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 15,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1919,
+        1250,
+        1928
+      ],
+      "expected": "HUMIDITY SENSOR 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDITY SENSOR 2",
+          "word_ids": [
+            2511,
+            2512,
+            2513
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDITY SENSOR 2",
+          "word_ids": [
+            2220,
+            2221,
+            2222
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 16,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1929,
+        260,
+        1947
+      ],
+      "expected": "HS-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HS-3",
+          "word_ids": [
+            2514
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HS-3",
+          "word_ids": [
+            2216
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 16,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1929,
+        1250,
+        1947
+      ],
+      "expected": "HUMIDITY SENSOR 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDITY SENSOR 3",
+          "word_ids": [
+            2515,
+            2516,
+            2517
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDITY SENSOR 3",
+          "word_ids": [
+            2211,
+            2212,
+            2213
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 17,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1948,
+        260,
+        1967
+      ],
+      "expected": "SD-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-1",
+          "word_ids": [
+            2518
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-1",
+          "word_ids": [
+            2208
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 17,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1948,
+        1250,
+        1967
+      ],
+      "expected": "SUPPLY AIR SMOKE DETECTOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR SMOKE DETECTOR",
+          "word_ids": [
+            2519,
+            2520,
+            2521,
+            2522
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR SMOKE DETECTOR",
+          "word_ids": [
+            2200,
+            2201,
+            2202,
+            2203
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 18,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1968,
+        260,
+        1986
+      ],
+      "expected": "SD-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-2",
+          "word_ids": [
+            2523
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-2",
+          "word_ids": [
+            2081
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 18,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1968,
+        1250,
+        1986
+      ],
+      "expected": "RETURN AIR SMOKE DETECTOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RETURN AIR SMOKE DETECTOR",
+          "word_ids": [
+            2524,
+            2525,
+            2526,
+            2527
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RETURN AIR SMOKE DETECTOR",
+          "word_ids": [
+            2082,
+            2083,
+            2084,
+            2085
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 19,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        1987,
+        260,
+        2004
+      ],
+      "expected": "SP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SP-1",
+          "word_ids": [
+            2528
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SP-1",
+          "word_ids": [
+            2086
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 19,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        1987,
+        1250,
+        2004
+      ],
+      "expected": "STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATIC PRESSURE",
+          "word_ids": [
+            2529,
+            2530
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATIC PRESSURE",
+          "word_ids": [
+            2087,
+            2088
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 20,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        2005,
+        260,
+        2023
+      ],
+      "expected": "SP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SP-2",
+          "word_ids": [
+            2531
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SP-2",
+          "word_ids": [
+            2089
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "row": 20,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        2005,
+        1250,
+        2023
+      ],
+      "expected": "STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATIC PRESSURE",
+          "word_ids": [
+            2532,
+            2533
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATIC PRESSURE",
+          "word_ids": [
+            2090,
+            2091
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "header": "DDC CONTROLLER INPUT/OUTPUT SUMMARY",
+      "page": 19,
+      "bbox": [
+        190,
+        1570,
+        1540,
+        1655
+      ],
+      "engine": "mupdf",
+      "actual": "DDC CONTROLLER INPUT/OUTPUT LEGEND ANALOG IN ANALOG OUT BINARY IN BINARY OUT TRENDING GENERAL 5 1 FLOW POINT OPEN LOG LOG LOG ALARM EVERY EVERY TEXT SWITCH BY SWITCH EVENT TEMPERATURE ADJUSTMENT SPEED/LEVEL/FL OW STATUS/PROOF MISCELLANEOU S MINUTES HOUR ALARM POINT STATUS + VALVE MODULATION OPEN/CLOSE START/STOP LOG MESSAGE CONTROL DEVICE CARBON MONOXIDE POSITIVE FEEDBACK PRESSURE VARIABLE SPEED AUXILIARY CONTACTS HIGH/LOW EXCEPTION SUMMARY SUMMARY CARBON DIOXIDE CURRENT HUMIDITY MASS-AIR CONTROL CONTROL PERCENT TREND AUDIBLE GRAPHIC DISPLAY ON/OFF TREND TREND FLOW FLOW TIME EMAIL END ALL TAG ID DESCRIPTION",
+      "pass": true
+    },
+    {
+      "table": "M805-ADMIN-AHU-BASE",
+      "header": "DDC CONTROLLER INPUT/OUTPUT SUMMARY",
+      "page": 19,
+      "bbox": [
+        190,
+        1570,
+        1540,
+        1655
+      ],
+      "engine": "poppler",
+      "actual": "DDC CONTROLLER INPUT/OUTPUT LEGEND ANALOG IN ANALOG OUT BINARY IN BINARY OUT TRENDING GENERAL 5 1 FLOW POINT OPEN LOG LOG LOG ALARM EVERY EVERY TEXT SWITCH BY SWITCH EVENT TEMPERATURE ADJUSTMENT SPEED/LEVEL/FL OW STATUS/PROOF MISCELLANEOU S MINUTES HOUR ALARM POINT STATUS + VALVE MODULATION OPEN/CLOSE START/STOP LOG MESSAGE CONTROL DEVICE CARBON MONOXIDE POSITIVE FEEDBACK PRESSURE VARIABLE SPEED AUXILIARY CONTACTS HIGH/LOW EXCEPTION SUMMARY SUMMARY CARBON DIOXIDE CURRENT HUMIDITY MASS-AIR CONTROL CONTROL PERCENT TREND AUDIBLE GRAPHIC DISPLAY ON/OFF TREND TREND FLOW FLOW TIME EMAIL END ALL TAG ID DESCRIPTION",
+      "pass": true
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 1,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        2024,
+        260,
+        2042
+      ],
+      "expected": "HS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HS-1",
+          "word_ids": [
+            2534
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HS-1",
+          "word_ids": [
+            2092
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 1,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        2024,
+        1250,
+        2042
+      ],
+      "expected": "SUPPLY HIGH STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY HIGH STATIC PRESSURE",
+          "word_ids": [
+            2535,
+            2536,
+            2537,
+            2538
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY HIGH STATIC PRESSURE",
+          "word_ids": [
+            2093,
+            2094,
+            2095,
+            2096
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 2,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        2043,
+        260,
+        2061
+      ],
+      "expected": "HS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HS-2",
+          "word_ids": [
+            2539
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HS-2",
+          "word_ids": [
+            2097
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 2,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        2043,
+        1250,
+        2061
+      ],
+      "expected": "EXHAUST HIGH STATIC PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST HIGH STATIC PRESSURE",
+          "word_ids": [
+            2540,
+            2541,
+            2542,
+            2543
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST HIGH STATIC PRESSURE",
+          "word_ids": [
+            2098,
+            2099,
+            2100,
+            2101
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 3,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        2062,
+        260,
+        2080
+      ],
+      "expected": "TS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-1",
+          "word_ids": [
+            2544
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-1",
+          "word_ids": [
+            2102
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 3,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        2062,
+        1250,
+        2080
+      ],
+      "expected": "TEMPERATURE SENSOR 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 1",
+          "word_ids": [
+            2545,
+            2546,
+            2547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 1",
+          "word_ids": [
+            2103,
+            2104,
+            2105
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 4,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        2081,
+        260,
+        2099
+      ],
+      "expected": "TS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-2",
+          "word_ids": [
+            2548
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-2",
+          "word_ids": [
+            2106
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 4,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        2081,
+        1250,
+        2099
+      ],
+      "expected": "TEMPERATURE SENSOR 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 2",
+          "word_ids": [
+            2549,
+            2550,
+            2551
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 2",
+          "word_ids": [
+            2107,
+            2108,
+            2109
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 5,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        2100,
+        260,
+        2118
+      ],
+      "expected": "TS-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-3",
+          "word_ids": [
+            2552
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-3",
+          "word_ids": [
+            2110
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 5,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        2100,
+        1250,
+        2118
+      ],
+      "expected": "TEMPERATURE SENSOR 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 3",
+          "word_ids": [
+            2553,
+            2554,
+            2555
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 3",
+          "word_ids": [
+            2111,
+            2112,
+            2113
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 6,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        2119,
+        260,
+        2137
+      ],
+      "expected": "TS-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-4",
+          "word_ids": [
+            2556
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-4",
+          "word_ids": [
+            2114
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 6,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        2119,
+        1250,
+        2137
+      ],
+      "expected": "TEMPERATURE SENSOR 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 4",
+          "word_ids": [
+            2557,
+            2558,
+            2559
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 4",
+          "word_ids": [
+            2115,
+            2116,
+            2117
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 7,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        2138,
+        260,
+        2156
+      ],
+      "expected": "TS-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-5",
+          "word_ids": [
+            2560
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-5",
+          "word_ids": [
+            2118
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 7,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        2138,
+        1250,
+        2156
+      ],
+      "expected": "TEMPERATURE SENSOR 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 5",
+          "word_ids": [
+            2561,
+            2562,
+            2563
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 5",
+          "word_ids": [
+            2119,
+            2120,
+            2121
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 8,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        2157,
+        260,
+        2175
+      ],
+      "expected": "TS-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TS-6",
+          "word_ids": [
+            2564
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TS-6",
+          "word_ids": [
+            2122
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 8,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        2157,
+        1250,
+        2175
+      ],
+      "expected": "TEMPERATURE SENSOR 6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 6",
+          "word_ids": [
+            2565,
+            2566,
+            2567
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR 6",
+          "word_ids": [
+            2123,
+            2124,
+            2125
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 9,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        2176,
+        260,
+        2194
+      ],
+      "expected": "V-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-1",
+          "word_ids": [
+            2568
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-1",
+          "word_ids": [
+            2126
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 9,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        2176,
+        1250,
+        2194
+      ],
+      "expected": "VALVE MODULATION 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VALVE MODULATION 1",
+          "word_ids": [
+            2569,
+            2570,
+            2571
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VALVE MODULATION 1",
+          "word_ids": [
+            2127,
+            2128,
+            2129
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 10,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        220,
+        2195,
+        260,
+        2213
+      ],
+      "expected": "V-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-2",
+          "word_ids": [
+            2572
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-2",
+          "word_ids": [
+            2130
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-ADMIN-AHU-CONTINUATION",
+      "row": 10,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        260,
+        2195,
+        1250,
+        2213
+      ],
+      "expected": "VALVE MODULATION 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VALVE MODULATION 2",
+          "word_ids": [
+            2573,
+            2574,
+            2575
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VALVE MODULATION 2",
+          "word_ids": [
+            2131,
+            2132,
+            2133
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-VAV-RETURN",
+      "row": 1,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1715,
+        1828,
+        1760,
+        1846
+      ],
+      "expected": "AFMS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AFMS-1",
+          "word_ids": [
+            2312
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AFMS-1",
+          "word_ids": [
+            2272
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-VAV-RETURN",
+      "row": 1,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1760,
+        1828,
+        2450,
+        1846
+      ],
+      "expected": "AIR FLOW MONITORING STATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIR FLOW MONITORING STATION",
+          "word_ids": [
+            2313,
+            2314,
+            2315,
+            2316
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIR FLOW MONITORING STATION",
+          "word_ids": [
+            2264,
+            2265,
+            2266,
+            2267
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-VAV-RETURN",
+      "row": 2,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1715,
+        1847,
+        1760,
+        1865
+      ],
+      "expected": "DO-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DO-1",
+          "word_ids": [
+            2317
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DO-1",
+          "word_ids": [
+            2255
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-VAV-RETURN",
+      "row": 2,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1760,
+        1847,
+        2450,
+        1865
+      ],
+      "expected": "DAMPER ACTUATOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DAMPER ACTUATOR",
+          "word_ids": [
+            2318,
+            2319
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DAMPER ACTUATOR",
+          "word_ids": [
+            2248,
+            2249
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-VAV-RETURN",
+      "row": 3,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1715,
+        1866,
+        1760,
+        1884
+      ],
+      "expected": "SP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SP-1",
+          "word_ids": [
+            2320
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SP-1",
+          "word_ids": [
+            2241
+          ]
+        }
+      }
+    },
+    {
+      "table": "M805-VAV-RETURN",
+      "row": 3,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1760,
+        1866,
+        2450,
+        1884
+      ],
+      "expected": "STATIC PRESSURE SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATIC PRESSURE SENSOR",
+          "word_ids": [
+            2321,
+            2322,
+            2323
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATIC PRESSURE SENSOR",
+          "word_ids": [
+            2234,
+            2235,
+            2236
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m804-lab-virtual-points-note",
+      "page": 18,
+      "bbox": [
+        220,
+        2165,
+        1550,
+        2205
+      ],
+      "expected": "NOT ALL VIRTUAL POINTS ARE SHOWN. PROVIDE ALL POINTS REQUIRED FOR SOFTWARE OPERATION.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTE: 1. LOCKOUT ALARM WHEN UNIT IS DE-ENERGIZED. PROVIDE 15-MINUTE STARTUP DELAY PRIOR TO ENABLING ALARM. 2. NOT ALL VIRTUAL POINTS ARE SHOWN. PROVIDE ALL POINTS REQUIRED FOR SOFTWARE OPERATION.",
+          "word_ids": [
+            2567,
+            2568,
+            2569,
+            2570,
+            2571,
+            2572,
+            2573,
+            2574,
+            2575,
+            2576,
+            2577,
+            2578,
+            2579,
+            2580,
+            2581,
+            2582,
+            2583,
+            2584,
+            2585,
+            2586,
+            2587,
+            2588,
+            2589,
+            2590,
+            2591,
+            2592,
+            2593,
+            2594,
+            2595,
+            2596
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTE: 1. LOCKOUT ALARM WHEN UNIT IS DE-ENERGIZED. PROVIDE 15-MINUTE STARTUP DELAY PRIOR TO ENABLING ALARM. 2. NOT ALL VIRTUAL POINTS ARE SHOWN. PROVIDE ALL POINTS REQUIRED FOR SOFTWARE OPERATION.",
+          "word_ids": [
+            2745,
+            2746,
+            2747,
+            2748,
+            2749,
+            2750,
+            2751,
+            2752,
+            2753,
+            2754,
+            2755,
+            2756,
+            2757,
+            2758,
+            2759,
+            2760,
+            2761,
+            2762,
+            2763,
+            2764,
+            2765,
+            2766,
+            2767,
+            2768,
+            2769,
+            2770,
+            2771,
+            2772,
+            2773,
+            2774
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m805-virtual-points-note",
+      "page": 19,
+      "bbox": [
+        190,
+        2200,
+        1540,
+        2250
+      ],
+      "expected": "NOT ALL VIRTUAL POINTS ARE SHOWN. PROVIDE ALL POINTS REQUIRED FOR SOFTWARE OPERATION.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "V-2 VALVE MODULATION 2 NOTE: 1. LOCKOUT ALARM WHEN UNIT IS DE-ENERGIZED. PROVIDE 15-MINUTE STARTUP DELAY PRIOR TO ENABLING ALARM. 2. NOT ALL VIRTUAL POINTS ARE SHOWN. PROVIDE ALL POINTS REQUIRED FOR SOFTWARE OPERATION.",
+          "word_ids": [
+            2572,
+            2573,
+            2574,
+            2575,
+            2576,
+            2577,
+            2578,
+            2579,
+            2580,
+            2581,
+            2582,
+            2583,
+            2584,
+            2585,
+            2586,
+            2587,
+            2588,
+            2589,
+            2590,
+            2591,
+            2592,
+            2593,
+            2594,
+            2595,
+            2596,
+            2597,
+            2598,
+            2599,
+            2600,
+            2601,
+            2602,
+            2603,
+            2604,
+            2605
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "V-2 VALVE MODULATION 2 NOTE: 1. LOCKOUT ALARM WHEN UNIT IS DE-ENERGIZED. PROVIDE 15-MINUTE STARTUP DELAY PRIOR TO ENABLING ALARM. 2. NOT ALL VIRTUAL POINTS ARE SHOWN. PROVIDE ALL POINTS REQUIRED FOR SOFTWARE OPERATION.",
+          "word_ids": [
+            2130,
+            2131,
+            2132,
+            2133,
+            2436,
+            2437,
+            2438,
+            2439,
+            2440,
+            2441,
+            2442,
+            2443,
+            2444,
+            2445,
+            2446,
+            2447,
+            2448,
+            2449,
+            2450,
+            2451,
+            2452,
+            2453,
+            2454,
+            2455,
+            2456,
+            2457,
+            2458,
+            2459,
+            2460,
+            2461,
+            2462,
+            2463,
+            2464,
+            2465
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m804-m805-table-count",
+      "actual": 8,
+      "expected": 8,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

@@ -1,0 +1,49 @@
+{
+  "document_id": "19__vol2__094",
+  "module_role": "Reconciles every M-401 schedule identity to plan/detail/source context without turning schematic appearances or embedded humidifier cabinet text into extra equipment counts. The supplied set has no dedicated control-valve or damper-actuator schedule.",
+  "schedule_registry_schema": {
+    "namespace_separator": "_",
+    "identity_columns": {"mark": "mark"},
+    "anchor_records_path": ["primary_anchors"],
+    "non_instance_table_ids": []
+  },
+  "scheduled_families": [
+    {"module": "schedules_m401.json", "bundle_module": "schedules", "table": "M401-AIR-HANDLING-UNIT-CHW", "rows": 5, "class": "Roof air-handling unit", "mark": ["AHU-04", "AHU-05", "AHU-06", "AHU-07", "AHU-08"]},
+    {"module": "schedules_m401.json", "bundle_module": "schedules", "table": "M401-PACKAGED-AIR-COOLED-WATER-CHILLER", "rows": 1, "class": "Air-cooled chilled-water chiller", "mark": ["CH-2"]},
+    {"module": "schedules_m401.json", "bundle_module": "schedules", "table": "M401-COOLING-TOWER", "rows": 1, "class": "Cooling tower", "mark": ["CT-1"]},
+    {"module": "schedules_m401.json", "bundle_module": "schedules", "table": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER", "rows": 4, "class": "Electric humidifier", "mark": ["HF-4", "HF-5", "HF-6", "HF-8"]}
+  ],
+  "schedule_counts": {"tables": 4, "rows": 11, "building_scoped_tag_identities_including_outlet_types": 11, "other_scheduled_tag_identities": 11},
+  "primary_anchors": [
+    {"id": "M401-AIR-HANDLING-UNIT-CHW-AHU-04", "scope": "Scheduled air-handling unit", "visual_anchor": "M-102 new-work roof plan labels AHU-04; M-201 Detail 1 caption uses AHU-4."},
+    {"id": "M401-AIR-HANDLING-UNIT-CHW-AHU-05", "scope": "Scheduled air-handling unit", "visual_anchor": "M-102 new-work roof plan labels AHU-05; M-201 Detail 1 caption uses AHU-5."},
+    {"id": "M401-AIR-HANDLING-UNIT-CHW-AHU-06", "scope": "Scheduled air-handling unit", "visual_anchor": "M-102 new-work roof plan labels AHU-06; M-201 Detail 2 caption uses AHU-6."},
+    {"id": "M401-AIR-HANDLING-UNIT-CHW-AHU-07", "scope": "Scheduled air-handling unit", "visual_anchor": "M-102 new-work roof plan labels AHU-07; M-201 Detail 3 caption uses AHU-7."},
+    {"id": "M401-AIR-HANDLING-UNIT-CHW-AHU-08", "scope": "Scheduled air-handling unit", "visual_anchor": "M-102 new-work roof plan labels AHU-08; M-201 Detail 1 caption uses AHU-8."},
+    {"id": "M401-PACKAGED-AIR-COOLED-WATER-CHILLER-CH-2", "scope": "Scheduled chiller", "visual_anchor": "M-102 new-work roof plan labels CH-2; M-103 phasing plan specifies temporary air-cooled chiller service while the cooling tower is replaced."},
+    {"id": "M401-COOLING-TOWER-CT-1", "scope": "Scheduled cooling tower", "visual_anchor": "M-102 new-work roof plan labels CT-1; M-103 phasing requires remove/replace existing cooling tower."},
+    {"id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER-HF-4", "scope": "Scheduled humidifier", "visual_anchor": "M-401 duct-size cell prints (IN AHU-4 CABINET); this embeds the humidifier in the associated AHU cabinet but is not a plan count."},
+    {"id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER-HF-5", "scope": "Scheduled humidifier", "visual_anchor": "M-401 duct-size cell prints (IN AHU-5 CABINET); this embeds the humidifier in the associated AHU cabinet but is not a plan count."},
+    {"id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER-HF-6", "scope": "Scheduled humidifier", "visual_anchor": "M-401 duct-size cell prints (IN AHU-6 CABINET); this embeds the humidifier in the associated AHU cabinet but is not a plan count."},
+    {"id": "M401-DISPOSABLE-CYLINDER-ELECTRIC-HUMIDIFIER-HF-8", "scope": "Scheduled humidifier", "visual_anchor": "M-401 duct-size cell prints (IN AHU-8 CABINET); this embeds the humidifier in the associated AHU cabinet but is not a plan count."}
+  ],
+  "plan_and_detail_reconciliation": [
+    {"id": "m102-new-work-roof-equipment", "sheet": "M-102", "scope": "New-work roof plan", "finding": "The full-page plan visually anchors AHU-04 through AHU-08, CH-2 and CT-1 to planned work. It does not present a controls point matrix."},
+    {"id": "m201-tag-format", "sheet": "M-201", "scope": "Controls captions", "finding": "Controls captions omit zero-padding on AHU marks: AHU-4/5/8, AHU-6 and AHU-7. The record preserves source forms rather than silently rewriting them."},
+    {"id": "m401-humidifier-cabinet-context", "sheet": "M-401", "scope": "Humidifier schedule", "finding": "HF-4, HF-5, HF-6 and HF-8 have printed in-AHU-cabinet cells. The four schedule rows are four identities; cabinet wording is not a separate physical-device multiplier."}
+  ],
+  "control_valve_and_damper_schedule_status": {
+    "control_valve_schedule": {"status": "not_present", "value": null, "note": "M-201/M-301 show individual existing three-way-valve context and M-401 says cooling coils reconnect to existing 3-way control valves, but the supplied pages contain no control-valve schedule."},
+    "damper_actuator_schedule": {"status": "not_present", "value": null, "note": "M-201 includes DM-1/DM-2 schematic labels and typed bubble context, but the supplied pages contain no damper-actuator schedule."}
+  },
+  "source_conflicts": [
+    {"id": "ahu-zero-padding", "scope": "M-401 versus M-201", "finding": "M-401 prints AHU-04/AHU-05/AHU-06/AHU-07/AHU-08; M-201 captions print AHU-4/AHU-5/AHU-6/AHU-7/AHU-8. This is a source-format difference, not an asserted data correction."}
+  ],
+  "tables": [],
+  "assertions": [],
+  "inventory_checks": [
+    {"id": "scheduled-families", "records_path": ["scheduled_families"], "expected": 4, "unique_key": "table"},
+    {"id": "scheduled-primary-anchors", "records_path": ["primary_anchors"], "expected": 11, "unique_key": "id"},
+    {"id": "plan-detail-reconciliation-items", "records_path": ["plan_and_detail_reconciliation"], "expected": 3, "unique_key": "id"}
+  ]
+}

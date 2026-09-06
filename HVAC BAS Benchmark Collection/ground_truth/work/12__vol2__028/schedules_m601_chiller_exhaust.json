@@ -1,0 +1,53 @@
+{
+  "document_id": "12__vol2__028",
+  "status": "partial_document_audit",
+  "scope": "All printed rows in M-601 Air-Cooled Chiller and Exhaust Fan schedules (source PDF page 9).",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [9],
+    "render": "reviews/12__vol2__028/p9-p9-full-poppler.png",
+    "dpi": 144,
+    "finding": "Both lower-page schedules were visually reviewed. Printed zero-like NEMA values are retained exactly (`00` for EF-1/EF-3 and `0` for EF-2)."
+  },
+  "tables": [
+    {
+      "id": "M601-AIR-COOLED-CHILLER",
+      "page": 9,
+      "sheet": "M-601",
+      "title": "AIR-COOLED CHILLER SCHEDULE",
+      "classification": "Air-cooled scroll chiller",
+      "columns": "mark|type|nominal_size_tons|volts_ph_hz|mca_a|mfs_a|iplv_eer|fouling_factor_hr_sq_ft_f_btu|evaporator_ewt_f|evaporator_lwt_f|evaporator_wpd_ft_wg|evaporator_gpm|condenser_ambient_air_temp_f|condenser_number_of_fans|length_in|width_in|height_in|weight_lbs|manufacturer_model|notes",
+      "x_edges": [125,180,310,360,425,470,505,545,645,680,710,755,795,850,900,940,985,1035,1085,1200,1260],
+      "y_edges": [1228,1250],
+      "rows": [
+        "CH-1|AIR-COOLED SCROLL|40.7|208/3/60|184.5|200|17.3|0.0001|56|44|10.3|78.5|101.5|4|94.3|88|100.2|4,173|DAIKIN/AGZ040E|1,2,3,4,5"
+      ],
+      "header_evidence": [
+        {"bbox": [125,1148,400,1178], "expected": "AIR-COOLED CHILLER SCHEDULE"}
+      ]
+    },
+    {
+      "id": "M601-EXHAUST-FAN",
+      "page": 9,
+      "sheet": "M-601",
+      "title": "EXHAUST FAN SCHEDULE",
+      "classification": "Exhaust fans",
+      "columns": "mark|cfm|external_static_pressure_in_wg|hp|rpm|volt_ph|nema_size|max_sones|manufacturer_model|length_in|width_in|height_in|weight_lbs|notes",
+      "x_edges": [1285,1335,1380,1425,1460,1505,1565,1625,1680,1835,1890,1945,2005,2070,2150],
+      "y_edges": [1225,1243,1258,1273],
+      "rows": [
+        "EF-1|620|0.5|1/6|1,725|115/1|00|10|GREENHECK/SQ-95-VG|15.0|19.0|15.0|50|1,2,3,4,5",
+        "EF-2|920|0.5|3/4|2,200|115/1|0|17|GREENHECK/SQ-99-VG|15.0|24.0|15.0|58|1,2,3,4,5",
+        "EF-3|645|0.5|1/6|1725|115/1|00|10|GREENHECK/SQ-95-VG|15.0|19.0|15.0|50|1,2,3,4,5"
+      ],
+      "header_evidence": [
+        {"bbox": [1285,1148,1500,1178], "expected": "EXHAUST FAN SCHEDULE"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "m601-chiller-row-count", "records_path": ["tables", 0, "rows"], "expected": 1},
+    {"id": "m601-exhaust-fan-row-count", "records_path": ["tables", 1, "rows"], "expected": 3}
+  ],
+  "remaining_work": "Reconcile schedule tags with plan anchors and the written exhaust-fan controls sequence before treating this partial schedule audit as a complete record."
+}

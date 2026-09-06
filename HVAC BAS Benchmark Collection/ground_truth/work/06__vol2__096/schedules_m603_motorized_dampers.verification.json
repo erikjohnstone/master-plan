@@ -1,0 +1,5783 @@
+{
+  "document_id": "06__vol2__096",
+  "source_sha256": "72da836a803740382b319b718c1f10d8daeff6e5dbe869f1e68ff173ea4092ec",
+  "annotation_sha256": "0f3acb8178cf5cb5abd7ce7b3174a0d8180a842f5d5beceab95555f6bb998456",
+  "tables": 1,
+  "rows": 24,
+  "cell_assertions": 192,
+  "text_assertions": 4,
+  "checks": [
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 1,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1373,
+        435,
+        1389
+      ],
+      "expected": "JED-1-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JED-1-1",
+          "word_ids": [
+            1553
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JED-1-1",
+          "word_ids": [
+            1954
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 1,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1373,
+        535,
+        1389
+      ],
+      "expected": "18\"X14\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            1554
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            1955
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 1,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1373,
+        605,
+        1389
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1555
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1956
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 1,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1373,
+        735,
+        1389
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            1556
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            1957
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 1,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1373,
+        825,
+        1389
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1557
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1958
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 1,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1373,
+        940,
+        1389
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1558
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1959
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 1,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1373,
+        1030,
+        1389
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1559
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1960
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 1,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1373,
+        1110,
+        1389
+      ],
+      "expected": "1,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            1560
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            1961
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 2,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1389,
+        435,
+        1404
+      ],
+      "expected": "JED-2-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JED-2-1",
+          "word_ids": [
+            1545
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JED-2-1",
+          "word_ids": [
+            1967
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 2,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1389,
+        535,
+        1404
+      ],
+      "expected": "18\"X14\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            1546
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            1968
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 2,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1389,
+        605,
+        1404
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1969
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 2,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1389,
+        735,
+        1404
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            1548
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            1970
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 2,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1389,
+        825,
+        1404
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1549
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1971
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 2,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1389,
+        940,
+        1404
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1550
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1972
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 2,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1389,
+        1030,
+        1404
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1551
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1973
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 2,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1389,
+        1110,
+        1404
+      ],
+      "expected": "1,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            1552
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            1974
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 3,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1404,
+        435,
+        1419
+      ],
+      "expected": "JED-3-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JED-3-1",
+          "word_ids": [
+            1537
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JED-3-1",
+          "word_ids": [
+            1989
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 3,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1404,
+        535,
+        1419
+      ],
+      "expected": "18\"X14\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            1538
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            1990
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 3,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1404,
+        605,
+        1419
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1539
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1991
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 3,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1404,
+        735,
+        1419
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            1540
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            1992
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 3,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1404,
+        825,
+        1419
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1541
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1993
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 3,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1404,
+        940,
+        1419
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1542
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1994
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 3,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1404,
+        1030,
+        1419
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1543
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1995
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 3,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1404,
+        1110,
+        1419
+      ],
+      "expected": "1,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            1544
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            1996
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 4,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1419,
+        435,
+        1434
+      ],
+      "expected": "JED-4-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JED-4-1",
+          "word_ids": [
+            1529
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JED-4-1",
+          "word_ids": [
+            2011
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 4,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1419,
+        535,
+        1434
+      ],
+      "expected": "18\"X14\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            1530
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            2012
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 4,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1419,
+        605,
+        1434
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1531
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2013
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 4,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1419,
+        735,
+        1434
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            1532
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            2014
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 4,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1419,
+        825,
+        1434
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1533
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2015
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 4,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1419,
+        940,
+        1434
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1534
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2016
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 4,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1419,
+        1030,
+        1434
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1535
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2017
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 4,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1419,
+        1110,
+        1434
+      ],
+      "expected": "1,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            1536
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            2018
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 5,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1434,
+        435,
+        1449
+      ],
+      "expected": "JED-5-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JED-5-1",
+          "word_ids": [
+            1521
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JED-5-1",
+          "word_ids": [
+            2032
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 5,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1434,
+        535,
+        1449
+      ],
+      "expected": "18\"X14\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            1522
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            2033
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 5,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1434,
+        605,
+        1449
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1523
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2034
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 5,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1434,
+        735,
+        1449
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            1524
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            2035
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 5,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1434,
+        825,
+        1449
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1525
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2036
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 5,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1434,
+        940,
+        1449
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1526
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2037
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 5,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1434,
+        1030,
+        1449
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1527
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2038
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 5,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1434,
+        1110,
+        1449
+      ],
+      "expected": "1,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            1528
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            2039
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 6,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1449,
+        435,
+        1464
+      ],
+      "expected": "JED-6-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JED-6-1",
+          "word_ids": [
+            1513
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JED-6-1",
+          "word_ids": [
+            2053
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 6,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1449,
+        535,
+        1464
+      ],
+      "expected": "18\"X14\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            1514
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            2054
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 6,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1449,
+        605,
+        1464
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1515
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2055
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 6,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1449,
+        735,
+        1464
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            1516
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            2056
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 6,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1449,
+        825,
+        1464
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1517
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2057
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 6,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1449,
+        940,
+        1464
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1518
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2058
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 6,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1449,
+        1030,
+        1464
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1519
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2059
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 6,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1449,
+        1110,
+        1464
+      ],
+      "expected": "1,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            1520
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            2060
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 7,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1464,
+        435,
+        1479
+      ],
+      "expected": "JED-1-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JED-1-2",
+          "word_ids": [
+            1505
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JED-1-2",
+          "word_ids": [
+            2071
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 7,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1464,
+        535,
+        1479
+      ],
+      "expected": "18\"X14\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            1506
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            2072
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 7,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1464,
+        605,
+        1479
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1507
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2073
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 7,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1464,
+        735,
+        1479
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            1508
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            2074
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 7,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1464,
+        825,
+        1479
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1509
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2075
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 7,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1464,
+        940,
+        1479
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1510
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2076
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 7,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1464,
+        1030,
+        1479
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1511
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2077
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 7,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1464,
+        1110,
+        1479
+      ],
+      "expected": "1,2,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            1512
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            2078
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 8,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1479,
+        435,
+        1494
+      ],
+      "expected": "JED-2-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JED-2-2",
+          "word_ids": [
+            1497
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JED-2-2",
+          "word_ids": [
+            2089
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 8,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1479,
+        535,
+        1494
+      ],
+      "expected": "18\"X14\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            1498
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            2090
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 8,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1479,
+        605,
+        1494
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1499
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2091
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 8,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1479,
+        735,
+        1494
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            1500
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            2092
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 8,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1479,
+        825,
+        1494
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1501
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2093
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 8,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1479,
+        940,
+        1494
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1502
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2094
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 8,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1479,
+        1030,
+        1494
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1503
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2095
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 8,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1479,
+        1110,
+        1494
+      ],
+      "expected": "1,2,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            1504
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            2096
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 9,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1494,
+        435,
+        1509
+      ],
+      "expected": "JED-3-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JED-3-2",
+          "word_ids": [
+            1489
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JED-3-2",
+          "word_ids": [
+            2097
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 9,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1494,
+        535,
+        1509
+      ],
+      "expected": "18\"X14\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            1490
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            2098
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 9,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1494,
+        605,
+        1509
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1491
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2099
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 9,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1494,
+        735,
+        1509
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            1492
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            2100
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 9,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1494,
+        825,
+        1509
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1493
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2101
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 9,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1494,
+        940,
+        1509
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1494
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2102
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 9,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1494,
+        1030,
+        1509
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1495
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2103
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 9,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1494,
+        1110,
+        1509
+      ],
+      "expected": "1,2,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            1496
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            2104
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 10,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1509,
+        435,
+        1524
+      ],
+      "expected": "JED-4-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JED-4-2",
+          "word_ids": [
+            1481
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JED-4-2",
+          "word_ids": [
+            2106
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 10,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1509,
+        535,
+        1524
+      ],
+      "expected": "18\"X14\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            1482
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            2107
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 10,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1509,
+        605,
+        1524
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1483
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2108
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 10,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1509,
+        735,
+        1524
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            1484
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            2109
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 10,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1509,
+        825,
+        1524
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1485
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2110
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 10,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1509,
+        940,
+        1524
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1486
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2111
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 10,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1509,
+        1030,
+        1524
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1487
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2112
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 10,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1509,
+        1110,
+        1524
+      ],
+      "expected": "1,2,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            1488
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            2113
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 11,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1524,
+        435,
+        1539
+      ],
+      "expected": "JED-5-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JED-5-2",
+          "word_ids": [
+            1473
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JED-5-2",
+          "word_ids": [
+            2131
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 11,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1524,
+        535,
+        1539
+      ],
+      "expected": "18\"X14\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            1474
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            2132
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 11,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1524,
+        605,
+        1539
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1475
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2133
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 11,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1524,
+        735,
+        1539
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            1476
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            2134
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 11,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1524,
+        825,
+        1539
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1477
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2135
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 11,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1524,
+        940,
+        1539
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1478
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2136
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 11,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1524,
+        1030,
+        1539
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1479
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2137
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 11,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1524,
+        1110,
+        1539
+      ],
+      "expected": "1,2,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            1480
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            2138
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 12,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1539,
+        435,
+        1554
+      ],
+      "expected": "JED-6-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JED-6-2",
+          "word_ids": [
+            1465
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JED-6-2",
+          "word_ids": [
+            2152
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 12,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1539,
+        535,
+        1554
+      ],
+      "expected": "18\"X14\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            1466
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X14\"",
+          "word_ids": [
+            2153
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 12,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1539,
+        605,
+        1554
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1467
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2154
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 12,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1539,
+        735,
+        1554
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            1468
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            2155
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 12,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1539,
+        825,
+        1554
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1469
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2156
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 12,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1539,
+        940,
+        1554
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1470
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2157
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 12,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1539,
+        1030,
+        1554
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1471
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2158
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 12,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1539,
+        1110,
+        1554
+      ],
+      "expected": "1,2,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            1472
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            2159
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 13,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1554,
+        435,
+        1568
+      ],
+      "expected": "PED-1-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PED-1-1",
+          "word_ids": [
+            1457
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PED-1-1",
+          "word_ids": [
+            2172
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 13,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1554,
+        535,
+        1568
+      ],
+      "expected": "20\"X16\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20\"X16\"",
+          "word_ids": [
+            1458
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20\"X16\"",
+          "word_ids": [
+            2173
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 13,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1554,
+        605,
+        1568
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1459
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2174
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 13,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1554,
+        735,
+        1568
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            1460
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            2175
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 13,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1554,
+        825,
+        1568
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1461
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2176
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 13,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1554,
+        940,
+        1568
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1462
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2177
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 13,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1554,
+        1030,
+        1568
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1463
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2178
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 13,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1554,
+        1110,
+        1568
+      ],
+      "expected": "1,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            1464
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            2179
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 14,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1568,
+        435,
+        1583
+      ],
+      "expected": "PED-2-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PED-2-1",
+          "word_ids": [
+            1449
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PED-2-1",
+          "word_ids": [
+            2191
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 14,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1568,
+        535,
+        1583
+      ],
+      "expected": "20\"X16\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20\"X16\"",
+          "word_ids": [
+            1450
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20\"X16\"",
+          "word_ids": [
+            2192
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 14,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1568,
+        605,
+        1583
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1451
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2193
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 14,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1568,
+        735,
+        1583
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            1452
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            2194
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 14,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1568,
+        825,
+        1583
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1453
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2195
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 14,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1568,
+        940,
+        1583
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1454
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2196
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 14,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1568,
+        1030,
+        1583
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1455
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2197
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 14,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1568,
+        1110,
+        1583
+      ],
+      "expected": "1,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            1456
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            2198
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 15,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1583,
+        435,
+        1598
+      ],
+      "expected": "PED-3-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PED-3-1",
+          "word_ids": [
+            1441
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PED-3-1",
+          "word_ids": [
+            2199
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 15,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1583,
+        535,
+        1598
+      ],
+      "expected": "20\"X16\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20\"X16\"",
+          "word_ids": [
+            1442
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20\"X16\"",
+          "word_ids": [
+            2200
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 15,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1583,
+        605,
+        1598
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1443
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2201
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 15,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1583,
+        735,
+        1598
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            1444
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            2202
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 15,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1583,
+        825,
+        1598
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1445
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2203
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 15,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1583,
+        940,
+        1598
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1446
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2204
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 15,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1583,
+        1030,
+        1598
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1447
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2205
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 15,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1583,
+        1110,
+        1598
+      ],
+      "expected": "1,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            1448
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            2206
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 16,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1598,
+        435,
+        1613
+      ],
+      "expected": "PED-4-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PED-4-1",
+          "word_ids": [
+            1433
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PED-4-1",
+          "word_ids": [
+            2207
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 16,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1598,
+        535,
+        1613
+      ],
+      "expected": "20\"X16\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20\"X16\"",
+          "word_ids": [
+            1434
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20\"X16\"",
+          "word_ids": [
+            2208
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 16,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1598,
+        605,
+        1613
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1435
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2209
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 16,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1598,
+        735,
+        1613
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            1436
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            2210
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 16,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1598,
+        825,
+        1613
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1437
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2211
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 16,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1598,
+        940,
+        1613
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1438
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2212
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 16,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1598,
+        1030,
+        1613
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1439
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2213
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 16,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1598,
+        1110,
+        1613
+      ],
+      "expected": "1,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            1440
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            2214
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 17,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1613,
+        435,
+        1628
+      ],
+      "expected": "PED-5-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PED-5-1",
+          "word_ids": [
+            1425
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PED-5-1",
+          "word_ids": [
+            2215
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 17,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1613,
+        535,
+        1628
+      ],
+      "expected": "20\"X16\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20\"X16\"",
+          "word_ids": [
+            1426
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20\"X16\"",
+          "word_ids": [
+            2216
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 17,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1613,
+        605,
+        1628
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1427
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2217
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 17,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1613,
+        735,
+        1628
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            1428
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            2218
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 17,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1613,
+        825,
+        1628
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1429
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2219
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 17,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1613,
+        940,
+        1628
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1430
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2220
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 17,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1613,
+        1030,
+        1628
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1431
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2221
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 17,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1613,
+        1110,
+        1628
+      ],
+      "expected": "1,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            1432
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            2222
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 18,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1628,
+        435,
+        1643
+      ],
+      "expected": "PED-6-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PED-6-1",
+          "word_ids": [
+            1417
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PED-6-1",
+          "word_ids": [
+            2223
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 18,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1628,
+        535,
+        1643
+      ],
+      "expected": "20\"X16\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20\"X16\"",
+          "word_ids": [
+            1418
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20\"X16\"",
+          "word_ids": [
+            2224
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 18,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1628,
+        605,
+        1643
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1419
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2225
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 18,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1628,
+        735,
+        1643
+      ],
+      "expected": "NO",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            1420
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NO",
+          "word_ids": [
+            2226
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 18,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1628,
+        825,
+        1643
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1421
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2227
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 18,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1628,
+        940,
+        1643
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1422
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2228
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 18,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1628,
+        1030,
+        1643
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1423
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2229
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 18,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1628,
+        1110,
+        1643
+      ],
+      "expected": "1,3,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            1424
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,3,4",
+          "word_ids": [
+            2230
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 19,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1643,
+        435,
+        1658
+      ],
+      "expected": "PED-1-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PED-1-2",
+          "word_ids": [
+            1409
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PED-1-2",
+          "word_ids": [
+            2231
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 19,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1643,
+        535,
+        1658
+      ],
+      "expected": "18\"X18\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X18\"",
+          "word_ids": [
+            1410
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X18\"",
+          "word_ids": [
+            2232
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 19,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1643,
+        605,
+        1658
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1411
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2233
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 19,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1643,
+        735,
+        1658
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            1412
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            2234
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 19,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1643,
+        825,
+        1658
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1413
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2235
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 19,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1643,
+        940,
+        1658
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1414
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2236
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 19,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1643,
+        1030,
+        1658
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1415
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2237
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 19,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1643,
+        1110,
+        1658
+      ],
+      "expected": "1,2,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            1416
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            2238
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 20,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1658,
+        435,
+        1673
+      ],
+      "expected": "PED-2-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PED-2-2",
+          "word_ids": [
+            1401
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PED-2-2",
+          "word_ids": [
+            2239
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 20,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1658,
+        535,
+        1673
+      ],
+      "expected": "18\"X18\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X18\"",
+          "word_ids": [
+            1402
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X18\"",
+          "word_ids": [
+            2240
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 20,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1658,
+        605,
+        1673
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1403
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2241
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 20,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1658,
+        735,
+        1673
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            1404
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            2242
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 20,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1658,
+        825,
+        1673
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1405
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2243
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 20,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1658,
+        940,
+        1673
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1406
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2244
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 20,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1658,
+        1030,
+        1673
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2245
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 20,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1658,
+        1110,
+        1673
+      ],
+      "expected": "1,2,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            1408
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            2246
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 21,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1673,
+        435,
+        1688
+      ],
+      "expected": "PED-3-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PED-3-2",
+          "word_ids": [
+            1393
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PED-3-2",
+          "word_ids": [
+            2247
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 21,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1673,
+        535,
+        1688
+      ],
+      "expected": "18\"X18\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X18\"",
+          "word_ids": [
+            1394
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X18\"",
+          "word_ids": [
+            2248
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 21,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1673,
+        605,
+        1688
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1395
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2249
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 21,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1673,
+        735,
+        1688
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            1396
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            2250
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 21,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1673,
+        825,
+        1688
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1397
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2251
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 21,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1673,
+        940,
+        1688
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1398
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2252
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 21,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1673,
+        1030,
+        1688
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1399
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2253
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 21,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1673,
+        1110,
+        1688
+      ],
+      "expected": "1,2,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            1400
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            2254
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 22,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1688,
+        435,
+        1703
+      ],
+      "expected": "PED-4-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PED-4-2",
+          "word_ids": [
+            1385
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PED-4-2",
+          "word_ids": [
+            2255
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 22,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1688,
+        535,
+        1703
+      ],
+      "expected": "18\"X18\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X18\"",
+          "word_ids": [
+            1386
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X18\"",
+          "word_ids": [
+            2256
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 22,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1688,
+        605,
+        1703
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1387
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2257
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 22,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1688,
+        735,
+        1703
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            1388
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            2258
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 22,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1688,
+        825,
+        1703
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1389
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2259
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 22,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1688,
+        940,
+        1703
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1390
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2260
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 22,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1688,
+        1030,
+        1703
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1391
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2261
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 22,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1688,
+        1110,
+        1703
+      ],
+      "expected": "1,2,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            1392
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            2262
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 23,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1703,
+        435,
+        1718
+      ],
+      "expected": "PED-5-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PED-5-2",
+          "word_ids": [
+            1377
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PED-5-2",
+          "word_ids": [
+            2263
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 23,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1703,
+        535,
+        1718
+      ],
+      "expected": "18\"X18\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X18\"",
+          "word_ids": [
+            1378
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X18\"",
+          "word_ids": [
+            2264
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 23,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1703,
+        605,
+        1718
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1379
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2265
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 23,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1703,
+        735,
+        1718
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            1380
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            2266
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 23,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1703,
+        825,
+        1718
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2267
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 23,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1703,
+        940,
+        1718
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1382
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2268
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 23,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1703,
+        1030,
+        1718
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1383
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2269
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 23,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1703,
+        1110,
+        1718
+      ],
+      "expected": "1,2,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            1384
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            2270
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 24,
+      "column": "tag",
+      "page": 22,
+      "bbox": [
+        350,
+        1718,
+        435,
+        1733
+      ],
+      "expected": "PED-6-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PED-6-2",
+          "word_ids": [
+            1369
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PED-6-2",
+          "word_ids": [
+            2271
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 24,
+      "column": "dimensions",
+      "page": 22,
+      "bbox": [
+        435,
+        1718,
+        535,
+        1733
+      ],
+      "expected": "18\"X18\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"X18\"",
+          "word_ids": [
+            1370
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"X18\"",
+          "word_ids": [
+            2272
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 24,
+      "column": "voltage",
+      "page": 22,
+      "bbox": [
+        535,
+        1718,
+        605,
+        1733
+      ],
+      "expected": "24V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            1371
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24V",
+          "word_ids": [
+            2273
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 24,
+      "column": "normally_open_or_closed",
+      "page": 22,
+      "bbox": [
+        605,
+        1718,
+        735,
+        1733
+      ],
+      "expected": "NC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            1372
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NC",
+          "word_ids": [
+            2274
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 24,
+      "column": "quantity",
+      "page": 22,
+      "bbox": [
+        735,
+        1718,
+        825,
+        1733
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1373
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            2275
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 24,
+      "column": "manufacturer",
+      "page": 22,
+      "bbox": [
+        825,
+        1718,
+        940,
+        1733
+      ],
+      "expected": "POTTORFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            1374
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTTORFF",
+          "word_ids": [
+            2276
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 24,
+      "column": "model",
+      "page": 22,
+      "bbox": [
+        940,
+        1718,
+        1030,
+        1733
+      ],
+      "expected": "SD-151",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            1375
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SD-151",
+          "word_ids": [
+            2277
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "row": 24,
+      "column": "remarks",
+      "page": 22,
+      "bbox": [
+        1030,
+        1718,
+        1110,
+        1733
+      ],
+      "expected": "1,2,4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            1376
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,4",
+          "word_ids": [
+            2278
+          ]
+        }
+      }
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "header": "MOTORIZED DAMPER SCHEDULE",
+      "page": 22,
+      "bbox": [
+        460,
+        1300,
+        1020,
+        1345
+      ],
+      "engine": "mupdf",
+      "actual": "MOTORIZED DAMPER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M603-MOTORIZED-DAMPERS",
+      "header": "MOTORIZED DAMPER SCHEDULE",
+      "page": 22,
+      "bbox": [
+        460,
+        1300,
+        1020,
+        1345
+      ],
+      "engine": "poppler",
+      "actual": "MOTORIZED DAMPER SCHEDULE",
+      "pass": true
+    },
+    {
+      "assertion": "m603-damper-note-1",
+      "page": 22,
+      "bbox": [
+        350,
+        1760,
+        950,
+        1778
+      ],
+      "expected": "1. VERIFY LOCATION AND QUANITIY WITH TAG LOCATIONS ON DUCTWORK PLANS. VERIFY SIZE WITH MECHANICAL CONTRACTOR.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. VERIFY LOCATION AND QUANITIY WITH TAG LOCATIONS ON DUCTWORK PLANS. VERIFY SIZE WITH MECHANICAL CONTRACTOR.",
+          "word_ids": [
+            1352,
+            1353,
+            1354,
+            1355,
+            1356,
+            1357,
+            1358,
+            1359,
+            1360,
+            1361,
+            1362,
+            1363,
+            1364,
+            1365,
+            1366,
+            1367
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. VERIFY LOCATION AND QUANITIY WITH TAG LOCATIONS ON DUCTWORK PLANS. VERIFY SIZE WITH MECHANICAL CONTRACTOR.",
+          "word_ids": [
+            2365,
+            2366,
+            2367,
+            2368,
+            2369,
+            2370,
+            2371,
+            2372,
+            2373,
+            2374,
+            2375,
+            2376,
+            2377,
+            2378,
+            2379,
+            2380
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m603-damper-note-2",
+      "page": 22,
+      "bbox": [
+        350,
+        1773,
+        610,
+        1790
+      ],
+      "expected": "2. MOTORIZED DAMPER FOR POD/JAIL EXHAUST FANS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2. MOTORIZED DAMPER FOR POD/JAIL EXHAUST FANS.",
+          "word_ids": [
+            1345,
+            1346,
+            1347,
+            1348,
+            1349,
+            1350,
+            1351
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2. MOTORIZED DAMPER FOR POD/JAIL EXHAUST FANS.",
+          "word_ids": [
+            2381,
+            2382,
+            2383,
+            2384,
+            2385,
+            2386,
+            2387
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m603-damper-note-3",
+      "page": 22,
+      "bbox": [
+        350,
+        1785,
+        630,
+        1802
+      ],
+      "expected": "3. OTORIZED DAMPER FOR POD/JAIL ZONE RETURN MAINS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3. OTORIZED DAMPER FOR POD/JAIL ZONE RETURN MAINS.",
+          "word_ids": [
+            1337,
+            1338,
+            1339,
+            1340,
+            1341,
+            1342,
+            1343,
+            1344
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3. OTORIZED DAMPER FOR POD/JAIL ZONE RETURN MAINS.",
+          "word_ids": [
+            2388,
+            2389,
+            2390,
+            2391,
+            2392,
+            2393,
+            2394,
+            2395
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m603-damper-note-4",
+      "page": 22,
+      "bbox": [
+        350,
+        1798,
+        465,
+        1815
+      ],
+      "expected": "4. PROVIDED BY TCC.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4. PROVIDED BY TCC.",
+          "word_ids": [
+            1333,
+            1334,
+            1335,
+            1336
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4. PROVIDED BY TCC.",
+          "word_ids": [
+            2396,
+            2397,
+            2398,
+            2399
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

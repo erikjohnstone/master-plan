@@ -1,0 +1,18 @@
+{
+  "document_id":"02__vol2__015",
+  "status":"corroborated_document_component",
+  "scope":"Equipment schedule embedded on guard-booth floor-plan sheet, additional to AM601-AM603. Complete-document plan/equipment reconciliation remains in progress.",
+  "tables":[
+    {
+      "id":"GB-DSS","page":9,"sheet":"AM107","building":"Guard Booth GB01","title":"DUCTLESS SPLIT SYSTEM SCHEDULE",
+      "classification":"Paired wall-mounted ductless indoor unit and outdoor heat pump",
+      "columns":"indoor_mark|type|location|refrigerant|airflow_CFM|fan_W|total_cooling_MBH|sensible_cooling_MBH|EAT_DB_F|EAT_WB_F|min_SEER|heat_at_47F_MBH|heat_at_17F_MBH|heat_EAT_DB_F|indoor_FLA|indoor_MCA|indoor_V|indoor_phase|indoor_Hz|outdoor_mark|outdoor_location|outdoor_FLA|outdoor_MCA|outdoor_MOCP|outdoor_V|outdoor_phase|outdoor_Hz|notes",
+      "x_edges":[99,142.2,232.9,317.3,400.9,503.3,593,680.4,766.3,829.6,892,994.7,1104.1,1207.4,1251.8,1287.7,1324.8,1373.8,1400.3,1428.7,1478.3,1538.3,1576.7,1614.6,1654.4,1700.4,1725.4,1752.8,1801.3],
+      "y_edges":[671.5,688.8],
+      "rows":["DSS-4|WALL-MOUNTED|GUARD BOOTH|R-410A|370|30|12|9.6|78|65|20.8|18|11.1|68|0.33|1|208/230|1|60|CU-4|OUTSIDE|7.83|11|28|208/230|1|60|1,2,3,4,5"],
+      "header_evidence":[{"bbox":[99,591,1802,671.5],"expected":"DUCTLESS SPLIT SYSTEM SCHEDULE MARK TYPE LOCATION REFERIGERANT TYPE SUPPLY FAN DATA COOLING HEATING INDOOR UNIT ELECTRICAL OUTDOOR UNIT OUTDOOR UNIT ELECTRICAL TOTAL AIRFLOW CFM FAN MOTOR WATTS TOTAL COOLING MBH SENSIBLE COOLING MBH EAT DB EAT WB MIN EFFICIENCY SEER HEATING CAPACITY AT 47 F MBH HEATING CAPACITY AT 17 F MBH EAT DB F FLA MCA VOLTS PH HZ MARK LOCATION FLA MCA MOCP VOLTS PH HZ NOTES"}],
+      "notes":["1. Provide power and control wiring from outdoor unit to indoor unit per manufacturer's recommendations.","2. Provide with coastal coil protection on condensing unit coil.","3. Provide with remote controller.","4. Provide refrigerant line set per manufacturer's recommendation.","5. Electrical data for outdoor unit includes indoor unit."],
+      "audit_notes":["One schedule row contains two equipment tags. The floor plan and two sections repeat the same DSS-4/CU-4 pair; they are not three pairs.","Plan work note 16 mounts the remote controller at 48 inches AFF. AM706 exempts guard booth from an additional DDC temperature sensor; the local controller is still present.","AM107 approval field reads 5/19/2020, different from 03/05/2021 on the other mechanical sheets. The sheet's seal and plotting date are separate date roles."]
+    }
+  ]
+}

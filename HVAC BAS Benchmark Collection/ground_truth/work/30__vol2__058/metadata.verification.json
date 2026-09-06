@@ -1,0 +1,132 @@
+{
+  "document_id": "30__vol2__058",
+  "source_sha256": "5c0d37ef255d621865fc7e0147ef7cad54321292e4f68d45ae97447d35b8e627",
+  "annotation_sha256": "9206de43bcabbe943231b6848cd301944420fec7d4a28dc4fbcfa9b43dde3efb",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 3,
+  "checks": [
+    {
+      "assertion": "cover-project",
+      "page": 1,
+      "bbox": [
+        1700,
+        205,
+        2380,
+        355
+      ],
+      "expected": "BUILDING 59 NERSC FACILITY UPGRADE II",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BUILDING 59 NERSC FACILITY UPGRADE II",
+          "word_ids": [
+            61,
+            62,
+            63,
+            64,
+            65,
+            66
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BUILDING 59 NERSC FACILITY UPGRADE II",
+          "word_ids": [
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "cover-location",
+      "page": 1,
+      "bbox": [
+        1150,
+        335,
+        2400,
+        395
+      ],
+      "expected": "SHYH WANG HALL, 1 CYCLOTRON ROAD, BERKELEY, CA 94720",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SHYH WANG HALL, 1 CYCLOTRON ROAD, BERKELEY, CA 94720",
+          "word_ids": [
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SHYH WANG HALL, 1 CYCLOTRON ROAD, BERKELEY, CA 94720",
+          "word_ids": [
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "cover-issue",
+      "page": 1,
+      "bbox": [
+        1470,
+        400,
+        2050,
+        455
+      ],
+      "expected": "ISSUED FOR BID - 01/29/2024",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ISSUED FOR BID - 01/29/2024",
+          "word_ids": [
+            56,
+            57,
+            58,
+            59,
+            60
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ISSUED FOR BID - 01/29/2024",
+          "word_ids": [
+            22,
+            23,
+            24,
+            25,
+            26
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

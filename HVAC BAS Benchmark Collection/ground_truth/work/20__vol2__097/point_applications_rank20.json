@@ -1,0 +1,12 @@
+{
+  "document_id": "20__vol2__097",
+  "module_role": "No-row formal point-list disposition.",
+  "tables": [],
+  "ledger_mode": "literal_source_row_matrices_v1",
+  "applications": [],
+  "expanded_template_counts": {
+    "source_rows": 0,
+    "total": 0
+  },
+  "expanded_count_warning": "0 is the number of formal published BAS point-list rows, not a claim that no controls components occur in diagrams or schedules."
+}

@@ -1,0 +1,33 @@
+# The curated 30-document benchmark package is intentionally versioned on
+# its dedicated non-main branch. Raw parser captures and page-render review
+# images remain local because they are reproducible, redundant, and ~2.6 GB.
+*
+!.gitignore
+!START_HERE.md
+!SHA256SUMS.txt
+!manifest.json
+!all_113_sets.csv
+!all_4799_pages.csv
+!focus_30_coverage.csv
+!source_parser_warnings.json
+!verification.json
+!pdf/
+!pdf/*.pdf
+!ground_truth/
+ground_truth/*
+!ground_truth/README.md
+!ground_truth/STATUS.md
+!ground_truth/status.json
+!ground_truth/capture_last_run.json
+!ground_truth/records/
+!ground_truth/records/**
+!ground_truth/verification/
+!ground_truth/verification/**
+!ground_truth/legend_learn/
+!ground_truth/legend_learn/**
+!ground_truth/symbol_sweep/
+!ground_truth/symbol_sweep/**
+!ground_truth/work/
+!ground_truth/work/**
+!ground_truth/tools/
+!ground_truth/tools/**/*.py

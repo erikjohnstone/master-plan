@@ -1,0 +1,12 @@
+{
+  "document_id": "09__vol2__014",
+  "module_role": "Explicit no-row point-list disposition for the supplied drawing set.",
+  "tables": [],
+  "ledger_mode": "literal_source_row_matrices_v1",
+  "applications": [],
+  "expanded_template_counts": {
+    "source_rows": 0,
+    "total": 0
+  },
+  "expanded_count_warning": "0 is an explicit count of published formal point-list source rows in this supplied set; it is not an installed BAS point, controller, I/O, terminal, cable, sensor, valve, damper, actuator or device total."
+}

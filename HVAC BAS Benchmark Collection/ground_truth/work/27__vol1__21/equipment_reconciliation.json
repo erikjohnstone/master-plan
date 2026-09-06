@@ -1,0 +1,16 @@
+{
+  "document_id": "27__vol1__21",
+  "module_role": "Literal schedule-row boundary.",
+  "tables": [],
+  "ledger_mode": "literal_schedule_rows_v1",
+  "schedule_counts": {
+    "tables": 1,
+    "rows": 1,
+    "interpretation": "One literal booster-pump schedule row, not an inferred installation total."
+  },
+  "control_valve_and_damper_schedule_status": {
+    "control_valve_schedule": "Control-valve functions appear in diagrams; this record does not claim a standalone control-valve schedule.",
+    "damper_actuator_schedule": "Damper functions appear in diagrams; this record does not claim a standalone damper-actuator schedule."
+  },
+  "source_boundary": "No physical BAS takeoff is inferred."
+}

@@ -1,0 +1,5808 @@
+{
+  "document_id": "09__vol2__014",
+  "source_sha256": "f208e34965aba62b3752f39b2691e2a418ac823bd99dbaadfb2e7b06391fc7ff",
+  "annotation_sha256": "968838d490233d2afe82c6561136362b59046814dd4d61c6494f33b36256af0f",
+  "tables": 1,
+  "rows": 17,
+  "cell_assertions": 187,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 1,
+      "column": "mark",
+      "page": 3,
+      "bbox": [
+        1470,
+        102,
+        1535,
+        126
+      ],
+      "expected": "CD-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-A1",
+          "word_ids": [
+            957
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-A1",
+          "word_ids": [
+            17
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 1,
+      "column": "base_alt_or_existing",
+      "page": 3,
+      "bbox": [
+        1535,
+        102,
+        1600,
+        126
+      ],
+      "expected": "BASE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BASE",
+          "word_ids": [
+            958
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BASE",
+          "word_ids": [
+            18
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 1,
+      "column": "manufacturer",
+      "page": 3,
+      "bbox": [
+        1600,
+        102,
+        1660,
+        126
+      ],
+      "expected": "RUSKIN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            959
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            19
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 1,
+      "column": "model_number",
+      "page": 3,
+      "bbox": [
+        1660,
+        102,
+        1745,
+        126
+      ],
+      "expected": "CD40x2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD40x2",
+          "word_ids": [
+            960
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD40x2",
+          "word_ids": [
+            20
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 1,
+      "column": "size",
+      "page": 3,
+      "bbox": [
+        1745,
+        102,
+        1820,
+        126
+      ],
+      "expected": "17'-0\" x 7'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "17'-0\" x 7'-0\"",
+          "word_ids": [
+            961,
+            962,
+            963
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "17'-0\" x 7'-0\"",
+          "word_ids": [
+            21,
+            22,
+            23
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 1,
+      "column": "type",
+      "page": 3,
+      "bbox": [
+        1820,
+        102,
+        1965,
+        126
+      ],
+      "expected": "TWO-ROW, OPPOSED BLADE, LOW-LEAKAGE, INSULATED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TWO-ROW, OPPOSED BLADE, LOW-LEAKAGE, INSULATED",
+          "word_ids": [
+            964,
+            965,
+            966,
+            967,
+            968
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TWO-ROW, OPPOSED BLADE, LOW-LEAKAGE, INSULATED",
+          "word_ids": [
+            24,
+            25,
+            26,
+            27,
+            28
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 1,
+      "column": "function",
+      "page": 3,
+      "bbox": [
+        1965,
+        102,
+        2090,
+        126
+      ],
+      "expected": "OUTDOOR AIR INTAKE FOR AHU-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTDOOR AIR INTAKE FOR AHU-A1",
+          "word_ids": [
+            969,
+            970,
+            971,
+            972,
+            973
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTDOOR AIR INTAKE FOR AHU-A1",
+          "word_ids": [
+            75,
+            76,
+            77,
+            78,
+            79
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 1,
+      "column": "max_cfm",
+      "page": 3,
+      "bbox": [
+        2090,
+        102,
+        2150,
+        126
+      ],
+      "expected": "75,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "75,000",
+          "word_ids": [
+            974
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "75,000",
+          "word_ids": [
+            2152
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 1,
+      "column": "mounting",
+      "page": 3,
+      "bbox": [
+        2150,
+        102,
+        2230,
+        126
+      ],
+      "expected": "WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WALL",
+          "word_ids": [
+            975
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WALL",
+          "word_ids": [
+            2113
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 1,
+      "column": "control",
+      "page": 3,
+      "bbox": [
+        2230,
+        102,
+        2330,
+        126
+      ],
+      "expected": "MODULATING, FAIL-CLOSED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MODULATING, FAIL-CLOSED",
+          "word_ids": [
+            976,
+            977
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MODULATING, FAIL-CLOSED",
+          "word_ids": [
+            2094,
+            2095
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 1,
+      "column": "notes",
+      "page": 3,
+      "bbox": [
+        2330,
+        102,
+        2430,
+        126
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            978,
+            979
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1077,
+            1078
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 2,
+      "column": "mark",
+      "page": 3,
+      "bbox": [
+        1470,
+        126,
+        1535,
+        149
+      ],
+      "expected": "CD-A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-A2",
+          "word_ids": [
+            980
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-A2",
+          "word_ids": [
+            31
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 2,
+      "column": "base_alt_or_existing",
+      "page": 3,
+      "bbox": [
+        1535,
+        126,
+        1600,
+        149
+      ],
+      "expected": "(E)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(E)",
+          "word_ids": [
+            981
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(E)",
+          "word_ids": [
+            32
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 2,
+      "column": "manufacturer",
+      "page": 3,
+      "bbox": [
+        1600,
+        126,
+        1660,
+        149
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            982
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            33
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 2,
+      "column": "model_number",
+      "page": 3,
+      "bbox": [
+        1660,
+        126,
+        1745,
+        149
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            983
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            34
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 2,
+      "column": "size",
+      "page": 3,
+      "bbox": [
+        1745,
+        126,
+        1820,
+        149
+      ],
+      "expected": "10'-0\" x 10'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10'-0\" x 10'-0\"",
+          "word_ids": [
+            984,
+            985,
+            986
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10'-0\" x 10'-0\"",
+          "word_ids": [
+            35,
+            36,
+            37
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 2,
+      "column": "type",
+      "page": 3,
+      "bbox": [
+        1820,
+        126,
+        1965,
+        149
+      ],
+      "expected": "VERIFY IN FIELD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VERIFY IN FIELD",
+          "word_ids": [
+            987,
+            988,
+            989
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VERIFY IN FIELD",
+          "word_ids": [
+            38,
+            39,
+            40
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 2,
+      "column": "function",
+      "page": 3,
+      "bbox": [
+        1965,
+        126,
+        2090,
+        149
+      ],
+      "expected": "LOW VELOCITY WIND TUNNEL ISOLATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOW VELOCITY WIND TUNNEL ISOLATION",
+          "word_ids": [
+            990,
+            991,
+            992,
+            993,
+            994
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOW VELOCITY WIND TUNNEL ISOLATION",
+          "word_ids": [
+            80,
+            81,
+            82,
+            83,
+            84
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 2,
+      "column": "max_cfm",
+      "page": 3,
+      "bbox": [
+        2090,
+        126,
+        2150,
+        149
+      ],
+      "expected": "75,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "75,000",
+          "word_ids": [
+            995
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "75,000",
+          "word_ids": [
+            2093
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 2,
+      "column": "mounting",
+      "page": 3,
+      "bbox": [
+        2150,
+        126,
+        2230,
+        149
+      ],
+      "expected": "DUCT IN-LINE BELOW ROOF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT IN-LINE BELOW ROOF",
+          "word_ids": [
+            996,
+            997,
+            998,
+            999
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT IN-LINE BELOW ROOF",
+          "word_ids": [
+            2082,
+            2083,
+            2084,
+            2085
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 2,
+      "column": "control",
+      "page": 3,
+      "bbox": [
+        2230,
+        126,
+        2330,
+        149
+      ],
+      "expected": "TWO-POSITION, FAIL-OPEN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TWO-POSITION, FAIL-OPEN",
+          "word_ids": [
+            1000,
+            1001
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TWO-POSITION, FAIL-OPEN",
+          "word_ids": [
+            2096,
+            2097
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 2,
+      "column": "notes",
+      "page": 3,
+      "bbox": [
+        2330,
+        126,
+        2430,
+        149
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1002,
+            1003
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1079,
+            1080
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 3,
+      "column": "mark",
+      "page": 3,
+      "bbox": [
+        1470,
+        149,
+        1535,
+        172
+      ],
+      "expected": "CD-A3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-A3",
+          "word_ids": [
+            1004
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-A3",
+          "word_ids": [
+            44
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 3,
+      "column": "base_alt_or_existing",
+      "page": 3,
+      "bbox": [
+        1535,
+        149,
+        1600,
+        172
+      ],
+      "expected": "(E)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(E)",
+          "word_ids": [
+            1005
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(E)",
+          "word_ids": [
+            45
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 3,
+      "column": "manufacturer",
+      "page": 3,
+      "bbox": [
+        1600,
+        149,
+        1660,
+        172
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            1006
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            46
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 3,
+      "column": "model_number",
+      "page": 3,
+      "bbox": [
+        1660,
+        149,
+        1745,
+        172
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            1007
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            47
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 3,
+      "column": "size",
+      "page": 3,
+      "bbox": [
+        1745,
+        149,
+        1820,
+        172
+      ],
+      "expected": "5'-0\" x 5'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5'-0\" x 5'-0\"",
+          "word_ids": [
+            1008,
+            1009,
+            1010
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5'-0\" x 5'-0\"",
+          "word_ids": [
+            48,
+            49,
+            50
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 3,
+      "column": "type",
+      "page": 3,
+      "bbox": [
+        1820,
+        149,
+        1965,
+        172
+      ],
+      "expected": "VERIFY IN FIELD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VERIFY IN FIELD",
+          "word_ids": [
+            1011,
+            1012,
+            1013
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VERIFY IN FIELD",
+          "word_ids": [
+            51,
+            52,
+            53
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 3,
+      "column": "function",
+      "page": 3,
+      "bbox": [
+        1965,
+        149,
+        2090,
+        172
+      ],
+      "expected": "HIGH VELOCITY WIND TUNNEL ISOLATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH VELOCITY WIND TUNNEL ISOLATION",
+          "word_ids": [
+            1014,
+            1015,
+            1016,
+            1017,
+            1018
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH VELOCITY WIND TUNNEL ISOLATION",
+          "word_ids": [
+            85,
+            86,
+            87,
+            88,
+            89
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 3,
+      "column": "max_cfm",
+      "page": 3,
+      "bbox": [
+        2090,
+        149,
+        2150,
+        172
+      ],
+      "expected": "75,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "75,000",
+          "word_ids": [
+            1019
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "75,000",
+          "word_ids": [
+            1075
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 3,
+      "column": "mounting",
+      "page": 3,
+      "bbox": [
+        2150,
+        149,
+        2230,
+        172
+      ],
+      "expected": "DUCT IN-LINE BELOW ROOF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT IN-LINE BELOW ROOF",
+          "word_ids": [
+            1020,
+            1021,
+            1022,
+            1023
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT IN-LINE BELOW ROOF",
+          "word_ids": [
+            2086,
+            2087,
+            2088,
+            2089
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 3,
+      "column": "control",
+      "page": 3,
+      "bbox": [
+        2230,
+        149,
+        2330,
+        172
+      ],
+      "expected": "TWO-POSITION, FAIL-OPEN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TWO-POSITION, FAIL-OPEN",
+          "word_ids": [
+            1024,
+            1025
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TWO-POSITION, FAIL-OPEN",
+          "word_ids": [
+            2098,
+            2099
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 3,
+      "column": "notes",
+      "page": 3,
+      "bbox": [
+        2330,
+        149,
+        2430,
+        172
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1026,
+            1027
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1081,
+            1082
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 4,
+      "column": "mark",
+      "page": 3,
+      "bbox": [
+        1470,
+        172,
+        1535,
+        195
+      ],
+      "expected": "CD-A4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-A4",
+          "word_ids": [
+            1028
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-A4",
+          "word_ids": [
+            59
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 4,
+      "column": "base_alt_or_existing",
+      "page": 3,
+      "bbox": [
+        1535,
+        172,
+        1600,
+        195
+      ],
+      "expected": "BASE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BASE",
+          "word_ids": [
+            1029
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BASE",
+          "word_ids": [
+            60
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 4,
+      "column": "manufacturer",
+      "page": 3,
+      "bbox": [
+        1600,
+        172,
+        1660,
+        195
+      ],
+      "expected": "RUSKIN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            1030
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            61
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 4,
+      "column": "model_number",
+      "page": 3,
+      "bbox": [
+        1660,
+        172,
+        1745,
+        195
+      ],
+      "expected": "CD60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            1031
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            62
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 4,
+      "column": "size",
+      "page": 3,
+      "bbox": [
+        1745,
+        172,
+        1820,
+        195
+      ],
+      "expected": "3'-0\" x 2'-6\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3'-0\" x 2'-6\"",
+          "word_ids": [
+            1032,
+            1033,
+            1034
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3'-0\" x 2'-6\"",
+          "word_ids": [
+            63,
+            64,
+            65
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 4,
+      "column": "type",
+      "page": 3,
+      "bbox": [
+        1820,
+        172,
+        1965,
+        195
+      ],
+      "expected": "OPPOSED BLADE, LOW-LEAKAGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            1035,
+            1036,
+            1037
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            72,
+            73,
+            74
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 4,
+      "column": "function",
+      "page": 3,
+      "bbox": [
+        1965,
+        172,
+        2090,
+        195
+      ],
+      "expected": "BURN CHAMBER RECIRCULATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BURN CHAMBER RECIRCULATION",
+          "word_ids": [
+            1038,
+            1039,
+            1040
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BURN CHAMBER RECIRCULATION",
+          "word_ids": [
+            90,
+            91,
+            92
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 4,
+      "column": "max_cfm",
+      "page": 3,
+      "bbox": [
+        2090,
+        172,
+        2150,
+        195
+      ],
+      "expected": "30,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30,000",
+          "word_ids": [
+            1041
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30,000",
+          "word_ids": [
+            1076
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 4,
+      "column": "mounting",
+      "page": 3,
+      "bbox": [
+        2150,
+        172,
+        2230,
+        195
+      ],
+      "expected": "DUCT ABOVE FLOOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT ABOVE FLOOR",
+          "word_ids": [
+            1042,
+            1043,
+            1044
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT ABOVE FLOOR",
+          "word_ids": [
+            2090,
+            2091,
+            2092
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 4,
+      "column": "control",
+      "page": 3,
+      "bbox": [
+        2230,
+        172,
+        2330,
+        195
+      ],
+      "expected": "MODULATING, FAIL-OPEN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MODULATING, FAIL-OPEN",
+          "word_ids": [
+            1045,
+            1046
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MODULATING, FAIL-OPEN",
+          "word_ids": [
+            2100,
+            2101
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 4,
+      "column": "notes",
+      "page": 3,
+      "bbox": [
+        2330,
+        172,
+        2430,
+        195
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1047,
+            1048
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1083,
+            1084
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 5,
+      "column": "mark",
+      "page": 3,
+      "bbox": [
+        1470,
+        197,
+        1535,
+        231
+      ],
+      "expected": "CD-A5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-A5",
+          "word_ids": [
+            1049
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-A5",
+          "word_ids": [
+            100
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 5,
+      "column": "base_alt_or_existing",
+      "page": 3,
+      "bbox": [
+        1535,
+        197,
+        1600,
+        231
+      ],
+      "expected": "BASE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BASE",
+          "word_ids": [
+            1050
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BASE",
+          "word_ids": [
+            101
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 5,
+      "column": "manufacturer",
+      "page": 3,
+      "bbox": [
+        1600,
+        197,
+        1660,
+        231
+      ],
+      "expected": "RUSKIN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            1051
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            102
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 5,
+      "column": "model_number",
+      "page": 3,
+      "bbox": [
+        1660,
+        197,
+        1745,
+        231
+      ],
+      "expected": "CD60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            1052
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            103
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 5,
+      "column": "size",
+      "page": 3,
+      "bbox": [
+        1745,
+        197,
+        1820,
+        231
+      ],
+      "expected": "17'-0\" x 4'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "17'-0\" x 4'-0\"",
+          "word_ids": [
+            1053,
+            1054,
+            1055
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "17'-0\" x 4'-0\"",
+          "word_ids": [
+            104,
+            105,
+            106
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 5,
+      "column": "type",
+      "page": 3,
+      "bbox": [
+        1820,
+        197,
+        1965,
+        231
+      ],
+      "expected": "OPPOSED BLADE, LOW-LEAKAGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            1056,
+            1057,
+            1058
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            107,
+            108,
+            109
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 5,
+      "column": "function",
+      "page": 3,
+      "bbox": [
+        1965,
+        197,
+        2090,
+        231
+      ],
+      "expected": "WIND TUNNEL COMMON RECIRCULATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WIND TUNNEL COMMON RECIRCULATION",
+          "word_ids": [
+            1059,
+            1060,
+            1061,
+            1062
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WIND TUNNEL COMMON RECIRCULATION",
+          "word_ids": [
+            121,
+            122,
+            123,
+            124
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 5,
+      "column": "max_cfm",
+      "page": 3,
+      "bbox": [
+        2090,
+        197,
+        2150,
+        231
+      ],
+      "expected": "75,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "75,000",
+          "word_ids": [
+            1063
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "75,000",
+          "word_ids": [
+            110
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 5,
+      "column": "mounting",
+      "page": 3,
+      "bbox": [
+        2150,
+        197,
+        2230,
+        231
+      ],
+      "expected": "WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WALL",
+          "word_ids": [
+            1064
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WALL",
+          "word_ids": [
+            111
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 5,
+      "column": "control",
+      "page": 3,
+      "bbox": [
+        2230,
+        197,
+        2330,
+        231
+      ],
+      "expected": "MODULATING, FAIL-OPEN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MODULATING, FAIL-OPEN",
+          "word_ids": [
+            1065,
+            1066
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MODULATING, FAIL-OPEN",
+          "word_ids": [
+            1085,
+            1086
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 5,
+      "column": "notes",
+      "page": 3,
+      "bbox": [
+        2330,
+        197,
+        2430,
+        231
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1067,
+            1068
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1087,
+            1088
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 6,
+      "column": "mark",
+      "page": 3,
+      "bbox": [
+        1470,
+        233,
+        1535,
+        257
+      ],
+      "expected": "CD-A6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-A6",
+          "word_ids": [
+            1069
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-A6",
+          "word_ids": [
+            138
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 6,
+      "column": "base_alt_or_existing",
+      "page": 3,
+      "bbox": [
+        1535,
+        233,
+        1600,
+        257
+      ],
+      "expected": "BASE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BASE",
+          "word_ids": [
+            1070
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BASE",
+          "word_ids": [
+            139
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 6,
+      "column": "manufacturer",
+      "page": 3,
+      "bbox": [
+        1600,
+        233,
+        1660,
+        257
+      ],
+      "expected": "RUSKIN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            1071
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            140
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 6,
+      "column": "model_number",
+      "page": 3,
+      "bbox": [
+        1660,
+        233,
+        1745,
+        257
+      ],
+      "expected": "CD60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            1072
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            141
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 6,
+      "column": "size",
+      "page": 3,
+      "bbox": [
+        1745,
+        233,
+        1820,
+        257
+      ],
+      "expected": "17'-0\" x 4'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "17'-0\" x 4'-0\"",
+          "word_ids": [
+            1073,
+            1074,
+            1075
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "17'-0\" x 4'-0\"",
+          "word_ids": [
+            142,
+            143,
+            144
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 6,
+      "column": "type",
+      "page": 3,
+      "bbox": [
+        1820,
+        233,
+        1965,
+        257
+      ],
+      "expected": "OPPOSED BLADE, LOW-LEAKAGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            1076,
+            1077,
+            1078
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            145,
+            146,
+            147
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 6,
+      "column": "function",
+      "page": 3,
+      "bbox": [
+        1965,
+        233,
+        2090,
+        257
+      ],
+      "expected": "SMOKE RELIEF DAMPER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SMOKE RELIEF DAMPER",
+          "word_ids": [
+            1079,
+            1080,
+            1081
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SMOKE RELIEF DAMPER",
+          "word_ids": [
+            148,
+            149,
+            150
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 6,
+      "column": "max_cfm",
+      "page": 3,
+      "bbox": [
+        2090,
+        233,
+        2150,
+        257
+      ],
+      "expected": "75,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "75,000",
+          "word_ids": [
+            1082
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "75,000",
+          "word_ids": [
+            151
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 6,
+      "column": "mounting",
+      "page": 3,
+      "bbox": [
+        2150,
+        233,
+        2230,
+        257
+      ],
+      "expected": "WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WALL",
+          "word_ids": [
+            1083
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WALL",
+          "word_ids": [
+            152
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 6,
+      "column": "control",
+      "page": 3,
+      "bbox": [
+        2230,
+        233,
+        2330,
+        257
+      ],
+      "expected": "MODULATING, FAIL-OPEN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MODULATING, FAIL-OPEN",
+          "word_ids": [
+            1084,
+            1085
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MODULATING, FAIL-OPEN",
+          "word_ids": [
+            1089,
+            1090
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 6,
+      "column": "notes",
+      "page": 3,
+      "bbox": [
+        2330,
+        233,
+        2430,
+        257
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1086,
+            1087
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1103,
+            1104
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 7,
+      "column": "mark",
+      "page": 3,
+      "bbox": [
+        1470,
+        257,
+        1535,
+        280
+      ],
+      "expected": "CD-A7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-A7",
+          "word_ids": [
+            1088
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-A7",
+          "word_ids": [
+            165
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 7,
+      "column": "base_alt_or_existing",
+      "page": 3,
+      "bbox": [
+        1535,
+        257,
+        1600,
+        280
+      ],
+      "expected": "(E)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(E)",
+          "word_ids": [
+            1089
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(E)",
+          "word_ids": [
+            166
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 7,
+      "column": "manufacturer",
+      "page": 3,
+      "bbox": [
+        1600,
+        257,
+        1660,
+        280
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            1090
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            167
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 7,
+      "column": "model_number",
+      "page": 3,
+      "bbox": [
+        1660,
+        257,
+        1745,
+        280
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            1091
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            168
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 7,
+      "column": "size",
+      "page": 3,
+      "bbox": [
+        1745,
+        257,
+        1820,
+        280
+      ],
+      "expected": "40'-0\" x 2'-6\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "40'-0\" x 2'-6\"",
+          "word_ids": [
+            1092,
+            1093,
+            1094
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "40'-0\" x 2'-6\"",
+          "word_ids": [
+            169,
+            170,
+            171
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 7,
+      "column": "type",
+      "page": 3,
+      "bbox": [
+        1820,
+        257,
+        1965,
+        280
+      ],
+      "expected": "VERIFY IN FIELD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VERIFY IN FIELD",
+          "word_ids": [
+            1095,
+            1096,
+            1097
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VERIFY IN FIELD",
+          "word_ids": [
+            172,
+            173,
+            174
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 7,
+      "column": "function",
+      "page": 3,
+      "bbox": [
+        1965,
+        257,
+        2090,
+        280
+      ],
+      "expected": "SUPPLY AIR PLENUM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR PLENUM",
+          "word_ids": [
+            1098,
+            1099,
+            1100
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR PLENUM",
+          "word_ids": [
+            175,
+            176,
+            177
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 7,
+      "column": "max_cfm",
+      "page": 3,
+      "bbox": [
+        2090,
+        257,
+        2150,
+        280
+      ],
+      "expected": "75,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "75,000",
+          "word_ids": [
+            1101
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "75,000",
+          "word_ids": [
+            178
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 7,
+      "column": "mounting",
+      "page": 3,
+      "bbox": [
+        2150,
+        257,
+        2230,
+        280
+      ],
+      "expected": "WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WALL",
+          "word_ids": [
+            1102
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WALL",
+          "word_ids": [
+            179
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 7,
+      "column": "control",
+      "page": 3,
+      "bbox": [
+        2230,
+        257,
+        2330,
+        280
+      ],
+      "expected": "MODULATING, FAIL LAST POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MODULATING, FAIL LAST POSITION",
+          "word_ids": [
+            1103,
+            1104,
+            1105,
+            1106
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MODULATING, FAIL LAST POSITION",
+          "word_ids": [
+            1091,
+            1092,
+            1093,
+            1094
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 7,
+      "column": "notes",
+      "page": 3,
+      "bbox": [
+        2330,
+        257,
+        2430,
+        280
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1107,
+            1108
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1105,
+            1106
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 8,
+      "column": "mark",
+      "page": 3,
+      "bbox": [
+        1470,
+        280,
+        1535,
+        303
+      ],
+      "expected": "CD-A8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-A8",
+          "word_ids": [
+            1109
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-A8",
+          "word_ids": [
+            193
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 8,
+      "column": "base_alt_or_existing",
+      "page": 3,
+      "bbox": [
+        1535,
+        280,
+        1600,
+        303
+      ],
+      "expected": "ALT. 12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALT. 12",
+          "word_ids": [
+            1110,
+            1111
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALT. 12",
+          "word_ids": [
+            194,
+            195
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 8,
+      "column": "manufacturer",
+      "page": 3,
+      "bbox": [
+        1600,
+        280,
+        1660,
+        303
+      ],
+      "expected": "RUSKIN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            1112
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            196
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 8,
+      "column": "model_number",
+      "page": 3,
+      "bbox": [
+        1660,
+        280,
+        1745,
+        303
+      ],
+      "expected": "CD60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            1113
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            197
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 8,
+      "column": "size",
+      "page": 3,
+      "bbox": [
+        1745,
+        280,
+        1820,
+        303
+      ],
+      "expected": "30'-0\" x 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30'-0\" x 1'-0\"",
+          "word_ids": [
+            1114,
+            1115,
+            1116
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30'-0\" x 1'-0\"",
+          "word_ids": [
+            198,
+            199,
+            200
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 8,
+      "column": "type",
+      "page": 3,
+      "bbox": [
+        1820,
+        280,
+        1965,
+        303
+      ],
+      "expected": "OPPOSED BLADE, LOW-LEAKAGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            1117,
+            1118,
+            1119
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            201,
+            202,
+            203
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 8,
+      "column": "function",
+      "page": 3,
+      "bbox": [
+        1965,
+        280,
+        2090,
+        303
+      ],
+      "expected": "SUPPLY TO RELIEF BYPASS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY TO RELIEF BYPASS",
+          "word_ids": [
+            1120,
+            1121,
+            1122,
+            1123
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY TO RELIEF BYPASS",
+          "word_ids": [
+            204,
+            205,
+            206,
+            207
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 8,
+      "column": "max_cfm",
+      "page": 3,
+      "bbox": [
+        2090,
+        280,
+        2150,
+        303
+      ],
+      "expected": "30,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30,000",
+          "word_ids": [
+            1124
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30,000",
+          "word_ids": [
+            225
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 8,
+      "column": "mounting",
+      "page": 3,
+      "bbox": [
+        2150,
+        280,
+        2230,
+        303
+      ],
+      "expected": "PLENUM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PLENUM",
+          "word_ids": [
+            1125
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PLENUM",
+          "word_ids": [
+            226
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 8,
+      "column": "control",
+      "page": 3,
+      "bbox": [
+        2230,
+        280,
+        2330,
+        303
+      ],
+      "expected": "MODULATING, FAIL-CLOSED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MODULATING, FAIL-CLOSED",
+          "word_ids": [
+            1126,
+            1127
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MODULATING, FAIL-CLOSED",
+          "word_ids": [
+            1095,
+            1096
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 8,
+      "column": "notes",
+      "page": 3,
+      "bbox": [
+        2330,
+        280,
+        2430,
+        303
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1128,
+            1129
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1107,
+            1108
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 9,
+      "column": "mark",
+      "page": 3,
+      "bbox": [
+        1470,
+        304,
+        1535,
+        327
+      ],
+      "expected": "CD-A9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-A9",
+          "word_ids": [
+            1130
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-A9",
+          "word_ids": [
+            404
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 9,
+      "column": "base_alt_or_existing",
+      "page": 3,
+      "bbox": [
+        1535,
+        304,
+        1600,
+        327
+      ],
+      "expected": "(E)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "(E)",
+          "word_ids": [
+            1131
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "(E)",
+          "word_ids": [
+            405
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 9,
+      "column": "manufacturer",
+      "page": 3,
+      "bbox": [
+        1600,
+        304,
+        1660,
+        327
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            1132
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            406
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 9,
+      "column": "model_number",
+      "page": 3,
+      "bbox": [
+        1660,
+        304,
+        1745,
+        327
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            1133
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            407
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 9,
+      "column": "size",
+      "page": 3,
+      "bbox": [
+        1745,
+        304,
+        1820,
+        327
+      ],
+      "expected": "11'-0\" x 8'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11'-0\" x 8'-0\"",
+          "word_ids": [
+            1134,
+            1135,
+            1136
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11'-0\" x 8'-0\"",
+          "word_ids": [
+            408,
+            409,
+            410
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 9,
+      "column": "type",
+      "page": 3,
+      "bbox": [
+        1820,
+        304,
+        1965,
+        327
+      ],
+      "expected": "VERIFY IN FIELD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VERIFY IN FIELD",
+          "word_ids": [
+            1137,
+            1138,
+            1139
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VERIFY IN FIELD",
+          "word_ids": [
+            411,
+            412,
+            413
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 9,
+      "column": "function",
+      "page": 3,
+      "bbox": [
+        1965,
+        304,
+        2090,
+        327
+      ],
+      "expected": "FLUE STACK SMOKE EXHAUST",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FLUE STACK SMOKE EXHAUST",
+          "word_ids": [
+            1140,
+            1141,
+            1142,
+            1143
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FLUE STACK SMOKE EXHAUST",
+          "word_ids": [
+            208,
+            209,
+            210,
+            211
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 9,
+      "column": "max_cfm",
+      "page": 3,
+      "bbox": [
+        2090,
+        304,
+        2150,
+        327
+      ],
+      "expected": "17,500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "17,500",
+          "word_ids": [
+            1144
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "17,500",
+          "word_ids": [
+            227
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 9,
+      "column": "mounting",
+      "page": 3,
+      "bbox": [
+        2150,
+        304,
+        2230,
+        327
+      ],
+      "expected": "ROOF VENTILATOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ROOF VENTILATOR",
+          "word_ids": [
+            1145,
+            1146
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ROOF VENTILATOR",
+          "word_ids": [
+            228,
+            229
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 9,
+      "column": "control",
+      "page": 3,
+      "bbox": [
+        2230,
+        304,
+        2330,
+        327
+      ],
+      "expected": "MODULATING, FAIL LAST POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MODULATING, FAIL LAST POSITION",
+          "word_ids": [
+            1147,
+            1148,
+            1149,
+            1150
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MODULATING, FAIL LAST POSITION",
+          "word_ids": [
+            1097,
+            1098,
+            1099,
+            1100
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 9,
+      "column": "notes",
+      "page": 3,
+      "bbox": [
+        2330,
+        304,
+        2430,
+        327
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1151,
+            1152
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1109,
+            1110
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 10,
+      "column": "mark",
+      "page": 3,
+      "bbox": [
+        1470,
+        328,
+        1535,
+        351
+      ],
+      "expected": "CD-A10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-A10",
+          "word_ids": [
+            1153
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-A10",
+          "word_ids": [
+            430
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 10,
+      "column": "base_alt_or_existing",
+      "page": 3,
+      "bbox": [
+        1535,
+        328,
+        1600,
+        351
+      ],
+      "expected": "BASE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BASE",
+          "word_ids": [
+            1154
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BASE",
+          "word_ids": [
+            431
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 10,
+      "column": "manufacturer",
+      "page": 3,
+      "bbox": [
+        1600,
+        328,
+        1660,
+        351
+      ],
+      "expected": "RUSKIN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            1155
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            432
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 10,
+      "column": "model_number",
+      "page": 3,
+      "bbox": [
+        1660,
+        328,
+        1745,
+        351
+      ],
+      "expected": "CD60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            1156
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            433
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 10,
+      "column": "size",
+      "page": 3,
+      "bbox": [
+        1745,
+        328,
+        1820,
+        351
+      ],
+      "expected": "14\"x24\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14\"x24\"",
+          "word_ids": [
+            1157
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14\"x24\"",
+          "word_ids": [
+            434
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 10,
+      "column": "type",
+      "page": 3,
+      "bbox": [
+        1820,
+        328,
+        1965,
+        351
+      ],
+      "expected": "OPPOSED BLADE, LOW-LEAKAGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            1158,
+            1159,
+            1160
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            435,
+            436,
+            437
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 10,
+      "column": "function",
+      "page": 3,
+      "bbox": [
+        1965,
+        328,
+        2090,
+        351
+      ],
+      "expected": "BOILER ROOM INTAKE LOUVER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BOILER ROOM INTAKE LOUVER",
+          "word_ids": [
+            1161,
+            1162,
+            1163,
+            1164
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BOILER ROOM INTAKE LOUVER",
+          "word_ids": [
+            212,
+            213,
+            214,
+            215
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 10,
+      "column": "max_cfm",
+      "page": 3,
+      "bbox": [
+        2090,
+        328,
+        2150,
+        351
+      ],
+      "expected": "600",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "600",
+          "word_ids": [
+            1165
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "600",
+          "word_ids": [
+            230
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 10,
+      "column": "mounting",
+      "page": 3,
+      "bbox": [
+        2150,
+        328,
+        2230,
+        351
+      ],
+      "expected": "WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WALL",
+          "word_ids": [
+            1166
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WALL",
+          "word_ids": [
+            231
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 10,
+      "column": "control",
+      "page": 3,
+      "bbox": [
+        2230,
+        328,
+        2330,
+        351
+      ],
+      "expected": "TWO-POSITION, FAIL-CLOSED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TWO-POSITION, FAIL-CLOSED",
+          "word_ids": [
+            1167,
+            1168
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TWO-POSITION, FAIL-CLOSED",
+          "word_ids": [
+            1101,
+            1102
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 10,
+      "column": "notes",
+      "page": 3,
+      "bbox": [
+        2330,
+        328,
+        2430,
+        351
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1169,
+            1170
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1111,
+            1112
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 11,
+      "column": "mark",
+      "page": 3,
+      "bbox": [
+        1470,
+        352,
+        1535,
+        385
+      ],
+      "expected": "CD-A11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-A11",
+          "word_ids": [
+            1171
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-A11",
+          "word_ids": [
+            438
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 11,
+      "column": "base_alt_or_existing",
+      "page": 3,
+      "bbox": [
+        1535,
+        352,
+        1600,
+        385
+      ],
+      "expected": "ALT. 10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALT. 10",
+          "word_ids": [
+            1172,
+            1173
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALT. 10",
+          "word_ids": [
+            439,
+            440
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 11,
+      "column": "manufacturer",
+      "page": 3,
+      "bbox": [
+        1600,
+        352,
+        1660,
+        385
+      ],
+      "expected": "RUSKIN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            1174
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            441
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 11,
+      "column": "model_number",
+      "page": 3,
+      "bbox": [
+        1660,
+        352,
+        1745,
+        385
+      ],
+      "expected": "CD60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            1175
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            442
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 11,
+      "column": "size",
+      "page": 3,
+      "bbox": [
+        1745,
+        352,
+        1820,
+        385
+      ],
+      "expected": "18\"x24\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18\"x24\"",
+          "word_ids": [
+            1176
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18\"x24\"",
+          "word_ids": [
+            443
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 11,
+      "column": "type",
+      "page": 3,
+      "bbox": [
+        1820,
+        352,
+        1965,
+        385
+      ],
+      "expected": "OPPOSED BLADE, LOW-LEAKAGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            1177,
+            1178,
+            1179
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            444,
+            445,
+            446
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 11,
+      "column": "function",
+      "page": 3,
+      "bbox": [
+        1965,
+        352,
+        2090,
+        385
+      ],
+      "expected": "AIR CONDITIONING EQUIPMENT INTAKE LOUVER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIR CONDITIONING EQUIPMENT INTAKE LOUVER",
+          "word_ids": [
+            1180,
+            1181,
+            1182,
+            1183,
+            1184
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIR CONDITIONING EQUIPMENT INTAKE LOUVER",
+          "word_ids": [
+            216,
+            217,
+            218,
+            219,
+            220
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 11,
+      "column": "max_cfm",
+      "page": 3,
+      "bbox": [
+        2090,
+        352,
+        2150,
+        385
+      ],
+      "expected": "900",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "900",
+          "word_ids": [
+            1185
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "900",
+          "word_ids": [
+            232
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 11,
+      "column": "mounting",
+      "page": 3,
+      "bbox": [
+        2150,
+        352,
+        2230,
+        385
+      ],
+      "expected": "WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WALL",
+          "word_ids": [
+            1186
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WALL",
+          "word_ids": [
+            233
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 11,
+      "column": "control",
+      "page": 3,
+      "bbox": [
+        2230,
+        352,
+        2330,
+        385
+      ],
+      "expected": "TWO-POSITION, FAIL-CLOSED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TWO-POSITION, FAIL-CLOSED",
+          "word_ids": [
+            1187,
+            1188
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TWO-POSITION, FAIL-CLOSED",
+          "word_ids": [
+            1113,
+            1114
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 11,
+      "column": "notes",
+      "page": 3,
+      "bbox": [
+        2330,
+        352,
+        2430,
+        385
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1189,
+            1190
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1115,
+            1116
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 12,
+      "column": "mark",
+      "page": 3,
+      "bbox": [
+        1470,
+        386,
+        1535,
+        409
+      ],
+      "expected": "CD-A12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-A12",
+          "word_ids": [
+            1191
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-A12",
+          "word_ids": [
+            447
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 12,
+      "column": "base_alt_or_existing",
+      "page": 3,
+      "bbox": [
+        1535,
+        386,
+        1600,
+        409
+      ],
+      "expected": "BASE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BASE",
+          "word_ids": [
+            1192
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BASE",
+          "word_ids": [
+            448
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 12,
+      "column": "manufacturer",
+      "page": 3,
+      "bbox": [
+        1600,
+        386,
+        1660,
+        409
+      ],
+      "expected": "RUSKIN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            1193
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            449
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 12,
+      "column": "model_number",
+      "page": 3,
+      "bbox": [
+        1660,
+        386,
+        1745,
+        409
+      ],
+      "expected": "CD60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            1194
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            450
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 12,
+      "column": "size",
+      "page": 3,
+      "bbox": [
+        1745,
+        386,
+        1820,
+        409
+      ],
+      "expected": "24\"x24\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24\"x24\"",
+          "word_ids": [
+            1195
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24\"x24\"",
+          "word_ids": [
+            451
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 12,
+      "column": "type",
+      "page": 3,
+      "bbox": [
+        1820,
+        386,
+        1965,
+        409
+      ],
+      "expected": "OPPOSED BLADE, LOW-LEAKAGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            1196,
+            1197,
+            1198
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            2378,
+            2379,
+            2380
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 12,
+      "column": "function",
+      "page": 3,
+      "bbox": [
+        1965,
+        386,
+        2090,
+        409
+      ],
+      "expected": "MECHANICAL LOFT INTAKE LOUVER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL LOFT INTAKE LOUVER",
+          "word_ids": [
+            1199,
+            1200,
+            1201,
+            1202
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL LOFT INTAKE LOUVER",
+          "word_ids": [
+            221,
+            222,
+            223,
+            224
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 12,
+      "column": "max_cfm",
+      "page": 3,
+      "bbox": [
+        2090,
+        386,
+        2150,
+        409
+      ],
+      "expected": "1,200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,200",
+          "word_ids": [
+            1203
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,200",
+          "word_ids": [
+            234
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 12,
+      "column": "mounting",
+      "page": 3,
+      "bbox": [
+        2150,
+        386,
+        2230,
+        409
+      ],
+      "expected": "WALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WALL",
+          "word_ids": [
+            1204
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WALL",
+          "word_ids": [
+            235
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 12,
+      "column": "control",
+      "page": 3,
+      "bbox": [
+        2230,
+        386,
+        2330,
+        409
+      ],
+      "expected": "TWO-POSITION, FAIL-CLOSED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TWO-POSITION, FAIL-CLOSED",
+          "word_ids": [
+            1205,
+            1206
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TWO-POSITION, FAIL-CLOSED",
+          "word_ids": [
+            1117,
+            1118
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 12,
+      "column": "notes",
+      "page": 3,
+      "bbox": [
+        2330,
+        386,
+        2430,
+        409
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1207,
+            1208
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1139,
+            1140
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 13,
+      "column": "mark",
+      "page": 3,
+      "bbox": [
+        1470,
+        410,
+        1535,
+        434
+      ],
+      "expected": "CD-A13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-A13",
+          "word_ids": [
+            1209
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-A13",
+          "word_ids": [
+            452
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 13,
+      "column": "base_alt_or_existing",
+      "page": 3,
+      "bbox": [
+        1535,
+        410,
+        1600,
+        434
+      ],
+      "expected": "ALT. 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALT. 3",
+          "word_ids": [
+            1210,
+            1211
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALT. 3",
+          "word_ids": [
+            453,
+            454
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 13,
+      "column": "manufacturer",
+      "page": 3,
+      "bbox": [
+        1600,
+        410,
+        1660,
+        434
+      ],
+      "expected": "RUSKIN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            1212
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            455
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 13,
+      "column": "model_number",
+      "page": 3,
+      "bbox": [
+        1660,
+        410,
+        1745,
+        434
+      ],
+      "expected": "CD60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            1213
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            456
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 13,
+      "column": "size",
+      "page": 3,
+      "bbox": [
+        1745,
+        410,
+        1820,
+        434
+      ],
+      "expected": "14\"x12\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14\"x12\"",
+          "word_ids": [
+            1214
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14\"x12\"",
+          "word_ids": [
+            457
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 13,
+      "column": "type",
+      "page": 3,
+      "bbox": [
+        1820,
+        410,
+        1965,
+        434
+      ],
+      "expected": "OPPOSED BLADE, LOW-LEAKAGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            1215,
+            1216,
+            1217
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            2381,
+            2382,
+            2383
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 13,
+      "column": "function",
+      "page": 3,
+      "bbox": [
+        1965,
+        410,
+        2090,
+        434
+      ],
+      "expected": "VAV SA ZONE 1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV SA ZONE 1",
+          "word_ids": [
+            1218,
+            1219,
+            1220,
+            1221
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV SA ZONE 1",
+          "word_ids": [
+            236,
+            237,
+            238,
+            239
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 13,
+      "column": "max_cfm",
+      "page": 3,
+      "bbox": [
+        2090,
+        410,
+        2150,
+        434
+      ],
+      "expected": "1,240",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,240",
+          "word_ids": [
+            1222
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,240",
+          "word_ids": [
+            240
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 13,
+      "column": "mounting",
+      "page": 3,
+      "bbox": [
+        2150,
+        410,
+        2230,
+        434
+      ],
+      "expected": "DUCT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT",
+          "word_ids": [
+            1223
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT",
+          "word_ids": [
+            241
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 13,
+      "column": "control",
+      "page": 3,
+      "bbox": [
+        2230,
+        410,
+        2330,
+        434
+      ],
+      "expected": "MODULATING, FAIL LAST POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MODULATING, FAIL LAST POSITION",
+          "word_ids": [
+            1224,
+            1225,
+            1226,
+            1227
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MODULATING, FAIL LAST POSITION",
+          "word_ids": [
+            1119,
+            1120,
+            1121,
+            1122
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 13,
+      "column": "notes",
+      "page": 3,
+      "bbox": [
+        2330,
+        410,
+        2430,
+        434
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1228,
+            1229
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1141,
+            1142
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 14,
+      "column": "mark",
+      "page": 3,
+      "bbox": [
+        1470,
+        434,
+        1535,
+        458
+      ],
+      "expected": "CD-A14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-A14",
+          "word_ids": [
+            1230
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-A14",
+          "word_ids": [
+            458
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 14,
+      "column": "base_alt_or_existing",
+      "page": 3,
+      "bbox": [
+        1535,
+        434,
+        1600,
+        458
+      ],
+      "expected": "ALT. 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALT. 3",
+          "word_ids": [
+            1231,
+            1232
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALT. 3",
+          "word_ids": [
+            459,
+            460
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 14,
+      "column": "manufacturer",
+      "page": 3,
+      "bbox": [
+        1600,
+        434,
+        1660,
+        458
+      ],
+      "expected": "RUSKIN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            1233
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            461
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 14,
+      "column": "model_number",
+      "page": 3,
+      "bbox": [
+        1660,
+        434,
+        1745,
+        458
+      ],
+      "expected": "CD60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            1234
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            462
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 14,
+      "column": "size",
+      "page": 3,
+      "bbox": [
+        1745,
+        434,
+        1820,
+        458
+      ],
+      "expected": "20\"x12\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20\"x12\"",
+          "word_ids": [
+            1235
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20\"x12\"",
+          "word_ids": [
+            463
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 14,
+      "column": "type",
+      "page": 3,
+      "bbox": [
+        1820,
+        434,
+        1965,
+        458
+      ],
+      "expected": "OPPOSED BLADE, LOW-LEAKAGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            1236,
+            1237,
+            1238
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            2384,
+            2385,
+            2386
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 14,
+      "column": "function",
+      "page": 3,
+      "bbox": [
+        1965,
+        434,
+        2090,
+        458
+      ],
+      "expected": "VAV SA ZONE 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV SA ZONE 2",
+          "word_ids": [
+            1239,
+            1240,
+            1241,
+            1242
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV SA ZONE 2",
+          "word_ids": [
+            242,
+            243,
+            244,
+            245
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 14,
+      "column": "max_cfm",
+      "page": 3,
+      "bbox": [
+        2090,
+        434,
+        2150,
+        458
+      ],
+      "expected": "1,590",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,590",
+          "word_ids": [
+            1243
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,590",
+          "word_ids": [
+            246
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 14,
+      "column": "mounting",
+      "page": 3,
+      "bbox": [
+        2150,
+        434,
+        2230,
+        458
+      ],
+      "expected": "DUCT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT",
+          "word_ids": [
+            1244
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT",
+          "word_ids": [
+            247
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 14,
+      "column": "control",
+      "page": 3,
+      "bbox": [
+        2230,
+        434,
+        2330,
+        458
+      ],
+      "expected": "MODULATING, FAIL LAST POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MODULATING, FAIL LAST POSITION",
+          "word_ids": [
+            1245,
+            1246,
+            1247,
+            1248
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MODULATING, FAIL LAST POSITION",
+          "word_ids": [
+            1123,
+            1124,
+            1125,
+            1126
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 14,
+      "column": "notes",
+      "page": 3,
+      "bbox": [
+        2330,
+        434,
+        2430,
+        458
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1249,
+            1250
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1143,
+            1144
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 15,
+      "column": "mark",
+      "page": 3,
+      "bbox": [
+        1470,
+        458,
+        1535,
+        482
+      ],
+      "expected": "CD-A15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-A15",
+          "word_ids": [
+            1251
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-A15",
+          "word_ids": [
+            464
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 15,
+      "column": "base_alt_or_existing",
+      "page": 3,
+      "bbox": [
+        1535,
+        458,
+        1600,
+        482
+      ],
+      "expected": "ALT. 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALT. 3",
+          "word_ids": [
+            1252,
+            1253
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALT. 3",
+          "word_ids": [
+            465,
+            466
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 15,
+      "column": "manufacturer",
+      "page": 3,
+      "bbox": [
+        1600,
+        458,
+        1660,
+        482
+      ],
+      "expected": "RUSKIN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            1254
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            467
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 15,
+      "column": "model_number",
+      "page": 3,
+      "bbox": [
+        1660,
+        458,
+        1745,
+        482
+      ],
+      "expected": "CD60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            1255
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            468
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 15,
+      "column": "size",
+      "page": 3,
+      "bbox": [
+        1745,
+        458,
+        1820,
+        482
+      ],
+      "expected": "24\"x12\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24\"x12\"",
+          "word_ids": [
+            1256
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24\"x12\"",
+          "word_ids": [
+            469
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 15,
+      "column": "type",
+      "page": 3,
+      "bbox": [
+        1820,
+        458,
+        1965,
+        482
+      ],
+      "expected": "OPPOSED BLADE, LOW-LEAKAGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            1257,
+            1258,
+            1259
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            2387,
+            2388,
+            2389
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 15,
+      "column": "function",
+      "page": 3,
+      "bbox": [
+        1965,
+        458,
+        2090,
+        482
+      ],
+      "expected": "VAV SA ZONE 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV SA ZONE 3",
+          "word_ids": [
+            1260,
+            1261,
+            1262,
+            1263
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV SA ZONE 3",
+          "word_ids": [
+            248,
+            249,
+            250,
+            251
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 15,
+      "column": "max_cfm",
+      "page": 3,
+      "bbox": [
+        2090,
+        458,
+        2150,
+        482
+      ],
+      "expected": "2,460",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,460",
+          "word_ids": [
+            1264
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,460",
+          "word_ids": [
+            252
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 15,
+      "column": "mounting",
+      "page": 3,
+      "bbox": [
+        2150,
+        458,
+        2230,
+        482
+      ],
+      "expected": "DUCT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT",
+          "word_ids": [
+            1265
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT",
+          "word_ids": [
+            253
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 15,
+      "column": "control",
+      "page": 3,
+      "bbox": [
+        2230,
+        458,
+        2330,
+        482
+      ],
+      "expected": "MODULATING, FAIL LAST POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MODULATING, FAIL LAST POSITION",
+          "word_ids": [
+            1266,
+            1267,
+            1268,
+            1269
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MODULATING, FAIL LAST POSITION",
+          "word_ids": [
+            1127,
+            1128,
+            1129,
+            1130
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 15,
+      "column": "notes",
+      "page": 3,
+      "bbox": [
+        2330,
+        458,
+        2430,
+        482
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1270,
+            1271
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1145,
+            1146
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 16,
+      "column": "mark",
+      "page": 3,
+      "bbox": [
+        1470,
+        482,
+        1535,
+        506
+      ],
+      "expected": "CD-A16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-A16",
+          "word_ids": [
+            1272
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-A16",
+          "word_ids": [
+            470
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 16,
+      "column": "base_alt_or_existing",
+      "page": 3,
+      "bbox": [
+        1535,
+        482,
+        1600,
+        506
+      ],
+      "expected": "ALT. 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALT. 3",
+          "word_ids": [
+            1273,
+            1274
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALT. 3",
+          "word_ids": [
+            471,
+            472
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 16,
+      "column": "manufacturer",
+      "page": 3,
+      "bbox": [
+        1600,
+        482,
+        1660,
+        506
+      ],
+      "expected": "RUSKIN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            1275
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            473
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 16,
+      "column": "model_number",
+      "page": 3,
+      "bbox": [
+        1660,
+        482,
+        1745,
+        506
+      ],
+      "expected": "CD60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            1276
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            474
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 16,
+      "column": "size",
+      "page": 3,
+      "bbox": [
+        1745,
+        482,
+        1820,
+        506
+      ],
+      "expected": "14\"x12\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14\"x12\"",
+          "word_ids": [
+            1277
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14\"x12\"",
+          "word_ids": [
+            475
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 16,
+      "column": "type",
+      "page": 3,
+      "bbox": [
+        1820,
+        482,
+        1965,
+        506
+      ],
+      "expected": "OPPOSED BLADE, LOW-LEAKAGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            1278,
+            1279,
+            1280
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            2390,
+            2391,
+            2392
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 16,
+      "column": "function",
+      "page": 3,
+      "bbox": [
+        1965,
+        482,
+        2090,
+        506
+      ],
+      "expected": "VAV SA ZONE 4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV SA ZONE 4",
+          "word_ids": [
+            1281,
+            1282,
+            1283,
+            1284
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV SA ZONE 4",
+          "word_ids": [
+            254,
+            255,
+            256,
+            257
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 16,
+      "column": "max_cfm",
+      "page": 3,
+      "bbox": [
+        2090,
+        482,
+        2150,
+        506
+      ],
+      "expected": "905",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "905",
+          "word_ids": [
+            1285
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "905",
+          "word_ids": [
+            258
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 16,
+      "column": "mounting",
+      "page": 3,
+      "bbox": [
+        2150,
+        482,
+        2230,
+        506
+      ],
+      "expected": "DUCT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT",
+          "word_ids": [
+            1286
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT",
+          "word_ids": [
+            259
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 16,
+      "column": "control",
+      "page": 3,
+      "bbox": [
+        2230,
+        482,
+        2330,
+        506
+      ],
+      "expected": "MODULATING, FAIL LAST POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MODULATING, FAIL LAST POSITION",
+          "word_ids": [
+            1287,
+            1288,
+            1289,
+            1290
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MODULATING, FAIL LAST POSITION",
+          "word_ids": [
+            1131,
+            1132,
+            1133,
+            1134
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 16,
+      "column": "notes",
+      "page": 3,
+      "bbox": [
+        2330,
+        482,
+        2430,
+        506
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1291,
+            1292
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1147,
+            1148
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 17,
+      "column": "mark",
+      "page": 3,
+      "bbox": [
+        1470,
+        506,
+        1535,
+        530
+      ],
+      "expected": "CD-A17",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD-A17",
+          "word_ids": [
+            1293
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD-A17",
+          "word_ids": [
+            476
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 17,
+      "column": "base_alt_or_existing",
+      "page": 3,
+      "bbox": [
+        1535,
+        506,
+        1600,
+        530
+      ],
+      "expected": "ALT. 3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALT. 3",
+          "word_ids": [
+            1294,
+            1295
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALT. 3",
+          "word_ids": [
+            477,
+            478
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 17,
+      "column": "manufacturer",
+      "page": 3,
+      "bbox": [
+        1600,
+        506,
+        1660,
+        530
+      ],
+      "expected": "RUSKIN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            1296
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RUSKIN",
+          "word_ids": [
+            479
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 17,
+      "column": "model_number",
+      "page": 3,
+      "bbox": [
+        1660,
+        506,
+        1745,
+        530
+      ],
+      "expected": "CD60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            1297
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CD60",
+          "word_ids": [
+            480
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 17,
+      "column": "size",
+      "page": 3,
+      "bbox": [
+        1745,
+        506,
+        1820,
+        530
+      ],
+      "expected": "10\"x8\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10\"x8\"",
+          "word_ids": [
+            1298
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10\"x8\"",
+          "word_ids": [
+            481
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 17,
+      "column": "type",
+      "page": 3,
+      "bbox": [
+        1820,
+        506,
+        1965,
+        530
+      ],
+      "expected": "OPPOSED BLADE, LOW-LEAKAGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            1299,
+            1300,
+            1301
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OPPOSED BLADE, LOW-LEAKAGE",
+          "word_ids": [
+            2393,
+            2394,
+            2395
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 17,
+      "column": "function",
+      "page": 3,
+      "bbox": [
+        1965,
+        506,
+        2090,
+        530
+      ],
+      "expected": "VAV SA ZONE 5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV SA ZONE 5",
+          "word_ids": [
+            1302,
+            1303,
+            1304,
+            1305
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV SA ZONE 5",
+          "word_ids": [
+            260,
+            261,
+            262,
+            263
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 17,
+      "column": "max_cfm",
+      "page": 3,
+      "bbox": [
+        2090,
+        506,
+        2150,
+        530
+      ],
+      "expected": "205",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "205",
+          "word_ids": [
+            1306
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "205",
+          "word_ids": [
+            264
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 17,
+      "column": "mounting",
+      "page": 3,
+      "bbox": [
+        2150,
+        506,
+        2230,
+        530
+      ],
+      "expected": "DUCT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT",
+          "word_ids": [
+            1307
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT",
+          "word_ids": [
+            265
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 17,
+      "column": "control",
+      "page": 3,
+      "bbox": [
+        2230,
+        506,
+        2330,
+        530
+      ],
+      "expected": "MODULATING, FAIL LAST POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MODULATING, FAIL LAST POSITION",
+          "word_ids": [
+            1308,
+            1309,
+            1310,
+            1311
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MODULATING, FAIL LAST POSITION",
+          "word_ids": [
+            1135,
+            1136,
+            1137,
+            1138
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "row": 17,
+      "column": "notes",
+      "page": 3,
+      "bbox": [
+        2330,
+        506,
+        2430,
+        530
+      ],
+      "expected": "SEE BELOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1312,
+            1313
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SEE BELOW",
+          "word_ids": [
+            1149,
+            1150
+          ]
+        }
+      }
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "header": "CONTROL DAMPER SCHEDULE",
+      "page": 3,
+      "bbox": [
+        1480,
+        35,
+        1870,
+        75
+      ],
+      "engine": "mupdf",
+      "actual": "CONTROL DAMPER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M03-CONTROL-DAMPER-SCHEDULE",
+      "header": "CONTROL DAMPER SCHEDULE",
+      "page": 3,
+      "bbox": [
+        1480,
+        35,
+        1870,
+        75
+      ],
+      "engine": "poppler",
+      "actual": "CONTROL DAMPER SCHEDULE",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

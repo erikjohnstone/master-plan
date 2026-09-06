@@ -1,0 +1,57 @@
+{
+  "document_id": "14__vol2__021",
+  "module_role": "Project, sheet, scale, and review-scope ground truth for the supplied USDA ARS laboratory mechanical set. Project locality is not inferred because no city/state is established by the supplied sheets.",
+  "project": {
+    "owner_as_printed": "USDA Agricultural Research Service",
+    "project_name_as_printed": "Technology Center",
+    "architect_engineer_as_printed": "Setty & Associates",
+    "issue_as_printed": "Bid Set",
+    "drawing_dates_observed": ["08/27/2019"],
+    "location": {"status": "not_stated_in_supplied_set", "value": null}
+  },
+  "scope": "Project, sheet, scale and full-page-review context for the supplied 19-page USDA ARS laboratory mechanical set. Locality is left unknown because the supplied sheets do not establish it.",
+  "source_scope": {
+    "source_pdf": "pdf/14__vol2__021__USDA_ARS_Laboratory_Mechanical_Set_2019.pdf",
+    "page_count": 19,
+    "reviewed_sheets": [
+      "M-001", "M-101", "M-102", "M-103", "M-201", "M-202", "M-301", "M-401", "M-501", "M-502", "M-503", "M-504", "M-601", "M-701", "M-801", "M-802", "M-803", "M-804", "M-805"
+    ],
+    "controls_sheets": ["M-801", "M-802", "M-803", "M-804", "M-805"],
+    "schedule_sheet": "M-601",
+    "hydronic_schematic_sheet": "M-701"
+  },
+  "scale_semantics": {
+    "plan_scales_observed": ["1/8 in = 1 ft-0 in", "1/4 in = 1 ft-0 in"],
+    "takeoff_scale_status": "multiple_printed_plan_scales; no single document-wide scale asserted",
+    "bar_scale_status": "graphic scale bars appear on plan sheets; schedule and sequence sheets are not scale-derived"
+  },
+  "visual_review_pages": [
+    {"page": 1, "render": "reviews/14__vol2__021/p1-p1-full-poppler-poppler.png", "finding": "M-001 legend identifies supply, hood-exhaust, general-exhaust air valves and dampers."},
+    {"page": 2, "render": "reviews/14__vol2__021/p2-p2-full-poppler-poppler.png", "finding": "M-101 first-floor HVAC ceiling plans; laboratory supply-air-valve note is visible."},
+    {"page": 3, "render": "reviews/14__vol2__021/p3-p3-full-poppler-poppler.png", "finding": "M-102 second-floor HVAC ceiling plans; laboratory supply-air-valve note is visible."},
+    {"page": 4, "render": "reviews/14__vol2__021/p4-p4-full-poppler-poppler.png", "finding": "M-103 penthouse/roof HVAC plan with AHU and exhaust equipment locations."},
+    {"page": 5, "render": "reviews/14__vol2__021/p5-p5-full-poppler-poppler.png", "finding": "M-201 first-floor piping plan."},
+    {"page": 6, "render": "reviews/14__vol2__021/p6-p6-full-poppler-poppler.png", "finding": "M-202 second-floor piping plan."},
+    {"page": 7, "render": "reviews/14__vol2__021/p7-p7-full-poppler-poppler.png", "finding": "M-301 sections relate laboratory air valves, hood exhaust and AHUs."},
+    {"page": 8, "render": "reviews/14__vol2__021/p8-p8-full-poppler-poppler.png", "finding": "M-401 enlarged penthouse piping/equipment plan."},
+    {"page": 9, "render": "reviews/14__vol2__021/p9-p9-full-poppler-poppler.png", "finding": "M-501 details include air-valve, coil-valve and smoke-detector details."},
+    {"page": 10, "render": "reviews/14__vol2__021/p10-p10-full-poppler-poppler.png", "finding": "M-502 mechanical construction details."},
+    {"page": 11, "render": "reviews/14__vol2__021/p11-p11-full-poppler-poppler.png", "finding": "M-503 seismic bracing/support details."},
+    {"page": 12, "render": "reviews/14__vol2__021/p12-p12-full-poppler-poppler.png", "finding": "M-504 air-handling-unit elevations."},
+    {"page": 13, "render": "reviews/14__vol2__021/p13-p13-full-poppler-poppler.png", "finding": "M-601 dense equipment, air-device, air-valve, PRV, chiller and ice-storage schedules."},
+    {"page": 14, "render": "reviews/14__vol2__021/p14-p14-full-poppler-poppler.png", "finding": "M-701 east/west heating-water and chilled-water/ice-storage schematics."},
+    {"page": 15, "render": "reviews/14__vol2__021/p15-p15-full-poppler-poppler.png", "finding": "M-801 control diagrams for AHUs, laboratory/hood/general exhaust, VAVs and fan coils."},
+    {"page": 16, "render": "reviews/14__vol2__021/p16-p16-full-poppler-poppler.png", "finding": "M-802 laboratory room and chemistry-room VAV control diagrams with detailed sequence text."},
+    {"page": 17, "render": "reviews/14__vol2__021/p17-p17-full-poppler-poppler.png", "finding": "M-803 heating/chilled-water sequences and boiler/chiller physical-versus-logical I/O matrices."},
+    {"page": 18, "render": "reviews/14__vol2__021/p18-p18-full-poppler-poppler.png", "finding": "M-804 laboratory AHU, fume-hood, general-exhaust and fan-coil sequences/I-O matrices."},
+    {"page": 19, "render": "reviews/14__vol2__021/p19-p19-full-poppler-poppler.png", "finding": "M-805 administration AHU, VAV, unit-heater and exhaust control sequences/I-O matrices."}
+  ],
+  "tables": [],
+  "assertions": [
+    {"id": "m601-sheet-title", "page": 13, "bbox": [3100, 2480, 3380, 2550], "expected": "SCHEDULES M-601"},
+    {"id": "m803-sheet-title", "page": 17, "bbox": [3100, 2480, 3380, 2550], "expected": "SEQUENCE OF OPERATIONS M-803"},
+    {"id": "m804-sheet-title", "page": 18, "bbox": [3100, 2480, 3380, 2550], "expected": "SEQUENCE OF OPERATIONS M-804"},
+    {"id": "m805-sheet-title", "page": 19, "bbox": [3100, 2480, 3380, 2550], "expected": "SEQUENCE OF OPERATIONS M-805"}
+  ],
+  "inventory_checks": []
+}

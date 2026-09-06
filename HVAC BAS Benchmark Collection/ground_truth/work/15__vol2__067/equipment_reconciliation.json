@@ -1,0 +1,49 @@
+{
+  "document_id": "15__vol2__067",
+  "module_role": "Source-constrained schedule identity/classification ledger for the exact M7.0 equipment tables. It leaves physical I/O, field-installation and unprovided device attributes unknown rather than deriving them from tag patterns.",
+  "schedule_registry_schema": {"namespace_separator": "-", "identity_columns": {"schedule_mark": "mark"}, "anchor_records_path": ["primary_anchors"], "non_instance_table_ids": []},
+  "scheduled_families": [
+    {"module": "schedules_m70.json", "bundle_module": "schedules", "table": "M70-NEW-PCW-PUMPS", "class": "new_inline_pcw_pump", "rows": 2, "schedule_mark": ["B950A-PCWP-1001", "B950A-PCWP-1002"]},
+    {"module": "schedules_m70.json", "bundle_module": "schedules", "table": "M70-NEW-HEAT-EXCHANGER", "class": "new_pcw_chw_heat_exchanger", "rows": 1, "schedule_mark": ["B950A-HX-PCWP-1001"]},
+    {"module": "schedules_m70.json", "bundle_module": "schedules", "table": "M70-NEW-VFDS", "class": "new_pump_vfd", "rows": 2, "schedule_mark": ["B950A-VFD-PCWP-1001", "B950A-VFD-PCWP-1002"]},
+    {"module": "schedules_m70.json", "bundle_module": "schedules", "table": "M70-COMPRESSED-AIR-REGULATOR", "class": "new_compressed_air_regulator", "rows": 1, "schedule_mark": ["(N) REG-1"]},
+    {"module": "schedules_m70.json", "bundle_module": "schedules", "table": "M70-GRILLE", "class": "grille_type", "rows": 1, "schedule_mark": ["RG-1"]},
+    {"module": "schedules_m70.json", "bundle_module": "schedules", "table": "M70-RELOCATED-REHEAT-COIL", "class": "relocated_reheat_coil", "rows": 1, "schedule_mark": ["B950-RHC-1002"]},
+    {"module": "schedules_m70.json", "bundle_module": "schedules", "table": "M70-EXISTING-AHU", "class": "existing_ahu_reference", "rows": 1, "schedule_mark": ["B950-AHU-3001"]},
+    {"module": "schedules_m70.json", "bundle_module": "schedules", "table": "M70-PCW-AIR-SEPARATOR", "class": "new_pcw_air_separator", "rows": 1, "schedule_mark": ["(N) B950A-AS-1001"]}
+  ],
+  "schedule_counts": {"tables": 8, "rows": 10, "building_scoped_tag_identities_including_outlet_types": 10, "other_scheduled_tag_identities": 10},
+  "primary_anchors": [
+    {"id": "M70-B950A-PCWP-1001", "scope": "New inline PCW pump; N+1 pair; schedule design flow 581.9 GPM and selection flow 650 GPM."},
+    {"id": "M70-B950A-PCWP-1002", "scope": "New inline PCW pump; N+1 pair; schedule design flow 581.9 GPM and selection flow 650 GPM."},
+    {"id": "M70-B950A-HX-PCWP-1001", "scope": "New PCW/CHW heat exchanger; schedule assigns PCW high-temperature and CHW low-temperature sides."},
+    {"id": "M70-B950A-VFD-PCWP-1001", "scope": "New ABB VFD corresponding to PCWP-1001 by literal mark."},
+    {"id": "M70-B950A-VFD-PCWP-1002", "scope": "New ABB VFD corresponding to PCWP-1002 by literal mark."},
+    {"id": "M70-(N) REG-1", "scope": "New compressed-air regulator at Hutch 1.3."},
+    {"id": "M70-RG-1", "scope": "Grille schedule type row, not an asserted installed-quantity count."},
+    {"id": "M70-B950-RHC-1002", "scope": "Existing reheat coil relocated from demolition phase."},
+    {"id": "M70-B950-AHU-3001", "scope": "Existing AHU reference schedule; change is limited by printed notes."},
+    {"id": "M70-(N) B950A-AS-1001", "scope": "New PCW air separator."}
+  ],
+  "supplemental_source_entities": [
+    {"id": "B950A-PF-1001", "classification": "new_pcw_pot_feeder", "source_scope": "M7.0 PCW POT FEEDER SCHEDULE", "note": "Retained in M7.0 additional schedule inventory; its detailed table is visually reviewed but not promoted into the cross-table registry because the strict primary tables selected above are the direct BAS/equipment anchors."},
+    {"id": "B950A-ET-1001", "classification": "new_pcw_expansion_tank", "source_scope": "M7.0 PCW EXPANSION TANK SCHEDULE"},
+    {"id": "B950A-WF-1001", "classification": "new_pcw_filter", "source_scope": "M7.0 PCW FILTER SCHEDULE"}
+  ],
+  "additional_identities": [
+    {"id": "B950A-PF-1001", "classification": "new_pcw_pot_feeder", "source_scope": "M7.0 PCW POT FEEDER SCHEDULE"},
+    {"id": "B950A-ET-1001", "classification": "new_pcw_expansion_tank", "source_scope": "M7.0 PCW EXPANSION TANK SCHEDULE"},
+    {"id": "B950A-WF-1001", "classification": "new_pcw_filter", "source_scope": "M7.0 PCW FILTER SCHEDULE"},
+    {"id": "M63-TCV", "classification": "P&ID-only modulating chilled-water control valve", "source_scope": "M6.3 AO TCV MODULATION", "limitations": "No tag/Cv/actuator/fail-position schedule in supplied set."}
+  ],
+  "reconciliation_findings": [
+    "M7.0 prints two identical new pump selections and labels their schedule notes N+1; this is a source classification, not an unprinted lead/lag rotation sequence.",
+    "The M6.3 typed I/O diagram binds pump-specific alarm/VFD-speed/start-stop/current callouts to PCWP-1001 and PCWP-1002, but does not state PLC card/channel/terminal numbers.",
+    "M7.0 separates existing and new PCW demand. The revised 581.998 GPM new PCW flow is not automatically a sum of installed device rows, and it is retained as a source demand total.",
+    "The diagram shows a modulating chilled-water control valve and makeup actuator, while the supplied set lacks an actual control-valve or damper-actuator schedule; unsupported Cv, fail action, torque and actuator signal must stay unknown."
+  ],
+  "control_valve_and_damper_schedule_status": {"control_valve_schedule": {"status": "not_present_as_schedule", "value": null}, "damper_actuator_schedule": {"status": "not_present", "value": null}},
+  "tables": [],
+  "assertions": [],
+  "inventory_checks": [{"id": "schedule-primary-anchors", "records_path": ["primary_anchors"], "expected": 10, "unique_key": "id"}]
+}

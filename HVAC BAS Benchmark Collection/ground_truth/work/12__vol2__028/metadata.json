@@ -1,0 +1,71 @@
+{
+  "document_id": "12__vol2__028",
+  "module_role": "Exact project, title-block, sheet, date, scale, and complete visual-review ledger for the supplied excerpt.",
+  "scope": "The supplied PDF is a nine-sheet archive excerpt: M-505 through M-512 and M-601, from a 191-sheet Renovation of Building 615 final-design set. This ledger is complete for the supplied nine pages only; it does not represent the missing project sheets.",
+  "project": {
+    "name": "RENOVATION OF BUILDING 615",
+    "site": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+    "owner_or_agency": "US ARMY CORPS OF ENGINEERS",
+    "design_firm_as_printed": "KENALL + FNI",
+    "contract_number": "W9126G19B3286",
+    "issue": "FINAL SUBMITTAL",
+    "issue_date": "AUGUST 12, 2019",
+    "revision_date": {
+      "status": "not_stated_in_supplied_title_blocks",
+      "value": null,
+      "note": "The repeated ISSUE DATE is retained as an issue date, not recast as a revision date."
+    }
+  },
+  "scale_semantics": {
+    "title_block_scale": "NOT STATED",
+    "finding": "Every supplied sheet was visually reviewed. The schedule and control schematic/detail views are diagrammatic or tabular; this excerpt does not show a printed title-block scale or a graphic scale bar for a measurable plan view. The M-505 detail captions state NOT TO SCALE where printed.",
+    "graphic_scale_bar_total": 0,
+    "measurable_length_scaled_view_total": 0
+  },
+  "visual_review_pages": [
+    {"page": 1, "sheet": "M-505", "title": "HVAC SCHEDULE AND DETAILS IV", "review_status": "complete", "finding": "Duct-silencer and external-static-pressure schedules; mini-split and concealed-fan-coil details. No graphic scale bar.", "render": "reviews/12__vol2__028/p1-p1-full-poppler.png"},
+    {"page": 2, "sheet": "M-506", "title": "MECHANICAL CONTROL SCHEMATICS I", "review_status": "complete", "finding": "Mini-split and exhaust-fan control schematics, meter and global I/O matrices, and written sequences.", "render": "reviews/12__vol2__028/p2-p2-full-poppler.png"},
+    {"page": 3, "sheet": "M-507", "title": "MECHANICAL CONTROL SCHEMATICS II", "review_status": "complete", "finding": "Chilled-water P&ID and BAS input/output matrix.", "render": "reviews/12__vol2__028/p3-p3-full-poppler.png"},
+    {"page": 4, "sheet": "M-508", "title": "MECHANICAL CONTROL SCHEMATICS III", "review_status": "complete", "finding": "Heating-water P&ID and BAS input/output matrix.", "render": "reviews/12__vol2__028/p4-p4-full-poppler.png"},
+    {"page": 5, "sheet": "M-509", "title": "MECHANICAL CONTROL SCHEMATICS IV", "review_status": "complete", "finding": "Written chilled-water and heating-hot-water system sequences; no separate typed point matrix.", "render": "reviews/12__vol2__028/p5-p5-full-poppler.png"},
+    {"page": 6, "sheet": "M-510", "title": "MECHANICAL CONTROL SCHEMATICS V", "review_status": "complete", "finding": "Fan-coil-unit P&ID, typed BAS input/output matrix, and written FCU sequence.", "render": "reviews/12__vol2__028/p6-p6-full-poppler.png"},
+    {"page": 7, "sheet": "M-511", "title": "MECHANICAL CONTROL SCHEMATIC VI", "review_status": "complete", "finding": "DOAS-3 and VAV-terminal P&IDs, typed BAS input/output matrices, and written sequences.", "render": "reviews/12__vol2__028/p7-p7-full-poppler.png"},
+    {"page": 8, "sheet": "M-512", "title": "MECHANICAL CONTROL SCHEMATIC VII", "review_status": "complete", "finding": "DOAS-1/2 P&ID, typed BAS input/output matrix, and written sequence.", "render": "reviews/12__vol2__028/p8-p8-full-poppler.png"},
+    {"page": 9, "sheet": "M-601", "title": "HVAC SCHEDULES I", "review_status": "complete", "finding": "FCU, DOAS, boiler, unit-heater, chiller, and exhaust-fan schedules with detailed schedule notes.", "render": "reviews/12__vol2__028/p9-p9-full-poppler.png"}
+  ],
+  "tables": [],
+  "assertion_groups": [
+    {
+      "id": "sheets",
+      "covers_all_source_pages": true,
+      "defaults": {
+        "project_name": "RENOVATION OF BUILDING 615",
+        "site": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+        "issue_date": "AUGUST 12, 2019",
+        "contract_number": "W9126G19B3286"
+      },
+      "templates": [
+        {"id": "sheet-number", "field": "sheet", "bbox": [2276, 1478, 2368, 1518], "mode": "exact"},
+        {"id": "sheet-title", "field": "title", "bbox_field": "title_bbox", "reading_direction": "up", "mode": "exact"},
+        {"id": "project", "field": "project_name", "bbox": [2270, 1170, 2286, 1322], "reading_direction": "up", "mode": "exact"},
+        {"id": "site", "field": "site", "bbox": [2285, 894, 2313, 1023], "reading_direction": "up", "mode": "exact"},
+        {"id": "issue-date", "field": "issue_date", "bbox": [2278, 640, 2295, 730], "reading_direction": "up", "mode": "exact"},
+        {"id": "contract", "field": "contract_number", "bbox": [2305, 640, 2318, 730], "reading_direction": "up", "mode": "exact"}
+      ],
+      "records": [
+        {"id": "1", "page": 1, "sheet": "M-505", "title": "HVAC SCHEDULE AND DETAILS IV", "title_bbox": [2330, 1138, 2351, 1375]},
+        {"id": "2", "page": 2, "sheet": "M-506", "title": "MECHANICAL CONTROL SCHEMATICS I", "title_bbox": [2330, 1122, 2351, 1372]},
+        {"id": "3", "page": 3, "sheet": "M-507", "title": "MECHANICAL CONTROL SCHEMATICS II", "title_bbox": [2330, 1121, 2351, 1373]},
+        {"id": "4", "page": 4, "sheet": "M-508", "title": "MECHANICAL CONTROL SCHEMATICS III", "title_bbox": [2330, 1119, 2351, 1375]},
+        {"id": "5", "page": 5, "sheet": "M-509", "title": "MECHANICAL CONTROL SCHEMATICS IV", "title_bbox": [2330, 1119, 2351, 1376]},
+        {"id": "6", "page": 6, "sheet": "M-510", "title": "MECHANICAL CONTROL SCHEMATICS V", "title_bbox": [2330, 1121, 2351, 1374]},
+        {"id": "7", "page": 7, "sheet": "M-511", "title": "MECHANICAL CONTROL SCHEMATIC VI", "title_bbox": [2330, 1121, 2351, 1372]},
+        {"id": "8", "page": 8, "sheet": "M-512", "title": "MECHANICAL CONTROL SCHEMATIC VII", "title_bbox": [2330, 1119, 2351, 1373]},
+        {"id": "9", "page": 9, "sheet": "M-601", "title": "HVAC SCHEDULES I", "title_bbox": [2330, 1181, 2351, 1312]}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "full-page-visual-review", "records_path": ["visual_review_pages"], "expected": 9, "unique_key": "page"}
+  ]
+}

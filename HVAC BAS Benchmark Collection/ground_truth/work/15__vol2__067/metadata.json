@@ -1,0 +1,45 @@
+{
+  "document_id": "15__vol2__067",
+  "module_role": "Project/title-block context and complete 13-page Poppler full-page visual-review ledger for the supplied SLAC LCLS-II-HE PCW skid drawing set.",
+  "scope": "Complete review of the supplied 13-page, mixed mechanical/structural drawing set only. The record distinguishes existing, demolition, new and relocated source scope; it does not claim to include omitted electrical, controls-submittal or external specification documents.",
+  "project": {
+    "name": "B950/NEH LCLS-II-HE:EI",
+    "facility": "SLAC National Accelerator Laboratory",
+    "owner_context": "Stanford University / SLAC; U.S. Department of Energy logo is printed in the title block.",
+    "project_identifier": "B0950.x",
+    "project_location": {"status": "archive_metadata_only", "value": "Menlo Park, CA", "note": "The supplied title blocks identify B950/NEH and SLAC but do not print a street/city address; the location is preserved as source-archive metadata rather than title-block fact."},
+    "current_review_authorization": "SLAC Building Inspection Office Construction Authorization (IFC), PRS# 26-058, shown with date 3/9/2026 on supplied pages.",
+    "revision_context": "Mechanical pages visibly carry Bulletin 4.2 - PCW Skid Replacement - Installation, revision 7, dated 26 JAN 19; individual sheet logs also retain earlier bullets and page-specific revisions. Revision letters/numbers are not flattened into a single project-wide revision claim."
+  },
+  "scale_semantics": {
+    "finding": "All 13 pages were reviewed. Scale is view-specific: plan/detail captions include 1/8 in = 1 ft, 1/4 in = 1 ft, 1/2 in = 1 ft, 1 in = 1 ft or NTS as appropriate. The repeating title block does not establish one safe global geometry scale for all mechanical and structural views.",
+    "global_measured_takeoff_warning": "The record preserves schedule and P&ID facts, not a geometric quantity takeoff. Any measuring tool must read the local caption/graphic scale of the individual view."
+  },
+  "visual_review_pages": [
+    {"page": 1, "sheet": "M0.0", "title": "SYM, LEGENDS, AND GEN. NOTES", "review_status": "complete", "finding": "Mechanical symbols, abbreviations, general construction notes, scope-of-work text and title-block/revision context; no populated equipment schedule or point list.", "render": "reviews/15__vol2__067/p1-p1-full-poppler-poppler.png"},
+    {"page": 2, "sheet": "MD3.0", "title": "BASEMENT (NEH) - PROCESS PIPING OVERALL PLAN - DEMO", "review_status": "complete", "finding": "Demolition plan including existing PCW skid/control-panel/instrumentation removal and protection context; not a new-equipment schedule.", "render": "reviews/15__vol2__067/p2-p2-full-poppler-poppler.png"},
+    {"page": 3, "sheet": "M3.0", "title": "BASEMENT (NEH) - PROCESS PIPING OVERALL PLAN", "review_status": "complete", "finding": "New PCW skid plan/enlarged view, CHW/PCW routing, pump/PLC panel location and keyed installation notes.", "render": "reviews/15__vol2__067/p3-p3-full-poppler-poppler.png"},
+    {"page": 4, "sheet": "M5.1", "title": "MECHANICAL DETAILS", "review_status": "complete", "finding": "Skid plan/isometrics, PCW custom manifold and pipe support details; manufacturer reconfiguration note is visible.", "render": "reviews/15__vol2__067/p4-p4-full-poppler-poppler.png"},
+    {"page": 5, "sheet": "M6.0", "title": "MECHANICAL SCHEMATIC - PCW", "review_status": "complete", "finding": "Existing and new NEH PCW schematic with project flow/routing context; no standalone points list.", "render": "reviews/15__vol2__067/p5-p5-full-poppler-poppler.png"},
+    {"page": 6, "sheet": "M6.3", "title": "MECHANICAL SCHEMATIC - PCW P&ID", "review_status": "complete", "finding": "Existing/new P&ID, typed I/O callouts, sequence of operation, alarm limits, Modbus-to-Ignition/EPICS wording and factory-versus-field I&C boundary.", "render": "reviews/15__vol2__067/p6-p6-full-poppler-poppler.png"},
+    {"page": 7, "sheet": "M6.4", "title": "MECH SCHEMATIC - PCW FLOW DIAG", "review_status": "complete", "finding": "Existing/new PCW skid flow diagrams; confirms factory-provided I&C within the skid boundary.", "render": "reviews/15__vol2__067/p7-p7-full-poppler-poppler.png"},
+    {"page": 8, "sheet": "M7.0", "title": "MECHANICAL SCHEDULES", "review_status": "complete", "finding": "Dense schedule sheet: pumps, pipe/duct installation, pressure tests, heat exchanger, VFDs, compressed-air regulator, grille, reheat coil, existing AHU, air separator, pot feeder, expansion tank, filter, riser utility and existing/new PCW demand.", "render": "reviews/15__vol2__067/p8-p8-full-poppler-poppler.png"},
+    {"page": 9, "sheet": "S0.1", "title": "STRUCTURAL SPECIFICATIONS", "review_status": "complete", "finding": "Structural specifications and structural sheet list; contextual only for equipment anchorage/support.", "render": "reviews/15__vol2__067/p9-p9-full-poppler-poppler.png"},
+    {"page": 10, "sheet": "S3.1", "title": "BSMT - PCW SKID", "review_status": "complete", "finding": "Basement PCW skid structural plan and equipment schedule/dimension context; not a BAS schedule.", "render": "reviews/15__vol2__067/p10-p10-full-poppler-poppler.png"},
+    {"page": 11, "sheet": "S5.0", "title": "STRUCTURAL DETAILS", "review_status": "complete", "finding": "Structural framing/support details; one detail marked NOT USED.", "render": "reviews/15__vol2__067/p11-p11-full-poppler-poppler.png"},
+    {"page": 12, "sheet": "S5.1", "title": "STRUCTURAL DETAILS", "review_status": "complete", "finding": "PCW skid support/anchorage/wall-penetration structural details.", "render": "reviews/15__vol2__067/p12-p12-full-poppler-poppler.png"},
+    {"page": 13, "sheet": "S5.2", "title": "STRUCTURAL DETAILS", "review_status": "complete", "finding": "PCW skid base/anchorage structural details.", "render": "reviews/15__vol2__067/p13-p13-full-poppler-poppler.png"}
+  ],
+  "tables": [],
+  "assertions": [
+    {"id": "p1-project-family", "page": 1, "bbox": [2920,2365,3090,2410], "expected": "B950/NEH LCLS-II-HE:EI", "mode": "exact"},
+    {"id": "p1-sheet-title", "page": 1, "bbox": [2920,2418,3320,2465], "expected": "SYM, LEGENDS, AND GEN. NOTES", "mode": "contains"},
+    {"id": "p6-sheet-number", "page": 6, "bbox": [3205,2318,3265,2355], "expected": "M6.3", "mode": "exact"},
+    {"id": "p8-sheet-title", "page": 8, "bbox": [2920,2418,3240,2470], "expected": "MECHANICAL MECHANICAL SCHEDULES", "mode": "exact"},
+    {"id": "p8-sheet-number", "page": 8, "bbox": [3205,2318,3265,2355], "expected": "M7.0", "mode": "exact"},
+    {"id": "p9-sheet-number", "page": 9, "bbox": [3205,2315,3265,2355], "expected": "S0.1", "mode": "exact"}
+  ],
+  "inventory_checks": [
+    {"id": "full-page-visual-review", "records_path": ["visual_review_pages"], "expected": 13, "unique_key": "page"}
+  ]
+}

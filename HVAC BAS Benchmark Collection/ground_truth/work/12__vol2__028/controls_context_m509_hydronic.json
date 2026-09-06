@@ -1,0 +1,105 @@
+{
+  "document_id": "12__vol2__028",
+  "module_role": "M-509 written chilled-water and heating-hot-water system controls. This is a bounded source transcription of the two detailed sequences, not an inference of installed equipment quantities from schematic labels.",
+  "source_sheet": "M-509",
+  "source_page": 5,
+  "network_architecture": {
+    "protocols_as_printed": ["BACNET"],
+    "operator_interface_as_printed": ["HMI", "BAS"],
+    "protocol_context": "The chiller and boiler sequences call for BACNET-compatible controllers interfaced with the building BAS, with monitoring and adjustment from the HMI.",
+    "transport": {"status": "not_stated_in_supplied_excerpt", "value": null},
+    "addressing_baud_rate_controller_model": {"status": "not_stated_in_supplied_excerpt", "value": null},
+    "assertion_ids": ["chw-chiller-bacnet", "hhw-boiler-bacnet"]
+  },
+  "sequences": [
+    {
+      "id": "chilled-water-system",
+      "title": "CHILLED WATER SYSTEM CONTROL SEQUENCES",
+      "statements": [
+        {"number": "A", "text": "THE NEW AIR-COOLED CHILLER SHALL BE INSTALLED WITH A BACNET COMPATIBLE CONTROLLER THAT MODULATES REFRIGERANT FLOW FOR COOLING BASED ON A PRE-DEFINED CHILLED WATER SUPPLY TEMPERATURE SET POINT.", "assertion_ids": ["chw-chiller-bacnet"]},
+        {"number": "B.a", "text": "THERE IS A CALL FOR COOLING: DEFINED AS ANY CHILLED WATER VALVE OPEN MORE THAN 20% (ADJ.) FOR A PERIOD OF 5 MINS. (ADJ.).", "assertion_ids": ["chw-enable-valve"]},
+        {"number": "B.b", "text": "AND OUTSIDE AIR TEMPERATURE IS GREATER THAN OR EQUAL TO 55°F (ADJ.).", "assertion_ids": ["chw-enable-oat"]},
+        {"number": "D", "text": "TO PREVENT SHORT CYCLING, THE CHILLED WATER SYSTEM SHALL REMAIN ENABLED OR DISABLED FOR AT LEAST 30 MINUTES (ADJ.).", "assertion_ids": ["chw-short-cycle"]},
+        {"number": "E", "text": "THE LEAD PUMP SHALL RUN WHEN THE CHILLER IS COMMANDED TO START. THE LEAD CHILLED WATER PUMP WILL ROTATE AFTER A RUNTIME OF 1 WEEK (ADJ.).", "assertion_ids": ["chw-lead-rotation"]},
+        {"number": "E.a", "text": "THE CHILLED WATER PUMP SHALL START IMMEDIATELY ON RECEIVING CHILLER START COMMAND TO PROVIDE FLOW FOR THE CHILLER.", "assertion_ids": ["chw-pump-start"]},
+        {"number": "E.b", "text": "THE CHILLED WATER PUMP SHALL DISABLE AFTER 15 MINUTES (ADJ.) OF RECEIVING THE CHILLER STOP COMMAND TO MAINTAIN FLOW UNTIL THE CHILLER SHUTS DOWN.", "assertion_ids": ["chw-pump-stop-delay"]},
+        {"number": "F.b", "text": "THE BAS SHALL BE ABLE TO HAVE TWO-WAY COMMUNICATION WITH THE CHILLER CONTROLLER AND MONITOR AND ADJUST CHILLED WATER SET POINT BASED ON THE RESET STRATEGY.", "assertion_ids": ["chw-two-way"]},
+        {"number": "G", "text": "THE CONTROLLER SHALL MEASURE CHILLED WATER DIFFERENTIAL PRESSURE WITH A SEPARATE DIFFERENTIAL PRESSURE SENSOR IN THE LOOP AND MODULATE THE CHILLED WATER PUMP ECM TO MAINTAIN ITS CHILLED WATER DIFFERENTIAL PRESSURE SET POINT (ADJ.).", "assertion_ids": ["chw-dp-reset"]},
+        {"number": "G.a", "text": "THE ECM MINIMUM SPEED SHALL NOT DROP BELOW THE SPEED CORRESPONDING WITH 5% ABOVE THE CHILLER MANUFACTURER’S RECOMMENDED MINIMUM CHILLED WATER FLOW.", "assertion_ids": ["chw-min-speed"]},
+        {"number": "G.b", "text": "BAS SHALL MONITOR ALL OF THE CHILLED WATER CONTROL VALVES EVERY (5) FIVE MINUTES (ADJ.) AND USE THE MOST WIDE-OPEN COIL POSITION IN THE ENTIRE SYSTEM AS THE CRITICAL VALVE.", "assertion_ids": ["chw-critical-valve"]},
+        {"number": "G.c", "text": "IF THE CRITICAL CHILLED WATER CONTROL VALVE IS MORE THAN 90% OPEN (ADJ.), THEN INCREASE THE DIFFERENTIAL PRESSURE SET POINT BY 1 PSI (ADJ.).", "assertion_ids": ["chw-dp-increase"]},
+        {"number": "G.f", "text": "IN THE EVENT THAT THE CRITICAL CHILLED WATER CONTROL VALVE IS LESS THAN 80% OPEN (ADJ.), AND THE DIFFERENTIAL PRESSURE SET POINT HAS BEEN REDUCED TO THE MINIMUM ALLOWABLE SYSTEM LIMIT, THE CHILLED WATER BYPASS VALVE LOCATED AT THE END OF LOOP SHALL BE OPENED TO ENSURE ADEQUATE CHILLED FLOW IS DELIVERED TO THE CHILLER.", "assertion_ids": ["chw-bypass"]},
+        {"number": "H.g", "text": "FREEZE PROTECTION: IF THERE IS NO CALL FOR COOLING, OUTSIDE AIR TEMPERATURE IS BELOW 38°F. PROVIDE ALARM AND START CHILLED WATER PUMPS TO SEND WATER IS FLOWING THRU THE CHILLER.", "assertion_ids": ["chw-freeze"]},
+        {"number": "H.h", "text": "CHILLER SHUTDOWN SEQUENCE: THE CHILLER WILL GO THROUGH A SHUTDOWN SEQUENCE IF CHILLER START CONDITIONS ARE NOT MET. THE CHILLER WILL DISABLE FIRST AFTER GOING THROUGH ITS INTERNAL SHUTDOWN PROCEDURE AND THE LEAD CHILLED WATER PUMP SHALL DISABLE AFTER A DELAY OF 15 MINS. (ADJ.)", "assertion_ids": ["chw-shutdown"]}
+      ]
+    },
+    {
+      "id": "heating-hot-water-system",
+      "title": "HEATING-WATER SYSTEM CONTROL SEQUENCES",
+      "statements": [
+        {"number": "A", "text": "THE HEATING WATER SYSTEM SHALL BE ENERGIZED AND CONTROLLED BY THE BUILDING BAS SYSTEM TO MAINTAIN A PRE-DEFINED HEATING WATER TEMPERATURE SETPOINT. ALL CONTROL POINTS ON THE I/O POINTS LIST SHALL BE MONITORED AND/OR CONTROLLED VIA THE BAS SYSTEM THROUGH THE HMI.", "assertion_ids": ["hhw-bas-hmi"]},
+        {"number": "B.a", "text": "THERE IS A CALL FOR HEATING: DEFINED AS ANY HEATING WATER CONTROL VALVE OPEN MORE THAN 20% (ADJ.) FOR A PERIOD OF 5 MINS. (ADJ.).", "assertion_ids": ["hhw-enable-valve"]},
+        {"number": "B.b", "text": "OUTSIDE AIR TEMPERATURE LESS THAN 65°F (ADJ.).", "assertion_ids": ["hhw-enable-oat"]},
+        {"number": "C", "text": "THE HEATING WATER SYSTEM ENABLE POINT SHALL HAVE THE CAPABILITY OF BEING COMMANDED AND/OR OVERRIDDEN FROM THE HMI BY THE USER. TO PREVENT SHORT CYCLING, THE BOILER SYSTEM SHALL REMAIN ENABLED OR DISABLED FOR 30 MINS.(ADJ.).", "assertion_ids": ["hhw-override-short-cycle"]},
+        {"number": "D", "text": "THE TWO HEATING WATER SYSTEM PUMPS SHALL OPERATE IN A LEAD/STANDBY FASHION, WITH ONLY ONE PUMP RUNNING AT A TIME. THE SYSTEM PUMP SHALL RUN ANY TIME A HEATING WATER CONTROL VALVE IS OPEN MORE THAN 20% (ADJ.) FOR A PERIOD OF 5 MINS. (ADJ.). THE MOST OPEN VALVE IN THE SYSTEM IS HENCEFORTH TERMED THE “CRITICAL CONTROL VALVE”.", "assertion_ids": ["hhw-lead-standby"]},
+        {"number": "D.b", "text": "ON FAILURE OF THE LEAD PUMP, THE STANDBY PUMP SHALL RUN AND THE LEAD PUMP SHALL TURN OFF. CONTROL SYSTEM SHALL DISPLAY A PUMP FAILURE ALARM FOR THE LEAD PUMP ON THE HMI.", "assertion_ids": ["hhw-standby-failure"]},
+        {"number": "D.f", "text": "FREEZE PROTECTION: THE HEATING WATER SYSTEM PUMPS SHALL RUN FOR FREEZE PROTECTION WHENEVER OUTSIDE AIR TEMPERATURE IS LESS THAN 38°F (ADJUSTABLE). THE SYSTEM BYPASS CONTROL VALVE SHALL MODULATE OPEN AS REQUIRED TO ALLOW BOTH SYSTEM PUMPS TO RUN (AT 40% SPEED RESPECTIVELY) AS REQUIRED FOR CIRCULATION. THE CONTROL SYSTEM SHALL DISPLAY FREEZE ALARM ON THE HMI FOR THE TIME THIS SEQUENCE IS ON.", "assertion_ids": ["hhw-freeze"]},
+        {"number": "E", "text": "THE CONTROLLER SHALL MEASURE HEATING WATER DIFFERENTIAL PRESSURE WITH A SEPARATE DIFFERENTIAL PRESSURE SENSOR IN THE LOOP AND MODULATE THE HEATING WATER PUMP ECM TO MAINTAIN ITS HEATING WATER DIFFERENTIAL PRESSURE SET POINT.", "assertion_ids": ["hhw-dp-reset"]},
+        {"number": "E.a", "text": "THE ECM MINIMUM SPEED SHALL NOT DROP BELOW THE SPEED CORRESPONDING WITH 30% OF THE MAXIMUM HEATING WATER FLOW.", "assertion_ids": ["hhw-min-speed"]},
+        {"number": "E.c", "text": "IF THE CRITICAL HEATING CONTROL VALVE IS MORE THAN 90% OPEN (ADJ.), THEN INCREASE THE DIFFERENTIAL PRESSURE SET POINT BY 1 PSI (ADJ.).", "assertion_ids": ["hhw-dp-increase"]},
+        {"number": "E.f", "text": "IN THE EVENT THAT THE CRITICAL HEATING WATER CONTROL VALVE IS LESS THAN 80% OPEN (ADJ.), AND THE DIFFERENTIAL PRESSURE SET POINT HAS BEEN REDUCED TO THE MINIMUM ALLOWABLE SYSTEM LIMIT, THE HEATING WATER SYSTEM BYPASS VALVE LOCATED AT THE END OF LOOP SHALL BE OPENED TO ENSURE ADEQUATE HEATING FLOW IS DELIVERED TO PROTECT THE PUMP MOTORS.", "assertion_ids": ["hhw-bypass"]},
+        {"number": "G", "text": "THE BOILER CIRCULATOR PUMPS SHALL BE CONSTANT SPEED AND CONTROLLED IN A LEAD/LAG FASHION. THE LEAD PUMP SHALL ROTATE WHEN ITS RUNTIME EXCEEDS ONE WEEK (ADJ.) OR WHEN THE LEAD PUMP FAILS. WHEN THERE IS A CALL FOR HEATING THE LEAD PUMP SHALL BE ENERGIZED.", "assertion_ids": ["boiler-circulator"]},
+        {"number": "H", "text": "THE BOILER SHALL BE PROVIDED WITH A BACNET COMPATIBLE STANDALONE BOILER SYSTEM CONTROLLER. THE CONTROLLER SHALL CONTROL ALL OPERATIONS AND ENERGY INPUT (MODULATE COMBUSTION) TO MAINTAIN THE HOT WATER SUPPLY TEMPERATURE SETPOINT. THE BOILER SYSTEM CONTROLLER SHALL BE INTERFACED TO THE BAS AND ALLOW MONITORING AND ADJUSTMENT OF SET POINTS.", "assertion_ids": ["hhw-boiler-bacnet"]},
+        {"number": "H.c", "text": "WHENEVER THE HEATING WATER SYSTEM IS IN FREEZE PROTECTION MODE DUE TO LOW OUTSIDE AIR TEMPERATURE, WATER SHALL FLOW THROUGH THE BOILER CONTINUOUSLY. IF THERE IS NO CALL FOR HEATING, BUT HEATING WATER TEMPERATURE DROPS BELOW 35°F (ADJ.), BOILER SHALL START AND INCREASE WATER TEMPERATURE TO 45°F (ADJ.)", "assertion_ids": ["boiler-freeze"]},
+        {"number": "I.g", "text": "CO SENSOR: THE CO SENSOR SHALL CONTINUOUSLY MONITOR CARBON MONOXIDE CONTENT INSIDE THE MECHANICAL ROOM AND SHALL BE INTERLOCKED WITH THE BAS SYSTEM AND IF A CO LEVEL OF MORE THAN 100 PPM IS DETECTED, IT SHALL ALARM THE BAS SYSTEM TO SHUTDOWN THE BURNER IN THE BOILER AND STOP COMBUSTION PROCESS IMMEDIATELY.", "assertion_ids": ["boiler-co-safety"]}
+      ]
+    }
+  ],
+  "sensor_and_zone_ledger": {
+    "source_items": [
+      {"id": "CHW-DP", "classification": "Separate chilled-water-loop differential-pressure sensor", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "chilled-water loop", "basis": "M-509 chilled-water sequence G."},
+      {"id": "HHW-DP", "classification": "Separate heating-water-loop differential-pressure sensor", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "heating-water loop", "basis": "M-509 heating-water sequence E."},
+      {"id": "OAT-FREEZE", "classification": "Outside-air-temperature condition used for CHW and HHW freeze protection", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "outdoor", "basis": "M-509 CHW H.g and HHW D.f."},
+      {"id": "MECH-ROOM-CO", "classification": "CO sensor for mechanical room; BAS interlocked boiler safety input", "physical_sensor_count": {"status": "not_stated", "value": null}, "zone": "mechanical room", "basis": "M-509 HHW I.g."}
+    ],
+    "counts": {"space_sensors": {"status": "not_stated", "value": null}, "CO_sensors": {"status": "not_stated", "value": null}},
+    "limitation": "The supplied excerpt lacks a mechanical-room plan and sensor schedule, so the named CO sensor is not converted to a physical device count or plan position."
+  },
+  "tables": [],
+  "assertions": [
+    {"id": "chw-chiller-bacnet", "page": 5, "bbox": [130,125,1050,160], "expected": "THE NEW AIR-COOLED CHILLER SHALL BE INSTALLED WITH A BACNET COMPATIBLE CONTROLLER THAT MODULATES REFRIGERANT FLOW FOR COOLING BASED ON A PRE-DEFINED CHILLED WATER SUPPLY TEMPERATURE SET POINT.", "mode": "contains"},
+    {"id": "chw-enable-valve", "page": 5, "bbox": [130,210,1100,230], "expected": "THERE IS A CALL FOR COOLING: DEFINED AS ANY CHILLED WATER VALVE OPEN MORE THAN 20% (ADJ.) FOR A PERIOD OF 5 MINS. (ADJ.).", "mode": "contains"},
+    {"id": "chw-enable-oat", "page": 5, "bbox": [130,227,900,245], "expected": "AND OUTSIDE AIR TEMPERATURE IS GREATER THAN OR EQUAL TO 55°F (ADJ.).", "mode": "contains"},
+    {"id": "chw-short-cycle", "page": 5, "bbox": [130,260,1120,280], "expected": "TO PREVENT SHORT CYCLING, THE CHILLED WATER SYSTEM SHALL REMAIN ENABLED OR DISABLED FOR AT LEAST 30 MINUTES (ADJ.).", "mode": "contains"},
+    {"id": "chw-lead-rotation", "page": 5, "bbox": [130,280,1050,315], "expected": "THE LEAD PUMP SHALL RUN WHEN THE CHILLER IS COMMANDED TO START. THE LEAD CHILLED WATER PUMP WILL ROTATE AFTER A RUNTIME OF 1 WEEK (ADJ.).", "mode": "contains"},
+    {"id": "chw-pump-start", "page": 5, "bbox": [130,313,1100,330], "expected": "THE CHILLED WATER PUMP SHALL START IMMEDIATELY ON RECEIVING CHILLER START COMMAND TO PROVIDE FLOW FOR THE CHILLER.", "mode": "contains"},
+    {"id": "chw-pump-stop-delay", "page": 5, "bbox": [130,330,1050,350], "expected": "THE CHILLED WATER PUMP SHALL DISABLE AFTER 15 MINUTES (ADJ.) OF RECEIVING THE CHILLER STOP COMMAND TO MAINTAIN FLOW UNTIL THE", "mode": "contains"},
+    {"id": "chw-two-way", "page": 5, "bbox": [130,565,1080,585], "expected": "THE BAS SHALL BE ABLE TO HAVE TWO-WAY COMMUNICATION WITH THE CHILLER CONTROLLER AND MONITOR AND ADJUST CHILLED WATER SET", "mode": "contains"},
+    {"id": "chw-dp-reset", "page": 5, "bbox": [130,605,1080,625], "expected": "THE CONTROLLER SHALL MEASURE CHILLED WATER DIFFERENTIAL PRESSURE WITH A", "mode": "contains"},
+    {"id": "chw-min-speed", "page": 5, "bbox": [130,690,1150,735], "expected": "THE ECM MINIMUM SPEED SHALL NOT DROP BELOW THE SPEED CORRESPONDING WITH 5% ABOVE THE CHILLER MANUFACTURER’S RECOMMENDED MINIMUM CHILLED WATER FLOW", "mode": "contains"},
+    {"id": "chw-critical-valve", "page": 5, "bbox": [130,740,1080,755], "expected": "BAS SHALL MONITOR ALL OF THE CHILLED WATER CONTROL VALVES EVERY (5) FIVE MINUTES (ADJ.)", "mode": "contains"},
+    {"id": "chw-dp-increase", "page": 5, "bbox": [130,775,1080,790], "expected": "IF THE CRITICAL CHILLED WATER CONTROL VALVE IS MORE THAN 90% OPEN (ADJ.), THEN INCREASE THE DIFFERENTIAL PRESSURE SET POINT BY 1 PSI", "mode": "contains"},
+    {"id": "chw-bypass", "page": 5, "bbox": [130,895,1080,915], "expected": "IN THE EVENT THAT THE CRITICAL CHILLED WATER CONTROL VALVE IS LESS THAN 80% OPEN (ADJ.), AND THE DIFFERENTIAL PRESSURE SET POINT HAS", "mode": "contains"},
+    {"id": "chw-freeze", "page": 5, "bbox": [130,1078,1080,1110], "expected": "FREEZE PROTECTION: IF THERE IS NO CALL FOR COOLING, OUTSIDE AIR TEMPERATURE IS BELOW 38°F.", "mode": "contains"},
+    {"id": "chw-shutdown", "page": 5, "bbox": [130,1115,1080,1135], "expected": "CHILLER SHUTDOWN SEQUENCE: THE CHILLER WILL GO THROUGH A SHUTDOWN SEQUENCE IF CHILLER START CONDITIONS ARE NOT MET.", "mode": "contains"},
+    {"id": "hhw-bas-hmi", "page": 5, "bbox": [1070,110,2200,150], "expected": "THE HEATING WATER SYSTEM SHALL BE ENERGIZED AND CONTROLLED BY THE BUILDING BAS SYSTEM TO MAINTAIN A PRE-DEFINED HEATING WATER TEMPERATURE SETPOINT. ALL CONTROL POINTS ON THE I/O POINTS LIST SHALL BE MONITORED AND/OR CONTROLLED VIA THE BAS SYSTEM THROUGH THE HMI.", "mode": "contains"},
+    {"id": "hhw-enable-valve", "page": 5, "bbox": [1070,165,2200,185], "expected": "THERE IS A CALL FOR HEATING: DEFINED AS ANY HEATING WATER CONTROL VALVE OPEN MORE THAN 20% (ADJ.) FOR A PERIOD OF 5 MINS. (ADJ.).", "mode": "contains"},
+    {"id": "hhw-enable-oat", "page": 5, "bbox": [1070,185,1850,202], "expected": "OUTSIDE AIR TEMPERATURE LESS THAN 65°F (ADJ.).", "mode": "contains"},
+    {"id": "hhw-override-short-cycle", "page": 5, "bbox": [1070,200,2200,235], "expected": "THE HEATING WATER SYSTEM ENABLE POINT SHALL HAVE THE CAPABILITY OF BEING COMMANDED AND/OR OVERRIDDEN FROM THE HMI BY THE USER. TO PREVENT SHORT CYCLING, THE BOILER SYSTEM SHALL REMAIN ENABLED OR DISABLED FOR 30 MINS.(ADJ.).", "mode": "contains"},
+    {"id": "hhw-lead-standby", "page": 5, "bbox": [1070,235,2200,260], "expected": "THE TWO HEATING WATER SYSTEM PUMPS SHALL OPERATE", "mode": "contains"},
+    {"id": "hhw-standby-failure", "page": 5, "bbox": [1070,302,2200,320], "expected": "ON FAILURE OF THE LEAD PUMP, THE STANDBY PUMP SHALL RUN AND THE LEAD PUMP SHALL TURN OFF. CONTROL SYSTEM SHALL DISPLAY A PUMP FAILURE ALARM FOR THE LEAD PUMP", "mode": "contains"},
+    {"id": "hhw-freeze", "page": 5, "bbox": [1070,390,2200,440], "expected": "FREEZE PROTECTION: THE HEATING WATER SYSTEM PUMPS SHALL RUN FOR FREEZE PROTECTION WHENEVER OUTSIDE AIR TEMPERATURE IS LESS THAN 38°F (ADJUSTABLE). THE SYSTEM BYPASS CONTROL VALVE SHALL MODULATE OPEN AS REQUIRED TO ALLOW BOTH SYSTEM PUMPS TO RUN (AT 40% SPEED RESPECTIVELY) AS REQUIRED FOR CIRCULATION. THE CONTROL SYSTEM SHALL DISPLAY FREEZE ALARM ON THE HMI FOR THE TIME THIS SEQUENCE IS ON.", "mode": "contains"},
+    {"id": "hhw-dp-reset", "page": 5, "bbox": [1070,456,2200,525], "expected": "THE CONTROLLER SHALL MEASURE HEATING WATER DIFFERENTIAL PRESSURE WITH A SEPARATE DIFFERENTIAL PRESSURE SENSOR IN THE LOOP AND MODULATE THE HEATING WATER PUMP ECM TO MAINTAIN ITS HEATING WATER DIFFERENTIAL PRESSURE SET POINT.", "mode": "contains"},
+    {"id": "hhw-min-speed", "page": 5, "bbox": [1070,525,2150,555], "expected": "THE ECM MINIMUM SPEED SHALL NOT DROP BELOW THE SPEED CORRESPONDING WITH 30% OF THE MAXIMUM HEATING WATER FLOW.", "mode": "contains"},
+    {"id": "hhw-dp-increase", "page": 5, "bbox": [1070,592,2150,610], "expected": "IF THE CRITICAL HEATING CONTROL VALVE IS MORE THAN 90% OPEN (ADJ.), THEN INCREASE THE DIFFERENTIAL PRESSURE SET POINT BY 1 PSI (ADJ.).", "mode": "contains"},
+    {"id": "hhw-bypass", "page": 5, "bbox": [1070,680,2200,700], "expected": "IN THE EVENT THAT THE CRITICAL HEATING WATER CONTROL VALVE IS LESS THAN 80% OPEN (ADJ.), AND THE DIFFERENTIAL PRESSURE SET POINT HAS BEEN REDUCED TO THE MINIMUM", "mode": "contains"},
+    {"id": "boiler-circulator", "page": 5, "bbox": [1070,815,2200,855], "expected": "THE BOILER CIRCULATOR PUMPS SHALL BE CONSTANT SPEED AND CONTROLLED IN A LEAD/LAG FASHION. THE LEAD PUMP SHALL ROTATE WHEN ITS RUNTIME EXCEEDS ONE WEEK (ADJ.) OR WHEN THE LEAD PUMP FAILS. WHEN THERE IS A CALL FOR HEATING THE LEAD PUMP SHALL BE ENERGIZED.", "mode": "contains"},
+    {"id": "hhw-boiler-bacnet", "page": 5, "bbox": [1070,970,2200,1020], "expected": "THE BOILER SHALL BE PROVIDED WITH A BACNET COMPATIBLE STANDALONE BOILER SYSTEM CONTROLLER. THE CONTROLLER SHALL CONTROL ALL OPERATIONS AND ENERGY INPUT (MODULATE COMBUSTION) TO MAINTAIN THE HOT WATER SUPPLY TEMPERATURE SETPOINT. THE BOILER SYSTEM CONTROLLER SHALL BE INTERFACED TO THE BAS AND ALLOW MONITORING AND ADJUSTMENT OF SET POINTS.", "mode": "contains"},
+    {"id": "boiler-freeze", "page": 5, "bbox": [1070,1120,2200,1155], "expected": "WHENEVER THE HEATING WATER SYSTEM IS IN FREEZE PROTECTION MODE DUE TO LOW OUTSIDE AIR TEMPERATURE, WATER SHALL FLOW THROUGH THE BOILER CONTINUOUSLY. IF THERE IS NO CALL FOR HEATING, BUT HEATING WATER TEMPERATURE DROPS BELOW 35°F (ADJ.), BOILER SHALL START AND INCREASE WATER TEMPERATURE TO 45°F (ADJ.)", "mode": "contains"},
+    {"id": "boiler-co-safety", "page": 5, "bbox": [1070,1325,2200,1345], "expected": "CO SENSOR: THE CO SENSOR SHALL CONTINUOUSLY MONITOR CARBON MONOXIDE CONTENT INSIDE THE MECHANICAL ROOM AND SHALL BE INTERLOCKED WITH THE BAS SYSTEM", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "two-m509-hydronic-sequences", "records_path": ["sequences"], "expected": 2, "unique_key": "id"},
+    {"id": "m509-logical-sensor-items", "records_path": ["sensor_and_zone_ledger", "source_items"], "expected": 4, "unique_key": "id"}
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "id": "05__vol2__009",
+  "record_sha256": "3578922745acbcf80176ff3eb102588bd6af88166455a1d01b4b4081775a18de",
+  "checked_utc": "2026-09-05T07:31:59.043073+00:00",
+  "errors": [],
+  "modules": {
+    "metadata": {
+      "components": [
+        {
+          "annotation_sha256": "ff8f6f3f2cc566eaeb5fccb6db5ff57ac9b7bc90cd14bb8ecc4536238f7aefc4",
+          "cell_assertions": 0,
+          "text_assertions": 10,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 10,
+      "pass": true
+    },
+    "schedules": {
+      "components": [
+        {
+          "annotation_sha256": "ff0c29d8ee1e64b477319cf582627104a7f258e41a58c6d48c468e1b8e3e5c41",
+          "cell_assertions": 240,
+          "text_assertions": 6,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "4fbbd922fed3d95d7652bef264eda4aa34315bbdf0e4ddf03781c0a6e516e19b",
+          "cell_assertions": 92,
+          "text_assertions": 5,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 332,
+      "text_assertions": 11,
+      "pass": true
+    },
+    "points": {
+      "components": [
+        {
+          "annotation_sha256": "e425cd79d57e87143d5c06d11c9ecd8412f66af6d7d686f404f4e8f7aeb58e83",
+          "cell_assertions": 150,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 150,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "controls_context": {
+      "components": [
+        {
+          "annotation_sha256": "e7486b8fe4e3737fee0ef9643211ddcc530809db7c0b5c1c2da72efb6fcdf523",
+          "cell_assertions": 375,
+          "text_assertions": 7,
+          "pass": true
+        },
+        {
+          "annotation_sha256": "b9d8624eb15fc361cf3de8600e1abe1db32016f885ee3433e53da2e453fdf8fe",
+          "cell_assertions": 0,
+          "text_assertions": 39,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 375,
+      "text_assertions": 46,
+      "pass": true
+    },
+    "equipment_reconciliation": {
+      "components": [
+        {
+          "annotation_sha256": "7ca8fd54faa75daacfb38aa6c630cbb4ecd12cee158519ef937073c7485ca1b5",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "point_applications": {
+      "components": [
+        {
+          "annotation_sha256": "a508240e5fe3767b518653f890f2851c424e95504c4d18912a2b166013c2fc59",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "supporting_evidence": {
+      "components": [
+        {
+          "annotation_sha256": "a118b7f59cc89310407dd64a131850ab275544a0365e331d54b67d81cc723196",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    }
+  },
+  "source_files_sha256": {
+    "work/05__vol2__009/document_manifest.json": "967b926da68bb70d2ee3c76003404ead39abb7e7c5377f3a3ed59fc6712a924e",
+    "work/05__vol2__009/metadata_rank05.json": "ff8f6f3f2cc566eaeb5fccb6db5ff57ac9b7bc90cd14bb8ecc4536238f7aefc4",
+    "work/05__vol2__009/schedules_m601_core.json": "ff0c29d8ee1e64b477319cf582627104a7f258e41a58c6d48c468e1b8e3e5c41",
+    "work/05__vol2__009/schedules_m601_air_devices.json": "4fbbd922fed3d95d7652bef264eda4aa34315bbdf0e4ddf03781c0a6e516e19b",
+    "work/05__vol2__009/points_rank05_ledger.json": "e425cd79d57e87143d5c06d11c9ecd8412f66af6d7d686f404f4e8f7aeb58e83",
+    "work/05__vol2__009/points_m801_m804.json": "e7486b8fe4e3737fee0ef9643211ddcc530809db7c0b5c1c2da72efb6fcdf523",
+    "work/05__vol2__009/controls_sequences_network.json": "b9d8624eb15fc361cf3de8600e1abe1db32016f885ee3433e53da2e453fdf8fe",
+    "work/05__vol2__009/equipment_reconciliation_rank05.json": "7ca8fd54faa75daacfb38aa6c630cbb4ecd12cee158519ef937073c7485ca1b5",
+    "work/05__vol2__009/point_applications_rank05.json": "a508240e5fe3767b518653f890f2851c424e95504c4d18912a2b166013c2fc59",
+    "work/05__vol2__009/supporting_evidence_rank05.json": "a118b7f59cc89310407dd64a131850ab275544a0365e331d54b67d81cc723196",
+    "reviews/05__vol2__009/p1-p1-full-poppler.png": "c33d8b918b745323638f1f05d5a7e0a31bea65761a4d7376d5879bb03a533d7e",
+    "reviews/05__vol2__009/p2-p2-full-poppler.png": "4f13cf185b4a6657d649654b1e8fefde8475e51edab66d8b9a68df3b6f579a6d",
+    "reviews/05__vol2__009/p3-p3-full-poppler.png": "db25909eb49a957e9833a4d99510068c96202ff987265d58a40ba54b38229853",
+    "reviews/05__vol2__009/p4-p4-full-poppler.png": "6f211159a69b2c9f0530c9a539a8655858aac9e1f698020afa15af3e5e9fe653",
+    "reviews/05__vol2__009/p5-p5-full-poppler.png": "7c5409bf31229486f654b4530fea87a0f4a49e8aab53cc230ad23ff2ac5b41b2",
+    "reviews/05__vol2__009/p6-p6-full-poppler.png": "2c9d7603bca63b66ec8ca8c3631486e83cc4dee8c75211a260774d68a8fe986c",
+    "reviews/05__vol2__009/p7-p7-full-poppler.png": "141fac2965c9343fd2838ecb91ee574cdfc6936b1f8e499d40efa257c6388228",
+    "reviews/05__vol2__009/p8-p8-full-poppler.png": "74f24728bf97fadc6f6930014bd492a05876db80bdc4de937326614cd5ec5e41",
+    "reviews/05__vol2__009/p9-p9-full-poppler.png": "3d96562783380aa1973204c906d132eaddb93722fe003cc1bb9d5b0f9f1e3d4d",
+    "reviews/05__vol2__009/p10-p10-full-poppler.png": "f8b5abb60d32ee407d82662024638f36874dbe252cf8121da74d39d9d796d9c0",
+    "reviews/05__vol2__009/p11-p11-full-poppler.png": "a69342f06a9530a6721f904ce584a52058875a686ed50472fb7d71ce4bd2de8b",
+    "reviews/05__vol2__009/p12-p12-full-poppler.png": "1a37222408b6baa5006430149413191106644f9d4d62a6b0f6dd3564e6a05392",
+    "reviews/05__vol2__009/p13-p13-full-poppler.png": "96a1935c193907e2df0cf0fcd91f8ba96096f130337b4c17c49186c7d6255659",
+    "reviews/05__vol2__009/p14-p14-full-poppler.png": "ad8e7409d902e8da34ed06f2adb67c0e0b987e1ed9198d4854e291115f4941bf",
+    "reviews/05__vol2__009/p15-p15-full-poppler.png": "3fdcc6f937c10ae3c67cfe7d3661a2b45ce899ce9e5284cdab32c4851823c757",
+    "reviews/05__vol2__009/p16-p16-full-poppler.png": "d2cc96da9056999fbc2a6c3f137aa0d25b6debd65b5fa4d35545628980b87fda",
+    "reviews/05__vol2__009/p17-p17-full-poppler.png": "95cbac67565be049db4580e1c8800321c2ebe95797c12d6db82dde09d3929f3f",
+    "reviews/05__vol2__009/p18-p18-full-poppler.png": "7681fa180d5be5fe0264f0fc85a08575891cddd76ec54ab81a2930e6a568d2d0",
+    "reviews/05__vol2__009/p19-p19-full-poppler.png": "ee338eadf05841c4c3b13b098a9367d566559ac09d8f63cf21efbf0bfe5b0ae9",
+    "reviews/05__vol2__009/p20-p20-full-poppler.png": "d2e6e5966f98ac78394d299a54e9d4ae66a1927e399e77a2f7c28b1bc4b78c05",
+    "reviews/05__vol2__009/p21-p21-full-poppler.png": "38d34718c56baa83860ae7810acc7058200cefea8c0d18b7b6d8c273908e4de5",
+    "reviews/05__vol2__009/p22-p22-full-poppler.png": "4bd1fce01800252e071e9b075f0ecb4f3e1ee435887871e49420636254094e66",
+    "reviews/05__vol2__009/p23-p23-full-poppler.png": "78e0822768eeb8f54e536fd35aa8256c28838a0d79dc8b51b104bfa7d800b2a2",
+    "reviews/05__vol2__009/p24-p24-full-poppler.png": "58c3e9c1f94fda568081e39c674a03bedfda228eac283680c1c1c269fe7d333c",
+    "reviews/05__vol2__009/p25-p25-full-poppler.png": "f6cf9b46c622344e0b915f2b9e80487473c555a0620589aa5b3879874f5253d1",
+    "reviews/05__vol2__009/p26-p26-full-poppler.png": "13a42e41b799efd3bbac01d6934466d84b4a7be20bba9b688b79c934f846f447",
+    "reviews/05__vol2__009/p27-p27-full-poppler.png": "4a5f8f995a1a75b67abaefc63241d0bc9928b38894fd81fb4e836f94d6b9cc3b",
+    "reviews/05__vol2__009/p28-p28-full-poppler.png": "048298e82617506cdca119e5e2e42543f93fa5b09caf967c7941285582563ed3",
+    "reviews/05__vol2__009/p29-p29-full-poppler.png": "6733ab620f1799cdadefd0935c94c5b8b6798beab42dd371808c79ebbc6bead6",
+    "reviews/05__vol2__009/p30-p30-full-poppler.png": "63502c8a41de85cfd696f1390f5675755c38ec15744bd9c945d5bff0b89af82a",
+    "reviews/05__vol2__009/p31-p31-full-poppler.png": "68ebbda1c4ed8262e741328b6e86d5cf98fa07a9f9bcdfa3447a877b037944cc"
+  },
+  "scope": "Rechecks every embedded authored module against MuPDF and Poppler, exact bundle/source identity, authored page/requirement coverage and review-file integrity. Visual interpretation and completeness are coordinator audit assertions, not automatic parser proof.",
+  "bounded_assertions": 924,
+  "independent_engine_checks": 1848,
+  "pass": true
+}

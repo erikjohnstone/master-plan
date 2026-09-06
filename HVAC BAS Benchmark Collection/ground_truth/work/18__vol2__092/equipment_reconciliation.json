@@ -1,0 +1,57 @@
+{
+  "document_id": "18__vol2__092",
+  "module_role": "Reconciles every M3.01 schedule table identity to its printed source scope. Schedule rows, outlet types, coordination categories, refrigeration cross-references and M2.01 sample detail graphics are kept distinct rather than silently merged into physical equipment counts.",
+  "schedule_registry_schema": {
+    "namespace_separator": "-",
+    "identity_columns": {"tag": "tag", "equipment_tag": "equipment_tag"},
+    "anchor_records_path": ["primary_anchors"],
+    "non_instance_table_ids": ["OUTLET-M301-GRILLE-REGISTER-DIFFUSER", "COORD-M301-MECHANICAL-ELECTRICAL-COORDINATION", "REFRIG-M301-REFRIGERATION"]
+  },
+  "scheduled_families": [
+    {"module": "schedules_m301.json", "bundle_module": "schedules", "table": "CH-M301-AIR-COOLED-CHILLER", "rows": 1, "class": "Air-cooled chiller", "tag": ["CH 2"]},
+    {"module": "schedules_m301.json", "bundle_module": "schedules", "table": "FCU-M301-FAN-COIL-2-PIPE-CHILLED-WATER", "rows": 5, "class": "Two-pipe chilled-water fan coil schedule mark", "tag": ["FCU 1", "FCU 2", "FCU 3", "FCU 4", "FCU 5"]},
+    {"module": "schedules_m301.json", "bundle_module": "schedules", "table": "ACD-M301-AUTOMATIC-CONTROL-DAMPER", "rows": 2, "class": "Automatic control damper", "tag": ["ACD 1", "ACD 2"]},
+    {"module": "schedules_m301.json", "bundle_module": "schedules", "table": "CU-M301-CONDENSING-UNIT", "rows": 3, "class": "Condensing unit", "tag": ["CU 1", "CU 2", "CU 3"]},
+    {"module": "schedules_m301.json", "bundle_module": "schedules", "table": "OUTLET-M301-GRILLE-REGISTER-DIFFUSER", "rows": 1, "class": "Air-outlet type", "tag": ["A"]},
+    {"module": "schedules_m301.json", "bundle_module": "schedules", "table": "DX-M301-DX-COIL", "rows": 1, "class": "DX coil", "tag": ["DC 1"]},
+    {"module": "schedules_m301.json", "bundle_module": "schedules", "table": "COORD-M301-MECHANICAL-ELECTRICAL-COORDINATION", "rows": 3, "class": "Trade-coordination equipment category", "equipment_tag": ["FCU", "CU", "CH"]},
+    {"module": "schedules_m301.json", "bundle_module": "schedules", "table": "REFRIG-M301-REFRIGERATION", "rows": 4, "class": "Refrigeration schedule cross-reference", "equipment_tag": ["CH 1", "CU 1", "CU 2", "CU 3"]}
+  ],
+  "schedule_counts": {"tables": 8, "rows": 20, "building_scoped_tag_identities_including_outlet_types": 20, "other_scheduled_tag_identities": 12},
+  "primary_anchors": [
+    {"id": "CH-CH 2", "scope": "Scheduled air-cooled chiller", "visual_anchor": "M3.01 Air Cooled Chiller Schedule row CH 2; left field / near gate 6."},
+    {"id": "FCU-FCU 1", "scope": "Scheduled fan-coil mark", "visual_anchor": "M3.01 FCU row FCU 1, quantity 1, level 200 section 7."},
+    {"id": "FCU-FCU 2", "scope": "Scheduled fan-coil mark", "visual_anchor": "M3.01 FCU row FCU 2, quantity 1, level 200 section 7."},
+    {"id": "FCU-FCU 3", "scope": "Scheduled fan-coil mark", "visual_anchor": "M3.01 FCU row FCU 3, quantity 1, visitors clubhouse."},
+    {"id": "FCU-FCU 4", "scope": "Scheduled fan-coil mark", "visual_anchor": "M3.01 FCU row FCU 4, quantity 1, ISFA conference room."},
+    {"id": "FCU-FCU 5", "scope": "Scheduled fan-coil mark", "visual_anchor": "M3.01 FCU row FCU 5 prints quantity 11. The one schedule row and its printed quantity remain distinct from eleven individually located equipment identities."},
+    {"id": "ACD-ACD 1", "scope": "Scheduled automatic control damper", "visual_anchor": "M3.01 ACD row ACD 1: Visitors Clubhouse, 12x10, opposed blade, fail closed."},
+    {"id": "ACD-ACD 2", "scope": "Scheduled automatic control damper", "visual_anchor": "M3.01 ACD row ACD 2: ISFA Conference / Pressbox, verify existing size, opposed blade, fail closed."},
+    {"id": "CU-CU 1", "scope": "Scheduled condensing unit", "visual_anchor": "M3.01 Condensing Units row CU 1; patio AHU / 200 level section 2."},
+    {"id": "CU-CU 2", "scope": "Scheduled condensing unit", "visual_anchor": "M3.01 Condensing Units row CU 2; score board control / 200 level section 5."},
+    {"id": "CU-CU 3", "scope": "Scheduled condensing unit", "visual_anchor": "M3.01 Condensing Units row CU 3; score board control / 200 level section 5."},
+    {"id": "DX-DC 1", "scope": "Scheduled DX coil", "visual_anchor": "M3.01 DX Coil row DC 1 cites CU-1 at patio; the row is kept as a scheduled coil identity and is not added to the CU quantity."}
+  ],
+  "plan_and_detail_reconciliation": [
+    {"id": "m301-fcu-quantity-semantics", "sheet": "M3.01", "finding": "Five FCU schedule marks print quantities 1, 1, 1, 1 and 11. The record retains five source rows plus their literal quantity cells; it does not manufacture eleven separately anchored FCU-5 tags."},
+    {"id": "m301-damper-actuator-split", "sheet": "M3.01", "finding": "ACD-1 and ACD-2 are populated automatic-control-damper rows. Their note assigns damper furnishing to MC and the listed-fail-position actuator to BASC."},
+    {"id": "m301-refrigeration-cross-reference", "sheet": "M3.01", "finding": "The refrigeration schedule contains four reference rows. It is indexed independently from the equipment schedules and not used as a second equipment-instance count."},
+    {"id": "m201-valve-chart-sample", "sheet": "M2.01", "finding": "Full-page visual review identifies the valve tag/chart as a sample detail; it has no populated project valve rows and is not counted as a control-valve schedule."}
+  ],
+  "control_valve_and_damper_schedule_status": {
+    "control_valve_schedule": {"status": "not_present_as_populated_schedule", "value": null, "note": "M2.01 has a valve-tag/valve-chart sample detail, but no populated project control-valve schedule row is supplied."},
+    "damper_actuator_schedule": {"status": "present", "source": "M3.01 ACD schedule", "rows": 2, "note": "ACD 1 and ACD 2 are populated schedule rows; both are opposed blade / fail closed. MC furnishes dampers and BASC furnishes actuators with the printed fail position."}
+  },
+  "source_conflicts": [
+    {"id": "chiller-tag-discrepancy", "scope": "M3.01 chiller vs refrigeration schedules", "finding": "The Air Cooled Chiller Schedule prints CH 2 at left field / near gate 6, while the Refrigeration Schedule prints CH 1 at left field with 475 tons. The source does not explicitly state that these are the same unit, so no alias is invented."},
+    {"id": "fcu1-location-discrepancy", "scope": "M3.01 FCU schedule vs M4.02 sequence", "finding": "M3.01 locates FCU 1 at Level 200 Section 7, while M4.02 says FCU-1 is in the ISFA conference room for the OA-damper behavior. The conflicting printed location context is retained without correction."}
+  ],
+  "valve_aliases": [],
+  "tables": [],
+  "assertions": [],
+  "inventory_checks": [
+    {"id": "scheduled-families", "records_path": ["scheduled_families"], "expected": 8, "unique_key": "table"},
+    {"id": "scheduled-primary-anchors", "records_path": ["primary_anchors"], "expected": 12, "unique_key": "id"},
+    {"id": "plan-detail-reconciliation", "records_path": ["plan_and_detail_reconciliation"], "expected": 4, "unique_key": "id"}
+  ]
+}

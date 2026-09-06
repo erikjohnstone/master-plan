@@ -1,0 +1,144 @@
+{
+  "id": "08__vol2__044",
+  "record_sha256": "bc20be16e7e51816a7d60fc126275ec6815f8e155c49b4ca3a635764e9574d53",
+  "checked_utc": "2026-09-05T08:31:38.158012+00:00",
+  "errors": [],
+  "modules": {
+    "metadata": {
+      "components": [
+        {
+          "annotation_sha256": "258f3b131c45e2c74bb7f2c752c84ab7a27229c04c6e2058c52f74e4aa0e9222",
+          "cell_assertions": 0,
+          "text_assertions": 6,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 6,
+      "pass": true
+    },
+    "schedules": {
+      "components": [
+        {
+          "annotation_sha256": "6f003e76e19bb25c0ad8997ee49860015d25059e7e34c045514aa8d8ac9a70c6",
+          "cell_assertions": 568,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 568,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "points": {
+      "components": [
+        {
+          "annotation_sha256": "1ce3ca57ca80c66050942a15381389b43e7dba49c75132748f85b86722a39bd2",
+          "cell_assertions": 321,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 321,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "controls_context": {
+      "components": [
+        {
+          "annotation_sha256": "60ac5b722391068db836ffa9d5123af7423ad83cebd325e5b63439164596b7fd",
+          "cell_assertions": 0,
+          "text_assertions": 21,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 21,
+      "pass": true
+    },
+    "equipment_reconciliation": {
+      "components": [
+        {
+          "annotation_sha256": "979b2f9b15b6b97ff242034425d849608279a65dff1e374632de6bcb44e57ecc",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "point_applications": {
+      "components": [
+        {
+          "annotation_sha256": "549925ed6ee4dc99494375741dbd37aecb7e57780998f3d8251ac720f05587c2",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "supporting_evidence": {
+      "components": [
+        {
+          "annotation_sha256": "a9ec13b0024d16465619a08157dae41316809b7d7ea01a85942e1f163b05e71c",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    }
+  },
+  "source_files_sha256": {
+    "work/08__vol2__044/document_manifest.json": "4fcb497f3e29fcc18c80f2e56f204692797b702885d7ec086cecd23fb0b2e56e",
+    "work/08__vol2__044/metadata_rank08.json": "258f3b131c45e2c74bb7f2c752c84ab7a27229c04c6e2058c52f74e4aa0e9222",
+    "work/08__vol2__044/schedules_mi503_mi504.json": "6f003e76e19bb25c0ad8997ee49860015d25059e7e34c045514aa8d8ac9a70c6",
+    "work/08__vol2__044/points_mi605_mi607.json": "1ce3ca57ca80c66050942a15381389b43e7dba49c75132748f85b86722a39bd2",
+    "work/08__vol2__044/controls_sequences.json": "60ac5b722391068db836ffa9d5123af7423ad83cebd325e5b63439164596b7fd",
+    "work/08__vol2__044/equipment_reconciliation_rank08.json": "979b2f9b15b6b97ff242034425d849608279a65dff1e374632de6bcb44e57ecc",
+    "work/08__vol2__044/point_applications_rank08.json": "549925ed6ee4dc99494375741dbd37aecb7e57780998f3d8251ac720f05587c2",
+    "work/08__vol2__044/supporting_evidence_rank08.json": "a9ec13b0024d16465619a08157dae41316809b7d7ea01a85942e1f163b05e71c",
+    "reviews/08__vol2__044/p1-p1-full-poppler.png": "e99f188b0e48bbcdb84769fca71ad635ead91dcaf35ee7845df3685755ab9191",
+    "reviews/08__vol2__044/p2-p2-full-poppler.png": "b91422a1497d157a8ae41f25fff929a50ada4bdba9ced15de6352cbbe8ce7db1",
+    "reviews/08__vol2__044/p3-p3-full-poppler.png": "ee0ce8f0ce3a48a502f77a9017d23214c189966bff180796c30485643607b42a",
+    "reviews/08__vol2__044/p4-p4-full-poppler.png": "4c8ccdc8a0e6f59e1b3bbb13250d3d89d38d3ad6c3f96575514100cedad7858f",
+    "reviews/08__vol2__044/p5-p5-full-poppler.png": "c4f66908cc333c1e1436d14b7c750957a4301e8389662f5231e907faef86e580",
+    "reviews/08__vol2__044/p6-p6-full-poppler.png": "2b97fc724113edf12ff5964c0c1851f699d5b9c63540c6886904b4cbcbaa0033",
+    "reviews/08__vol2__044/p7-p7-full-poppler.png": "3006aaf835ddb796b0841f7228c7d02a3cb4f0e8a7d386252a42944afd4c51f8",
+    "reviews/08__vol2__044/p8-p8-full-poppler.png": "6ca3d8ac82c1fcd421bd5a0f7eeba354993b6df0fe58f5216b62662544b3605d",
+    "reviews/08__vol2__044/p9-p9-full-poppler.png": "4598f50017e217052a42f6b9342f94130c23680973259abf56104ea4eca09ae6",
+    "reviews/08__vol2__044/p10-p10-full-poppler.png": "66bd98e7c4a4b9619057f1c9e67f84e958395fdebf50d45cd0167064e36852f3",
+    "reviews/08__vol2__044/p11-p11-full-poppler.png": "6ca0ebbdf1af1b41a9df3de3293233d297daecf5521ec2d67c70ed375ccaade6",
+    "reviews/08__vol2__044/p12-p12-full-poppler.png": "57d834943fc091aaae9a30c91fa1e0a0387a88285c0b8be8b91fee94315f1a37",
+    "reviews/08__vol2__044/p13-p13-full-poppler.png": "e8999f01d3b28103414c34789c505004c8f0f00488a9c88d783f9c6390cf56d4",
+    "reviews/08__vol2__044/p14-p14-full-poppler.png": "97962c1b047e6f5cce9dea2b3763ef91c70869a2d3487bbc2039ac2d9d6eb834",
+    "reviews/08__vol2__044/p15-p15-full-poppler.png": "a043dd3b39ec6065a653056863de543980a848d01d61091230499c48dd757ef1",
+    "reviews/08__vol2__044/p16-p16-full-poppler.png": "43005bbdd77e0b2fe9062153820a2dded4e1f2ce68ae92124f6ab569e441fcdd",
+    "reviews/08__vol2__044/p17-p17-full-poppler.png": "1877f3b3d35f2aeeb4cd002a1b9f31f337cd5f48e37079d76fa47643a5788590",
+    "reviews/08__vol2__044/p18-p18-full-poppler.png": "bec7697371877392fc3f11497caa0d584bc9da296aad1fb0d559547d18b20377",
+    "reviews/08__vol2__044/p19-p19-full-poppler.png": "5fb1af41a03971147fa55d431a5fc377b4455ba632692c49ae12873196ca5a06",
+    "reviews/08__vol2__044/p20-p20-full-poppler.png": "aab698ec183834556aaadf205848101f0893ab28cc66e530ecfded457ba5518a",
+    "reviews/08__vol2__044/p21-p21-full-poppler.png": "3163d393dad243e5e3da524ef0114c6cc2031560d6d4702e1f682796a277b1f4",
+    "reviews/08__vol2__044/p22-p22-full-poppler.png": "ac84b1eb76165816d7299b6a4f27c63d771a497699d81b70886ebf07e86f4c60",
+    "reviews/08__vol2__044/p23-p23-full-poppler.png": "f96aa53b4ed0ebd0f67d048a5159f911fd6f91530bb7610876e2d63321863cab",
+    "reviews/08__vol2__044/p24-p24-full-poppler.png": "c697cdf6b10e4d5d6f2cf36a8046b349ef37f6bbe8ab42ad7df96690c5a79856",
+    "reviews/08__vol2__044/p25-p25-full-poppler.png": "d79eda533d39630286d403e670043ccf80aeb26c18d9793d68e64cf37d27df5b",
+    "reviews/08__vol2__044/p26-p26-full-poppler.png": "c76bf5c8ae61c452ecfa3eb40b56f44489849a19be7fe5ad39586273445e5ac0",
+    "reviews/08__vol2__044/p27-p27-full-poppler.png": "db388da8225e40c102de1d85b9e8c473f586a4ff12318e5db717faabdf64178f",
+    "reviews/08__vol2__044/p28-p28-full-poppler.png": "12c08389931195ab9995845eec14ef640ad4dbe970ddfd45bb63f93679e9b037",
+    "reviews/08__vol2__044/p29-p29-full-poppler.png": "568d3a440e53813069bcf1385eb76814ac3ab5dad1ff643db6e1b03a1b31648c",
+    "reviews/08__vol2__044/p30-p30-full-poppler.png": "560160b8f12e0931dfc013f2a8461272e0e67ee94b4a81fd9ed7543d86909bbe",
+    "reviews/08__vol2__044/p31-p31-full-poppler.png": "a3814849f6df34d0bdc042badb99243fa5e196045ec87567e7a57c3fcd47d89b"
+  },
+  "scope": "Rechecks every embedded authored module against MuPDF and Poppler, exact bundle/source identity, authored page/requirement coverage and review-file integrity. Visual interpretation and completeness are coordinator audit assertions, not automatic parser proof.",
+  "bounded_assertions": 916,
+  "independent_engine_checks": 1832,
+  "pass": true
+}

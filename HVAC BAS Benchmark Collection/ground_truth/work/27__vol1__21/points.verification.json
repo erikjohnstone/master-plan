@@ -1,0 +1,60 @@
+{
+  "document_id": "27__vol1__21",
+  "source_sha256": "e47047c7322d16d44854dd5aa738f3d76087cc47f446927b00d8afc04a128f65",
+  "annotation_sha256": "9aae8ac97c57445fc5094f65e888d584be9d65e965aa7429305fd9fb46079c5e",
+  "tables": 1,
+  "rows": 1,
+  "cell_assertions": 1,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M701-CHWP-IO",
+      "row": 1,
+      "column": "literal_source_row_as_printed",
+      "page": 52,
+      "bbox": [
+        225,
+        735,
+        1000,
+        765
+      ],
+      "expected": "48 CHEMICAL FEEDER START/STOP DO HOA 2 VFD",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "48 CHEMICAL FEEDER START/STOP DO HOA 2 VFD",
+          "word_ids": [
+            1937,
+            218,
+            219,
+            154,
+            22,
+            31,
+            20,
+            39
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "48 CHEMICAL FEEDER START/STOP DO HOA 2 VFD",
+          "word_ids": [
+            189,
+            187,
+            188,
+            196,
+            197,
+            198,
+            263,
+            262
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

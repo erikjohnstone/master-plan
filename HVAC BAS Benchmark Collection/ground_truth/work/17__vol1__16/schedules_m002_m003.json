@@ -1,0 +1,642 @@
+{
+  "document_id": "17__vol1__16",
+  "module_role": "All 86 literal equipment schedule rows from M0.02 and M0.03, including the printed reference-only and bid-alternate schedules.",
+  "tables": [
+    {
+      "id": "M002-2-STAGE-GAS-FIRED-FURNACE",
+      "sheet": "M0.02",
+      "page": 3,
+      "title_as_printed": "2-STAGE, GAS FIRED FURNACE SCHEDULE",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        1050,
+        2710
+      ],
+      "y_ranges": [
+        [
+          180,
+          198
+        ],
+        [
+          198,
+          216
+        ],
+        [
+          216,
+          234
+        ],
+        [
+          234,
+          252
+        ],
+        [
+          252,
+          270
+        ],
+        [
+          270,
+          288
+        ],
+        [
+          288,
+          306
+        ],
+        [
+          306,
+          324
+        ],
+        [
+          324,
+          342
+        ],
+        [
+          342,
+          360
+        ],
+        [
+          360,
+          378
+        ],
+        [
+          378,
+          396
+        ],
+        [
+          396,
+          414
+        ],
+        [
+          414,
+          432
+        ],
+        [
+          432,
+          450
+        ],
+        [
+          450,
+          468
+        ],
+        [
+          468,
+          486
+        ],
+        [
+          486,
+          504
+        ],
+        [
+          504,
+          522
+        ],
+        [
+          522,
+          540
+        ],
+        [
+          540,
+          558
+        ]
+      ],
+      "rows": [
+        "B1 CLASSROOM 23 RHEEM R962V0705A21 175 1,600 450 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+        "B2 CLASSROOM 24 RHEEM R962V0705A21 175 1,600 475 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+        "B3 CLASSROOM 25, CORRIDOR B101 RHEEM R962V0705A21 175 1,600 550 0.5 21 115/1/60 15 20 70/49 60/42 59 100 0 A,B,C",
+        "B4 CLASSROOM 26 RHEEM R962V0705A21 175 1,600 475 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+        "B5 CLASSROOM 27 RHEEM R962V0705A21 175 1,600 600 0.5 21 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+        "B6 CLS CLASSROOM 29 RHEEM R962V0705A21 175 1,600 675 0.5 21 115/1/60 15 20 70/49 60/42 56 97 0 A,B,C",
+        "B7 CLASROOM 28 RHEEM R962V0705A21 175 1,600 475 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+        "B8 CORRIDOR B101, UNISEX RR 29A, BOYS RR 30A, GIRLS RR 30B, WOMENS RR 30C, MENS RR 30D FRASER JOHNSTON TM9Y080C16MP11 140 1,050 700 0.5 21 115/1/60 8.7 15 80/52 63/50 48 113 0 A,B,C,F",
+        "B9 STORAGE ROOM 21, OFFICE ROOM 22, ROOM B3, OFFICE ROOM 22A, OFFICE ROOM 22B, VESTIBULE B100, STORAGE ROOM 22 RHEEM R962V0705A21 175 1,600 150 0.5 21 115/1/60 15 20 70/49 60/42 59 100 0 A,B,D,E",
+        "C1 CLASSROOM 41, CORRIDOR 40A RHEEM R962V0705A21 175 1,600 600 0.5 23 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+        "C2 CLASSROOM 40 RHEEM R962V0705A21 175 1,600 450 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+        "C3 CLASSROOM 43, CORRIDOR 40A RHEEM R962V0705A21 175 1,600 600 0.5 27 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+        "C4 CLASSROOM 42 RHEEM R962V0705A21 175 1,600 450 0.5 23 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+        "C5 CLASSROOM 45, RESTROOM 47A RHEEM R962V0705A21 175 1,600 600 0.5 21 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+        "C6 CLASSROOM 44, MECHANICAL 44A, MECHANICAL 44B RHEEM R962V0705A21 175 1,600 600 0.5 27 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+        "C7 CLASSROOM 47, RESTROOM 47B RHEEM R962V0705A21 175 1,600 600 0.5 23 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+        "C8 CLASSROOM 46, ROOM 46A, ROOM 46B RHEEM R962V0705A21 175 1,600 625 0.5 21 115/1/60 15 20 70/49 60/42 57 98 0 A,B,C",
+        "C9 CLASSROOM 49, CORRIDOR 40A RHEEM R962V0705A21 175 1,600 600 0.5 27 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C",
+        "C10 CLASSROOM 48 RHEEM R962V0705A21 175 1,600 450 0.5 23 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+        "C11 CLASSROOM 51 RHEEM R962V0705A21 175 1,600 450 0.5 21 115/1/60 15 20 70/49 60/42 61 102 0 A,B,C",
+        "C12 CLASSROOM 50, CORRIDOR 40A RHEEM R962V0705A21 175 1,600 600 0.5 27 115/1/60 15 20 70/49 60/42 58 99 0 A,B,C"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+    },
+    {
+      "id": "M002-CONDENSING-UNIT",
+      "sheet": "M0.02",
+      "page": 3,
+      "title_as_printed": "CONDENSING UNIT SCHEDULE",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        650,
+        1580
+      ],
+      "y_ranges": [
+        [
+          822,
+          840
+        ],
+        [
+          840,
+          858
+        ],
+        [
+          858,
+          876
+        ],
+        [
+          876,
+          894
+        ],
+        [
+          894,
+          912
+        ],
+        [
+          912,
+          930
+        ],
+        [
+          930,
+          948
+        ],
+        [
+          948,
+          966
+        ],
+        [
+          966,
+          984
+        ],
+        [
+          984,
+          1002
+        ],
+        [
+          1002,
+          1020
+        ],
+        [
+          1020,
+          1038
+        ],
+        [
+          1038,
+          1056
+        ],
+        [
+          1056,
+          1074
+        ],
+        [
+          1074,
+          1092
+        ],
+        [
+          1092,
+          1110
+        ],
+        [
+          1110,
+          1128
+        ],
+        [
+          1128,
+          1146
+        ],
+        [
+          1146,
+          1164
+        ],
+        [
+          1164,
+          1182
+        ],
+        [
+          1182,
+          1200
+        ],
+        [
+          1200,
+          1218
+        ],
+        [
+          1218,
+          1236
+        ]
+      ],
+      "rows": [
+        "B1 F-B1 AND EC-B1 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 30.9 30.9 A,B",
+        "B2 F-B2 AND EC-B2 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+        "B3 F-B3 AND EC-B3 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 35.3 35.3 A,B",
+        "B4 F-B4 AND EC-B4 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 30.9 30.9 A,B",
+        "B5 F-B5 AND EC-B5 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 36.8 36.8 A,B",
+        "B6 F-B6 AND EC-B6 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 36.8 36.8 A,B,D",
+        "B7 F-B7 AND EC-B7 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 30.9 30.9 A,B",
+        "B8 F-B8 AND EC-B8 FRASER JOHNSTON AL19B3621S 270 208/1/60 21.4 35 100/61 16 N/A 24.2 24.2 A,C,D",
+        "B9 F-B9 AND EC-B9 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 35.3 35.3 A,B",
+        "BO1 OAU-B1 FRASER JOHNSTON AL19B6021S 300 208/1/60 31.4 50 100/61 19 N/A 50 50 A,C",
+        "BO2 OAU-B2 FRASER JOHNSTON AL19B6021S 300 208/1/60 31.4 50 100/61 19 N/A 50 50 A,C",
+        "C1 F-C1 AND EC-C1 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 33.9 33.9 A,B",
+        "C2 F-C2 AND EC-C2 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 29.5 29.5 A,B",
+        "C3 F-C3 AND EC-C3 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+        "C4 F-C4 AND EC-C4 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 29.5 29.5 A,B",
+        "C5 F-C5 AND EC-C5 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+        "C6 F-C6 AND EC-C6 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+        "C7 F-C7 AND EC-C7 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+        "C8 F-C8 AND EC-C8 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 38.3 38.3 A,B",
+        "C9 F-C9 AND EC-C9 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 32.4 32.4 A,B",
+        "C10 F-C10 AND EC-C10 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 29.5 29.5 A,B",
+        "C11 F-C11 AND EC-C11 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 29.5 29.5 A,B",
+        "C12 F-C12 AND EC-C12 RHEEM RA16AZ48AJ3 250 208/1/60 25 40 100/61 16 N/A 33.9 33.9 A,B"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+    },
+    {
+      "id": "M002-EVAPORATOR-COIL",
+      "sheet": "M0.02",
+      "page": 3,
+      "title_as_printed": "EVAPORATOR COIL SCHEDULE",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        1750,
+        2620
+      ],
+      "y_ranges": [
+        [
+          813,
+          831
+        ],
+        [
+          831,
+          849
+        ],
+        [
+          849,
+          867
+        ],
+        [
+          867,
+          885
+        ],
+        [
+          885,
+          903
+        ],
+        [
+          903,
+          921
+        ],
+        [
+          921,
+          939
+        ],
+        [
+          939,
+          957
+        ],
+        [
+          957,
+          975
+        ],
+        [
+          975,
+          993
+        ],
+        [
+          993,
+          1011
+        ],
+        [
+          1011,
+          1029
+        ],
+        [
+          1029,
+          1047
+        ],
+        [
+          1047,
+          1065
+        ],
+        [
+          1065,
+          1083
+        ],
+        [
+          1083,
+          1101
+        ],
+        [
+          1101,
+          1119
+        ],
+        [
+          1119,
+          1137
+        ],
+        [
+          1137,
+          1155
+        ],
+        [
+          1155,
+          1173
+        ],
+        [
+          1173,
+          1191
+        ]
+      ],
+      "rows": [
+        "B1 F-B1 AND CU-B1 RHEEM RCFZ4921ST 80 21 30.9 30.9 1,600 0.25 76/56 55 A,B",
+        "B2 F-B2 AND CU-B2 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/56 55 A,B",
+        "B3 F-B3 AND CU-B3 RHEEM RCFZ4921ST 80 21 35.3 35.3 1,600 0.25 79/56 55 A,B",
+        "B4 F-B4 AND CU-B4 RHEEM RCFZ4921ST 80 21 30.9 30.9 1,600 0.25 76/56 55 A,B",
+        "B5 F-B5 AND CU-B5 RHEEM RCFZ4921ST 80 21 36.8 36.8 1,600 0.25 80/57 55 A,B",
+        "B6 F-B6 AND CU-B6 RHEEM RCFZ4921ST 80 21 36.8 36.8 1,600 0.25 80/57 55 A,B",
+        "B7 F-B7 AND CU-B7 RHEEM RCFZ4921ST 80 21 30.9 30.9 1,600 0.25 76/56 55 A,B",
+        "B8 F-B8 AND CU-B8 FRASER JOHNSTON XAHC36DBCN1 60 21 24.2 24.2 1,050 0.25 80/55 55 A,B",
+        "B9 F-B9 AND CU-B9 RHEEM RCFZ4921ST 80 21 35.3 35.3 1,600 0.25 79/55 55 A,B",
+        "C1 F-C1 AND CU-C1 RHEEM RCFZ4921ST 80 21 33.9 33.9 1,600 0.25 78/56 55 A,B",
+        "C2 F-C2 AND CU-C2 RHEEM RCFZ4921ST 80 21 29.5 29.5 1,600 0.25 75/56 55 A,B",
+        "C3 F-C3 AND CU-C3 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/55 55 A,B",
+        "C4 F-C4 AND CU-C4 RHEEM RCFZ4921ST 80 21 29.5 29.5 1,600 0.25 75/56 55 A,B",
+        "C5 F-C5 AND CU-C5 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/55 55 A,B",
+        "C6 F-C6 AND CU-C6 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/55 55 A,B",
+        "C7 F-C7 AND CU-C7 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/55 55 A,B",
+        "C8 F-C8 AND CU-C8 RHEEM RCFZ4921ST 80 21 38.3 38.3 1,600 0.25 81/57 55 A,B",
+        "C9 F-C9 AND CU-C9 RHEEM RCFZ4921ST 80 21 32.4 32.4 1,600 0.25 77/55 55 A,B",
+        "C10 F-C10 AND CU-C10 RHEEM RCFZ4921ST 80 21 29.5 29.5 1,600 0.25 75/56 55 A,B",
+        "C11 F-C11 AND CU-C11 RHEEM RCFZ4921ST 80 21 29.5 29.5 1,600 0.25 75/56 55 A,B",
+        "C12 F-C12 AND CU-C12 RHEEM RCFZ4921ST 80 21 33.9 33.9 1,600 0.25 78/56 55 A,B"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+    },
+    {
+      "id": "M002-ENERGY-RECOVERY-VENTILATOR",
+      "sheet": "M0.02",
+      "page": 3,
+      "title_as_printed": "ENERGY RECOVERY VENTILATOR SCHEDULE",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        650,
+        2710
+      ],
+      "y_ranges": [
+        [
+          1473,
+          1491
+        ],
+        [
+          1491,
+          1509
+        ]
+      ],
+      "rows": [
+        "C1 SWEGON NAGOLD020FRX INDOOR 1,600 460/3/60 8.8 15 3,300 0.75 1 3.2 2,950 0.75 1 3.2 100/61 76 10 0 66 80 3,300 82 56.2 85 3,300 50 152.1 85 A,B,C,D,E,F,G",
+        "C2 SWEGON NAGOLD020FRX INDOOR 1,600 460/3/60 8.8 15 3,325 0.75 1 3.2 2,750 0.75 1 3.2 100/61 76 10 0 66 80 3,325 82 53.8 87 3,325 48 145.9 87 A,B,C,D,E,F,G"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+    },
+    {
+      "id": "M002-OUTDOOR-AIR-UNIT",
+      "sheet": "M0.02",
+      "page": 3,
+      "title_as_printed": "OUTDOOR AIR UNIT SCHEDULE",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        1160,
+        2710
+      ],
+      "y_ranges": [
+        [
+          1828,
+          1846
+        ],
+        [
+          1846,
+          1864
+        ]
+      ],
+      "rows": [
+        "B1 BUILDING B OUTSIDE AIR ENVIRO-TEC HDD20 300 208/3/60 5.5 15 2,200 1.0 1.5 N/A N/A N/A N/A N/A N/A N/A N/A N/A N/A N/A 50.0 50.0 2,200 0.25 100/61 75 3 10 A,B,C,D",
+        "B2 BUILDING B OUTSIDE AIR ENVIRO-TEC HDD20 300 208/3/60 5.5 15 2,200 1.0 1.5 N/A N/A N/A N/A N/A N/A N/A N/A N/A N/A N/A 50.0 50.0 2,200 0.25 100/61 75 3 10 A,B,C,D"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+    },
+    {
+      "id": "M003-RELIEF-HOOD",
+      "sheet": "M0.03",
+      "page": 4,
+      "title_as_printed": "RELIEF HOOD SCHEDULE",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        630,
+        1490
+      ],
+      "y_ranges": [
+        [
+          189,
+          207
+        ],
+        [
+          207,
+          225
+        ]
+      ],
+      "rows": [
+        "C1 ERV-C1 GREENHECK FGR-24x24 125 N/A 24 24 2,950 750 4.0 0.08 A,B,C,D",
+        "C2 ERV-C2 GREENHECK FGR-24x24 125 N/A 24 24 2,750 700 4.0 0.07 A,B,C,D"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+    },
+    {
+      "id": "M003-INTAKE-HOOD",
+      "sheet": "M0.03",
+      "page": 4,
+      "title_as_printed": "INTAKE HOOD SCHEDULE",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        1700,
+        2600
+      ],
+      "y_ranges": [
+        [
+          189,
+          207
+        ],
+        [
+          207,
+          225
+        ]
+      ],
+      "rows": [
+        "B9 F-B9 OUTSIDE AIR GREENHECK GRSI-8 50 8.25 N/A N/A 150 405 0.37 0.03 A,B,C,D,E,G,",
+        "B OAU-B1 AND OAU-B2 GREENHECK FGI-28x40 200 N/A 28 40 4,400 575 7.78 0.04 A,B,C,D,F"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+    },
+    {
+      "id": "M003-CONTROL-DAMPER",
+      "sheet": "M0.03",
+      "page": 4,
+      "title_as_printed": "CONTROL DAMPER SCHEDULE",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        280,
+        1335
+      ],
+      "y_ranges": [
+        [
+          532,
+          550
+        ],
+        [
+          550,
+          568
+        ],
+        [
+          568,
+          586
+        ]
+      ],
+      "rows": [
+        "B1 OAU-B1 AND OAU-B2 GREENHECK VCD-33 AIRFOIL PARALLEL CLOSED 1 25 30 4,400 845 0.01 A,B",
+        "OA1 OAU-B1 GREENHECK VCD-33 AIRFOIL PARALLEL CLOSED 1 24 24 2,200 550 0.004 A,B",
+        "OA2 OAU-B2 GREENHECK VCD-33 AIRFOIL PARALLEL CLOSED 1 24 24 2,200 550 0.004 A,B"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+    },
+    {
+      "id": "M003-EXHAUST-FAN",
+      "sheet": "M0.03",
+      "page": 4,
+      "title_as_printed": "EXHAUST FAN SCHEDULE",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        1400,
+        2700
+      ],
+      "y_ranges": [
+        [
+          515,
+          541
+        ]
+      ],
+      "rows": [
+        "B1 BUILDING B CLASSROOMS GREENHECK CUE-160-VG UPBLAST 2,350 0.75 DIRECT 1170 73,80,78,76,70,67,63,60,77,66 14 115 1 60 3/4 HP 80 A,B,C"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+    },
+    {
+      "id": "M003-EXISTING-RTU-REFERENCE",
+      "sheet": "M0.03",
+      "page": 4,
+      "title_as_printed": "EXISTING GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (FOR REFERENCE ONLY)",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        650,
+        1335
+      ],
+      "y_ranges": [
+        [
+          840,
+          867
+        ],
+        [
+          867,
+          894
+        ],
+        [
+          894,
+          921
+        ],
+        [
+          921,
+          948
+        ]
+      ],
+      "rows": [
+        "2 CARRIER 48HJE005---551-- 115 655 208/3/60 22 22 30 82/115",
+        "3 CARRIER 48HJE004---541-- 115 645 208/3/60 18 18 25 50/72",
+        "4 CARRIER 48HJE004---541-- 115 645 208/3/60 18 18 25 50/72",
+        "5 CARRIER 48HJE004---541-- 115 645 208/3/60 18 18 25 50/72"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+    },
+    {
+      "id": "M003-GAS-FIRED-INDOOR-DUCT-FURNACE",
+      "sheet": "M0.03",
+      "page": 4,
+      "title_as_printed": "GAS-FIRED INDOOR DUCT FURNACE SCHEDULE",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        1400,
+        2700
+      ],
+      "y_ranges": [
+        [
+          795,
+          825
+        ]
+      ],
+      "rows": [
+        "B1 OAU-B1 AND OAU-B2 MODINE DFP250TM--N40A 250 120/1/60 2.4 15 4,375 0.25 INDIRECT NATURAL 0 41 250 170 81 A,B,C,D,E"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+    },
+    {
+      "id": "M003-RTU-BID-ALTERNATE-1",
+      "sheet": "M0.03",
+      "page": 4,
+      "title_as_printed": "GAS-FIRED DX COOLING ROOF TOP UNIT SCHEDULE (BID ALTERNATE 1)",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        1240,
+        2700
+      ],
+      "y_ranges": [
+        [
+          1098,
+          1125
+        ],
+        [
+          1125,
+          1152
+        ],
+        [
+          1152,
+          1179
+        ],
+        [
+          1179,
+          1206
+        ]
+      ],
+      "rows": [
+        "B2 CARRIER 48GCRJ05A2M5 940 1,600 100 500 0.75 17.4 SEER 410A 208/3/60 26 30 40.4 40.4 80/57 52 100/61 82/110 70.4 50 98 0 A,B,C,D,E,F,G,H,I,J,K,L",
+        "B3 CARRIER 48GCRJ05A2M5 940 1,500 100 575 0.75 17.4 SEER 410A 208/3/60 26 30 40.4 40.4 82/58 54 100/61 82/110 70.4 45 93 0 A,B,C,D,E,F,G,H,I,J,K,L",
+        "B4 CARRIER 48GCRJ05A2M5 940 1,600 100 450 0.75 17.4 SEER 410A 208/3/60 26 30 38.1 37 80/57 55 100/61 82/110 70.4 52 100 0 A,B,C,D,E,F,G,H,I,J,K,L",
+        "B5 CARRIER 48GCSJ04A2M5 850 1,200 100 175 0.75 17.4 SEER 410A 208/3/60 21 30 28.7 28.7 79/58 53 100/61 50/67 43.2 60 100 0 A,B,C,D,E,F,G,H,I,J,K,L"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Complete literal printed equipment-schedule row. It remains source specification evidence and is not converted into plan placement, installed multiplicity, controller-I/O, wiring, ownership, or physical takeoff assertions."
+    }
+  ],
+  "assertions": [],
+  "schedule_scope": "The 86 rows are coordinate-bounded literal schedule evidence only. Existing rooftop-unit rows are explicitly marked for reference only; bid-alternate rows are explicitly retained as alternate scope. No plan placement, selected alternative, installed quantity, BAS ownership, field wiring, controller I/O, or physical-device count is inferred."
+}

@@ -1,0 +1,7343 @@
+{
+  "document_id": "05__vol2__009",
+  "source_sha256": "d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1",
+  "annotation_sha256": "ff0c29d8ee1e64b477319cf582627104a7f258e41a58c6d48c468e1b8e3e5c41",
+  "tables": 7,
+  "rows": 24,
+  "cell_assertions": 240,
+  "text_assertions": 6,
+  "checks": [
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        875,
+        638,
+        935,
+        663
+      ],
+      "expected": "CH-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CH-1",
+          "word_ids": [
+            801
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CH-1",
+          "word_ids": [
+            403
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "capacity_tons",
+      "page": 18,
+      "bbox": [
+        935,
+        638,
+        995,
+        663
+      ],
+      "expected": "60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            802
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            398
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "min_eer",
+      "page": 18,
+      "bbox": [
+        995,
+        638,
+        1075,
+        663
+      ],
+      "expected": "10.29",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.29",
+          "word_ids": [
+            803
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.29",
+          "word_ids": [
+            393
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "min_iplv",
+      "page": 18,
+      "bbox": [
+        1075,
+        638,
+        1155,
+        663
+      ],
+      "expected": "15.53",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15.53",
+          "word_ids": [
+            804
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15.53",
+          "word_ids": [
+            388
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "ewt_f",
+      "page": 18,
+      "bbox": [
+        1155,
+        638,
+        1225,
+        663
+      ],
+      "expected": "44",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "44",
+          "word_ids": [
+            805
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "44",
+          "word_ids": [
+            380
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "lwt_f",
+      "page": 18,
+      "bbox": [
+        1225,
+        638,
+        1300,
+        663
+      ],
+      "expected": "45",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            806
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            372
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "gpm",
+      "page": 18,
+      "bbox": [
+        1300,
+        638,
+        1360,
+        663
+      ],
+      "expected": "99",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "99",
+          "word_ids": [
+            807
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "99",
+          "word_ids": [
+            358
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "fouling_factor",
+      "page": 18,
+      "bbox": [
+        1360,
+        638,
+        1435,
+        663
+      ],
+      "expected": "0.0001",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.0001",
+          "word_ids": [
+            808
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.0001",
+          "word_ids": [
+            354
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "max_pressure_drop_ft_wg",
+      "page": 18,
+      "bbox": [
+        1435,
+        638,
+        1515,
+        663
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            809
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            350
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "fluid",
+      "page": 18,
+      "bbox": [
+        1515,
+        638,
+        1585,
+        663
+      ],
+      "expected": "WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            810
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            346
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "row": 1,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        1585,
+        638,
+        1640,
+        663
+      ],
+      "expected": "1:2:3:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:2:3:",
+          "word_ids": [
+            811
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:2:3:",
+          "word_ids": [
+            235
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "header": "AIR COOLED CHILLER SCHEDULE",
+      "page": 18,
+      "bbox": [
+        1165,
+        502,
+        1340,
+        522
+      ],
+      "engine": "mupdf",
+      "actual": "AIR COOLED CHILLER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-AIR-COOLED-CHILLER",
+      "header": "AIR COOLED CHILLER SCHEDULE",
+      "page": 18,
+      "bbox": [
+        1165,
+        502,
+        1340,
+        522
+      ],
+      "engine": "poppler",
+      "actual": "AIR COOLED CHILLER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1660,
+        693,
+        1725,
+        712
+      ],
+      "expected": "EF-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-1",
+          "word_ids": [
+            510
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-1",
+          "word_ids": [
+            220
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "cfm",
+      "page": 18,
+      "bbox": [
+        1725,
+        693,
+        1785,
+        712
+      ],
+      "expected": "2,200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,200",
+          "word_ids": [
+            511
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,200",
+          "word_ids": [
+            223
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "esp_in_wg",
+      "page": 18,
+      "bbox": [
+        1785,
+        693,
+        1845,
+        712
+      ],
+      "expected": "2.00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.00",
+          "word_ids": [
+            512
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.00",
+          "word_ids": [
+            226
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "direct_drive_mark",
+      "page": 18,
+      "bbox": [
+        1845,
+        693,
+        1910,
+        712
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            513
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            325
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "model",
+      "page": 18,
+      "bbox": [
+        1910,
+        693,
+        2010,
+        712
+      ],
+      "expected": "VK-H",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VK-H",
+          "word_ids": [
+            514
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VK-H",
+          "word_ids": [
+            299
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "max_hp",
+      "page": 18,
+      "bbox": [
+        2010,
+        693,
+        2080,
+        712
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            515
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            302
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "max_oper_weight_lb",
+      "page": 18,
+      "bbox": [
+        2080,
+        693,
+        2170,
+        712
+      ],
+      "expected": "700",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "700",
+          "word_ids": [
+            516
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "700",
+          "word_ids": [
+            305
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "max_fan_speed_rpm",
+      "page": 18,
+      "bbox": [
+        2170,
+        693,
+        2240,
+        712
+      ],
+      "expected": "2,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,000",
+          "word_ids": [
+            517
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,000",
+          "word_ids": [
+            308
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "max_noise_sones",
+      "page": 18,
+      "bbox": [
+        2240,
+        693,
+        2315,
+        712
+      ],
+      "expected": "21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            518
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            311
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "accessory_marks",
+      "page": 18,
+      "bbox": [
+        2315,
+        693,
+        2620,
+        712
+      ],
+      "expected": "X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X X X",
+          "word_ids": [
+            519,
+            520,
+            521
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X X X",
+          "word_ids": [
+            336,
+            330,
+            333
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 1,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2620,
+        693,
+        2660,
+        712
+      ],
+      "expected": "1:2:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:2:",
+          "word_ids": [
+            522
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:2:",
+          "word_ids": [
+            414
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1660,
+        712,
+        1725,
+        728
+      ],
+      "expected": "EF-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-2",
+          "word_ids": [
+            497
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-2",
+          "word_ids": [
+            221
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "cfm",
+      "page": 18,
+      "bbox": [
+        1725,
+        712,
+        1785,
+        728
+      ],
+      "expected": "1,400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            498
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            224
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "esp_in_wg",
+      "page": 18,
+      "bbox": [
+        1785,
+        712,
+        1845,
+        728
+      ],
+      "expected": "1.00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.00",
+          "word_ids": [
+            499
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.00",
+          "word_ids": [
+            227
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "direct_drive_mark",
+      "page": 18,
+      "bbox": [
+        1845,
+        712,
+        1910,
+        728
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            500
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            326
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "model",
+      "page": 18,
+      "bbox": [
+        1910,
+        712,
+        2010,
+        728
+      ],
+      "expected": "VK-H",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VK-H",
+          "word_ids": [
+            501
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VK-H",
+          "word_ids": [
+            300
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "max_hp",
+      "page": 18,
+      "bbox": [
+        2010,
+        712,
+        2080,
+        728
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            502
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            303
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "max_oper_weight_lb",
+      "page": 18,
+      "bbox": [
+        2080,
+        712,
+        2170,
+        728
+      ],
+      "expected": "500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "500",
+          "word_ids": [
+            503
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "500",
+          "word_ids": [
+            306
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "max_fan_speed_rpm",
+      "page": 18,
+      "bbox": [
+        2170,
+        712,
+        2240,
+        728
+      ],
+      "expected": "2,200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,200",
+          "word_ids": [
+            504
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,200",
+          "word_ids": [
+            309
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "max_noise_sones",
+      "page": 18,
+      "bbox": [
+        2240,
+        712,
+        2315,
+        728
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            505
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            312
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "accessory_marks",
+      "page": 18,
+      "bbox": [
+        2315,
+        712,
+        2620,
+        728
+      ],
+      "expected": "X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X X X",
+          "word_ids": [
+            506,
+            507,
+            508
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X X X",
+          "word_ids": [
+            337,
+            331,
+            334
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 2,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2620,
+        712,
+        2660,
+        728
+      ],
+      "expected": "1:2:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:2:",
+          "word_ids": [
+            509
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:2:",
+          "word_ids": [
+            415
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1660,
+        728,
+        1725,
+        744
+      ],
+      "expected": "EF-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-3",
+          "word_ids": [
+            484
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-3",
+          "word_ids": [
+            222
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "cfm",
+      "page": 18,
+      "bbox": [
+        1725,
+        728,
+        1785,
+        744
+      ],
+      "expected": "1,400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            485
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,400",
+          "word_ids": [
+            225
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "esp_in_wg",
+      "page": 18,
+      "bbox": [
+        1785,
+        728,
+        1845,
+        744
+      ],
+      "expected": "1.00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.00",
+          "word_ids": [
+            486
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.00",
+          "word_ids": [
+            228
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "direct_drive_mark",
+      "page": 18,
+      "bbox": [
+        1845,
+        728,
+        1910,
+        744
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            487
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            327
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "model",
+      "page": 18,
+      "bbox": [
+        1910,
+        728,
+        2010,
+        744
+      ],
+      "expected": "VK-H",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VK-H",
+          "word_ids": [
+            488
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VK-H",
+          "word_ids": [
+            301
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "max_hp",
+      "page": 18,
+      "bbox": [
+        2010,
+        728,
+        2080,
+        744
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            489
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            304
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "max_oper_weight_lb",
+      "page": 18,
+      "bbox": [
+        2080,
+        728,
+        2170,
+        744
+      ],
+      "expected": "500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "500",
+          "word_ids": [
+            490
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "500",
+          "word_ids": [
+            307
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "max_fan_speed_rpm",
+      "page": 18,
+      "bbox": [
+        2170,
+        728,
+        2240,
+        744
+      ],
+      "expected": "2,200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,200",
+          "word_ids": [
+            491
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,200",
+          "word_ids": [
+            310
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "max_noise_sones",
+      "page": 18,
+      "bbox": [
+        2240,
+        728,
+        2315,
+        744
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            492
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            313
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "accessory_marks",
+      "page": 18,
+      "bbox": [
+        2315,
+        728,
+        2620,
+        744
+      ],
+      "expected": "X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X X X",
+          "word_ids": [
+            493,
+            494,
+            495
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X X X",
+          "word_ids": [
+            338,
+            332,
+            335
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 3,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2620,
+        728,
+        2660,
+        744
+      ],
+      "expected": "1:2:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:2:",
+          "word_ids": [
+            496
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:2:",
+          "word_ids": [
+            416
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 4,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1660,
+        758,
+        1725,
+        776
+      ],
+      "expected": "EF-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-5",
+          "word_ids": [
+            473
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-5",
+          "word_ids": [
+            229
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 4,
+      "column": "cfm",
+      "page": 18,
+      "bbox": [
+        1725,
+        758,
+        1785,
+        776
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            474
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            231
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 4,
+      "column": "esp_in_wg",
+      "page": 18,
+      "bbox": [
+        1785,
+        758,
+        1845,
+        776
+      ],
+      "expected": "0.125",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.125",
+          "word_ids": [
+            475
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.125",
+          "word_ids": [
+            233
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 4,
+      "column": "direct_drive_mark",
+      "page": 18,
+      "bbox": [
+        1845,
+        758,
+        1910,
+        776
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            476
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            328
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 4,
+      "column": "model",
+      "page": 18,
+      "bbox": [
+        1910,
+        758,
+        2010,
+        776
+      ],
+      "expected": "70 SQN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "70 SQN",
+          "word_ids": [
+            477,
+            478
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "70 SQN",
+          "word_ids": [
+            314,
+            315
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 4,
+      "column": "max_hp",
+      "page": 18,
+      "bbox": [
+        2010,
+        758,
+        2080,
+        776
+      ],
+      "expected": "1/4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/4",
+          "word_ids": [
+            479
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/4",
+          "word_ids": [
+            318
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 4,
+      "column": "max_oper_weight_lb",
+      "page": 18,
+      "bbox": [
+        2080,
+        758,
+        2170,
+        776
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            480
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            320
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 4,
+      "column": "max_fan_speed_rpm",
+      "page": 18,
+      "bbox": [
+        2170,
+        758,
+        2240,
+        776
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            481
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            321
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 4,
+      "column": "max_noise_sones",
+      "page": 18,
+      "bbox": [
+        2240,
+        758,
+        2315,
+        776
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            482
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            322
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 4,
+      "column": "accessory_marks",
+      "page": 18,
+      "bbox": [
+        2315,
+        758,
+        2620,
+        776
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 4,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2620,
+        758,
+        2660,
+        776
+      ],
+      "expected": "3:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3:",
+          "word_ids": [
+            483
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3:",
+          "word_ids": [
+            417
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 5,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1660,
+        776,
+        1725,
+        792
+      ],
+      "expected": "EF-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EF-6",
+          "word_ids": [
+            465
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EF-6",
+          "word_ids": [
+            230
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 5,
+      "column": "cfm",
+      "page": 18,
+      "bbox": [
+        1725,
+        776,
+        1785,
+        792
+      ],
+      "expected": "200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            466
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            232
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 5,
+      "column": "esp_in_wg",
+      "page": 18,
+      "bbox": [
+        1785,
+        776,
+        1845,
+        792
+      ],
+      "expected": "0.125",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.125",
+          "word_ids": [
+            467
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.125",
+          "word_ids": [
+            234
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 5,
+      "column": "direct_drive_mark",
+      "page": 18,
+      "bbox": [
+        1845,
+        776,
+        1910,
+        792
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            468
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            329
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 5,
+      "column": "model",
+      "page": 18,
+      "bbox": [
+        1910,
+        776,
+        2010,
+        792
+      ],
+      "expected": "70 SQN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "70 SQN",
+          "word_ids": [
+            469,
+            470
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "70 SQN",
+          "word_ids": [
+            316,
+            317
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 5,
+      "column": "max_hp",
+      "page": 18,
+      "bbox": [
+        2010,
+        776,
+        2080,
+        792
+      ],
+      "expected": "1/4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/4",
+          "word_ids": [
+            471
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/4",
+          "word_ids": [
+            319
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 5,
+      "column": "max_oper_weight_lb",
+      "page": 18,
+      "bbox": [
+        2080,
+        776,
+        2170,
+        792
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 5,
+      "column": "max_fan_speed_rpm",
+      "page": 18,
+      "bbox": [
+        2170,
+        776,
+        2240,
+        792
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 5,
+      "column": "max_noise_sones",
+      "page": 18,
+      "bbox": [
+        2240,
+        776,
+        2315,
+        792
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 5,
+      "column": "accessory_marks",
+      "page": 18,
+      "bbox": [
+        2315,
+        776,
+        2620,
+        792
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "row": 5,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2620,
+        776,
+        2660,
+        792
+      ],
+      "expected": "3:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3:",
+          "word_ids": [
+            472
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3:",
+          "word_ids": [
+            418
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-FANS",
+      "header": "FAN SCHEDULE",
+      "page": 18,
+      "bbox": [
+        2140,
+        506,
+        2240,
+        530
+      ],
+      "engine": "mupdf",
+      "actual": "FAN SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-FANS",
+      "header": "FAN SCHEDULE",
+      "page": 18,
+      "bbox": [
+        2140,
+        506,
+        2240,
+        530
+      ],
+      "engine": "poppler",
+      "actual": "FAN SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "row": 1,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1230,
+        1058,
+        1290,
+        1079
+      ],
+      "expected": "CV-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-1",
+          "word_ids": [
+            726
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-1",
+          "word_ids": [
+            467
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "row": 1,
+      "column": "gpm",
+      "page": 18,
+      "bbox": [
+        1290,
+        1058,
+        1360,
+        1079
+      ],
+      "expected": "19",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "19",
+          "word_ids": [
+            727
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "19",
+          "word_ids": [
+            451
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "row": 1,
+      "column": "max_pressure_drop_ft",
+      "page": 18,
+      "bbox": [
+        1360,
+        1058,
+        1440,
+        1079
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            728
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            453
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "row": 1,
+      "column": "min_cv",
+      "page": 18,
+      "bbox": [
+        1440,
+        1058,
+        1515,
+        1079
+      ],
+      "expected": "6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            729
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6",
+          "word_ids": [
+            455
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "row": 1,
+      "column": "type",
+      "page": 18,
+      "bbox": [
+        1515,
+        1058,
+        1600,
+        1079
+      ],
+      "expected": "BALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BALL",
+          "word_ids": [
+            730
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BALL",
+          "word_ids": [
+            457
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "row": 1,
+      "column": "configuration",
+      "page": 18,
+      "bbox": [
+        1600,
+        1058,
+        1710,
+        1079
+      ],
+      "expected": "3-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3-WAY",
+          "word_ids": [
+            731
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3-WAY",
+          "word_ids": [
+            459
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "row": 1,
+      "column": "fluid",
+      "page": 18,
+      "bbox": [
+        1710,
+        1058,
+        1785,
+        1079
+      ],
+      "expected": "WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            732
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            461
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "row": 1,
+      "column": "fail_position",
+      "page": 18,
+      "bbox": [
+        1785,
+        1058,
+        1870,
+        1079
+      ],
+      "expected": "CLOSED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CLOSED",
+          "word_ids": [
+            733
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CLOSED",
+          "word_ids": [
+            470
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "row": 2,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1230,
+        1079,
+        1290,
+        1100
+      ],
+      "expected": "CV-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-2",
+          "word_ids": [
+            718
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-2",
+          "word_ids": [
+            468
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "row": 2,
+      "column": "gpm",
+      "page": 18,
+      "bbox": [
+        1290,
+        1079,
+        1360,
+        1100
+      ],
+      "expected": "80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            719
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            452
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "row": 2,
+      "column": "max_pressure_drop_ft",
+      "page": 18,
+      "bbox": [
+        1360,
+        1079,
+        1440,
+        1100
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            720
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            454
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "row": 2,
+      "column": "min_cv",
+      "page": 18,
+      "bbox": [
+        1440,
+        1079,
+        1515,
+        1100
+      ],
+      "expected": "25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            721
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            456
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "row": 2,
+      "column": "type",
+      "page": 18,
+      "bbox": [
+        1515,
+        1079,
+        1600,
+        1100
+      ],
+      "expected": "BALL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BALL",
+          "word_ids": [
+            722
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BALL",
+          "word_ids": [
+            458
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "row": 2,
+      "column": "configuration",
+      "page": 18,
+      "bbox": [
+        1600,
+        1079,
+        1710,
+        1100
+      ],
+      "expected": "3-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3-WAY",
+          "word_ids": [
+            723
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3-WAY",
+          "word_ids": [
+            460
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "row": 2,
+      "column": "fluid",
+      "page": 18,
+      "bbox": [
+        1710,
+        1079,
+        1785,
+        1100
+      ],
+      "expected": "WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            724
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            462
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "row": 2,
+      "column": "fail_position",
+      "page": 18,
+      "bbox": [
+        1785,
+        1079,
+        1870,
+        1100
+      ],
+      "expected": "CLOSED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CLOSED",
+          "word_ids": [
+            725
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CLOSED",
+          "word_ids": [
+            471
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "header": "HYDRONIC CONTROL VALVE SCHEDULE",
+      "page": 18,
+      "bbox": [
+        1440,
+        934,
+        1650,
+        958
+      ],
+      "engine": "mupdf",
+      "actual": "HYDRONIC CONTROL VALVE SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "header": "HYDRONIC CONTROL VALVE SCHEDULE",
+      "page": 18,
+      "bbox": [
+        1440,
+        934,
+        1650,
+        958
+      ],
+      "engine": "poppler",
+      "actual": "HYDRONIC CONTROL VALVE SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 1,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1890,
+        1118,
+        1940,
+        1139
+      ],
+      "expected": "AHU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            375
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            536
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 1,
+      "column": "mark",
+      "page": 18,
+      "bbox": [
+        1940,
+        1118,
+        2020,
+        1139
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            376
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            538
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 1,
+      "column": "model_series",
+      "page": 18,
+      "bbox": [
+        2020,
+        1118,
+        2080,
+        1139
+      ],
+      "expected": "39MN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "39MN",
+          "word_ids": [
+            377
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "39MN",
+          "word_ids": [
+            540
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 1,
+      "column": "max_cfm",
+      "page": 18,
+      "bbox": [
+        2080,
+        1118,
+        2132,
+        1139
+      ],
+      "expected": "2,565",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2,565",
+          "word_ids": [
+            378
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2,565",
+          "word_ids": [
+            542
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 1,
+      "column": "min_oa_cfm",
+      "page": 18,
+      "bbox": [
+        2132,
+        1118,
+        2172,
+        1139
+      ],
+      "expected": "640",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "640",
+          "word_ids": [
+            379
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "640",
+          "word_ids": [
+            544
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 1,
+      "column": "unoccupied_cfm",
+      "page": 18,
+      "bbox": [
+        2172,
+        1118,
+        2228,
+        1139
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            380
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            546
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 1,
+      "column": "external_static_in_wg",
+      "page": 18,
+      "bbox": [
+        2228,
+        1118,
+        2268,
+        1139
+      ],
+      "expected": "3.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.5",
+          "word_ids": [
+            381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.5",
+          "word_ids": [
+            548
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 1,
+      "column": "max_motor_hp",
+      "page": 18,
+      "bbox": [
+        2268,
+        1118,
+        2325,
+        1139
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            382
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            550
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 1,
+      "column": "max_rpm",
+      "page": 18,
+      "bbox": [
+        2325,
+        1118,
+        2372,
+        1139
+      ],
+      "expected": "3,500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3,500",
+          "word_ids": [
+            383
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3,500",
+          "word_ids": [
+            552
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 1,
+      "column": "total_cooling_mbh",
+      "page": 18,
+      "bbox": [
+        2372,
+        1118,
+        2420,
+        1139
+      ],
+      "expected": "106.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "106.2",
+          "word_ids": [
+            384
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "106.2",
+          "word_ids": [
+            554
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 1,
+      "column": "sensible_cooling_mbh",
+      "page": 18,
+      "bbox": [
+        2420,
+        1118,
+        2470,
+        1139
+      ],
+      "expected": "64.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "64.5",
+          "word_ids": [
+            385
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "64.5",
+          "word_ids": [
+            556
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 1,
+      "column": "eat_db_f",
+      "page": 18,
+      "bbox": [
+        2470,
+        1118,
+        2500,
+        1139
+      ],
+      "expected": "78.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "78.3",
+          "word_ids": [
+            386
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "78.3",
+          "word_ids": [
+            558
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 1,
+      "column": "eat_wb_f",
+      "page": 18,
+      "bbox": [
+        2500,
+        1118,
+        2530,
+        1139
+      ],
+      "expected": "66.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "66.5",
+          "word_ids": [
+            387
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "66.5",
+          "word_ids": [
+            559
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 1,
+      "column": "lat_db_f",
+      "page": 18,
+      "bbox": [
+        2530,
+        1118,
+        2560,
+        1139
+      ],
+      "expected": "55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55",
+          "word_ids": [
+            388
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55",
+          "word_ids": [
+            562
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 1,
+      "column": "lat_wb_f",
+      "page": 18,
+      "bbox": [
+        2560,
+        1118,
+        2595,
+        1139
+      ],
+      "expected": "54",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "54",
+          "word_ids": [
+            389
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "54",
+          "word_ids": [
+            564
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 1,
+      "column": "gpm",
+      "page": 18,
+      "bbox": [
+        2595,
+        1118,
+        2660,
+        1139
+      ],
+      "expected": "19",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "19",
+          "word_ids": [
+            390
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "19",
+          "word_ids": [
+            566
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 1,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2660,
+        1118,
+        2715,
+        1139
+      ],
+      "expected": "1:2:3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:2:3",
+          "word_ids": [
+            391
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:2:3",
+          "word_ids": [
+            568
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 2,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1890,
+        1139,
+        1940,
+        1157
+      ],
+      "expected": "AHU-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-2",
+          "word_ids": [
+            358
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-2",
+          "word_ids": [
+            537
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 2,
+      "column": "mark",
+      "page": 18,
+      "bbox": [
+        1940,
+        1139,
+        2020,
+        1157
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            359
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            539
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 2,
+      "column": "model_series",
+      "page": 18,
+      "bbox": [
+        2020,
+        1139,
+        2080,
+        1157
+      ],
+      "expected": "39MN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "39MN",
+          "word_ids": [
+            360
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "39MN",
+          "word_ids": [
+            541
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 2,
+      "column": "max_cfm",
+      "page": 18,
+      "bbox": [
+        2080,
+        1139,
+        2132,
+        1157
+      ],
+      "expected": "4,930",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4,930",
+          "word_ids": [
+            361
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4,930",
+          "word_ids": [
+            543
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 2,
+      "column": "min_oa_cfm",
+      "page": 18,
+      "bbox": [
+        2132,
+        1139,
+        2172,
+        1157
+      ],
+      "expected": "4,930",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4,930",
+          "word_ids": [
+            362
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4,930",
+          "word_ids": [
+            545
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 2,
+      "column": "unoccupied_cfm",
+      "page": 18,
+      "bbox": [
+        2172,
+        1139,
+        2228,
+        1157
+      ],
+      "expected": "4,200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4,200",
+          "word_ids": [
+            363
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4,200",
+          "word_ids": [
+            547
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 2,
+      "column": "external_static_in_wg",
+      "page": 18,
+      "bbox": [
+        2228,
+        1139,
+        2268,
+        1157
+      ],
+      "expected": "3.25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.25",
+          "word_ids": [
+            364
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.25",
+          "word_ids": [
+            549
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 2,
+      "column": "max_motor_hp",
+      "page": 18,
+      "bbox": [
+        2268,
+        1139,
+        2325,
+        1157
+      ],
+      "expected": "15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            365
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "15",
+          "word_ids": [
+            551
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 2,
+      "column": "max_rpm",
+      "page": 18,
+      "bbox": [
+        2325,
+        1139,
+        2372,
+        1157
+      ],
+      "expected": "1,800",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,800",
+          "word_ids": [
+            366
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,800",
+          "word_ids": [
+            553
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 2,
+      "column": "total_cooling_mbh",
+      "page": 18,
+      "bbox": [
+        2372,
+        1139,
+        2420,
+        1157
+      ],
+      "expected": "461.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "461.4",
+          "word_ids": [
+            367
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "461.4",
+          "word_ids": [
+            555
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 2,
+      "column": "sensible_cooling_mbh",
+      "page": 18,
+      "bbox": [
+        2420,
+        1139,
+        2470,
+        1157
+      ],
+      "expected": "191.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "191.7",
+          "word_ids": [
+            368
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "191.7",
+          "word_ids": [
+            557
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 2,
+      "column": "eat_db_f",
+      "page": 18,
+      "bbox": [
+        2470,
+        1139,
+        2500,
+        1157
+      ],
+      "expected": "91",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "91",
+          "word_ids": [
+            369
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "91",
+          "word_ids": [
+            560
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 2,
+      "column": "eat_wb_f",
+      "page": 18,
+      "bbox": [
+        2500,
+        1139,
+        2530,
+        1157
+      ],
+      "expected": "79",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "79",
+          "word_ids": [
+            370
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "79",
+          "word_ids": [
+            561
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 2,
+      "column": "lat_db_f",
+      "page": 18,
+      "bbox": [
+        2530,
+        1139,
+        2560,
+        1157
+      ],
+      "expected": "55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55",
+          "word_ids": [
+            371
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55",
+          "word_ids": [
+            563
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 2,
+      "column": "lat_wb_f",
+      "page": 18,
+      "bbox": [
+        2560,
+        1139,
+        2595,
+        1157
+      ],
+      "expected": "54",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "54",
+          "word_ids": [
+            372
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "54",
+          "word_ids": [
+            565
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 2,
+      "column": "gpm",
+      "page": 18,
+      "bbox": [
+        2595,
+        1139,
+        2660,
+        1157
+      ],
+      "expected": "80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            373
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            567
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "row": 2,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2660,
+        1139,
+        2715,
+        1157
+      ],
+      "expected": "1:2:4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:2:4",
+          "word_ids": [
+            374
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:2:4",
+          "word_ids": [
+            569
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "header": "AIR HANDLING UNIT SCHEDULE",
+      "page": 18,
+      "bbox": [
+        2210,
+        940,
+        2390,
+        965
+      ],
+      "engine": "mupdf",
+      "actual": "AIR HANDLING UNIT SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-AIR-HANDLING-UNITS",
+      "header": "AIR HANDLING UNIT SCHEDULE",
+      "page": 18,
+      "bbox": [
+        2210,
+        940,
+        2390,
+        965
+      ],
+      "engine": "poppler",
+      "actual": "AIR HANDLING UNIT SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 1,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        2045,
+        1408,
+        2110,
+        1426
+      ],
+      "expected": "VAV-1-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-1-1",
+          "word_ids": [
+            675
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-1-1",
+          "word_ids": [
+            647
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 1,
+      "column": "max_cfm",
+      "page": 18,
+      "bbox": [
+        2110,
+        1408,
+        2170,
+        1426
+      ],
+      "expected": "500",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "500",
+          "word_ids": [
+            676
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "500",
+          "word_ids": [
+            654
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 1,
+      "column": "min_cfm",
+      "page": 18,
+      "bbox": [
+        2170,
+        1408,
+        2240,
+        1426
+      ],
+      "expected": "250",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "250",
+          "word_ids": [
+            677
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "250",
+          "word_ids": [
+            661
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 1,
+      "column": "shutoff_mark",
+      "page": 18,
+      "bbox": [
+        2240,
+        1408,
+        2275,
+        1426
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 1,
+      "column": "reheat_mark",
+      "page": 18,
+      "bbox": [
+        2275,
+        1408,
+        2330,
+        1426
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            678
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            668
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 1,
+      "column": "inlet_duct_connection",
+      "page": 18,
+      "bbox": [
+        2330,
+        1408,
+        2415,
+        1426
+      ],
+      "expected": "8\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8\"",
+          "word_ids": [
+            679
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8\"",
+          "word_ids": [
+            675
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 1,
+      "column": "air_handling_system",
+      "page": 18,
+      "bbox": [
+        2415,
+        1408,
+        2515,
+        1426
+      ],
+      "expected": "AHU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            680
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            698
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 1,
+      "column": "hot_water_mark",
+      "page": 18,
+      "bbox": [
+        2515,
+        1408,
+        2565,
+        1426
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 1,
+      "column": "electric_mark",
+      "page": 18,
+      "bbox": [
+        2565,
+        1408,
+        2610,
+        1426
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            681
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            705
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 1,
+      "column": "kw",
+      "page": 18,
+      "bbox": [
+        2610,
+        1408,
+        2670,
+        1426
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            682
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            682
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 1,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2670,
+        1408,
+        2715,
+        1426
+      ],
+      "expected": "1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            683
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            689
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 2,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        2045,
+        1426,
+        2110,
+        1442
+      ],
+      "expected": "VAV-1-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-1-2",
+          "word_ids": [
+            666
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-1-2",
+          "word_ids": [
+            648
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 2,
+      "column": "max_cfm",
+      "page": 18,
+      "bbox": [
+        2110,
+        1426,
+        2170,
+        1442
+      ],
+      "expected": "210",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "210",
+          "word_ids": [
+            667
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "210",
+          "word_ids": [
+            655
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 2,
+      "column": "min_cfm",
+      "page": 18,
+      "bbox": [
+        2170,
+        1426,
+        2240,
+        1442
+      ],
+      "expected": "125",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            668
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            662
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 2,
+      "column": "shutoff_mark",
+      "page": 18,
+      "bbox": [
+        2240,
+        1426,
+        2275,
+        1442
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 2,
+      "column": "reheat_mark",
+      "page": 18,
+      "bbox": [
+        2275,
+        1426,
+        2330,
+        1442
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            669
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            669
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 2,
+      "column": "inlet_duct_connection",
+      "page": 18,
+      "bbox": [
+        2330,
+        1426,
+        2415,
+        1442
+      ],
+      "expected": "6\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6\"",
+          "word_ids": [
+            670
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6\"",
+          "word_ids": [
+            676
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 2,
+      "column": "air_handling_system",
+      "page": 18,
+      "bbox": [
+        2415,
+        1426,
+        2515,
+        1442
+      ],
+      "expected": "AHU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            671
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            699
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 2,
+      "column": "hot_water_mark",
+      "page": 18,
+      "bbox": [
+        2515,
+        1426,
+        2565,
+        1442
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 2,
+      "column": "electric_mark",
+      "page": 18,
+      "bbox": [
+        2565,
+        1426,
+        2610,
+        1442
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            672
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            706
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 2,
+      "column": "kw",
+      "page": 18,
+      "bbox": [
+        2610,
+        1426,
+        2670,
+        1442
+      ],
+      "expected": "1.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            673
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            683
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 2,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2670,
+        1426,
+        2715,
+        1442
+      ],
+      "expected": "1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            674
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            690
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 3,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        2045,
+        1442,
+        2110,
+        1458
+      ],
+      "expected": "VAV-1-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-1-3",
+          "word_ids": [
+            657
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-1-3",
+          "word_ids": [
+            649
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 3,
+      "column": "max_cfm",
+      "page": 18,
+      "bbox": [
+        2110,
+        1442,
+        2170,
+        1458
+      ],
+      "expected": "450",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "450",
+          "word_ids": [
+            658
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "450",
+          "word_ids": [
+            656
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 3,
+      "column": "min_cfm",
+      "page": 18,
+      "bbox": [
+        2170,
+        1442,
+        2240,
+        1458
+      ],
+      "expected": "200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            659
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            663
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 3,
+      "column": "shutoff_mark",
+      "page": 18,
+      "bbox": [
+        2240,
+        1442,
+        2275,
+        1458
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 3,
+      "column": "reheat_mark",
+      "page": 18,
+      "bbox": [
+        2275,
+        1442,
+        2330,
+        1458
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            660
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            670
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 3,
+      "column": "inlet_duct_connection",
+      "page": 18,
+      "bbox": [
+        2330,
+        1442,
+        2415,
+        1458
+      ],
+      "expected": "6\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6\"",
+          "word_ids": [
+            661
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6\"",
+          "word_ids": [
+            677
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 3,
+      "column": "air_handling_system",
+      "page": 18,
+      "bbox": [
+        2415,
+        1442,
+        2515,
+        1458
+      ],
+      "expected": "AHU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            662
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            700
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 3,
+      "column": "hot_water_mark",
+      "page": 18,
+      "bbox": [
+        2515,
+        1442,
+        2565,
+        1458
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 3,
+      "column": "electric_mark",
+      "page": 18,
+      "bbox": [
+        2565,
+        1442,
+        2610,
+        1458
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            663
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            707
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 3,
+      "column": "kw",
+      "page": 18,
+      "bbox": [
+        2610,
+        1442,
+        2670,
+        1458
+      ],
+      "expected": "1.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.5",
+          "word_ids": [
+            664
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.5",
+          "word_ids": [
+            684
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 3,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2670,
+        1442,
+        2715,
+        1458
+      ],
+      "expected": "1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            665
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            691
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 4,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        2045,
+        1458,
+        2110,
+        1473
+      ],
+      "expected": "VAV-1-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-1-4",
+          "word_ids": [
+            648
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-1-4",
+          "word_ids": [
+            650
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 4,
+      "column": "max_cfm",
+      "page": 18,
+      "bbox": [
+        2110,
+        1458,
+        2170,
+        1473
+      ],
+      "expected": "600",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "600",
+          "word_ids": [
+            649
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "600",
+          "word_ids": [
+            657
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 4,
+      "column": "min_cfm",
+      "page": 18,
+      "bbox": [
+        2170,
+        1458,
+        2240,
+        1473
+      ],
+      "expected": "300",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            650
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            664
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 4,
+      "column": "shutoff_mark",
+      "page": 18,
+      "bbox": [
+        2240,
+        1458,
+        2275,
+        1473
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 4,
+      "column": "reheat_mark",
+      "page": 18,
+      "bbox": [
+        2275,
+        1458,
+        2330,
+        1473
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            651
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            671
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 4,
+      "column": "inlet_duct_connection",
+      "page": 18,
+      "bbox": [
+        2330,
+        1458,
+        2415,
+        1473
+      ],
+      "expected": "8\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8\"",
+          "word_ids": [
+            652
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8\"",
+          "word_ids": [
+            678
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 4,
+      "column": "air_handling_system",
+      "page": 18,
+      "bbox": [
+        2415,
+        1458,
+        2515,
+        1473
+      ],
+      "expected": "AHU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            653
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            701
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 4,
+      "column": "hot_water_mark",
+      "page": 18,
+      "bbox": [
+        2515,
+        1458,
+        2565,
+        1473
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 4,
+      "column": "electric_mark",
+      "page": 18,
+      "bbox": [
+        2565,
+        1458,
+        2610,
+        1473
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            654
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            708
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 4,
+      "column": "kw",
+      "page": 18,
+      "bbox": [
+        2610,
+        1458,
+        2670,
+        1473
+      ],
+      "expected": "2.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            655
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            685
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 4,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2670,
+        1458,
+        2715,
+        1473
+      ],
+      "expected": "1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            656
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            692
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 5,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        2045,
+        1473,
+        2110,
+        1489
+      ],
+      "expected": "VAV-1-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-1-5",
+          "word_ids": [
+            639
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-1-5",
+          "word_ids": [
+            651
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 5,
+      "column": "max_cfm",
+      "page": 18,
+      "bbox": [
+        2110,
+        1473,
+        2170,
+        1489
+      ],
+      "expected": "245",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            640
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            658
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 5,
+      "column": "min_cfm",
+      "page": 18,
+      "bbox": [
+        2170,
+        1473,
+        2240,
+        1489
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            641
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            665
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 5,
+      "column": "shutoff_mark",
+      "page": 18,
+      "bbox": [
+        2240,
+        1473,
+        2275,
+        1489
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 5,
+      "column": "reheat_mark",
+      "page": 18,
+      "bbox": [
+        2275,
+        1473,
+        2330,
+        1489
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            642
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            672
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 5,
+      "column": "inlet_duct_connection",
+      "page": 18,
+      "bbox": [
+        2330,
+        1473,
+        2415,
+        1489
+      ],
+      "expected": "6\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6\"",
+          "word_ids": [
+            643
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6\"",
+          "word_ids": [
+            679
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 5,
+      "column": "air_handling_system",
+      "page": 18,
+      "bbox": [
+        2415,
+        1473,
+        2515,
+        1489
+      ],
+      "expected": "AHU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            644
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            702
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 5,
+      "column": "hot_water_mark",
+      "page": 18,
+      "bbox": [
+        2515,
+        1473,
+        2565,
+        1489
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 5,
+      "column": "electric_mark",
+      "page": 18,
+      "bbox": [
+        2565,
+        1473,
+        2610,
+        1489
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            645
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            709
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 5,
+      "column": "kw",
+      "page": 18,
+      "bbox": [
+        2610,
+        1473,
+        2670,
+        1489
+      ],
+      "expected": "1.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            646
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            686
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 5,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2670,
+        1473,
+        2715,
+        1489
+      ],
+      "expected": "1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            647
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            693
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 6,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        2045,
+        1489,
+        2110,
+        1504
+      ],
+      "expected": "VAV-1-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-1-6",
+          "word_ids": [
+            630
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-1-6",
+          "word_ids": [
+            652
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 6,
+      "column": "max_cfm",
+      "page": 18,
+      "bbox": [
+        2110,
+        1489,
+        2170,
+        1504
+      ],
+      "expected": "270",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "270",
+          "word_ids": [
+            631
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "270",
+          "word_ids": [
+            659
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 6,
+      "column": "min_cfm",
+      "page": 18,
+      "bbox": [
+        2170,
+        1489,
+        2240,
+        1504
+      ],
+      "expected": "110",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            632
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            666
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 6,
+      "column": "shutoff_mark",
+      "page": 18,
+      "bbox": [
+        2240,
+        1489,
+        2275,
+        1504
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 6,
+      "column": "reheat_mark",
+      "page": 18,
+      "bbox": [
+        2275,
+        1489,
+        2330,
+        1504
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            633
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            673
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 6,
+      "column": "inlet_duct_connection",
+      "page": 18,
+      "bbox": [
+        2330,
+        1489,
+        2415,
+        1504
+      ],
+      "expected": "6\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6\"",
+          "word_ids": [
+            634
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6\"",
+          "word_ids": [
+            680
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 6,
+      "column": "air_handling_system",
+      "page": 18,
+      "bbox": [
+        2415,
+        1489,
+        2515,
+        1504
+      ],
+      "expected": "AHU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            635
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            703
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 6,
+      "column": "hot_water_mark",
+      "page": 18,
+      "bbox": [
+        2515,
+        1489,
+        2565,
+        1504
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 6,
+      "column": "electric_mark",
+      "page": 18,
+      "bbox": [
+        2565,
+        1489,
+        2610,
+        1504
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            636
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            710
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 6,
+      "column": "kw",
+      "page": 18,
+      "bbox": [
+        2610,
+        1489,
+        2670,
+        1504
+      ],
+      "expected": "1.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            637
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.0",
+          "word_ids": [
+            687
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 6,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2670,
+        1489,
+        2715,
+        1504
+      ],
+      "expected": "1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            638
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            694
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 7,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        2045,
+        1504,
+        2110,
+        1521
+      ],
+      "expected": "VAV-1-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VAV-1-7",
+          "word_ids": [
+            621
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VAV-1-7",
+          "word_ids": [
+            653
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 7,
+      "column": "max_cfm",
+      "page": 18,
+      "bbox": [
+        2110,
+        1504,
+        2170,
+        1521
+      ],
+      "expected": "290",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "290",
+          "word_ids": [
+            622
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "290",
+          "word_ids": [
+            660
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 7,
+      "column": "min_cfm",
+      "page": 18,
+      "bbox": [
+        2170,
+        1504,
+        2240,
+        1521
+      ],
+      "expected": "290",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "290",
+          "word_ids": [
+            623
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "290",
+          "word_ids": [
+            667
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 7,
+      "column": "shutoff_mark",
+      "page": 18,
+      "bbox": [
+        2240,
+        1504,
+        2275,
+        1521
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 7,
+      "column": "reheat_mark",
+      "page": 18,
+      "bbox": [
+        2275,
+        1504,
+        2330,
+        1521
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            624
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            674
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 7,
+      "column": "inlet_duct_connection",
+      "page": 18,
+      "bbox": [
+        2330,
+        1504,
+        2415,
+        1521
+      ],
+      "expected": "8\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8\"",
+          "word_ids": [
+            625
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8\"",
+          "word_ids": [
+            681
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 7,
+      "column": "air_handling_system",
+      "page": 18,
+      "bbox": [
+        2415,
+        1504,
+        2515,
+        1521
+      ],
+      "expected": "AHU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            626
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-1",
+          "word_ids": [
+            704
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 7,
+      "column": "hot_water_mark",
+      "page": 18,
+      "bbox": [
+        2515,
+        1504,
+        2565,
+        1521
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 7,
+      "column": "electric_mark",
+      "page": 18,
+      "bbox": [
+        2565,
+        1504,
+        2610,
+        1521
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            627
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            711
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 7,
+      "column": "kw",
+      "page": 18,
+      "bbox": [
+        2610,
+        1504,
+        2670,
+        1521
+      ],
+      "expected": "2.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            628
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.0",
+          "word_ids": [
+            688
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "row": 7,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2670,
+        1504,
+        2715,
+        1521
+      ],
+      "expected": "1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            629
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            695
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "header": "VAV TERMINAL SCHEDULE",
+      "page": 18,
+      "bbox": [
+        2310,
+        1280,
+        2450,
+        1305
+      ],
+      "engine": "mupdf",
+      "actual": "VAV TERMINAL SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-VAV-TERMINALS",
+      "header": "VAV TERMINAL SCHEDULE",
+      "page": 18,
+      "bbox": [
+        2310,
+        1280,
+        2450,
+        1305
+      ],
+      "engine": "poppler",
+      "actual": "VAV TERMINAL SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-CHILLED-WATER-PUMPS",
+      "row": 1,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1850,
+        1712,
+        1930,
+        1729
+      ],
+      "expected": "CWP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CWP-1",
+          "word_ids": [
+            594
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CWP-1",
+          "word_ids": [
+            761
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHILLED-WATER-PUMPS",
+      "row": 1,
+      "column": "gpm",
+      "page": 18,
+      "bbox": [
+        1930,
+        1712,
+        1995,
+        1729
+      ],
+      "expected": "99",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "99",
+          "word_ids": [
+            595
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "99",
+          "word_ids": [
+            763
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHILLED-WATER-PUMPS",
+      "row": 1,
+      "column": "head_ft_wg",
+      "page": 18,
+      "bbox": [
+        1995,
+        1712,
+        2070,
+        1729
+      ],
+      "expected": "35",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "35",
+          "word_ids": [
+            596
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "35",
+          "word_ids": [
+            765
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHILLED-WATER-PUMPS",
+      "row": 1,
+      "column": "motor_hp",
+      "page": 18,
+      "bbox": [
+        2070,
+        1712,
+        2150,
+        1729
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            597
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            767
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHILLED-WATER-PUMPS",
+      "row": 1,
+      "column": "fluid",
+      "page": 18,
+      "bbox": [
+        2150,
+        1712,
+        2225,
+        1729
+      ],
+      "expected": "WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            598
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            769
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHILLED-WATER-PUMPS",
+      "row": 1,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2225,
+        1712,
+        2270,
+        1729
+      ],
+      "expected": "1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            599
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            771
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHILLED-WATER-PUMPS",
+      "row": 2,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1850,
+        1729,
+        1930,
+        1747
+      ],
+      "expected": "CWP-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CWP-2",
+          "word_ids": [
+            588
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CWP-2",
+          "word_ids": [
+            762
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHILLED-WATER-PUMPS",
+      "row": 2,
+      "column": "gpm",
+      "page": 18,
+      "bbox": [
+        1930,
+        1729,
+        1995,
+        1747
+      ],
+      "expected": "99",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "99",
+          "word_ids": [
+            589
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "99",
+          "word_ids": [
+            764
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHILLED-WATER-PUMPS",
+      "row": 2,
+      "column": "head_ft_wg",
+      "page": 18,
+      "bbox": [
+        1995,
+        1729,
+        2070,
+        1747
+      ],
+      "expected": "35",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "35",
+          "word_ids": [
+            590
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "35",
+          "word_ids": [
+            766
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHILLED-WATER-PUMPS",
+      "row": 2,
+      "column": "motor_hp",
+      "page": 18,
+      "bbox": [
+        2070,
+        1729,
+        2150,
+        1747
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            591
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            768
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHILLED-WATER-PUMPS",
+      "row": 2,
+      "column": "fluid",
+      "page": 18,
+      "bbox": [
+        2150,
+        1729,
+        2225,
+        1747
+      ],
+      "expected": "WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            592
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            770
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHILLED-WATER-PUMPS",
+      "row": 2,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2225,
+        1729,
+        2270,
+        1747
+      ],
+      "expected": "1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            593
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            772
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-CHILLED-WATER-PUMPS",
+      "header": "CHILLED WATER PUMP",
+      "page": 18,
+      "bbox": [
+        2000,
+        1585,
+        2125,
+        1608
+      ],
+      "engine": "mupdf",
+      "actual": "CHILLED WATER PUMP",
+      "pass": true
+    },
+    {
+      "table": "M601-CHILLED-WATER-PUMPS",
+      "header": "CHILLED WATER PUMP",
+      "page": 18,
+      "bbox": [
+        2000,
+        1585,
+        2125,
+        1608
+      ],
+      "engine": "poppler",
+      "actual": "CHILLED WATER PUMP",
+      "pass": true
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 1,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        2300,
+        1712,
+        2360,
+        1729
+      ],
+      "expected": "EDH-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EDH-1",
+          "word_ids": [
+            295
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EDH-1",
+          "word_ids": [
+            773
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 1,
+      "column": "cfm",
+      "page": 18,
+      "bbox": [
+        2360,
+        1712,
+        2425,
+        1729
+      ],
+      "expected": "1,750",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,750",
+          "word_ids": [
+            296
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,750",
+          "word_ids": [
+            778
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 1,
+      "column": "preheat_mark",
+      "page": 18,
+      "bbox": [
+        2425,
+        1712,
+        2470,
+        1729
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 1,
+      "column": "reheat_mark",
+      "page": 18,
+      "bbox": [
+        2470,
+        1712,
+        2540,
+        1729
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            297
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            717
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 1,
+      "column": "air_handling_system",
+      "page": 18,
+      "bbox": [
+        2540,
+        1712,
+        2605,
+        1729
+      ],
+      "expected": "AHU-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-2",
+          "word_ids": [
+            298
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-2",
+          "word_ids": [
+            722
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 1,
+      "column": "kw",
+      "page": 18,
+      "bbox": [
+        2605,
+        1712,
+        2670,
+        1729
+      ],
+      "expected": "10.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.0",
+          "word_ids": [
+            299
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.0",
+          "word_ids": [
+            727
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 1,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2670,
+        1712,
+        2720,
+        1729
+      ],
+      "expected": "1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            300
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            732
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 2,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        2300,
+        1729,
+        2360,
+        1745
+      ],
+      "expected": "EDH-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EDH-2",
+          "word_ids": [
+            289
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EDH-2",
+          "word_ids": [
+            774
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 2,
+      "column": "cfm",
+      "page": 18,
+      "bbox": [
+        2360,
+        1729,
+        2425,
+        1745
+      ],
+      "expected": "690",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "690",
+          "word_ids": [
+            290
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "690",
+          "word_ids": [
+            779
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 2,
+      "column": "preheat_mark",
+      "page": 18,
+      "bbox": [
+        2425,
+        1729,
+        2470,
+        1745
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 2,
+      "column": "reheat_mark",
+      "page": 18,
+      "bbox": [
+        2470,
+        1729,
+        2540,
+        1745
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            291
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            718
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 2,
+      "column": "air_handling_system",
+      "page": 18,
+      "bbox": [
+        2540,
+        1729,
+        2605,
+        1745
+      ],
+      "expected": "AHU-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-2",
+          "word_ids": [
+            292
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-2",
+          "word_ids": [
+            723
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 2,
+      "column": "kw",
+      "page": 18,
+      "bbox": [
+        2605,
+        1729,
+        2670,
+        1745
+      ],
+      "expected": "8.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8.0",
+          "word_ids": [
+            293
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8.0",
+          "word_ids": [
+            728
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 2,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2670,
+        1729,
+        2720,
+        1745
+      ],
+      "expected": "1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            294
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            733
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 3,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        2300,
+        1745,
+        2360,
+        1761
+      ],
+      "expected": "EDH-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EDH-3",
+          "word_ids": [
+            283
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EDH-3",
+          "word_ids": [
+            775
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 3,
+      "column": "cfm",
+      "page": 18,
+      "bbox": [
+        2360,
+        1745,
+        2425,
+        1761
+      ],
+      "expected": "900",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "900",
+          "word_ids": [
+            284
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "900",
+          "word_ids": [
+            780
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 3,
+      "column": "preheat_mark",
+      "page": 18,
+      "bbox": [
+        2425,
+        1745,
+        2470,
+        1761
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 3,
+      "column": "reheat_mark",
+      "page": 18,
+      "bbox": [
+        2470,
+        1745,
+        2540,
+        1761
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            285
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            719
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 3,
+      "column": "air_handling_system",
+      "page": 18,
+      "bbox": [
+        2540,
+        1745,
+        2605,
+        1761
+      ],
+      "expected": "AHU-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-2",
+          "word_ids": [
+            286
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-2",
+          "word_ids": [
+            724
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 3,
+      "column": "kw",
+      "page": 18,
+      "bbox": [
+        2605,
+        1745,
+        2670,
+        1761
+      ],
+      "expected": "8.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8.0",
+          "word_ids": [
+            287
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8.0",
+          "word_ids": [
+            729
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 3,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2670,
+        1745,
+        2720,
+        1761
+      ],
+      "expected": "1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            288
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            734
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 4,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        2300,
+        1761,
+        2360,
+        1777
+      ],
+      "expected": "EDH-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EDH-4",
+          "word_ids": [
+            277
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EDH-4",
+          "word_ids": [
+            776
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 4,
+      "column": "cfm",
+      "page": 18,
+      "bbox": [
+        2360,
+        1761,
+        2425,
+        1777
+      ],
+      "expected": "690",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "690",
+          "word_ids": [
+            278
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "690",
+          "word_ids": [
+            781
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 4,
+      "column": "preheat_mark",
+      "page": 18,
+      "bbox": [
+        2425,
+        1761,
+        2470,
+        1777
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 4,
+      "column": "reheat_mark",
+      "page": 18,
+      "bbox": [
+        2470,
+        1761,
+        2540,
+        1777
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            279
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            720
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 4,
+      "column": "air_handling_system",
+      "page": 18,
+      "bbox": [
+        2540,
+        1761,
+        2605,
+        1777
+      ],
+      "expected": "AHU-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-2",
+          "word_ids": [
+            280
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-2",
+          "word_ids": [
+            725
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 4,
+      "column": "kw",
+      "page": 18,
+      "bbox": [
+        2605,
+        1761,
+        2670,
+        1777
+      ],
+      "expected": "10.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.0",
+          "word_ids": [
+            281
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.0",
+          "word_ids": [
+            730
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 4,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2670,
+        1761,
+        2720,
+        1777
+      ],
+      "expected": "1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            282
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            735
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 5,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        2300,
+        1777,
+        2360,
+        1793
+      ],
+      "expected": "EDH-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EDH-5",
+          "word_ids": [
+            271
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EDH-5",
+          "word_ids": [
+            777
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 5,
+      "column": "cfm",
+      "page": 18,
+      "bbox": [
+        2360,
+        1777,
+        2425,
+        1793
+      ],
+      "expected": "900",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "900",
+          "word_ids": [
+            272
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "900",
+          "word_ids": [
+            782
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 5,
+      "column": "preheat_mark",
+      "page": 18,
+      "bbox": [
+        2425,
+        1777,
+        2470,
+        1793
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 5,
+      "column": "reheat_mark",
+      "page": 18,
+      "bbox": [
+        2470,
+        1777,
+        2540,
+        1793
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            273
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            721
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 5,
+      "column": "air_handling_system",
+      "page": 18,
+      "bbox": [
+        2540,
+        1777,
+        2605,
+        1793
+      ],
+      "expected": "AHU-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-2",
+          "word_ids": [
+            274
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-2",
+          "word_ids": [
+            726
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 5,
+      "column": "kw",
+      "page": 18,
+      "bbox": [
+        2605,
+        1777,
+        2670,
+        1793
+      ],
+      "expected": "8.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8.0",
+          "word_ids": [
+            275
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8.0",
+          "word_ids": [
+            731
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "row": 5,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2670,
+        1777,
+        2720,
+        1793
+      ],
+      "expected": "1:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            276
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1:",
+          "word_ids": [
+            736
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "header": "ELECTRIC DUCT HEATER",
+      "page": 18,
+      "bbox": [
+        2440,
+        1585,
+        2575,
+        1610
+      ],
+      "engine": "mupdf",
+      "actual": "ELECTRIC DUCT HEATER",
+      "pass": true
+    },
+    {
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "header": "ELECTRIC DUCT HEATER",
+      "page": 18,
+      "bbox": [
+        2440,
+        1585,
+        2575,
+        1610
+      ],
+      "engine": "poppler",
+      "actual": "ELECTRIC DUCT HEATER",
+      "pass": true
+    },
+    {
+      "assertion": "m601-chiller-r32-note",
+      "page": 18,
+      "bbox": [
+        860,
+        728,
+        1080,
+        754
+      ],
+      "expected": "1. UNIT SHALL UTILIZE R-32 REFRIGERANT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. UNIT SHALL UTILIZE R-32 REFRIGERANT",
+          "word_ids": [
+            794,
+            795,
+            796,
+            797,
+            798,
+            799
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. UNIT SHALL UTILIZE R-32 REFRIGERANT",
+          "word_ids": [
+            237,
+            238,
+            239,
+            240,
+            241,
+            242
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-cv1-serves-ahu1",
+      "page": 18,
+      "bbox": [
+        1210,
+        1105,
+        1340,
+        1126
+      ],
+      "expected": "1. CV-1 SERVES AHU-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. CV-1 SERVES AHU-1",
+          "word_ids": [
+            714,
+            715,
+            716,
+            717
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. CV-1 SERVES AHU-1",
+          "word_ids": [
+            528,
+            529,
+            530,
+            531
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-cv2-serves-ahu2",
+      "page": 18,
+      "bbox": [
+        1210,
+        1121,
+        1340,
+        1142
+      ],
+      "expected": "2. CV-2 SERVES AHU-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2. CV-2 SERVES AHU-2",
+          "word_ids": [
+            710,
+            711,
+            712,
+            713
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2. CV-2 SERVES AHU-2",
+          "word_ids": [
+            532,
+            533,
+            534,
+            535
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-ahus-replace-actuators-note",
+      "page": 18,
+      "bbox": [
+        1880,
+        1198,
+        2490,
+        1220
+      ],
+      "expected": "2. CLEAN ALL COILS, REPLACE FAN BELTS, AND DAMPER ACTUATORS. ENSURE DAMPER ARE IN OPERATING CONDITION.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2. CLEAN ALL COILS, REPLACE FAN BELTS, AND DAMPER ACTUATORS. ENSURE DAMPER ARE IN OPERATING CONDITION.",
+          "word_ids": [
+            334,
+            335,
+            336,
+            337,
+            338,
+            339,
+            340,
+            341,
+            342,
+            343,
+            344,
+            345,
+            346,
+            347,
+            348,
+            349
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2. CLEAN ALL COILS, REPLACE FAN BELTS, AND DAMPER ACTUATORS. ENSURE DAMPER ARE IN OPERATING CONDITION.",
+          "word_ids": [
+            578,
+            579,
+            580,
+            581,
+            582,
+            583,
+            584,
+            585,
+            586,
+            587,
+            588,
+            589,
+            590,
+            591,
+            592,
+            593
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-vav-existing-note",
+      "page": 18,
+      "bbox": [
+        2025,
+        1528,
+        2320,
+        1558
+      ],
+      "expected": "NOTES: 1. EXISTING VAV UNIT. INFORMATION PROVIDED FOR BALANCING.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTES: 1. EXISTING VAV UNIT. INFORMATION PROVIDED FOR BALANCING.",
+          "word_ids": [
+            620,
+            612,
+            613,
+            614,
+            615,
+            616,
+            617,
+            618,
+            619
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTES: 1. EXISTING VAV UNIT. INFORMATION PROVIDED FOR BALANCING.",
+          "word_ids": [
+            737,
+            738,
+            739,
+            740,
+            741,
+            742,
+            743,
+            744,
+            745
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-edh-three-stages-note",
+      "page": 18,
+      "bbox": [
+        2290,
+        1830,
+        2565,
+        1865
+      ],
+      "expected": "NOTES: 1. PROVIDE DUCT HEATER WITH A MINIMUM OF THREE STAGES.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTES: 1. PROVIDE DUCT HEATER WITH A MINIMUM OF THREE STAGES.",
+          "word_ids": [
+            270,
+            260,
+            261,
+            262,
+            263,
+            264,
+            265,
+            266,
+            267,
+            268,
+            269
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTES: 1. PROVIDE DUCT HEATER WITH A MINIMUM OF THREE STAGES.",
+          "word_ids": [
+            817,
+            818,
+            819,
+            820,
+            821,
+            822,
+            823,
+            824,
+            825,
+            826,
+            827
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

@@ -1,0 +1,5524 @@
+{
+  "document_id": "10__vol2__040",
+  "source_sha256": "2337ee9ae5483fd440d98967f23f63f8337d7f6dc8d3024cd494c29e129a1dc2",
+  "annotation_sha256": "997d82d8da3adfbd1b5a182c45edd94653cc5fed5c7928bfa84a9b8940e30a88",
+  "tables": 1,
+  "rows": 11,
+  "cell_assertions": 187,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 1,
+      "column": "tag_name",
+      "page": 48,
+      "bbox": [
+        1900,
+        317,
+        1980,
+        326
+      ],
+      "expected": "TAB-101",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-101",
+          "word_ids": [
+            404
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-101",
+          "word_ids": [
+            575
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 1,
+      "column": "area_served",
+      "page": 48,
+      "bbox": [
+        1980,
+        317,
+        2120,
+        326
+      ],
+      "expected": "CRAWL SPACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CRAWL SPACE",
+          "word_ids": [
+            405,
+            406
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CRAWL SPACE",
+          "word_ids": [
+            586,
+            587
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 1,
+      "column": "cooling_cfm_max",
+      "page": 48,
+      "bbox": [
+        2120,
+        317,
+        2180,
+        326
+      ],
+      "expected": "600",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "600",
+          "word_ids": [
+            407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "600",
+          "word_ids": [
+            609
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 1,
+      "column": "heating_cfm_max",
+      "page": 48,
+      "bbox": [
+        2180,
+        317,
+        2240,
+        326
+      ],
+      "expected": "600",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "600",
+          "word_ids": [
+            408
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "600",
+          "word_ids": [
+            623
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 1,
+      "column": "heating_cfm_min",
+      "page": 48,
+      "bbox": [
+        2240,
+        317,
+        2280,
+        326
+      ],
+      "expected": "600",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "600",
+          "word_ids": [
+            409
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "600",
+          "word_ids": [
+            635
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 1,
+      "column": "heating_eat_f",
+      "page": 48,
+      "bbox": [
+        2280,
+        317,
+        2315,
+        326
+      ],
+      "expected": "46.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            410
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            674
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 1,
+      "column": "heating_lat_f",
+      "page": 48,
+      "bbox": [
+        2315,
+        317,
+        2345,
+        326
+      ],
+      "expected": "85.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "85.0",
+          "word_ids": [
+            411
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "85.0",
+          "word_ids": [
+            675
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 1,
+      "column": "heating_ewt_f",
+      "page": 48,
+      "bbox": [
+        2345,
+        317,
+        2380,
+        326
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            412
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            676
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 1,
+      "column": "max_gpm",
+      "page": 48,
+      "bbox": [
+        2380,
+        317,
+        2425,
+        326
+      ],
+      "expected": "2.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.9",
+          "word_ids": [
+            413
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.9",
+          "word_ids": [
+            677
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 1,
+      "column": "min_inlet_dia_inches",
+      "page": 48,
+      "bbox": [
+        2425,
+        317,
+        2480,
+        326
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            414
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            678
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 1,
+      "column": "min_inlet_width_inches",
+      "page": 48,
+      "bbox": [
+        2480,
+        317,
+        2520,
+        326
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            415
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            679
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 1,
+      "column": "min_inlet_height_inches",
+      "page": 48,
+      "bbox": [
+        2520,
+        317,
+        2575,
+        326
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            416
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            680
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 1,
+      "column": "control_type",
+      "page": 48,
+      "bbox": [
+        2575,
+        317,
+        2630,
+        326
+      ],
+      "expected": "TAB-A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-A",
+          "word_ids": [
+            417
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-A",
+          "word_ids": [
+            681
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 1,
+      "column": "sensor_type",
+      "page": 48,
+      "bbox": [
+        2630,
+        317,
+        2690,
+        326
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            418
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            767
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 1,
+      "column": "manufacturer",
+      "page": 48,
+      "bbox": [
+        2690,
+        317,
+        2790,
+        326
+      ],
+      "expected": "TITUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            419
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            778
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 1,
+      "column": "model",
+      "page": 48,
+      "bbox": [
+        2790,
+        317,
+        2850,
+        326
+      ],
+      "expected": "DESV",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            420
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            789
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 1,
+      "column": "remarks",
+      "page": 48,
+      "bbox": [
+        2850,
+        317,
+        2925,
+        326
+      ],
+      "expected": "NOTES 1, 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            421,
+            422,
+            423
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            800,
+            801,
+            802
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 2,
+      "column": "tag_name",
+      "page": 48,
+      "bbox": [
+        1900,
+        330,
+        1980,
+        339
+      ],
+      "expected": "TAB-102",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-102",
+          "word_ids": [
+            424
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-102",
+          "word_ids": [
+            576
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 2,
+      "column": "area_served",
+      "page": 48,
+      "bbox": [
+        1980,
+        330,
+        2120,
+        339
+      ],
+      "expected": "DECONTAMINATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DECONTAMINATION",
+          "word_ids": [
+            425
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DECONTAMINATION",
+          "word_ids": [
+            588
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 2,
+      "column": "cooling_cfm_max",
+      "page": 48,
+      "bbox": [
+        2120,
+        330,
+        2180,
+        339
+      ],
+      "expected": "3600",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3600",
+          "word_ids": [
+            426
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3600",
+          "word_ids": [
+            610
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 2,
+      "column": "heating_cfm_max",
+      "page": 48,
+      "bbox": [
+        2180,
+        330,
+        2240,
+        339
+      ],
+      "expected": "3900",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3900",
+          "word_ids": [
+            427
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3900",
+          "word_ids": [
+            624
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 2,
+      "column": "heating_cfm_min",
+      "page": 48,
+      "bbox": [
+        2240,
+        330,
+        2280,
+        339
+      ],
+      "expected": "3900",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3900",
+          "word_ids": [
+            428
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3900",
+          "word_ids": [
+            636
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 2,
+      "column": "heating_eat_f",
+      "page": 48,
+      "bbox": [
+        2280,
+        330,
+        2315,
+        339
+      ],
+      "expected": "46.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            429
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            682
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 2,
+      "column": "heating_lat_f",
+      "page": 48,
+      "bbox": [
+        2315,
+        330,
+        2345,
+        339
+      ],
+      "expected": "85.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "85.0",
+          "word_ids": [
+            430
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "85.0",
+          "word_ids": [
+            683
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 2,
+      "column": "heating_ewt_f",
+      "page": 48,
+      "bbox": [
+        2345,
+        330,
+        2380,
+        339
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            431
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            684
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 2,
+      "column": "max_gpm",
+      "page": 48,
+      "bbox": [
+        2380,
+        330,
+        2425,
+        339
+      ],
+      "expected": "11.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11.0",
+          "word_ids": [
+            432
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11.0",
+          "word_ids": [
+            685
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 2,
+      "column": "min_inlet_dia_inches",
+      "page": 48,
+      "bbox": [
+        2425,
+        330,
+        2480,
+        339
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            433
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            686
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 2,
+      "column": "min_inlet_width_inches",
+      "page": 48,
+      "bbox": [
+        2480,
+        330,
+        2520,
+        339
+      ],
+      "expected": "24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            434
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            687
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 2,
+      "column": "min_inlet_height_inches",
+      "page": 48,
+      "bbox": [
+        2520,
+        330,
+        2575,
+        339
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            435
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            688
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 2,
+      "column": "control_type",
+      "page": 48,
+      "bbox": [
+        2575,
+        330,
+        2630,
+        339
+      ],
+      "expected": "TAB-C",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-C",
+          "word_ids": [
+            436
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-C",
+          "word_ids": [
+            689
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 2,
+      "column": "sensor_type",
+      "page": 48,
+      "bbox": [
+        2630,
+        330,
+        2690,
+        339
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            437
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            768
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 2,
+      "column": "manufacturer",
+      "page": 48,
+      "bbox": [
+        2690,
+        330,
+        2790,
+        339
+      ],
+      "expected": "TITUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            438
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            779
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 2,
+      "column": "model",
+      "page": 48,
+      "bbox": [
+        2790,
+        330,
+        2850,
+        339
+      ],
+      "expected": "DESV",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            439
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            790
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 2,
+      "column": "remarks",
+      "page": 48,
+      "bbox": [
+        2850,
+        330,
+        2925,
+        339
+      ],
+      "expected": "NOTES 1, 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            440,
+            441,
+            442
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            803,
+            804,
+            805
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 3,
+      "column": "tag_name",
+      "page": 48,
+      "bbox": [
+        1900,
+        343,
+        1980,
+        352
+      ],
+      "expected": "TAB-103",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-103",
+          "word_ids": [
+            443
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-103",
+          "word_ids": [
+            577
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 3,
+      "column": "area_served",
+      "page": 48,
+      "bbox": [
+        1980,
+        343,
+        2120,
+        352
+      ],
+      "expected": "WATER TREATMENT/STORAGE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER TREATMENT/STORAGE",
+          "word_ids": [
+            444,
+            445
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER TREATMENT/STORAGE",
+          "word_ids": [
+            589,
+            590
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 3,
+      "column": "cooling_cfm_max",
+      "page": 48,
+      "bbox": [
+        2120,
+        343,
+        2180,
+        352
+      ],
+      "expected": "525",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "525",
+          "word_ids": [
+            446
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "525",
+          "word_ids": [
+            611
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 3,
+      "column": "heating_cfm_max",
+      "page": 48,
+      "bbox": [
+        2180,
+        343,
+        2240,
+        352
+      ],
+      "expected": "525",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "525",
+          "word_ids": [
+            447
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "525",
+          "word_ids": [
+            625
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 3,
+      "column": "heating_cfm_min",
+      "page": 48,
+      "bbox": [
+        2240,
+        343,
+        2280,
+        352
+      ],
+      "expected": "525",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "525",
+          "word_ids": [
+            448
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "525",
+          "word_ids": [
+            637
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 3,
+      "column": "heating_eat_f",
+      "page": 48,
+      "bbox": [
+        2280,
+        343,
+        2315,
+        352
+      ],
+      "expected": "46.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            449
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            690
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 3,
+      "column": "heating_lat_f",
+      "page": 48,
+      "bbox": [
+        2315,
+        343,
+        2345,
+        352
+      ],
+      "expected": "95.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "95.0",
+          "word_ids": [
+            450
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "95.0",
+          "word_ids": [
+            691
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 3,
+      "column": "heating_ewt_f",
+      "page": 48,
+      "bbox": [
+        2345,
+        343,
+        2380,
+        352
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            451
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            692
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 3,
+      "column": "max_gpm",
+      "page": 48,
+      "bbox": [
+        2380,
+        343,
+        2425,
+        352
+      ],
+      "expected": "2.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.8",
+          "word_ids": [
+            452
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.8",
+          "word_ids": [
+            693
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 3,
+      "column": "min_inlet_dia_inches",
+      "page": 48,
+      "bbox": [
+        2425,
+        343,
+        2480,
+        352
+      ],
+      "expected": "8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            453
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            694
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 3,
+      "column": "min_inlet_width_inches",
+      "page": 48,
+      "bbox": [
+        2480,
+        343,
+        2520,
+        352
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            454
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            695
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 3,
+      "column": "min_inlet_height_inches",
+      "page": 48,
+      "bbox": [
+        2520,
+        343,
+        2575,
+        352
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            455
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            696
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 3,
+      "column": "control_type",
+      "page": 48,
+      "bbox": [
+        2575,
+        343,
+        2630,
+        352
+      ],
+      "expected": "TAB-A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-A",
+          "word_ids": [
+            456
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-A",
+          "word_ids": [
+            697
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 3,
+      "column": "sensor_type",
+      "page": 48,
+      "bbox": [
+        2630,
+        343,
+        2690,
+        352
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            457
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            769
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 3,
+      "column": "manufacturer",
+      "page": 48,
+      "bbox": [
+        2690,
+        343,
+        2790,
+        352
+      ],
+      "expected": "TITUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            458
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            780
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 3,
+      "column": "model",
+      "page": 48,
+      "bbox": [
+        2790,
+        343,
+        2850,
+        352
+      ],
+      "expected": "DESV",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            459
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            791
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 3,
+      "column": "remarks",
+      "page": 48,
+      "bbox": [
+        2850,
+        343,
+        2925,
+        352
+      ],
+      "expected": "NOTES 1, 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            460,
+            461,
+            462
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            806,
+            807,
+            808
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 4,
+      "column": "tag_name",
+      "page": 48,
+      "bbox": [
+        1900,
+        355,
+        1980,
+        365
+      ],
+      "expected": "TAB-104",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-104",
+          "word_ids": [
+            463
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-104",
+          "word_ids": [
+            578
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 4,
+      "column": "area_served",
+      "page": 48,
+      "bbox": [
+        1980,
+        355,
+        2120,
+        365
+      ],
+      "expected": "SCOPE PROCESSING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCOPE PROCESSING",
+          "word_ids": [
+            464,
+            465
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCOPE PROCESSING",
+          "word_ids": [
+            591,
+            592
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 4,
+      "column": "cooling_cfm_max",
+      "page": 48,
+      "bbox": [
+        2120,
+        355,
+        2180,
+        365
+      ],
+      "expected": "625",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "625",
+          "word_ids": [
+            466
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "625",
+          "word_ids": [
+            612
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 4,
+      "column": "heating_cfm_max",
+      "page": 48,
+      "bbox": [
+        2180,
+        355,
+        2240,
+        365
+      ],
+      "expected": "625",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "625",
+          "word_ids": [
+            467
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "625",
+          "word_ids": [
+            626
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 4,
+      "column": "heating_cfm_min",
+      "page": 48,
+      "bbox": [
+        2240,
+        355,
+        2280,
+        365
+      ],
+      "expected": "625",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "625",
+          "word_ids": [
+            468
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "625",
+          "word_ids": [
+            638
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 4,
+      "column": "heating_eat_f",
+      "page": 48,
+      "bbox": [
+        2280,
+        355,
+        2315,
+        365
+      ],
+      "expected": "46.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            469
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            698
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 4,
+      "column": "heating_lat_f",
+      "page": 48,
+      "bbox": [
+        2315,
+        355,
+        2345,
+        365
+      ],
+      "expected": "85.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "85.0",
+          "word_ids": [
+            470
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "85.0",
+          "word_ids": [
+            699
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 4,
+      "column": "heating_ewt_f",
+      "page": 48,
+      "bbox": [
+        2345,
+        355,
+        2380,
+        365
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            471
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            700
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 4,
+      "column": "max_gpm",
+      "page": 48,
+      "bbox": [
+        2380,
+        355,
+        2425,
+        365
+      ],
+      "expected": "3.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.2",
+          "word_ids": [
+            472
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.2",
+          "word_ids": [
+            701
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 4,
+      "column": "min_inlet_dia_inches",
+      "page": 48,
+      "bbox": [
+        2425,
+        355,
+        2480,
+        365
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            473
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            702
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 4,
+      "column": "min_inlet_width_inches",
+      "page": 48,
+      "bbox": [
+        2480,
+        355,
+        2520,
+        365
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            474
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            703
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 4,
+      "column": "min_inlet_height_inches",
+      "page": 48,
+      "bbox": [
+        2520,
+        355,
+        2575,
+        365
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            475
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            704
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 4,
+      "column": "control_type",
+      "page": 48,
+      "bbox": [
+        2575,
+        355,
+        2630,
+        365
+      ],
+      "expected": "TAB-C",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-C",
+          "word_ids": [
+            476
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-C",
+          "word_ids": [
+            705
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 4,
+      "column": "sensor_type",
+      "page": 48,
+      "bbox": [
+        2630,
+        355,
+        2690,
+        365
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            477
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            770
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 4,
+      "column": "manufacturer",
+      "page": 48,
+      "bbox": [
+        2690,
+        355,
+        2790,
+        365
+      ],
+      "expected": "TITUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            478
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            781
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 4,
+      "column": "model",
+      "page": 48,
+      "bbox": [
+        2790,
+        355,
+        2850,
+        365
+      ],
+      "expected": "DESV",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            479
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            792
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 4,
+      "column": "remarks",
+      "page": 48,
+      "bbox": [
+        2850,
+        355,
+        2925,
+        365
+      ],
+      "expected": "NOTES 1, 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            480,
+            481,
+            482
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            809,
+            810,
+            811
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 5,
+      "column": "tag_name",
+      "page": 48,
+      "bbox": [
+        1900,
+        368,
+        1980,
+        378
+      ],
+      "expected": "TAB-105",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-105",
+          "word_ids": [
+            483
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-105",
+          "word_ids": [
+            579
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 5,
+      "column": "area_served",
+      "page": 48,
+      "bbox": [
+        1980,
+        368,
+        2120,
+        378
+      ],
+      "expected": "CLEAN WORKROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CLEAN WORKROOM",
+          "word_ids": [
+            484,
+            485
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CLEAN WORKROOM",
+          "word_ids": [
+            593,
+            594
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 5,
+      "column": "cooling_cfm_max",
+      "page": 48,
+      "bbox": [
+        2120,
+        368,
+        2180,
+        378
+      ],
+      "expected": "1875",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1875",
+          "word_ids": [
+            486
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1875",
+          "word_ids": [
+            613
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 5,
+      "column": "heating_cfm_max",
+      "page": 48,
+      "bbox": [
+        2180,
+        368,
+        2240,
+        378
+      ],
+      "expected": "1875",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1875",
+          "word_ids": [
+            487
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1875",
+          "word_ids": [
+            627
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 5,
+      "column": "heating_cfm_min",
+      "page": 48,
+      "bbox": [
+        2240,
+        368,
+        2280,
+        378
+      ],
+      "expected": "1875",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1875",
+          "word_ids": [
+            488
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1875",
+          "word_ids": [
+            639
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 5,
+      "column": "heating_eat_f",
+      "page": 48,
+      "bbox": [
+        2280,
+        368,
+        2315,
+        378
+      ],
+      "expected": "46.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            489
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            706
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 5,
+      "column": "heating_lat_f",
+      "page": 48,
+      "bbox": [
+        2315,
+        368,
+        2345,
+        378
+      ],
+      "expected": "85.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "85.0",
+          "word_ids": [
+            490
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "85.0",
+          "word_ids": [
+            707
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 5,
+      "column": "heating_ewt_f",
+      "page": 48,
+      "bbox": [
+        2345,
+        368,
+        2380,
+        378
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            491
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            708
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 5,
+      "column": "max_gpm",
+      "page": 48,
+      "bbox": [
+        2380,
+        368,
+        2425,
+        378
+      ],
+      "expected": "5.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.3",
+          "word_ids": [
+            492
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.3",
+          "word_ids": [
+            709
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 5,
+      "column": "min_inlet_dia_inches",
+      "page": 48,
+      "bbox": [
+        2425,
+        368,
+        2480,
+        378
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            493
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            710
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 5,
+      "column": "min_inlet_width_inches",
+      "page": 48,
+      "bbox": [
+        2480,
+        368,
+        2520,
+        378
+      ],
+      "expected": "24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            494
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            711
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 5,
+      "column": "min_inlet_height_inches",
+      "page": 48,
+      "bbox": [
+        2520,
+        368,
+        2575,
+        378
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            495
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            712
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 5,
+      "column": "control_type",
+      "page": 48,
+      "bbox": [
+        2575,
+        368,
+        2630,
+        378
+      ],
+      "expected": "TAB-C",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-C",
+          "word_ids": [
+            496
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-C",
+          "word_ids": [
+            713
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 5,
+      "column": "sensor_type",
+      "page": 48,
+      "bbox": [
+        2630,
+        368,
+        2690,
+        378
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            497
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            771
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 5,
+      "column": "manufacturer",
+      "page": 48,
+      "bbox": [
+        2690,
+        368,
+        2790,
+        378
+      ],
+      "expected": "TITUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            498
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            782
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 5,
+      "column": "model",
+      "page": 48,
+      "bbox": [
+        2790,
+        368,
+        2850,
+        378
+      ],
+      "expected": "DESV",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            499
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            793
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 5,
+      "column": "remarks",
+      "page": 48,
+      "bbox": [
+        2850,
+        368,
+        2925,
+        378
+      ],
+      "expected": "NOTES 1, 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            500,
+            501,
+            502
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            812,
+            813,
+            814
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 6,
+      "column": "tag_name",
+      "page": 48,
+      "bbox": [
+        1900,
+        381,
+        1980,
+        391
+      ],
+      "expected": "TAB-106",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-106",
+          "word_ids": [
+            503
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-106",
+          "word_ids": [
+            580
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 6,
+      "column": "area_served",
+      "page": 48,
+      "bbox": [
+        1980,
+        381,
+        2120,
+        391
+      ],
+      "expected": "CART WASHER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CART WASHER",
+          "word_ids": [
+            504,
+            505
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CART WASHER",
+          "word_ids": [
+            595,
+            596
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 6,
+      "column": "cooling_cfm_max",
+      "page": 48,
+      "bbox": [
+        2120,
+        381,
+        2180,
+        391
+      ],
+      "expected": "1150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1150",
+          "word_ids": [
+            506
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1150",
+          "word_ids": [
+            614
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 6,
+      "column": "heating_cfm_max",
+      "page": 48,
+      "bbox": [
+        2180,
+        381,
+        2240,
+        391
+      ],
+      "expected": "1150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1150",
+          "word_ids": [
+            507
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1150",
+          "word_ids": [
+            628
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 6,
+      "column": "heating_cfm_min",
+      "page": 48,
+      "bbox": [
+        2240,
+        381,
+        2280,
+        391
+      ],
+      "expected": "1150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1150",
+          "word_ids": [
+            508
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1150",
+          "word_ids": [
+            640
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 6,
+      "column": "heating_eat_f",
+      "page": 48,
+      "bbox": [
+        2280,
+        381,
+        2315,
+        391
+      ],
+      "expected": "46.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            509
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            714
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 6,
+      "column": "heating_lat_f",
+      "page": 48,
+      "bbox": [
+        2315,
+        381,
+        2345,
+        391
+      ],
+      "expected": "85.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "85.0",
+          "word_ids": [
+            510
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "85.0",
+          "word_ids": [
+            715
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 6,
+      "column": "heating_ewt_f",
+      "page": 48,
+      "bbox": [
+        2345,
+        381,
+        2380,
+        391
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            511
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            716
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 6,
+      "column": "max_gpm",
+      "page": 48,
+      "bbox": [
+        2380,
+        381,
+        2425,
+        391
+      ],
+      "expected": "2.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            512
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            717
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 6,
+      "column": "min_inlet_dia_inches",
+      "page": 48,
+      "bbox": [
+        2425,
+        381,
+        2480,
+        391
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            513
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            718
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 6,
+      "column": "min_inlet_width_inches",
+      "page": 48,
+      "bbox": [
+        2480,
+        381,
+        2520,
+        391
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            514
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            719
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 6,
+      "column": "min_inlet_height_inches",
+      "page": 48,
+      "bbox": [
+        2520,
+        381,
+        2575,
+        391
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            515
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            720
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 6,
+      "column": "control_type",
+      "page": 48,
+      "bbox": [
+        2575,
+        381,
+        2630,
+        391
+      ],
+      "expected": "TAB-C",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-C",
+          "word_ids": [
+            516
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-C",
+          "word_ids": [
+            721
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 6,
+      "column": "sensor_type",
+      "page": 48,
+      "bbox": [
+        2630,
+        381,
+        2690,
+        391
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            517
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            772
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 6,
+      "column": "manufacturer",
+      "page": 48,
+      "bbox": [
+        2690,
+        381,
+        2790,
+        391
+      ],
+      "expected": "TITUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            518
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            783
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 6,
+      "column": "model",
+      "page": 48,
+      "bbox": [
+        2790,
+        381,
+        2850,
+        391
+      ],
+      "expected": "DESV",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            519
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            794
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 6,
+      "column": "remarks",
+      "page": 48,
+      "bbox": [
+        2850,
+        381,
+        2925,
+        391
+      ],
+      "expected": "NOTES 1, 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            520,
+            521,
+            522
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            815,
+            816,
+            817
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 7,
+      "column": "tag_name",
+      "page": 48,
+      "bbox": [
+        1900,
+        394,
+        1980,
+        404
+      ],
+      "expected": "TAB-107",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-107",
+          "word_ids": [
+            523
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-107",
+          "word_ids": [
+            581
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 7,
+      "column": "area_served",
+      "page": 48,
+      "bbox": [
+        1980,
+        394,
+        2120,
+        404
+      ],
+      "expected": "STERILIZER AREA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STERILIZER AREA",
+          "word_ids": [
+            524,
+            525
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STERILIZER AREA",
+          "word_ids": [
+            597,
+            598
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 7,
+      "column": "cooling_cfm_max",
+      "page": 48,
+      "bbox": [
+        2120,
+        394,
+        2180,
+        404
+      ],
+      "expected": "2875",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2875",
+          "word_ids": [
+            526
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2875",
+          "word_ids": [
+            615
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 7,
+      "column": "heating_cfm_max",
+      "page": 48,
+      "bbox": [
+        2180,
+        394,
+        2240,
+        404
+      ],
+      "expected": "2875",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2875",
+          "word_ids": [
+            527
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2875",
+          "word_ids": [
+            629
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 7,
+      "column": "heating_cfm_min",
+      "page": 48,
+      "bbox": [
+        2240,
+        394,
+        2280,
+        404
+      ],
+      "expected": "2875",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2875",
+          "word_ids": [
+            528
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2875",
+          "word_ids": [
+            641
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 7,
+      "column": "heating_eat_f",
+      "page": 48,
+      "bbox": [
+        2280,
+        394,
+        2315,
+        404
+      ],
+      "expected": "46.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            529
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            722
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 7,
+      "column": "heating_lat_f",
+      "page": 48,
+      "bbox": [
+        2315,
+        394,
+        2345,
+        404
+      ],
+      "expected": "85.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "85.0",
+          "word_ids": [
+            530
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "85.0",
+          "word_ids": [
+            723
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 7,
+      "column": "heating_ewt_f",
+      "page": 48,
+      "bbox": [
+        2345,
+        394,
+        2380,
+        404
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            531
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            724
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 7,
+      "column": "max_gpm",
+      "page": 48,
+      "bbox": [
+        2380,
+        394,
+        2425,
+        404
+      ],
+      "expected": "8.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8.1",
+          "word_ids": [
+            532
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8.1",
+          "word_ids": [
+            725
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 7,
+      "column": "min_inlet_dia_inches",
+      "page": 48,
+      "bbox": [
+        2425,
+        394,
+        2480,
+        404
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            533
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            726
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 7,
+      "column": "min_inlet_width_inches",
+      "page": 48,
+      "bbox": [
+        2480,
+        394,
+        2520,
+        404
+      ],
+      "expected": "24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            534
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24",
+          "word_ids": [
+            727
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 7,
+      "column": "min_inlet_height_inches",
+      "page": 48,
+      "bbox": [
+        2520,
+        394,
+        2575,
+        404
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            535
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            728
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 7,
+      "column": "control_type",
+      "page": 48,
+      "bbox": [
+        2575,
+        394,
+        2630,
+        404
+      ],
+      "expected": "TAB-C",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-C",
+          "word_ids": [
+            536
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-C",
+          "word_ids": [
+            729
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 7,
+      "column": "sensor_type",
+      "page": 48,
+      "bbox": [
+        2630,
+        394,
+        2690,
+        404
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            537
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            773
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 7,
+      "column": "manufacturer",
+      "page": 48,
+      "bbox": [
+        2690,
+        394,
+        2790,
+        404
+      ],
+      "expected": "TITUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            538
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            784
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 7,
+      "column": "model",
+      "page": 48,
+      "bbox": [
+        2790,
+        394,
+        2850,
+        404
+      ],
+      "expected": "DESV",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            539
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            795
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 7,
+      "column": "remarks",
+      "page": 48,
+      "bbox": [
+        2850,
+        394,
+        2925,
+        404
+      ],
+      "expected": "NOTES 1, 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            540,
+            541,
+            542
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            818,
+            819,
+            820
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 8,
+      "column": "tag_name",
+      "page": 48,
+      "bbox": [
+        1900,
+        407,
+        1980,
+        417
+      ],
+      "expected": "TAB-108",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-108",
+          "word_ids": [
+            543
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-108",
+          "word_ids": [
+            582
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 8,
+      "column": "area_served",
+      "page": 48,
+      "bbox": [
+        1980,
+        407,
+        2120,
+        417
+      ],
+      "expected": "STORAGE STERILE DURABLES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STORAGE STERILE DURABLES",
+          "word_ids": [
+            544,
+            545,
+            546
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STORAGE STERILE DURABLES",
+          "word_ids": [
+            599,
+            600,
+            601
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 8,
+      "column": "cooling_cfm_max",
+      "page": 48,
+      "bbox": [
+        2120,
+        407,
+        2180,
+        417
+      ],
+      "expected": "650",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "650",
+          "word_ids": [
+            547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "650",
+          "word_ids": [
+            616
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 8,
+      "column": "heating_cfm_max",
+      "page": 48,
+      "bbox": [
+        2180,
+        407,
+        2240,
+        417
+      ],
+      "expected": "650",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "650",
+          "word_ids": [
+            548
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "650",
+          "word_ids": [
+            630
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 8,
+      "column": "heating_cfm_min",
+      "page": 48,
+      "bbox": [
+        2240,
+        407,
+        2280,
+        417
+      ],
+      "expected": "650",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "650",
+          "word_ids": [
+            549
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "650",
+          "word_ids": [
+            642
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 8,
+      "column": "heating_eat_f",
+      "page": 48,
+      "bbox": [
+        2280,
+        407,
+        2315,
+        417
+      ],
+      "expected": "46.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            550
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            730
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 8,
+      "column": "heating_lat_f",
+      "page": 48,
+      "bbox": [
+        2315,
+        407,
+        2345,
+        417
+      ],
+      "expected": "95.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "95.0",
+          "word_ids": [
+            551
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "95.0",
+          "word_ids": [
+            731
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 8,
+      "column": "heating_ewt_f",
+      "page": 48,
+      "bbox": [
+        2345,
+        407,
+        2380,
+        417
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            552
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            732
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 8,
+      "column": "max_gpm",
+      "page": 48,
+      "bbox": [
+        2380,
+        407,
+        2425,
+        417
+      ],
+      "expected": "2.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            553
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            733
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 8,
+      "column": "min_inlet_dia_inches",
+      "page": 48,
+      "bbox": [
+        2425,
+        407,
+        2480,
+        417
+      ],
+      "expected": "8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            554
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            734
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 8,
+      "column": "min_inlet_width_inches",
+      "page": 48,
+      "bbox": [
+        2480,
+        407,
+        2520,
+        417
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            555
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            735
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 8,
+      "column": "min_inlet_height_inches",
+      "page": 48,
+      "bbox": [
+        2520,
+        407,
+        2575,
+        417
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            556
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            736
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 8,
+      "column": "control_type",
+      "page": 48,
+      "bbox": [
+        2575,
+        407,
+        2630,
+        417
+      ],
+      "expected": "TAB-B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-B",
+          "word_ids": [
+            557
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-B",
+          "word_ids": [
+            737
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 8,
+      "column": "sensor_type",
+      "page": 48,
+      "bbox": [
+        2630,
+        407,
+        2690,
+        417
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            558
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            774
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 8,
+      "column": "manufacturer",
+      "page": 48,
+      "bbox": [
+        2690,
+        407,
+        2790,
+        417
+      ],
+      "expected": "TITUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            559
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            785
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 8,
+      "column": "model",
+      "page": 48,
+      "bbox": [
+        2790,
+        407,
+        2850,
+        417
+      ],
+      "expected": "DESV",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            560
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            796
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 8,
+      "column": "remarks",
+      "page": 48,
+      "bbox": [
+        2850,
+        407,
+        2925,
+        417
+      ],
+      "expected": "NOTES 1, 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            561,
+            562,
+            563
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            821,
+            822,
+            823
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 9,
+      "column": "tag_name",
+      "page": 48,
+      "bbox": [
+        1900,
+        420,
+        1980,
+        430
+      ],
+      "expected": "TAB-109",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-109",
+          "word_ids": [
+            564
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-109",
+          "word_ids": [
+            583
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 9,
+      "column": "area_served",
+      "page": 48,
+      "bbox": [
+        1980,
+        420,
+        2120,
+        430
+      ],
+      "expected": "UNLOADING/COOLING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UNLOADING/COOLING",
+          "word_ids": [
+            565
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UNLOADING/COOLING",
+          "word_ids": [
+            602
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 9,
+      "column": "cooling_cfm_max",
+      "page": 48,
+      "bbox": [
+        2120,
+        420,
+        2180,
+        430
+      ],
+      "expected": "400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "400",
+          "word_ids": [
+            566
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "400",
+          "word_ids": [
+            617
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 9,
+      "column": "heating_cfm_max",
+      "page": 48,
+      "bbox": [
+        2180,
+        420,
+        2240,
+        430
+      ],
+      "expected": "400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "400",
+          "word_ids": [
+            567
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "400",
+          "word_ids": [
+            631
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 9,
+      "column": "heating_cfm_min",
+      "page": 48,
+      "bbox": [
+        2240,
+        420,
+        2280,
+        430
+      ],
+      "expected": "400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "400",
+          "word_ids": [
+            568
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "400",
+          "word_ids": [
+            643
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 9,
+      "column": "heating_eat_f",
+      "page": 48,
+      "bbox": [
+        2280,
+        420,
+        2315,
+        430
+      ],
+      "expected": "46.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            569
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            738
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 9,
+      "column": "heating_lat_f",
+      "page": 48,
+      "bbox": [
+        2315,
+        420,
+        2345,
+        430
+      ],
+      "expected": "95.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "95.0",
+          "word_ids": [
+            570
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "95.0",
+          "word_ids": [
+            739
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 9,
+      "column": "heating_ewt_f",
+      "page": 48,
+      "bbox": [
+        2345,
+        420,
+        2380,
+        430
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            571
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            740
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 9,
+      "column": "max_gpm",
+      "page": 48,
+      "bbox": [
+        2380,
+        420,
+        2425,
+        430
+      ],
+      "expected": "1.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.5",
+          "word_ids": [
+            572
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.5",
+          "word_ids": [
+            741
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 9,
+      "column": "min_inlet_dia_inches",
+      "page": 48,
+      "bbox": [
+        2425,
+        420,
+        2480,
+        430
+      ],
+      "expected": "8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            573
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            742
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 9,
+      "column": "min_inlet_width_inches",
+      "page": 48,
+      "bbox": [
+        2480,
+        420,
+        2520,
+        430
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            574
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            743
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 9,
+      "column": "min_inlet_height_inches",
+      "page": 48,
+      "bbox": [
+        2520,
+        420,
+        2575,
+        430
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            575
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            744
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 9,
+      "column": "control_type",
+      "page": 48,
+      "bbox": [
+        2575,
+        420,
+        2630,
+        430
+      ],
+      "expected": "TAB-B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-B",
+          "word_ids": [
+            576
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-B",
+          "word_ids": [
+            745
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 9,
+      "column": "sensor_type",
+      "page": 48,
+      "bbox": [
+        2630,
+        420,
+        2690,
+        430
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            577
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            775
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 9,
+      "column": "manufacturer",
+      "page": 48,
+      "bbox": [
+        2690,
+        420,
+        2790,
+        430
+      ],
+      "expected": "TITUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            578
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            786
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 9,
+      "column": "model",
+      "page": 48,
+      "bbox": [
+        2790,
+        420,
+        2850,
+        430
+      ],
+      "expected": "DESV",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            579
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            797
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 9,
+      "column": "remarks",
+      "page": 48,
+      "bbox": [
+        2850,
+        420,
+        2925,
+        430
+      ],
+      "expected": "NOTES 1, 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            580,
+            581,
+            582
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            824,
+            825,
+            826
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 10,
+      "column": "tag_name",
+      "page": 48,
+      "bbox": [
+        1900,
+        433,
+        1980,
+        443
+      ],
+      "expected": "TAB-201",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-201",
+          "word_ids": [
+            583
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-201",
+          "word_ids": [
+            584
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 10,
+      "column": "area_served",
+      "page": 48,
+      "bbox": [
+        1980,
+        433,
+        2120,
+        443
+      ],
+      "expected": "ELECTRICAL ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ELECTRICAL ROOM",
+          "word_ids": [
+            584,
+            585
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ELECTRICAL ROOM",
+          "word_ids": [
+            603,
+            604
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 10,
+      "column": "cooling_cfm_max",
+      "page": 48,
+      "bbox": [
+        2120,
+        433,
+        2180,
+        443
+      ],
+      "expected": "400",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "400",
+          "word_ids": [
+            586
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "400",
+          "word_ids": [
+            618
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 10,
+      "column": "heating_cfm_max",
+      "page": 48,
+      "bbox": [
+        2180,
+        433,
+        2240,
+        443
+      ],
+      "expected": "0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            587
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0",
+          "word_ids": [
+            632
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 10,
+      "column": "heating_cfm_min",
+      "page": 48,
+      "bbox": [
+        2240,
+        433,
+        2280,
+        443
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            588
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            644
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 10,
+      "column": "heating_eat_f",
+      "page": 48,
+      "bbox": [
+        2280,
+        433,
+        2315,
+        443
+      ],
+      "expected": "46.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            589
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            746
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 10,
+      "column": "heating_lat_f",
+      "page": 48,
+      "bbox": [
+        2315,
+        433,
+        2345,
+        443
+      ],
+      "expected": "0.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.0",
+          "word_ids": [
+            590
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.0",
+          "word_ids": [
+            747
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 10,
+      "column": "heating_ewt_f",
+      "page": 48,
+      "bbox": [
+        2345,
+        433,
+        2380,
+        443
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 10,
+      "column": "max_gpm",
+      "page": 48,
+      "bbox": [
+        2380,
+        433,
+        2425,
+        443
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 10,
+      "column": "min_inlet_dia_inches",
+      "page": 48,
+      "bbox": [
+        2425,
+        433,
+        2480,
+        443
+      ],
+      "expected": "8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            591
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            748
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 10,
+      "column": "min_inlet_width_inches",
+      "page": 48,
+      "bbox": [
+        2480,
+        433,
+        2520,
+        443
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            592
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            749
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 10,
+      "column": "min_inlet_height_inches",
+      "page": 48,
+      "bbox": [
+        2520,
+        433,
+        2575,
+        443
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            593
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            750
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 10,
+      "column": "control_type",
+      "page": 48,
+      "bbox": [
+        2575,
+        433,
+        2630,
+        443
+      ],
+      "expected": "TAB-E",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-E",
+          "word_ids": [
+            594
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-E",
+          "word_ids": [
+            751
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 10,
+      "column": "sensor_type",
+      "page": 48,
+      "bbox": [
+        2630,
+        433,
+        2690,
+        443
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            595
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            776
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 10,
+      "column": "manufacturer",
+      "page": 48,
+      "bbox": [
+        2690,
+        433,
+        2790,
+        443
+      ],
+      "expected": "TITUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            596
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            787
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 10,
+      "column": "model",
+      "page": 48,
+      "bbox": [
+        2790,
+        433,
+        2850,
+        443
+      ],
+      "expected": "DESV",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            597
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            798
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 10,
+      "column": "remarks",
+      "page": 48,
+      "bbox": [
+        2850,
+        433,
+        2925,
+        443
+      ],
+      "expected": "NOTES 1, 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            598,
+            599,
+            600
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            827,
+            828,
+            829
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 11,
+      "column": "tag_name",
+      "page": 48,
+      "bbox": [
+        1900,
+        446,
+        1980,
+        456
+      ],
+      "expected": "TAB-202",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-202",
+          "word_ids": [
+            601
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-202",
+          "word_ids": [
+            585
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 11,
+      "column": "area_served",
+      "page": 48,
+      "bbox": [
+        1980,
+        446,
+        2120,
+        456
+      ],
+      "expected": "MECH ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECH ROOM",
+          "word_ids": [
+            602,
+            603
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECH ROOM",
+          "word_ids": [
+            605,
+            606
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 11,
+      "column": "cooling_cfm_max",
+      "page": 48,
+      "bbox": [
+        2120,
+        446,
+        2180,
+        456
+      ],
+      "expected": "600",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "600",
+          "word_ids": [
+            604
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "600",
+          "word_ids": [
+            619
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 11,
+      "column": "heating_cfm_max",
+      "page": 48,
+      "bbox": [
+        2180,
+        446,
+        2240,
+        456
+      ],
+      "expected": "200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            605
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            633
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 11,
+      "column": "heating_cfm_min",
+      "page": 48,
+      "bbox": [
+        2240,
+        446,
+        2280,
+        456
+      ],
+      "expected": "200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            606
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            645
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 11,
+      "column": "heating_eat_f",
+      "page": 48,
+      "bbox": [
+        2280,
+        446,
+        2315,
+        456
+      ],
+      "expected": "46.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            607
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "46.0",
+          "word_ids": [
+            752
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 11,
+      "column": "heating_lat_f",
+      "page": 48,
+      "bbox": [
+        2315,
+        446,
+        2345,
+        456
+      ],
+      "expected": "95.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "95.0",
+          "word_ids": [
+            608
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "95.0",
+          "word_ids": [
+            753
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 11,
+      "column": "heating_ewt_f",
+      "page": 48,
+      "bbox": [
+        2345,
+        446,
+        2380,
+        456
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            609
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            754
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 11,
+      "column": "max_gpm",
+      "page": 48,
+      "bbox": [
+        2380,
+        446,
+        2425,
+        456
+      ],
+      "expected": "1.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.1",
+          "word_ids": [
+            610
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.1",
+          "word_ids": [
+            755
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 11,
+      "column": "min_inlet_dia_inches",
+      "page": 48,
+      "bbox": [
+        2425,
+        446,
+        2480,
+        456
+      ],
+      "expected": "8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            611
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            756
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 11,
+      "column": "min_inlet_width_inches",
+      "page": 48,
+      "bbox": [
+        2480,
+        446,
+        2520,
+        456
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            612
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            757
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 11,
+      "column": "min_inlet_height_inches",
+      "page": 48,
+      "bbox": [
+        2520,
+        446,
+        2575,
+        456
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            613
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            758
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 11,
+      "column": "control_type",
+      "page": 48,
+      "bbox": [
+        2575,
+        446,
+        2630,
+        456
+      ],
+      "expected": "TAB-B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TAB-B",
+          "word_ids": [
+            614
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TAB-B",
+          "word_ids": [
+            759
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 11,
+      "column": "sensor_type",
+      "page": 48,
+      "bbox": [
+        2630,
+        446,
+        2690,
+        456
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            615
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            777
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 11,
+      "column": "manufacturer",
+      "page": 48,
+      "bbox": [
+        2690,
+        446,
+        2790,
+        456
+      ],
+      "expected": "TITUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            616
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TITUS",
+          "word_ids": [
+            788
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 11,
+      "column": "model",
+      "page": 48,
+      "bbox": [
+        2790,
+        446,
+        2850,
+        456
+      ],
+      "expected": "DESV",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            617
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DESV",
+          "word_ids": [
+            799
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "row": 11,
+      "column": "remarks",
+      "page": 48,
+      "bbox": [
+        2850,
+        446,
+        2925,
+        456
+      ],
+      "expected": "NOTES 1, 2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            618,
+            619,
+            620
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NOTES 1, 2",
+          "word_ids": [
+            830,
+            831,
+            832
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "header": "TERMINAL AIR BOX SCHEDULE - SINGLE DUCT - PHASE 2",
+      "page": 48,
+      "bbox": [
+        1917,
+        145,
+        2449,
+        165
+      ],
+      "engine": "mupdf",
+      "actual": "TERMINAL AIR BOX SCHEDULE - SINGLE DUCT - PHASE 2",
+      "pass": true
+    },
+    {
+      "table": "M601-TERMINAL-AIR-BOX-PHASE-2",
+      "header": "TERMINAL AIR BOX SCHEDULE - SINGLE DUCT - PHASE 2",
+      "page": 48,
+      "bbox": [
+        1917,
+        145,
+        2449,
+        165
+      ],
+      "engine": "poppler",
+      "actual": "TERMINAL AIR BOX SCHEDULE - SINGLE DUCT - PHASE 2",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

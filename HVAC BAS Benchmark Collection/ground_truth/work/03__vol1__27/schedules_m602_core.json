@@ -1,0 +1,322 @@
+{
+  "document_id": "03__vol1__27",
+  "module_role": "Cell-for-cell M-602 schedule ledger for the expansion tanks and filtration equipment. M-602's separately structured modular-chiller schedule is captured in its own module so its vertically merged assembly cells are not flattened into invented repetitions.",
+  "source_sheet": "M-602",
+  "source_page": 14,
+  "tables": [
+    {
+      "id": "M602-EXPANSION-TANKS",
+      "page": 14,
+      "sheet": "M-602",
+      "title": "EXPANSION TANK SCHEDULE",
+      "classification": "Literal expansion tank schedule rows",
+      "columns": "tag|location|system|manufacturer_model|type|system_volume_gal|low_temp_f|high_temp_f|required_tank_volume_gal|required_acceptance_volume_gal|fluid|charge_pressure_psig|operating_pressure_psig|maop_psig|connection_size_in|operating_weight_lbs|remarks",
+      "x_edges": [
+        470,
+        525,
+        600,
+        710,
+        840,
+        915,
+        975,
+        1035,
+        1100,
+        1165,
+        1240,
+        1325,
+        1390,
+        1450,
+        1510,
+        1575,
+        1625,
+        2170
+      ],
+      "y_ranges": [
+        [
+          145,
+          188
+        ],
+        [
+          188,
+          229
+        ],
+        [
+          229,
+          270
+        ],
+        [
+          270,
+          312
+        ]
+      ],
+      "rows": [
+        "DT-1|MAIN RM.|BOOSTER PUMP DRAWDOWN|ARMSTRONG FX-60|BLADDER|N/A|48|140|16|16|WATER|12|45|150|1/2\"|175|THIS TANK IS PART OF THE WATER BOOSTER PUMP BP-1 ASSEMBLY.",
+        "ET-1|MAIN RM.|EVAPORATOR LOOP|FLAMCO NEXP-023|BLADDER|1100|40|85|23|23|WATER|12|30|125|1\"|420|INSTALL WITH PRESSURE RELIEF VALVE, PRESSURE GAUGE, INTEGRITY MONITOR, AND AIR ACCESS VALVE.",
+        "ET-2|MAIN RM.|CONDENSER LOOP|FLAMCO NEXP-106|BLADDER|1100|48|158|106|106|WATER|12|30|125|1 1/2\"|1200|INSTALL WITH PRESSURE RELIEF VALVE, PRESSURE GAUGE, INTEGRITY MONITOR, AND AIR ACCESS VALVE.",
+        "ET-3|MAIN RM.|TEMPERED WATER LOOP|FLAMCO NEXP-023|BLADDER|300|45|95|23|23|WATER|12|30|125|1\"|282|POTABLE WATER COMPATIBLE BLADDER AND FITTINGS. INSTALL WITH PRESSURE RELIEF VALVE, PRESSURE GAUGE, INTEGRITY MONITOR, AND AIR ACCESS VALVE."
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            470,
+            55,
+            2170,
+            145
+          ],
+          "expected": "EXPANSION TANK SCHEDULE TAG LOCATION SYSTEM MANUFACTURER MODEL TYPE VOLUME FLUID CHARGE PRESS MAOP REMARKS"
+        }
+      ]
+    },
+    {
+      "id": "M602-WSHP-ASSEMBLY-TAG",
+      "page": 14,
+      "sheet": "M-602",
+      "title": "MODULAR HEAT RECOVERY CHILLER SCHEDULE",
+      "classification": "Literal chiller assembly tag in vertically merged source cell",
+      "columns": "tag",
+      "x_edges": [
+        530,
+        590
+      ],
+      "y_ranges": [
+        [
+          700,
+          740
+        ]
+      ],
+      "rows": [
+        "WSHP-1"
+      ],
+      "source_layout_notes": "WSHP-1 is one printed assembly tag spanning the modular equipment and accessory schedule area. It is intentionally not repeated in the five module rows."
+    },
+    {
+      "id": "M602-WSHP-MODULES",
+      "page": 14,
+      "sheet": "M-602",
+      "title": "MODULAR HEAT RECOVERY CHILLER SCHEDULE",
+      "classification": "Literal modular heat-recovery chiller module rows; the assembly tag/location/service are separate vertically merged source cells",
+      "columns": "module|merged_location_serves_source_cell|manufacturer_model|refrigerant_circuits_charge|load_side_ewt_f|load_side_gpm|source_side_ewt_f|source_side_gpm|cooling|heating_mbh|heating_kw_in|heating_lwt_f|full_load_kw_per_ton|full_load_eer|part_load_iplv_kw_per_ton|part_load_iplv_eer|volts|phase|fla|mca|mocp|unit_weight_lbs",
+      "x_edges": [
+        590,
+        650,
+        805,
+        950,
+        1060,
+        1126,
+        1170,
+        1224,
+        1265,
+        1330,
+        1378,
+        1425,
+        1482,
+        1537,
+        1573,
+        1628,
+        1664,
+        1716,
+        1730,
+        1780,
+        1820,
+        1860,
+        1900
+      ],
+      "y_ranges": [
+        [
+          400,
+          456
+        ],
+        [
+          456,
+          511
+        ],
+        [
+          511,
+          566
+        ],
+        [
+          566,
+          621
+        ],
+        [
+          621,
+          676
+        ]
+      ],
+      "rows": [
+        "1||WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS|R-454B / 2 /10 LBS|110|39.9|52|97.4||414.3|32.88|130.78|0.752|16.00|0.575|20.00|480|3|49.50|55.70|80|3,000",
+        "2||WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS|R-454B / 2 /10 LBS|110|39.9|52|97.4||414.3|32.88|130.78|0.752|16.00|0.575|20.00|480|3|49.50|55.70|80|3,000",
+        "3|AERATED MECHANICAL WATER ROOM HEATING|WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS|R-454B / 2 /10 LBS|110|39.9|52|97.4|NA|414.3|32.88|130.78|0.752|16.00|0.575|20.00|480|3|49.50|55.70|80|3,000",
+        "4||WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS|R-454B / 2 /10 LBS|110|39.9|52|97.4||414.3|32.88|130.78|0.752|16.00|0.575|20.00|480|3|49.50|55.70|80|3,000",
+        "5||WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS|R-454B / 2 /10 LBS|110|39.9|52|97.4||414.3|32.88|130.78|0.752|16.00|0.575|20.00|480|3|49.50|55.70|80|3,000"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            540,
+            325,
+            1900,
+            400
+          ],
+          "expected": "MODULAR HEAT RECOVERY CHILLER SCHEDULE MODULE MANUFACTURER REFRIGERANT LOAD SIDE SOURCE SIDE CAPACITIES EFFICIENCY UNIT ELECTRICAL"
+        }
+      ],
+      "source_layout_notes": "The cooling field is a shared vertically centered `NA` cell, physically printed only in the module-3 row band. Blank module cells are kept blank rather than mechanically copied across all five rows."
+    },
+    {
+      "id": "M602-WSHP-ACCESSORIES",
+      "page": 14,
+      "sheet": "M-602",
+      "title": "MODULAR HEAT RECOVERY CHILLER SCHEDULE — ACCESSORIES",
+      "classification": "Literal WSHP accessory schedule rows",
+      "columns": "accessory|manufacturer_model|description|volts|phase|fla|mca|mocp|remarks",
+      "x_edges": [
+        590,
+        730,
+        960,
+        1660,
+        1710,
+        1730,
+        1780,
+        1820,
+        1860,
+        2170
+      ],
+      "y_ranges": [
+        [
+          775,
+          825
+        ],
+        [
+          825,
+          875
+        ],
+        [
+          875,
+          925
+        ],
+        [
+          925,
+          975
+        ],
+        [
+          975,
+          1050
+        ]
+      ],
+      "rows": [
+        "BYPASS HEADER KITS|WATER FURNACE|PIPE ASSEMBLY WITH BYPASS VALVE, WATER PRESSURE AND TEMPERATURE SENSORS.|||NA|||PROVIDE CHECK-TEST-STARTUP AT SITE. ASSEMBLE PER MANUFACTURER INSTRUCTIONS.",
+        "DIFFERENTIAL WATER PRESSURE TRANSDUCERS|WATER FURNACE 19P685-01|DIFFERENTIAL HEADER WATER TRANSUCERS|||NA|||PROVIDE CHECK-TEST-STARTUP AT SITE. ASSEMBLE PER MANUFACTURER INSTRUCTIONS.",
+        "HEADER END CAPS|WATER FURNACE/ VICTAULIC 29P522-03|DUCTILE IRON CAP, COUPLING, AND GASKET|||NA|||PROVIDE CHECK-TEST-STARTUP AT SITE. ASSEMBLE PER MANUFACTURER INSTRUCTIONS.",
+        "STRAINER|WATER FURNACE/ VICTAULIC 23P535-03|STRAINER, DUCTILE IRON BODY, GROOVED END, 30 MESH SS SCREEN.|||NA|||PROVIDE CHECK-TEST-STARTUP AT SITE. ASSEMBLE PER MANUFACTURER INSTRUCTIONS.",
+        "WSHP MASTER CONTROL PANEL|WATER FURNACE HSCDB1DUSSC HYDROLINK SUPERVISORY CONTROL PANEL|HYDROLINK 2 CONTROLLER BACNET/IP CONTROL INTERFACE CONTROL PANEL ENCLOSURE 20.6\" W X 28.5\" H X 6.6\" DEEP|120|1|||20|SUPERVISORY, SEQUENCING, CONTROL PANEL FOR MODULES TO BE PROVIDED BY CHILLER MANUFACTURER. BACNET/IP INTERFACE, TOUCHPAD HMI."
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            590,
+            710,
+            1900,
+            775
+          ],
+          "expected": "ACCESSORY MANUFACTURER MODEL DESCRIPTION VOLTS FLA MCA MOCP"
+        }
+      ]
+    },
+    {
+      "id": "M602-FILTERS-STRAINERS",
+      "page": 14,
+      "sheet": "M-602",
+      "title": "FILTER & STRAINER SCHEDULE",
+      "classification": "Literal filter and strainer schedule rows",
+      "columns": "tag|location|serves|manufacturer_model|filtration|minimum_pressure|pressure_drop|flow_gpm|volts|phase|fla|unit_weight_lbs|remarks",
+      "x_edges": [
+        960,
+        1020,
+        1115,
+        1225,
+        1355,
+        1450,
+        1530,
+        1580,
+        1640,
+        1680,
+        1710,
+        1740,
+        1780,
+        2170
+      ],
+      "y_ranges": [
+        [
+          1140,
+          1180
+        ],
+        [
+          1180,
+          1220
+        ]
+      ],
+      "rows": [
+        "FTR-1|MAIN ROOM|WASTEWATER TO HX-1|TEKLEEN LPF4-LPE PANEL GB6-LPF|100 MICRON, 2.5 SF FILTER|20 PSI|1 PSI|265|110|1|10|200|AUTOMATIC SELF CLEANING FILTER & CONTROL PANEL. 4\" CLASS 150 CONNECTIONS, 1\" NPT FLUSHING BALL VALVE.",
+        "STR-1|MAIN ROOM|WASTEWATER TO HX-1|KECKLEY STYLE GFV 6\"|60 MESH|NONE|0.25 PSI|265|NA|NA|NA|120|BASKET STRAINER. CLASS 125 FLANGE CONNECTIONS."
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            960,
+            1060,
+            2170,
+            1140
+          ],
+          "expected": "FILTER STRAINER SCHEDULE TAG LOCATION SERVES MANUFACTURER MODEL FILTRATION PRESSURE FLOW UNIT ELECTRICAL UNIT WT REMARKS"
+        }
+      ]
+    }
+  ],
+  "assembly_context": {
+    "assembly_tag": "WSHP-1",
+    "location": "MECHANICAL ROOM",
+    "serves": "AERATED WATER HEATING",
+    "assertion_ids": [
+      "m602-wshp-location",
+      "m602-wshp-serves"
+    ],
+    "source_layout_note": "Location and serves are vertical merged cells adjacent to the five literal module rows; they do not repeat in every module row."
+  },
+  "assertions": [
+    {
+      "id": "m602-wshp-location",
+      "page": 14,
+      "bbox": [
+        650,
+        510,
+        735,
+        560
+      ],
+      "expected": "MECHANICAL ROOM",
+      "mode": "exact"
+    },
+    {
+      "id": "m602-wshp-serves",
+      "page": 14,
+      "bbox": [
+        735,
+        510,
+        805,
+        570
+      ],
+      "expected": "AERATED WATER HEATING",
+      "mode": "exact"
+    }
+  ],
+  "inventory_checks": [
+    {
+      "id": "m602-core-table-count",
+      "records_path": [
+        "tables"
+      ],
+      "expected": 5,
+      "unique_key": "id"
+    }
+  ]
+}

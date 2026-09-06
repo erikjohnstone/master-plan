@@ -1,0 +1,21 @@
+{
+  "document_id": "18__vol2__092",
+  "module_role": "Source-template points ledger. M4.02 labels both point lists as typical, so their rows are preserved as authored templates without multiplying them by fan-coil, air-handler, damper or valve schedule quantities.",
+  "ledger_mode": "source_matrix_templates_v1",
+  "source_points_composite": "points_m402 holds the two source lists: six rows for a typical fan coil and five rows for a typical air handling unit.",
+  "ownership_binding_semantics": "M4.02 establishes BASC/EC duties in prose, and M3.01 establishes the MC/BASC split for the two ACD rows, but it does not assign an owner, controller, terminal or transport to every row in either typical list.",
+  "expanded_count_warning": "11 is the count of printed typical-list source rows, not a physical point count, logical I/O total, controller terminal count, or multiplication by the 15 scheduled fan-coil units implied by FCU quantities.",
+  "applications": [
+    {"id": "typical-fan-coil", "source_table": "M402-TYPICAL-FAN-COIL-POINTS", "ownership_scope": "Typical template scope only; no instance mapping, row-level ownership, wiring method or controller terminal is stated."},
+    {"id": "typical-air-handling-unit", "source_table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS", "ownership_scope": "Typical template scope only; no instance mapping, row-level ownership, wiring method or controller terminal is stated."}
+  ],
+  "listed_template_counts": {"source_rows": 11, "tables": 2},
+  "expanded_template_counts": {"source_rows": 11},
+  "installed_IO_total": {"status": "not_stated_in_supplied_set", "value": null, "reason": "No installed equipment-instance points matrix, controller schedule, panel terminal list, network point export or source multiplier is supplied."},
+  "point_transport": {"status": "not_stated_per_symbol", "value": null, "note": "Integration to the existing Siemens BAS is required but no protocol/transport is assigned to individual typical points."},
+  "tables": [],
+  "assertions": [],
+  "inventory_checks": [
+    {"id": "typical-points-applications", "records_path": ["applications"], "expected": 2, "unique_key": "id"}
+  ]
+}

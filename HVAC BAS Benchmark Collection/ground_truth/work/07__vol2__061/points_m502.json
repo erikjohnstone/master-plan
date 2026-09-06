@@ -1,0 +1,1048 @@
+{
+  "document_id": "07__vol2__061",
+  "module_role": "Complete literal M-502 point-matrix capture: AHU, bid-alternate exhaust fan, bid-alternate heat-recovery plant, typical VAV zone and heating-hot-water plant.",
+  "tables": [
+    {
+      "id": "M502-AHU",
+      "sheet": "M-502",
+      "page": 57,
+      "title_as_printed": "AHU POINTS LIST",
+      "columns": "source_row_as_printed",
+      "x_edges": [
+        180,
+        1660
+      ],
+      "y_ranges": [
+        [
+          118.9,
+          129.9
+        ],
+        [
+          132.7,
+          143.7
+        ],
+        [
+          146.6,
+          157.6
+        ],
+        [
+          160.6,
+          171.6
+        ],
+        [
+          174.9,
+          185.9
+        ],
+        [
+          189.2,
+          200.2
+        ],
+        [
+          203.6,
+          214.6
+        ],
+        [
+          218.0,
+          229.0
+        ],
+        [
+          232.4,
+          243.4
+        ],
+        [
+          246.5,
+          257.5
+        ],
+        [
+          260.2,
+          271.2
+        ],
+        [
+          273.9,
+          284.9
+        ],
+        [
+          287.6,
+          298.6
+        ],
+        [
+          301.3,
+          312.3
+        ],
+        [
+          314.2,
+          325.2
+        ],
+        [
+          327.1,
+          338.1
+        ],
+        [
+          341.0,
+          352.0
+        ],
+        [
+          353.9,
+          364.9
+        ],
+        [
+          365.6,
+          376.6
+        ],
+        [
+          377.1,
+          388.1
+        ],
+        [
+          390.1,
+          401.1
+        ],
+        [
+          402.7,
+          413.7
+        ],
+        [
+          415.7,
+          426.7
+        ],
+        [
+          430.3,
+          441.3
+        ],
+        [
+          444.1,
+          455.1
+        ],
+        [
+          457.0,
+          468.0
+        ],
+        [
+          469.0,
+          480.0
+        ],
+        [
+          482.0,
+          493.0
+        ],
+        [
+          495.8,
+          506.8
+        ],
+        [
+          509.70000000000005,
+          520.7
+        ],
+        [
+          523.5,
+          534.5
+        ],
+        [
+          537.4,
+          548.4
+        ],
+        [
+          551.2,
+          562.2
+        ],
+        [
+          565.1,
+          576.1
+        ],
+        [
+          577.7,
+          588.7
+        ],
+        [
+          590.2,
+          601.2
+        ],
+        [
+          604.1,
+          615.1
+        ],
+        [
+          617.9,
+          628.9
+        ],
+        [
+          631.6,
+          642.6
+        ],
+        [
+          645.3,
+          656.3
+        ],
+        [
+          659.2,
+          670.2
+        ],
+        [
+          672.9,
+          683.9
+        ],
+        [
+          685.6,
+          696.6
+        ],
+        [
+          698.8,
+          709.8
+        ],
+        [
+          712.7,
+          723.7
+        ],
+        [
+          727.5,
+          738.5
+        ],
+        [
+          742.4,
+          753.4
+        ],
+        [
+          756.2,
+          767.2
+        ],
+        [
+          770.1,
+          781.1
+        ],
+        [
+          783.9,
+          794.9
+        ],
+        [
+          797.8,
+          808.8
+        ],
+        [
+          811.6,
+          822.6
+        ],
+        [
+          825.5,
+          836.5
+        ],
+        [
+          839.3,
+          850.3
+        ],
+        [
+          852.3,
+          863.3
+        ],
+        [
+          865.3,
+          876.3
+        ],
+        [
+          879.2,
+          890.2
+        ],
+        [
+          893.0,
+          904.0
+        ],
+        [
+          906.9,
+          917.9
+        ],
+        [
+          920.7,
+          931.7
+        ],
+        [
+          934.6,
+          945.6
+        ],
+        [
+          948.4,
+          959.4
+        ],
+        [
+          962.3,
+          973.3
+        ],
+        [
+          976.1,
+          987.1
+        ],
+        [
+          990.1,
+          1001.1
+        ],
+        [
+          1004.0,
+          1015.0
+        ],
+        [
+          1017.8,
+          1028.8
+        ],
+        [
+          1031.7,
+          1042.7
+        ],
+        [
+          1044.5,
+          1055.5
+        ],
+        [
+          1059.4,
+          1070.4
+        ],
+        [
+          1073.2,
+          1084.2
+        ],
+        [
+          1087.1,
+          1098.1
+        ],
+        [
+          1100.9,
+          1111.9
+        ],
+        [
+          1114.9,
+          1125.9
+        ],
+        [
+          1128.8,
+          1139.8
+        ],
+        [
+          1142.6,
+          1153.6
+        ],
+        [
+          1156.5,
+          1167.5
+        ],
+        [
+          1170.3,
+          1181.3
+        ],
+        [
+          1184.2,
+          1195.2
+        ],
+        [
+          1198.0,
+          1209.0
+        ],
+        [
+          1211.9,
+          1222.9
+        ],
+        [
+          1225.7,
+          1236.7
+        ],
+        [
+          1239.7,
+          1250.7
+        ],
+        [
+          1253.6,
+          1264.6
+        ],
+        [
+          1267.4,
+          1278.4
+        ]
+      ],
+      "rows": [
+        "OPERATING MODE - X",
+        "OUTDOOR AIR TEMPERATURE (GLOBAL) °F X",
+        "OUTDOOR AIR RELATIVE HUMIDITY (GLOBAL) % RH X",
+        "OUTDOOR AIR ENTHALPY (GLOBAL) BTU/LB X",
+        "RETURN STATIC PRESSURE (PTE-1) IN. W.C. X",
+        "RETURN AIR RELATIVE HUMIDITY (HTE-1) % RH X IF LESS THAN 30% OR GREATER THAN 60% RELATIVE HUMIDITY FOR MORE THAN 5 MINUTES (adj.)",
+        "RETURN AIR RELATIVE HUMIDITY SETPOINT (HTE-1) % RH X",
+        "RETURN AIR TEMPERATURE (TTE-1) °F X",
+        "RETURN AIR ENTHALPY BTU/LB X",
+        "RETURN AIR LOW PRESSURE SWITCH STATUS (LPS-1) - X IF ACTIVE.",
+        "RETURN FAN (RF-1) STATUS (CS-2) - X IF OFF WHEN COMMANDED ON OR ON WHEN COMMMANDED OFF FOR MOR THAN 5 MINUTES (adj.)",
+        "RETURN FAN (RF-1) ENABLE/DISABLE COMMAND - X",
+        "RETURN FAN (RF-1) SPEED HZ X",
+        "RETURN FAN (RF-1) SPEED COMMAND HZ X",
+        "RETURN FAN (RF-2) STATUS (CS-3) - X IF OFF WHEN COMMANDED ON OR ON WHEN COMMMANDED OFF FOR MOR THAN 5 MINUTES (adj.)",
+        "RETURN FAN (RF-2) ENABLE/DISABLE COMMAND - X",
+        "RETURN FAN (RF-2) SPEED HZ X",
+        "RETURN FAN (RF-2) SPEED COMMAND HZ X",
+        "RETURN FAN (RF-3) STATUS (CS-4) - X IF 5 DEG. F. LESS OR GREATER THAN ACTIVE SETPOINT FOR MORE THAN 10 MINUTES (adj.)",
+        "RETURN FAN (RF-3) ENABLE/DISABLE COMMAND - X",
+        "RETURN FAN (RF-3) SPEED HZ X",
+        "RETURN FAN (RF-3) SPEED COMMAND HZ X",
+        "RETURN FAN (RF-4) STATUS (CS-5) - X IF 5 DEG. F. LESS OR GREATER THAN ACTIVE SETPOINT FOR MORE THAN 10 MINUTES (adj.)",
+        "RETURN FAN (RF-4) ENABLE/DISABLE COMMAND - X",
+        "RETURN FAN (RF-4) SPEED HZ X",
+        "RETURN FAN (RF-4) SPEED COMMAND HZ X",
+        "RETURN AIRFLOW (AFM-1) CFM X",
+        "RETURN HIGH PRESSURE SWITCH (HPS-1) - X IF ACTIVE.",
+        "RELIEF PRESSURE SETPOINT (PTE-2) IN. W.C. X",
+        "RELIEF PRESSURE (PTE-2) IN. W.C. X",
+        "SUPPLY LOW PRESSURE SWITCH (LPS-2) - X IF ACTIVE.",
+        "RELIEF AIR DAMPER POSITION COMMAND (AE-1) % X",
+        "RETURN AIR DAMPER POSITION COMMAND (AE-2) % X",
+        "ECONOMIZER DAMPER POSITION COMMAND (AE-4) % X",
+        "VENTILATION DAMPER POSITION COMMAND (AE-3) % X",
+        "VENTILATION AIRFLOW (AFM-2) CFM X",
+        "MIXED AIR TEMPERATURE (TTE-3) °F X ALARM IF LESS THAN 32 DEG. F. (adj.)",
+        "PRE-FILTER DIFFERENTIAL PRESSURE (DPTE-3) IN. W.C. X ALARM IF GREATER THAN 0.5 IN. W.C.",
+        "HWP-B STATUS (CS-1) - X IF OFF WHEN COMMANDED ON OR ON WHEN COMMMANDED OFF FOR MOR THAN 5 MINUTES (adj.)",
+        "HWP-B ENABLE/DISABLE COMMAND - X",
+        "HEATING COIL VALVE POSITION COMMAND (V-2) % X",
+        "HEATING COIL LEAVING AIR TEMPERATURE (TTE-4) °F X",
+        "HEATING COIL LEAVING AIR TEMPERATURE SETPOINT (TTE-4) °F X",
+        "LOW LIMIT AIR TEMPERATURE SENSOR (LLT-1) - X ALARM IF ACTIVE",
+        "HUMIDIFIER (HUM-A) STATUS - X IF OFF WHEN COMMANDED ON OR ON WHEN COMMMANDED OFF FOR MOR THAN 5 MINUTES (adj.)",
+        "HUMIDIFIER (HUM-A) ENABLE/DISABLE COMMAND - X",
+        "HUMIDIFIER VALVE (V-1) COMMAND % X",
+        "HUMIDIFIER FLOW SWITCH STATUS (FS-1) - X",
+        "DISCHARGE RELATIVE HUMIDITY (HTE-2) % RH X IF GREATER THAN 90% RH (adj.)",
+        "COOLING COIL DISCHARGE AIR TEMPERATURE (TTE-6) °F X IF LESS THAN OR GREATER THAN ACTIVE COOLING SETPOINT BY 2 DEG. F. FOR MORE THAN 10 MINUTES",
+        "COOLING COIL VALVE (V-3) COMMAND % X",
+        "COOLING COIL VALVE (V-4) COMMAND % X",
+        "COOLING COIL DIFFERENTIAL PRESSURE (DPTE-4) IN. W.C. X IF GREATER THAN 1.0 IN. W.C. (adj.)",
+        "SUPPLY FAN (SF-1) STATUS (CS-6) - X",
+        "SUPPLY FAN (SF-1) ENABLE/DISABLE COMMAND - X",
+        "SUPPLY FAN (SF-1) SPEED % X",
+        "SUPPLY FAN (SF-1) SPEED COMMAND - X",
+        "SUPPLY FAN (SF-2) STATUS (CS-7) °F X IF 5 DEG. F. LESS OR GREATER THAN ACTIVE SETPOINT FOR MORE THAN 10 MINUTES (adj.)",
+        "SUPPLY FAN (SF-2) ENABLE/DISABLE COMMAND °F X",
+        "SUPPLY FAN (SF-2) SPEED °F X",
+        "SUPPLY FAN (SF-2) SPEED SETPOINT COMMAND - X",
+        "SUPPLY FAN (SF-3) STATUS (CS-8) - X IF OFF WHEN COMMANDED ON OR ON WHEN COMMMANDED OFF FOR MORE THAN 5 MINUTES (adj.)",
+        "SUPPLY FAN (SF-3) ENABLE/DISABLE COMMAND - X",
+        "SUPPLY FAN (SF-3) SPEED HZ X",
+        "SUPPLY FAN (SF-3) SPEED COMMAND HZ X",
+        "SUPPLY FAN (SF-4) STATUS (CS-9) - X IF OFF WHEN COMMANDED ON OR ON WHEN COMMMANDED OFF FOR MORE THAN 5 MINUTES (adj.)",
+        "SUPPLY FAN (SF-4) ENABLE/DISABLE COMMAND - X",
+        "SUPPLY FAN (SF-4) SPEED HZ X",
+        "SUPPLY FAN (SF-4) SPEED SETPOINT COMMAND HZ X",
+        "SUPPLY FAN (SF-4) STATUS (CS-10) - X IF OFF WHEN COMMANDED ON OR ON WHEN COMMMANDED OFF FOR MORE THAN 5 MINUTES (adj.)",
+        "SUPPLY FAN (SF-5) ENABLE/DISABLE COMMAND - X",
+        "SUPPLY FAN (SF-5) SPEED HZ X",
+        "SUPPLY FAN (SF-5) SPEED SETPOINT COMMAND HZ X",
+        "SUPPLY FAN (SF-6) STATUS (CS-11) - X IF OFF WHEN COMMANDED ON OR ON WHEN COMMMANDED OFF FOR MORE THAN 5 MINUTES (adj.)",
+        "SUPPLY FAN (SF-6) ENABLE/DISABLE COMMAND - X",
+        "SUPPLY FAN (SF-6) SPEED HZ X",
+        "SUPPLY FAN (SF-6) SPEED SETPOINT COMMAND HZ X",
+        "SUPPLY AIRFLOW (AFM-4) CFM X",
+        "FINAL FILTER DIFFERENTIAL PRESSURE (DPTE-5) IN. W.C. X IF GREATER THAN 1.0 IN. W.C. (adj.)",
+        "SUPPLY AIR HIGH PRESSURE SENSOR STATUS (HPS-2) - X IF ACTIVE.",
+        "SUPPLY AIR TEMPERATURE (TTE-7) °F X",
+        "SUPPLY AIR TEMPERATURE SETPOINT (TTE-7) °F X",
+        "HIGH LIMIT DISCHARGE RELATIVE HUMIDITY STATUS (HTE-2) - X IF ACTIVE.",
+        "SUPPLY AIR STATIC PRESSURE (PTE-3) IN. W.C. X",
+        "SUPPLY AIR STATIC PRESSURE SETPOINT (PTE-3) IN. W.C. X"
+      ],
+      "row_reading_order": "left_to_right",
+      "header_evidence": [
+        {
+          "bbox": [
+            1100,
+            55,
+            1280,
+            95
+          ],
+          "expected": "AHU POINTS LIST"
+        }
+      ],
+      "source_row_semantics": "Complete literal source-matrix row, including printed type marks and alarms. It is not an installed controller, terminal, wire, sensor or physical-I/O count."
+    },
+    {
+      "id": "M502-BID-ALT-2-EXHAUST",
+      "sheet": "M-502",
+      "page": 57,
+      "title_as_printed": "BID ALTERNATE #2 EXHAUST FAN POINTS LIST",
+      "columns": "source_row_as_printed",
+      "x_edges": [
+        1700,
+        2700
+      ],
+      "y_ranges": [
+        [
+          120.3,
+          131.3
+        ],
+        [
+          134.2,
+          145.2
+        ],
+        [
+          148.0,
+          159.0
+        ],
+        [
+          161.9,
+          172.9
+        ],
+        [
+          175.7,
+          186.7
+        ],
+        [
+          188.3,
+          199.3
+        ],
+        [
+          200.9,
+          211.9
+        ],
+        [
+          214.7,
+          225.7
+        ],
+        [
+          228.7,
+          239.7
+        ],
+        [
+          242.5,
+          253.5
+        ],
+        [
+          256.4,
+          267.4
+        ],
+        [
+          269.3,
+          280.3
+        ],
+        [
+          282.2,
+          293.2
+        ],
+        [
+          296.1,
+          307.1
+        ],
+        [
+          309.4,
+          320.4
+        ],
+        [
+          322.1,
+          333.1
+        ],
+        [
+          334.9,
+          345.9
+        ],
+        [
+          347.7,
+          358.7
+        ],
+        [
+          360.4,
+          371.4
+        ],
+        [
+          373.1,
+          384.1
+        ],
+        [
+          385.9,
+          396.9
+        ],
+        [
+          399.2,
+          410.2
+        ],
+        [
+          412.9,
+          423.9
+        ],
+        [
+          426.5,
+          437.5
+        ],
+        [
+          440.5,
+          451.5
+        ],
+        [
+          454.3,
+          465.3
+        ]
+      ],
+      "rows": [
+        "EXISTING EXHAUST FAN (EF-1) STATUS (CS-14) - X IF OFF WHEN COMMANDED ON OR ON WHEN COMMANDED OFF FOR MORE THAN 5 MINUTES (adj.)",
+        "EXISTING EXHAUST FAN (EF-1) ENABLE/DISABLE - X",
+        "EXISTING EXHAUST FAN (EF-1) SPEED HZ X",
+        "EXISTING EXHAUST FAN (EF-1) SPEED COMMAND HZ X",
+        "EXHAUST FAN (EF-2) STATUS (CS-12) - X IF OFF WHEN COMMANDED ON OR ON WHEN COMMANDED OFF FOR MORE THAN 5 MINUTES (adj.)",
+        "EXHAUST FAN (EF-2) ENABLE/DISABLE - X",
+        "EXHAUST FAN (EF-2) SPEED HZ X",
+        "EXHAUST FAN (EF-2) SPEED COMMAND HZ X",
+        "EXHAUST FAN (EF-2) AIRFLOW (AFM-5) CFM X",
+        "EXHAUST FAN (EF-3) STATUS (CS-13) - X IF OFF WHEN COMMANDED ON OR ON WHEN COMMANDED OFF FOR MORE THAN 5 MINUTES (adj.)",
+        "EXHAUST FAN (EF-3) ENABLE/DISABLE - X",
+        "EXHAUST FAN (EF-3) SPEED HZ X",
+        "EXHAUST FAN (EF-3) SPEED COMMAND HZ X",
+        "EXHAUST FAN (EF-3) AIRFLOW (AFM-6) CFM X",
+        "EF-1 ISOLATION DAMPER POSITION (EXISTING) % IF CLOSED WHEN COMMANDED ON",
+        "EF-1 ISOLATION DAMPER COMMAND %",
+        "EF-2 ISOLATION DAMPER POSITION (EXISTING) % IF CLOSED WHEN COMMANDED ON FOR MORE THAN 1 MINUTE (adj.)",
+        "EF-2 ISOLATION DAMPER COMMAND %",
+        "EF-3 ISOLATION DAMPER POSITION (EXISTING) % IF CLOSED WHEN COMMANDED ON FOR MORE THAN 1 MINUTE (adj.)",
+        "EF-3 ISOLATION DAMPER COMMAND %",
+        "EF-2 BYPASS DAMPER POSITION (EXISTING) % X",
+        "EF-2 BYPASS DAMPER POSITION COMMAND (EXISTING) % X",
+        "EF-3 BYPASS DAMPER POSITION (EXISTING) % X",
+        "EF-3 DAMPER POSITION COMMAND (EXISTING) % X",
+        "LOW PRESSURE SWITCH STATUS (EXISTING) - X IF ACTIVE.",
+        "FAN STATIC PRESSURE (EXISTING) IN. W.C X IF +/- 20% OF STATIC PRESSURE SETPOINT FOR MORE THAN 10 MINUTES (adj.)"
+      ],
+      "row_reading_order": "left_to_right",
+      "header_evidence": [
+        {
+          "bbox": [
+            1850,
+            55,
+            2440,
+            95
+          ],
+          "expected": "BID ALTERNATE #2 EXHAUST FAN POINTS LIST"
+        }
+      ],
+      "source_row_semantics": "Complete literal source-matrix row, including printed type marks and alarms. It is not an installed controller, terminal, wire, sensor or physical-I/O count."
+    },
+    {
+      "id": "M502-BID-ALT-1-HEAT-RECOVERY",
+      "sheet": "M-502",
+      "page": 57,
+      "title_as_printed": "BID ALTERNATE #1 HEAT RECOVERY PLANT POINTS LIST",
+      "columns": "source_row_as_printed",
+      "x_edges": [
+        1700,
+        2700
+      ],
+      "y_ranges": [
+        [
+          556.3,
+          567.3
+        ],
+        [
+          570.2,
+          581.2
+        ],
+        [
+          584.0,
+          595.0
+        ],
+        [
+          597.9,
+          608.9
+        ],
+        [
+          611.7,
+          622.7
+        ],
+        [
+          625.6,
+          636.6
+        ],
+        [
+          639.5,
+          650.5
+        ],
+        [
+          653.3,
+          664.3
+        ],
+        [
+          667.3,
+          678.3
+        ],
+        [
+          681.1,
+          692.1
+        ],
+        [
+          695.0,
+          706.0
+        ],
+        [
+          708.8,
+          719.8
+        ],
+        [
+          722.8,
+          733.8
+        ],
+        [
+          737.1,
+          748.1
+        ],
+        [
+          751.4,
+          762.4
+        ],
+        [
+          765.7,
+          776.7
+        ],
+        [
+          779.8,
+          790.8
+        ],
+        [
+          794.1,
+          805.1
+        ],
+        [
+          807.7,
+          818.7
+        ],
+        [
+          821.1,
+          832.1
+        ],
+        [
+          835.4,
+          846.4
+        ],
+        [
+          849.7,
+          860.7
+        ],
+        [
+          863.8,
+          874.8
+        ],
+        [
+          879.3,
+          890.3
+        ],
+        [
+          894.7,
+          905.7
+        ],
+        [
+          908.8,
+          919.8
+        ],
+        [
+          923.1,
+          934.1
+        ],
+        [
+          937.4,
+          948.4
+        ],
+        [
+          950.8,
+          961.8
+        ],
+        [
+          964.4,
+          975.4
+        ],
+        [
+          979.4,
+          990.4
+        ],
+        [
+          994.4,
+          1005.4
+        ]
+      ],
+      "rows": [
+        "BYPASS VALVE (V-6) POSITION COMMAND % X",
+        "BYPASS VALVE (V-7) POSITION COMMAND % X",
+        "EVAPORATOR DIFFERENTIAL PRESSURE (DPTE-1) FT. H2O X",
+        "CONDENSER DIFFERNTIAL PRESSURE (DPTE-2) FT. H2O X",
+        "EVAPORATOR LEAVING WATER TEMPERATURE (TTE-1) °F X",
+        "EVAPORATOR ENTERING WATER TEMPERATURE (TTE-2) °F X",
+        "CONDENSER LEAVING WATER TEMPERATURE (TTE-3) °F X IF LESS THAN 30 DEG. F. (adj.)",
+        "CONDENSER ENTERING WATER TEMPERATURE (TTE-5) °F X",
+        "HEAT PUMP (WWHP-A) ENABLE/DISABLE - X",
+        "HEAT PUMP (WWHP-A) CAPACITY COMMAND % X",
+        "HEAT PUMP (WWHP-A) GENERAL ALARM - X IF ACTIVE.",
+        "HEAT RECOVERY PUMP (GWP-A-1) STATUS (CS-17) - X IF OFF WHEN COMMANDED ON OR ON WHEN COMMMANDED OFF FOR MORE THAN 5 MINUTES (adj.)",
+        "HEAT RECOVERY PUMP (GWP-A-1) ENABLE/DISABLE - X",
+        "HEAT RECOVERY PUMP (GWP-A-1) SPEED HZ X",
+        "HEAT RECOVERY PUMP (GWP-A-1) SPEED COMMAND HZ X",
+        "HEAT RECOVERY PUMP (GWP-A-2) STATUS (CS-16) - X IF OFF WHEN COMMANDED ON OR ON WHEN COMMMANDED OFF FOR MORE THAN 5 MINUTES (adj.)",
+        "HEAT RECOVERY PUMP (GWP-A-2) ENABLE/DISABLE - X",
+        "HEAT RECOVERY PUMP (GWP-A-2) SPEED HZ X",
+        "HEAT RECOVERY PUMP (GWP-A-2) SPEED COMMAND HZ X",
+        "HEAT RECOVERY PUMP (GWP-B-1) STATUS (CS-15) - X IF OFF WHEN COMMANDED ON OR ON WHEN COMMMANDED OFF FOR MORE THAN 5 MINUTES (adj.)",
+        "HEAT RECOVERY PUMP (GWP-B-1) ENABLE/DISABLE - X",
+        "HEAT RECOVERY PUMP (GWP-B-1) SPEED HZ X",
+        "HEAT RECOVERY PUMP (GWP-B-1) SPEED COMMAND HZ X",
+        "HEAT RECOVERY PUMP (GWP-B-2) STATUS (CS-14) - X IF OFF WHEN COMMANDED ON OR ON WHEN COMMMANDED OFF FOR MORE THAN 5 MINUTES (adj.)",
+        "HEAT RECOVERY PUMP (GWP-B-2) ENABLE/DISABLE - X",
+        "HEAT RECOVERY PUMP (GWP-B-2) SPEED HZ X",
+        "HEAT RECOVERY PUMP (GWP-B-2) SPEED COMMAND HZ X",
+        "HEAT RECOVERY COIL VALVE COMMAND (V-5) % X",
+        "HEAT RECOVERY COIL LEAVING AIR TEMPERATURE (TTE-4) °F X",
+        "HRU-A HEAT RECOVERY COIL ENTERING TEMPERATURE (TTE-8) °F X",
+        "HRU-A HEAT RECOVERY COIL LEAVING TEMPERATURE (TTE-9) °F X",
+        "HRU-A COIL DIFFERENTIAL PRESSURE (DPTE-6)"
+      ],
+      "row_reading_order": "left_to_right",
+      "header_evidence": [
+        {
+          "bbox": [
+            1850,
+            490,
+            2470,
+            530
+          ],
+          "expected": "BID ALTERNATE #1 HEAT RECOVERY PLANT POINTS LIST"
+        }
+      ],
+      "source_row_semantics": "Complete literal source-matrix row, including printed type marks and alarms. It is not an installed controller, terminal, wire, sensor or physical-I/O count."
+    },
+    {
+      "id": "M502-TYPICAL-VAV-ZONE",
+      "sheet": "M-502",
+      "page": 57,
+      "title_as_printed": "TYPICAL VARIABLE AIR VOLUME ZONE POINTS LIST",
+      "columns": "source_row_as_printed",
+      "x_edges": [
+        1700,
+        2700
+      ],
+      "y_ranges": [
+        [
+          1186.1,
+          1197.1
+        ],
+        [
+          1200.1,
+          1211.1
+        ],
+        [
+          1213.9,
+          1224.9
+        ],
+        [
+          1227.8,
+          1238.8
+        ],
+        [
+          1242.5,
+          1253.5
+        ],
+        [
+          1257.4,
+          1268.4
+        ],
+        [
+          1271.2,
+          1282.2
+        ],
+        [
+          1285.3,
+          1296.3
+        ],
+        [
+          1299.5,
+          1310.5
+        ],
+        [
+          1313.8,
+          1324.8
+        ],
+        [
+          1328.1,
+          1339.1
+        ],
+        [
+          1342.3,
+          1353.3
+        ]
+      ],
+      "rows": [
+        "OCCUPANCY STATUS - X",
+        "OCCUPANCY STATUS COMMAND - X",
+        "ZONE TEMPERATURE °F X IF 3°F (adj.) ABOVE OR BELOW ACTIVE SETPOINT FOR MORE THAN 10 MINUTES (adj.)",
+        "ZONE TEMPERATURE SETPOINT °F X",
+        "VAV AIRFLOW CFM X IF 70% (adj.) OF AIRFLOW SETPOINT FOR MORE THAN 10 MINUTES (adj.)",
+        "VAV MAXIMUM AIRFLOW SETPOINT CFM X",
+        "VAV MAXIMUM HEATING AIRFLOW SETPOINT CFM X",
+        "VAV MINIMUM AIRFLOW SETPOINT CFM X",
+        "VAV DAMPER POSITION % X",
+        "REHEAT COIL DISCHARGE AIR TEMPERATURE °F X IF 10°F (adj.) LESS THAN ACTIVE SETPOINT FOR MORE THAN 10 MINUTES (adj.)",
+        "REHEAT COIL VALVE POSITION COMMAND % X",
+        "HEATING PLANT REQUESTS - X"
+      ],
+      "row_reading_order": "left_to_right",
+      "header_evidence": [
+        {
+          "bbox": [
+            2050,
+            1120,
+            2490,
+            1160
+          ],
+          "expected": "TYPICAL VARIABLE AIR VOLUME ZONE POINTS LIST"
+        }
+      ],
+      "source_row_semantics": "Complete literal source-matrix row, including printed type marks and alarms. It is not an installed controller, terminal, wire, sensor or physical-I/O count."
+    },
+    {
+      "id": "M502-HEATING-HOT-WATER",
+      "sheet": "M-502",
+      "page": 57,
+      "title_as_printed": "HEATING HOT WATER PLANT POINTS LIST",
+      "columns": "source_row_as_printed",
+      "x_edges": [
+        1700,
+        2700
+      ],
+      "y_ranges": [
+        [
+          1445.2,
+          1456.2
+        ],
+        [
+          1459.1,
+          1470.1
+        ],
+        [
+          1472.9,
+          1483.9
+        ],
+        [
+          1486.9,
+          1497.9
+        ],
+        [
+          1500.8,
+          1511.8
+        ],
+        [
+          1514.6,
+          1525.6
+        ],
+        [
+          1528.5,
+          1539.5
+        ],
+        [
+          1542.3,
+          1553.3
+        ],
+        [
+          1556.2,
+          1567.2
+        ],
+        [
+          1570.0,
+          1581.0
+        ],
+        [
+          1583.9,
+          1594.9
+        ],
+        [
+          1597.7,
+          1608.7
+        ],
+        [
+          1611.7,
+          1622.7
+        ],
+        [
+          1625.6,
+          1636.6
+        ],
+        [
+          1639.4,
+          1650.4
+        ],
+        [
+          1653.3,
+          1664.3
+        ],
+        [
+          1667.1,
+          1678.1
+        ],
+        [
+          1681.0,
+          1692.0
+        ],
+        [
+          1695.1,
+          1706.1
+        ],
+        [
+          1709.3,
+          1720.3
+        ],
+        [
+          1723.5,
+          1734.5
+        ],
+        [
+          1737.8,
+          1748.8
+        ],
+        [
+          1752.1,
+          1763.1
+        ],
+        [
+          1766.3,
+          1777.3
+        ],
+        [
+          1780.5,
+          1791.5
+        ]
+      ],
+      "rows": [
+        "NUMBER OF HEATING REQUESTS - X",
+        "STEAM PRESSURE PSIG X IF GREATER THAN 20 PSIG (adj.)",
+        "STEAM VALVE (V-1) POSITION COMMAND % X",
+        "STEAM VALVE (V-2) POSITION COMMAND % X",
+        "STEAM VALVE (V-3) POSITION COMMAND % X",
+        "STEAM VALVE (V-4) POSITION COMMAND % X",
+        "HEAT EXCHANGER (HX-B-1) DIFFERENTIAL PRESSURE FT. H2O X IF GREATER THAN 5 FT. H2O (adj.)",
+        "HEAT EXCHANGER (HX-B-2) DIFFERENTIAL PRESSURE FT. H2O X IF GREATER THAN 5 FT. H2O (adj.)",
+        "HEAT EXCHANGER (V-5) VALVE COMMAND - X",
+        "HEAT EXCHAGNER (V-5) VALVE POSITION % X",
+        "HEAT EXCHANGER (V-6) VALVE COMMAND - X",
+        "HEAT EXCHANGER (V-6) VALVE POSITION % X",
+        "HEATING HOT WATER LEAVING WATER TEMPERATURE °F X IF 10°F (adj.) GREATER THAN SETPOINT FOR MORE THAN 5 MINUTES (adj.)",
+        "HEATING HOT WATER LEAVING WATER TEMPERATURE SETPOINT °F X",
+        "HEATING HOT WATER RETURN WATER TEMPERATURE °F X",
+        "PUMP DIFFERENTIAL PRESSURE SETPOINT FT. H2O X",
+        "PUMP DIFFERENTIAL PRESSURE FT. H2O X",
+        "HEATING HOT WATER PUMP (HWP-A-1) STATUS - X IF OFF WHEN COMMANDED ON OR ON WHEN COMMMANDED OFF FOR MOR THAN 5 MINUTES (adj.)",
+        "HEATING HOT WATER PUMP (HWP-A-1) ENABLE/DISABLE - X",
+        "HEATING HOT WATER PUMP (HWP-A-1) SPEED HZ X",
+        "HEATING HOT WATER PUMP (HWP-A-1) SPEED COMMAND HZ X",
+        "HEATING HOT WATER PUMP (HWP-A-2) STATUS - X IF OFF WHEN COMMANDED ON OR ON WHEN COMMMANDED OFF FOR MOR THAN 5 MINUTES (adj.)",
+        "HEATING HOT WATER PUMP (HWP-A-2) ENABLE/DISABLE - X",
+        "HEATING HOT WATER PUMP (HWP-A-2) SPEED HZ X",
+        "HEATING HOT WATER PUMP (HWP-A-2) SPEED COMMAND HZ X"
+      ],
+      "row_reading_order": "left_to_right",
+      "header_evidence": [
+        {
+          "bbox": [
+            2100,
+            1380,
+            2440,
+            1410
+          ],
+          "expected": "HEATING HOT WATER PLANT POINTS LIST"
+        }
+      ],
+      "source_row_semantics": "Complete literal source-matrix row, including printed type marks and alarms. It is not an installed controller, terminal, wire, sensor or physical-I/O count."
+    }
+  ],
+  "assertions": [],
+  "point_scope": "The 180 printed rows are source-matrix facts, including source spelling and type-mark anomalies. They are not final physical BAS points, controllers, cards, terminals, cable, wiring, device counts, or a per-VAV expansion."
+}

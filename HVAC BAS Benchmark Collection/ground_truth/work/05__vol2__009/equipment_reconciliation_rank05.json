@@ -1,0 +1,339 @@
+{
+  "document_id": "05__vol2__009",
+  "module_role": "Cross-reference registry for every M-601 schedule table. It retains literal schedule identity/classification but does not turn schedule types or rows into plan-instance totals.",
+  "tables": [],
+  "schedule_registry_schema": {
+    "namespace_separator": "-",
+    "identity_columns": {
+      "tag": "tag"
+    },
+    "anchor_records_path": [
+      "primary_anchors"
+    ],
+    "non_instance_table_ids": []
+  },
+  "scheduled_families": [
+    {
+      "module": "schedules_m601_core.json",
+      "bundle_module": "schedules",
+      "table": "M601-AIR-COOLED-CHILLER",
+      "class": "air_cooled_chiller",
+      "scope": "M-601 air-cooled chiller schedule",
+      "rows": 1,
+      "tag": [
+        "CH-1"
+      ]
+    },
+    {
+      "module": "schedules_m601_core.json",
+      "bundle_module": "schedules",
+      "table": "M601-FANS",
+      "class": "exhaust_fan",
+      "scope": "M-601 fan schedule",
+      "rows": 5,
+      "tag": [
+        "EF-1",
+        "EF-2",
+        "EF-3",
+        "EF-5",
+        "EF-6"
+      ]
+    },
+    {
+      "module": "schedules_m601_core.json",
+      "bundle_module": "schedules",
+      "table": "M601-HYDRONIC-CONTROL-VALVES",
+      "class": "hydronic_control_valve",
+      "scope": "M-601 hydronic control-valve schedule",
+      "rows": 2,
+      "tag": [
+        "CV-1",
+        "CV-2"
+      ]
+    },
+    {
+      "module": "schedules_m601_core.json",
+      "bundle_module": "schedules",
+      "table": "M601-AIR-HANDLING-UNITS",
+      "class": "air_handling_unit",
+      "scope": "M-601 air-handling-unit schedule",
+      "rows": 2,
+      "tag": [
+        "AHU-1",
+        "AHU-2"
+      ]
+    },
+    {
+      "module": "schedules_m601_core.json",
+      "bundle_module": "schedules",
+      "table": "M601-VAV-TERMINALS",
+      "class": "vav_terminal_schedule_type",
+      "scope": "M-601 VAV terminal schedule rows; each is an existing balancing-information schedule row, not a facility instance count",
+      "rows": 7,
+      "tag": [
+        "VAV-1-1",
+        "VAV-1-2",
+        "VAV-1-3",
+        "VAV-1-4",
+        "VAV-1-5",
+        "VAV-1-6",
+        "VAV-1-7"
+      ]
+    },
+    {
+      "module": "schedules_m601_core.json",
+      "bundle_module": "schedules",
+      "table": "M601-CHILLED-WATER-PUMPS",
+      "class": "chilled_water_pump",
+      "scope": "M-601 chilled-water-pump schedule",
+      "rows": 2,
+      "tag": [
+        "CWP-1",
+        "CWP-2"
+      ]
+    },
+    {
+      "module": "schedules_m601_core.json",
+      "bundle_module": "schedules",
+      "table": "M601-ELECTRIC-DUCT-HEATERS",
+      "class": "electric_duct_heater",
+      "scope": "M-601 electric-duct-heater schedule",
+      "rows": 5,
+      "tag": [
+        "EDH-1",
+        "EDH-2",
+        "EDH-3",
+        "EDH-4",
+        "EDH-5"
+      ]
+    },
+    {
+      "module": "schedules_m601_air_devices.json",
+      "bundle_module": "schedules",
+      "table": "M601-AIR-DEVICES",
+      "class": "air_device_type",
+      "scope": "M-601 literal air-device type rows with a rotated/merged accessory matrix; no clean equipment-tag column",
+      "rows": 4
+    }
+  ],
+  "schedule_counts": {
+    "tables": 8,
+    "rows": 28,
+    "building_scoped_tag_identities_including_outlet_types": 24,
+    "other_scheduled_tag_identities": 24,
+    "interpretation": "Counts are literal clean-tag schedule-row identities only. The four air-device type rows are separately retained and are not recast as installed outlets."
+  },
+  "primary_anchors": [
+    {
+      "id": "M601-CH-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "air_cooled_chiller",
+      "source_table": "M601-AIR-COOLED-CHILLER"
+    },
+    {
+      "id": "M601-EF-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "exhaust_fan",
+      "source_table": "M601-FANS"
+    },
+    {
+      "id": "M601-EF-2",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "exhaust_fan",
+      "source_table": "M601-FANS"
+    },
+    {
+      "id": "M601-EF-3",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "exhaust_fan",
+      "source_table": "M601-FANS"
+    },
+    {
+      "id": "M601-EF-5",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "exhaust_fan",
+      "source_table": "M601-FANS"
+    },
+    {
+      "id": "M601-EF-6",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "exhaust_fan",
+      "source_table": "M601-FANS"
+    },
+    {
+      "id": "M601-CV-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "hydronic_control_valve",
+      "source_table": "M601-HYDRONIC-CONTROL-VALVES"
+    },
+    {
+      "id": "M601-CV-2",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "hydronic_control_valve",
+      "source_table": "M601-HYDRONIC-CONTROL-VALVES"
+    },
+    {
+      "id": "M601-AHU-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "air_handling_unit",
+      "source_table": "M601-AIR-HANDLING-UNITS"
+    },
+    {
+      "id": "M601-AHU-2",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "air_handling_unit",
+      "source_table": "M601-AIR-HANDLING-UNITS"
+    },
+    {
+      "id": "M601-VAV-1-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "vav_terminal_schedule_type",
+      "source_table": "M601-VAV-TERMINALS"
+    },
+    {
+      "id": "M601-VAV-1-2",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "vav_terminal_schedule_type",
+      "source_table": "M601-VAV-TERMINALS"
+    },
+    {
+      "id": "M601-VAV-1-3",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "vav_terminal_schedule_type",
+      "source_table": "M601-VAV-TERMINALS"
+    },
+    {
+      "id": "M601-VAV-1-4",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "vav_terminal_schedule_type",
+      "source_table": "M601-VAV-TERMINALS"
+    },
+    {
+      "id": "M601-VAV-1-5",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "vav_terminal_schedule_type",
+      "source_table": "M601-VAV-TERMINALS"
+    },
+    {
+      "id": "M601-VAV-1-6",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "vav_terminal_schedule_type",
+      "source_table": "M601-VAV-TERMINALS"
+    },
+    {
+      "id": "M601-VAV-1-7",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "vav_terminal_schedule_type",
+      "source_table": "M601-VAV-TERMINALS"
+    },
+    {
+      "id": "M601-CWP-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "chilled_water_pump",
+      "source_table": "M601-CHILLED-WATER-PUMPS"
+    },
+    {
+      "id": "M601-CWP-2",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "chilled_water_pump",
+      "source_table": "M601-CHILLED-WATER-PUMPS"
+    },
+    {
+      "id": "M601-EDH-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "electric_duct_heater",
+      "source_table": "M601-ELECTRIC-DUCT-HEATERS"
+    },
+    {
+      "id": "M601-EDH-2",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "electric_duct_heater",
+      "source_table": "M601-ELECTRIC-DUCT-HEATERS"
+    },
+    {
+      "id": "M601-EDH-3",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "electric_duct_heater",
+      "source_table": "M601-ELECTRIC-DUCT-HEATERS"
+    },
+    {
+      "id": "M601-EDH-4",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "electric_duct_heater",
+      "source_table": "M601-ELECTRIC-DUCT-HEATERS"
+    },
+    {
+      "id": "M601-EDH-5",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule row.",
+      "classification": "electric_duct_heater",
+      "source_table": "M601-ELECTRIC-DUCT-HEATERS"
+    }
+  ],
+  "additional_identities": [
+    {
+      "status": "source_literal_type_rows_not_clean_equipment_tags",
+      "source": "M-601 / M601-AIR-DEVICES",
+      "marks_as_printed": [
+        "D",
+        "F",
+        "H",
+        "L"
+      ],
+      "reason": "The source has an air-device MARK column and accessory matrix, not a clean installed equipment-tag count."
+    }
+  ],
+  "control_valve_and_damper_schedule_status": {
+    "control_valve_schedule": "Present: M-601 supplies two hydronic control-valve rows, CV-1 and CV-2, with GPM, maximum pressure drop, Cv, valve type/configuration, fluid and fail position.",
+    "damper_actuator_schedule": "No standalone damper-actuator schedule is supplied. M-601 refers to replacing damper actuators and M-801 through M-804 contain damper/sequence context, but no actuator tag/make/model/torque/control-signal/fail-action/installed-quantity schedule is asserted.",
+    "boundary": "Do not infer damper-actuator quantities or specifications from air-device accessory marks, damper legends, planned VAV rows or sequences."
+  },
+  "source_boundary": "The registry validates source schedule coverage and clean identity cells only. It is not an installed device count, plan takeoff or actuator inventory."
+}

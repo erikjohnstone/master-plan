@@ -1,0 +1,60 @@
+{
+  "document_id": "24__vol2__019",
+  "module_role": "Project, sheet, scale and full-page visual-review context for the supplied 24-page Eglin AFB NICoE mechanical and controls set. It preserves only project identity and scope printed on the sheets.",
+  "project": {
+    "project_name_as_printed": "EGLIN AIR FORCE BASE BUILDING XX",
+    "facility_identity_as_printed": "NICoE - National Intrepid Center of Excellence",
+    "location_as_printed": "ASH DR, EGLIN AIR FORCE BASE, FLORIDA 32542",
+    "architect_engineer_as_printed": "SmithGroup",
+    "mep_engineer_as_printed": "SmithGroup MEP-FP Engineering",
+    "issue_as_printed": "CONTRACT DOCUMENTS",
+    "drawing_dates_observed": ["11.08.2018", "01.04.2019"],
+    "project_number_as_printed": "10822.000"
+  },
+  "scope": "Full-page review context for the supplied 24-page Eglin AFB NICoE mechanical and controls PDF. It has general mechanical, HVAC zone/air-terminal/duct/piping plans, details, three schedule sheets and M8.1-M8.8 controls. It does not infer installed plan quantities from symbols or expand control-template rows into final field-device or terminal counts.",
+  "source_scope": {
+    "source_pdf": "pdf/24__vol2__019__Eglin_AFB_NICoE_Mechanical_Controls.pdf",
+    "page_count": 24,
+    "schedule_sheets": ["M7.1", "M7.2", "M7.3"],
+    "controls_sheets": ["M8.1", "M8.2", "M8.3", "M8.4", "M8.5", "M8.6", "M8.7", "M8.8"]
+  },
+  "scale_semantics": {
+    "plan_scales_observed": ["1/8 in = 1 ft-0 in", "1/4 in = 1 ft-0 in", "1 1/2 in = 1 ft-0 in"],
+    "takeoff_scale_status": "multiple printed view scales; no single document-wide scale is asserted",
+    "bar_scale_status": "No graphic scale bar was observed on the supplied mechanical sheets; printed numerical view scales are preserved where visible. Schedule, detail and sequence sheets are not scale-derived."
+  },
+  "visual_review_pages": [
+    {"page":1,"render":"reviews/24__vol2__019/p1-p1-full-poppler.png","finding":"M0.1 mechanical abbreviations, plan symbols, HVAC/piping legend and general notes."},
+    {"page":2,"render":"reviews/24__vol2__019/p2-p2-full-poppler.png","finding":"M2.1 HVAC zone legend locating VAV, DX and FCU zone designations; not used as an unverified symbol count."},
+    {"page":3,"render":"reviews/24__vol2__019/p3-p3-full-poppler.png","finding":"M2.2 ground-floor air-terminal plan with terminal marks and CFM callouts."},
+    {"page":4,"render":"reviews/24__vol2__019/p4-p4-full-poppler.png","finding":"M2.3 ground-floor duct plan with VAV, FCU, exhaust and louver context plus room schedule."},
+    {"page":5,"render":"reviews/24__vol2__019/p5-p5-full-poppler.png","finding":"M2.4 roof plan locating air-cooled condensing units, louvers and exhaust fans."},
+    {"page":6,"render":"reviews/24__vol2__019/p6-p6-full-poppler.png","finding":"M3.1 ground-floor HVAC piping plan and utility-yard chiller context."},
+    {"page":7,"render":"reviews/24__vol2__019/p7-p7-full-poppler.png","finding":"M4.1 enlarged mechanical-room duct and piping plans locating AHU-1, B-1/B-2, pumps, tanks and separators."},
+    {"page":8,"render":"reviews/24__vol2__019/p8-p8-full-poppler.png","finding":"M4.2 mechanical-room sections with AHU, boilers, piping and roof equipment relationships."},
+    {"page":9,"render":"reviews/24__vol2__019/p9-p9-full-poppler.png","finding":"M5.1 hot-water and chilled-water piping diagrams connecting boilers, chiller, pumps, tanks, separators and AHU coils."},
+    {"page":10,"render":"reviews/24__vol2__019/p10-p10-full-poppler.png","finding":"M6.1 mechanical piping details including 2-way/3-way coil valves, air separator, tank, chiller, pump and unit-heater details."},
+    {"page":11,"render":"reviews/24__vol2__019/p11-p11-full-poppler.png","finding":"M6.2 ductwork details including volume dampers, roof ventilator, VAV terminal connections and branch takeoffs."},
+    {"page":12,"render":"reviews/24__vol2__019/p12-p12-full-poppler.png","finding":"M6.3 equipment details including buffer tank, boiler cool-down and base-mounted pump."},
+    {"page":13,"render":"reviews/24__vol2__019/p13-p13-full-poppler.png","finding":"M6.4 AHU views/elevation showing coils, energy wheel, MERV 8/MERV 14 filters, fans and motorized-control-damper context."},
+    {"page":14,"render":"reviews/24__vol2__019/p14-p14-full-poppler.png","finding":"M7.1 primary AHU, fan, coil, chiller, boiler, pump, general-fan and air-separator schedules."},
+    {"page":15,"render":"reviews/24__vol2__019/p15-p15-full-poppler.png","finding":"M7.2 air-device, FCU, condensing-unit, expansion-tank, DX fan-coil, unit-heater, silencer, radiator and louver schedules."},
+    {"page":16,"render":"reviews/24__vol2__019/p16-p16-full-poppler.png","finding":"M7.3 dense VAV box schedule containing VAV-1 through VAV-58."},
+    {"page":17,"render":"reviews/24__vol2__019/p17-p17-full-poppler.png","finding":"M8.1 controls abbreviations, symbols and BAS-point semantics including AI/DI/AO/DO definitions and failure-mode meanings."},
+    {"page":18,"render":"reviews/24__vol2__019/p18-p18-full-poppler.png","finding":"M8.2 system architecture: B-BC-1/B-BC-2/B-BC-3, B-ASC, network gateway, two MSTP VAV trunks and dedicated VFD MSTP trunk."},
+    {"page":19,"render":"reviews/24__vol2__019/p19-p19-full-poppler.png","finding":"M8.3 chilled-water control diagram, written sequence and point function schedule."},
+    {"page":20,"render":"reviews/24__vol2__019/p20-p20-full-poppler.png","finding":"M8.4 heating-hot-water control diagram, written boiler/pump sequence and point function schedule."},
+    {"page":21,"render":"reviews/24__vol2__019/p21-p21-full-poppler.png","finding":"M8.5 AHU-1 control diagram, point function schedule, occupancy schedule, balancing diagram and global HVAC-zone/space-pressure points."},
+    {"page":22,"render":"reviews/24__vol2__019/p22-p22-full-poppler.png","finding":"M8.6 AHU-1 written sequence of operation, diagnostics and direct VFD interface requirements."},
+    {"page":23,"render":"reviews/24__vol2__019/p23-p23-full-poppler.png","finding":"M8.7 constant-air-volume, dual-maximum VAV and VAV diagrams/sequences with a VAV point function schedule."},
+    {"page":24,"render":"reviews/24__vol2__019/p24-p24-full-poppler.png","finding":"M8.8 toilet/mechanical-room exhaust, unit-heater, fan-coil, lighting, radiator, DX, emergency-shutdown and drain-pan sequences plus miscellaneous point schedule."}
+  ],
+  "tables": [],
+  "assertions": [
+    {"id":"m81-controls-legend-title","page":17,"bbox":[2720,1860,2995,1990],"expected":"DRAWING TITLE MECHANICAL CONTROLS - LEGEND","mode":"contains"},
+    {"id":"m83-controls-sheet-title","page":19,"bbox":[2700,1850,3010,2000],"expected":"DRAWING TITLE MECHANICAL CONTROLS - CHILLED WATER SYSTEM","mode":"contains"},
+    {"id":"m84-controls-sheet-title","page":20,"bbox":[2700,1850,3010,2000],"expected":"DRAWING TITLE MECHANICAL CONTROLS - HEATING HOT WATER SYSTEM","mode":"contains"},
+    {"id":"m85-controls-sheet-title","page":21,"bbox":[2700,1850,3010,2000],"expected":"DRAWING TITLE MECHANICAL CONTROLS - AIR HANDLING UNIT AHU-1 DIAGRAM AND POINT LIST","mode":"contains"}
+  ],
+  "inventory_checks": [{"id":"full-page-review-ledger","records_path":["visual_review_pages"],"expected":24,"unique_key":"page"}]
+}

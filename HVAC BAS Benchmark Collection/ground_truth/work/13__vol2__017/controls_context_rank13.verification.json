@@ -1,0 +1,1291 @@
+{
+  "document_id": "13__vol2__017",
+  "source_sha256": "5821df0d298d0e51a6c20ba36b3cc5d2eb7bbece098f12eb1746c339b56a1533",
+  "annotation_sha256": "146e2bab54e598e9f0689f7e5e0502904f13e4423e6a43dc93409667dd452f2d",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 20,
+  "checks": [
+    {
+      "assertion": "m702-a1-fan-time-schedule",
+      "page": 16,
+      "bbox": [
+        2194,
+        329,
+        2730,
+        347
+      ],
+      "expected": "THE DDC ACU CONTROLLER SHALL START AND STOP THE SUPPLY AND RETURN FANS BASED ON A TIME SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THE DDC ACU CONTROLLER SHALL START AND STOP THE SUPPLY AND RETURN FANS BASED ON A TIME SCHEDULE AS DETAILED IN",
+          "word_ids": [
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200,
+            201,
+            202,
+            203,
+            204,
+            205,
+            206
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THE DDC ACU CONTROLLER SHALL START AND STOP THE SUPPLY AND RETURN FANS BASED ON A TIME SCHEDULE AS DETAILED IN",
+          "word_ids": [
+            276,
+            277,
+            278,
+            279,
+            280,
+            281,
+            282,
+            283,
+            284,
+            285,
+            286,
+            287,
+            288,
+            289,
+            290,
+            291,
+            292,
+            293,
+            294,
+            295,
+            296
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m702-a1-preheat-low-outdoor",
+      "page": 16,
+      "bbox": [
+        2194,
+        397,
+        2660,
+        413
+      ],
+      "expected": "THE PREHEAT COIL VALVE SHALL BE OPEN WHEN OUTSIDE AIR TEMPERATURE IS BELOW 36 DEG. F.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ADJUSTABLE). THE PREHEAT COIL VALVE SHALL BE OPEN WHEN OUTSIDE AIR TEMPERATURE IS BELOW 36 DEG. F.",
+          "word_ids": [
+            276,
+            277,
+            278,
+            279,
+            280,
+            281,
+            282,
+            283,
+            284,
+            285,
+            286,
+            287,
+            288,
+            289,
+            290,
+            291,
+            292
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ADJUSTABLE). THE PREHEAT COIL VALVE SHALL BE OPEN WHEN OUTSIDE AIR TEMPERATURE IS BELOW 36 DEG. F.",
+          "word_ids": [
+            487,
+            488,
+            489,
+            490,
+            491,
+            492,
+            493,
+            494,
+            495,
+            496,
+            497,
+            498,
+            499,
+            500,
+            501,
+            502,
+            503
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m702-a1-freezestat-smoke-safety",
+      "page": 16,
+      "bbox": [
+        2194,
+        419,
+        2768,
+        435
+      ],
+      "expected": "SAFETY CONTROLS: PROVIDE A FREEZE STAT (FZ) AND SMOKE DETECTOR SAFETY DEVICES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SAFETY CONTROLS: PROVIDE A FREEZE STAT (FZ) AND SMOKE DETECTOR SAFETY DEVICES AS SHOWN. THEY OPERATE AS FOLLOWS. WHEN",
+          "word_ids": [
+            293,
+            294,
+            295,
+            296,
+            297,
+            298,
+            299,
+            300,
+            301,
+            302,
+            303,
+            304,
+            305,
+            306,
+            307,
+            308,
+            309,
+            310,
+            311
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SAFETY CONTROLS: PROVIDE A FREEZE STAT (FZ) AND SMOKE DETECTOR SAFETY DEVICES AS SHOWN. THEY OPERATE AS FOLLOWS. WHEN",
+          "word_ids": [
+            640,
+            641,
+            642,
+            643,
+            644,
+            645,
+            646,
+            647,
+            648,
+            649,
+            650,
+            651,
+            652,
+            653,
+            654,
+            655,
+            656,
+            657,
+            658
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m702-a1-economizer",
+      "page": 16,
+      "bbox": [
+        2194,
+        656,
+        2735,
+        672
+      ],
+      "expected": "THE ECONOMIZER MODE WILL BE ALLOWED. IN ECONOMIZER MODE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ENTHALPY IS GREATER THAN THE OUTDOOR AIR ENTHALPY, THE ECONOMIZER MODE WILL BE ALLOWED. IN ECONOMIZER MODE THE",
+          "word_ids": [
+            552,
+            553,
+            554,
+            555,
+            556,
+            557,
+            558,
+            559,
+            560,
+            561,
+            562,
+            563,
+            564,
+            565,
+            566,
+            567,
+            568,
+            569
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ENTHALPY IS GREATER THAN THE OUTDOOR AIR ENTHALPY, THE ECONOMIZER MODE WILL BE ALLOWED. IN ECONOMIZER MODE THE",
+          "word_ids": [
+            1342,
+            1343,
+            1344,
+            1345,
+            1346,
+            1347,
+            1348,
+            1349,
+            1350,
+            1351,
+            1352,
+            1353,
+            1354,
+            1355,
+            1356,
+            1357,
+            1358,
+            1359
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m702-a1-cooling-valve",
+      "page": 16,
+      "bbox": [
+        2194,
+        701,
+        2752,
+        717
+      ],
+      "expected": "MECHANICAL COOLING BY MODULATING THE COOLING COIL VALVE (V2)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL COOLING BY MODULATING THE COOLING COIL VALVE (V2), AS REQUIRED TO MAINTAIN THE DISCHARGE AIR SETPOINT (55°F,",
+          "word_ids": [
+            628,
+            629,
+            630,
+            631,
+            632,
+            633,
+            634,
+            635,
+            636,
+            637,
+            638,
+            639,
+            640,
+            641,
+            642,
+            643,
+            644,
+            645
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL COOLING BY MODULATING THE COOLING COIL VALVE (V2), AS REQUIRED TO MAINTAIN THE DISCHARGE AIR SETPOINT (55°F,",
+          "word_ids": [
+            1418,
+            1419,
+            1420,
+            1421,
+            1422,
+            1423,
+            1424,
+            1425,
+            1426,
+            1427,
+            1428,
+            1429,
+            1430,
+            1431,
+            1432,
+            1433,
+            1434,
+            1435
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m702-a1-night-setback",
+      "page": 16,
+      "bbox": [
+        2194,
+        847,
+        2757,
+        864
+      ],
+      "expected": "A NIGHT SETBACK MODE SHALL BE PROVIDED FOR UNOCCUPIED HOURS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "A NIGHT SETBACK MODE SHALL BE PROVIDED FOR UNOCCUPIED HOURS. WHEN THE DDC SYSTEM SPACE TEMPERATURE INDICATES THAT",
+          "word_ids": [
+            740,
+            741,
+            742,
+            743,
+            744,
+            745,
+            746,
+            747,
+            748,
+            749,
+            750,
+            751,
+            752,
+            753,
+            754,
+            755,
+            756,
+            757
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "A NIGHT SETBACK MODE SHALL BE PROVIDED FOR UNOCCUPIED HOURS. WHEN THE DDC SYSTEM SPACE TEMPERATURE INDICATES THAT",
+          "word_ids": [
+            3989,
+            3990,
+            3991,
+            3992,
+            3993,
+            3994,
+            3995,
+            3996,
+            3997,
+            3998,
+            3999,
+            4000,
+            4001,
+            4002,
+            4003,
+            4004,
+            4005,
+            4006
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m702-a1-night-setup",
+      "page": 16,
+      "bbox": [
+        2194,
+        1005,
+        2747,
+        1021
+      ],
+      "expected": "A NIGHT SETUP MODE SHALL BE PROVIDED FOR UNOCCUPIED HOURS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "A NIGHT SETUP MODE SHALL BE PROVIDED FOR UNOCCUPIED HOURS. WHEN THE DDC SYSTEM SPACE TEMPERATURE INDICATES THAT",
+          "word_ids": [
+            921,
+            922,
+            923,
+            924,
+            925,
+            926,
+            927,
+            928,
+            929,
+            930,
+            931,
+            932,
+            933,
+            934,
+            935,
+            936,
+            937,
+            938
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "A NIGHT SETUP MODE SHALL BE PROVIDED FOR UNOCCUPIED HOURS. WHEN THE DDC SYSTEM SPACE TEMPERATURE INDICATES THAT",
+          "word_ids": [
+            3440,
+            3441,
+            3442,
+            3443,
+            3444,
+            3445,
+            3446,
+            3447,
+            3448,
+            3449,
+            3450,
+            3451,
+            3452,
+            3453,
+            3454,
+            3455,
+            3456,
+            3457
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m702-a1-airflow-stations",
+      "page": 16,
+      "bbox": [
+        2194,
+        1343,
+        2765,
+        1359
+      ],
+      "expected": "THE AIR FLOW MEASURING STATIONS (AFMS) FOR THE SUPPLY AIR, RETURN AIR AND OUTSIDE AIR FLOWS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THE AIR FLOW MEASURING STATIONS (AFMS) FOR THE SUPPLY AIR, RETURN AIR AND OUTSIDE AIR FLOWS (SA, RA, OA) SHALL MONITOR AND",
+          "word_ids": [
+            1312,
+            1313,
+            1314,
+            1315,
+            1316,
+            1317,
+            1318,
+            1319,
+            1320,
+            1321,
+            1322,
+            1323,
+            1324,
+            1325,
+            1326,
+            1327,
+            1328,
+            1329,
+            1330,
+            1331,
+            1332,
+            1333
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THE AIR FLOW MEASURING STATIONS (AFMS) FOR THE SUPPLY AIR, RETURN AIR AND OUTSIDE AIR FLOWS (SA, RA, OA) SHALL MONITOR AND",
+          "word_ids": [
+            2603,
+            2604,
+            2605,
+            2606,
+            2607,
+            2608,
+            2609,
+            2610,
+            2611,
+            2612,
+            2613,
+            2614,
+            2615,
+            2616,
+            2617,
+            2618,
+            2619,
+            2620,
+            2621,
+            2622,
+            2623,
+            2624
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m702-a1-humidifier-high-limit",
+      "page": 16,
+      "bbox": [
+        2194,
+        1545,
+        2765,
+        1561
+      ],
+      "expected": "HUMIDIFIER OUTPUT SHALL BE SUBJECT TO DUCT HUMIDISTAT HIGH LIMIT SETPOINT (85%, ADJ.).",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HUMIDIFIER OUTPUT SHALL BE SUBJECT TO DUCT HUMIDISTAT HIGH LIMIT SETPOINT (85%, ADJ.). IF HIGH LIMIT SETPOINT IS EXCEEDED, THE",
+          "word_ids": [
+            1478,
+            1479,
+            1480,
+            1481,
+            1482,
+            1483,
+            1484,
+            1485,
+            1486,
+            1487,
+            1488,
+            1489,
+            1490,
+            1491,
+            1492,
+            1493,
+            1494,
+            1495,
+            1496,
+            1497
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HUMIDIFIER OUTPUT SHALL BE SUBJECT TO DUCT HUMIDISTAT HIGH LIMIT SETPOINT (85%, ADJ.). IF HIGH LIMIT SETPOINT IS EXCEEDED, THE",
+          "word_ids": [
+            2311,
+            2312,
+            2313,
+            2314,
+            2315,
+            2316,
+            2317,
+            2318,
+            2319,
+            2320,
+            2321,
+            2322,
+            2323,
+            2324,
+            2325,
+            2326,
+            2327,
+            2328,
+            2329,
+            2330
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m702-a2-reheat-preheat",
+      "page": 16,
+      "bbox": [
+        870,
+        386,
+        1440,
+        413
+      ],
+      "expected": "THE REHEAT VALVE IS CLOSE. THE PREHEAT COIL VALVE SHALL MODULATE TO MAINTAIN T2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CLOSED. THE RETURN AIR DAMPER IS OPENED. THE REHEAT VALVE IS CLOSE. THE PREHEAT COIL VALVE SHALL MODULATE TO MAINTAIN T2 SETPOINT (45 DEG. F, ADJUSTABLE). THE PREHEAT COIL VALVE SHALL BE OPEN WHEN OUTSIDE AIR TEMPERATURE IS BELOW 36 DEG. F.",
+          "word_ids": [
+            1792,
+            1793,
+            1794,
+            1795,
+            1796,
+            1797,
+            1798,
+            1799,
+            1800,
+            1801,
+            1802,
+            1803,
+            1804,
+            1805,
+            1806,
+            1807,
+            1808,
+            1809,
+            1810,
+            1811,
+            1812,
+            1813,
+            1814,
+            1815,
+            1816,
+            1817,
+            1818,
+            1819,
+            1820,
+            1821,
+            1822,
+            1823,
+            1824,
+            1825,
+            1826,
+            1827,
+            1828,
+            1829,
+            1830,
+            1831,
+            1832,
+            1833
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CLOSED. THE RETURN AIR DAMPER IS OPENED. THE REHEAT VALVE IS CLOSE. THE PREHEAT COIL VALVE SHALL MODULATE TO MAINTAIN T2 SETPOINT (45 DEG. F, ADJUSTABLE). THE PREHEAT COIL VALVE SHALL BE OPEN WHEN OUTSIDE AIR TEMPERATURE IS BELOW 36 DEG. F.",
+          "word_ids": [
+            346,
+            347,
+            348,
+            349,
+            350,
+            351,
+            352,
+            353,
+            354,
+            355,
+            356,
+            357,
+            358,
+            359,
+            360,
+            361,
+            362,
+            363,
+            364,
+            365,
+            366,
+            367,
+            368,
+            369,
+            370,
+            371,
+            372,
+            373,
+            374,
+            375,
+            376,
+            377,
+            378,
+            379,
+            380,
+            381,
+            382,
+            383,
+            384,
+            385,
+            386,
+            387
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m702-a2-cooling-valve",
+      "page": 16,
+      "bbox": [
+        870,
+        836,
+        1448,
+        852
+      ],
+      "expected": "MECHANICAL COOLING BY MODULATING THE COOLING COIL VALVE (V2)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL COOLING BY MODULATING THE COOLING COIL VALVE (V2), AS REQUIRED TO MAINTAIN THE DISCHARGE AIR SETPOINT. ON A RISE",
+          "word_ids": [
+            2276,
+            2277,
+            2278,
+            2279,
+            2280,
+            2281,
+            2282,
+            2283,
+            2284,
+            2285,
+            2286,
+            2287,
+            2288,
+            2289,
+            2290,
+            2291,
+            2292,
+            2293,
+            2294,
+            2295
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL COOLING BY MODULATING THE COOLING COIL VALVE (V2), AS REQUIRED TO MAINTAIN THE DISCHARGE AIR SETPOINT. ON A RISE",
+          "word_ids": [
+            1815,
+            1816,
+            1817,
+            1818,
+            1819,
+            1820,
+            1821,
+            1822,
+            1823,
+            1824,
+            1825,
+            1826,
+            1827,
+            1828,
+            1829,
+            1830,
+            1831,
+            1832,
+            1833,
+            1834
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m702-a2-zone-night-setback",
+      "page": 16,
+      "bbox": [
+        870,
+        903,
+        1448,
+        920
+      ],
+      "expected": "WHEN THE DDC SYSTEM ZONE SENSOR INDICATES THAT THE SPACE TEMPERATURE HAS FALLEN BELOW THE NIGHT SETBACK TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WHEN THE DDC SYSTEM ZONE SENSOR INDICATES THAT THE SPACE TEMPERATURE HAS FALLEN BELOW THE NIGHT SETBACK TEMPERATURE",
+          "word_ids": [
+            2341,
+            2342,
+            2343,
+            2344,
+            2345,
+            2346,
+            2347,
+            2348,
+            2349,
+            2350,
+            2351,
+            2352,
+            2353,
+            2354,
+            2355,
+            2356,
+            2357,
+            2358
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WHEN THE DDC SYSTEM ZONE SENSOR INDICATES THAT THE SPACE TEMPERATURE HAS FALLEN BELOW THE NIGHT SETBACK TEMPERATURE",
+          "word_ids": [
+            4144,
+            4145,
+            4146,
+            4147,
+            4148,
+            4149,
+            4150,
+            4151,
+            4152,
+            4153,
+            4154,
+            4155,
+            4156,
+            4157,
+            4158,
+            4159,
+            4160,
+            4161
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m702-a2-zone-night-setup",
+      "page": 16,
+      "bbox": [
+        870,
+        1027,
+        1430,
+        1044
+      ],
+      "expected": "WHEN THE DDC SYSTEM ZONE SENSOR INDICATES THAT THE SPACE TEMPERATURE HAS RISEN ABOVE THE NIGHT SETUP TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WHEN THE DDC SYSTEM ZONE SENSOR INDICATES THAT THE SPACE TEMPERATURE HAS RISEN ABOVE THE NIGHT SETUP TEMPERATURE",
+          "word_ids": [
+            2433,
+            2434,
+            2435,
+            2436,
+            2437,
+            2438,
+            2439,
+            2440,
+            2441,
+            2442,
+            2443,
+            2444,
+            2445,
+            2446,
+            2447,
+            2448,
+            2449,
+            2450
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WHEN THE DDC SYSTEM ZONE SENSOR INDICATES THAT THE SPACE TEMPERATURE HAS RISEN ABOVE THE NIGHT SETUP TEMPERATURE",
+          "word_ids": [
+            3829,
+            3830,
+            3831,
+            3832,
+            3833,
+            3834,
+            3835,
+            3836,
+            3837,
+            3838,
+            3839,
+            3840,
+            3841,
+            3842,
+            3843,
+            3844,
+            3845,
+            3846
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m702-a2-afms",
+      "page": 16,
+      "bbox": [
+        870,
+        1308,
+        1443,
+        1325
+      ],
+      "expected": "THE AIR FLOW MEASURING STATIONS (AFMS) FOR THE SUPPLY AIR, RETURN AIR AND OUTSIDE AIR FLOWS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THE AIR FLOW MEASURING STATIONS (AFMS) FOR THE SUPPLY AIR, RETURN AIR AND OUTSIDE AIR FLOWS (SA, RA, OA) SHALL MONITOR AND",
+          "word_ids": [
+            2806,
+            2807,
+            2808,
+            2809,
+            2810,
+            2811,
+            2812,
+            2813,
+            2814,
+            2815,
+            2816,
+            2817,
+            2818,
+            2819,
+            2820,
+            2821,
+            2822,
+            2823,
+            2824,
+            2825,
+            2826,
+            2827
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THE AIR FLOW MEASURING STATIONS (AFMS) FOR THE SUPPLY AIR, RETURN AIR AND OUTSIDE AIR FLOWS (SA, RA, OA) SHALL MONITOR AND",
+          "word_ids": [
+            2725,
+            2726,
+            2727,
+            2728,
+            2729,
+            2730,
+            2731,
+            2732,
+            2733,
+            2734,
+            2735,
+            2736,
+            2737,
+            2738,
+            2739,
+            2740,
+            2741,
+            2742,
+            2743,
+            2744,
+            2745,
+            2746
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m702-a3a6-fan-time-schedule",
+      "page": 16,
+      "bbox": [
+        1551,
+        329,
+        2090,
+        347
+      ],
+      "expected": "THE DDC ACU CONTROLLER SHALL START AND STOP THE SUPPLY AND EXHAUST FANS BASED ON A TIME SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THE DDC ACU CONTROLLER SHALL START AND STOP THE SUPPLY AND EXHAUST FANS BASED ON A TIME SCHEDULE AS DETAILED IN",
+          "word_ids": [
+            3090,
+            3091,
+            3092,
+            3093,
+            3094,
+            3095,
+            3096,
+            3097,
+            3098,
+            3099,
+            3100,
+            3101,
+            3102,
+            3103,
+            3104,
+            3105,
+            3106,
+            3107,
+            3108,
+            3109,
+            3110
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THE DDC ACU CONTROLLER SHALL START AND STOP THE SUPPLY AND EXHAUST FANS BASED ON A TIME SCHEDULE AS DETAILED IN",
+          "word_ids": [
+            239,
+            240,
+            241,
+            242,
+            243,
+            244,
+            245,
+            246,
+            247,
+            248,
+            249,
+            250,
+            251,
+            252,
+            253,
+            254,
+            255,
+            256,
+            257,
+            258,
+            259
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m702-a3a6-night-setback",
+      "page": 16,
+      "bbox": [
+        1551,
+        847,
+        2115,
+        864
+      ],
+      "expected": "A NIGHT SETBACK MODE SHALL BE PROVIDED FOR UNOCCUPIED HOURS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "A NIGHT SETBACK MODE SHALL BE PROVIDED FOR UNOCCUPIED HOURS. WHEN THE DDC SYSTEM SPACE TEMPERATURE INDICATES THAT",
+          "word_ids": [
+            3640,
+            3641,
+            3642,
+            3643,
+            3644,
+            3645,
+            3646,
+            3647,
+            3648,
+            3649,
+            3650,
+            3651,
+            3652,
+            3653,
+            3654,
+            3655,
+            3656,
+            3657
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "A NIGHT SETBACK MODE SHALL BE PROVIDED FOR UNOCCUPIED HOURS. WHEN THE DDC SYSTEM SPACE TEMPERATURE INDICATES THAT",
+          "word_ids": [
+            4214,
+            4215,
+            4216,
+            4217,
+            4218,
+            4219,
+            4220,
+            4221,
+            4222,
+            4223,
+            4224,
+            4225,
+            4226,
+            4227,
+            4228,
+            4229,
+            4230,
+            4231
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m702-a3a6-afms",
+      "page": 16,
+      "bbox": [
+        1551,
+        1274,
+        2123,
+        1291
+      ],
+      "expected": "THE AIR FLOW MEASURING STATIONS (AFMS) FOR THE SUPPLY AIR, RETURN AIR AND OUTSIDE AIR FLOWS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THE AIR FLOW MEASURING STATIONS (AFMS) FOR THE SUPPLY AIR, RETURN AIR AND OUTSIDE AIR FLOWS (SA, RA, OA) SHALL MONITOR AND",
+          "word_ids": [
+            4176,
+            4177,
+            4178,
+            4179,
+            4180,
+            4181,
+            4182,
+            4183,
+            4184,
+            4185,
+            4186,
+            4187,
+            4188,
+            4189,
+            4190,
+            4191,
+            4192,
+            4193,
+            4194,
+            4195,
+            4196,
+            4197
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THE AIR FLOW MEASURING STATIONS (AFMS) FOR THE SUPPLY AIR, RETURN AIR AND OUTSIDE AIR FLOWS (SA, RA, OA) SHALL MONITOR AND",
+          "word_ids": [
+            2781,
+            2782,
+            2783,
+            2784,
+            2785,
+            2786,
+            2787,
+            2788,
+            2789,
+            2790,
+            2791,
+            2792,
+            2793,
+            2794,
+            2795,
+            2796,
+            2797,
+            2798,
+            2799,
+            2800,
+            2801,
+            2802
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m703-existing-reference-only",
+      "page": 17,
+      "bbox": [
+        1898,
+        685,
+        2210,
+        702
+      ],
+      "expected": "ALL POINTS ARE EXISTING TO REMAIN AND SHOWN FOR REFERENCE ONLY.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALL POINTS ARE EXISTING TO REMAIN AND SHOWN FOR REFERENCE ONLY.",
+          "word_ids": [
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALL POINTS ARE EXISTING TO REMAIN AND SHOWN FOR REFERENCE ONLY.",
+          "word_ids": [
+            496,
+            497,
+            498,
+            499,
+            500,
+            501,
+            502,
+            503,
+            504,
+            505,
+            506
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m703-alarm-email",
+      "page": 17,
+      "bbox": [
+        1898,
+        714,
+        2238,
+        731
+      ],
+      "expected": "ALARM SIGNALS SHALL NOTIFY UP TO 3 PEOPLE VIA E-MAIL AS DIRECTED BY NIST.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM SIGNALS SHALL NOTIFY UP TO 3 PEOPLE VIA E-MAIL AS DIRECTED BY NIST.",
+          "word_ids": [
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM SIGNALS SHALL NOTIFY UP TO 3 PEOPLE VIA E-MAIL AS DIRECTED BY NIST.",
+          "word_ids": [
+            528,
+            529,
+            530,
+            531,
+            532,
+            533,
+            534,
+            535,
+            536,
+            537,
+            538,
+            539,
+            540,
+            541
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m703-campus-ddc-visible",
+      "page": 17,
+      "bbox": [
+        1898,
+        724,
+        2155,
+        741
+      ],
+      "expected": "ALL POINTS SHALL BE VISIBLE TO THE CAMPUS DDC SYSTEM.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALL POINTS SHALL BE VISIBLE TO THE CAMPUS DDC SYSTEM.",
+          "word_ids": [
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALL POINTS SHALL BE VISIBLE TO THE CAMPUS DDC SYSTEM.",
+          "word_ids": [
+            542,
+            543,
+            544,
+            545,
+            546,
+            547,
+            548,
+            549,
+            550,
+            551
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

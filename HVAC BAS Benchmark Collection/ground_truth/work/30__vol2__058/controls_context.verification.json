@@ -1,0 +1,250 @@
+{
+  "document_id": "30__vol2__058",
+  "source_sha256": "5c0d37ef255d621865fc7e0147ef7cad54321292e4f68d45ae97447d35b8e627",
+  "annotation_sha256": "168b0de8e98fc03eef3da65ef6bc8ae37b3cc2ed4ba62cdb2fb8fa1f40122f8b",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 7,
+  "checks": [
+    {
+      "assertion": "j601-network",
+      "page": 214,
+      "bbox": [
+        1090,
+        1275,
+        1450,
+        1320
+      ],
+      "expected": "BUILDING AUTOMATION NETWORK",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BUILDING AUTOMATION NETWORK",
+          "word_ids": [
+            14,
+            15,
+            16
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BUILDING AUTOMATION NETWORK",
+          "word_ids": [
+            623,
+            624,
+            625
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "j601-bacnet-mstp",
+      "page": 214,
+      "bbox": [
+        1080,
+        1215,
+        1200,
+        1250
+      ],
+      "expected": "BACnet / MS/TP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BACnet / MS/TP",
+          "word_ids": [
+            662,
+            663,
+            664
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BACnet / MS/TP",
+          "word_ids": [
+            601,
+            602,
+            603
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "j604-bacnet",
+      "page": 217,
+      "bbox": [
+        370,
+        455,
+        450,
+        490
+      ],
+      "expected": "BACnet",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BACnet",
+          "word_ids": [
+            341
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BACnet",
+          "word_ids": [
+            79
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "j608-ache-bypass",
+      "page": 221,
+      "bbox": [
+        1000,
+        715,
+        1260,
+        760
+      ],
+      "expected": "ACHE BYPASS CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACHE BYPASS CONTROL",
+          "word_ids": [
+            14,
+            15,
+            16
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACHE BYPASS CONTROL",
+          "word_ids": [
+            132,
+            133,
+            134
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "j608-valve-feedback-a",
+      "page": 221,
+      "bbox": [
+        1620,
+        335,
+        1810,
+        375
+      ],
+      "expected": "ACHE BYPASS A MODULATING VALVE FEEDBACK",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACHE BYPASS A MODULATING VALVE FEEDBACK 120VAC",
+          "word_ids": [
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACHE BYPASS A MODULATING VALVE FEEDBACK 120VAC",
+          "word_ids": [
+            33,
+            34,
+            35,
+            37,
+            38,
+            39,
+            42
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "j608-valve-position-a",
+      "page": 221,
+      "bbox": [
+        1620,
+        305,
+        1800,
+        340
+      ],
+      "expected": "ACHE BYPASS A MODULATING VALVE POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ACHE BYPASS A MODULATING VALVE POSITION",
+          "word_ids": [
+            26,
+            27,
+            28,
+            29,
+            30,
+            31
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ACHE BYPASS A MODULATING VALVE POSITION",
+          "word_ids": [
+            25,
+            26,
+            27,
+            28,
+            29,
+            30
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "j610-controller",
+      "page": 223,
+      "bbox": [
+        200,
+        425,
+        500,
+        480
+      ],
+      "expected": "NEW ACHE BYPASS CONTROLLER CM-61 EXP-01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NEW ACHE BYPASS CONTROLLER CM-61 EXP-01",
+          "word_ids": [
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NEW ACHE BYPASS CONTROLLER CM-61 EXP-01",
+          "word_ids": [
+            648,
+            649,
+            650,
+            651,
+            652,
+            653
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

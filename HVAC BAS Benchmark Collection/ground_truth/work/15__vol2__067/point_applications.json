@@ -1,0 +1,15 @@
+{
+  "document_id": "15__vol2__067",
+  "module_role": "Explicit boundary between M6.3 diagram I/O callouts and a nonexistent supplied installed point/controller-terminal schedule.",
+  "ledger_mode": "source_matrix_templates_v1",
+  "source_points_module": "points_m63.json",
+  "applications": [],
+  "listed_template_counts": {"total": 0},
+  "expanded_template_counts": {"total": 0, "source_rows": 0},
+  "diagram_callout_ledger": {"source_records": 23, "typed_counts": {"AI": 15, "DI": 2, "AO": 4, "DO": 2}, "installed_io_total": {"status": "not_stated_in_supplied_set", "value": null, "reason": "The P&ID labels 23 diagram callouts but contains no final points list, PLC panel I/O card/terminal schedule, wiring diagram or source rule declaring these a complete field I/O count."}},
+  "expanded_count_warning": "Twenty-three typed P&ID callouts are preserved separately in the points module. This source has no standalone matrix or source-stated multiplier/terminal schedule, so zero unprinted applications or installed PLC I/O counts are emitted.",
+  "ownership_binding_semantics": "Pump-specific diagram callouts are associated with the printed pump tags where visibly drawn; all other callouts remain P&ID/system context. Neither that association nor the requested future contractor points list supplies a PLC-terminal quantity.",
+  "tables": [],
+  "assertions": [],
+  "inventory_checks": [{"id": "unexpanded-point-applications", "records_path": ["applications"], "expected": 0, "unique_key": "id"}]
+}

@@ -1,0 +1,264 @@
+{
+  "document_id": "24__vol2__019",
+  "module_role": "M7.1 schedule-tag registry for AHU-1, its supply/relief fans, plant equipment, general fans and air separators. It carries concise literal performance summaries while retaining the source table rows as the authoritative schedule identity anchors.",
+  "source_sheet": "M7.1",
+  "source_page": 14,
+  "tables": [
+    {
+      "id": "M71-AHU",
+      "page": 14,
+      "sheet": "M7.1",
+      "title": "AIR HANDLING UNIT SCHEDULE",
+      "classification": "scheduled air-handling unit",
+      "columns": "mark",
+      "x_edges": [
+        1101.399,
+        1139.579
+      ],
+      "y_ranges": [
+        [
+          162.431,
+          178.431
+        ]
+      ],
+      "rows": [
+        "AHU-1"
+      ]
+    },
+    {
+      "id": "M71-AHU-FANS",
+      "page": 14,
+      "sheet": "M7.1",
+      "title": "AIR HANDLING UNIT FAN SCHEDULE",
+      "classification": "scheduled AHU supply/relief fan",
+      "columns": "mark",
+      "x_edges": [
+        1442.919,
+        1473.775
+      ],
+      "y_ranges": [
+        [
+          371.071,
+          384.031
+        ],
+        [
+          384.031,
+          396.991
+        ],
+        [
+          396.991,
+          409.951
+        ],
+        [
+          409.951,
+          422.911
+        ]
+      ],
+      "rows": [
+        "RF-1",
+        "RF-2",
+        "SF-1",
+        "SF-2"
+      ]
+    },
+    {
+      "id": "M71-CHILLER",
+      "page": 14,
+      "sheet": "M7.1",
+      "title": "CHILLER SCHEDULE (ELECTRIC AIR-COOLED)",
+      "classification": "scheduled air-cooled chiller",
+      "columns": "mark",
+      "x_edges": [
+        450.28,
+        482.095
+      ],
+      "y_ranges": [
+        [
+          772.391,
+          788.391
+        ]
+      ],
+      "rows": [
+        "CH-1"
+      ]
+    },
+    {
+      "id": "M71-BOILER",
+      "page": 14,
+      "sheet": "M7.1",
+      "title": "HOT WATER CONDENSING BOILER SCHEDULE",
+      "classification": "scheduled condensing boiler",
+      "columns": "mark",
+      "x_edges": [
+        1226.199,
+        1250.815
+      ],
+      "y_ranges": [
+        [
+          994.471,
+          1007.431
+        ],
+        [
+          1007.431,
+          1020.391
+        ]
+      ],
+      "rows": [
+        "B-1",
+        "B-2"
+      ]
+    },
+    {
+      "id": "M71-PUMP",
+      "page": 14,
+      "sheet": "M7.1",
+      "title": "PUMP SCHEDULE",
+      "classification": "scheduled pump",
+      "columns": "mark",
+      "x_edges": [
+        468.64,
+        515.695
+      ],
+      "y_ranges": [
+        [
+          1153.711,
+          1166.671
+        ],
+        [
+          1166.671,
+          1179.631
+        ],
+        [
+          1179.631,
+          1192.591
+        ],
+        [
+          1192.591,
+          1205.491
+        ],
+        [
+          1205.491,
+          1218.391
+        ],
+        [
+          1218.391,
+          1231.351
+        ],
+        [
+          1231.351,
+          1244.311
+        ],
+        [
+          1244.311,
+          1257.271
+        ],
+        [
+          1257.271,
+          1270.171
+        ],
+        [
+          1270.171,
+          1283.071
+        ],
+        [
+          1283.071,
+          1296.031
+        ]
+      ],
+      "rows": [
+        "CP-1",
+        "CP-2",
+        "CP-3",
+        "CP-4",
+        "CP-5",
+        "CP-6",
+        "CWP-1",
+        "CWP-2",
+        "HWP-1",
+        "HWP-2",
+        "HWRP-1"
+      ]
+    },
+    {
+      "id": "M71-GENERAL-FAN",
+      "page": 14,
+      "sheet": "M7.1",
+      "title": "GENERAL FAN SCHEDULE",
+      "classification": "scheduled exhaust fan",
+      "columns": "mark",
+      "x_edges": [
+        427.0,
+        457.375
+      ],
+      "y_ranges": [
+        [
+          1481.25,
+          1494.09
+        ],
+        [
+          1494.09,
+          1506.99
+        ],
+        [
+          1506.99,
+          1519.95
+        ],
+        [
+          1519.95,
+          1532.91
+        ]
+      ],
+      "rows": [
+        "EF-1",
+        "EF-2",
+        "EF-3",
+        "EF-4"
+      ]
+    },
+    {
+      "id": "M71-AIR-SEPARATOR",
+      "page": 14,
+      "sheet": "M7.1",
+      "title": "AIR SEPARATOR SCHEDULE",
+      "classification": "scheduled air separator",
+      "columns": "mark",
+      "x_edges": [
+        1787.799,
+        1818.659
+      ],
+      "y_ranges": [
+        [
+          1702.89,
+          1715.73
+        ],
+        [
+          1715.73,
+          1728.57
+        ]
+      ],
+      "rows": [
+        "AS-1",
+        "AS-2"
+      ]
+    }
+  ],
+  "schedule_detail_records": {
+    "AHU-1": "MECH ROOM AHU; 20,150 CFM minimum supply/25,000 CFM design supply/6,500 CFM minimum outside air/21,000 CFM design return air; two supply and two relief fans; HWC/CHWC; air-to-air energy-recovery wheel; Daikin CAC/CAH.",
+    "CH-1": "UTILITY ENCLOSURE air-cooled R410A chiller; 110 tons minimum net cooling, 54/44 F water, 271 GPM design water flow, two passes, 9.20 ft H2O water-side maximum pressure drop, 460 V three phase.",
+    "B-1_and_B-2": "MECHANICAL ROOM condensing boilers: 750 MBH input each, 92% minimum efficiency at 25% firing rate, 42.50 GPM design flow, 110/140 F entering/leaving water, 750 MBH natural gas, 120 V one phase.",
+    "pumps": "The M7.1 pump schedule contains six condensate pumps CP-1 through CP-6, CWP-1/CWP-2 chilled-water centrifugal pumps, HWP-1/HWP-2 heating-water centrifugal pumps, and HWRP-1 AHU-1 heating-water return pump. All rows retain literal schedule marks; numerical values remain source-table scoped.",
+    "fans_and_separators": "EF-1 through EF-4 are scheduled general exhaust fans. AS-1 chilled-water and AS-2 heating-hot-water are flanged in-line air separators; the source prints 271 GPM and 85 GPM respectively, each with 5 ft w.c. maximum pressure drop."
+  },
+  "tables_note": "Every listed mark is a literal schedule identity anchored to its own bounded word cell. A schedule mark is not silently multiplied into plan placements, actuator counts, controller terminals or field-I/O counts.",
+  "assertions": [],
+  "inventory_checks": [
+    {
+      "id": "schedules_m71-families",
+      "records_path": [
+        "tables"
+      ],
+      "expected": 7,
+      "unique_key": "id"
+    }
+  ]
+}

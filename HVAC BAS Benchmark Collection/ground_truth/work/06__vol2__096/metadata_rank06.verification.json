@@ -1,0 +1,209 @@
+{
+  "document_id": "06__vol2__096",
+  "source_sha256": "72da836a803740382b319b718c1f10d8daeff6e5dbe869f1e68ff173ea4092ec",
+  "annotation_sha256": "f02616b7c532505cb8f457cf543c6d341b624c1a598254150427819a529631a6",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 6,
+  "checks": [
+    {
+      "assertion": "rank06-title-owner-project",
+      "page": 1,
+      "bbox": [
+        2800,
+        400,
+        2940,
+        870
+      ],
+      "expected": "VERMILLION COUNTY COMMISSIONERS VERMILLION COUNTY JAIL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VERMILLION COUNTY COMMISSIONERS VERMILLION COUNTY JAIL",
+          "word_ids": [
+            1700,
+            1701,
+            1702,
+            1679,
+            1680,
+            1681
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VERMILLION COUNTY COMMISSIONERS VERMILLION COUNTY JAIL",
+          "word_ids": [
+            2341,
+            2342,
+            2343,
+            2334,
+            2335,
+            2336
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank06-issue",
+      "page": 1,
+      "bbox": [
+        2760,
+        570,
+        2820,
+        715
+      ],
+      "expected": "100% CD Bid Set",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100% CD Bid Set",
+          "word_ids": [
+            1696,
+            1697,
+            1698,
+            1699
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100% CD Bid Set",
+          "word_ids": [
+            2345,
+            2346,
+            2347,
+            2348
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank06-location",
+      "page": 1,
+      "bbox": [
+        2980,
+        620,
+        3010,
+        710
+      ],
+      "expected": "HILLSDALE, IN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HILLSDALE, IN",
+          "word_ids": [
+            1687,
+            1688
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HILLSDALE, IN",
+          "word_ids": [
+            2330,
+            2331
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank06-project-no",
+      "page": 1,
+      "bbox": [
+        2800,
+        1145,
+        2920,
+        1180
+      ],
+      "expected": "#: 17-700-078-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "#: 17-700-078-2",
+          "word_ids": [
+            1677,
+            1678
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "#: 17-700-078-2",
+          "word_ids": [
+            1981,
+            1982
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank06-issue-date",
+      "page": 1,
+      "bbox": [
+        2800,
+        1265,
+        2880,
+        1300
+      ],
+      "expected": "04.12.2021",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "04.12.2021",
+          "word_ids": [
+            1675
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "04.12.2021",
+          "word_ids": [
+            2021
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank06-scale-m210a",
+      "page": 7,
+      "bbox": [
+        800,
+        1625,
+        980,
+        1670
+      ],
+      "expected": "1/8\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FIRST FLOOR 1 1/8\" = 1'-0\"",
+          "word_ids": [
+            658,
+            659,
+            657,
+            654,
+            655,
+            656
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FIRST FLOOR 1 1/8\" = 1'-0\"",
+          "word_ids": [
+            819,
+            820,
+            664,
+            827,
+            828,
+            829
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

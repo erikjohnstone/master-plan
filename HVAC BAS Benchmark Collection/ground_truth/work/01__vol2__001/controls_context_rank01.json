@@ -1,0 +1,551 @@
+{
+  "document_id": "01__vol2__001",
+  "module_role": "Cross-building BAS network, sequence-location and sensor/thermostat context. It cites independently verified source modules and preserves system/template boundaries rather than fabricating installed counts.",
+  "controls_sources": [
+    "MI700 / PDF p50",
+    "MI701 / PDF p51",
+    "MI703 / PDF p53",
+    "MI705 / MI711 / MI713 / MI721 / MI723",
+    "MI730 / PDF p64",
+    "MI741 / PDF p68",
+    "MI742 / PDF p69",
+    "MI743 / PDF p70",
+    "MI744 / PDF p71"
+  ],
+  "network_architecture": {
+    "source_module": "network_mi701.json",
+    "protocol_legend": [
+      {
+        "protocol": "BACNET IP",
+        "source_assertion_refs": [
+          "legend-bacnet-ip"
+        ]
+      },
+      {
+        "protocol": "BACNET MS/TP",
+        "source_assertion_refs": [
+          "legend-bacnet-mstp"
+        ]
+      },
+      {
+        "protocol": "BACNET MS/TP - UUKL NETWORK",
+        "source_assertion_refs": [
+          "legend-uukl"
+        ]
+      },
+      {
+        "protocol": "GENERIC NETWORK AS REQUIRED FOR SYSTEM",
+        "source_assertion_refs": [
+          "legend-generic-network"
+        ]
+      }
+    ],
+    "nae_cabinet_locations": [
+      {
+        "building_scope": "ATCT",
+        "location": "DDC control cabinet in mechanical room 2102",
+        "source_assertion_refs": [
+          "atct-nae-location"
+        ]
+      },
+      {
+        "building_scope": "MTRACON",
+        "location": "DDC control cabinet in mechanical room 171",
+        "source_assertion_refs": [
+          "mtracon-nae-location"
+        ]
+      },
+      {
+        "building_scope": "Air Operations",
+        "location": "DDC control cabinet in mechanical room 152",
+        "source_assertion_refs": [
+          "air-ops-nae-location"
+        ]
+      }
+    ],
+    "named_controller_nodes": [
+      {
+        "building_scope": "Air Operations",
+        "node": "BOILER PLANT MASTER CONTROLLER (B-AAC)",
+        "source_assertion_refs": [
+          "air-ops-boiler-master"
+        ]
+      },
+      {
+        "building_scope": "Air Operations",
+        "node": "CHILLER PLANT MASTER CONTROLLER (B-AAC)",
+        "source_assertion_refs": [
+          "air-ops-chiller-master"
+        ]
+      },
+      {
+        "building_scope": "Air Operations",
+        "node": "AHU-A1 CONTROLLER (B-AAC)",
+        "source_assertion_refs": [
+          "air-ops-ahu-a1"
+        ]
+      },
+      {
+        "building_scope": "Air Operations",
+        "node": "DOAH-A1 CONTROLLER (B-AAC)",
+        "source_assertion_refs": [
+          "air-ops-doah-a1"
+        ]
+      },
+      {
+        "building_scope": "Air Operations",
+        "node": "AHU-A2 CONTROLLER (B-AAC)",
+        "source_assertion_refs": [
+          "air-ops-ahu-a2"
+        ]
+      },
+      {
+        "building_scope": "Air Operations",
+        "node": "DOAH-A2 CONTROLLER (B-AAC)",
+        "source_assertion_refs": [
+          "air-ops-doah-a2"
+        ]
+      },
+      {
+        "building_scope": "MTRACON",
+        "node": "BOILER PLANT MASTER CONTROLLER (B-AAC)",
+        "source_assertion_refs": [
+          "mtracon-boiler-master"
+        ]
+      },
+      {
+        "building_scope": "MTRACON",
+        "node": "CHILLER PLANT MASTER CONTROLLER (B-AAC)",
+        "source_assertion_refs": [
+          "mtracon-chiller-master"
+        ]
+      },
+      {
+        "building_scope": "MTRACON",
+        "node": "AHU-M1 CONTROLLER (B-AAC)",
+        "source_assertion_refs": [
+          "mtracon-ahu-m1"
+        ]
+      },
+      {
+        "building_scope": "MTRACON",
+        "node": "DOAH-M1 CONTROLLER (B-AAC)",
+        "source_assertion_refs": [
+          "mtracon-doah-m1"
+        ]
+      },
+      {
+        "building_scope": "ATCT",
+        "node": "BOILER PLANT MASTER CONTROLLER (B-AAC)",
+        "source_assertion_refs": [
+          "atct-boiler-master"
+        ]
+      },
+      {
+        "building_scope": "ATCT",
+        "node": "ATCT CHW PUMP MASTER CONTROLLER (B-AAC)",
+        "source_assertion_refs": [
+          "atct-chw-pump-master"
+        ]
+      },
+      {
+        "building_scope": "ATCT",
+        "node": "AHU MASTER CONTROLLER (B-AAC)",
+        "source_assertion_refs": [
+          "atct-ahu-master"
+        ]
+      },
+      {
+        "building_scope": "ATCT",
+        "node": "DOAH-T1 CONTROLLER (B-AAC)",
+        "source_assertion_refs": [
+          "atct-doah-t1"
+        ]
+      },
+      {
+        "building_scope": "ATCT",
+        "node": "STAIR PRESS. CONTROLLER (B-AAC)",
+        "source_assertion_refs": [
+          "atct-stair-press"
+        ]
+      }
+    ],
+    "external_interfaces": [
+      {
+        "interface": "Fiber patch cable to fiber patch panel in telemetry panel (by MCAS Cherry Point)",
+        "source_assertion_refs": [
+          "fiber-patch-interface"
+        ]
+      },
+      {
+        "interface": "Energy meter network connection (by MCAS Cherry Point)",
+        "source_assertion_refs": [
+          "energy-meter-interface"
+        ]
+      },
+      {
+        "interface": "Control-box tamper alarm to DDC via NAE",
+        "source_assertion_refs": [
+          "tamper-alarm"
+        ]
+      },
+      {
+        "interface": "MSTP NAE connection conveys heating-plant status to enable heat-recovery chiller",
+        "source_assertion_refs": [
+          "heat-recovery-interface"
+        ]
+      },
+      {
+        "interface": "Stair pressurization sequence is directed to fire protection; TO FACP is printed",
+        "source_assertion_refs": [
+          "fire-protection-reference",
+          "to-facp"
+        ]
+      }
+    ],
+    "not_stated": [
+      "controller make/model beyond printed B-AAC/B-ASC designations",
+      "network addresses",
+      "IP subnet/VLAN design",
+      "MS/TP device addressing",
+      "panel/card/terminal count",
+      "field-wiring schedule"
+    ]
+  },
+  "sequence_of_operations": {
+    "source_bounded_ledgers": [
+      {
+        "source_module": "sequence_air_ops_mtracon_doah.json",
+        "source_sheet": "MI703",
+        "source_page": 53,
+        "system_scope": "Air Operations/MTRACON DOAH sequence",
+        "bounded_sequence_assertions": 22,
+        "module_scope": "Full-sheet MI703 Air Ops/MTRACON dedicated-outdoor-air-handling-unit sequence context. This captures the written operating behavior and printed setpoints; it does not assign the reusable DOAH points list to undocumented field controller terminals."
+      },
+      {
+        "source_module": "sequences_air_ops_and_shared_hydronics.json",
+        "source_sheet": "MI705 / MI711 / MI713 / MI721 / MI723",
+        "source_page": null,
+        "system_scope": "Air Operations AHU and shared chilled/heating-water sequences",
+        "bounded_sequence_assertions": 22,
+        "module_scope": "Full-page sequence context for MI705, MI711, MI713, MI721 and MI723. It preserves high-value written AHU, chilled-water and heating-hot-water behavior without converting sequence prose into unprinted installed I/O, controller terminals or plan quantities."
+      },
+      {
+        "source_module": "sequence_atct_doah_t1.json",
+        "source_sheet": "MI730",
+        "source_page": 64,
+        "system_scope": "ATCT DOAH-T1 sequence",
+        "bounded_sequence_assertions": 18,
+        "module_scope": "Bounded, source-text assertions from the ATCT DOAH-T1 sequence of operation on MI730 (source PDF page 64). It identifies key control logic, safeties, alarms and setpoints without claiming that the remainder of the 75-page document has been sequence-audited."
+      },
+      {
+        "source_module": "sequence_crah_sfpvav.json",
+        "source_sheet": "MI741",
+        "source_page": 68,
+        "system_scope": "CRAH and series-fan-powered-VAV templates",
+        "bounded_sequence_assertions": 27,
+        "module_scope": "Bounded, source-text assertions from the CRAH and series-fan powered VAV sequences of operation on MI741 (source PDF page 68). The module records explicit control logic, safeties, alarms and setpoints without claiming that the rest of the 75-page source document has been sequence-audited."
+      },
+      {
+        "source_module": "sequence_mi742.json",
+        "source_sheet": "MI742",
+        "source_page": 69,
+        "system_scope": "humidifier, UPS exhaust, bathroom exhaust and elevator-machine-room templates",
+        "bounded_sequence_assertions": 24,
+        "module_scope": "Bounded source-text assertions from the humidifier, UPS battery exhaust fan, bathroom exhaust fan, and elevator machine room sequences of operation on MI742 (source PDF page 69). These assertions preserve explicit logic and source spellings; they do not claim the rest of the source document is sequence-audited."
+      },
+      {
+        "source_module": "sequence_air_ops_heating_ventilating.json",
+        "source_sheet": "MI743",
+        "source_page": 70,
+        "system_scope": "Air Operations heating/ventilating sequence",
+        "bounded_sequence_assertions": 10,
+        "module_scope": "Bounded source-text assertions from the Air Operations storage-bay heating-and-ventilating sequence of operation on MI743 (source PDF page 70). The source's copy-forward terminology is retained and not corrected to an inferred system description."
+      },
+      {
+        "source_module": "sequence_mi744_fcu_sfpvav.json",
+        "source_sheet": "MI744",
+        "source_page": 71,
+        "system_scope": "occupied/redundant FCU and SPFVAV/FCU sequence",
+        "bounded_sequence_assertions": 16,
+        "module_scope": "Bounded source-text assertions from MI744's occupied fan-coil and SPFVAV/redundant-FCU sequences (source PDF page 71). Source spellings and source-specific application scope are retained; no additional FCU instances or physical I/O are inferred."
+      }
+    ],
+    "summary": "Written sequence evidence is present on all listed sources. Each sequence module retains its literal bounded statements; this context ledger records source/sheet coverage and does not convert prose into additional unprinted I/O."
+  },
+  "control_diagram_bindings": [
+    {
+      "source_sheet": "MI702/MI703",
+      "system": "Air Operations/MTRACON DOAH",
+      "equipment_scope": [
+        "DOAH-A1",
+        "DOAH-A2",
+        "DOAH-M1"
+      ]
+    },
+    {
+      "source_sheet": "MI704/MI705",
+      "system": "Air Operations/MTRACON AHUs",
+      "equipment_scope": [
+        "AHU-A1",
+        "AHU-A2",
+        "AHU-M1"
+      ]
+    },
+    {
+      "source_sheet": "MI710-MI713",
+      "system": "Air Operations chilled/hot water",
+      "equipment_scope": [
+        "Air Operations CHW/HHW plants"
+      ]
+    },
+    {
+      "source_sheet": "MI720-MI723",
+      "system": "MTRACON/ATCT chilled/hot water",
+      "equipment_scope": [
+        "shared MTRACON/ATCT CHW/HHW plants"
+      ]
+    },
+    {
+      "source_sheet": "MI730-MI732",
+      "system": "ATCT",
+      "equipment_scope": [
+        "DOAH-T1",
+        "AHU-T1A",
+        "AHU-T1B",
+        "stair pressurization"
+      ]
+    },
+    {
+      "source_sheet": "MI740-MI744",
+      "system": "template controls",
+      "equipment_scope": [
+        "FCU",
+        "unit heater",
+        "CRAH",
+        "SFPVAV",
+        "humidifier",
+        "exhaust",
+        "elevator machine room"
+      ]
+    }
+  ],
+  "sensor_and_zone_ledger": [
+    {
+      "source_scope": "assembled 546 printed point-list rows",
+      "sensor_or_thermostat_mapping": "Seven literal SPACE TEMPERATURE rows occur in Air Operations MI743, MI740, MI741 and MI744 reusable/system templates.",
+      "literal_rows": [
+        {
+          "sheet": "MI743",
+          "table": "AIR-OPS-HV-AI",
+          "row": 1,
+          "point_name": "SPACE TEMPERATURE"
+        },
+        {
+          "sheet": "MI741",
+          "table": "CRAH-AI",
+          "row": 1,
+          "point_name": "SPACE TEMPERATURE"
+        },
+        {
+          "sheet": "MI741",
+          "table": "SFPVAV-AI",
+          "row": 1,
+          "point_name": "SPACE TEMPERATURE"
+        },
+        {
+          "sheet": "MI740",
+          "table": "FCU-COOL-AI",
+          "row": 1,
+          "point_name": "SPACE TEMPERATURE"
+        },
+        {
+          "sheet": "MI740",
+          "table": "FCU-HEAT-COOL-AI",
+          "row": 1,
+          "point_name": "SPACE TEMPERATURE"
+        },
+        {
+          "sheet": "MI740",
+          "table": "UNIT-HEATER-AI",
+          "row": 1,
+          "point_name": "SPACE TEMPERATURE"
+        },
+        {
+          "sheet": "MI744",
+          "table": "OCCUPIED-FCU-HEAT-COOL-AI",
+          "row": 1,
+          "point_name": "SPACE TEMPERATURE"
+        }
+      ],
+      "count_status": "seven source-template occurrences; not a project-installed thermostat/sensor quantity."
+    },
+    {
+      "source_scope": "MI731 ATCT AHU point list",
+      "sensor_or_thermostat_mapping": "One literal SPACE THERMOSTAT point row is listed.",
+      "literal_rows": [
+        {
+          "sheet": "MI731",
+          "table": "ATCT-AHU-AI",
+          "row": 20,
+          "point_name": "SPACE THERMOSTAT"
+        }
+      ],
+      "count_status": "one source-template occurrence; no building-wide installation multiplier is stated."
+    },
+    {
+      "source_scope": "MI700 legend and assembled point lists",
+      "sensor_or_thermostat_mapping": "MI700 defines a carbon-dioxide-monitor symbol, but none of the 546 extracted point-name cells contains CO2; this is a point-list-only observation, not a visual claim that the full drawings contain no CO2 sensor.",
+      "literal_rows": [],
+      "count_status": "CO2 point-list count is zero; full-plan symbol count remains not performed."
+    },
+    {
+      "source_scope": "MI704/MI702/MI730/MI731/MI742 point templates",
+      "sensor_or_thermostat_mapping": "Humidity-related point rows are retained in source context for mixed air, supply air, energy wheel/outdoor air, space, zone and elevator-machine-room templates.",
+      "literal_rows": [
+        {
+          "sheet": "MI704",
+          "table": "AIR-OPS-AHU-AI",
+          "row": 3,
+          "point_name": "MA HUMIDITY"
+        },
+        {
+          "sheet": "MI704",
+          "table": "AIR-OPS-AHU-AI",
+          "row": 11,
+          "point_name": "SA HUMIDITY"
+        },
+        {
+          "sheet": "MI702",
+          "table": "AIR-OPS-DOAH-AI",
+          "row": 5,
+          "point_name": "ERW LEAVING AIR HUMIDITY - OA SIDE"
+        },
+        {
+          "sheet": "MI702",
+          "table": "AIR-OPS-DOAH-AI",
+          "row": 13,
+          "point_name": "TOA HUMIDITY"
+        },
+        {
+          "sheet": "MI702",
+          "table": "AIR-OPS-DOAH-AI",
+          "row": 17,
+          "point_name": "ERW LEAVING AIR HUMIDITY - EA SIDE"
+        },
+        {
+          "sheet": "MI702",
+          "table": "AIR-OPS-DOAH-AI",
+          "row": 21,
+          "point_name": "ERW ENTERING AIR HUMIDITY - EA SIDE"
+        },
+        {
+          "sheet": "MI731",
+          "table": "ATCT-AHU-AI",
+          "row": 18,
+          "point_name": "HIGH LIMIT HUMIDISTAT"
+        },
+        {
+          "sheet": "MI731",
+          "table": "ATCT-AHU-AI",
+          "row": 19,
+          "point_name": "SPACE HUMIDITY"
+        },
+        {
+          "sheet": "MI731",
+          "table": "ATCT-AHU-AI",
+          "row": 21,
+          "point_name": "HUMIDIFIER CONTROL"
+        },
+        {
+          "sheet": "MI731",
+          "table": "ATCT-AHU-AO",
+          "row": 7,
+          "point_name": "HUMIDIFIER OUTPUT"
+        },
+        {
+          "sheet": "MI730",
+          "table": "ATCT-DOAH-AI",
+          "row": 1,
+          "point_name": "UOA RELATIVE HUMIDITY"
+        },
+        {
+          "sheet": "MI730",
+          "table": "ATCT-DOAH-AI",
+          "row": 7,
+          "point_name": "TOA HUMIDITY"
+        },
+        {
+          "sheet": "MI742",
+          "table": "HUMIDIFIER-AI",
+          "row": 1,
+          "point_name": "ZONE HUMIDITY"
+        },
+        {
+          "sheet": "MI742",
+          "table": "HUMIDIFIER-BI",
+          "row": 1,
+          "point_name": "HUMIDIFER STATUS"
+        },
+        {
+          "sheet": "MI742",
+          "table": "HUMIDIFIER-BI",
+          "row": 2,
+          "point_name": "HUMIDIFIER CYLINDER CHANGE STATUS"
+        },
+        {
+          "sheet": "MI742",
+          "table": "HUMIDIFIER-BI",
+          "row": 3,
+          "point_name": "HUMIDIFIER DDC RESET"
+        },
+        {
+          "sheet": "MI742",
+          "table": "HUMIDIFIER-BO",
+          "row": 1,
+          "point_name": "HUMIDIFIER START/STOP"
+        },
+        {
+          "sheet": "MI742",
+          "table": "ELEVATOR-MACHINE-ROOM-AI",
+          "row": 2,
+          "point_name": "HUMIDITY SENSOR"
+        },
+        {
+          "sheet": "MI742",
+          "table": "ELEVATOR-MACHINE-ROOM-AI",
+          "row": 3,
+          "point_name": "HUMIDIFIER OUTPUT"
+        },
+        {
+          "sheet": "MI742",
+          "table": "ELEVATOR-MACHINE-ROOM-AO",
+          "row": 1,
+          "point_name": "HUMIDIFIER CONTROL"
+        }
+      ],
+      "count_status": "template occurrences only; no global sensor quantity or zone multiplier is asserted."
+    }
+  ],
+  "tables": [],
+  "assertions": [],
+  "inventory_checks": [
+    {
+      "id": "rank01-sequence-source-ledgers",
+      "records_path": [
+        "sequence_of_operations",
+        "source_bounded_ledgers"
+      ],
+      "expected": 7,
+      "unique_key": "source_module"
+    },
+    {
+      "id": "rank01-control-diagram-bindings",
+      "records_path": [
+        "control_diagram_bindings"
+      ],
+      "expected": 6,
+      "unique_key": "source_sheet"
+    }
+  ]
+}

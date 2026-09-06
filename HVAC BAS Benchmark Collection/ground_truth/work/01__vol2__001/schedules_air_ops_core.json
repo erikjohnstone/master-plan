@@ -1,0 +1,194 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All populated equipment schedule rows on Air Operations sheet M-601 (source PDF page 42): AHU, both DOAH table parts, FCU, pump and boiler. These are printed schedule rows, not asserted installed-plan quantities. The remaining schedule sheets/pages require separate exhaustive review.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "blank_cell_semantics": "An empty pipe-delimited field is a visually blank printed schedule cell; it is neither a zero nor unknown work. A literal dash is retained as printed.",
+  "visual_review": {
+    "pages": [42],
+    "render": "reviews/01__vol2__001/p42-schedules-poppler.png",
+    "dpi": 180,
+    "finding": "The rendered M-601 page was visually reviewed separately from native-parser corroboration. Table rules, title/row alignment, headers, footnotes and the visually blank DOAH-circulator remarks cells agree with every bounded M-601 annotation below. The six tables exhaust this page's printed equipment schedules; other sheets, plan installation counts and BAS ownership remain outside this module."
+  },
+  "tables": [
+    {
+      "id": "AIR-OPS-PUMP",
+      "page": 42,
+      "sheet": "M-601",
+      "building_scope": "Air Operations",
+      "title": "PUMP SCHEDULE",
+      "classification": "Hydronic pumps / circulators",
+      "columns": "mark|service|type|flow_GPM|TDH_ft_water_column|motor_RPM|min_motor_HP|speed_control|volts|phase|Hz|VFD_or_disconnect_provided_by|remarks",
+      "x_edges": [145, 260, 475, 607, 678, 743, 824, 890, 968, 1030, 1098, 1151, 1265, 1332],
+      "y_ranges": [[1332, 1351], [1351, 1368], [1368, 1385], [1385, 1403], [1403, 1420], [1420, 1438], [1438, 1455], [1455, 1473]],
+      "rows": [
+        "HHWP-DOAH-A1|DOAH CIRCULATOR|INLINE CIRCULATOR|6.7|22|3250|1/8|-|120|1|60|DIVISION 23|",
+        "HHWP-DOAH-A2|DOAH CIRCULATOR|INLINE CIRCULATOR|4.6|20|3250|1/8|-|120|1|60|DIVISION 23|",
+        "PCHWP-A1|PRIMARY CHILLED WATER PUMP|VERTICAL INLINE|171|109|1760|10|VFD|460|3|60|DIVISION 23|2",
+        "PCHWP-A2|PRIMARY CHILLED WATER PUMP|VERTICAL INLINE|171|109|1760|10|VFD|460|3|60|DIVISION 23|2",
+        "PHHWP-A1|PRIMARY HEATING HOT WATER PUMP|INLINE CIRCULATOR|33|21|1750|1/4|VFD|120|1|60|DIVISION 23|1,2",
+        "PHHWP-A2|PRIMARY HEATING HOT WATER PUMP|INLINE CIRCULATOR|33|21|1750|1/4|VFD|120|1|60|DIVISION 23|1,2",
+        "SHHWP-A1|SECONDARY HEATING HOT WATER PUMP|VERTICAL INLINE|51|68|1760|2|VFD|460|3|60|DIVISION 23|2",
+        "SHHWP-A2|SECONDARY HEATING HOT WATER PUMP|VERTICAL INLINE|51|68|1760|2|VFD|460|3|60|DIVISION 23|2"
+      ],
+      "notes": [
+        "1. PROVIDE WITH BOILER, COORDINATE PRESSURE DROP WITH BOILER. SELECTED PRESSURE DROP SHALL BE BOILER WPD + 10.2 FT WC.",
+        "2. PROVIDE WITH VFD & INTEGRAL DISCONNECT.",
+        "The two DOAH circulator rows have blank remarks cells as printed.",
+        "The source table does not state a unit-system classification beyond the printed labels; TDH is transcribed as FT WC exactly from the header."
+      ],
+      "header_evidence": [
+        {"bbox": [650, 1240, 840, 1272], "expected": "PUMP SCHEDULE"},
+        {"bbox": [175, 1285, 820, 1333], "expected": "MARK SERVICE TYPE FLOW GPM TDH FT WC MOTOR RPM"},
+        {"bbox": [825, 1285, 1250, 1333], "expected": "MIN MOTOR VFD SPEED POWER VOLTS PHASE HZ DISCONNECT CONTROL HP PROVIDED BY"},
+        {"bbox": [1270, 1288, 1332, 1315], "expected": "REMARKS"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-BOILER",
+      "page": 42,
+      "sheet": "M-601",
+      "building_scope": "Air Operations",
+      "title": "BOILER SCHEDULE",
+      "classification": "Natural-gas condensing boilers",
+      "columns": "mark|location|type|leaving_water_temperature_F|entering_water_temperature_F|water_flow_GPM|natural_gas_input_MBH|natural_gas_output_MBH|V_phase_Hz|notes",
+      "x_edges": [1368, 1415, 1507, 1665, 1735, 1805, 1879, 1965, 2038, 2110, 2180],
+      "y_ranges": [[1320, 1337], [1337, 1356]],
+      "rows": [
+        "B-A1|152 MECH|NATURAL GAS CONDENSING|130|110|33|350|330|120/1/60|1,2",
+        "B-A2|152 MECH|NATURAL GAS CONDENSING|130|110|33|350|330|120/1/60|1,2"
+      ],
+      "notes": [
+        "1. BOILER AHRI CERTIFIED EFFICIENCY SHALL BE MINIMUM OF 95%.",
+        "2. PROVIDE BOILER WITH PHHWP, SEE HVAC PUMP SCHEDULE FOR PUMP INFORMATION."
+      ],
+      "header_evidence": [
+        {"bbox": [1675, 1245, 1880, 1273], "expected": "BOILER SCHEDULE"},
+        {"bbox": [1370, 1280, 1965, 1319], "expected": "LVG WATER ENT WATER WATER FLOW NATURAL GAS MARK LOCATION TYPE TEMP F TEMP F GPM INPUT MBH"},
+        {"bbox": [1965, 1272, 2175, 1320], "expected": "NATURAL GAS OUTPUT MBH V PH HZ NOTES"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-AHU",
+      "page": 42,
+      "sheet": "M-601",
+      "building_scope": "Air Operations",
+      "title": "AIR HANDLING UNIT SCHEDULE",
+      "classification": "Air-handling units",
+      "columns": "mark|location|supply_air_CFM_max|supply_air_CFM_min|outside_air_CFM|ESP_in_WG|fan_quantity_and_HP|volts_phase_Hz|FLA|MCA|MOCP|total_cooling_MBH|sensible_cooling_MBH|EWT_F|EAT_FDB|EAT_FWB|LAT_FDB|LAT_FWB|max_coil_face_velocity_FPM|coil_rows|water_GPM|max_water_pressure_drop_ft_water_column|notes",
+      "x_edges": [154, 216, 290, 332, 365, 414, 460, 526, 616, 680, 745, 826, 915, 990, 1025, 1060, 1095, 1126, 1160, 1265, 1335, 1385, 1530, 1600],
+      "y_ranges": [[151, 170], [170, 188]],
+      "rows": [
+        "AHU-A1|152 MECH|10,260|4,250|2,200|4.6|(2) @ 10.0|460/3/60|28.65|32.15|45 A|307.3|269.7|45|75.0|61.7|51.1|51.1|500|8|61.5|10|1,2,3,5",
+        "AHU-A2|151 MECH|2,640|1,530|1,530|3.0|(1) @ 5.0|460/3/60|8.85|10.90|20 A|54.4|44.1|45|67.2|59.3|52.0|52.0|500|8|10.9|10|1,2,4,5"
+      ],
+      "notes": [
+        "1. PROVIDE MERV 8 AND MERV 13 FLAT FILTERS UPSTREAM OF COILS.",
+        "2. PROVIDE WITH VFDS. ONE VFD PER FAN. PROVIDE WITH SINGLE POINT ELECTRICAL CONNECTION.",
+        "3. MAXIMUM UNIT DIMENSIONS ARE 126\" LONG 84\" WIDE 60\" HIGH. UNIT SHALL BE MODULAR AND SHALL BE ABLE TO FIT THROUGH 84\"X72\" OPENING.",
+        "4. MAXIMUM UNIT DIMENSIONS ARE 100\" LONG 48\" WIDE 30\" HIGH. UNIT SHALL BE MODULAR AND SHALL BE ABLE TO FIT THROUGH 84\"X72\" OPENING.",
+        "5. ESP INCLUDES 0.5 IN WG FOR MERV 8 & 0.7 IN WG FOR MERV 13 LOADING."
+      ],
+      "header_evidence": [
+        {"bbox": [720, 72, 1040, 100], "expected": "AIR HANDLING UNIT SCHEDULE"},
+        {"bbox": [160, 100, 820, 151], "expected": "MARK LOCATION FAN DATA S A CFM MAX MIN OA CFM E S P IN WG FAN QTY H P ELECTRICAL DATA VOLTS PH HZ FLA MCA MOCP"},
+        {"bbox": [830, 100, 1530, 151], "expected": "COOLING COIL DATA TOTAL MBH SENSIBLE MBH EWT F EAT FDB EAT FWB LAT FDB LAT FWB MAX COIL FV FPM OF ROWS GPM MAX WATER PRESSURE DROP FT WC"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-DOAH-1",
+      "page": 42,
+      "sheet": "M-601",
+      "building_scope": "Air Operations",
+      "title": "DEDICATED OUTDOOR AIR UNIT SCHEDULE 1 OF 1",
+      "classification": "Dedicated outdoor-air units; supply/exhaust fan and cooling/heating coil data",
+      "columns": "mark|supply_fan_CFM|supply_external_SP_in_WG|supply_motor_quantity_and_HP|exhaust_fan_CFM|exhaust_external_SP_in_WG|exhaust_min_motor_HP|cooling_total_MBH|cooling_sensible_MBH|cooling_EAT_FDB|cooling_EAT_FWB|cooling_LAT_FDB|cooling_LAT_FWB|cooling_EWT_F|cooling_LWT_F|cooling_GPM|cooling_water_PD_ft_H2O|cooling_max_coil_face_velocity_FPM|heating_MBH|heating_EAT_FDB|heating_LAT_FDB|heating_EWT_F|heating_LWT_F|heating_GPM|heating_water_PD_ft_H2O|heating_max_coil_face_velocity_FPM",
+      "x_edges": [154, 216, 267, 349, 452, 512, 618, 716, 792, 860, 930, 1000, 1070, 1144, 1213, 1284, 1349, 1425, 1500, 1562, 1645, 1725, 1795, 1870, 1938, 2013, 2135],
+      "y_ranges": [[397, 414], [414, 432]],
+      "rows": [
+        "DOAH-A1|2,200|2.0|(1) 5|1,280|1.2|3|127.5|62.9|81.0|72.4|55.0|55.0|45|55|25.5|10|500|66.5|27.0|55.0|130|110|6.7|5.0|500",
+        "DOAH-A2|1,530|1.9|(1) 5|1,380|1.2|3|88.7|43.8|81.0|72.4|55.0|55.0|45|55|17.7|10|500|46.3|27.0|55.0|130|110|4.6|5.0|500"
+      ],
+      "header_evidence": [
+        {"bbox": [890, 318, 1385, 347], "expected": "DEDICATED OUTDOOR AIR UNIT SCHEDULE 1 OF 1"},
+        {"bbox": [160, 345, 715, 396], "expected": "MARK SUPPLY FAN CFM EXTERNAL SP IN WG MOTOR QTY HP EXHAUST FAN CFM EXTERNAL SP IN WG MIN MOTOR HP"},
+        {"bbox": [720, 345, 2130, 396], "expected": "COOLING COIL DATA TOTAL MBH SENSIBLE MBH EAT FDB EAT FWB LAT FDB LAT FWB EWT F LWT F GPM WTR P D FT H20 MAX COIL FV FPM HEATING COIL DATA MBH EAT FDB LAT FDB EWT F LWT F GPM WTR P D FT H20 MAX COIL FV FPM"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-DOAH-2",
+      "page": 42,
+      "sheet": "M-601",
+      "building_scope": "Air Operations",
+      "title": "DEDICATED OUTDOOR AIR UNIT SCHEDULE 2 OF 2",
+      "classification": "Dedicated outdoor-air units; energy-wheel summer/winter performance and unit electrical data",
+      "columns": "mark|summer_outside_air_CFM|summer_outside_air_EAT_DB_WB|summer_outside_air_LAT_DB_WB|summer_outside_air_pressure_drop_in_WG|summer_entering_exhaust_CFM|summer_exhaust_EAT_DB_WB|summer_exhaust_LAT_DB_WB|summer_exhaust_air_pressure_drop_in_WG|winter_outside_air_EAT_DB_WB|winter_outside_air_LAT_DB_WB|winter_outside_air_pressure_drop_in_WG|winter_entering_exhaust_CFM|winter_exhaust_EAT_DB_WB|winter_exhaust_LAT_DB_WB|winter_exhaust_air_pressure_drop_in_WG|V_Hz_phase|VFD_provided_by|FLA|MOCP|notes",
+      "x_edges": [154, 216, 297, 400, 500, 600, 670, 740, 820, 902, 996, 1090, 1185, 1260, 1350, 1440, 1530, 1600, 1725, 1800, 1880, 1970],
+      "y_ranges": [[577, 594], [594, 611]],
+      "rows": [
+        "DOAH-A1|2,200|84.0 / 78.7|80.5 / 71.8|0.5|1,280|78.0 / 65.0|82.9 / 75.9|0.5|27.0 / 25.0|50.7 / 41.4|0.5|1,280|68.0 / 51.5|34.0 / 30.4|0.5|460/60/3|DIVISION 23|15 A|20 A|1,2,3,5",
+        "DOAH-A2|1,530|84.0 / 78.7|79.7/ 70.1|0.5|1,380|78.0 / 65.0|82.8 / 75.6|0.5|27.0 / 25.0|56.1 / 45.8|0.5|1,380|68.0 / 53|35.2 / 31.8|0.5|460/60/3|DIVISION 23|15 A|20 A|1,2,4,5"
+      ],
+      "notes": [
+        "1. PROVIDE MERV 8 AND MERV 13 FLAT FILTERS UPSTREAM OF WHEEL FOR SUPPLY, AND MERV 8 UPSTREAM OF WHEEL FOR EXHAUST.",
+        "2. PROVIDE SUPPLY AND EXHAUST FANS WITH VFDS. PROVIDE WITH SINGLE POINT ELECTRICAL CONNECTION FOR ENTIRE UNIT.",
+        "3. MAXIMUM UNIT DIMENSIONS ARE 202.1\" LONG 44\" WIDE 70.8\" HIGH. UNIT SHALL BE MODULAR AND SHALL BE ABLE TO FIT THROUGH 84\"X72\" OPENING.",
+        "4. MAXIMUM UNIT DIMENSIONS ARE 204.0\" LONG 44\" WIDE 70.8\" HIGH. UNIT SHALL BE MODULAR AND SHALL BE ABLE TO FIT THROUGH 84\"X72\" OPENING.",
+        "5. ESP INCLUDES 0.5 IN WG FOR MERV 8 & 0.7 IN WG FOR MERV 13 LOADING.",
+        "6. DOAH COOLING COIL SHALL BE SIZED AT 50% SENSIBLE AND TOTAL EFFECTIVENESS. ENERGY WHEEL SHALL PERFORM AS SCHEDULED.",
+        "7. ENERGY WHEEL SHALL BE 460V, 3-PHASE."
+      ],
+      "header_evidence": [
+        {"bbox": [810, 465, 1310, 495], "expected": "DEDICATED OUTDOOR AIR UNIT SCHEDULE 2 OF 2"},
+        {"bbox": [160, 495, 1530, 576], "expected": "MARK ENERGY WHEEL DATA SUMMER CONDITIONS WINTER CONDITIONS OUTSIDE AIR CFM OUTSIDE AIR EAT DB WB OUTSIDE AIR LAT DB WB OUTSIDE AIR PRESSURE DROP IN WG ENTERING EXHAUST CFM EXHAUST EAT DB WB EXHAUST LAT DB WB EXHAUST AIR PRESSURE DROP IN WG"},
+        {"bbox": [1530, 495, 1970, 576], "expected": "UNIT ELECTRICAL DATA V HZ PH VFD PROVIDED BY FLA MOCP NOTES"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-FCU",
+      "page": 42,
+      "sheet": "M-601",
+      "building_scope": "Air Operations",
+      "title": "FAN COIL UNIT SCHEDULE",
+      "classification": "Fan-coil units",
+      "columns": "mark|type|fan_CFM_cooling_heating|fan_ESP_in_WG|fan_nominal_HP_or_W|cooling_sensible_MBH|cooling_total_MBH|cooling_entering_air_DB_F|cooling_entering_air_WB_F|cooling_leaving_air_DB_F|cooling_leaving_air_WB_F|cooling_entering_water_F|cooling_exit_water_F|cooling_GPM|cooling_max_coil_face_velocity_FPM|cooling_water_PD_ft_head|cooling_piping_runout_size_in|heating_MBH|heating_entering_air_DB_F|heating_entering_water_F|heating_water_temp_delta_F|heating_GPM|heating_max_coil_face_velocity_FPM|heating_water_PD_ft_head|heating_piping_runout_size_in|V_Hz_phase|max_ECM_FLA|starter_disconnect_provided_by|notes",
+      "x_edges": [154, 216, 430, 505, 552, 610, 675, 735, 790, 845, 900, 960, 1030, 1100, 1145, 1220, 1265, 1320, 1370, 1430, 1500, 1570, 1620, 1685, 1750, 1825, 1895, 1965, 2100, 2180],
+      "y_ranges": [[837, 855], [855, 872], [872, 890], [890, 907], [907, 924], [924, 942], [942, 959], [959, 976], [976, 993], [993, 1011], [1011, 1028], [1028, 1045], [1045, 1062], [1062, 1080]],
+      "rows": [
+        "FCU-A1|VERTICAL CABINET|150 / 150|-|107 W|2.7|4.2|80.0|70.0|64.4|62.1|45|55|0.8|500|10|3/4|5.0|50.0|130|20|0.5|500|10|3/4|120/60/1|1.2|DIV 23|1,2,3,5,6",
+        "FCU-A2|VERTICAL CABINET|250 / 250|-|107 W|3.8|5.8|80.0|70.0|66.3|63.4|45|55|1.2|500|10|3/4|5.9|50.0|130|20|0.6|500|10|3/4|120/60/1|1.2|DIV 23|1,2,3,5,6",
+        "FCU-A3|SUSPENDED HORIZONTAL CABINET|620 / -|-|124 W|19.5|24.5|90.0|70.5|61.6|58.7|45|55|4.9|500|10|1|-|-|-|-|-|-|-|-|120/60/1|6.4|DIV 23|1,2,3,4",
+        "FCU-A4|SUSPENDED HORIZONTAL CABINET|1220 / -|-|1/2|22.8|31.7|75.0|65.0|58.1|56.6|45|55|6.3|500|10|1|-|-|-|-|-|-|-|-|120/60/1|6.4|DIV 23|1,2,4,8",
+        "FCU-A5|SUSPENDED HORIZONTAL CABINET|1280 / -|-|1/2|23.7|32.8|75.0|65.0|58.2|56.7|45|55|6.5|500|10|1|-|-|-|-|-|-|-|-|120/60/1|4.8|DIV 23|1,2,4,8",
+        "FCU-A6|SUSPENDED HORIZONTAL CABINET|310 / 190|-|107 W|9.4|11.8|90.0|70.5|62.9|59.4|45|55|2.4|500|10|3/4|5.6|50.0|130|20|0.6|500|10|3/4|120/60/1|1.5|DIV 23|1,2,3,4",
+        "FCU-A7|SUSPENDED HORIZONTAL CABINET|480 / 360|-|124 W|14.6|18.4|90.0|70.5|62.3|59.0|45|55|3.7|500|10|1|11.2|50.0|130|20|1.1|500|10|3/4|120/60/1|1.9|DIV 23|1,2,3,4",
+        "FCU-A8A|SUSPENDED HORIZONTAL CABINET|800 / 500|-|1/2|18.8|23.7|80.0|66.5|58.7|57.1|45|55|4.7|500|10|1|15.1|50.0|130|20|1.5|500|10|3/4|120/60/1|6.4|DIV 23|1,2,4,8",
+        "FCU-A8B|SUSPENDED HORIZONTAL CABINET|800 / 500|-|1/2|18.8|23.7|80.0|66.5|58.7|57.1|45|55|4.7|500|10|1|15.1|50.0|130|20|1.5|500|10|3/4|120/60/1|6.4|DIV 23|1,2,4,8",
+        "FCU-A9|SUSPENDED HORIZONTAL CABINET|160 / 160|-|107 W|5.0|6.4|90.0|70.5|61.0|58.2|45|55|1.3|500|10|3/4|5.0|50.0|130|20|0.5|500|10|3/4|120/60/1|1.3|DIV 23|1,2,3,4",
+        "FCU-A10|SUSPENDED HORIZONTAL DUCTED|5500 / -|0.3|5 HP|127.8|137.9|80.0|66.5|58.9|58.9|45|58.9|19.9|500|10|1 1/2|-|-|-|-|-|-|-|-|460/60/3|8.4|DIV 23|1,2,3,7",
+        "FCU-A11|SUSPENDED HORIZONTAL DUCTED|830 / -|0.3|149 W|23.6|28.7|90.0|70.5|64.4|60.4|45|55|5.7|500|10|1|-|-|-|-|-|-|-|-|120/60/1|3.5|DIV 23|1,2,3,4",
+        "FCU-A12|SUSPENDED HORIZONTAL DUCTED|660 / 500|0.3|1/2|12.5|16.9|75.0|65.0|57.8|56.7|45|55|3.8|500|10|1|10.4|70|130|20|1.0|500|10|3/4|120/60/1|6.4|DIV 23|1,2,4,8",
+        "FCU-A13|SUSPENDED HORIZONTAL DUCTED|670 / 420|0.3|1/2|13.1|17.8|75.0|65.0|57.3|56.4|45|58.6|2.7|500|10|1|10.6|70|130|20|1.1|500|10|3/4|120/60/1|7.5|DIV 23|1,2,4,8"
+      ],
+      "notes": [
+        "1. PROVIDE UNIT WITH UNIT MOUNTED DISCONNECT AND 120V/60HZ/1PH CONTROL VOLTAGE TRANSFORMER.",
+        "2. NUMBER OF MOTORS IN PARENTHESIS.",
+        "3. PROVIDE UNITS WITH FILTER RACK ON THE UNIT INTAKE WITH A 2\" MERV 8 FILTER.",
+        "4. PROVIDE WITH EC TYPE MOTOR. EC MOTORS SHALL BE PROVIDED WITH EQUIPMENT TO PREVENT ADDING HARMONICS TO ELECTRICAL SYSTEM (INDUCTOR, ETC.) AND SHALL BE PROGRAMMED TO PREVENT EC MOTOR OVERSPEED.",
+        "5. PROVIDE WITH CONDENSATE PUMP. PUMP CAPACITY SHALL BE 10 GPH AT 20 FT WC. CONDENSATE PUMP SHALL BE POWERED BY FCU ELECTRICAL CONNECTION.",
+        "6. MOTOR CAN BE EITHER EC TYPE OR TWO SPEED. IF EC TYPE, PROVIDE MOTOR WITH EQUIPMENT TO PREVENT ADDING HARMONICS TO ELECTRICAL SYSTEM (INDUCTOR, ETC.) AND SHALL BE PROGRAMMED TO PREVENT EC MOTOR OVERSPEED.",
+        "7. PROVIDE WITH EITHER MOTOR WITH VFD OR EC TYPE MOTOR. EC MOTORS SHALL BE PROVIDED WITH EQUIPMENT TO PREVENT ADDING HARMONICS TO ELECTRICAL SYSTEM (INDUCTOR, ETC.) AND SHALL BE PROGRAMMED TO PREVENT EC MOTOR OVERSPEED.",
+        "8. PROVIDE UNITS WITH FILTER RACK ON THE UNIT INTAKE WITH BOTH A 2\" MERV 8 PRE-FILTER, AND A MERV 11 FINAL FILTER."
+      ],
+      "header_evidence": [
+        {"bbox": [1030, 743, 1310, 773], "expected": "FAN COIL UNIT SCHEDULE"},
+        {"bbox": [160, 772, 1100, 836], "expected": "MARK TYPE FAN DATA CFM CLG HTG ESP IN W G NOMINAL H P COOLING COIL DATA SENSIBLE MBH TOTAL MBH ENT AIR F DB WB LVG AIR F DB WB ENT WTR TEMP F EXT WTR TEMP F"},
+        {"bbox": [1100, 772, 2180, 836], "expected": "MAX COIL FV FPM W P D FT HD PIPING RUNOUT SIZE IN HEATING COIL DATA MBH ENT AIR F DB ENT WTR TEMP F WTR TEMP T GPM MAX COIL FV FPM W P D FT HD PIPING RUNOUT SIZE IN V HZ PH MAX ECM FLA STARTER DISCONNECT PROVIDED BY NOTES"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "air-ops-core-schedule-tables", "records_path": ["tables"], "expected": 6, "unique_key": "id"}
+  ],
+  "remaining_work": "Transcribe the remainder of M-601 and every populated schedule table on M-602, M-603, M-611 through M-613, and M-621 through M-622. Reconcile each listed equipment identity to plans, piping schematics and the M700-series controls/points sheets before asserting installed quantities or BAS ownership."
+}

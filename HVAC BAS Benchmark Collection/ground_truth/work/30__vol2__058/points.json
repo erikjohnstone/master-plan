@@ -1,0 +1,54 @@
+{
+  "document_id": "30__vol2__058",
+  "module_role": "CWGP-1 VFD literal source point mappings.",
+  "tables": [
+    {
+      "id": "J604-CWGP1-VFD-POINTS",
+      "page": 217,
+      "sheet": "MJ901",
+      "title_as_printed": "MECHANICAL CONTROLS DIAGRAM COOLING WATER PUMPS",
+      "columns": "literal_source_row_as_printed",
+      "x_edges": [
+        400,
+        630
+      ],
+      "y_ranges": [
+        [
+          270,
+          300
+        ],
+        [
+          305,
+          335
+        ],
+        [
+          340,
+          370
+        ],
+        [
+          370,
+          400
+        ],
+        [
+          400,
+          435
+        ],
+        [
+          435,
+          470
+        ]
+      ],
+      "rows": [
+        "CWGP-1 - 12-0-DO1 VFD Enable J606",
+        "CWGP-1 - 12-0-AO2 VFD Speed J606",
+        "CWGP-1 - VFD 12-1-AI2 Speed Feedback J606",
+        "CWGP-1 - 12-1-AI5 VFD kW J606",
+        "CWGP-1 - VFD 12-1-AI4 HOA Ref. J606",
+        "CWGP-1 - 12-1-DI3 VFD Fault J606"
+      ],
+      "row_reading_order": "left_to_right",
+      "source_row_semantics": "Literal published VFD point-mapping row only; it is not a physical I/O count, wiring quantity, or controller ownership assertion."
+    }
+  ],
+  "assertions": []
+}

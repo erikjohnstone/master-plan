@@ -1,0 +1,672 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "191d00dc7b09916394149b7ff1d4cffe03bc34e1dc658f2a89a5d008627c1072",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 19,
+  "checks": [
+    {
+      "assertion": "symbol-ai",
+      "page": 50,
+      "bbox": [
+        680,
+        1335,
+        790,
+        1370
+      ],
+      "expected": "ANALOG INPUT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ANALOG INPUT",
+          "word_ids": [
+            544,
+            545
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ANALOG INPUT",
+          "word_ids": [
+            157,
+            158
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "symbol-ao",
+      "page": 50,
+      "bbox": [
+        680,
+        1385,
+        790,
+        1412
+      ],
+      "expected": "ANALOG OUTPUT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ANALOG OUTPUT",
+          "word_ids": [
+            546,
+            547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ANALOG OUTPUT",
+          "word_ids": [
+            160,
+            161
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "symbol-bi",
+      "page": 50,
+      "bbox": [
+        680,
+        1238,
+        790,
+        1270
+      ],
+      "expected": "BINARY INPUT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BINARY INPUT",
+          "word_ids": [
+            615,
+            616
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BINARY INPUT",
+          "word_ids": [
+            144,
+            145
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "symbol-bo",
+      "page": 50,
+      "bbox": [
+        680,
+        1285,
+        790,
+        1320
+      ],
+      "expected": "BINARY OUTPUT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BINARY OUTPUT",
+          "word_ids": [
+            542,
+            543
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BINARY OUTPUT",
+          "word_ids": [
+            151,
+            152
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "abbreviation-di",
+      "page": 50,
+      "bbox": [
+        1050,
+        630,
+        1200,
+        655
+      ],
+      "expected": "DI DIGITAL INPUT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DI DIGITAL INPUT",
+          "word_ids": [
+            241,
+            126,
+            127
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DI DIGITAL INPUT",
+          "word_ids": [
+            768,
+            649,
+            650
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "abbreviation-do",
+      "page": 50,
+      "bbox": [
+        1050,
+        644,
+        1210,
+        675
+      ],
+      "expected": "DO DIGITAL OUTPUT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DO DIGITAL OUTPUT DIFF DIFFERENCE",
+          "word_ids": [
+            242,
+            128,
+            129,
+            243,
+            130
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DO DIGITAL OUTPUT DIFF DIFFERENCE",
+          "word_ids": [
+            769,
+            651,
+            652,
+            770,
+            653
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "duct-smoke",
+      "page": 50,
+      "bbox": [
+        680,
+        205,
+        880,
+        235
+      ],
+      "expected": "SMOKE DETECTOR, DUCT-MOUNTED",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SMOKE DETECTOR, DUCT-MOUNTED",
+          "word_ids": [
+            417,
+            418,
+            419
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SMOKE DETECTOR, DUCT-MOUNTED",
+          "word_ids": [
+            486,
+            487,
+            488
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "temperature-sensor",
+      "page": 50,
+      "bbox": [
+        680,
+        320,
+        830,
+        350
+      ],
+      "expected": "TEMPERATURE SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR",
+          "word_ids": [
+            593,
+            594
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE SENSOR",
+          "word_ids": [
+            300,
+            301
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "space-thermostat",
+      "page": 50,
+      "bbox": [
+        680,
+        375,
+        910,
+        412
+      ],
+      "expected": "SPACE THERMOSTAT WITH SPECIFIED IO FUNCTIONS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPACE THERMOSTAT WITH SPECIFIED IO FUNCTIONS",
+          "word_ids": [
+            420,
+            421,
+            422,
+            423,
+            424,
+            425
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPACE THERMOSTAT WITH SPECIFIED IO FUNCTIONS",
+          "word_ids": [
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "space-humidity",
+      "page": 50,
+      "bbox": [
+        680,
+        430,
+        910,
+        468
+      ],
+      "expected": "SPACE HUMIDITY SENSOR WITH SPECIFIED IO FUNCTIONS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPACE HUMIDITY SENSOR WITH SPECIFIED IO FUNCTIONS",
+          "word_ids": [
+            440,
+            441,
+            442,
+            443,
+            444,
+            445,
+            446
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPACE HUMIDITY SENSOR WITH SPECIFIED IO FUNCTIONS",
+          "word_ids": [
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "temperature-averaging",
+      "page": 50,
+      "bbox": [
+        680,
+        480,
+        910,
+        510
+      ],
+      "expected": "TEMPERATURE AVERAGING SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE AVERAGING SENSOR",
+          "word_ids": [
+            437,
+            438,
+            439
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE AVERAGING SENSOR",
+          "word_ids": [
+            25,
+            26,
+            27
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "duct-static-pressure",
+      "page": 50,
+      "bbox": [
+        680,
+        640,
+        880,
+        665
+      ],
+      "expected": "DUCT STATIC PRESSURE SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT STATIC PRESSURE SENSOR",
+          "word_ids": [
+            453,
+            454,
+            455,
+            456
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT STATIC PRESSURE SENSOR",
+          "word_ids": [
+            35,
+            36,
+            37,
+            38
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "differential-pressure",
+      "page": 50,
+      "bbox": [
+        680,
+        695,
+        880,
+        725
+      ],
+      "expected": "DIFFERENTIAL PRESSURE SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE SENSOR",
+          "word_ids": [
+            553,
+            554,
+            555
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIFFERENTIAL PRESSURE SENSOR",
+          "word_ids": [
+            40,
+            41,
+            42
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "freezestat",
+      "page": 50,
+      "bbox": [
+        680,
+        560,
+        920,
+        590
+      ],
+      "expected": "TEMPERATURE LOW LIMIT / FREEZESTAT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERATURE LOW LIMIT / FREEZESTAT",
+          "word_ids": [
+            584,
+            585,
+            586,
+            587,
+            588
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERATURE LOW LIMIT / FREEZESTAT",
+          "word_ids": [
+            28,
+            29,
+            30,
+            31,
+            32
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "airflow-station",
+      "page": 50,
+      "bbox": [
+        680,
+        920,
+        900,
+        945
+      ],
+      "expected": "AIR FLOW MEASURING STATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIR FLOW MEASURING STATION",
+          "word_ids": [
+            447,
+            448,
+            449,
+            450
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIR FLOW MEASURING STATION",
+          "word_ids": [
+            114,
+            115,
+            116,
+            117
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "co2-monitor",
+      "page": 50,
+      "bbox": [
+        1050,
+        405,
+        1260,
+        435
+      ],
+      "expected": "CO2 CARBON DIOXIDE MONITOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CO2 CARBON DIOXIDE MONITOR COM COMMON",
+          "word_ids": [
+            225,
+            89,
+            90,
+            91,
+            226,
+            92
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CO2 CARBON DIOXIDE MONITOR COM COMMON",
+          "word_ids": [
+            752,
+            612,
+            613,
+            614,
+            753,
+            615
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "ddc-control-valve",
+      "page": 50,
+      "bbox": [
+        230,
+        970,
+        470,
+        1012
+      ],
+      "expected": "CONTROL VALVE, TWO WAY, DDC",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONTROL VALVE, TWO WAY, DDC NORMALLY OPEN OR CLOSED AS SHOWN",
+          "word_ids": [
+            432,
+            433,
+            434,
+            435,
+            436,
+            565,
+            566,
+            567,
+            568,
+            569,
+            570
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONTROL VALVE, TWO WAY, DDC NORMALLY OPEN OR CLOSED AS SHOWN",
+          "word_ids": [
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "parallel-blade-damper",
+      "page": 50,
+      "bbox": [
+        230,
+        660,
+        470,
+        710
+      ],
+      "expected": "MOTORIZED DAMPER, PARALLEL BLADE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MOTORIZED DAMPER, PARALLEL BLADE NORMALLY OPEN OR CLOSED AS SHOWN",
+          "word_ids": [
+            17,
+            18,
+            19,
+            20,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MOTORIZED DAMPER, PARALLEL BLADE NORMALLY OPEN OR CLOSED AS SHOWN",
+          "word_ids": [
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "opposed-blade-damper",
+      "page": 50,
+      "bbox": [
+        230,
+        748,
+        470,
+        795
+      ],
+      "expected": "MOTORIZED DAMPER, OPPOSED BLADE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MOTORIZED DAMPER, OPPOSED BLADE NORMALLY OPEN OR CLOSED AS SHOWN",
+          "word_ids": [
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MOTORIZED DAMPER, OPPOSED BLADE NORMALLY OPEN OR CLOSED AS SHOWN",
+          "word_ids": [
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

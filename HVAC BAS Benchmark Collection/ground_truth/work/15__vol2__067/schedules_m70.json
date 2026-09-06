@@ -1,0 +1,141 @@
+{
+  "document_id": "15__vol2__067",
+  "module_role": "Cell-by-cell schedule transcription from M7.0 for the new PCW skid and directly associated mechanical equipment. Existing/reference schedules and demand ledgers are retained as distinct source classifications; no schedule row is silently expanded into an installed field count.",
+  "source_sheet": "M7.0",
+  "source_page": 8,
+  "tables": [
+    {
+      "id": "M70-NEW-PCW-PUMPS",
+      "page": 8,
+      "sheet": "M7.0",
+      "title": "(N) PUMP SCHEDULE",
+      "classification": "Two scheduled new inline PCW pumps; note 1 identifies the pair as N+1 pumps.",
+      "columns": "mark|manufacturer_model|location|service|type|design_flow_gpm|selection_flow_gpm|design_head_ftwg_psi|max_flow_gpm|max_head_ftwg_psi|bhp|hp|rpm|electrical_v_ph_hz|total_operating_weight_lb|remarks",
+      "x_edges": [170,306,423,500,565,627,682,745,806,859,921,965,994,1024,1090,1184,1262],
+      "y_edges": [196,229,258],
+      "rows": [
+        "B950A-PCWP-1001|GOULDS 125SV-55BGT-4C60|MECH ROOM 4 60B24|NEH/XPP|INLINE|581.9|650|277/120|677|300/130|73.9|75|3500|480/3/60|1386|(1)-(9)",
+        "B950A-PCWP-1002|GOULDS 125SV-55BGT-4C60|MECH ROOM 4 60B24|NEH/XPP|INLINE|581.9|650|277/120|677|300/130|73.9|75|3500|480/3/60|1386|(1)-(9)"
+      ],
+      "header_evidence": [{"bbox": [170,131,1262,195], "expected": "(N) PUMP SCHEDULE MARK MANUFACTURER AND MODEL NUMBER LOCATION SERVICE TYPE DESIGN FLOW SELECTION FLOW DESIGN HEAD MAX FLOW MAX HEAD MOTOR ELECTRICAL TOTAL OPERATING WEIGHT REMARKS"}]
+    },
+    {
+      "id": "M70-NEW-HEAT-EXCHANGER",
+      "page": 8,
+      "sheet": "M7.0",
+      "title": "(N) HEAT EXCHANGER SCHEDULE",
+      "classification": "One new PCW-to-CHW heat exchanger; high-temperature side is PCW and low-temperature side is CHW exactly as printed.",
+      "columns": "mark|manufacturer_model|location|service|design_capacity_mbh|max_capacity_mbh|high_design_gpm|high_max_gpm|high_ewt_f|high_lwt_f|high_dp_psi|high_fluid|low_design_gpm|low_max_gpm|low_ewt_f|low_lwt_f|low_dp_psi|low_fluid|design_plates|max_plates|total_operating_weight|remarks",
+      "x_edges": [1334,1411,1505,1574,1641,1705,1765,1835,1894,1928,1965,2004,2035,2110,2167,2204,2242,2290,2325,2380,2423,2497,2560],
+      "y_edges": [738,772],
+      "rows": [
+        "B950A-HX-PCWP-1001|BELL & GOSSETT AP47|B950A MECHANICAL ROOM|B950A|3462|3905|581.9|650|74°|62°|4.97|PCW|349.12|389.16|45|65|1.92|CHW|186|228|1648 LBS|(1)-(3)"
+      ],
+      "header_evidence": [{"bbox": [1334,671,2560,737], "expected": "(N) HEAT EXCHANGER SCHEDULE MARK MANUFACTURER AND MODEL NUMBER LOCATION SERVICE DESIGN CAPACITY MAX CAPACITY HIGH TEMP WATER SIDE LOW TEMP WATER SIDE DESIGN PLATES MAX PLATES TOTAL OPERATING WEIGHT REMARKS"}]
+    },
+    {
+      "id": "M70-NEW-VFDS",
+      "page": 8,
+      "sheet": "M7.0",
+      "title": "(N) VFD SCHEDULE",
+      "classification": "Two scheduled new ABB VFDs associated one-for-one with the new PCW pumps.",
+      "columns": "mark|manufacturer_model|hp|fla|volts|weight|enclosure|remarks",
+      "x_edges": [1570,1665,1790,1825,1870,1930,1998,2075,2150],
+      "y_edges": [1018,1050,1082],
+      "rows": [
+        "B950A-VFD-PCWP-1001|PUMP SMART ABB ACH580-PCR-096A-4|75|96|480|359 LBS|NEMA 3R|(1)-(5)",
+        "B950A-VFD-PCWP-1002|PUMP SMART ABB ACH580-PCR-096A-4|75|96|480|359 LBS|NEMA 3R|(1)-(5)"
+      ],
+      "header_evidence": [{"bbox": [1570,956,2150,1017], "expected": "(N) VFD SCHEDULE MARK MANUFACTURER AND MODEL NUMBER HP FLA VOLTS WEIGHT ENCLOSURE REMARKS"}]
+    },
+    {
+      "id": "M70-COMPRESSED-AIR-REGULATOR",
+      "page": 8,
+      "sheet": "M7.0",
+      "title": "(N) COMPRESSED AIR REGULATOR",
+      "classification": "One new compressed-air regulator serving Hutch 1.3; it is a pressure-regulating assembly, not a BAS control valve schedule.",
+      "columns": "mark|manufacturer_model|location|outlet_pressure|diaphragm|inlet_outlet_size|wall_mountable|shipping_weight|remarks",
+      "x_edges": [2225,2320,2425,2500,2560,2660,2740,2825,2900,2980],
+      "y_edges": [1045,1080],
+      "rows": [
+        "(N) REG-1|CONOFLOW GH30-XTHMXSXG|HUTCH 1.3|125 PSIG|BUNA \"N\" (WITH RELIEF, NO BLEED)|1/4\"|YES|2 LB|1-4"
+      ],
+      "header_evidence": [{"bbox": [2225,990,3035,1044], "expected": "(N) COMPRESSED AIR REGULATOR MARK MANUFACTURER AND MODEL NUMBER LOCATION OUTLET PRESSURE DIAPHRAGM INLET OUTLET SIZE WALL MOUNTABLE SHIPPING WEIGHT REMARKS"}]
+    },
+    {
+      "id": "M70-GRILLE",
+      "page": 8,
+      "sheet": "M7.0",
+      "title": "GRILLE SCHEDULE",
+      "classification": "One scheduled grille type; note 1 explicitly requires a volume damper before the grille connection but does not provide an actuator schedule.",
+      "columns": "mark|maximum_airflow_cfm|design_airflow_cfm|air_velocity_fpm|face_size_in|connection_size_in|max_static_pressure_drop_inwg|max_nc|mounting_location|material|finish|basis_of_design|notes",
+      "x_edges": [180,245,310,400,510,600,700,790,845,920,985,1075,1175,1240],
+      "y_edges": [875,912],
+      "rows": [
+        "RG-1|1555|1410/1415|450|30x16|30x16|0.08|25|DUCT|STEEL|#26 WHITE|TITUS 350RL|(1)-(2)"
+      ],
+      "header_evidence": [{"bbox": [180,793,1240,875], "expected": "GRILLE SCHEDULE MARK NUMBER MAX AIRFLOW DESIGN AIRFLOW AIR VELOCITY FACE SIZE CONNECTION SIZE MAX STATIC PRESS DROP MAX NC MOUNTING LOCATION MATERIAL FINISH BASIS OF DESIGN NOTES"}]
+    },
+    {
+      "id": "M70-RELOCATED-REHEAT-COIL",
+      "page": 8,
+      "sheet": "M7.0",
+      "title": "REHEAT COIL SCHEDULES (RELOCATED)",
+      "classification": "One existing reheat coil relocated from demolition phase; the schedule note says pre-measurement is required to determine actual airflow.",
+      "columns": "mark|room_number|room_name|maximum_airflow_cfm|capacity_mbh|air_pd_inwg|eat_f|lat_f|flow_gpm|water_pd_ftwg|ewt_f|lwt_f|pipe_connection_in|coil_dimension_hxw_in|basis_of_design|note",
+      "x_edges": [175,260,440,600,675,738,795,850,910,960,1035,1093,1155,1220,1285,1340,1400],
+      "y_edges": [1092,1135],
+      "rows": [
+        "B950-RHC-1002|100H3|HUTCH 1.3 XPP|6,050|126|0.10|55|73|9|16.3|180|155|1 1/4|24x48|HEATCRAFT|"
+      ],
+      "header_evidence": [{"bbox": [175,1025,1400,1092], "expected": "REHEAT COIL SCHEDULES RELOCATED ID TAG ROOM NUMBER ROOM NAME MAXIMUM AIRFLOW CAPACITY AIR PD EAT LAT FLOW WATER PD EWT LWT PIPE CONN COIL DIMENSION BASIS OF DESIGN"}]
+    },
+    {
+      "id": "M70-EXISTING-AHU",
+      "page": 8,
+      "sheet": "M7.0",
+      "title": "AIR HANDLING UNIT SCHEDULE (EXISTING)",
+      "classification": "One existing AHU reference schedule. Its note limits new work to motorized-damper airflow adjustment and does not identify those dampers by tag or actuator model.",
+      "columns": "mark|location|capacity_designed_cfm|outside_air_cfm|fan_type|fan_count|design_total_sp_inwg|bhp_per_fan|motor_hp_per_fan|electrical_power_vphz|fla_amps|mca_amps|cooling_capacity_mbh|eat_fdb_fwb|lat_fdb_fwb|ewt_f|lwt_f|apd_inwg|wpd_ft|pre_filter|final_filter|weight_lb|basis_of_design|note",
+      "x_edges": [175,295,410,510,585,685,750,825,880,960,1035,1095,1150,1210,1270,1350,1415,1480,1540,1615,1700,1790,1865,2000,2100],
+      "y_edges": [1320,1365],
+      "rows": [
+        "B950-AHU-3001|MECH RM|60,000|5,445|DIRECT DRIVE PLENUM|10|9.36|12.54|15|460/3/60|146|164|1,195|68.5/58.2|48.6/48.5|44|55.5|1.03|15.26|MERV 8|99.97 HEPA||TEMTROL|1, 2, 3"
+      ],
+      "header_evidence": [{"bbox": [175,1231,2100,1320], "expected": "AIR HANDLING UNIT SCHEDULE EXISTING MARK NUMBER LOCATION CAPACITY DESIGNED OUTSIDE AIR FANS COILS FILTERS WEIGHT BASIS OF DESIGN NOTE"}]
+    },
+    {
+      "id": "M70-PCW-AIR-SEPARATOR",
+      "page": 8,
+      "sheet": "M7.0",
+      "title": "PCW AIR SEPARATOR SCHEDULE",
+      "classification": "One new PCW air separator.",
+      "columns": "mark|manufacturer_model|location|service|inlet_connection|outlet_connection|tank_volume|max_capacity|max_pressure|max_temperature|dimensions|tank_weight_dry|tank_weight_wetted|notes",
+      "x_edges": [1050,1165,1260,1370,1450,1530,1605,1680,1735,1800,1865,1950,2040,2130,2225],
+      "y_edges": [1538,1575],
+      "rows": [
+        "(N) B950A-AS-1001|ROLAIRTROL RL-6FB|B950A MECH ROOM|AIR SEPARATOR|6\" FLANGE|6\" FLANGE|34 GAL|850 GPM|125 PSIG|350°F|44-1/16\"H x 21-1/4\"Ø|280 LBS|564 LBS|(1)-(6)"
+      ],
+      "header_evidence": [{"bbox": [1050,1488,2225,1538], "expected": "PCW AIR SEPARATOR SCHEDULE MARK MFR AND MODEL NUMBER LOCATION SERVICE INLET CONNECTION OUTLET CONNECTION TANK VOLUME MAX CAPACITY MAX PRESSURE MAX TEMP DIMENSIONS TANK WEIGHT DRY WETTED NOTES"}]
+    }
+  ],
+  "additional_schedule_inventory": [
+    {"id": "pipe-installation", "classification": "Six service/material rows: PCWS/R under 2-1/2 in copper; PCWS/R 3 in and larger 316L stainless; CHWS/R Schedule 40 black steel; compressed air copper; heating hot water copper; and makeup water copper. This is an installation schedule, not a device inventory."},
+    {"id": "pressure-testing", "classification": "Four testing rows: PCW, CHW, makeup water and compressed air; no BAS point count is inferred."},
+    {"id": "duct-installation", "classification": "Two material rows: metal duct and fabric duct; this is not a damper-actuator schedule."},
+    {"id": "riser-utility-hutch-1-3", "classification": "PCW riser utility schedule contains 29 literal branch/device lines and a printed total flow of 65.45 GPM. Existing/new identifiers and grouped branch sums are retained in equipment reconciliation."},
+    {"id": "flow-demand", "classification": "NEH PCW Flow Demand separates existing and new columns. Printed existing PCW flow is 536.9 GPM, new PCW flow is 581.998 GPM, future factor increase is 10%, resulting new PCW flow requirement is 640.20 GPM, and pump selection flow is 650 GPM."},
+    {"id": "pcw-pot-feeder", "classification": "One new B950A-PF-1001 pot feeder: JL Wingert Co 5HD; B950A mechanical room; 5.79 gal; 200 PSIG; 200°F; 21-1/8 in H x 10 in diameter; dry 33 lb/wetted 81.37 lb."},
+    {"id": "pcw-expansion-tank", "classification": "One new B950A-ET-1001 expansion tank: Wessels NLA-85, part 22010085; 23 gal; 125 PSIG; 240°F; 37 in H x 16 in diameter; dry 90 lb/wetted 281.82 lb."},
+    {"id": "pcw-filter", "classification": "One new B950A-WF-1001 water filter: Shellco SJCH-170 filter housing, four Shellco SJC-170-20 filter cartridges, 150 GPM per cartridge/600 GPM total, 20 micron."}
+  ],
+  "control_valve_and_damper_schedule_status": {
+    "control_valve_schedule": {"status": "not_present_as_a_schedule", "value": null, "note": "The M6.3 P&ID shows an AO TCV MODULATION callout, but the set has no tabular control-valve schedule with tag, Cv, actuator, signal or fail position."},
+    "damper_actuator_schedule": {"status": "not_present", "value": null, "note": "M7.0 mentions motorized dampers in an existing-AHU note but prints no damper tag list, actuator torque/model, control signal or fail position."}
+  },
+  "assertions": [],
+  "inventory_checks": [
+    {"id": "m70-transcribed-equipment-schedule-tables", "records_path": ["tables"], "expected": 8, "unique_key": "id"},
+    {"id": "m70-transcribed-equipment-schedule-rows", "records_path": ["tables", 0, "rows"], "expected": 2}
+  ]
+}

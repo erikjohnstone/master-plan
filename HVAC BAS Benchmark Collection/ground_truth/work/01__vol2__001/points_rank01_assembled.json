@@ -1,0 +1,4677 @@
+{
+  "document_id": "01__vol2__001",
+  "module_role": "Lossless assembly of all existing raw-text-cell-bounded Cherry Point BAS point-list rows. Existing printed BI/BO categories are normalized to DI/DO only for takeoff-category presentation; the printed source type remains on each table.",
+  "source_components": [
+    {
+      "module": "points_air_ops_ahu.json",
+      "point_rows_copied": 31
+    },
+    {
+      "module": "points_air_ops_chw.json",
+      "point_rows_copied": 33
+    },
+    {
+      "module": "points_air_ops_doah.json",
+      "point_rows_copied": 67
+    },
+    {
+      "module": "points_air_ops_heating_ventilating.json",
+      "point_rows_copied": 16
+    },
+    {
+      "module": "points_air_ops_hhw.json",
+      "point_rows_copied": 39
+    },
+    {
+      "module": "points_atct_ahu.json",
+      "point_rows_copied": 62
+    },
+    {
+      "module": "points_atct_doah.json",
+      "point_rows_copied": 34
+    },
+    {
+      "module": "points_atct_stair_pressurization.json",
+      "point_rows_copied": 12
+    },
+    {
+      "module": "points_crah_sfpvav_templates.json",
+      "point_rows_copied": 22
+    },
+    {
+      "module": "points_fcu_unit_heater_templates.json",
+      "point_rows_copied": 26
+    },
+    {
+      "module": "points_mi742_templates.json",
+      "point_rows_copied": 26
+    },
+    {
+      "module": "points_mi744_fcu_sfpvav.json",
+      "point_rows_copied": 13
+    },
+    {
+      "module": "points_mtracon_atct_chw.json",
+      "point_rows_copied": 63
+    },
+    {
+      "module": "points_mtracon_atct_hhw.json",
+      "point_rows_copied": 102
+    }
+  ],
+  "tables": [
+    {
+      "id": "AIR-OPS-AHU-AI",
+      "page": 54,
+      "sheet": "MI704",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS AHU DDC POINTS LIST - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1775,
+        1810,
+        2100,
+        2155,
+        2210
+      ],
+      "y_edges": [
+        356,
+        374,
+        391,
+        408,
+        425,
+        443,
+        460,
+        477,
+        494,
+        512,
+        529,
+        546,
+        563
+      ],
+      "rows": [
+        "AI1|SF SPEED (FEEDBACK) *TYPICAL OF 2|Yes|Yes",
+        "AI2|MA TEMPERATURE|No|Yes",
+        "AI3|MA HUMIDITY|No|Yes",
+        "AI4|RA DAMPER POSITION (FEEDBACK)|No|Yes",
+        "AI5|MA TEMPERATURE|No|Yes",
+        "AI6|CHW VALVE POSITION (FEEDBACK)|No|No",
+        "AI7|COOLING COIL LAT|No|Yes",
+        "AI8|SA FAN AIRFLOW|No|Yes",
+        "AI9|SA DIFFERENTIAL PRESSURE|No|Yes",
+        "AI10|SA TEMPERATURE|No|Yes",
+        "AI11|SA HUMIDITY|No|Yes",
+        "AI12|SUPPLY AIR PRESSURE|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1910,
+            285,
+            2110,
+            320
+          ],
+          "expected": "AIR OPS AHU DDC POINTS LIST"
+        },
+        {
+          "bbox": [
+            1775,
+            320,
+            2210,
+            347
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            1760,
+            337,
+            1850,
+            356
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_air_ops_ahu.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "AIR-OPS-AHU-AO",
+      "page": 54,
+      "sheet": "MI704",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS AHU DDC POINTS LIST - ANALOG OUTPUT",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1775,
+        1810,
+        2100,
+        2155,
+        2210
+      ],
+      "y_edges": [
+        598,
+        615,
+        632,
+        650
+      ],
+      "rows": [
+        "AO1|RA DAMPER CONTROL|No|No",
+        "AO2|CHW VALVE CONTROL|No|No",
+        "AO3|SF SPEED *TYPICAL OF 2|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1760,
+            580,
+            1850,
+            598
+          ],
+          "expected": "ANALOG OUTPUT"
+        }
+      ],
+      "source_component": "points_air_ops_ahu.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "AIR-OPS-AHU-BI",
+      "page": 54,
+      "sheet": "MI704",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS AHU DDC POINTS LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1775,
+        1810,
+        2100,
+        2155,
+        2210
+      ],
+      "y_ranges": [
+        [
+          684,
+          701
+        ],
+        [
+          701,
+          718
+        ],
+        [
+          718,
+          735
+        ],
+        [
+          735,
+          753
+        ],
+        [
+          753,
+          770
+        ],
+        [
+          770,
+          787
+        ],
+        [
+          787,
+          804
+        ],
+        [
+          804,
+          822
+        ],
+        [
+          822,
+          839
+        ],
+        [
+          839,
+          856
+        ],
+        [
+          856,
+          873
+        ],
+        [
+          873,
+          907
+        ],
+        [
+          907,
+          942
+        ]
+      ],
+      "rows": [
+        "BI1|MERV 8 FILTER STATUS|Yes|No",
+        "BI2|MERV 13 FILTER STATUS|Yes|No",
+        "BI3|SF STATUS *TYPICAL OF 2|No|Yes",
+        "BI4|SF ALARM *TYPICAL OF 2|Yes|No",
+        "BI5|HIGH LIMIT STATIC PRESSURE|Yes|No",
+        "BI6|SA DUCT SMOKE DETECTOR|Yes|No",
+        "BI7|SA SMOKE DAMPER POSITION OPEN (FEEDBACK)|Yes|No",
+        "BI8|SA SMOKE DAMPER POSITION CLOSED (FEEDBACK)|Yes|No",
+        "BI9|LOW LIMIT STATIC PRESSURE|Yes|No",
+        "BI10|ESS (ATFP EMERGENCY SHUTDOWN) *GLOBAL POINT|Yes|No",
+        "BI11|AHU DDC RESET|No|No",
+        "BI#|RA 24/7 ISOLATION DAMPER POSITION OPEN (FEEDBACK) *TYPICAL|Yes|No",
+        "BI##|RA 24/7 ISOLATION DAMPER POSITION CLOSED (FEEDBACK) *TYPICAL|Yes|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1760,
+            657,
+            1850,
+            684
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_air_ops_ahu.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "AIR-OPS-AHU-BO",
+      "page": 54,
+      "sheet": "MI704",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS AHU DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1775,
+        1810,
+        2100,
+        2155,
+        2210
+      ],
+      "y_ranges": [
+        [
+          972,
+          989
+        ],
+        [
+          989,
+          1006
+        ],
+        [
+          1006,
+          1040
+        ]
+      ],
+      "rows": [
+        "BO1|SA SMOKE DAMPER CONTROL|No|No",
+        "BO2|SF ENABLE *TYPICAL OF 2|Yes|No",
+        "BO#|RA 24/7 ISOLATION DAMPER CONTROL *TYPICAL|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1760,
+            944,
+            1850,
+            972
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_air_ops_ahu.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "AIR-OPS-CHW-AI",
+      "page": 56,
+      "sheet": "MI710",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS CHW SYSTEM POINTS LIST - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1700,
+        1740,
+        2020,
+        2075,
+        2120
+      ],
+      "y_edges": [
+        361,
+        378,
+        395,
+        413,
+        430,
+        447,
+        464,
+        482,
+        499,
+        516,
+        533,
+        551,
+        568,
+        585,
+        602,
+        620
+      ],
+      "rows": [
+        "AI01|PCHWP-A2 SPEED (FEEDBACK)|No|Yes",
+        "AI02|CHW FLOWRATE|No|Yes",
+        "AI03|CHW SUPPLY TEMPERATURE|Yes|Yes",
+        "AI04|CH-A1 CHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI05|CHW RETURN TEMPERATURE|Yes|Yes",
+        "AI06|CHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI07|CH-A1 CHW SUPPLY TEMPERATURE|No|Yes",
+        "AI08|CH-A1 CHW RETURN TEMPERATURE|No|Yes",
+        "AI09|CH-A2 CHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI10|PCHWP-A1 SPEED (FEEDBACK)|No|Yes",
+        "AI11|CH-A2 CHW SUPPLY TEMPERATURE|Yes|Yes",
+        "AI12|CH-A2 CHW RETURN TEMPERATURE|Yes|Yes",
+        "AI13|CHW BYPASS CV-3 POSITION (FEEDBACK)|No|Yes",
+        "AI14|PCHWP-A1 DIFFERENTIAL PRESSURE|No|Yes",
+        "AI15|PCHWP-A2 DIFFERENTIAL PRESSURE|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1800,
+            290,
+            2050,
+            325
+          ],
+          "expected": "AIR OPS CHW SYSTEM POINTS LIST"
+        },
+        {
+          "bbox": [
+            1700,
+            325,
+            2120,
+            352
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            1680,
+            344,
+            1800,
+            361
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_air_ops_chw.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "AIR-OPS-CHW-AO",
+      "page": 56,
+      "sheet": "MI710",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS CHW SYSTEM POINTS LIST - ANALOG OUTPUT",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1700,
+        1740,
+        2020,
+        2075,
+        2120
+      ],
+      "y_edges": [
+        654,
+        671,
+        689,
+        706
+      ],
+      "rows": [
+        "AO01|PCHWP-A1 SPEED CONTROL|No|Yes",
+        "AO02|PCHWP-A2 SPEED CONTROL|No|Yes",
+        "AO03|CHW BYPASS CV-3 VALVE CONTROL|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1680,
+            628,
+            1800,
+            654
+          ],
+          "expected": "ANALOG OUTPUT"
+        }
+      ],
+      "source_component": "points_air_ops_chw.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "AIR-OPS-CHW-BI",
+      "page": 56,
+      "sheet": "MI710",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS CHW SYSTEM POINTS LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1700,
+        1740,
+        2020,
+        2075,
+        2120
+      ],
+      "y_edges": [
+        740,
+        758,
+        775,
+        792,
+        809,
+        827,
+        844,
+        861,
+        879,
+        896
+      ],
+      "rows": [
+        "BI01|PCHWP-A2 VFD ALARM|Yes|No",
+        "BI02|PCHWP-A1 VFD ALARM|Yes|No",
+        "BI03|PCHWP-A1 VFD STATUS|No|Yes",
+        "BI04|PCHWP-A2 VFD STATUS|No|Yes",
+        "BI05|CH-A1 FLOW SWITCH|Yes|No",
+        "BI06|CH-A1 CV-1 POSITION (FEEDBACK)|No|Yes",
+        "BI07|CH-A2 FLOW SWITCH|Yes|No",
+        "BI08|CH-A2 CV-2 POSITION (FEEDBACK)|No|Yes",
+        "BI09|AIR OPS CHILLER PLANT DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1680,
+            714,
+            1800,
+            740
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_air_ops_chw.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "AIR-OPS-CHW-BO",
+      "page": 56,
+      "sheet": "MI710",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS CHW SYSTEM POINTS LIST - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1700,
+        1740,
+        2020,
+        2075,
+        2120
+      ],
+      "y_edges": [
+        930,
+        947,
+        965,
+        982,
+        999,
+        1016,
+        1034
+      ],
+      "rows": [
+        "BO01|CH-A1 CV-1 VALVE CONTROL|No|No",
+        "BO02|PCHWP-A2 ENABLE|No|No",
+        "BO03|CH-A1 CHILLER CONTROL|No|No",
+        "BO04|CH-A2 CHILLER CONTROL|No|No",
+        "BO05|CH-A2 CV-2 VALVE CONTROL|No|No",
+        "BO06|PCHWP-A1 ENABLE|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1680,
+            904,
+            1800,
+            930
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_air_ops_chw.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "AIR-OPS-DOAH-AI",
+      "page": 52,
+      "sheet": "MI702",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS DOAH DDC POINTS LIST - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1750,
+        1790,
+        2100,
+        2160,
+        2210
+      ],
+      "y_edges": [
+        254,
+        272,
+        289,
+        306,
+        324,
+        341,
+        358,
+        375,
+        393,
+        410,
+        427,
+        444,
+        461,
+        479,
+        496,
+        513,
+        530,
+        548,
+        565,
+        582,
+        599,
+        617,
+        634,
+        651,
+        668,
+        685,
+        703,
+        720
+      ],
+      "rows": [
+        "AI01|HIGH LIMIT STATIC PRESSURE|Yes|No",
+        "AI02|HIGH LIMIT STATIC PRESSURE|Yes|No",
+        "AI03|ERW DIFFERENTIAL PRESSURE - OA SIDE|No|Yes",
+        "AI04|ERW BYPASS DAMPER POSITION (FEEDBACK) - OA SIDE|No|Yes",
+        "AI05|ERW LEAVING AIR HUMIDITY - OA SIDE|No|Yes",
+        "AI06|ERW LAT - OA SIDE|No|Yes",
+        "AI07|HWR VALVE POSITION (FEEDBACK)|No|Yes",
+        "AI08|HEATING COIL LAT|No|Yes",
+        "AI09|CHW VALVE POSITION (FEEDBACK)|No|Yes",
+        "AI10|COOLING COIL LAT|No|Yes",
+        "AI11|TOA FAN DIFFERENTIAL PRESSURE|No|Yes",
+        "AI12|TOA TEMPERATURE|No|Yes",
+        "AI13|TOA HUMIDITY|No|Yes",
+        "AI14|TOA AIRFLOW|No|Yes",
+        "AI15|EA FAN DIFFERENTIAL PRESSURE|No|Yes",
+        "AI16|EA AIRFLOW|No|Yes",
+        "AI17|ERW LEAVING AIR HUMIDITY - EA SIDE|No|Yes",
+        "AI18|ERW LAT - EA SIDE|No|Yes",
+        "AI19|ERW DIFFERENTIAL PRESSURE - EA SIDE|No|Yes",
+        "AI20|ERW BYPASS DAMPER POSITION (FEEDBACK) - EA SIDE|No|Yes",
+        "AI21|ERW ENTERING AIR HUMIDITY - EA SIDE|No|Yes",
+        "AI22|ERW EAT - EA SIDE|No|Yes",
+        "AI23|DOAH SF SPEED (FEEDBACK)|No|No",
+        "AI24|DOAH EF SPEED (FEEDBACK)|No|No",
+        "AI25|BATHROOM EXHAUST AIRFLOW|No|Yes",
+        "AI26|RELIEF DAMPER POSITION (FEEDBACK)|No|No",
+        "AI27|RELIEF AIRFLOW|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1890,
+            185,
+            2100,
+            220
+          ],
+          "expected": "AIR OPS DOAH DDC POINTS LIST"
+        },
+        {
+          "bbox": [
+            1750,
+            220,
+            2210,
+            246
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            1730,
+            235,
+            1840,
+            254
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_air_ops_doah.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "AIR-OPS-DOAH-AO",
+      "page": 52,
+      "sheet": "MI702",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS DOAH DDC POINTS LIST - ANALOG OUTPUT",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1750,
+        1790,
+        2100,
+        2160,
+        2210
+      ],
+      "y_edges": [
+        754,
+        772,
+        789,
+        806,
+        823,
+        841,
+        858,
+        875
+      ],
+      "rows": [
+        "AO01|ERW BYPASS DAMPER CONTROL - OA SIDE|No|Yes",
+        "AO02|HHW VALVE CONTROL|No|Yes",
+        "AO03|CHW VALVE CONTROL|No|Yes",
+        "AO04|ERW BYPASS DAMPER CONTROL - EA SIDE|No|Yes",
+        "AO05|DOAH SF SPEED (FEEDBACK)|No|Yes",
+        "AO06|DOAH EF SPEED (FEEDBACK)|No|Yes",
+        "AO07|RELIEF DAMPER CONTROL|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1730,
+            735,
+            1840,
+            754
+          ],
+          "expected": "ANALOG OUTPUT"
+        }
+      ],
+      "source_component": "points_air_ops_doah.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "AIR-OPS-DOAH-BI",
+      "page": 52,
+      "sheet": "MI702",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS DOAH DDC POINTS LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1750,
+        1790,
+        2100,
+        2160,
+        2210
+      ],
+      "y_edges": [
+        909,
+        927,
+        944,
+        961,
+        979,
+        996,
+        1013,
+        1030,
+        1048,
+        1065,
+        1082,
+        1099,
+        1117,
+        1134,
+        1151,
+        1168,
+        1186,
+        1203,
+        1220,
+        1237,
+        1255,
+        1272,
+        1289,
+        1306,
+        1324
+      ],
+      "rows": [
+        "BI01|DOAH OA DAMPER POSITION OPEN (FEEDBACK)|Yes|No",
+        "BI02|DOAH OA DAMPER POSITION CLOSED (FEEDBACK)|Yes|No",
+        "BI03|MERV 8 UOA FILTER STATUS|Yes|No",
+        "BI04|MERV 13 UOA FILTER STATUS|Yes|No",
+        "BI06|FREEZESTAT|Yes|No",
+        "BI07|HIGH LIMIT STATIC PRESSURE|Yes|No",
+        "BI08|TOA DUCT SMOKE DETECTOR|Yes|No",
+        "BI09|DOAH EA DISCHARGE DAMPER POSITION OPEN (FEEDBACK)|Yes|Yes",
+        "BI10|DOAH EA DISCHARGE DAMPER POSITION CLOSED (FEEDBACK)|Yes|Yes",
+        "BI11|MERV 8 EA FILTER STATUS|Yes|No",
+        "BI12|TREATED OA DAMPER POSITION OPEN (FEEDBACK)|Yes|Yes",
+        "BI13|TREATED OA DAMPER POSITION CLOSED (FEEDBACK)|Yes|Yes",
+        "BI14|EA INLET DAMPER POSITION OPEN (FEEDBACK)|Yes|Yes",
+        "BI15|EA INLET DAMPER POSITION CLOSED (FEEDBACK)|Yes|Yes",
+        "BI16|DOAH SF STATUS|No|Yes",
+        "BI17|DOAH SF ALARM|Yes|No",
+        "BI18|ERW STATUS (FEEDBACK)|Yes|Yes",
+        "BI19|DOAH EF ALARM|Yes|No",
+        "BI20|DOAH EF STATUS|No|Yes",
+        "BI21|ESS (ATFP EMERGENCY SHUTDOWN) *GLOBAL POINT|Yes|No",
+        "BI22|HHWP-DOAH-X CIRCULATOR PUMP STATUS|No|Yes",
+        "BI23|DOAH DDC HARDWARE RESET|No|No",
+        "BI24|24/7 EA ISOLATION DAMPER POSITION OPEN (FEEDBACK)|Yes|Yes",
+        "BI25|24/7 EA DAMPER POSITION CLOSED (FEEDBACK)|Yes|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1730,
+            890,
+            1840,
+            909
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_air_ops_doah.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "AIR-OPS-DOAH-BO",
+      "page": 52,
+      "sheet": "MI702",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS DOAH DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1750,
+        1790,
+        2100,
+        2160,
+        2210
+      ],
+      "y_edges": [
+        1358,
+        1376,
+        1393,
+        1410,
+        1427,
+        1444,
+        1462,
+        1479,
+        1496,
+        1514
+      ],
+      "rows": [
+        "BO01|DOAH OA DAMPER CONTROL|No|Yes",
+        "BO02|DOAH SF ENABLE|No|No",
+        "BO03|DOAH EA DAMPER CONTROL|No|Yes",
+        "BO04|TREATED OA DAMPER CONTROL|No|Yes",
+        "BO05|EA INLET DAMPER CONTROL|No|Yes",
+        "BO06|ERW CONTROL|No|Yes",
+        "BO07|DOAH EF ENABLE|No|No",
+        "BO08|HHWP-DOAH-X CIRCULATOR PUMP ON/OFF|No|Yes",
+        "BO09|24/7 EA DAMPER CONTROL|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1730,
+            1338,
+            1840,
+            1358
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_air_ops_doah.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "AIR-OPS-HV-AI",
+      "page": 70,
+      "sheet": "MI743",
+      "building_scope": "Air Operations storage bay",
+      "title": "AIR OPS H&V DDC POINTS LIST - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        792,
+        825,
+        1000,
+        1045,
+        1090
+      ],
+      "y_edges": [
+        145,
+        162,
+        179,
+        196
+      ],
+      "rows": [
+        "AI01|SPACE TEMPERATURE|Yes|Yes",
+        "AI02|UH-A1 HHW VALVE CONTROL|No|Yes",
+        "AI03|UH-A2 HHW VALVE CONTROL|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            790,
+            82,
+            1090,
+            109
+          ],
+          "expected": "AIR OPS H&V DDC POINTS LIST"
+        },
+        {
+          "bbox": [
+            790,
+            109,
+            1090,
+            131
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            790,
+            126,
+            875,
+            145
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_air_ops_heating_ventilating.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "AIR-OPS-HV-AO",
+      "page": 70,
+      "sheet": "MI743",
+      "building_scope": "Air Operations storage bay",
+      "title": "AIR OPS H&V DDC POINTS LIST - ANALOG OUTPUT",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        792,
+        825,
+        1000,
+        1045,
+        1090
+      ],
+      "y_edges": [
+        231,
+        248,
+        266
+      ],
+      "rows": [
+        "AO01|UH-A1 HHW VALVE CONTROL|No|No",
+        "AO02|UH-A2 HHW VALVE CONTROL|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            790,
+            213,
+            885,
+            231
+          ],
+          "expected": "ANALOG OUTPUT"
+        }
+      ],
+      "source_component": "points_air_ops_heating_ventilating.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "AIR-OPS-HV-BI",
+      "page": 70,
+      "sheet": "MI743",
+      "building_scope": "Air Operations storage bay",
+      "title": "AIR OPS H&V DDC POINTS LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        792,
+        825,
+        1000,
+        1045,
+        1090
+      ],
+      "y_edges": [
+        300,
+        318,
+        335,
+        352,
+        370,
+        387,
+        405
+      ],
+      "rows": [
+        "BI01|OA DAMPER END SWITCH|Yes|No",
+        "BI02|EA DAMPER END SWITCH|Yes|No",
+        "BI03|EF-A1 STATUS (FEEDBACK)|Yes|No",
+        "BI04|UH-A1 FAN STATUS|Yes|No",
+        "BI05|UH-A2 FAN STATUS|Yes|No",
+        "BI06|AIR OPS H&V DDC RESET|Yes|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            790,
+            282,
+            880,
+            300
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_air_ops_heating_ventilating.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "AIR-OPS-HV-BO",
+      "page": 70,
+      "sheet": "MI743",
+      "building_scope": "Air Operations storage bay",
+      "title": "AIR OPS H&V DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        792,
+        825,
+        1000,
+        1045,
+        1090
+      ],
+      "y_edges": [
+        439,
+        456,
+        473,
+        491,
+        508,
+        526
+      ],
+      "rows": [
+        "BO01|OA DAMPER OPEN/CLOSE|No|No",
+        "BO02|EA DAMPER OPEN/CLOSE|No|No",
+        "BO03|EF-A1 START/STOP|No|No",
+        "BO04|UH-A1 FAN START/STOP|No|No",
+        "BO05|UH-A2 FAN START/STOP|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            790,
+            420,
+            885,
+            439
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_air_ops_heating_ventilating.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "AIR-OPS-HHW-AI",
+      "page": 58,
+      "sheet": "MI712",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS HHW SYSTEM POINT LIST - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1750,
+        1810,
+        2075,
+        2130,
+        2175
+      ],
+      "y_ranges": [
+        [
+          304,
+          325
+        ],
+        [
+          325,
+          342
+        ],
+        [
+          342,
+          359
+        ],
+        [
+          359,
+          393
+        ],
+        [
+          393,
+          411
+        ],
+        [
+          411,
+          428
+        ],
+        [
+          428,
+          445
+        ],
+        [
+          445,
+          462
+        ],
+        [
+          462,
+          479
+        ],
+        [
+          479,
+          496
+        ],
+        [
+          496,
+          514
+        ],
+        [
+          514,
+          531
+        ],
+        [
+          531,
+          548
+        ],
+        [
+          548,
+          565
+        ],
+        [
+          565,
+          582
+        ],
+        [
+          582,
+          600
+        ]
+      ],
+      "rows": [
+        "AI1|HHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI2|HHW FLOWRATE|No|Yes",
+        "AI3|HHWR TEMPERATURE|No|Yes",
+        "AI4|HHW BYPASS VALVE POSITION (FEEDBACK)|No|Yes",
+        "AI5|HHWS TEMPERATURE|No|Yes",
+        "AI6|SHHWP-A1 DIFFERENTIAL PRESSURE|No|Yes",
+        "AI7|SHHWP-A2 DIFFERENTIAL PRESSURE|No|Yes",
+        "AI8|B-A1 LWT|No|Yes",
+        "AI9|B-A2 LWT|No|Yes",
+        "AI10|B-A1 EWT|No|Yes",
+        "AI11|B-A2 EWT|No|Yes",
+        "AI12|SHHWP-A1 SPEED (FEEDBACK)|No|Yes",
+        "AI13|OA TEMPERATURE *GLOBAL POINT|No|Yes",
+        "AI14|SHHWP-A2 SPEED (FEEDBACK)|No|Yes",
+        "AI15|SHHWP-A1 SPEED (FEEDBACK)|No|Yes",
+        "AI16|PHHWP-A1 SPEED (FEEDBACK)|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1875,
+            233,
+            2110,
+            268
+          ],
+          "expected": "AIR OPS HHW SYSTEM POINT LIST"
+        },
+        {
+          "bbox": [
+            1750,
+            268,
+            2175,
+            295
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            1745,
+            286,
+            1840,
+            304
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_air_ops_hhw.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "AIR-OPS-HHW-AO",
+      "page": 58,
+      "sheet": "MI712",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS HHW SYSTEM POINT LIST - ANALOG OUTPUT",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1750,
+        1810,
+        2075,
+        2130,
+        2175
+      ],
+      "y_edges": [
+        629,
+        646,
+        663,
+        680,
+        697,
+        720
+      ],
+      "rows": [
+        "AO1|HHW BYPASS VALVE CONTROL|No|Yes",
+        "AO2|SHHWP-A1 VFD SPEED CONTROL|No|Yes",
+        "AO3|SHHWP-A2 VFD SPEED CONTROL|No|Yes",
+        "AO4|PHHWP-A1 VFD SPEED CONTROL|No|Yes",
+        "AO5|PHHWP-A2 VFD SPEED CONTROL|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1745,
+            603,
+            1840,
+            629
+          ],
+          "expected": "ANALOG OUTPUT"
+        }
+      ],
+      "source_component": "points_air_ops_hhw.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "AIR-OPS-HHW-BI",
+      "page": 58,
+      "sheet": "MI712",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS HHW SYSTEM POINT LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1750,
+        1810,
+        2075,
+        2130,
+        2175
+      ],
+      "y_edges": [
+        750,
+        767,
+        784,
+        802,
+        819,
+        836,
+        853,
+        870,
+        888,
+        905,
+        922,
+        939,
+        960
+      ],
+      "rows": [
+        "BI1|BOILER B-A1 REMOTE SHUTDOWN SWITCH|Yes|No",
+        "BI2|SHHWP-A1 VFD STATUS|No|Yes",
+        "BI3|SHHWP-A1 VFD ALARM|Yes|No",
+        "BI4|SHHWP-A2 VFD STATUS|No|Yes",
+        "BI5|SHHWP-A2 VFD ALARM|Yes|No",
+        "BI6|B-A1 STATUS|No|No",
+        "BI7|B-A2 STATUS|No|No",
+        "BI8|PHHWP-A1 VFD STATUS|No|Yes",
+        "BI9|PHHWP-A1 VFD ALARM|Yes|No",
+        "BI10|PHHWP-A2 VFD ALARM|Yes|No",
+        "BI11|PHHWP-A2 VFD STATUS|No|Yes",
+        "BI12|AIR OPS BOILER DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1745,
+            724,
+            1840,
+            750
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_air_ops_hhw.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "AIR-OPS-HHW-BO",
+      "page": 58,
+      "sheet": "MI712",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS HHW SYSTEM POINT LIST - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1750,
+        1810,
+        2075,
+        2130,
+        2175
+      ],
+      "y_edges": [
+        991,
+        1008,
+        1026,
+        1043,
+        1060,
+        1077,
+        1100
+      ],
+      "rows": [
+        "BO1|SHHWP-A1 VFD ENABLE|No|No",
+        "BO2|SHHWP-A2 VFD ENABLE|No|No",
+        "BO3|B-A1 ON/OFF|No|No",
+        "BO4|B-A2 ON/OFF|No|No",
+        "BO5|PHHWP-A2 VFD ENABLE|No|No",
+        "BO6|PHHWP-A2 VFD ENABLE|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1745,
+            965,
+            1840,
+            991
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_air_ops_hhw.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "ATCT-AHU-AI",
+      "page": 65,
+      "sheet": "MI731",
+      "building_scope": "ATCT",
+      "title": "POINTS LIST AHU T1A T1B - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1650,
+        1720,
+        2050,
+        2105,
+        2155
+      ],
+      "y_edges": [
+        290,
+        309,
+        327,
+        344,
+        361,
+        378,
+        395,
+        412,
+        429,
+        446,
+        464,
+        481,
+        498,
+        515,
+        532,
+        549,
+        566,
+        584,
+        601,
+        618,
+        635,
+        654
+      ],
+      "rows": [
+        "AI01|AHU-T1B HW VALVE POSITION (FEEDBACK)|No|No",
+        "AI02|AHU-T1B SA TEMPERATURE|Yes|Yes",
+        "AI03|AHU-T1B SA FAN STATUS|Yes|No",
+        "AI04|AHU-T1B SA FAN AIRFLOW|No|No",
+        "AI05|AHU-T1B FAN SPEED (FEEDBACK)|No|No",
+        "AI06|MIN OA AIRFLOW|Yes|Yes",
+        "AI07|AHU-T1B CHW VALVE POSITION (FEEDBACK)|No|No",
+        "AI08|AHU-T1B CC DISCHARGE TEMPERATURE|No|No",
+        "AI09|AHU-T1B MA TEMPERATURE|No|No",
+        "AI10|AHU-T1A HW VALVE POSITION (FEEDBACK)|No|No",
+        "AI11|AHU-T1A SA TEMPERATURE|Yes|Yes",
+        "AI12|AHU-T1A SA FAN STATUS|Yes|No",
+        "AI13|AHU-T1A SA FAN AIRFLOW|No|No",
+        "AI14|AHU-T1A FAN SPEED (FEEDBACK)|No|No",
+        "AI15|AHU-T1A CHW VALVE POSITION (FEEDBACK)|No|No",
+        "AI16|AHU-T1A CC DISCHARGE TEMPERATURE|No|No",
+        "AI17|AHU-T1A MA TEMPERATURE|No|No",
+        "AI18|HIGH LIMIT HUMIDISTAT|Yes|No",
+        "AI19|SPACE HUMIDITY|Yes|No",
+        "AI20|SPACE THERMOSTAT|Yes|No",
+        "AI21|HUMIDIFIER CONTROL|Yes|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1780,
+            225,
+            2040,
+            262
+          ],
+          "expected": "POINTS LIST AHU T1A TIB"
+        },
+        {
+          "bbox": [
+            1650,
+            251,
+            2155,
+            279
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            1640,
+            272,
+            1740,
+            290
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_atct_ahu.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "ATCT-AHU-AO",
+      "page": 65,
+      "sheet": "MI731",
+      "building_scope": "ATCT",
+      "title": "POINTS LIST AHU T1A T1B - ANALOG OUTPUT",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1650,
+        1720,
+        2050,
+        2105,
+        2155
+      ],
+      "y_edges": [
+        687,
+        706,
+        724,
+        741,
+        758,
+        775,
+        792,
+        810
+      ],
+      "rows": [
+        "AO01|AHU-T1B HW VALVE CONTROL|No|No",
+        "AO02|AHU-T1B FAN SPEED CONTROL|No|No",
+        "AO03|AHU-T1B CHW VALVE CONTROL|No|No",
+        "AO04|AHU-T1A HW VALVE CONTROL|No|No",
+        "AO05|AHU-T1A FAN SPEED CONTROL|No|No",
+        "AO06|AHU-T1A CHW VALVE CONTROL|No|No",
+        "AO07|HUMIDIFIER OUTPUT|Yes|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1640,
+            661,
+            1740,
+            687
+          ],
+          "expected": "ANALOG OUTPUT"
+        }
+      ],
+      "source_component": "points_atct_ahu.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "ATCT-AHU-BI",
+      "page": 65,
+      "sheet": "MI731",
+      "building_scope": "ATCT",
+      "title": "POINTS LIST AHU T1A T1B - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1650,
+        1720,
+        2050,
+        2105,
+        2155
+      ],
+      "y_edges": [
+        842,
+        861,
+        879,
+        896,
+        913,
+        930,
+        947,
+        964,
+        981,
+        999,
+        1016,
+        1033,
+        1050,
+        1067,
+        1085,
+        1102,
+        1119,
+        1136,
+        1153,
+        1170,
+        1187,
+        1205,
+        1222,
+        1239,
+        1256,
+        1273,
+        1292
+      ],
+      "rows": [
+        "BI01|AHU-T1B MERV 8 FILTER STATUS|Yes|No",
+        "BI02|AHU-T1B SA DUCT SMOKE DETECTOR|Yes|No",
+        "BI03|AHU-T1B MERV 13 FILTER STATUS|Yes|No",
+        "BI04|AHU-T1B VFD FAULT STATUS|No|No",
+        "BI05|MINIMUM OA DAMPER POSITION CLOSED (FEEDBACK)|No|No",
+        "BI06|MINIMUM OA DAMPER POSITION OPEN (FEEDBACK)|No|No",
+        "BI07|REDUNDANT OA DAMPER POSITION CLOSED (FEEDBACK)|No|No",
+        "BI08|REDUNDANT OA DAMPER POSITION OPEN (FEEDBACK)|No|No",
+        "BI09|AHU-T1A MERV 8 FILTER STATUS|Yes|No",
+        "BI10|AHU-T1A SA DUCT SMOKE DETECTOR|Yes|No",
+        "BI11|AHU-T1A MERV 13 FILTER STATUS|Yes|No",
+        "BI12|AHU-T1A VFD FAULT STATUS|No|No",
+        "BI13|AHU-T1A RA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)|No|No",
+        "BI14|AHU-T1A RA ISOLATION DAMPER POSITION OPEN (FEEDBACK)|No|No",
+        "BI15|AHU-T1B RA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)|No|No",
+        "BI16|AHU-T1B RA ISOLATION DAMPER POSITION OPEN (FEEDBACK)|No|No",
+        "BI17|AHU-T1B SA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)|No|No",
+        "BI18|AHU-T1B SA ISOLATION DAMPER POSITION OPEN (FEEDBACK)|No|No",
+        "BI19|AHU-T1A SA ISOLATION DAMPER POSITION CLOSED (FEEDBACK)|No|No",
+        "BI20|AHU-T1A SA ISOLATION DAMPER POSITION OPEN (FEEDBACK)|No|No",
+        "BI21|ATFP EMERGENCY SHUTDOWN SWITCH|Yes|No",
+        "BI22|AHU-T1A FREEZESTAT|No|No",
+        "BI23|AHU-T1B FREEZESTAT|Yes|No",
+        "BI24|ATCT AHU DDC RESET|No|No",
+        "BI25|AHU-T1A HIGH LIMIT STATIC PRESSURE|Yes|No",
+        "BI26|AHU-T1B HIGH LIMIT STATIC PRESSURE|Yes|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1640,
+            816,
+            1740,
+            842
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_atct_ahu.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "ATCT-AHU-BO",
+      "page": 65,
+      "sheet": "MI731",
+      "building_scope": "ATCT",
+      "title": "POINTS LIST AHU T1A T1B - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1650,
+        1720,
+        2050,
+        2105,
+        2155
+      ],
+      "y_edges": [
+        1325,
+        1344,
+        1361,
+        1378,
+        1395,
+        1412,
+        1429,
+        1447,
+        1465
+      ],
+      "rows": [
+        "BO01|AHU-T1B FAN START/STOP|No|No",
+        "BO02|MINIMUM OA DAMPER CONTROL|No|No",
+        "BO03|REDUNDANT OA DAMPER CONTROL|No|No",
+        "BO04|AHU-T1A FAN START/STOP|No|No",
+        "BO05|AHU-T1A RA ISOLATION DAMPER CONTROL|No|No",
+        "BO06|AHU-T1B RA ISOLATION DAMPER CONTROL|No|No",
+        "BO07|AHU-T1B SA ISOLATION DAMPER CONTROL|No|No",
+        "BO08|AHU-T1A SA ISOLATION DAMPER CONTROL|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1640,
+            1299,
+            1740,
+            1325
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_atct_ahu.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "ATCT-DOAH-AI",
+      "page": 64,
+      "sheet": "MI730",
+      "building_scope": "ATCT",
+      "title": "POINTS LIST DOAH T1 - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1650,
+        1720,
+        2030,
+        2090,
+        2145
+      ],
+      "y_edges": [
+        409,
+        429,
+        446,
+        463,
+        480,
+        497,
+        514,
+        531,
+        548,
+        565,
+        582,
+        599,
+        616,
+        635
+      ],
+      "rows": [
+        "AI01|UOA RELATIVE HUMIDITY|No|Yes",
+        "AI02|UOA TEMPERATURE|No|Yes",
+        "AI03|HHW VALVE POSITION (FEEDBACK)|No|Yes",
+        "AI04|HEATING COIL LAT|No|Yes",
+        "AI05|COOLING COIL LAT|Yes|Yes",
+        "AI06|TOA TEMPERATURE|No|Yes",
+        "AI07|TOA HUMIDITY|Yes|Yes",
+        "AI08|TOA AIRFLOW|Yes|Yes",
+        "AI09|CHW VALVE POSITION (FEEDBACK)|No|Yes",
+        "AI10|FAN SPEED (FEEDBACK)|No|Yes",
+        "AI11|TOA FAN DIFFERENTIAL PRESSURE|No|Yes",
+        "AI12|REHEAT HHW VALVE POSITION (FEEDBACK)|No|Yes",
+        "AI13|DOAH DISCHARGE TEMPERATURE|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1780,
+            345,
+            2010,
+            380
+          ],
+          "expected": "POINTS LIST DOAH TI"
+        },
+        {
+          "bbox": [
+            1650,
+            370,
+            2145,
+            398
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            1640,
+            391,
+            1740,
+            409
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_atct_doah.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "ATCT-DOAH-AO",
+      "page": 64,
+      "sheet": "MI730",
+      "building_scope": "ATCT",
+      "title": "POINTS LIST DOAH T1 - ANALOG OUTPUT",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1650,
+        1720,
+        2030,
+        2090,
+        2145
+      ],
+      "y_edges": [
+        668,
+        687,
+        704,
+        722,
+        739
+      ],
+      "rows": [
+        "AO01|HHW VALVE CONTROL|No|Yes",
+        "AO02|CHW VALVE CONTROL|No|Yes",
+        "AO03|FAN SPEED CONTROL|No|Yes",
+        "AO04|REHEAT HHW VALVE CONTROL|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1640,
+            642,
+            1740,
+            668
+          ],
+          "expected": "ANALOG OUTPUT"
+        }
+      ],
+      "source_component": "points_atct_doah.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "ATCT-DOAH-BI",
+      "page": 64,
+      "sheet": "MI730",
+      "building_scope": "ATCT",
+      "title": "POINTS LIST DOAH T1 - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1650,
+        1720,
+        2030,
+        2090,
+        2145
+      ],
+      "y_edges": [
+        771,
+        790,
+        808,
+        825,
+        842,
+        859,
+        876,
+        893,
+        910,
+        928,
+        945,
+        962,
+        979,
+        997
+      ],
+      "rows": [
+        "BI01|MERV 8 UOA FILTER STATUS|Yes|No",
+        "BI02|MERV 13 UOA FILTER STATUS|Yes|No",
+        "BI03|FREEZESTAT|Yes|No",
+        "BI04|UOA DAMPER POSITION CLOSED (FEEDBACK)|Yes|No",
+        "BI05|UOA DAMPER POSITION OPEN (FEEDBACK)|Yes|No",
+        "BI06|HIGH LIMIT STATIC PRESSURE|Yes|No",
+        "BI07|TREATED OA DAMPER POSITION CLOSED (FEEDBACK)|Yes|No",
+        "BI08|TREATED OA DAMPER POSITION OPEN (FEEDBACK)|Yes|No",
+        "BI09|HHWP-DOAH-T1 CIRCULATOR PUMP STATUS|Yes|Yes",
+        "BI10|FAN VFD STATUS|No|Yes",
+        "BI11|FAN VFD ALARM|Yes|No",
+        "BI12|ESS (ATFP EMERGENCY SHUTDOWN) *GLOBAL POINT|Yes|No",
+        "BI13|ATCT DOAH DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1640,
+            745,
+            1740,
+            771
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_atct_doah.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "ATCT-DOAH-BO",
+      "page": 64,
+      "sheet": "MI730",
+      "building_scope": "ATCT",
+      "title": "POINTS LIST DOAH T1 - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1650,
+        1720,
+        2030,
+        2090,
+        2145
+      ],
+      "y_edges": [
+        1030,
+        1049,
+        1066,
+        1083,
+        1101
+      ],
+      "rows": [
+        "BO01|UOA DAMPER CONTROL|No|No",
+        "BO02|TREATED OA DAMPER CONTROL|No|No",
+        "BO03|HHWP-DOAH-T1 CIRCULATOR PUMP ON/OFF|No|No",
+        "BO04|FAN START/STOP|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1640,
+            1004,
+            1740,
+            1030
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_atct_doah.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "ATCT-STAIR-PRESS-AI",
+      "page": 66,
+      "sheet": "MI732",
+      "building_scope": "ATCT",
+      "title": "ATCT STAIR PRESSURIZATION DDC POINTS LIST - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1530,
+        1570,
+        1715,
+        1765,
+        1815
+      ],
+      "y_edges": [
+        358,
+        378,
+        395
+      ],
+      "rows": [
+        "AI01|SPF-T1 SPEED (FEEDBACK)|No|Yes",
+        "AI02|SPF-T2 SPEED (FEEDBACK)|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1370,
+            298,
+            1800,
+            330
+          ],
+          "expected": "ATCT STAIR PRESSURIZATION DDC POINTS LIST"
+        },
+        {
+          "bbox": [
+            1530,
+            319,
+            1815,
+            348
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            1520,
+            341,
+            1620,
+            358
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_atct_stair_pressurization.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "ATCT-STAIR-PRESS-AO",
+      "page": 66,
+      "sheet": "MI732",
+      "building_scope": "ATCT",
+      "title": "ATCT STAIR PRESSURIZATION DDC POINTS LIST - ANALOG OUTPUT",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1530,
+        1570,
+        1715,
+        1765,
+        1815
+      ],
+      "y_edges": [
+        427,
+        447,
+        464
+      ],
+      "rows": [
+        "AO01|SPF-T1 SPEED|No|Yes",
+        "AO02|SPF-T2 SPEED|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1520,
+            401,
+            1620,
+            427
+          ],
+          "expected": "ANALOG OUTPUT"
+        }
+      ],
+      "source_component": "points_atct_stair_pressurization.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "ATCT-STAIR-PRESS-BI",
+      "page": 66,
+      "sheet": "MI732",
+      "building_scope": "ATCT",
+      "title": "ATCT STAIR PRESSURIZATION DDC POINTS LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1530,
+        1570,
+        1715,
+        1765,
+        1815
+      ],
+      "y_edges": [
+        496,
+        516,
+        534,
+        551,
+        568,
+        585,
+        603
+      ],
+      "rows": [
+        "BI01|SPF-T1 PRESSURE SWITCH|No|Yes",
+        "BI02|SFP-T1 ALARM|Yes|No",
+        "BI03|SFP-T1 STATUS|No|Yes",
+        "BI04|SPF-T2 PRESSURE SWITCH|No|Yes",
+        "BI05|SFP-T2 ALARM|Yes|No",
+        "BI06|SFP-T2 STATUS|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1520,
+            470,
+            1620,
+            496
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_atct_stair_pressurization.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "ATCT-STAIR-PRESS-BO",
+      "page": 66,
+      "sheet": "MI732",
+      "building_scope": "ATCT",
+      "title": "ATCT STAIR PRESSURIZATION DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1530,
+        1570,
+        1715,
+        1765,
+        1815
+      ],
+      "y_edges": [
+        634,
+        654,
+        671
+      ],
+      "rows": [
+        "BO01|SPF-T1 ENABLE|No|No",
+        "BO02|SPF-T2 ENABLE|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1520,
+            608,
+            1620,
+            634
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_atct_stair_pressurization.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "CRAH-AI",
+      "page": 68,
+      "sheet": "MI741",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "CRAH DDC POINTS LIST - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        143,
+        185,
+        370,
+        418,
+        460
+      ],
+      "y_edges": [
+        1025,
+        1044,
+        1062,
+        1079,
+        1097,
+        1115
+      ],
+      "rows": [
+        "AI01|SPACE TEMPERATURE|Yes|Yes",
+        "AI02|SUPPLY AIR TEMPERATURE|No|Yes",
+        "AI03|RA TEMPERATURE|No|Yes",
+        "AI04|FAN SPEED (FEEDBACK)|No|No",
+        "AI05|CONTROL VALVE (FEEDBACK)|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            140,
+            960,
+            465,
+            990
+          ],
+          "expected": "CRAH DDC POINTS LIST"
+        },
+        {
+          "bbox": [
+            140,
+            990,
+            465,
+            1012
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            140,
+            1012,
+            240,
+            1025
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_crah_sfpvav_templates.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "CRAH-AO",
+      "page": 68,
+      "sheet": "MI741",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "CRAH DDC POINTS LIST - ANALOG OUTPUT",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        143,
+        185,
+        370,
+        418,
+        460
+      ],
+      "y_edges": [
+        1146,
+        1163,
+        1182
+      ],
+      "rows": [
+        "AO01|CHW VALVE CONTROL|No|No",
+        "AO02|FAN SPEED CONTROL|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            140,
+            1128,
+            240,
+            1146
+          ],
+          "expected": "ANALOG OUTPUT"
+        }
+      ],
+      "source_component": "points_crah_sfpvav_templates.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "CRAH-BI",
+      "page": 68,
+      "sheet": "MI741",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "CRAH DDC POINTS LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        143,
+        185,
+        370,
+        418,
+        460
+      ],
+      "y_edges": [
+        1215,
+        1233,
+        1250,
+        1268,
+        1285,
+        1304
+      ],
+      "rows": [
+        "BI01|DIRTY FILTER SWITCH|Yes|No",
+        "BI02|DRAIN PAN OVERFLOW SWITCH|Yes|No",
+        "BI03|FAN STATUS|Yes|No",
+        "BI04|CONDENSATE PUMP STATUS|Yes|No",
+        "BI05|CRAH DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            140,
+            1197,
+            240,
+            1215
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_crah_sfpvav_templates.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "CRAH-BO",
+      "page": 68,
+      "sheet": "MI741",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "CRAH DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        143,
+        185,
+        370,
+        418,
+        460
+      ],
+      "y_edges": [
+        1336,
+        1360
+      ],
+      "rows": [
+        "BO01|FAN START/STOP|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            140,
+            1318,
+            240,
+            1336
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_crah_sfpvav_templates.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "SFPVAV-AI",
+      "page": 68,
+      "sheet": "MI741",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "SFPVAV DDC POINTS LIST - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1948,
+        1985,
+        2144,
+        2180,
+        2230
+      ],
+      "y_edges": [
+        1149,
+        1168,
+        1185,
+        1203,
+        1236
+      ],
+      "rows": [
+        "AI01|SPACE TEMPERATURE|Yes|Yes",
+        "AI02|VELOCITY PRESSURE SENSOR|No|Yes",
+        "AI03|SUPPLY AIR TEMPERATURE|No|Yes",
+        "AI04|HHW VALVE CONTROL (FEEDBACK)|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1945,
+            1085,
+            2235,
+            1115
+          ],
+          "expected": "SFPVAV DDC POINTS LIST"
+        },
+        {
+          "bbox": [
+            1945,
+            1115,
+            2235,
+            1138
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            1945,
+            1130,
+            2030,
+            1149
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_crah_sfpvav_templates.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "SFPVAV-AO",
+      "page": 68,
+      "sheet": "MI741",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "SFPVAV DDC POINTS LIST - ANALOG OUTPUT",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1948,
+        1985,
+        2144,
+        2180,
+        2230
+      ],
+      "y_edges": [
+        1268,
+        1286,
+        1304
+      ],
+      "rows": [
+        "AO01|HW VALVE CONTROL|No|No",
+        "AO02|DAMPER CONTROL|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1945,
+            1248,
+            2045,
+            1268
+          ],
+          "expected": "ANALOG OUTPUT"
+        }
+      ],
+      "source_component": "points_crah_sfpvav_templates.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "SFPVAV-BI",
+      "page": 68,
+      "sheet": "MI741",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "SFPVAV DDC POINTS LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1948,
+        1985,
+        2144,
+        2180,
+        2230
+      ],
+      "y_edges": [
+        1337,
+        1355,
+        1373
+      ],
+      "rows": [
+        "BI01|FAN STATUS|Yes|No",
+        "BI02|VAV DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1945,
+            1318,
+            2045,
+            1337
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_crah_sfpvav_templates.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "SFPVAV-BO",
+      "page": 68,
+      "sheet": "MI741",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "SFPVAV DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1948,
+        1985,
+        2144,
+        2180,
+        2230
+      ],
+      "y_edges": [
+        1406,
+        1430
+      ],
+      "rows": [
+        "BO01|FAN START/STOP|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1945,
+            1385,
+            2045,
+            1406
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_crah_sfpvav_templates.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "FCU-COOL-AI",
+      "page": 67,
+      "sheet": "MI740",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "FCU WITH COOLING COILS DDC POINTS LIST - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        400,
+        440,
+        585,
+        635,
+        680
+      ],
+      "y_ranges": [
+        [
+          1116,
+          1137
+        ],
+        [
+          1137,
+          1154
+        ],
+        [
+          1154,
+          1190
+        ]
+      ],
+      "rows": [
+        "AI01|SPACE TEMPERATURE|Yes|Yes",
+        "AI02|CHW VALVE CONTROL|No|No",
+        "AI03|DISCHARGE AIR TEMPERATURE SENSOR|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            400,
+            1065,
+            680,
+            1105
+          ],
+          "expected": "FCU WITH COOLING COILS DDC POINTS LIST"
+        },
+        {
+          "bbox": [
+            395,
+            1095,
+            690,
+            1116
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_fcu_unit_heater_templates.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "FCU-COOL-AO",
+      "page": 67,
+      "sheet": "MI740",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "FCU WITH COOLING COILS DDC POINTS LIST - ANALOG OUTPUT",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        400,
+        440,
+        585,
+        635,
+        680
+      ],
+      "y_edges": [
+        1217,
+        1238
+      ],
+      "rows": [
+        "AO01|CHW VALVE CONTROL|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            395,
+            1190,
+            500,
+            1217
+          ],
+          "expected": "ANALOG OUTPUT"
+        }
+      ],
+      "source_component": "points_fcu_unit_heater_templates.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "FCU-COOL-BI",
+      "page": 67,
+      "sheet": "MI740",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "FCU WITH COOLING COILS DDC POINTS LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        400,
+        440,
+        585,
+        635,
+        680
+      ],
+      "y_ranges": [
+        [
+          1269,
+          1290
+        ],
+        [
+          1290,
+          1320
+        ],
+        [
+          1320,
+          1338
+        ],
+        [
+          1338,
+          1360
+        ]
+      ],
+      "rows": [
+        "BI01|FAN STATUS|Yes|No",
+        "BI02|SECONDARY DRAIN PAN OVERFLOW SWITCH|Yes|No",
+        "BI03|DIRTY FILTER SWITCH|Yes|No",
+        "BI04|FCU DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            395,
+            1243,
+            500,
+            1269
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_fcu_unit_heater_templates.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "FCU-COOL-BO",
+      "page": 67,
+      "sheet": "MI740",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "FCU WITH COOLING COILS DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        400,
+        440,
+        585,
+        635,
+        680
+      ],
+      "y_edges": [
+        1387,
+        1410
+      ],
+      "rows": [
+        "BO01|FAN START/STOP|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            395,
+            1360,
+            500,
+            1387
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_fcu_unit_heater_templates.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "FCU-HEAT-COOL-AI",
+      "page": 67,
+      "sheet": "MI740",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1200,
+        1235,
+        1465,
+        1510,
+        1560
+      ],
+      "y_edges": [
+        1129,
+        1150,
+        1167,
+        1184,
+        1202
+      ],
+      "rows": [
+        "AI01|SPACE TEMPERATURE|Yes|Yes",
+        "AI02|CHW VALVE CONTROL (FEEDBACK)|No|Yes",
+        "AI03|HHW VALVE CONTROL (FEEDBACK)|No|Yes",
+        "AI04|DISCHARGE AIR TEMPERATURE SENSOR|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1200,
+            1060,
+            1560,
+            1101
+          ],
+          "expected": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST"
+        },
+        {
+          "bbox": [
+            1195,
+            1108,
+            1300,
+            1129
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_fcu_unit_heater_templates.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "FCU-HEAT-COOL-AO",
+      "page": 67,
+      "sheet": "MI740",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST - ANALOG OUTPUT",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1200,
+        1235,
+        1465,
+        1510,
+        1560
+      ],
+      "y_edges": [
+        1233,
+        1253,
+        1270
+      ],
+      "rows": [
+        "AO01|CHW VALVE CONTROL|No|No",
+        "AO02|HHW VALVE CONTROL|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1195,
+            1205,
+            1300,
+            1233
+          ],
+          "expected": "ANALOG OUTPUT"
+        }
+      ],
+      "source_component": "points_fcu_unit_heater_templates.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "FCU-HEAT-COOL-BI",
+      "page": 67,
+      "sheet": "MI740",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1200,
+        1235,
+        1465,
+        1510,
+        1560
+      ],
+      "y_edges": [
+        1302,
+        1323,
+        1340,
+        1357,
+        1374
+      ],
+      "rows": [
+        "BI01|SUPPLY FAN START/STOP|Yes|No",
+        "BI02|DIRTY FILTER SWITCH|Yes|No",
+        "BI03|SECOUNDARY DRAIN PAN OVERFLOW SWITCH|Yes|No",
+        "BI04|FCU DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1195,
+            1274,
+            1300,
+            1302
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_fcu_unit_heater_templates.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "FCU-HEAT-COOL-BO",
+      "page": 67,
+      "sheet": "MI740",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1200,
+        1235,
+        1465,
+        1510,
+        1560
+      ],
+      "y_edges": [
+        1405,
+        1429
+      ],
+      "rows": [
+        "BO01|SUPPLY FAN START/STOP|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1195,
+            1377,
+            1300,
+            1405
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_fcu_unit_heater_templates.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "UNIT-HEATER-AI",
+      "page": 67,
+      "sheet": "MI740",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "UNIT HEATER DDC POINTS LIST - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1745,
+        1785,
+        1930,
+        1985,
+        2040
+      ],
+      "y_edges": [
+        1214,
+        1235,
+        1252
+      ],
+      "rows": [
+        "AI01|SPACE TEMPERATURE|Yes|Yes",
+        "AI02|HHW VALVE CONTROL|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1750,
+            1145,
+            2040,
+            1186
+          ],
+          "expected": "UNIT HEATER DDC POINTS LIST"
+        },
+        {
+          "bbox": [
+            1745,
+            1193,
+            1845,
+            1214
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_fcu_unit_heater_templates.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "UNIT-HEATER-AO",
+      "page": 67,
+      "sheet": "MI740",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "UNIT HEATER DDC POINTS LIST - ANALOG OUTPUT",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1745,
+        1785,
+        1930,
+        1985,
+        2040
+      ],
+      "y_edges": [
+        1283,
+        1308
+      ],
+      "rows": [
+        "AO01|HHW VALVE CONTROL|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1745,
+            1256,
+            1845,
+            1283
+          ],
+          "expected": "ANALOG OUTPUT"
+        }
+      ],
+      "source_component": "points_fcu_unit_heater_templates.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "UNIT-HEATER-BI",
+      "page": 67,
+      "sheet": "MI740",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "UNIT HEATER DDC POINTS LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1745,
+        1785,
+        1930,
+        1985,
+        2040
+      ],
+      "y_edges": [
+        1335,
+        1356,
+        1373
+      ],
+      "rows": [
+        "BI01|FAN STATUS|Yes|No",
+        "BI02|CUH/UH DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1745,
+            1308,
+            1845,
+            1335
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_fcu_unit_heater_templates.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "UNIT-HEATER-BO",
+      "page": 67,
+      "sheet": "MI740",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "UNIT HEATER DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1745,
+        1785,
+        1930,
+        1985,
+        2040
+      ],
+      "y_edges": [
+        1404,
+        1428
+      ],
+      "rows": [
+        "BO01|FAN START/STOP|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1745,
+            1377,
+            1845,
+            1404
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_fcu_unit_heater_templates.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "HUMIDIFIER-AI",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "HUMIDIFIER DDC POINTS LIST - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        327,
+        360,
+        490,
+        535,
+        575
+      ],
+      "y_edges": [
+        130,
+        150
+      ],
+      "rows": [
+        "AI01|ZONE HUMIDITY|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            325,
+            65,
+            575,
+            95
+          ],
+          "expected": "HUMIDIFIER DDC POINTS LIST"
+        },
+        {
+          "bbox": [
+            325,
+            95,
+            575,
+            117
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            325,
+            112,
+            410,
+            130
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_mi742_templates.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "HUMIDIFIER-BI",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "HUMIDIFIER DDC POINTS LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        327,
+        360,
+        490,
+        535,
+        575
+      ],
+      "y_ranges": [
+        [
+          181,
+          201
+        ],
+        [
+          201,
+          232
+        ],
+        [
+          232,
+          251
+        ]
+      ],
+      "rows": [
+        "BI01|HUMIDIFER STATUS|Yes|No",
+        "BI02|HUMIDIFIER CYLINDER CHANGE STATUS|Yes|No",
+        "BI03|HUMIDIFIER DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            325,
+            163,
+            410,
+            181
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_mi742_templates.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "HUMIDIFIER-BO",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "HUMIDIFIER DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        327,
+        360,
+        490,
+        535,
+        575
+      ],
+      "y_edges": [
+        282,
+        304
+      ],
+      "rows": [
+        "BO01|HUMIDIFIER START/STOP|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            325,
+            264,
+            415,
+            282
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_mi742_templates.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "UPS-EXHAUST-BI",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "UPS EXHAUST FAN DDC POINTS LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        930,
+        964,
+        1145,
+        1185,
+        1225
+      ],
+      "y_edges": [
+        122,
+        140,
+        157,
+        175
+      ],
+      "rows": [
+        "BI01|EXHAUST DAMPER END SWITCH|Yes|No",
+        "BI02|EXHAUST FAN STATUS (FEEDBACK)|Yes|No",
+        "BI03|EXHAUST FAN DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            930,
+            58,
+            1230,
+            88
+          ],
+          "expected": "UPS EXHAUST FAN DDC POINTS LIST"
+        },
+        {
+          "bbox": [
+            930,
+            87,
+            1230,
+            109
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            925,
+            104,
+            1010,
+            122
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_mi742_templates.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "UPS-EXHAUST-BO",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "UPS EXHAUST FAN DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        930,
+        964,
+        1145,
+        1185,
+        1225
+      ],
+      "y_edges": [
+        208,
+        227
+      ],
+      "rows": [
+        "BO01|EXHAUST FAN START/STOP|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            925,
+            189,
+            1015,
+            208
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_mi742_templates.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "BATHROOM-EXHAUST-BI",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "BATHROOM EXHAUST FAN DDC POINTS LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        930,
+        964,
+        1145,
+        1185,
+        1225
+      ],
+      "y_edges": [
+        826,
+        844,
+        861,
+        879
+      ],
+      "rows": [
+        "BI01|EXHAUST DAMPER END SWITCH|Yes|No",
+        "BI02|EXHAUST FAN STATUS (FEEDBACK)|Yes|No",
+        "BI03|EXHAUST FAN DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            930,
+            762,
+            1230,
+            792
+          ],
+          "expected": "BATHROOM EXHAUST FAN DDC POINTS LIST"
+        },
+        {
+          "bbox": [
+            930,
+            790,
+            1230,
+            812
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            925,
+            807,
+            1010,
+            826
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_mi742_templates.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "BATHROOM-EXHAUST-BO",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "BATHROOM EXHAUST FAN DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        930,
+        964,
+        1145,
+        1185,
+        1225
+      ],
+      "y_edges": [
+        912,
+        931
+      ],
+      "rows": [
+        "BO01|EXHAUST FAN START/STOP|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            925,
+            893,
+            1015,
+            912
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_mi742_templates.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "ELEVATOR-MACHINE-ROOM-AI",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "ELEVATOR MACHINE ROOM DDC POINTS LIST - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1785,
+        1818,
+        2050,
+        2090,
+        2140
+      ],
+      "y_edges": [
+        277,
+        295,
+        312,
+        329,
+        347,
+        365
+      ],
+      "rows": [
+        "AI01|TEMPERATURE SENSOR|Yes|Yes",
+        "AI02|HUMIDITY SENSOR|Yes|Yes",
+        "AI03|HUMIDIFIER OUTPUT|Yes|Yes",
+        "AI04|CHW VALVE POSITION (FEEDBACK)|No|Yes",
+        "AI05|HHW VALVE CONTROL (FEEDBACK)|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1780,
+            215,
+            2140,
+            241
+          ],
+          "expected": "ELEVATOR MACHINE ROOM DDC POINTS LIST"
+        },
+        {
+          "bbox": [
+            1780,
+            240,
+            2140,
+            263
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            1780,
+            258,
+            1870,
+            277
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_mi742_templates.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "ELEVATOR-MACHINE-ROOM-AO",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "ELEVATOR MACHINE ROOM DDC POINTS LIST - ANALOG OUTPUT",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1785,
+        1818,
+        2050,
+        2090,
+        2140
+      ],
+      "y_edges": [
+        397,
+        416,
+        433,
+        450
+      ],
+      "rows": [
+        "AO01|HUMIDIFIER CONTROL|No|No",
+        "AO02|CHW VALVE CONTROL|No|No",
+        "AO03|HHW VALVE CONTROL|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1780,
+            376,
+            1880,
+            397
+          ],
+          "expected": "ANALOG OUTPUT"
+        }
+      ],
+      "source_component": "points_mi742_templates.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "ELEVATOR-MACHINE-ROOM-BI",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "ELEVATOR MACHINE ROOM DDC POINTS LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1785,
+        1818,
+        2050,
+        2090,
+        2140
+      ],
+      "y_edges": [
+        484,
+        502,
+        519,
+        536,
+        555
+      ],
+      "rows": [
+        "BI01|FILTER STATUS|Yes|No",
+        "BI02|SECONDARY DRAIN PAN OVERFLOW SWITCH|Yes|No",
+        "BI03|SUPPLY FAN STATUS|Yes|No",
+        "BI04|ELEVATOR MACHINE EQUIPMENT RESET|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1780,
+            462,
+            1875,
+            484
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_mi742_templates.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "ELEVATOR-MACHINE-ROOM-BO",
+      "page": 69,
+      "sheet": "MI742",
+      "building_scope": "Air Operations/MTRACON/ATCT as applicable",
+      "title": "ELEVATOR MACHINE ROOM DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1785,
+        1818,
+        2050,
+        2090,
+        2140
+      ],
+      "y_edges": [
+        588,
+        607
+      ],
+      "rows": [
+        "BO01|SUPPLY FAN START/STOP|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1780,
+            566,
+            1880,
+            588
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_mi742_templates.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "OCCUPIED-FCU-HEAT-COOL-AI",
+      "page": 71,
+      "sheet": "MI744",
+      "building_scope": "Air Operations/MTRACON as applicable",
+      "title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST - OCCUPIED - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        783,
+        825,
+        1085,
+        1155,
+        1235
+      ],
+      "y_edges": [
+        172,
+        190,
+        207,
+        225,
+        244
+      ],
+      "rows": [
+        "AI01|SPACE TEMPERATURE|Yes|Yes",
+        "AI02|CHW VALVE CONTROL (FEEDBACK)|No|Yes",
+        "AI03|HHW VALVE CONTROL (FEEDBACK)|No|Yes",
+        "AI04|DISCHARGE AIR TEMPERATURE SENSOR|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            780,
+            105,
+            1240,
+            135
+          ],
+          "expected": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST OCCUPIED"
+        },
+        {
+          "bbox": [
+            780,
+            134,
+            1240,
+            158
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            780,
+            153,
+            885,
+            172
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_mi744_fcu_sfpvav.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "OCCUPIED-FCU-HEAT-COOL-AO",
+      "page": 71,
+      "sheet": "MI744",
+      "building_scope": "Air Operations/MTRACON as applicable",
+      "title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST - OCCUPIED - ANALOG OUTPUT",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        783,
+        825,
+        1085,
+        1155,
+        1235
+      ],
+      "y_edges": [
+        276,
+        294,
+        312
+      ],
+      "rows": [
+        "AO01|CHW VALVE CONTROL|No|No",
+        "AO02|HHW VALVE CONTROL|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            780,
+            257,
+            900,
+            276
+          ],
+          "expected": "ANALOG OUTPUT"
+        }
+      ],
+      "source_component": "points_mi744_fcu_sfpvav.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "OCCUPIED-FCU-HEAT-COOL-BI",
+      "page": 71,
+      "sheet": "MI744",
+      "building_scope": "Air Operations/MTRACON as applicable",
+      "title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST - OCCUPIED - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        783,
+        825,
+        1085,
+        1155,
+        1235
+      ],
+      "y_ranges": [
+        [
+          344,
+          362
+        ],
+        [
+          362,
+          379
+        ],
+        [
+          379,
+          410
+        ],
+        [
+          410,
+          431
+        ]
+      ],
+      "rows": [
+        "BI01|SUPPLY FAN START/STOP|Yes|No",
+        "BI02|DIRTY FILTER SWITCH|Yes|No",
+        "BI03|SECOUNDARY DRAIN PAN OVERFLOW SWITCH|Yes|No",
+        "BI04|FCU DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            780,
+            326,
+            885,
+            344
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_mi744_fcu_sfpvav.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "OCCUPIED-FCU-HEAT-COOL-BO",
+      "page": 71,
+      "sheet": "MI744",
+      "building_scope": "Air Operations/MTRACON as applicable",
+      "title": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST - OCCUPIED - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        783,
+        825,
+        1085,
+        1155,
+        1235
+      ],
+      "y_edges": [
+        462,
+        482
+      ],
+      "rows": [
+        "BO01|SUPPLY FAN START/STOP|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            780,
+            444,
+            900,
+            462
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_mi744_fcu_sfpvav.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "REDUNDANT-FCU-BI",
+      "page": 71,
+      "sheet": "MI744",
+      "building_scope": "SFPVAV/redundant FCU application",
+      "title": "REDUNDANT FCU DDC POINTS LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1350,
+        1390,
+        1605,
+        1655,
+        1710
+      ],
+      "y_edges": [
+        865,
+        884,
+        902
+      ],
+      "rows": [
+        "BI01|FCU STATUS (FEEDBACK) - FROM DDC|Yes|No",
+        "BI02|AHU-X STATUS (FEEDBACK) - FROM DDC|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1350,
+            802,
+            1720,
+            828
+          ],
+          "expected": "REDUNDANT FCU DDC POINTS LIST"
+        },
+        {
+          "bbox": [
+            1350,
+            828,
+            1710,
+            852
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            1350,
+            847,
+            1430,
+            865
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_mi744_fcu_sfpvav.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "MTRACON-ATCT-CHW-AI",
+      "page": 60,
+      "sheet": "MI720",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT CHW SYSTEM POINT LIST - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1750,
+        1810,
+        2080,
+        2130,
+        2220
+      ],
+      "y_ranges": [
+        [
+          297,
+          323
+        ],
+        [
+          323,
+          340
+        ],
+        [
+          340,
+          357
+        ],
+        [
+          357,
+          374
+        ],
+        [
+          374,
+          391
+        ],
+        [
+          391,
+          408
+        ],
+        [
+          408,
+          425
+        ],
+        [
+          425,
+          442
+        ],
+        [
+          442,
+          459
+        ],
+        [
+          459,
+          476
+        ],
+        [
+          476,
+          493
+        ],
+        [
+          493,
+          510
+        ],
+        [
+          510,
+          527
+        ],
+        [
+          527,
+          544
+        ],
+        [
+          544,
+          561
+        ],
+        [
+          561,
+          579
+        ],
+        [
+          579,
+          596
+        ],
+        [
+          596,
+          613
+        ],
+        [
+          613,
+          630
+        ],
+        [
+          630,
+          647
+        ],
+        [
+          647,
+          664
+        ],
+        [
+          664,
+          681
+        ],
+        [
+          681,
+          698
+        ],
+        [
+          698,
+          715
+        ],
+        [
+          715,
+          732
+        ],
+        [
+          732,
+          749
+        ],
+        [
+          749,
+          766
+        ],
+        [
+          766,
+          783
+        ],
+        [
+          783,
+          800
+        ],
+        [
+          800,
+          825
+        ]
+      ],
+      "rows": [
+        "AI01|MTRACON CHW SUPPLY TEMPERATURE|Yes|Yes",
+        "AI02|TOWER CHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI03|TOWER CHW RETURN TEMPERATURE|Yes|Yes",
+        "AI04|MTRACON CHW RETURN TEMPERATURE|Yes|Yes",
+        "AI05|MTRACON CHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI06|TOWER SECONDARY CHW FLOWRATE|No|Yes",
+        "AI07|TOWER CHW SUPPLY TEMPERATURE|Yes|Yes",
+        "AI08|MTRACON SECONDARY CHW FLOWRATE|No|Yes",
+        "AI09|PCHWP-MT2 SPEED (FEEDBACK)|No|Yes",
+        "AI10|CH-MT2 CHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI11|CH-MT2 FLOW|Yes|Yes",
+        "AI12|CH-MT2 CHW SUPPLY TEMPERATURE|Yes|Yes",
+        "AI13|PCHWP-A1 SPEED (FEEDBACK)|No|Yes",
+        "AI14|CH-MT1 CHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI15|CH-MT1 FLOW|Yes|Yes",
+        "AI16|CH-MT1 CHW SUPPLY TEMPERATURE|Yes|Yes",
+        "AI17|SCHWP-T1 SPEED (FEEDBACK)|No|Yes",
+        "AI18|SCHWP-M2 SPEED (FEEDBACK)|No|Yes",
+        "AI19|SCHWP-M1 SPEED (FEEDBACK)|No|Yes",
+        "AI20|ATCT CHW BYPASS POSITION (FEEDBACK)|No|Yes",
+        "AI21|MTRACON CHW BYPASS POSITION (FEEDBACK)|No|Yes",
+        "AI22|CH-MT2 CHW RETURN TEMPERATURE|Yes|Yes",
+        "AI23|CH-MT1 CHW RETURN TEMPERATURE|Yes|Yes",
+        "AI24|SCHWP-T2 SPEED (FEEDBACK)|No|Yes",
+        "AI25|PCHWP-MT2 DIFFERENTIAL PRESSURE|No|Yes",
+        "AI26|PCHWP-MT1 DIFFERENTIAL PRESSURE|No|Yes",
+        "AI27|SCHWP-T2 DIFFERENTIAL PRESSURE|No|Yes",
+        "AI28|SCHWP-T1 DIFFERENTIAL PRESSURE|No|Yes",
+        "AI29|SCHWP-M2 DIFFERENTIAL PRESSURE|No|Yes",
+        "AI30|SCHWP-M1 DIFFERENTIAL PRESSURE|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1820,
+            227,
+            2130,
+            262
+          ],
+          "expected": "MTRACON ATCT CHW SYSTEM POINT LIST"
+        },
+        {
+          "bbox": [
+            1750,
+            262,
+            2220,
+            289
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            1745,
+            280,
+            1840,
+            297
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_mtracon_atct_chw.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "MTRACON-ATCT-CHW-AO",
+      "page": 60,
+      "sheet": "MI720",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT CHW SYSTEM POINT LIST - ANALOG OUTPUT",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1750,
+        1810,
+        2080,
+        2130,
+        2220
+      ],
+      "y_edges": [
+        849,
+        872,
+        889,
+        906,
+        923,
+        940,
+        957,
+        974,
+        992
+      ],
+      "rows": [
+        "AO01|PCHWP-MT1 SPEED CONTROL|No|Yes",
+        "AO02|SCHWP-T2 SPEED CONTROL|No|Yes",
+        "AO03|SCHWP-M2 SPEED CONTROL|No|Yes",
+        "AO04|SCHWP-M1 SPEED CONTROL|No|Yes",
+        "AO05|SCHWP-T1 SPEED CONTROL|No|Yes",
+        "AO06|PCHWP-MT2 SPEED CONTROL|No|Yes",
+        "AO07|ATCT CHW BYPASS VALVE CONTROL|No|No",
+        "AO08|MTRACON CHW BYPASS VALVE CONTROL|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1745,
+            823,
+            1840,
+            849
+          ],
+          "expected": "ANALOG OUTPUT"
+        }
+      ],
+      "source_component": "points_mtracon_atct_chw.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "MTRACON-ATCT-CHW-BI",
+      "page": 60,
+      "sheet": "MI720",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT CHW SYSTEM POINT LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1750,
+        1810,
+        2080,
+        2130,
+        2220
+      ],
+      "y_edges": [
+        1022,
+        1044,
+        1062,
+        1079,
+        1096,
+        1113,
+        1130,
+        1148,
+        1165,
+        1182,
+        1199,
+        1216,
+        1233,
+        1251,
+        1268,
+        1285
+      ],
+      "rows": [
+        "BI01|CV-CHW-MT1 POSITION (FEEDBACK)|Yes|No",
+        "BI02|CV-CHW-MT2 POSITION (FEEDBACK)|Yes|No",
+        "BI03|PCHWP-A1 VFD STATUS|No|Yes",
+        "BI04|PCHWP-A1 VFD ALARM|Yes|No",
+        "BI06|PCHWP-A1 VFD STATUS|No|Yes",
+        "BI07|PCHWP-A1 VFD ALARM|Yes|No",
+        "BI08|SCHWP-T2 VFD ALARM|Yes|No",
+        "BI09|SCHWP-T2 VFD STATUS|No|Yes",
+        "BI10|SCHWP-T1 VFD STATUS|No|Yes",
+        "BI11|SCHWP-T1 VFD ALARM|Yes|No",
+        "BI12|SCHWP-M2 VFD STATUS|No|Yes",
+        "BI13|SCHWP-M2 VFD ALARM|Yes|No",
+        "BI14|SCHWP-M1 VFD STATUS|No|Yes",
+        "BI15|SCHWP-M1 VFD ALARM|Yes|No",
+        "BI16|AIR OPS/MTRACON CHILLER PLANT DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1745,
+            996,
+            1840,
+            1022
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_mtracon_atct_chw.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "MTRACON-ATCT-CHW-BO",
+      "page": 60,
+      "sheet": "MI720",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT CHW SYSTEM POINT LIST - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1750,
+        1810,
+        2080,
+        2130,
+        2220
+      ],
+      "y_edges": [
+        1315,
+        1337,
+        1354,
+        1371,
+        1388,
+        1405,
+        1423,
+        1440,
+        1457,
+        1474,
+        1492
+      ],
+      "rows": [
+        "BO01|SCHWP-T1 START/STOP|No|No",
+        "BO02|CH-MT2 CHILLER CONTROL|No|No",
+        "BO03|CH-MT1 CHILLER CONTROL|No|No",
+        "BO04|CV-CHW-MT2 VALVE CONTROL|No|No",
+        "BO05|CV-CHW-MT1 VALVE CONTROL|No|No",
+        "BO06|SCHWP-M2 START/STOP|No|No",
+        "BO07|SCHWP-M1 START/STOP|No|No",
+        "BO08|SCHWP-T2 START/STOP|No|No",
+        "BO09|PCHWP-MT1 START/STOP|No|No",
+        "BO10|PCHWP-MT2 START/STOP|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1745,
+            1289,
+            1840,
+            1315
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_mtracon_atct_chw.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    },
+    {
+      "id": "MTRACON-ATCT-HHW-AI",
+      "page": 62,
+      "sheet": "MI722",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT HHW SYSTEM POINT LIST - ANALOG INPUT",
+      "classification": "literal printed BAS point-list row; source type AI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1560,
+        1600,
+        1780,
+        1835,
+        1880
+      ],
+      "y_ranges": [
+        [
+          286,
+          306
+        ],
+        [
+          306,
+          323
+        ],
+        [
+          323,
+          354
+        ],
+        [
+          354,
+          385
+        ],
+        [
+          385,
+          402
+        ],
+        [
+          402,
+          420
+        ],
+        [
+          420,
+          438
+        ],
+        [
+          438,
+          455
+        ],
+        [
+          455,
+          472
+        ],
+        [
+          472,
+          504
+        ],
+        [
+          504,
+          521
+        ],
+        [
+          521,
+          539
+        ],
+        [
+          539,
+          556
+        ],
+        [
+          556,
+          587
+        ],
+        [
+          587,
+          604
+        ],
+        [
+          604,
+          622
+        ],
+        [
+          622,
+          640
+        ],
+        [
+          640,
+          657
+        ],
+        [
+          657,
+          674
+        ],
+        [
+          674,
+          691
+        ],
+        [
+          691,
+          708
+        ],
+        [
+          708,
+          726
+        ],
+        [
+          726,
+          743
+        ],
+        [
+          743,
+          760
+        ],
+        [
+          760,
+          792
+        ],
+        [
+          792,
+          809
+        ],
+        [
+          809,
+          841
+        ],
+        [
+          841,
+          873
+        ],
+        [
+          873,
+          905
+        ],
+        [
+          905,
+          922
+        ],
+        [
+          922,
+          954
+        ],
+        [
+          954,
+          986
+        ],
+        [
+          986,
+          1003
+        ],
+        [
+          1003,
+          1020
+        ],
+        [
+          1020,
+          1037
+        ],
+        [
+          1037,
+          1054
+        ],
+        [
+          1054,
+          1071
+        ],
+        [
+          1071,
+          1088
+        ],
+        [
+          1088,
+          1105
+        ],
+        [
+          1105,
+          1123
+        ],
+        [
+          1123,
+          1141
+        ],
+        [
+          1141,
+          1158
+        ],
+        [
+          1158,
+          1175
+        ]
+      ],
+      "rows": [
+        "AI01|HHWS TEMPERATURE - MTRACON|Yes|Yes",
+        "AI02|HHW FLOWRATE - MTRACON|No|Yes",
+        "AI03|HHW DIFFERENTIAL PRESSURE - MTRACON|No|No",
+        "AI04|HHW BYPASS VALVE POSITION (FEEDBACK) - MTRACON|No|No",
+        "AI05|HHWR TEMPERATURE - MTRACON|No|No",
+        "AI06|SHHWP-M1 DIFFERENTIAL PRESSURE|No|No",
+        "AI07|B-M2 LWT|No|No",
+        "AI08|B-M1 LWT|No|No",
+        "AI09|B-M2 EWT|No|No",
+        "AI10|HHW BYPASS VALVE POSITION - ATCT (FEEDBACK) - ATCT|No|No",
+        "AI11|B-M1 EWT|No|No",
+        "AI12|HHWS TEMPERATURE - ATCT|No|No",
+        "AI13|HHW FLOWRATE - ATCT|No|No",
+        "AI14|HHW DIFFERENTIAL PRESSURE - ATCT|No|No",
+        "AI15|HHWR TEMPERATURE - ATCT|No|No",
+        "AI16|SHHWP-T1 DIFFERENTIAL PRESSURE|No|No",
+        "AI17|SHHWP-T2 DIFFERENTIAL PRESSURE|No|No",
+        "AI18|B-T2 LWT|No|No",
+        "AI19|B-T1 LWT|No|No",
+        "AI20|B-T2 EWT|No|No",
+        "AI21|B-T1 EWT|No|No",
+        "AI22|SHHWP-M2 DIFFERENTIAL PRESSURE|No|No",
+        "AI23|HRHWP-MT1 SPEED (FEEDBACK)|No|No",
+        "AI24|HRHWP-MT1 SPEED (FEEDBACK)|No|No",
+        "AI25|CH-MT1 HRHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI26|CH-MT1 HR FLOW|Yes|Yes",
+        "AI27|CH-MT1 HRHW SUPPLY TEMPERATURE|Yes|Yes",
+        "AI28|CH-MT1 HRHW RETURN TEMPERATURE|Yes|Yes",
+        "AI29|CH-MT1 HRHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI30|CH-MT1 HR FLOW|Yes|Yes",
+        "AI31|CH-MT1 HRHW SUPPLY TEMPERATURE|Yes|Yes",
+        "AI32|CH-MT1 HRHW RETURN TEMPERATURE|Yes|Yes",
+        "AI33|SHHWP-M1 SPEED (FEEDBACK)|No|No",
+        "AI34|SHHWP-M2 SPEED (FEEDBACK)|No|No",
+        "AI35|PHHWP-M1 SPEED (FEEDBACK)|No|No",
+        "AI36|PHHWP-M2 SPEED (FEEDBACK)|No|No",
+        "AI37|PHHWP-T1 SPEED (FEEDBACK)|No|No",
+        "AI38|PHHWP-T2 SPEED (FEEDBACK)|No|No",
+        "AI39|SHHWP-T1 SPEED (FEEDBACK)|No|No",
+        "AI40|SHHWP-T2 SPEED (FEEDBACK)|No|No",
+        "AI41|OA TEMPERATURE *GLOBAL POINT|No|Yes",
+        "AI42|HRHWS TEMPERATURE|No|Yes",
+        "AI43|HRHWR TEMPERATURE|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1600,
+            227,
+            1840,
+            252
+          ],
+          "expected": "MTRACON ATCT HHW SYSTEM POINT LIST"
+        },
+        {
+          "bbox": [
+            1560,
+            251,
+            1880,
+            274
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        },
+        {
+          "bbox": [
+            1560,
+            268,
+            1650,
+            286
+          ],
+          "expected": "ANALOG INPUT"
+        }
+      ],
+      "source_component": "points_mtracon_atct_hhw.json",
+      "source_printed_type": "AI",
+      "normalized_point_type": "AI"
+    },
+    {
+      "id": "MTRACON-ATCT-HHW-AO-LEFT",
+      "page": 62,
+      "sheet": "MI722",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT HHW SYSTEM POINT LIST - ANALOG OUTPUT LEFT PANEL",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1560,
+        1600,
+        1780,
+        1835,
+        1880
+      ],
+      "y_edges": [
+        1207,
+        1227,
+        1244,
+        1262,
+        1279,
+        1296,
+        1313,
+        1330,
+        1348,
+        1365
+      ],
+      "rows": [
+        "AO01|HRHWP-MT1 SPEED CONTROL|No|Yes",
+        "AO02|HRHWP-MT2 SPEED CONTROL|No|Yes",
+        "AO03|SHHWP-M1 SPEED CONTROL|No|Yes",
+        "AO04|SHHWP-M2 SPEED CONTROL|No|Yes",
+        "AO05|SHHWP-T1 SPEED CONTROL|No|Yes",
+        "AO06|SHHWP-T2 SPEED CONTROL|No|Yes",
+        "AO07|PHHWP-T1 SPEED CONTROL|No|Yes",
+        "AO08|PHHWP-T2 SPEED CONTROL|No|Yes",
+        "AO09|PHHWP-M1 SPEED CONTROL|No|Yes"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1560,
+            1178,
+            1650,
+            1207
+          ],
+          "expected": "ANALOG OUTPUT"
+        }
+      ],
+      "source_component": "points_mtracon_atct_hhw.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "MTRACON-ATCT-HHW-AO-RIGHT",
+      "page": 62,
+      "sheet": "MI722",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT HHW SYSTEM POINT LIST - ANALOG OUTPUT RIGHT PANEL CONTINUATION",
+      "classification": "literal printed BAS point-list row; source type AO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1900,
+        1940,
+        2130,
+        2175,
+        2220
+      ],
+      "y_ranges": [
+        [
+          268,
+          288
+        ],
+        [
+          288,
+          320
+        ],
+        [
+          320,
+          350
+        ]
+      ],
+      "rows": [
+        "AO10|PHHWP-M2 SPEED CONTROL|No|Yes",
+        "AO11|HHW BYPASS VALVE POSITION - MTRACON|No|No",
+        "AO12|HHW BYPASS VALVE POSITION - ATCT|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1950,
+            227,
+            2180,
+            252
+          ],
+          "expected": "MTRACON ATCT HHW SYSTEM POINT LIST"
+        },
+        {
+          "bbox": [
+            1900,
+            251,
+            2220,
+            274
+          ],
+          "expected": "MARK DESCRIPTION ALARM TREND"
+        }
+      ],
+      "source_component": "points_mtracon_atct_hhw.json",
+      "source_printed_type": "AO",
+      "normalized_point_type": "AO"
+    },
+    {
+      "id": "MTRACON-ATCT-HHW-BI",
+      "page": 62,
+      "sheet": "MI722",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT HHW SYSTEM POINT LIST - BINARY INPUT",
+      "classification": "literal printed BAS point-list row; source type BI",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1900,
+        1940,
+        2130,
+        2175,
+        2220
+      ],
+      "y_ranges": [
+        [
+          383,
+          404
+        ],
+        [
+          404,
+          421
+        ],
+        [
+          421,
+          438
+        ],
+        [
+          438,
+          455
+        ],
+        [
+          455,
+          472
+        ],
+        [
+          472,
+          490
+        ],
+        [
+          490,
+          507
+        ],
+        [
+          507,
+          524
+        ],
+        [
+          524,
+          541
+        ],
+        [
+          541,
+          558
+        ],
+        [
+          558,
+          575
+        ],
+        [
+          575,
+          592
+        ],
+        [
+          592,
+          610
+        ],
+        [
+          610,
+          627
+        ],
+        [
+          627,
+          644
+        ],
+        [
+          644,
+          661
+        ],
+        [
+          661,
+          679
+        ],
+        [
+          679,
+          696
+        ],
+        [
+          696,
+          713
+        ],
+        [
+          713,
+          730
+        ],
+        [
+          730,
+          748
+        ],
+        [
+          748,
+          765
+        ],
+        [
+          765,
+          782
+        ],
+        [
+          782,
+          799
+        ],
+        [
+          799,
+          816
+        ],
+        [
+          816,
+          833
+        ],
+        [
+          833,
+          863
+        ],
+        [
+          863,
+          895
+        ],
+        [
+          895,
+          930
+        ]
+      ],
+      "rows": [
+        "BI01|CV-HR-MT1 POSITION (FEEDBACK)|Yes|No",
+        "BI02|CV-HR-MT2 POSITION (FEEDBACK)|Yes|No",
+        "BI03|HRHWP-MT2 VFD STATUS|No|Yes",
+        "BI04|HRHWP-MT2 VFD ALARM|Yes|No",
+        "BI05|HRHWP-MT1 VFD ALARM|Yes|No",
+        "BI06|HRHWP-MT1 VFD STATUS|No|Yes",
+        "BI07|SHHWP-M1 VFD STATUS|No|Yes",
+        "BI08|SHHWP-M1 VFD ALARM|Yes|No",
+        "BI09|SHHWP-M2 VFD STATUS|No|Yes",
+        "BI10|SHHWP-M2 VFD ALARM|Yes|No",
+        "BI11|B-M1 STATUS|No|No",
+        "BI12|PHHWP-M1 VFD STATUS|No|Yes",
+        "BI13|PHHWP-M1 VFD ALARM|Yes|No",
+        "BI14|B-M2 STATUS|No|No",
+        "BI15|PHHWP-M2 VFD STATUS|No|Yes",
+        "BI16|PHHWP-M2 VFD ALARM|Yes|No",
+        "BI17|B-T1 STATUS|No|No",
+        "BI18|PHHWP-T1 VFD STATUS|No|Yes",
+        "BI19|PHHWP-T1 VFD ALARM|Yes|No",
+        "BI20|B-T2 STATUS|No|No",
+        "BI21|PHHWP-T2 VFD STATUS|No|Yes",
+        "BI22|PHHWP-T2 VFD ALARM|Yes|No",
+        "BI23|SHHWP-T1 VFD STATUS|No|Yes",
+        "BI24|SHHWP-T1 VFD ALARM|Yes|No",
+        "BI25|SHHWP-T2 VFD STATUS|No|Yes",
+        "BI26|SHHWP-T2 VFD ALARM|Yes|No",
+        "BI27|BOILER B-T1/T2 REMOTE SHUTDOWN SWITCH|Yes|No",
+        "BI28|BOILER B-M1/M2 REMOTE SHUTDOWN SWITCH|Yes|No",
+        "BI29|MTRACON/ATCT BOILER PLANT DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1900,
+            350,
+            1990,
+            389
+          ],
+          "expected": "BINARY INPUT"
+        }
+      ],
+      "source_component": "points_mtracon_atct_hhw.json",
+      "source_printed_type": "BI",
+      "normalized_point_type": "DI"
+    },
+    {
+      "id": "MTRACON-ATCT-HHW-BO",
+      "page": 62,
+      "sheet": "MI722",
+      "building_scope": "MTRACON and ATCT",
+      "title": "MTRACON ATCT HHW SYSTEM POINT LIST - BINARY OUTPUT",
+      "classification": "literal printed BAS point-list row; source type BO",
+      "columns": "tag|point_name|alarm|trend",
+      "x_edges": [
+        1900,
+        1940,
+        2130,
+        2175,
+        2220
+      ],
+      "y_edges": [
+        961,
+        982,
+        999,
+        1016,
+        1033,
+        1051,
+        1068,
+        1085,
+        1102,
+        1119,
+        1137,
+        1154,
+        1171,
+        1188,
+        1205,
+        1223,
+        1240,
+        1257,
+        1275
+      ],
+      "rows": [
+        "BO01|HRHWP-MT1 START/STOP|No|No",
+        "BO02|CH-MT1 CHILLER HEAT RECOVERY|No|No",
+        "BO03|CV-HR-MT1 VALVE CONTROL|No|No",
+        "BO04|CV-HR-MT2 VALVE CONTROL|No|No",
+        "BO05|CH-MT2 CHILLER HEAT RECOVERY|No|No",
+        "BO06|HRHWP-MT2 START/STOP|No|No",
+        "BO07|SHHWP-M1 START/STOP|No|No",
+        "BO08|SHHWP-M2 START/STOP|No|No",
+        "BO09|B-M1 ON/OFF|No|No",
+        "BO10|PHHWP-M1 START/STOP|No|No",
+        "BO11|B-M2 ON/OFF|No|No",
+        "BO12|PHHWP-M2 START/STOP|No|No",
+        "BO13|B-T1 ON/OFF|No|No",
+        "BO14|PHHWP-T1 START/STOP|No|No",
+        "BO15|B-T2 ON/OFF|No|No",
+        "BO16|PHHWP-T2 START/STOP|No|No",
+        "BO17|SHHWP-T1 START/STOP|No|No",
+        "BO18|SHHWP-T2 START/STOP|No|No"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1900,
+            930,
+            1990,
+            961
+          ],
+          "expected": "BINARY OUTPUT"
+        }
+      ],
+      "source_component": "points_mtracon_atct_hhw.json",
+      "source_printed_type": "BO",
+      "normalized_point_type": "DO"
+    }
+  ],
+  "printed_point_type_counts": {
+    "AI": 210,
+    "AO": 66,
+    "DI": 189,
+    "DO": 81,
+    "total": 546
+  },
+  "point_count_semantics": "Counts are literal rows in the printed source point matrices/templates. They do not establish installed controller terminal, card, field-device, wiring or system multiplier quantities.",
+  "non_point_matrix_scope": {
+    "source_module": "points_mi744_fcu_sfpvav.json",
+    "source_table": "SPFVAV-FCU-MATRIX",
+    "status": "retained in the original verified source module as an equipment relationship matrix; excluded from this point-list ledger because it is not printed as point-tag/description I/O rows."
+  },
+  "assertions": [],
+  "inventory_checks": [
+    {
+      "id": "rank01-assembled-point-tables",
+      "records_path": [
+        "tables"
+      ],
+      "expected": 77,
+      "unique_key": "id"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "document_id": "24__vol2__019",
+  "source_sha256": "b98b269834a4abfdbb508bd83c2efc53a46d32f3030789e6bd36446ee7148f10",
+  "annotation_sha256": "317a0ab2253bc4cb44ceb706dc24ad7127da1a1a3dafc16efea733878115ccdd",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 0,
+  "checks": [],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "linked-schedule-registry",
+      "pass": true,
+      "tables": 17,
+      "rows": 132,
+      "identities": 132,
+      "primary_anchors": 109
+    },
+    {
+      "id": "rank24-primary-schedule-anchors",
+      "actual": 109,
+      "expected": 109,
+      "pass": true
+    },
+    {
+      "id": "rank24-supplemental-identity-boundaries",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {
+    "schedules_m71.json": "78e3a189799e4c451b36baaf041639ef1c9beeb75521530696c971c3cf0380f7",
+    "schedules_m72.json": "adf981be72e923721863323471b5d3700c6ca662d9991d279d75a3fb39c0ce31",
+    "schedules_m73.json": "02f3833f7fe7a4133984ed9c8b7ecfc6d6331883a9c692889acb8f5a2033d3ec"
+  },
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

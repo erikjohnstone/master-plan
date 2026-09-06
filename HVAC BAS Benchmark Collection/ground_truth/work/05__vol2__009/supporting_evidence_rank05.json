@@ -1,0 +1,55 @@
+{
+  "document_id": "05__vol2__009",
+  "module_role": "Explicit source limitations, parser/visual-review boundary statements and corroboration scope for the supplied 31-page set.",
+  "tables": [],
+  "source_limitations": [
+    "M-601 supplies a two-row hydronic control-valve schedule, but no standalone damper-actuator schedule with actuator tag, make/model, torque, control signal, fail action and installed quantity.",
+    "M-801 through M-804 publish 75 source point-list rows, including templates and repeated point identifiers. They are not a final physical I/O, device, controller-card, terminal, cable or wiring count.",
+    "M-801 specifies BACnet-native DDC and remote-access/cybersecurity requirements, but it does not establish a final BACnet transport/topology, device address list, selected IP values, network counts or controller-card layout.",
+    "M-601 schedule rows and air-device types are source schedule references. This record does not infer plan placements, duplicated installed instances, exact sensor/thermostat quantity, damper-actuator total, or distance-based takeoff quantity.",
+    "All 31 pages were visually reviewed using retained full-page renders. Every authored table cell and bounded textual assertion is independently rechecked against MuPDF and Poppler captures at build/verification time."
+  ],
+  "text_absence_assertions": [
+    {
+      "id": "rank05-no-standalone-damper-actuator-schedule-title",
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "covers_all_source_pages": true,
+      "patterns": [
+        "DAMPER\\s+ACTUATOR\\s+SCHEDULE"
+      ],
+      "visual_review_qualification": "Native-text absence is not engineering proof. It is paired with completed visual review of every sheet; the limited finding is that no standalone schedule title/row set is supplied."
+    }
+  ]
+}

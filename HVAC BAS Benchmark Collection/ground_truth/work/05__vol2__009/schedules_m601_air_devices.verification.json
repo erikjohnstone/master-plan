@@ -1,0 +1,2802 @@
+{
+  "document_id": "05__vol2__009",
+  "source_sha256": "d2e1967964c07d7bd1c058e1e17acaae79c344c83f0e8c9d5241dc9493637da1",
+  "annotation_sha256": "4fbbd922fed3d95d7652bef264eda4aa34315bbdf0e4ddf03781c0a6e516e19b",
+  "tables": 1,
+  "rows": 4,
+  "cell_assertions": 92,
+  "text_assertions": 5,
+  "checks": [
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "mark",
+      "page": 18,
+      "bbox": [
+        1470,
+        220,
+        1535,
+        237
+      ],
+      "expected": "D",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "D",
+          "word_ids": [
+            194
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "D",
+          "word_ids": [
+            101
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "module_sizes_in",
+      "page": 18,
+      "bbox": [
+        1535,
+        220,
+        1640,
+        237
+      ],
+      "expected": "24 X 24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24 X 24",
+          "word_ids": [
+            195,
+            196,
+            197
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24 X 24",
+          "word_ids": [
+            97,
+            98,
+            99
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "mnfr_titus_mark",
+      "page": 18,
+      "bbox": [
+        1640,
+        220,
+        1670,
+        237
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            198
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            10
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "mnfr_ruskin_mark",
+      "page": 18,
+      "bbox": [
+        1670,
+        220,
+        1710,
+        237
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "model_no",
+      "page": 18,
+      "bbox": [
+        1710,
+        220,
+        1770,
+        237
+      ],
+      "expected": "OMNI-AA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OMNI-AA",
+          "word_ids": [
+            199
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OMNI-AA",
+          "word_ids": [
+            11
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "type",
+      "page": 18,
+      "bbox": [
+        1770,
+        220,
+        1940,
+        237
+      ],
+      "expected": "PLAQUE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PLAQUE",
+          "word_ids": [
+            200
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PLAQUE",
+          "word_ids": [
+            12
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "material_steel_mark",
+      "page": 18,
+      "bbox": [
+        1940,
+        220,
+        1975,
+        237
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "material_aluminum_mark",
+      "page": 18,
+      "bbox": [
+        1975,
+        220,
+        2015,
+        237
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            201
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            13
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "material_aluminum_with_steel_frame_mark",
+      "page": 18,
+      "bbox": [
+        2015,
+        220,
+        2055,
+        237
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "finish_off_white_mark",
+      "page": 18,
+      "bbox": [
+        2055,
+        220,
+        2095,
+        237
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "finish_primer_mark",
+      "page": 18,
+      "bbox": [
+        2095,
+        220,
+        2135,
+        237
+      ],
+      "expected": " ",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "finish_clear_by_arch_mark",
+      "page": 18,
+      "bbox": [
+        2135,
+        220,
+        2175,
+        237
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            202
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            14
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "accessory_opposed_blade_damper_mark",
+      "page": 18,
+      "bbox": [
+        2175,
+        220,
+        2215,
+        237
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            203
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            15
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "accessory_air_scoop_mark",
+      "page": 18,
+      "bbox": [
+        2215,
+        220,
+        2255,
+        237
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "accessory_butterfly_damper_mark",
+      "page": 18,
+      "bbox": [
+        2255,
+        220,
+        2295,
+        237
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "accessory_fire_damper_mark",
+      "page": 18,
+      "bbox": [
+        2295,
+        220,
+        2335,
+        237
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "accessory_equalizing_grid_mark",
+      "page": 18,
+      "bbox": [
+        2335,
+        220,
+        2375,
+        237
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "mounting_lay_in_mark",
+      "page": 18,
+      "bbox": [
+        2375,
+        220,
+        2415,
+        237
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "mounting_surface_mark",
+      "page": 18,
+      "bbox": [
+        2415,
+        220,
+        2455,
+        237
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            204
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            54
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "mounting_duct_mark",
+      "page": 18,
+      "bbox": [
+        2455,
+        220,
+        2495,
+        237
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "max_nc",
+      "page": 18,
+      "bbox": [
+        2495,
+        220,
+        2540,
+        237
+      ],
+      "expected": "25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            205
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            55
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "max_loss_in_wg",
+      "page": 18,
+      "bbox": [
+        2540,
+        220,
+        2640,
+        237
+      ],
+      "expected": "0.10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.10",
+          "word_ids": [
+            206
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.10",
+          "word_ids": [
+            56
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 1,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2640,
+        220,
+        2710,
+        237
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            207
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            57
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "mark",
+      "page": 18,
+      "bbox": [
+        1470,
+        237,
+        1535,
+        277
+      ],
+      "expected": "F",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "F",
+          "word_ids": [
+            173
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "F",
+          "word_ids": [
+            95
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "module_sizes_in",
+      "page": 18,
+      "bbox": [
+        1535,
+        237,
+        1640,
+        277
+      ],
+      "expected": "NECK SIZE + 1.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NECK SIZE + 1.75",
+          "word_ids": [
+            174,
+            175,
+            176,
+            177
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NECK SIZE + 1.75",
+          "word_ids": [
+            16,
+            17,
+            18,
+            19
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "mnfr_titus_mark",
+      "page": 18,
+      "bbox": [
+        1640,
+        237,
+        1670,
+        277
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            178
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            20
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "mnfr_ruskin_mark",
+      "page": 18,
+      "bbox": [
+        1670,
+        237,
+        1710,
+        277
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "model_no",
+      "page": 18,
+      "bbox": [
+        1710,
+        237,
+        1770,
+        277
+      ],
+      "expected": "300FL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "300FL",
+          "word_ids": [
+            179
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "300FL",
+          "word_ids": [
+            21
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "type",
+      "page": 18,
+      "bbox": [
+        1770,
+        237,
+        1940,
+        277
+      ],
+      "expected": "LOUVERED FACE, DOUBLE DEFLECTION, 3/4\" BLADE SPACEING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOUVERED FACE, DOUBLE DEFLECTION, 3/4\" BLADE SPACEING",
+          "word_ids": [
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOUVERED FACE, DOUBLE DEFLECTION, 3/4\" BLADE SPACEING",
+          "word_ids": [
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "material_steel_mark",
+      "page": 18,
+      "bbox": [
+        1940,
+        237,
+        1975,
+        277
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "material_aluminum_mark",
+      "page": 18,
+      "bbox": [
+        1975,
+        237,
+        2015,
+        277
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            187
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            29
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "material_aluminum_with_steel_frame_mark",
+      "page": 18,
+      "bbox": [
+        2015,
+        237,
+        2055,
+        277
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "finish_off_white_mark",
+      "page": 18,
+      "bbox": [
+        2055,
+        237,
+        2095,
+        277
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "finish_primer_mark",
+      "page": 18,
+      "bbox": [
+        2095,
+        237,
+        2135,
+        277
+      ],
+      "expected": " ",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "finish_clear_by_arch_mark",
+      "page": 18,
+      "bbox": [
+        2135,
+        237,
+        2175,
+        277
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            188
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            30
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "accessory_opposed_blade_damper_mark",
+      "page": 18,
+      "bbox": [
+        2175,
+        237,
+        2215,
+        277
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            189
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            58
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "accessory_air_scoop_mark",
+      "page": 18,
+      "bbox": [
+        2215,
+        237,
+        2255,
+        277
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "accessory_butterfly_damper_mark",
+      "page": 18,
+      "bbox": [
+        2255,
+        237,
+        2295,
+        277
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "accessory_fire_damper_mark",
+      "page": 18,
+      "bbox": [
+        2295,
+        237,
+        2335,
+        277
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "accessory_equalizing_grid_mark",
+      "page": 18,
+      "bbox": [
+        2335,
+        237,
+        2375,
+        277
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "mounting_lay_in_mark",
+      "page": 18,
+      "bbox": [
+        2375,
+        237,
+        2415,
+        277
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "mounting_surface_mark",
+      "page": 18,
+      "bbox": [
+        2415,
+        237,
+        2455,
+        277
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            190
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            59
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "mounting_duct_mark",
+      "page": 18,
+      "bbox": [
+        2455,
+        237,
+        2495,
+        277
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "max_nc",
+      "page": 18,
+      "bbox": [
+        2495,
+        237,
+        2540,
+        277
+      ],
+      "expected": "25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            191
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            60
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "max_loss_in_wg",
+      "page": 18,
+      "bbox": [
+        2540,
+        237,
+        2640,
+        277
+      ],
+      "expected": "0.10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.10",
+          "word_ids": [
+            192
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.10",
+          "word_ids": [
+            61
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 2,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2640,
+        237,
+        2710,
+        277
+      ],
+      "expected": "1,2,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,6",
+          "word_ids": [
+            193
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,6",
+          "word_ids": [
+            62
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "mark",
+      "page": 18,
+      "bbox": [
+        1470,
+        277,
+        1535,
+        296
+      ],
+      "expected": "H",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "H",
+          "word_ids": [
+            158
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "H",
+          "word_ids": [
+            31
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "module_sizes_in",
+      "page": 18,
+      "bbox": [
+        1535,
+        277,
+        1640,
+        296
+      ],
+      "expected": "24 X 24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "24 X 24",
+          "word_ids": [
+            159,
+            160,
+            161
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "24 X 24",
+          "word_ids": [
+            32,
+            33,
+            34
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "mnfr_titus_mark",
+      "page": 18,
+      "bbox": [
+        1640,
+        277,
+        1670,
+        296
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            162
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            35
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "mnfr_ruskin_mark",
+      "page": 18,
+      "bbox": [
+        1670,
+        277,
+        1710,
+        296
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "model_no",
+      "page": 18,
+      "bbox": [
+        1710,
+        277,
+        1770,
+        296
+      ],
+      "expected": "PAR-AA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PAR-AA",
+          "word_ids": [
+            163
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PAR-AA",
+          "word_ids": [
+            36
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "type",
+      "page": 18,
+      "bbox": [
+        1770,
+        277,
+        1940,
+        296
+      ],
+      "expected": "PERFORATED FACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PERFORATED FACE",
+          "word_ids": [
+            164,
+            165
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PERFORATED FACE",
+          "word_ids": [
+            37,
+            38
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "material_steel_mark",
+      "page": 18,
+      "bbox": [
+        1940,
+        277,
+        1975,
+        296
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "material_aluminum_mark",
+      "page": 18,
+      "bbox": [
+        1975,
+        277,
+        2015,
+        296
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            166
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            39
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "material_aluminum_with_steel_frame_mark",
+      "page": 18,
+      "bbox": [
+        2015,
+        277,
+        2055,
+        296
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "finish_off_white_mark",
+      "page": 18,
+      "bbox": [
+        2055,
+        277,
+        2095,
+        296
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "finish_primer_mark",
+      "page": 18,
+      "bbox": [
+        2095,
+        277,
+        2135,
+        296
+      ],
+      "expected": " ",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "finish_clear_by_arch_mark",
+      "page": 18,
+      "bbox": [
+        2135,
+        277,
+        2175,
+        296
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            167
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            63
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "accessory_opposed_blade_damper_mark",
+      "page": 18,
+      "bbox": [
+        2175,
+        277,
+        2215,
+        296
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            168
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            64
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "accessory_air_scoop_mark",
+      "page": 18,
+      "bbox": [
+        2215,
+        277,
+        2255,
+        296
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "accessory_butterfly_damper_mark",
+      "page": 18,
+      "bbox": [
+        2255,
+        277,
+        2295,
+        296
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "accessory_fire_damper_mark",
+      "page": 18,
+      "bbox": [
+        2295,
+        277,
+        2335,
+        296
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "accessory_equalizing_grid_mark",
+      "page": 18,
+      "bbox": [
+        2335,
+        277,
+        2375,
+        296
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "mounting_lay_in_mark",
+      "page": 18,
+      "bbox": [
+        2375,
+        277,
+        2415,
+        296
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "mounting_surface_mark",
+      "page": 18,
+      "bbox": [
+        2415,
+        277,
+        2455,
+        296
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            169
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            65
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "mounting_duct_mark",
+      "page": 18,
+      "bbox": [
+        2455,
+        277,
+        2495,
+        296
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "max_nc",
+      "page": 18,
+      "bbox": [
+        2495,
+        277,
+        2540,
+        296
+      ],
+      "expected": "25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            170
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            66
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "max_loss_in_wg",
+      "page": 18,
+      "bbox": [
+        2540,
+        277,
+        2640,
+        296
+      ],
+      "expected": "0.10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.10",
+          "word_ids": [
+            171
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.10",
+          "word_ids": [
+            67
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 3,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2640,
+        277,
+        2710,
+        296
+      ],
+      "expected": "1,2,3,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,6",
+          "word_ids": [
+            172
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,6",
+          "word_ids": [
+            68
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "mark",
+      "page": 18,
+      "bbox": [
+        1470,
+        296,
+        1535,
+        322
+      ],
+      "expected": "L",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "L",
+          "word_ids": [
+            139
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "L",
+          "word_ids": [
+            40
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "module_sizes_in",
+      "page": 18,
+      "bbox": [
+        1535,
+        296,
+        1640,
+        322
+      ],
+      "expected": "NECK SIZE + 1.75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NECK SIZE + 1.75",
+          "word_ids": [
+            140,
+            141,
+            142,
+            143
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NECK SIZE + 1.75",
+          "word_ids": [
+            41,
+            42,
+            43,
+            44
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "mnfr_titus_mark",
+      "page": 18,
+      "bbox": [
+        1640,
+        296,
+        1670,
+        322
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            144
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            45
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "mnfr_ruskin_mark",
+      "page": 18,
+      "bbox": [
+        1670,
+        296,
+        1710,
+        322
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "model_no",
+      "page": 18,
+      "bbox": [
+        1710,
+        296,
+        1770,
+        322
+      ],
+      "expected": "350FL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "350FL",
+          "word_ids": [
+            145
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "350FL",
+          "word_ids": [
+            46
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "type",
+      "page": 18,
+      "bbox": [
+        1770,
+        296,
+        1940,
+        322
+      ],
+      "expected": "LOUVERED FACE, 35° FIXED SINGLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOUVERED FACE, 35° FIXED SINGLE",
+          "word_ids": [
+            146,
+            147,
+            148,
+            149,
+            150
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOUVERED FACE, 35° FIXED SINGLE",
+          "word_ids": [
+            47,
+            48,
+            49,
+            50,
+            51
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "material_steel_mark",
+      "page": 18,
+      "bbox": [
+        1940,
+        296,
+        1975,
+        322
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "material_aluminum_mark",
+      "page": 18,
+      "bbox": [
+        1975,
+        296,
+        2015,
+        322
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            151
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            52
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "material_aluminum_with_steel_frame_mark",
+      "page": 18,
+      "bbox": [
+        2015,
+        296,
+        2055,
+        322
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "finish_off_white_mark",
+      "page": 18,
+      "bbox": [
+        2055,
+        296,
+        2095,
+        322
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "finish_primer_mark",
+      "page": 18,
+      "bbox": [
+        2095,
+        296,
+        2135,
+        322
+      ],
+      "expected": " ",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "finish_clear_by_arch_mark",
+      "page": 18,
+      "bbox": [
+        2135,
+        296,
+        2175,
+        322
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            152
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            69
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "accessory_opposed_blade_damper_mark",
+      "page": 18,
+      "bbox": [
+        2175,
+        296,
+        2215,
+        322
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            153
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            70
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "accessory_air_scoop_mark",
+      "page": 18,
+      "bbox": [
+        2215,
+        296,
+        2255,
+        322
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "accessory_butterfly_damper_mark",
+      "page": 18,
+      "bbox": [
+        2255,
+        296,
+        2295,
+        322
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "accessory_fire_damper_mark",
+      "page": 18,
+      "bbox": [
+        2295,
+        296,
+        2335,
+        322
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "accessory_equalizing_grid_mark",
+      "page": 18,
+      "bbox": [
+        2335,
+        296,
+        2375,
+        322
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "mounting_lay_in_mark",
+      "page": 18,
+      "bbox": [
+        2375,
+        296,
+        2415,
+        322
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "mounting_surface_mark",
+      "page": 18,
+      "bbox": [
+        2415,
+        296,
+        2455,
+        322
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            154
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            71
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "mounting_duct_mark",
+      "page": 18,
+      "bbox": [
+        2455,
+        296,
+        2495,
+        322
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "max_nc",
+      "page": 18,
+      "bbox": [
+        2495,
+        296,
+        2540,
+        322
+      ],
+      "expected": "25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            155
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25",
+          "word_ids": [
+            72
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "max_loss_in_wg",
+      "page": 18,
+      "bbox": [
+        2540,
+        296,
+        2640,
+        322
+      ],
+      "expected": "0.10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.10",
+          "word_ids": [
+            156
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.10",
+          "word_ids": [
+            73
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "row": 4,
+      "column": "notes",
+      "page": 18,
+      "bbox": [
+        2640,
+        296,
+        2710,
+        322
+      ],
+      "expected": "1,2,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,6",
+          "word_ids": [
+            157
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,6",
+          "word_ids": [
+            74
+          ]
+        }
+      }
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "header": "AIR DEVICE SCHEDULE",
+      "page": 18,
+      "bbox": [
+        2025,
+        68,
+        2160,
+        96
+      ],
+      "engine": "mupdf",
+      "actual": "AIR DEVICE SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M601-AIR-DEVICES",
+      "header": "AIR DEVICE SCHEDULE",
+      "page": 18,
+      "bbox": [
+        2025,
+        68,
+        2160,
+        96
+      ],
+      "engine": "poppler",
+      "actual": "AIR DEVICE SCHEDULE",
+      "pass": true
+    },
+    {
+      "assertion": "m601-air-device-note-1",
+      "page": 18,
+      "bbox": [
+        1470,
+        374,
+        1770,
+        392
+      ],
+      "expected": "1. FINISH TO BE STANDARD COLOR AS SELECTED BY THE ARCHITECT.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. FINISH TO BE STANDARD COLOR AS SELECTED BY THE ARCHITECT.",
+          "word_ids": [
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. FINISH TO BE STANDARD COLOR AS SELECTED BY THE ARCHITECT.",
+          "word_ids": [
+            152,
+            153,
+            154,
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            161,
+            162
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-air-device-note-2",
+      "page": 18,
+      "bbox": [
+        1470,
+        390,
+        1810,
+        408
+      ],
+      "expected": "2. COORDINATE BORDER TYPES AND MOUNTING FRAMES WITH ARCHITECTURE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2. COORDINATE BORDER TYPES AND MOUNTING FRAMES WITH ARCHITECTURE.",
+          "word_ids": [
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2. COORDINATE BORDER TYPES AND MOUNTING FRAMES WITH ARCHITECTURE.",
+          "word_ids": [
+            163,
+            164,
+            165,
+            166,
+            167,
+            168,
+            169,
+            170,
+            171
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-air-device-note-3",
+      "page": 18,
+      "bbox": [
+        1470,
+        406,
+        1685,
+        424
+      ],
+      "expected": "3. MOLDED INSULATION BLANKET (R-6 MINIMUM).",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3. MOLDED INSULATION BLANKET (R-6 MINIMUM).",
+          "word_ids": [
+            112,
+            113,
+            114,
+            115,
+            116,
+            117
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3. MOLDED INSULATION BLANKET (R-6 MINIMUM).",
+          "word_ids": [
+            172,
+            173,
+            174,
+            175,
+            176,
+            177
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-air-device-note-4",
+      "page": 18,
+      "bbox": [
+        1470,
+        422,
+        1785,
+        440
+      ],
+      "expected": "4. 4-WAY THROW PATTERN UNLESS OTHERWISE NOTED ON FLOOR PLANS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4. 4-WAY THROW PATTERN UNLESS OTHERWISE NOTED ON FLOOR PLANS.",
+          "word_ids": [
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4. 4-WAY THROW PATTERN UNLESS OTHERWISE NOTED ON FLOOR PLANS.",
+          "word_ids": [
+            178,
+            179,
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-air-device-note-5",
+      "page": 18,
+      "bbox": [
+        1470,
+        438,
+        1865,
+        456
+      ],
+      "expected": "5. PROVIDE AIR BAFFLES AS NECESSARY TO ACHIEVE THROW PATTERN INDICATED ON PLANS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5. PROVIDE AIR BAFFLES AS NECESSARY TO ACHIEVE THROW PATTERN INDICATED ON PLANS.",
+          "word_ids": [
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5. PROVIDE AIR BAFFLES AS NECESSARY TO ACHIEVE THROW PATTERN INDICATED ON PLANS.",
+          "word_ids": [
+            189,
+            190,
+            191,
+            192,
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200,
+            201
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

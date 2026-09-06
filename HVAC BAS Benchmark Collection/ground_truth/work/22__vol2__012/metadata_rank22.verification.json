@@ -1,0 +1,485 @@
+{
+  "document_id": "22__vol2__012",
+  "source_sha256": "b008fd1b72a48adc5ccbacfa74fcf377dd93bbd30c4b8d2ebec2c540a6248711",
+  "annotation_sha256": "8e87ef4db67e59ce380efa17cdc088e36975fc339e063e3ad74594156fbab084",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 14,
+  "checks": [
+    {
+      "assertion": "cover-project",
+      "page": 1,
+      "bbox": [
+        2335,
+        980,
+        2570,
+        1015
+      ],
+      "expected": "CHILLER SYSTEM UPGRADE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHILLER SYSTEM UPGRADE",
+          "word_ids": [
+            103,
+            104,
+            105
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER SYSTEM UPGRADE",
+          "word_ids": [
+            99,
+            100,
+            101
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "cover-facility",
+      "page": 1,
+      "bbox": [
+        370,
+        285,
+        2110,
+        430
+      ],
+      "expected": "CENTER FOR BEHAVIORAL MEDICINE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CENTER FOR BEHAVIORAL MEDICINE CHILLER UPGRADE",
+          "word_ids": [
+            147,
+            148,
+            149,
+            150,
+            0,
+            1
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHILLER UPGRADE CENTER FOR BEHAVIORAL MEDICINE",
+          "word_ids": [
+            17,
+            18,
+            13,
+            14,
+            15,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "cover-location",
+      "page": 1,
+      "bbox": [
+        810,
+        395,
+        1700,
+        515
+      ],
+      "expected": "KANSAS CITY, MISSOURI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "KANSAS CITY, MISSOURI KANSAS CITY, MISSOURI",
+          "word_ids": [
+            151,
+            152,
+            153,
+            39,
+            40,
+            41
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "KANSAS CITY, MISSOURI KANSAS CITY, MISSOURI",
+          "word_ids": [
+            19,
+            21,
+            23,
+            20,
+            22,
+            24
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "cover-mep-engineer",
+      "page": 1,
+      "bbox": [
+        1848,
+        650,
+        2085,
+        695
+      ],
+      "expected": "INSITE GROUP, INC.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INSITE GROUP, INC.",
+          "word_ids": [
+            22,
+            23,
+            24
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INSITE GROUP, INC.",
+          "word_ids": [
+            66,
+            67,
+            68
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "cover-issue-date",
+      "page": 1,
+      "bbox": [
+        2335,
+        1668,
+        2465,
+        1700
+      ],
+      "expected": "FEBRUARY 4, 2025",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FEBRUARY 4, 2025",
+          "word_ids": [
+            139,
+            140,
+            141
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SHEET 1 OF 29 FEBRUARY 4, 2025",
+          "word_ids": [
+            151,
+            152,
+            153,
+            154,
+            155,
+            156,
+            157
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "g001-scale",
+      "page": 2,
+      "bbox": [
+        1088,
+        1598,
+        1205,
+        1625
+      ],
+      "expected": "SCALE: 1/16\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/16\" = 1'-0\"",
+          "word_ids": [
+            96,
+            97,
+            98,
+            99
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/16\" = 1'-0\"",
+          "word_ids": [
+            104,
+            105,
+            106,
+            107
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mpd110a-scale",
+      "page": 11,
+      "bbox": [
+        767,
+        1598,
+        878,
+        1625
+      ],
+      "expected": "SCALE: 1/4\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/4\" = 1'-0\"",
+          "word_ids": [
+            99,
+            100,
+            101,
+            102
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/4\" = 1'-0\"",
+          "word_ids": [
+            680,
+            681,
+            682,
+            683
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mpd110b-scale",
+      "page": 12,
+      "bbox": [
+        767,
+        1598,
+        878,
+        1625
+      ],
+      "expected": "SCALE: 1/4\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/4\" = 1'-0\"",
+          "word_ids": [
+            108,
+            109,
+            110,
+            111
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/4\" = 1'-0\"",
+          "word_ids": [
+            359,
+            360,
+            361,
+            362
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mp110a-scale",
+      "page": 13,
+      "bbox": [
+        767,
+        1635,
+        878,
+        1662
+      ],
+      "expected": "SCALE: 1/4\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/4\" = 1'-0\"",
+          "word_ids": [
+            181,
+            182,
+            183,
+            184
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/4\" = 1'-0\"",
+          "word_ids": [
+            976,
+            977,
+            978,
+            979
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "mp110b-scale",
+      "page": 14,
+      "bbox": [
+        767,
+        1598,
+        878,
+        1625
+      ],
+      "expected": "SCALE: 1/4\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/4\" = 1'-0\"",
+          "word_ids": [
+            142,
+            143,
+            144,
+            145
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/4\" = 1'-0\"",
+          "word_ids": [
+            488,
+            489,
+            490,
+            491
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "ed110a-scale",
+      "page": 22,
+      "bbox": [
+        767,
+        1598,
+        878,
+        1625
+      ],
+      "expected": "SCALE: 1/4\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/4\" = 1'-0\"",
+          "word_ids": [
+            247,
+            248,
+            249,
+            250
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/4\" = 1'-0\"",
+          "word_ids": [
+            271,
+            272,
+            273,
+            274
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "ed110b-scale",
+      "page": 23,
+      "bbox": [
+        767,
+        1598,
+        878,
+        1625
+      ],
+      "expected": "SCALE: 1/4\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/4\" = 1'-0\"",
+          "word_ids": [
+            300,
+            301,
+            302,
+            303
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/4\" = 1'-0\"",
+          "word_ids": [
+            328,
+            329,
+            330,
+            331
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "e110a-scale",
+      "page": 24,
+      "bbox": [
+        767,
+        1598,
+        878,
+        1625
+      ],
+      "expected": "SCALE: 1/4\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/4\" = 1'-0\"",
+          "word_ids": [
+            480,
+            481,
+            482,
+            483
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/4\" = 1'-0\"",
+          "word_ids": [
+            498,
+            499,
+            500,
+            501
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "e110b-scale",
+      "page": 25,
+      "bbox": [
+        767,
+        1598,
+        878,
+        1625
+      ],
+      "expected": "SCALE: 1/4\" = 1'-0\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SCALE: 1/4\" = 1'-0\"",
+          "word_ids": [
+            550,
+            551,
+            552,
+            553
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SCALE: 1/4\" = 1'-0\"",
+          "word_ids": [
+            577,
+            578,
+            579,
+            580
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

@@ -1,0 +1,83 @@
+{
+  "document_id": "24__vol2__019",
+  "module_role": "Explicit source-matrix ownership ledger for the five M8 point-function schedules. Repeated literal tags are retained by source row rather than falsely made into globally unique field-device identities.",
+  "ledger_mode": "source_matrix_templates_v1",
+  "source_points_modules": [
+    "points_m83_m88.json"
+  ],
+  "applications": [
+    {
+      "id": "m83-chilled-water",
+      "source_table": "M83-CHW-POINTS",
+      "ownership_scope": "M8.3 chilled-water system point-function template: air-cooled chiller, bypass and two chilled-water pump control context.",
+      "source_sheet": "M8.3",
+      "source_page": 19
+    },
+    {
+      "id": "m84-heating-hot-water",
+      "source_table": "M84-HHW-POINTS",
+      "ownership_scope": "M8.4 heating-hot-water point-function template: two boilers, bypass and two heating-water pump control context.",
+      "source_sheet": "M8.4",
+      "source_page": 20
+    },
+    {
+      "id": "m85-ahu-1",
+      "source_table": "M85-AHU1-POINTS",
+      "ownership_scope": "M8.5 AHU-1 point-function template, including supply/relief fan, hydronic coil, recovery wheel, damper, airflow, CO2 and space-pressure contexts.",
+      "source_sheet": "M8.5",
+      "source_page": 21
+    },
+    {
+      "id": "m87-vav",
+      "source_table": "M87-VAV-POINTS",
+      "ownership_scope": "M8.7 printed VAV-control template rows for constant-air-volume, dual-maximum and VAV applications; no unprinted VAV multiplier is assumed.",
+      "source_sheet": "M8.7",
+      "source_page": 23
+    },
+    {
+      "id": "m88-miscellaneous",
+      "source_table": "M88-MISC-POINTS",
+      "ownership_scope": "M8.8 miscellaneous template rows for mechanical/toilet exhaust, unit heater, fan coil, lighting, radiator, emergency shutdown and storm-water leak contexts.",
+      "source_sheet": "M8.8",
+      "source_page": 24
+    }
+  ],
+  "listed_template_counts": {
+    "total": 158,
+    "source_matrix_rows": 158,
+    "AI": 59,
+    "AO": 33,
+    "DI": 41,
+    "DO": 25
+  },
+  "expanded_template_counts": {
+    "total": 158,
+    "source_rows": 158,
+    "AI": 59,
+    "AO": 33,
+    "DI": 41,
+    "DO": 25
+  },
+  "printed_assignment_summary": {
+    "cell_bounded_source_matrix_rows": 158,
+    "AI": 59,
+    "AO": 33,
+    "DI": 41,
+    "DO": 25,
+    "semantics": "AI/DI/AO/DO values are the printed point-type column of a source control-system template. They are not a final controller-card, terminal, device, field-wiring or installed point total."
+  },
+  "expanded_count_warning": "The record exposes 158 raw-text-cell-bounded source-matrix rows under their printed system scopes. M8.3-M8.8 controls diagrams and sequences do not state final controller card/terminal quantities or an installed-system multiplier, and repeated tag text remains source-row scoped.",
+  "ownership_binding_semantics": "A table, source row and named system-template scope together identify each point occurrence. A tag that appears more than once in one matrix is represented with its row number in the presentation identifier, not merged or counted as distinct physical hardware.",
+  "tables": [],
+  "assertions": [],
+  "inventory_checks": [
+    {
+      "id": "rank24-matrix-application-scopes",
+      "records_path": [
+        "applications"
+      ],
+      "expected": 5,
+      "unique_key": "id"
+    }
+  ]
+}

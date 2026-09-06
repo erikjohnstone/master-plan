@@ -1,0 +1,74 @@
+{
+  "document_id": "12__vol2__028",
+  "module_role": "Exact M-508 heating-water-system BAS input/output matrix. Numeric tags are local P&ID callouts; boiler-controller asterisks and atypical printed I/O classifications are preserved.",
+  "source_sheet": "M-508",
+  "source_page": 4,
+  "logical_row_summary": {
+    "template_rows": 34,
+    "AI": 8,
+    "AO": 3,
+    "DI": 5,
+    "DO": 5,
+    "alarm_flag": 11,
+    "asterisk_note": "* INDICATES POINT PULLED FROM BOILER CONTROLLER",
+    "caution": "The table is a P&ID point template. It is not an installed controller/terminal schedule and does not provide BAS transport, addresses or a field-wired terminal count."
+  },
+  "tables": [
+    {
+      "id": "M508-HEATING-WATER-SYSTEM",
+      "page": 4,
+      "sheet": "M-508",
+      "detail": "2",
+      "title": "HEATING WATER SYSTEM P&ID",
+      "columns": "tag|point_name|AI|AO|DI|DO|ALARM",
+      "x_edges": [1500,1540,1870,1910,1955,2000,2040,2100],
+      "y_ranges": [[705,726],[726,746],[746,766],[766,786],[786,806],[806,826],[826,846],[846,865],[865,884],[884,903],[903,923],[923,942],[942,962],[962,982],[982,1001],[1001,1021],[1021,1040],[1040,1060],[1060,1080],[1080,1100],[1100,1119],[1119,1138],[1138,1157],[1157,1177],[1177,1196],[1196,1216],[1216,1235],[1235,1255],[1255,1274],[1274,1294],[1294,1313],[1313,1333],[1333,1352],[1352,1374]],
+      "rows": [
+        "1|BOILER 1 STATUS*|||X||",
+        "2|BOILER 1 ON/OFF*||||X|",
+        "3|BOILER 1 FAILURE*|||||X",
+        "4|BOILER 1 LOAD*|X||||",
+        "5|HWP PRESSURE DROP ACROSS BOILER 1*|X||||",
+        "6|BOILER 1 PROOF OF FLOW*|||X||X",
+        "7|BOILER 1 LOW WATER FLOW ALARM*|||||X",
+        "8|BCP 1 STATUS VIA CT|||X||",
+        "9|BCP 1 ON/OFF||||X|",
+        "10|BCP 1 FAILURE|||||X",
+        "11|BCP 2 STATUS VIA CT|||X||",
+        "12|BCP 2 ON/OFF||||X|",
+        "13|BCP 2 FAILURE|||||X",
+        "14|HWP 1 STATUS VIA CT|||X||",
+        "15|HWP 1 ON/OFF||||X|",
+        "16|HWP 1 FAILURE|||||X",
+        "17|HWP 1 SPEED||X|||",
+        "18|HWP 1 ECM FAULT|X||||X",
+        "19|HWP 2 STATUS VIA CT|||X||",
+        "20|HWP 2 ON/OFF||||X|",
+        "21|HWP 2 FAILURE|||||X",
+        "22|HWP 2 SPEED||X|||",
+        "23|HWP 2 ECM FAULT|X||||X",
+        "24|HWS DIFFERENTIAL PRESSURE|X||||",
+        "25|HWS DIFFERENTIAL PRESSURE SETPOINT||X|||",
+        "26|HIGH/LOW HWS TEMPERATURE*|X||||X",
+        "27|HWS TEMPERATURE SETPOINT||X|||",
+        "28|HWR TEMPERATURE*|X||||",
+        "29|HWS BYPASS VALVE POSITION|X||||",
+        "30|OUTSIDE AIR TEMPERATURE (GLOBAL)|X||||",
+        "31|EMERGENCY SHUTDOWN (GLOBAL)|||X||X",
+        "32|HEATING WATER SYSTEM FLOW RATE (GPM)|X||||",
+        "33|FREEZE PROTECTION|||||X",
+        "34|CO SENSOR|X||||X"
+      ],
+      "header_evidence": [
+        {"bbox": [1710,652,1900,675], "expected": "BAS INPUT/OUTPUT POINT LIST"},
+        {"bbox": [1500,682,2100,707], "expected": "TAG POINT NAME AI AO DI DO ALARM"}
+      ]
+    }
+  ],
+  "assertions": [
+    {"id": "m508-asterisk-note", "page": 4, "bbox": [1600,1375,1940,1400], "expected": "* INDICATES POINT PULLED FROM BOILER CONTROLLER", "mode": "contains"}
+  ],
+  "inventory_checks": [
+    {"id": "heating-water-io-matrix", "records_path": ["tables"], "expected": 1, "unique_key": "id"}
+  ]
+}

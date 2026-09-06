@@ -1,0 +1,150 @@
+{
+  "document_id":"02__vol2__015",
+  "status":"corroborated_document_component",
+  "scope":"Manually read network architecture and all nine written sequence groups on AM703-AM706. Source language and ambiguity are preserved. Bounded text corroboration does not resolve engineering contradictions or establish installed controller/sensor counts.",
+  "network":{
+    "page":22,"sheet":"AM701","view":"DDC network architecture, upper/right half",
+    "protocols_stated":[{"normalized":"BACnet/IP","source":"BACNET IP","assertion_ids":["net-ip"]},{"normalized":"BACnet MS/TP","source":"BACNET MS/TP","assertion_ids":["net-mstp"]}],
+    "unspecified_link":"GENERIC NETWORK AS REQUIRED FOR SYSTEM",
+    "router":"BACnet IP router in control cabinet",
+    "upstream_connection":"Fiber patch cable to fiber patch panel rack A1.FPP1-45; telecommunications sheet AT401 referenced, not supplied",
+    "operator_station":"DDC notebook computer in lockable cabinet",
+    "drawn_groups":[{"label":"Condenser water system","equipment":["CCC-1","CCC-2","P-1","P-2"],"additional":"Monitoring points"},{"label":"Exhaust fans","equipment":["EF-1","EF-2","EF-3","EF-4","EF-5","EF-6"]},{"label":"Fan coils","equipment":["FC-1","FC-2","FC-3","FC-4","P-3","P-4","P-5","P-6"]},{"label":"Unit heaters and ductless split system","equipment":["UH-1","UH-2","UH-3","UH-4","DSS-1","DSS-2"]}],
+    "controller_quantity":{"status":"not_stated","value":null,"reason":"The source expressly calls controller number and arrangement diagrammatic, to be designed by the DDC contractor. Four drawn group boxes are not a four-controller takeoff."},
+    "wiring_quantities":{"status":"not_stated","value":null,"reason":"No takeoff length, address roster or terminal allocation supplied by this network schematic."},
+    "assertion_ids":["net-generic","net-router","net-fiber","net-notebook","net-controller-count"],
+    "visual_evidence":"reviews/02__vol2__015/page-22.png",
+    "caveat":"The architecture is USB-specific and does not establish that gatehouse/guard-booth devices use the same individual links or controller allocations. Legend protocol names alone do not prove every point is a network object instead of physical I/O."
+  },
+  "sequences":[
+    {
+      "id":"cw","page":24,"sheet":"AM703","view":"B4 CONDENSER WATER CONTROLS","bbox":[1495,85,2220,1040],"diagram":{"page":23,"sheet":"AM702","view":"A1 CONDENSER WATER DIAGRAM"},
+      "equipment":["CCC-1","CCC-2","P-1","P-2","MPAC-1","MPAC-2","MPAC-3","MPAC-4","HPAC-1","HPAC-2","HPAC-3","V-1 through V-11"],
+      "logic":["PI control unless otherwise specified. Below low limit, coolers/control loops disabled and bypass open for building circulation; above low limit, enable lead cooler and modulate bypass using pre-pump CWR temperature AI-6.","At 100% bypass opening reset high limit to 90 F. Spray pump engages at reset setpoint minus 4 F; cooler fans engage above reset plus 2 F and modulate. Reverse on falling CWR temperature.","With no compressors enabled: pumps/coolers off, minimum bypass open and lead/lag shutoff valves closed. With compressors enabled: start lead condenser-water pump, open associated compressor isolation valves and modulate pump flow to the operating-combination table.","After compressors stop, ramp pump to minimum speed, modulate minimum-flow bypass and retain pump operation for 15 minutes adjustable.","On lead cooler or pump failure de-energize failed equipment and energize standby pump as written; alternate lead/lag on weekly schedule and runtime."],
+      "setpoints":[{"name":"CWR low limit","value":55,"unit":"F","adjustable":true},{"name":"CWR high limit","value":80,"unit":"F","adjustable":true},{"name":"CWR high-limit reset","value":90,"unit":"F","adjustable":true}],
+      "alarms":["CWR setpoint +3 F for 15 min","CWR setpoint -3 F for 15 min","Lead cooler failure","Lead pump failure","Any compressor CWR temperature 110 degrees or higher"],
+      "source_conflicts":["Mode paragraph mixes CWS, CWR and ZN variable names. Low-limit paragraph references AI-1, while setpoint list uses AI-6 and calls it MAIN CWR TEMPERATURE; the points matrix calls AI-1 MAIN CWR and AI-6 CWR BEFORE PUMPS.","V-3 is modulated by AO-1 in AM702/AM703; VLV-3 in AM602 is scheduled TWO POSITION.","AM610 shows NO on V-1, V-2 and V-4 through V-10; AM702 shows NC at those valves. V-3 and V-11 show NO on both.","Immediate no-compressor shutdown paragraph must be reconciled with the subsequent 15-minute pump overrun, rather than dropping either requirement.","Failure text specifies standby PUMP even when describing cooler failure. Do not silently substitute a complete standby-cooler sequence."],
+      "assertion_ids":["cw-pi","cw-mode","cw-modulation","cw-overrun","cw-failure","cw-alarms","cw-setpoints"],
+      "operating_flow_table":"CW-OPERATING-FLOW"
+    },
+    {
+      "id":"fc","page":25,"sheet":"AM704","view":"A1 FAN COIL UNIT WITH HEATING COILS","bbox":[195,775,745,1408],"diagram_bbox":[125,433,750,730],
+      "equipment":["FC-1","FC-2","FC-3","FC-4","P-3","P-4","P-5","P-6","V-12","V-13","V-14","V-15"],
+      "logic":["Heat enable below low-limit temperature with 2 F deadband; otherwise fan/control loops disabled. Source also says to disable cooling-coil loops although scheduled units have heating coils/electric backup.","Below 80 F condenser-water temperature, close hot-water valve and enable electric heat to maintain 55 F.","FC-1 requires two temperature sensors, selecting the lowest reading for heating and backup.","Modulate heating valve to maintain zone temperature when enabled; close when disabled. Direct-wired fan-starter safeties, monitor proof, disable and stop fan until reset on failure."],
+      "setpoints":[{"name":"Zone low limit","value":55,"unit":"F"},{"name":"Heat enable deadband","value":2,"unit":"F"},{"name":"Backup-water threshold","value":80,"unit":"F","adjustable":true}],
+      "alarms":["Low space temperature: setpoint minus 3 F for 15 minutes","Fan status mismatch","Dirty filters"],
+      "source_conflicts":["Heating coil paragraph calls its setpoint ZN-T-HL; supplied numeric list states ZN-T-LL. Preserve symbol ambiguity.","Second FC-1 temperature-sensor input is required but not separately numbered in the typical point list."],
+      "assertion_ids":["fc-heating","fc-backup","fc-two-sensors","fc-setpoint","fc-alarms"]
+    },
+    {
+      "id":"ef-typical","page":25,"sheet":"AM704","view":"A2 EXHAUST FAN CONTROLS","bbox":[922,1000,1480,1458],"diagram_bbox":[920,812,1465,990],
+      "equipment":["EF-1","EF-2","EF-3","EF-4","EF-5"],
+      "logic":["Above 80 F zone temperature, open outside-air damper, prove it open, then start exhaust fan. Falling temperature with 5 F deadband stops fan and closes damper.","EF-1 requires two temperature sensors; highest reading governs ventilation.","Hardwired fan-starter safeties and monitored proofs disable controls and stop fan until reset on failure."],
+      "alarms":["Fan failure"],
+      "source_conflicts":["Generic proof list names EF-2 intake and exhaust dampers, while typical matrix includes one intake-damper status and command. Do not invent a separately typed exhaust-damper point.","Second EF-1 sensor is not separately numbered in the matrix."],
+      "assertion_ids":["ef-ventilation","ef-two-sensors","ef-proof-names"]
+    },
+    {
+      "id":"ef6-generator","page":25,"sheet":"AM704","view":"A4 GENERATOR ROOM EXHAUST FAN/INTAKE AIR CONTROLS","bbox":[1540,930,2200,1460],"diagram_bbox":[1540,660,2220,930],
+      "equipment":["EF-6","GI-1","GI-2","GI-3","ATS-2","Generator No. 1","Generator No. 2"],
+      "logic":["At zone temperature above 80 F open one of three intake dampers and run EF-6 at minimum speed; modulate fan speed to maintain temperature. At falling temperature with 5 F deadband stop EF-6 and close active damper.","Rotate open intake weekly. Next damper must open before current one closes. If a damper fails, open the next in rotation; send critical alarm on open/close failure.","ATS-2 closed OR either/both generators running: open all three intake dampers and de-energize EF-6.","Direct-hardwired safeties and proof monitoring stop controls until reset on failure."],
+      "alarms":["Fan failure","Failure of any outside-air damper (critical open/close failure)"],
+      "source_conflicts":["Generic proof text says EXHAUST DAMPER EF-2 inside EF-6 sequence, and refers to fan-coil-unit fan shutdown. Retain as apparent copied wording, not an extra EF-2 point."],
+      "assertion_ids":["gen-ventilation","gen-rotation","gen-operation","gen-proof-names"]
+    },
+    {
+      "id":"unit-heaters","page":26,"sheet":"AM705","view":"A2 UNIT HEATER CONTROLS","bbox":[850,460,1340,1030],"diagram_bbox":[995,305,1155,451],
+      "equipment":["UH-1","UH-2","UH-3","UH-4"],
+      "logic":["Use zone AI-1 and 55 F setpoint with 3 F deadband to enable heater; disable above setpoint.","Hardwire safeties; monitor status/proofs and stop until reset on failure.","Source calls for local binary pushbutton RST-BUT and remote DDC reset command."],
+      "alarms":["Unit-heater alarm","Space temperature below 45 F"],
+      "source_conflicts":["RST-BUT and H-S status proof are not separately assigned point marks in the three-row table. No extra physical-input count fabricated."],
+      "assertion_ids":["uh-deadband","uh-reset","uh-setpoint","uh-low-alarm"]
+    },
+    {
+      "id":"mpac-relief","page":26,"sheet":"AM705","view":"A4 MEDIUM PRESSURE AIR COMPRESSOR RELIEF CONTROLS","bbox":[1590,850,2150,1390],"diagram_bbox":[1590,565,2010,825],
+      "equipment":["MPAC-1","MPAC-2","MPAC-3","MPAC-4"],
+      "logic":["Compressor off: relief damper closed, space damper open.","Compressor cooling-fan discharge airflow proven and zone above heating setpoint: open relief damper, prove open, then close space damper.","Airflow proven and zone below heating setpoint: relief stays closed and space stays open.","AI-1 uses FC-3 zone-temperature sensor input, not a new sensor for each compressor.","Proof/safety failure disables control loops; monitor airflow and both dampers."],
+      "alarms":["Damper failure"],
+      "assertion_ids":["mpac-off","mpac-nonheating","mpac-heating","mpac-shared-sensor"]
+    },
+    {
+      "id":"domestic-water","page":26,"sheet":"AM705","view":"A1 DOMESTIC WATER METER DIAGRAM","bbox":[140,990,750,1440],
+      "equipment":["DWM-1","DWM-2","DWM-3"],
+      "logic":["Monitor pulse output; record instantaneous, hourly, daily and cumulative flow.","DWM-1: main building meter; DWM-2: pure-water flow; DWM-3: pier flow.","USB/fire-pump freeze-protection flow is calculated DWM-1 minus (DWM-2 plus DWM-3), not another physical meter."],
+      "alarms":["Loss of meter signal"],
+      "external_references":["AP707 domestic-water controls is outside the supplied PDF"],
+      "source_conflicts":["Point matrix labels WATER FLOW PULSE INPUT as ANALOG INPUT/AI1. Terminal technology must be confirmed instead of auto-converting to DI."],
+      "assertion_ids":["water-logging","water-meter-roster","water-signal","water-external"]
+    },
+    {
+      "id":"gatehouse","page":27,"sheet":"AM706","view":"A1 SPLIT SYSTEM HEAT PUMP & EXHAUST CONTROLS - GATEHOUSE","bbox":[175,830,720,1345],"diagram_bbox":[175,450,835,760],
+      "equipment":["SS-1","HP-1","EF-7"],
+      "logic":["Provide manufacturer's 7-day programmable thermostat for cooling, heating, emergency heat and defrost. Coordinate hardwired DDC additional control with thermostat.","When split-system fan runs, open outside-air damper and energize exhaust fan; close outside-air and exhaust dampers when fan is off.","Monitor return-air temperature and humidity.","Auxiliary drain pan float switch shuts unit down on water detection (shown in diagram, not listed as a separate marked BAS point)."],
+      "setpoints":[{"name":"Space heat","value":68,"unit":"F","adjustable":true},{"name":"Space cool","value":78,"unit":"F","adjustable":true}],
+      "alarms":["Return temperature above cooling setpoint +3 F for 15 min","Return temperature below heating setpoint -3 F for 15 min","Return-air RH at least 65%","Exhaust-fan failure"],
+      "source_conflicts":["Sequence repeatedly calls the sensed fan 'split system exhaust fan' while then distinguishing split-system and exhaust fans. Preserve actual fan-status mappings from diagram, rather than adding another fan."],
+      "assertion_ids":["gh-thermostat","gh-setpoints","gh-alarms"]
+    },
+    {
+      "id":"ductless","page":27,"sheet":"AM706","view":"A3 DUCTLESS SPLIT SYSTEM CONTROLS - GATEHOUSE, GUARD BOOTH, AND USB","bbox":[1195,970,1900,1330],"diagram_bbox":[1195,747,1735,935],
+      "equipment":["DSS-1/CU-1","DSS-2/CU-2","DSS-3/CU-3","DSS-4/CU-4"],
+      "logic":["Ductless system continuously enabled through local unit thermostat, with DDC monitoring space temperature.","Temperature/humidity setpoints are communicated from DDC and measured in associated space; internal unit controls modulate cooling and reduce airflow for dehumidification.","Indoor fan runs whenever zone controller commands unit run.","Guard-booth temperature sensor explicitly not required; do not remove its separately specified local remote controller."],
+      "setpoints":[{"name":"Cooling","value":78,"unit":"F","adjustable":true},{"name":"Heating","value":68,"unit":"F","adjustable":true},{"name":"Cooling deadband","value":5,"unit":"F","source":"5 F (+/-2.5 F)","adjustable":true},{"name":"Humidity","value":55,"unit":"% RH"}],
+      "alarms":["Space temperature more than 5 F above/below setpoint for more than 30 minutes, adjustable"],
+      "source_conflicts":["Temperature/humidity measurement and communicated setpoint functions exceed the single listed AI-1 temperature row. Required physical vs network points/terminals not separately quantified.","Guard-booth exemption and general monitoring text must be retained together; no unsupported extra DDC sensor."],
+      "assertion_ids":["dss-local","dss-humidity-function","dss-exemption","dss-setpoints","dss-alarms"]
+    }
+  ],
+  "tables":[
+    {"id":"CW-OPERATING-FLOW","page":24,"title":"PUMP CONTROL operating-combination flow list","classification":"Required operating flow, not equipment quantity","columns":"number|compressor_combination|flow_with_unit","x_edges":[1530,1559,1788,1850],"y_edges":[568,582,596,610,624,638,652,666,680,695],"rows":["1.|(1) HIGH PRESSURE AC|66 GPM","2.|(1) MEDIUM PRESSURE AC|56.4 GPM","3.|(1) HIGH AND (1) MEDIUM PRESSURE AC|122.4 GPM","4.|(1) HIGH AND (2) MEDIUM PRESSURE AC|178.8 GPM","5.|(1) HIGH AND (3) MEDIUM PRESSURE AC|235.2 GPM","6.|(2) HIGH AND (0) MEDIUM PRESSURE AC|132 GPM","7.|(2) HIGH AND (1) MEDIUM PRESSURE AC|188.4 GPM","8.|(2) HIGH AND (2) MEDIUM PRESSURE AC|244.8 GPM","9.|(2) HIGH AND (3) MEDIUM PRESSURE AC|301.2 GPM"],"audit_notes":["No equipment counts should be derived by summing combinations. Maximum printed operating combination is three medium-pressure plus two high-pressure compressors. Literal GPM units retained in every row."]}
+  ],
+  "assertions":[
+    {"id":"net-ip","page":22,"bbox":[1739,326,1818,343],"expected":"BACNET IP","mode":"exact"},
+    {"id":"net-mstp","page":22,"bbox":[1739,354,1818,372],"expected":"BACNET MS/TP","mode":"exact"},
+    {"id":"net-generic","page":22,"bbox":[1739,382,1918,413],"expected":"GENERIC NETWORK AS REQUIRED FOR SYSTEM","mode":"exact"},
+    {"id":"net-router","page":22,"bbox":[1355,340,1525,372],"expected":"LOCATE BACNET IP ROUTER IN CONTROL CABINET","mode":"exact"},
+    {"id":"net-fiber","page":22,"bbox":[940,255,1070,344],"expected":"FIBER PATCH CABLE TO FIBER PATCH PANEL RACK A1.FPP1-45 SEE USB - ENLARGED PLAN - TELECOM ROOM SHEET AT401","mode":"exact"},
+    {"id":"net-notebook","page":22,"bbox":[998,625,1188,657],"expected":"NOTEBOOK COMPUTER LOCATED IN LOCKABLE CABINET","mode":"exact"},
+    {"id":"net-controller-count","page":22,"bbox":[991,697,1205,772],"expected":"NUMBER OF CONTROLLERS AND ARRANGEMENT IS DIAGRAMMATIC. DDC CONTRACTOR MUST PROVIDE ARRANGEMENT TO MEET THE REQUIREMENTS OF THEIR SYSTEM.","mode":"exact"},
+    {"id":"cw-pi","page":24,"bbox":[1500,115,2220,163],"expected":"UNLESS OTHERWISE SPECIFIED, ALL MODULATING CONTROL MUST BE PROPORTIONAL-INTEGRAL (PI) CONTROL."},
+    {"id":"cw-mode","page":24,"bbox":[1500,200,2220,248],"expected":"WHILE THE CWS TEMPERATURE (CWR-T) IS BELOW THE LOW LIMIT SETPOINT (CWS-T-LL) DISABLE ALL CONTROL LOOPS AND THE CLOSED-CIRCUIT COOLERS DO NOT RUN."},
+    {"id":"cw-modulation","page":24,"bbox":[1500,285,2220,416],"expected":"THEN MODULATE THE BYPASS VALVE TO MAINTAIN CWR TEMPERATURE (BEFORE THE PUMPS) SETPOINT (CWR-T-HL) AS SENSED BY AI-6."},
+    {"id":"cw-overrun","page":24,"bbox":[1500,706,2220,753],"expected":"THE CONDENSER WATER PUMPS MUST REMAIN ON FOR 15 MINUTES (ADJUSTABLE)."},
+    {"id":"cw-failure","page":24,"bbox":[1500,790,2220,838],"expected":"THE DDC MUST ALTERNATE THE LEAD AND LAG EQUIPMENT BASED ON A WEEKLY SCHEDULE AND RUNTIME."},
+    {"id":"cw-alarms","page":24,"bbox":[1500,875,1990,951],"expected":"HIGH CWR TEMPERATURE (SETPOINT + 3°F FOR 15 MIN) LOW CWR TEMPERATURE (SETPOINT - 3°F FOR 15 MIN) FAILURE OF THE LEAD CLOSED CIRCUIT COOLER FAILURE OF THE LEAD CONDENSER WATER PUMP HIGH CWR TEMPERATURE ON ANY ONE OF THE AIR COMPRESSORS (110 DEGREES OR HIGHER)","mode":"exact"},
+    {"id":"cw-setpoints","page":24,"bbox":[1500,987,2050,1035],"expected":"LOW LIMIT SETPOINT (CWR-T-LL), AS SENSED BY POINT AI-6 MAIN CWR TEMPERATURE: 55°F (ADJUSTABLE) HIGH LIMIT SETPOINT (CWR-T-HL), AS SENSED BY POINT AI-6 MAIN CWR TEMPERATURE: 80°F (ADJUSTABLE) HIGH LIMIT RESET SETPOINT (CWR-T-HLR): 90°F (ADJUSTABLE)","mode":"exact"},
+    {"id":"fc-heating","page":25,"bbox":[198,882,742,958],"expected":"WHEN ZN-T DROPS BELOW ZN-T-LL (WITH A 2 DEGREES F DEADBAND) ENABLE THE SUPPLY FAN (SYS-ENA) AND COMMAND TO RUN (SF-SS)"},
+    {"id":"fc-backup","page":25,"bbox":[198,966,742,1028],"expected":"IN THE EVENT THAT THE CONDENSER WATER TEMPERATURE FALL BELOW 80 DEGREES F (ADJUSTABLE), THE HOT WATER CONTROL VALVE MUST CLOSE AND THE DDC MUST ENABLE THE ELECTRIC HEATER TO MAINTAIN ZONE TEMPERATURE (ZN-T) SETPOINT OF 55 DEGREES F (ADJUSTABLE)."},
+    {"id":"fc-two-sensors","page":25,"bbox":[198,1036,733,1084],"expected":"FC-1 HAS (2) TEMPERATURE SENSORS THE CONTROL SYSTEM MUST MONITOR BOTH SENSORS AND USE THE WORST CASE TEMPERATURE (I.E. LOWEST) TO PROVIDE HEATING AND BACKUP SEQUENCE INDICATED ABOVE.","mode":"exact"},
+    {"id":"fc-setpoint","page":25,"bbox":[198,1370,745,1410],"expected":"LOW LIMIT SETPOINT (ZN-T-LL): 55°F"},
+    {"id":"fc-alarms","page":25,"bbox":[198,1303,490,1365],"expected":"LOW SPACE TEMPERATURE (SETPOINT - 3°F FOR 15 MIN) FAN STATUS FAILURE (STATUS MISMATCH) DIRTY FILTERS"},
+    {"id":"ef-ventilation","page":25,"bbox":[927,1116,1473,1192],"expected":"AFTER THE DAMPER IS PROVEN OPEN THE EXHAUST FAN MUST BE ENERGIZED."},
+    {"id":"ef-two-sensors","page":25,"bbox":[927,1200,1477,1234],"expected":"EF-1 HAS (2) TEMPERATURE SENSORS THE CONTROL SYSTEM MUST MONITOR BOTH SENSOR AND USE THE WORST CASE TEMPERATURE (I.E. HIGHEST) TO PROVIDE VENTILATION SEQUENCE INDICATED ABOVE.","mode":"exact"},
+    {"id":"ef-proof-names","page":25,"bbox":[927,1355,1152,1417],"expected":"FAN STATUS (PROOF) (EF2-S) INTAKE DAMPER EF-2 (PROOF) (IDEF2-S) EXHAUST DAMPER EF-2 (PROOF) (RDEF2-S)"},
+    {"id":"gen-ventilation","page":25,"bbox":[1545,1013,2190,1159],"expected":"OF THE THREE OUTSIDE AIR DAMPERS AND ENERGIZE EF-6 TO RUN AT MINIMUM SPEED."},
+    {"id":"gen-rotation","page":25,"bbox":[1545,1013,2190,1159],"expected":"THE DAMPER NEXT IN THE ROTATION MUST ALWAYS OPEN BEFORE THE OPEN DAMPER CLOSES."},
+    {"id":"gen-operation","page":25,"bbox":[1545,1167,2185,1244],"expected":"IF EITHER OR BOTH OF THE GENERATORS ARE RUNNING, THEN ALL THREE OF THE OUTSIDE AIR DAMPERS MUST OPEN AND EF-6 MUST BE DE-ENERGIZED."},
+    {"id":"gen-proof-names","page":25,"bbox":[1545,1350,1772,1412],"expected":"EXHAUST DAMPER EF-2 (PROOF) (RDEF2-S)"},
+    {"id":"uh-deadband","page":26,"bbox":[858,585,1327,662],"expected":"BELOW ZN-T (WITH A 3 DEGREE DEADBAND) ENABLE THE UNIT HEATER AND COMMAND TO RUN."},
+    {"id":"uh-reset","page":26,"bbox":[858,796,1335,873],"expected":"LOCAL BINARY PUSH-BUTTON (RST-BUT) INPUT TO THE DDC HARDWARE"},
+    {"id":"uh-setpoint","page":26,"bbox":[858,940,1335,975],"expected":"ZONE TEMPERATURE SETPOINT (ZN-T): 55 DEGREES F"},
+    {"id":"uh-low-alarm","page":26,"bbox":[858,980,1335,1030],"expected":"LOW SPACE TEMPERATURE: 45 DEGREES F"},
+    {"id":"mpac-off","page":26,"bbox":[1596,960,2148,1008],"expected":"WHEN THE COMPRESSOR IS NOT OPERATING, THE RELIEF AIR DAMPER MUST BE CLOSED AND THE SPACE DAMPER MUST BE OPEN."},
+    {"id":"mpac-nonheating","page":26,"bbox":[1596,1016,2148,1093],"expected":"RELIEF AIR DAMPER MUST OPEN. AFTER PROOF OF OPENING OF THE RELIEF AIR DAMPER THE SPACE DAMPER MUST CLOSE."},
+    {"id":"mpac-heating","page":26,"bbox":[1596,1101,2148,1163],"expected":"RELIEF AIR DAMPER MUST REMAIN CLOSED AND THE SPACE DAMPER WILL REMAIN OPEN."},
+    {"id":"mpac-shared-sensor","page":26,"bbox":[1955,752,2035,784],"expected":"FC-3 SENSOR INPUT"},
+    {"id":"water-logging","page":26,"bbox":[141,1052,627,1087],"expected":"MUST RECORD INSTANTANEOUS FLOW, HOURLY FLOW, DAILY FLOW AND CUMULATIVE FLOW."},
+    {"id":"water-meter-roster","page":26,"bbox":[141,1179,482,1256],"expected":"DWM-1 - MAIN WATER METER FOR BUILDING DWM-2 - PURE WATER FLOW DWM-3 - PIER FLOW FIRE PUMP SYSTEM - FREEZE PROTECTION FLOW USB - CALCULATED VALUE OF DWM-1 MINUS (DWM-2 PLUS DWM-3)","mode":"exact"},
+    {"id":"water-signal","page":26,"bbox":[141,1100,627,1145],"expected":"THE DDC MUST ALARM IF THERE IS A LOSS IN SIGNAL FROM THE WATER METER."},
+    {"id":"water-external","page":26,"bbox":[512,1377,734,1438],"expected":"SHEET AP707"},
+    {"id":"gh-thermostat","page":27,"bbox":[179,917,714,1035],"expected":"7-DAY PROGRAMMABLE THERMOSTAT"},
+    {"id":"gh-setpoints","page":27,"bbox":[179,1297,720,1348],"expected":"SPACE HEATING SETPOINT: 68°F (ADJUSTABLE) SPACE COOLING SETPOINT: 78°F (ADJUSTABLE)"},
+    {"id":"gh-alarms","page":27,"bbox":[179,1212,572,1289],"expected":"HIGH RETURN TEMPERATURE (SPACE COOLING SETPOINT + 3°F FOR 15 MIN) LOW RETURN TEMPERATURE (SPACE HEATING SETPOINT - 3°F FOR 15 MIN) HIGH RETURN AIR HUMIDITY (65% OR GREATER) FAILURE OF THE EXHAUST FAN"},
+    {"id":"dss-local","page":27,"bbox":[1199,1008,1876,1043],"expected":"MUST BE ENABLED TO RUN CONTINUOUSLY THROUGH THE LOCAL UNIT THERMOSTAT."},
+    {"id":"dss-humidity-function","page":27,"bbox":[1199,1051,1875,1086],"expected":"SPACE TEMPERATURE AND HUMIDITY MUST BE MEASURED VIA SENSORS IN THE ASSOCIATED SPACE."},
+    {"id":"dss-exemption","page":27,"bbox":[1505,890,1730,930],"expected":"NOTE: TEMPERATURE SENSOR NOT REQUIRED ON GUARD BOOTH"},
+    {"id":"dss-setpoints","page":27,"bbox":[1199,1248,1420,1325],"expected":"SETPOINTS: COOLING SETPOINT = 78°F (ADJ) HEATING SETPOINT = 68°F (ADJ) COOLING DEADBAND = 5°F (+/- 2.5°F) (ADJ) HUMIDITY SETPOINT = 55% RH","mode":"exact"},
+    {"id":"dss-alarms","page":27,"bbox":[1199,1206,1885,1241],"expected":"HIGH/LOW SPACE TEMPERATURE - SPACE TEMPERATURE IS MORE THAN 5°F ABOVE/BELOW SETPOINT FOR MORE THAN 30 MINS (ADJ)."}
+  ],
+  "document_record":"../../records/02__vol2__015.json"
+}

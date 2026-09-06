@@ -1,0 +1,249 @@
+{
+  "document_id": "20__vol2__097",
+  "module_role": "Project/title-sheet facts, complete page/sheet ledger, scale boundary and visual-review disposition.",
+  "tables": [],
+  "project": {
+    "project_name_as_printed": "JVWTP CHEMICAL BUILDINGS HVAC UPGRADES",
+    "facility_as_printed": "JORDAN VALLEY WATER TREATMENT PLANT",
+    "location_as_printed": "HERRIMAN, UT 84065",
+    "issue_date_as_printed": "February 20, 2025",
+    "assertion_ids": [
+      "cover-project-main",
+      "cover-project-upgrades",
+      "cover-facility-water",
+      "cover-facility-plant",
+      "cover-location",
+      "cover-date"
+    ]
+  },
+  "scale_semantics": {
+    "takeoff_scale_status": "No global scale is asserted across the mixed plans, schedules, control diagrams, wiring diagrams and one-lines.",
+    "boundary": "Individual plan scales are not transformed into document-wide physical takeoff quantities."
+  },
+  "visual_review_pages": [
+    {
+      "page": 1,
+      "sheet": "T-001",
+      "render": "reviews/20__vol2__097/p1-p1-full-poppler.png",
+      "finding": "Cover/drawing-index, project identity, issue and multidisciplinary-sheet index visually reviewed."
+    },
+    {
+      "page": 2,
+      "sheet": "H-001",
+      "render": "reviews/20__vol2__097/p2-p2-full-poppler.png",
+      "finding": "H-001 dense equipment schedules visually reviewed; all 12 schedule rows retained separately."
+    },
+    {
+      "page": 3,
+      "sheet": "H-002",
+      "render": "reviews/20__vol2__097/p3-p3-full-poppler.png",
+      "finding": "Vicinity plan visually reviewed as site/context evidence."
+    },
+    {
+      "page": 4,
+      "sheet": "HD101",
+      "render": "reviews/20__vol2__097/p4-p4-full-poppler.png",
+      "finding": "Chlorine-dioxide HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 5,
+      "sheet": "HD102",
+      "render": "reviews/20__vol2__097/p5-p5-full-poppler.png",
+      "finding": "Hydrofluorosilicic-acid HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 6,
+      "sheet": "HD103",
+      "render": "reviews/20__vol2__097/p6-p6-full-poppler.png",
+      "finding": "Primary-coagulant HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 7,
+      "sheet": "H-101",
+      "render": "reviews/20__vol2__097/p7-p7-full-poppler.png",
+      "finding": "Chlorine-dioxide HVAC remodel plan visually reviewed."
+    },
+    {
+      "page": 8,
+      "sheet": "H-102",
+      "render": "reviews/20__vol2__097/p8-p8-full-poppler.png",
+      "finding": "Hydrofluorosilicic-acid HVAC remodel plan visually reviewed."
+    },
+    {
+      "page": 9,
+      "sheet": "H-103",
+      "render": "reviews/20__vol2__097/p9-p9-full-poppler.png",
+      "finding": "Primary-coagulant HVAC remodel plan visually reviewed."
+    },
+    {
+      "page": 10,
+      "sheet": "H-501",
+      "render": "reviews/20__vol2__097/p10-p10-full-poppler.png",
+      "finding": "Mechanical detail sheet visually reviewed."
+    },
+    {
+      "page": 11,
+      "sheet": "H-502",
+      "render": "reviews/20__vol2__097/p11-p11-full-poppler.png",
+      "finding": "Mechanical detail sheet visually reviewed."
+    },
+    {
+      "page": 12,
+      "sheet": "H-503",
+      "render": "reviews/20__vol2__097/p12-p12-full-poppler.png",
+      "finding": "Mechanical generator-exhaust detail sheet visually reviewed."
+    },
+    {
+      "page": 13,
+      "sheet": "H-601",
+      "render": "reviews/20__vol2__097/p13-p13-full-poppler.png",
+      "finding": "H-601 controls diagrams and sequence-of-operations clauses visually reviewed; bounded clauses retained separately."
+    },
+    {
+      "page": 14,
+      "sheet": "P-601",
+      "render": "reviews/20__vol2__097/p14-p14-full-poppler.png",
+      "finding": "Gas-flow diagrams visually reviewed as plumbing context."
+    },
+    {
+      "page": 15,
+      "sheet": "E-001",
+      "render": "reviews/20__vol2__097/p15-p15-full-poppler.png",
+      "finding": "Electrical controls/instruments and symbol legend visually reviewed."
+    },
+    {
+      "page": 16,
+      "sheet": "ED101",
+      "render": "reviews/20__vol2__097/p16-p16-full-poppler.png",
+      "finding": "Chlorine-dioxide electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 17,
+      "sheet": "ED102",
+      "render": "reviews/20__vol2__097/p17-p17-full-poppler.png",
+      "finding": "Hydrofluorosilicic-acid electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 18,
+      "sheet": "ED103",
+      "render": "reviews/20__vol2__097/p18-p18-full-poppler.png",
+      "finding": "Primary-coagulant electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 19,
+      "sheet": "ED601",
+      "render": "reviews/20__vol2__097/p19-p19-full-poppler.png",
+      "finding": "Chlorine-dioxide electrical demolition one-line diagram visually reviewed."
+    },
+    {
+      "page": 20,
+      "sheet": "E-101",
+      "render": "reviews/20__vol2__097/p20-p20-full-poppler.png",
+      "finding": "Chlorine-dioxide electrical remodel plan visually reviewed."
+    },
+    {
+      "page": 21,
+      "sheet": "E-102",
+      "render": "reviews/20__vol2__097/p21-p21-full-poppler.png",
+      "finding": "Hydrofluorosilicic-acid electrical remodel plan visually reviewed."
+    },
+    {
+      "page": 22,
+      "sheet": "E-103",
+      "render": "reviews/20__vol2__097/p22-p22-full-poppler.png",
+      "finding": "Primary-coagulant electrical remodel plan visually reviewed."
+    },
+    {
+      "page": 23,
+      "sheet": "E-601",
+      "render": "reviews/20__vol2__097/p23-p23-full-poppler.png",
+      "finding": "Electrical remodel one-line diagram visually reviewed."
+    },
+    {
+      "page": 24,
+      "sheet": "E-602",
+      "render": "reviews/20__vol2__097/p24-p24-full-poppler.png",
+      "finding": "Chlorine-dioxide electrical remodel one-line diagram visually reviewed."
+    },
+    {
+      "page": 25,
+      "sheet": "E-603",
+      "render": "reviews/20__vol2__097/p25-p25-full-poppler.png",
+      "finding": "E-603 HVAC speed-controller wiring diagrams visually reviewed; bounded functional labels retained separately."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "cover-project-main",
+      "page": 1,
+      "bbox": [
+        560,
+        84,
+        1895,
+        160
+      ],
+      "expected": "JVWTP CHEMICAL BUILDINGS HVAC",
+      "mode": "exact"
+    },
+    {
+      "id": "cover-project-upgrades",
+      "page": 1,
+      "bbox": [
+        1018,
+        164,
+        1435,
+        240
+      ],
+      "expected": "UPGRADES",
+      "mode": "exact"
+    },
+    {
+      "id": "cover-facility-water",
+      "page": 1,
+      "bbox": [
+        912,
+        340,
+        1540,
+        396
+      ],
+      "expected": "JORDAN VALLEY WATER",
+      "mode": "exact"
+    },
+    {
+      "id": "cover-facility-plant",
+      "page": 1,
+      "bbox": [
+        973,
+        392,
+        1478,
+        448
+      ],
+      "expected": "TREATMENT PLANT",
+      "mode": "exact"
+    },
+    {
+      "id": "cover-location",
+      "page": 1,
+      "bbox": [
+        1069,
+        490,
+        1382,
+        526
+      ],
+      "expected": "HERRIMAN, UT 84065",
+      "mode": "exact"
+    },
+    {
+      "id": "cover-date",
+      "page": 1,
+      "bbox": [
+        1055,
+        1070,
+        1397,
+        1115
+      ],
+      "expected": "February 20, 2025",
+      "mode": "exact"
+    }
+  ]
+}

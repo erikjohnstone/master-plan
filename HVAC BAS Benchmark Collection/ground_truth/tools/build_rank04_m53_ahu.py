@@ -1,0 +1,58 @@
+"""Author the M5.3 AHU-1 source schedule as visual, cell-bounded ground truth."""
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[2]
+WORK = ROOT / "ground_truth" / "work" / "04__vol2__062"
+IDENT = "04__vol2__062"
+
+
+def main():
+    columns = [
+        "tag", "unit_type", "area_served", "supply_fan_type", "supply_airflow_design_cfm", "supply_airflow_actual_cfm", "supply_fan_esp", "supply_fan_tsp", "supply_fan_hp_qty", "supply_fan_voltage_phase", "supply_fan_rpm",
+        "dx_sensible_mbh", "dx_total_mbh", "dx_cfm", "dx_entering_db_f", "dx_entering_wb_f", "dx_leaving_db_f", "dx_leaving_wb_f", "dx_max_face_velocity_fpm", "dx_air_pd_wc", "dx_max_rh",
+        "gas_heat_input_mbh", "gas_heat_output_mbh", "gas_heat_cfm", "gas_heat_entering_db_f", "gas_heat_leaving_db_f", "gas_heat_modulation_pct",
+        "humidifier_unit_tag", "humidifier_coil_air_pd_ft", "humidifier_finned_height_in", "humidifier_finned_width_in", "humidifier_face_area_ft2", "humidifier_face_velocity_fpm", "humidifier_coil_type",
+        "pre_filter_efficiency", "pre_filter_depth", "final_filter_efficiency", "final_filter_depth", "filter_max_face_velocity_fpm",
+        "mca", "mropd", "electrical_voltage_phase", "minimum_osa_cfm", "ahri_eer_rating", "operating_weight_lb", "manufacturer_model", "remarks",
+    ]
+    ahu = (
+        "AHU-1|SEMI-CUSTOM|LABORATORIES|REMARK 2|13,000|11,540|1.5|4.3|7.6 \\ 4|208/3|2,246|"
+        "502.1|502.1|13,000|92.0|63.5|53.6|49.3|500|0.6|50%|"
+        "1,125.0|893.8|13,000|3.0|55.0|5-100%|"
+        "HUM-1|0.01|24.0|109.0|52.1|451|REMARK 6|"
+        "MERV 8|2\"|MERV 13|4\"|500|178.9|225.0|208 / 3|3,950|10.8|10,000|DAIKIN DPSA040|3 , 4 , 5 , 6"
+    )
+    data = {
+        "document_id": IDENT,
+        "module_role": "Cell-bounded capture of M5.3's one printed AHU schedule row. AHU-1 operating specifications are source values, not observed commissioning values or inferred BAS point quantities.",
+        "equipment_scope": {
+            "sheet": "M5.3 / PDF p15", "scheduled_unit_tags": ["AHU-1"],
+            "row_count": 1,
+            "controls_boundary": "M5.3 prints a humidifier component tag (HUM-1) and a schedule remark to see the humidifier schedule. Point templates and the VAV AHU sequence are separately bounded on M6.3; this table does not convert equipment attributes into I/O counts.",
+            "quantity_boundary": "One schedule line item is not evidence of a field-device count, sensor count, or a plan-placement count beyond the printed AHU-1 identity.",
+        },
+        "tables": [{
+            "id": "M53-AIR-HANDLING-UNIT",
+            "sheet": "M5.3", "page": 15,
+            "title_as_printed": "AIR HANDLING UNIT SCHEDULE",
+            "columns": "|".join(columns),
+            "x_edges": [200, 260, 330, 400, 445, 480, 530, 560, 600, 640, 673, 710, 750, 790, 840, 870, 905, 940, 977, 1035, 1065, 1105, 1145, 1190, 1232, 1263, 1300, 1370, 1410, 1445, 1480, 1515, 1555, 1590, 1630, 1672, 1700, 1745, 1780, 1825, 1860, 1905, 1950, 1985, 2015, 2065, 2175, 2245],
+            "y_ranges": [[327, 355]],
+            "rows": [ahu],
+            "row_semantics": "One complete visual schedule row. Values that print as two-line source cells (REMARK 2 and REMARK 6) remain a single cell value; no interpretation of the referenced remark is substituted into the source schedule.",
+            "printed_column_context": "AIR HANDLING UNIT SCHEDULE; the nested headings span supply fan, DX/dehumidification cooling coil, gas heating coil, humidification coil, filters, electrical requirements, outside air, AHRI EER, operating weight, manufacturer/model and remarks.",
+        }],
+        "assertions": [
+            {"id": "m53-ahu-title", "page": 15, "bbox": [1040, 210, 1410, 245], "expected": "AIR HANDLING UNIT SCHEDULE", "mode": "exact"},
+            {"id": "m53-ahu-remark-3", "page": 15, "bbox": [210, 415, 730, 450], "expected": "3. EXTERNAL STATIC PRESSURE (ESP) DOES NOT INCLUDE THE COILS, FILTERS, OR OTHER INTERNAL AIR HANDLER LOSSES.", "mode": "exact"},
+        ],
+        "inventory_checks": [{"id": "rank04-m53-ahu-row", "records_path": ["tables"], "expected": 1, "unique_key": "id"}],
+    }
+    WORK.mkdir(parents=True, exist_ok=True)
+    (WORK / "schedules_m53_ahu.json").write_text(json.dumps(data, indent=2) + "\n")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,209 @@
+{
+  "document_id": "08__vol2__044",
+  "source_sha256": "d726ef89f4021eef903c001f71f786df5837c432887f5d5ca88051fa8a151384",
+  "annotation_sha256": "258f3b131c45e2c74bb7f2c752c84ab7a27229c04c6e2058c52f74e4aa0e9222",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 6,
+  "checks": [
+    {
+      "assertion": "rank08-project",
+      "page": 29,
+      "bbox": [
+        2530,
+        1918,
+        2740,
+        1950
+      ],
+      "expected": "REPLACE MAIN BOILERS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "REPLACE MAIN BOILERS",
+          "word_ids": [
+            1182,
+            1183,
+            1184
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "REPLACE MAIN BOILERS",
+          "word_ids": [
+            1184,
+            1185,
+            1186
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank08-number",
+      "page": 29,
+      "bbox": [
+        2820,
+        1918,
+        2940,
+        1950
+      ],
+      "expected": "528A8-17-805",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "528A8-17-805",
+          "word_ids": [
+            1185
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "528A8-17-805",
+          "word_ids": [
+            1187
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank08-issue",
+      "page": 29,
+      "bbox": [
+        2250,
+        1918,
+        2460,
+        1965
+      ],
+      "expected": "100% CONSTRUCTION DOCUMENTS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100% CONSTRUCTION DOCUMENTS",
+          "word_ids": [
+            1179,
+            1180,
+            1181
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100% CONSTRUCTION DOCUMENTS",
+          "word_ids": [
+            1181,
+            1182,
+            1183
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank08-facility-line-1",
+      "page": 29,
+      "bbox": [
+        2530,
+        2000,
+        2795,
+        2018
+      ],
+      "expected": "Samuel S. Stratton VA Medical Center, 113 Holland Ave.,",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Samuel S. Stratton VA Medical Center, 113 Holland Ave.,",
+          "word_ids": [
+            1186,
+            1187,
+            1188,
+            1189,
+            1190,
+            1191,
+            1192,
+            1193,
+            1194
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Samuel S. Stratton VA Medical Center, 113 Holland Ave.,",
+          "word_ids": [
+            1191,
+            1192,
+            1193,
+            1194,
+            1195,
+            1196,
+            1197,
+            1198,
+            1199
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank08-facility-line-2",
+      "page": 29,
+      "bbox": [
+        2530,
+        2010,
+        2660,
+        2030
+      ],
+      "expected": "Albany, New York 12208",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Albany, New York 12208",
+          "word_ids": [
+            1195,
+            1196,
+            1197,
+            1198
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Albany, New York 12208",
+          "word_ids": [
+            1200,
+            1201,
+            1202,
+            1203
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "rank08-issue-date",
+      "page": 29,
+      "bbox": [
+        2530,
+        2048,
+        2600,
+        2070
+      ],
+      "expected": "06/05/2024",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "06/05/2024",
+          "word_ids": [
+            1199
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "06/05/2024",
+          "word_ids": [
+            1230
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

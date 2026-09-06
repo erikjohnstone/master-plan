@@ -1,0 +1,66 @@
+{
+  "document_id": "25__vol2__053",
+  "module_role": "Exact project/title-block/sheet context and complete full-page visual-review ledger for the supplied twelve-sheet Houston VA Emergency Room Expansion set.",
+  "scope": "Complete ground truth for the twelve supplied mechanical sheets only. It does not claim that unprovided disciplines, revisions, submittals, controller drawings or record documents are part of the source.",
+  "project": {
+    "name": "RENOVATE/EXPAND EMERGENCY ROOM SYSTEM",
+    "site": "2002 HOLCOMBE BOULEVARD, HOUSTON, TX 77030 4298",
+    "va_project_number": "580-17-101",
+    "building_number": "# 1",
+    "acg_project_number": "16-352",
+    "date": "MARCH 15, 2019",
+    "revision_date": {"status": "not_stated_in_supplied_title_blocks", "value": null, "note": "Blank revision-log heading/rows are not reclassified as revision events."}
+  },
+  "scale_semantics": {
+    "finding": "All twelve supplied pages were visually reviewed. The repeated title block does not print a document-wide scale field. Plan/detail captions and graphical scales must be read view by view; no universal measurable conversion is inferred from the title block.",
+    "global_measured_takeoff_warning": "The exact schedule/points cells are source-grounded. Any geometric takeoff should read the local drawing-view scale rather than applying an invented global factor."
+  },
+  "visual_review_pages": [
+    {"page": 1, "sheet": "M-001", "title": "MECHANICAL LEGEND, ABBREVIATIONS, AND GENERAL NOTES", "review_status": "complete", "finding": "Mechanical legend, abbreviations and general-notes sheet; context only, with no populated schedule or point matrix.", "render": "reviews/25__vol2__053/p1-p1-full-poppler-poppler.png"},
+    {"page": 2, "sheet": "MD101", "title": "FIRST FLOOR CEILING HVAC DEMOLITION PLAN", "review_status": "complete", "finding": "First-floor ceiling HVAC demolition plan; spatial/demolition context rather than a schedule or BAS point matrix.", "render": "reviews/25__vol2__053/p2-p2-full-poppler-poppler.png"},
+    {"page": 3, "sheet": "MD102", "title": "FIRST FLOOR INTERSTITIAL HVAC DEMOLITION PLAN", "review_status": "complete", "finding": "First-floor interstitial HVAC demolition plan; spatial/demolition context.", "render": "reviews/25__vol2__053/p3-p3-full-poppler-poppler.png"},
+    {"page": 4, "sheet": "MD103", "title": "FIRST FLOOR INTERSTITIAL MECHANICAL PIPING DEMOLITION PLAN", "review_status": "complete", "finding": "First-floor interstitial mechanical-piping demolition plan; spatial/demolition context.", "render": "reviews/25__vol2__053/p4-p4-full-poppler-poppler.png"},
+    {"page": 5, "sheet": "MH101", "title": "FIRST FLOOR CEILING PLAN", "review_status": "complete", "finding": "First-floor ceiling HVAC plan; plan context for new work and air-device placement, not a quantified schedule.", "render": "reviews/25__vol2__053/p5-p5-full-poppler-poppler.png"},
+    {"page": 6, "sheet": "MH102", "title": "FIRST FLOOR INTERSTITIAL COMPOSITE HVAC PLAN", "review_status": "complete", "finding": "First-floor interstitial composite HVAC plan; plan context for airside systems.", "render": "reviews/25__vol2__053/p6-p6-full-poppler-poppler.png"},
+    {"page": 7, "sheet": "MH103", "title": "FIRST FLOOR INTERSTITIAL HVAC SUPPLY PLAN", "review_status": "complete", "finding": "First-floor interstitial HVAC supply plan; plan context for supply-air systems.", "render": "reviews/25__vol2__053/p7-p7-full-poppler-poppler.png"},
+    {"page": 8, "sheet": "MH104", "title": "FIRST FLOOR INTERSTITIAL HVAC EXHAUST/RETURN PLAN", "review_status": "complete", "finding": "First-floor interstitial HVAC exhaust/return plan; plan context for return/exhaust systems.", "render": "reviews/25__vol2__053/p8-p8-full-poppler-poppler.png"},
+    {"page": 9, "sheet": "MP101", "title": "FIRST FLOOR INTERSTITIAL MECHANICAL PIPING PLAN", "review_status": "complete", "finding": "First-floor interstitial mechanical piping plan; plan context for heating-hot-water piping and valves.", "render": "reviews/25__vol2__053/p9-p9-full-poppler-poppler.png"},
+    {"page": 10, "sheet": "MH501", "title": "MECHANICAL DETAILS", "review_status": "complete", "finding": "Mechanical details sheet; includes construction/detail context but no populated project control-valve schedule.", "render": "reviews/25__vol2__053/p10-p10-full-poppler-poppler.png"},
+    {"page": 11, "sheet": "MH502", "title": "MECHANICAL CONTROLS", "review_status": "complete", "finding": "Mechanical-controls sheet with VAV terminal schematic, a 19-row point-function matrix, VAV sequence and isolation-room control sequence/diagram; no per-unit controller roster is printed.", "render": "reviews/25__vol2__053/p11-p11-full-poppler-poppler.png"},
+    {"page": 12, "sheet": "MH601", "title": "MECHANICAL SCHEDULES", "review_status": "complete", "finding": "Seven populated schedules: single-duct and series fan-powered terminal units, exhaust/return/supply air-device types, filters and heating-hot-water ball valves. All 69 source rows are transcribed cell-for-cell.", "render": "reviews/25__vol2__053/p12-p12-full-poppler-poppler.png"}
+  ],
+  "tables": [],
+  "assertion_groups": [
+    {
+      "id": "all-sheet-title-blocks",
+      "covers_all_source_pages": true,
+      "templates": [
+        {"id": "drawing-title", "field": "title", "bbox": [2140,1920,2480,1990], "mode": "exact"},
+        {"id": "sheet-number", "field": "sheet_number", "bbox": [2830,2010,2950,2055], "mode": "exact"}
+      ],
+      "records": [
+        {"id": "1", "page": 1, "title": "MECHANICAL LEGEND, ABBREVIATIONS, AND GENERAL NOTES", "sheet_number": "M-001"},
+        {"id": "2", "page": 2, "title": "FIRST FLOOR CEILING HVAC DEMOLITION PLAN", "sheet_number": "MD101"},
+        {"id": "3", "page": 3, "title": "FIRST FLOOR INTERSTITIAL HVAC DEMOLITION PLAN", "sheet_number": "MD102"},
+        {"id": "4", "page": 4, "title": "FIRST FLOOR INTERSTITIAL MECHANICAL PIPING DEMOLITION PLAN", "sheet_number": "MD103"},
+        {"id": "5", "page": 5, "title": "FIRST FLOOR CEILING PLAN", "sheet_number": "MH101"},
+        {"id": "6", "page": 6, "title": "FIRST FLOOR INTERSTITIAL COMPOSITE HVAC PLAN", "sheet_number": "MH102"},
+        {"id": "7", "page": 7, "title": "FIRST FLOOR INTERSTITIAL HVAC SUPPLY PLAN", "sheet_number": "MH103"},
+        {"id": "8", "page": 8, "title": "FIRST FLOOR INTERSTITIAL HVAC EXHAUST/RETURN PLAN", "sheet_number": "MH104"},
+        {"id": "9", "page": 9, "title": "FIRST FLOOR INTERSTITIAL MECHANICAL PIPING PLAN", "sheet_number": "MP101"},
+        {"id": "10", "page": 10, "title": "MECHANICAL DETAILS", "sheet_number": "MH501"},
+        {"id": "11", "page": 11, "title": "MECHANICAL CONTROLS", "sheet_number": "MH502"},
+        {"id": "12", "page": 12, "title": "MECHANICAL SCHEDULES", "sheet_number": "MH601"}
+      ]
+    }
+  ],
+  "assertions": [
+    {"id": "project-name", "page": 12, "bbox": [2535,1920,2810,1968], "expected": "RENOVATE/EXPAND EMERGENCY ROOM SYSTEM", "mode": "exact"},
+    {"id": "project-site", "page": 12, "bbox": [2190,2010,2480,2055], "expected": "2002 HOLCOMBE BOULEVARD, HOUSTON, TX 77030 4298", "mode": "exact"},
+    {"id": "va-project-number", "page": 12, "bbox": [2855,1920,2930,1941], "expected": "580-17-101", "mode": "exact"},
+    {"id": "project-date", "page": 12, "bbox": [2540,2055,2650,2075], "expected": "MARCH 15, 2019", "mode": "exact"}
+  ],
+  "inventory_checks": [
+    {"id": "full-page-visual-review", "records_path": ["visual_review_pages"], "expected": 12, "unique_key": "page"}
+  ]
+}

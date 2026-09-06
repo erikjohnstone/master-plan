@@ -1,0 +1,28 @@
+{
+  "document_id": "13__vol2__017",
+  "module_role": "Literal M-703 source-matrix scope and ownership boundary.",
+  "tables": [],
+  "ledger_mode": "literal_source_row_matrices_v1",
+  "applications": [
+    {
+      "id": "ACU-A1-EXISTING-DDC-TEMPLATE",
+      "source_table": "M703-ACU-A1-DDC",
+      "ownership_scope": "ACU A-1 existing-to-remain M-703 DDC source-template scope only."
+    },
+    {
+      "id": "ACU-A3-A6-EXISTING-DDC-TEMPLATE",
+      "source_table": "M703-ACU-A3-A6-DDC",
+      "ownership_scope": "ACU A-3/A-4/A-5/A-6 existing-to-remain M-703 DDC source-template scope only."
+    },
+    {
+      "id": "ACU-A2-EXISTING-DDC-TEMPLATE",
+      "source_table": "M703-ACU-A2-DDC",
+      "ownership_scope": "ACU A-2 existing-to-remain M-703 DDC source-template scope only."
+    }
+  ],
+  "expanded_template_counts": {
+    "source_rows": 60,
+    "total": 60
+  },
+  "expanded_count_warning": "60 is the number of literal printed M-703 source-matrix rows, not a physical BAS point, field-device, controller, terminal, card, wiring or installed-equipment count."
+}

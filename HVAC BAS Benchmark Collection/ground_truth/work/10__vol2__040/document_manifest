@@ -1,0 +1,521 @@
+{
+  "id": "10__vol2__040",
+  "rank": 10,
+  "title": "Lovell Federal Health Care Center Sterile Processing Expansion",
+  "source_pdf": "pdf/10__vol2__040__Lovell_Federal_Health_Care_Center_Sterile_Processing_Expansion.pdf",
+  "source_sha256": "2337ee9ae5483fd440d98967f23f63f8337d7f6dc8d3024cd494c29e129a1dc2",
+  "page_count": 48,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete source-bounded Rank 10 ground truth: all-page visual review, metadata/scale boundaries, 11 M601 Phase-2 TAB schedule rows, and 20 exact M401-M403 FMCS/VFD/steam-monitoring clauses. No physical takeoff, I/O, topology, wiring or untranscribed schedule corpus is invented.",
+  "reading_notes": [
+    "M601 provides a dense terminal-air-box schedule with airflow, reheat, control and sensor-type fields.",
+    "M401-M403 provide detailed FMCS terminal, VFD, report-generation, steam-meter and trap-monitoring sequences.",
+    "No conventional point-list matrix is supplied."
+  ],
+  "verification_semantics": "The bundle verifier rechecks every retained source fact against independent MuPDF and Poppler captures and hashes all source/render dependencies; it does not perform takeoff inference.",
+  "module_order": [
+    "metadata",
+    "schedules",
+    "points",
+    "controls_context",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "metadata": [
+      "metadata_rank10"
+    ],
+    "schedules": [
+      "schedules_m601_phase2_tabs"
+    ],
+    "points": [
+      "points_rank10"
+    ],
+    "controls_context": [
+      "controls_sequences"
+    ],
+    "equipment_reconciliation": [
+      "equipment_reconciliation_rank10"
+    ],
+    "point_applications": [
+      "point_applications_rank10"
+    ],
+    "supporting_evidence": [
+      "supporting_evidence_rank10"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Project, facility, issue date and first sheet are bounded.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 48 supplied pages have a sheet ledger and visual disposition.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "No global scale is asserted.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Literal selected schedule rows replace inferred installed totals.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "schedule_counts"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The M601 phase-2 terminal-air-box schedule retains 11 full rows.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "No formal source point-list matrix is published; zero source rows is explicit.",
+      "evidence": [
+        [
+          "modules",
+          "points",
+          "point_list_status"
+        ],
+        [
+          "modules",
+          "point_applications",
+          "expanded_template_counts"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Published FMCS/VFD/DDC integration is retained with topology boundaries.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Terminal-air-box, VFD and steam monitoring clauses are bounded.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sequence_inventory"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The terminal schedule's printed control/sensor types are retained without physical counts.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Schedule, point, topology and count limitations are explicit.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All source pages have full-page Poppler renders and findings.",
+      "evidence": [
+        [
+          "page_review"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Each authored module is independently rechecked against MuPDF and Poppler.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p1-p1-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p2-p2-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p3-p3-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p4-p4-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p5-p5-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p6-p6-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p7-p7-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p8-p8-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p9-p9-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 10,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p10-p10-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 11,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p11-p11-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 12,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p12-p12-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 13,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p13-p13-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 14,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p14-p14-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 15,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p15-p15-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 16,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p16-p16-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 17,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p17-p17-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 18,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p18-p18-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 19,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p19-p19-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 20,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p20-p20-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 21,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p21-p21-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 22,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p22-p22-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 23,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p23-p23-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 24,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p24-p24-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 25,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p25-p25-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 26,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p26-p26-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 27,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p27-p27-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 28,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p28-p28-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 29,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p29-p29-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 30,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p30-p30-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 31,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p31-p31-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 32,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p32-p32-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 33,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p33-p33-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 34,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p34-p34-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 35,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p35-p35-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 36,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p36-p36-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 37,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p37-p37-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 38,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p38-p38-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 39,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p39-p39-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 40,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p40-p40-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 41,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p41-p41-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 42,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p42-p42-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 43,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p43-p43-full-poppler.png",
+      "finding": "Control/sequence drawing visually reviewed and retained with bounded assertions."
+    },
+    {
+      "page": 44,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p44-p44-full-poppler.png",
+      "finding": "Control/sequence drawing visually reviewed and retained with bounded assertions."
+    },
+    {
+      "page": 45,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p45-p45-full-poppler.png",
+      "finding": "Control/sequence drawing visually reviewed and retained with bounded assertions."
+    },
+    {
+      "page": 46,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p46-p46-full-poppler.png",
+      "finding": "Control/sequence drawing visually reviewed and retained with bounded assertions."
+    },
+    {
+      "page": 47,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p47-p47-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    },
+    {
+      "page": 48,
+      "review_status": "complete",
+      "render": "reviews/10__vol2__040/p48-p48-full-poppler.png",
+      "finding": "Full-page mechanical source drawing visually reviewed; retained as source context."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "r10-page-review",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 48
+    },
+    {
+      "id": "r10-schedules",
+      "path": [
+        "modules",
+        "schedules",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 1
+    },
+    {
+      "id": "r10-points",
+      "path": [
+        "modules",
+        "points",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 0
+    }
+  ],
+  "completion_checks": {
+    "all_48_pages_visually_reviewed": true,
+    "all_authoring_modules_dual_engine_verified_at_build": true,
+    "source_limitations_explicit": true,
+    "required_objectives_covered": true
+  }
+}

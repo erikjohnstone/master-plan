@@ -1,0 +1,383 @@
+{
+  "id": "20__vol2__097",
+  "rank": 20,
+  "title": "JVWTP Chemical Buildings HVAC Upgrades",
+  "source_pdf": "pdf/20__vol2__097__JVWTP_Chemical_Buildings_HVAC_Upgrades.pdf",
+  "source_sha256": "95f1c434a5dca5ea297a5981901483d0f57b6a7277abc6c87d5645f072dfe0e3",
+  "page_count": 25,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete source-bounded Rank 20 ground truth: full 25-page visual review; project/sheet/scale boundaries; all 12 H-001 literal equipment schedule rows; H-601 source-bounded sequence clauses; E-603 wiring context; and explicit point/topology/physical-count limits. No final BAS point schedule, controller topology or inferred physical quantity is invented.",
+  "reading_notes": [
+    "H-001 provides a compact native/vector schedule page with equipment, fans, unit heaters, louvers, specifications and explicit louver/EF interlocks.",
+    "H-601 provides low/high-mode MAU and exhaust logic, thermostat/timer conditions, VFD safety interlocks, louver logic and unit-heater sequencing.",
+    "E-603 makes the functional control implementation testable with low/high command, thermostat, timer, controller and run-status wiring labels."
+  ],
+  "verification_semantics": "The bundle verifier rechecks every retained row/assertion against independent MuPDF and Poppler evidence and hashes source/renders; it does not infer takeoff quantities or prove physical installation.",
+  "module_order": [
+    "metadata",
+    "schedules",
+    "points",
+    "controls_context",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "metadata": [
+      "metadata_rank20"
+    ],
+    "schedules": [
+      "schedules_h001"
+    ],
+    "points": [
+      "points_rank20"
+    ],
+    "controls_context": [
+      "controls_context_rank20"
+    ],
+    "equipment_reconciliation": [
+      "equipment_reconciliation_rank20"
+    ],
+    "point_applications": [
+      "point_applications_rank20"
+    ],
+    "supporting_evidence": [
+      "supporting_evidence_rank20"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Cover project, facility, location and issue date are bounded.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 25 source pages have sheet-ledger and visual-review entries.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "No local plan scale is converted into document-wide takeoff quantities.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "H-001 retains all 12 literal equipment/outlet schedule rows with source tags/specification context.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "schedule_counts"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All H-001 published schedule rows are literal, coordinate-bounded rows.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "No formal BAS point-list matrix is published; zero-row status is explicit.",
+      "evidence": [
+        [
+          "modules",
+          "points",
+          "point_list_status"
+        ],
+        [
+          "modules",
+          "point_applications",
+          "expanded_template_counts"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Controls-work boundary, terminal strips, and controller-link labels are bounded, with topology limits explicit.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "H-601 retains MAU/EXF, HV/EF, louver and unit-heater logic; E-603 retains wiring labels.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sequence_inventory"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Thermostat, timer, smoke/freezing and VFD-safety contexts are bounded without inferred device or zone totals.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sensors_and_control_symbol_context"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Point-list, topology, physical-count and standalone-schedule-title boundaries are explicit.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 25 source pages have a retained full-page Poppler render and review finding.",
+      "evidence": [
+        [
+          "page_review"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every authored source module has current MuPDF and Poppler corroboration.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p1-p1-full-poppler.png",
+      "finding": "Cover/drawing-index, project identity, issue and multidisciplinary-sheet index visually reviewed."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p2-p2-full-poppler.png",
+      "finding": "H-001 dense equipment schedules visually reviewed; all 12 schedule rows retained separately."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p3-p3-full-poppler.png",
+      "finding": "Vicinity plan visually reviewed as site/context evidence."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p4-p4-full-poppler.png",
+      "finding": "Chlorine-dioxide HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p5-p5-full-poppler.png",
+      "finding": "Hydrofluorosilicic-acid HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p6-p6-full-poppler.png",
+      "finding": "Primary-coagulant HVAC demolition plan visually reviewed."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p7-p7-full-poppler.png",
+      "finding": "Chlorine-dioxide HVAC remodel plan visually reviewed."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p8-p8-full-poppler.png",
+      "finding": "Hydrofluorosilicic-acid HVAC remodel plan visually reviewed."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p9-p9-full-poppler.png",
+      "finding": "Primary-coagulant HVAC remodel plan visually reviewed."
+    },
+    {
+      "page": 10,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p10-p10-full-poppler.png",
+      "finding": "Mechanical detail sheet visually reviewed."
+    },
+    {
+      "page": 11,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p11-p11-full-poppler.png",
+      "finding": "Mechanical detail sheet visually reviewed."
+    },
+    {
+      "page": 12,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p12-p12-full-poppler.png",
+      "finding": "Mechanical generator-exhaust detail sheet visually reviewed."
+    },
+    {
+      "page": 13,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p13-p13-full-poppler.png",
+      "finding": "H-601 controls diagrams and sequence-of-operations clauses visually reviewed; bounded clauses retained separately."
+    },
+    {
+      "page": 14,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p14-p14-full-poppler.png",
+      "finding": "Gas-flow diagrams visually reviewed as plumbing context."
+    },
+    {
+      "page": 15,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p15-p15-full-poppler.png",
+      "finding": "Electrical controls/instruments and symbol legend visually reviewed."
+    },
+    {
+      "page": 16,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p16-p16-full-poppler.png",
+      "finding": "Chlorine-dioxide electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 17,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p17-p17-full-poppler.png",
+      "finding": "Hydrofluorosilicic-acid electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 18,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p18-p18-full-poppler.png",
+      "finding": "Primary-coagulant electrical demolition plan visually reviewed."
+    },
+    {
+      "page": 19,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p19-p19-full-poppler.png",
+      "finding": "Chlorine-dioxide electrical demolition one-line diagram visually reviewed."
+    },
+    {
+      "page": 20,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p20-p20-full-poppler.png",
+      "finding": "Chlorine-dioxide electrical remodel plan visually reviewed."
+    },
+    {
+      "page": 21,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p21-p21-full-poppler.png",
+      "finding": "Hydrofluorosilicic-acid electrical remodel plan visually reviewed."
+    },
+    {
+      "page": 22,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p22-p22-full-poppler.png",
+      "finding": "Primary-coagulant electrical remodel plan visually reviewed."
+    },
+    {
+      "page": 23,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p23-p23-full-poppler.png",
+      "finding": "Electrical remodel one-line diagram visually reviewed."
+    },
+    {
+      "page": 24,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p24-p24-full-poppler.png",
+      "finding": "Chlorine-dioxide electrical remodel one-line diagram visually reviewed."
+    },
+    {
+      "page": 25,
+      "review_status": "complete",
+      "render": "reviews/20__vol2__097/p25-p25-full-poppler.png",
+      "finding": "E-603 HVAC speed-controller wiring diagrams visually reviewed; bounded functional labels retained separately."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "pages",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 25
+    },
+    {
+      "id": "schedules",
+      "path": [
+        "modules",
+        "schedules",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 6
+    },
+    {
+      "id": "points",
+      "path": [
+        "modules",
+        "points",
+        "tables"
+      ],
+      "operation": "length",
+      "expected": 0
+    }
+  ],
+  "completion_checks": {
+    "all_25_pages_visually_reviewed": true,
+    "all_authoring_modules_dual_engine_verified_at_build": true,
+    "source_limitations_explicit": true,
+    "required_objectives_covered": true
+  }
+}

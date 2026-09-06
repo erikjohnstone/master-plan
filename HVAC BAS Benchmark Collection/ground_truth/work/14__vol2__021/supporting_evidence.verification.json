@@ -1,0 +1,190 @@
+{
+  "document_id": "14__vol2__021",
+  "source_sha256": "4d883afdd3b2d94ea2e14621dc49df77bc10ca0548bfd077c436420c43ae75f8",
+  "annotation_sha256": "daef35203d793a3f184ebd4db072140a10a3781b8736d45b2a41028e6bd085ea",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 2,
+  "checks": [
+    {
+      "assertion": "m803-virtual-points-scope",
+      "page": 17,
+      "bbox": [
+        1650,
+        2370,
+        3050,
+        2440
+      ],
+      "expected": "NOT ALL VIRTUAL POINTS ARE SHOWN. PROVIDE ALL POINTS REQUIRED FOR SOFTWARE OPERATION.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NUMBER OF PURGE CYCLES OVER THE LAST 7 DAYS NOTE: 1. LOCKOUT ALARM WHEN UNIT IS DE-ENERGIZED. PROVIDE 15-MINUTE STARTUP DELAY PRIOR TO ENABLING ALARM. 2. NOT ALL VIRTUAL POINTS ARE SHOWN. PROVIDE ALL POINTS REQUIRED FOR SOFTWARE OPERATION.",
+          "word_ids": [
+            1658,
+            1659,
+            1660,
+            1661,
+            1662,
+            1663,
+            1664,
+            1665,
+            1666,
+            1667,
+            1668,
+            1669,
+            1670,
+            1671,
+            1672,
+            1673,
+            1674,
+            1675,
+            1676,
+            1677,
+            1678,
+            1679,
+            1680,
+            1681,
+            1682,
+            1683,
+            1684,
+            1685,
+            1686,
+            1687,
+            1688,
+            1689,
+            1690,
+            1691,
+            1692,
+            1693,
+            1694,
+            1695,
+            1696
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NUMBER OF PURGE CYCLES OVER THE LAST 7 DAYS NOTE: 1. LOCKOUT ALARM WHEN UNIT IS DE-ENERGIZED. PROVIDE 15-MINUTE STARTUP DELAY PRIOR TO ENABLING ALARM. 2. NOT ALL VIRTUAL POINTS ARE SHOWN. PROVIDE ALL POINTS REQUIRED FOR SOFTWARE OPERATION.",
+          "word_ids": [
+            2512,
+            2513,
+            2514,
+            2515,
+            2516,
+            2517,
+            2518,
+            2519,
+            2520,
+            2521,
+            2522,
+            2523,
+            2524,
+            2525,
+            2526,
+            2527,
+            2528,
+            2529,
+            2530,
+            2531,
+            2532,
+            2533,
+            2534,
+            2535,
+            2536,
+            2537,
+            2538,
+            2539,
+            2540,
+            2541,
+            2542,
+            2543,
+            2544,
+            2545,
+            2546,
+            2547,
+            2548,
+            2549,
+            2550
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m601-air-valve-schedule-scope",
+      "page": 13,
+      "bbox": [
+        100,
+        450,
+        1100,
+        490
+      ],
+      "expected": "SUPPLY AIR VALVE (SAV), HOOD EXHAUST AIR VALVE (HEV), AND GENERAL EXHAUST AIR VALVE (EAV) SCHEDULE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR VALVE (SAV), HOOD EXHAUST AIR VALVE (HEV), AND GENERAL EXHAUST AIR VALVE (EAV) SCHEDULE",
+          "word_ids": [
+            3030,
+            3031,
+            3032,
+            3033,
+            3034,
+            3035,
+            3036,
+            3037,
+            3038,
+            3039,
+            3040,
+            3041,
+            3042,
+            3043,
+            3044,
+            3045
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR VALVE (SAV), HOOD EXHAUST AIR VALVE (HEV), AND GENERAL EXHAUST AIR VALVE (EAV) SCHEDULE",
+          "word_ids": [
+            1662,
+            1663,
+            1664,
+            1665,
+            1666,
+            1667,
+            1668,
+            1669,
+            1670,
+            1671,
+            1672,
+            1673,
+            1674,
+            1675,
+            1676,
+            1677
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "source-limitations",
+      "actual": 7,
+      "expected": 7,
+      "pass": true
+    },
+    {
+      "id": "supporting-visual-evidence",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

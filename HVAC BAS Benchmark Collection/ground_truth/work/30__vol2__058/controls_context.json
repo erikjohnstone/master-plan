@@ -1,0 +1,138 @@
+{
+  "document_id": "30__vol2__058",
+  "module_role": "J601/J604/J608/J610 source-bounded BAS network, VFD, valve and I/O context.",
+  "tables": [],
+  "assertions": [
+    {
+      "id": "j601-network",
+      "page": 214,
+      "bbox": [
+        1090,
+        1275,
+        1450,
+        1320
+      ],
+      "expected": "BUILDING AUTOMATION NETWORK",
+      "mode": "contains"
+    },
+    {
+      "id": "j601-bacnet-mstp",
+      "page": 214,
+      "bbox": [
+        1080,
+        1215,
+        1200,
+        1250
+      ],
+      "expected": "BACnet / MS/TP",
+      "mode": "contains"
+    },
+    {
+      "id": "j604-bacnet",
+      "page": 217,
+      "bbox": [
+        370,
+        455,
+        450,
+        490
+      ],
+      "expected": "BACnet",
+      "mode": "contains"
+    },
+    {
+      "id": "j608-ache-bypass",
+      "page": 221,
+      "bbox": [
+        1000,
+        715,
+        1260,
+        760
+      ],
+      "expected": "ACHE BYPASS CONTROL",
+      "mode": "contains"
+    },
+    {
+      "id": "j608-valve-feedback-a",
+      "page": 221,
+      "bbox": [
+        1620,
+        335,
+        1810,
+        375
+      ],
+      "expected": "ACHE BYPASS A MODULATING VALVE FEEDBACK",
+      "mode": "contains"
+    },
+    {
+      "id": "j608-valve-position-a",
+      "page": 221,
+      "bbox": [
+        1620,
+        305,
+        1800,
+        340
+      ],
+      "expected": "ACHE BYPASS A MODULATING VALVE POSITION",
+      "mode": "contains"
+    },
+    {
+      "id": "j610-controller",
+      "page": 223,
+      "bbox": [
+        200,
+        425,
+        500,
+        480
+      ],
+      "expected": "NEW ACHE BYPASS CONTROLLER CM-61 EXP-01",
+      "mode": "contains"
+    }
+  ],
+  "network_architecture": {
+    "published_integration": [
+      "J601 is a Building Automation Network Riser Diagram. It visibly identifies BACnet/IP, BACnet/MS/TP, CMnet, Modbus, named TCP panels, CM controllers, ME stacks and Ethernet connections.",
+      "J604 maps CWGP VFD points and labels BACnet. J610 identifies new ACHE bypass controller CM-61 expansion panels."
+    ],
+    "assertion_ids": [
+      "j601-network",
+      "j601-bacnet-mstp",
+      "j604-bacnet",
+      "j610-controller"
+    ],
+    "boundary": "The riser/diagrams do not establish final sitewide device addresses, complete BACnet object database, field-wiring takeoff, commissioned as-built ownership, final controller/card/terminal counts or all physical device quantities."
+  },
+  "sequence_inventory": [
+    {
+      "id": "j604-cooling-water-pump-vfd",
+      "sheet": "J604",
+      "assertion_ids": [
+        "j604-bacnet"
+      ]
+    },
+    {
+      "id": "j608-ache-bypass-modulating-valves",
+      "sheet": "J608",
+      "assertion_ids": [
+        "j608-ache-bypass",
+        "j608-valve-feedback-a",
+        "j608-valve-position-a"
+      ]
+    },
+    {
+      "id": "j610-ache-bypass-controller-io",
+      "sheet": "J610",
+      "assertion_ids": [
+        "j610-controller"
+      ]
+    }
+  ],
+  "sensors_and_control_symbol_context": {
+    "published_context": "Controls diagrams publish CWGP VFD enable/speed/speed feedback/kW/HOA/fault, suction/discharge pressure, valve feedback/position and fan-status contexts.",
+    "assertion_ids": [
+      "j608-valve-feedback-a",
+      "j608-valve-position-a",
+      "j610-controller"
+    ],
+    "boundary": "These are source diagram/point-map contexts and are not converted into standalone physical sensor, actuator, valve, zone or I/O counts."
+  }
+}

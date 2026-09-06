@@ -1,0 +1,2992 @@
+{
+  "updated_utc": "2026-09-05T10:37:39.903889+00:00",
+  "scope_documents": 30,
+  "scope_pages": 1489,
+  "captured_documents": 30,
+  "captured_pages": 1489,
+  "completed_documents": 30,
+  "completed_pages": 1489,
+  "documents": [
+    {
+      "id": "01__vol2__001",
+      "rank": 1,
+      "pages": 75,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/01__vol2__001.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/01__vol2__001/construction_air_ops.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 3,
+          "rows": 13,
+          "cell_assertions": 100,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/controls_context_rank01.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/controls_legend_mi700.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 19
+        },
+        {
+          "file": "work/01__vol2__001/equipment_reconciliation_rank01.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/metadata.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 375
+        },
+        {
+          "file": "work/01__vol2__001/metadata_rank01_final.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/network_mi701.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 28
+        },
+        {
+          "file": "work/01__vol2__001/plan_anchors_mtracon_atct.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/point_applications_rank01.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/points_air_ops_ahu.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 31,
+          "cell_assertions": 124,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/points_air_ops_chw.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 33,
+          "cell_assertions": 132,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/points_air_ops_doah.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 67,
+          "cell_assertions": 268,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/points_air_ops_heating_ventilating.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 16,
+          "cell_assertions": 64,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/points_air_ops_hhw.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 39,
+          "cell_assertions": 156,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/points_atct_ahu.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 62,
+          "cell_assertions": 248,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/points_atct_doah.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 34,
+          "cell_assertions": 136,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/points_atct_stair_pressurization.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 12,
+          "cell_assertions": 48,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/points_crah_sfpvav_templates.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 8,
+          "rows": 22,
+          "cell_assertions": 88,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/points_fcu_unit_heater_templates.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 12,
+          "rows": 26,
+          "cell_assertions": 104,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/points_mi742_templates.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 11,
+          "rows": 26,
+          "cell_assertions": 104,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/points_mi744_fcu_sfpvav.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 6,
+          "rows": 17,
+          "cell_assertions": 64,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/points_mtracon_atct_chw.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 63,
+          "cell_assertions": 252,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/points_mtracon_atct_hhw.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 5,
+          "rows": 102,
+          "cell_assertions": 408,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/points_rank01_assembled.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 77,
+          "rows": 546,
+          "cell_assertions": 2184,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/schedule_identities_rank01.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 40,
+          "rows": 243,
+          "cell_assertions": 2389,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/schedules_air_ops_aux.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 18,
+          "cell_assertions": 137,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/schedules_air_ops_core.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 6,
+          "rows": 30,
+          "cell_assertions": 670,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/schedules_air_ops_fan_sound.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 4,
+          "cell_assertions": 68,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/schedules_air_ops_grd.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 28,
+          "cell_assertions": 280,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/schedules_air_ops_m603_compact.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 5,
+          "rows": 15,
+          "cell_assertions": 138,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/schedules_air_ops_vav.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 27,
+          "cell_assertions": 594,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/schedules_atct_m621.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 8,
+          "rows": 42,
+          "cell_assertions": 42,
+          "text_assertions": 1
+        },
+        {
+          "file": "work/01__vol2__001/schedules_mtracon_m611.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 8,
+          "rows": 33,
+          "cell_assertions": 33,
+          "text_assertions": 1
+        },
+        {
+          "file": "work/01__vol2__001/schedules_mtracon_m612_aux.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 3,
+          "rows": 5,
+          "cell_assertions": 5,
+          "text_assertions": 1
+        },
+        {
+          "file": "work/01__vol2__001/schedules_mtracon_m613_aux.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 6,
+          "rows": 33,
+          "cell_assertions": 33,
+          "text_assertions": 1
+        },
+        {
+          "file": "work/01__vol2__001/schedules_mtracon_vav.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 25,
+          "cell_assertions": 550,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/schedules_rank01_assembled.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 53,
+          "rows": 440,
+          "cell_assertions": 3819,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/sequence_air_ops_heating_ventilating.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 10
+        },
+        {
+          "file": "work/01__vol2__001/sequence_air_ops_mtracon_doah.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 22
+        },
+        {
+          "file": "work/01__vol2__001/sequence_atct_doah_t1.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 18
+        },
+        {
+          "file": "work/01__vol2__001/sequence_crah_sfpvav.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 27
+        },
+        {
+          "file": "work/01__vol2__001/sequence_mi742.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 24
+        },
+        {
+          "file": "work/01__vol2__001/sequence_mi744_fcu_sfpvav.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 16
+        },
+        {
+          "file": "work/01__vol2__001/sequences_air_ops_and_shared_hydronics.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 22
+        },
+        {
+          "file": "work/01__vol2__001/source_overview.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 15
+        },
+        {
+          "file": "work/01__vol2__001/supporting_evidence_rank01.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/valves_air_ops_chw.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 21,
+          "cell_assertions": 147,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/valves_air_ops_hhw.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 46,
+          "cell_assertions": 322,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/valves_atct.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 2,
+          "rows": 46,
+          "cell_assertions": 322,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/01__vol2__001/valves_mtracon.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 2,
+          "rows": 54,
+          "cell_assertions": 378,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "02__vol2__015",
+      "rank": 2,
+      "pages": 27,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/02__vol2__015.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/02__vol2__015/controls_context.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 9,
+          "cell_assertions": 27,
+          "text_assertions": 46
+        },
+        {
+          "file": "work/02__vol2__015/equipment_reconciliation.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 144
+        },
+        {
+          "file": "work/02__vol2__015/metadata.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 414
+        },
+        {
+          "file": "work/02__vol2__015/point_applications.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/02__vol2__015/points.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 10,
+          "rows": 117,
+          "cell_assertions": 468,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/02__vol2__015/reference_tables.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 3,
+          "rows": 7,
+          "cell_assertions": 35,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/02__vol2__015/schedules.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 23,
+          "rows": 104,
+          "cell_assertions": 1194,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/02__vol2__015/sensors.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 56
+        },
+        {
+          "file": "work/02__vol2__015/supplemental_schedules.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 1,
+          "cell_assertions": 28,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/02__vol2__015/supporting_evidence.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 50
+        }
+      ]
+    },
+    {
+      "id": "03__vol1__27",
+      "rank": 3,
+      "pages": 38,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/03__vol1__27.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/03__vol1__27/controls_context_rank03.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 10
+        },
+        {
+          "file": "work/03__vol1__27/equipment_reconciliation_rank03.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/03__vol1__27/metadata_rank03.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 6
+        },
+        {
+          "file": "work/03__vol1__27/point_applications_rank03.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/03__vol1__27/points_e702_plc_io.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 52,
+          "cell_assertions": 728,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/03__vol1__27/schedules_m601_core.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 35,
+          "cell_assertions": 143,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/03__vol1__27/schedules_m602_core.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 5,
+          "rows": 17,
+          "cell_assertions": 250,
+          "text_assertions": 2
+        },
+        {
+          "file": "work/03__vol1__27/schedules_m603_core.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 6,
+          "rows": 43,
+          "cell_assertions": 380,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/03__vol1__27/schedules_m604_core.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 16,
+          "cell_assertions": 273,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/03__vol1__27/supporting_evidence_rank03.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "04__vol2__062",
+      "rank": 4,
+      "pages": 29,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/04__vol2__062.md)",
+      "warnings": [
+        "MuPDF warning retained"
+      ],
+      "partial_modules": [
+        {
+          "file": "work/04__vol2__062/controls_lab_zone_bindings.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 3,
+          "rows": 9,
+          "cell_assertions": 49,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/04__vol2__062/controls_sequences_network.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 17
+        },
+        {
+          "file": "work/04__vol2__062/equipment_reconciliation_rank04.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/04__vol2__062/metadata_rank04.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 7
+        },
+        {
+          "file": "work/04__vol2__062/point_applications_rank04.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/04__vol2__062/points_m62_m63.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 25,
+          "cell_assertions": 25,
+          "text_assertions": 5
+        },
+        {
+          "file": "work/04__vol2__062/points_rank04_ledger.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 25,
+          "cell_assertions": 50,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/04__vol2__062/schedules_m50_air_valves.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 3,
+          "rows": 21,
+          "cell_assertions": 21,
+          "text_assertions": 3
+        },
+        {
+          "file": "work/04__vol2__062/schedules_m50_core_equipment.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 19,
+          "cell_assertions": 283,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/04__vol2__062/schedules_m51_air_devices.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 2,
+          "rows": 11,
+          "cell_assertions": 55,
+          "text_assertions": 13
+        },
+        {
+          "file": "work/04__vol2__062/schedules_m51_control_valves.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 2,
+          "rows": 10,
+          "cell_assertions": 118,
+          "text_assertions": 2
+        },
+        {
+          "file": "work/04__vol2__062/schedules_m51_core_equipment.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 13,
+          "cell_assertions": 217,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/04__vol2__062/schedules_m52_equipment.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 7,
+          "rows": 19,
+          "cell_assertions": 208,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/04__vol2__062/schedules_m53_ahu.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 1,
+          "cell_assertions": 47,
+          "text_assertions": 2
+        },
+        {
+          "file": "work/04__vol2__062/supporting_evidence_rank04.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "05__vol2__009",
+      "rank": 5,
+      "pages": 31,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/05__vol2__009.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/05__vol2__009/controls_sequences_network.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 39
+        },
+        {
+          "file": "work/05__vol2__009/equipment_reconciliation_rank05.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/05__vol2__009/metadata_rank05.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 10
+        },
+        {
+          "file": "work/05__vol2__009/point_applications_rank05.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/05__vol2__009/points_m801_m804.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 8,
+          "rows": 75,
+          "cell_assertions": 375,
+          "text_assertions": 7
+        },
+        {
+          "file": "work/05__vol2__009/points_rank05_ledger.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 8,
+          "rows": 75,
+          "cell_assertions": 150,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/05__vol2__009/schedules_m601_air_devices.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 4,
+          "cell_assertions": 92,
+          "text_assertions": 5
+        },
+        {
+          "file": "work/05__vol2__009/schedules_m601_core.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 7,
+          "rows": 24,
+          "cell_assertions": 240,
+          "text_assertions": 6
+        },
+        {
+          "file": "work/05__vol2__009/supporting_evidence_rank05.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "06__vol2__096",
+      "rank": 6,
+      "pages": 36,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/06__vol2__096.md)",
+      "warnings": [
+        "Poppler warning retained"
+      ],
+      "partial_modules": [
+        {
+          "file": "work/06__vol2__096/controls_sequences.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 22
+        },
+        {
+          "file": "work/06__vol2__096/equipment_reconciliation_rank06.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/06__vol2__096/metadata_rank06.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 6
+        },
+        {
+          "file": "work/06__vol2__096/point_applications_rank06.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/06__vol2__096/points_m901.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 2,
+          "rows": 60,
+          "cell_assertions": 60,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/06__vol2__096/points_m902.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 52,
+          "cell_assertions": 52,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/06__vol2__096/points_m903.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 41,
+          "cell_assertions": 41,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/06__vol2__096/points_m904.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 30,
+          "cell_assertions": 30,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/06__vol2__096/points_m905.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 3,
+          "rows": 29,
+          "cell_assertions": 29,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/06__vol2__096/points_m906.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 17,
+          "cell_assertions": 17,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/06__vol2__096/schedules_m600_air_systems.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 8,
+          "rows": 39,
+          "cell_assertions": 39,
+          "text_assertions": 1
+        },
+        {
+          "file": "work/06__vol2__096/schedules_m601_core.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 6,
+          "rows": 21,
+          "cell_assertions": 21,
+          "text_assertions": 2
+        },
+        {
+          "file": "work/06__vol2__096/schedules_m602_terminal_equipment.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 6,
+          "rows": 39,
+          "cell_assertions": 39,
+          "text_assertions": 1
+        },
+        {
+          "file": "work/06__vol2__096/schedules_m603_air_devices.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 3,
+          "rows": 58,
+          "cell_assertions": 58,
+          "text_assertions": 1
+        },
+        {
+          "file": "work/06__vol2__096/schedules_m603_motorized_dampers.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 24,
+          "cell_assertions": 192,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/06__vol2__096/schedules_m603_vavs.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 58,
+          "cell_assertions": 928,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/06__vol2__096/supporting_evidence_rank06.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "07__vol2__061",
+      "rank": 7,
+      "pages": 71,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/07__vol2__061.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/07__vol2__061/controls_sequences.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 25
+        },
+        {
+          "file": "work/07__vol2__061/equipment_reconciliation_rank07.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/07__vol2__061/metadata_rank07.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 5
+        },
+        {
+          "file": "work/07__vol2__061/point_applications_rank07.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/07__vol2__061/points_m502.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 5,
+          "rows": 180,
+          "cell_assertions": 180,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/07__vol2__061/schedules_m601.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 13,
+          "rows": 36,
+          "cell_assertions": 36,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/07__vol2__061/supporting_evidence_rank07.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "08__vol2__044",
+      "rank": 8,
+      "pages": 31,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/08__vol2__044.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/08__vol2__044/controls_sequences.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 21
+        },
+        {
+          "file": "work/08__vol2__044/equipment_reconciliation_rank08.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/08__vol2__044/metadata_rank08.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 6
+        },
+        {
+          "file": "work/08__vol2__044/point_applications_rank08.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/08__vol2__044/points_mi605_mi607.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 2,
+          "rows": 96,
+          "cell_assertions": 321,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/08__vol2__044/schedules_mi503_mi504.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 9,
+          "rows": 56,
+          "cell_assertions": 568,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/08__vol2__044/supporting_evidence_rank08.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "09__vol2__014",
+      "rank": 9,
+      "pages": 28,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/09__vol2__014.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/09__vol2__014/controls_sequences.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 34
+        },
+        {
+          "file": "work/09__vol2__014/equipment_reconciliation_rank09.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/09__vol2__014/metadata_rank09.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/09__vol2__014/point_applications_rank09.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/09__vol2__014/points_rank09.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/09__vol2__014/schedules_core_equipment.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 10,
+          "cell_assertions": 142,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/09__vol2__014/schedules_m03_dampers.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 17,
+          "cell_assertions": 187,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/09__vol2__014/supporting_evidence_rank09.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "10__vol2__040",
+      "rank": 10,
+      "pages": 48,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/10__vol2__040.md)",
+      "warnings": [
+        "MuPDF warning retained"
+      ],
+      "partial_modules": [
+        {
+          "file": "work/10__vol2__040/controls_sequences.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 20
+        },
+        {
+          "file": "work/10__vol2__040/equipment_reconciliation_rank10.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/10__vol2__040/metadata_rank10.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/10__vol2__040/point_applications_rank10.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/10__vol2__040/points_rank10.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/10__vol2__040/schedules_m601_phase2_tabs.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 11,
+          "cell_assertions": 187,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/10__vol2__040/supporting_evidence_rank10.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "11__vol1__05",
+      "rank": 11,
+      "pages": 67,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/11__vol1__05.md)",
+      "warnings": [
+        "Poppler warning retained"
+      ],
+      "partial_modules": [
+        {
+          "file": "work/11__vol1__05/controls_context.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 13
+        },
+        {
+          "file": "work/11__vol1__05/equipment_reconciliation_rank11.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/11__vol1__05/metadata_rank11.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/11__vol1__05/point_applications_rank11.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/11__vol1__05/points_rank11.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/11__vol1__05/schedules_mh601_steam_traps.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 21,
+          "cell_assertions": 273,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/11__vol1__05/supporting_evidence_rank11.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "12__vol2__028",
+      "rank": 12,
+      "pages": 9,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/12__vol2__028.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/12__vol2__028/controls_context_m506.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 16
+        },
+        {
+          "file": "work/12__vol2__028/controls_context_m507.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 8
+        },
+        {
+          "file": "work/12__vol2__028/controls_context_m508.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 8
+        },
+        {
+          "file": "work/12__vol2__028/controls_context_m509_hydronic.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 30
+        },
+        {
+          "file": "work/12__vol2__028/controls_context_m510.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 21
+        },
+        {
+          "file": "work/12__vol2__028/controls_context_m511.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 21
+        },
+        {
+          "file": "work/12__vol2__028/controls_context_m512.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 14
+        },
+        {
+          "file": "work/12__vol2__028/equipment_reconciliation.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/12__vol2__028/metadata.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 54
+        },
+        {
+          "file": "work/12__vol2__028/point_applications.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/12__vol2__028/points_m506_airside_templates.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 2,
+          "rows": 16,
+          "cell_assertions": 112,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/12__vol2__028/points_m506_meter_global_templates.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 39,
+          "cell_assertions": 468,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/12__vol2__028/points_m507_chw_template.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 25,
+          "cell_assertions": 175,
+          "text_assertions": 1
+        },
+        {
+          "file": "work/12__vol2__028/points_m508_hhw_template.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 34,
+          "cell_assertions": 238,
+          "text_assertions": 1
+        },
+        {
+          "file": "work/12__vol2__028/points_m510_fcu_template.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 19,
+          "cell_assertions": 190,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/12__vol2__028/points_m511_doas3_vav_templates.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 2,
+          "rows": 33,
+          "cell_assertions": 231,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/12__vol2__028/points_m512_doas12_template.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 27,
+          "cell_assertions": 189,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/12__vol2__028/reference_tables.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/12__vol2__028/schedules_m505_silencer_esp.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 2,
+          "rows": 33,
+          "cell_assertions": 278,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/12__vol2__028/schedules_m601_boiler_unit_heater.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 2,
+          "rows": 2,
+          "cell_assertions": 29,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/12__vol2__028/schedules_m601_chiller_exhaust.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 2,
+          "rows": 4,
+          "cell_assertions": 62,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/12__vol2__028/schedules_m601_doas.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 3,
+          "cell_assertions": 96,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/12__vol2__028/schedules_m601_fcu.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 23,
+          "cell_assertions": 690,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/12__vol2__028/sensors.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/12__vol2__028/supporting_evidence.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "13__vol2__017",
+      "rank": 13,
+      "pages": 25,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/13__vol2__017.md)",
+      "warnings": [
+        "MuPDF warning retained"
+      ],
+      "partial_modules": [
+        {
+          "file": "work/13__vol2__017/controls_context_rank13.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 20
+        },
+        {
+          "file": "work/13__vol2__017/equipment_reconciliation_rank13.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/13__vol2__017/metadata_rank13.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 5
+        },
+        {
+          "file": "work/13__vol2__017/point_applications_rank13.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/13__vol2__017/points_m701.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 3,
+          "rows": 60,
+          "cell_assertions": 60,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/13__vol2__017/schedules_core.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 7,
+          "rows": 47,
+          "cell_assertions": 47,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/13__vol2__017/supporting_evidence_rank13.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "14__vol2__021",
+      "rank": 14,
+      "pages": 19,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/14__vol2__021.md)",
+      "warnings": [
+        "Poppler warning retained"
+      ],
+      "partial_modules": [
+        {
+          "file": "work/14__vol2__021/controls_context.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 8
+        },
+        {
+          "file": "work/14__vol2__021/equipment_reconciliation.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/14__vol2__021/metadata.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/14__vol2__021/point_applications.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/14__vol2__021/points_m803.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 23,
+          "cell_assertions": 46,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/14__vol2__021/points_m804_m805.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 8,
+          "rows": 75,
+          "cell_assertions": 150,
+          "text_assertions": 2
+        },
+        {
+          "file": "work/14__vol2__021/schedules_m601.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 6,
+          "rows": 30,
+          "cell_assertions": 30,
+          "text_assertions": 5
+        },
+        {
+          "file": "work/14__vol2__021/supporting_evidence.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 2
+        }
+      ]
+    },
+    {
+      "id": "15__vol2__067",
+      "rank": 15,
+      "pages": 13,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/15__vol2__067.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/15__vol2__067/controls_context_m63.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 9
+        },
+        {
+          "file": "work/15__vol2__067/equipment_reconciliation.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/15__vol2__067/metadata.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 6
+        },
+        {
+          "file": "work/15__vol2__067/point_applications.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/15__vol2__067/points_m63.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 8
+        },
+        {
+          "file": "work/15__vol2__067/schedules_m70.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 8,
+          "rows": 10,
+          "cell_assertions": 146,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/15__vol2__067/supporting_evidence.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 3
+        }
+      ]
+    },
+    {
+      "id": "16__vol2__069",
+      "rank": 16,
+      "pages": 9,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/16__vol2__069.md)",
+      "warnings": [
+        "MuPDF warning retained"
+      ],
+      "partial_modules": [
+        {
+          "file": "work/16__vol2__069/controls_context_m4.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 3,
+          "rows": 16,
+          "cell_assertions": 32,
+          "text_assertions": 34
+        },
+        {
+          "file": "work/16__vol2__069/equipment_reconciliation.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 6
+        },
+        {
+          "file": "work/16__vol2__069/metadata.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 19
+        },
+        {
+          "file": "work/16__vol2__069/point_applications.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/16__vol2__069/schedules_m3.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 11,
+          "cell_assertions": 160,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/16__vol2__069/supporting_evidence.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "17__vol1__16",
+      "rank": 17,
+      "pages": 47,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/17__vol1__16.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/17__vol1__16/controls_context_rank17.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 43
+        },
+        {
+          "file": "work/17__vol1__16/equipment_reconciliation_rank17.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/17__vol1__16/metadata_rank17.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 6
+        },
+        {
+          "file": "work/17__vol1__16/point_applications_rank17.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/17__vol1__16/points_m602.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 12,
+          "cell_assertions": 24,
+          "text_assertions": 11
+        },
+        {
+          "file": "work/17__vol1__16/schedules_m002_m003.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 12,
+          "rows": 86,
+          "cell_assertions": 86,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/17__vol1__16/supporting_evidence_rank17.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "18__vol2__092",
+      "rank": 18,
+      "pages": 13,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/18__vol2__092.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/18__vol2__092/controls_context_m402.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 6
+        },
+        {
+          "file": "work/18__vol2__092/equipment_reconciliation.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/18__vol2__092/metadata.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 33
+        },
+        {
+          "file": "work/18__vol2__092/point_applications.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/18__vol2__092/points_m402.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 2,
+          "rows": 11,
+          "cell_assertions": 22,
+          "text_assertions": 2
+        },
+        {
+          "file": "work/18__vol2__092/schedules_m301.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 8,
+          "rows": 20,
+          "cell_assertions": 421,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/18__vol2__092/supporting_evidence.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 1
+        }
+      ]
+    },
+    {
+      "id": "19__vol2__094",
+      "rank": 19,
+      "pages": 9,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/19__vol2__094.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/19__vol2__094/controls_context_m201.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 8
+        },
+        {
+          "file": "work/19__vol2__094/equipment_reconciliation.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/19__vol2__094/metadata.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 41
+        },
+        {
+          "file": "work/19__vol2__094/point_applications.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/19__vol2__094/schedules_m401.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 4,
+          "rows": 11,
+          "cell_assertions": 236,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/19__vol2__094/supporting_evidence.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 6,
+          "cell_assertions": 36,
+          "text_assertions": 2
+        }
+      ]
+    },
+    {
+      "id": "20__vol2__097",
+      "rank": 20,
+      "pages": 25,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/20__vol2__097.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/20__vol2__097/controls_context_rank20.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 23
+        },
+        {
+          "file": "work/20__vol2__097/equipment_reconciliation_rank20.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/20__vol2__097/metadata_rank20.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 6
+        },
+        {
+          "file": "work/20__vol2__097/point_applications_rank20.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/20__vol2__097/points_rank20.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/20__vol2__097/schedules_h001.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 6,
+          "rows": 12,
+          "cell_assertions": 12,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/20__vol2__097/supporting_evidence_rank20.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "21__vol2__095",
+      "rank": 21,
+      "pages": 8,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/21__vol2__095.md)",
+      "warnings": [],
+      "partial_modules": []
+    },
+    {
+      "id": "22__vol2__012",
+      "rank": 22,
+      "pages": 29,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/22__vol2__012.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/22__vol2__012/controls_context_rank22.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 37
+        },
+        {
+          "file": "work/22__vol2__012/equipment_reconciliation_rank22.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/22__vol2__012/metadata_rank22.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 14
+        },
+        {
+          "file": "work/22__vol2__012/point_applications_rank22.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/22__vol2__012/points_m701.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 101,
+          "cell_assertions": 606,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/22__vol2__012/schedules_m601.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 6,
+          "rows": 24,
+          "cell_assertions": 24,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/22__vol2__012/supporting_evidence_rank22.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "23__vol2__033",
+      "rank": 23,
+      "pages": 80,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/23__vol2__033.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/23__vol2__033/controls_context_rank23.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 33
+        },
+        {
+          "file": "work/23__vol2__033/equipment_reconciliation_rank23.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/23__vol2__033/metadata_rank23.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 3
+        },
+        {
+          "file": "work/23__vol2__033/point_applications_rank23.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/23__vol2__033/points_m702_m703.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 5,
+          "rows": 100,
+          "cell_assertions": 1100,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/23__vol2__033/schedules_m601_m602.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 8,
+          "rows": 69,
+          "cell_assertions": 69,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/23__vol2__033/supporting_evidence_rank23.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "24__vol2__019",
+      "rank": 24,
+      "pages": 24,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/24__vol2__019.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/24__vol2__019/controls_context.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 9
+        },
+        {
+          "file": "work/24__vol2__019/equipment_reconciliation.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/24__vol2__019/metadata.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/24__vol2__019/point_applications.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/24__vol2__019/points_m83_m88.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 5,
+          "rows": 158,
+          "cell_assertions": 474,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/24__vol2__019/schedules_m71.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 7,
+          "rows": 25,
+          "cell_assertions": 25,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/24__vol2__019/schedules_m72.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 9,
+          "rows": 49,
+          "cell_assertions": 49,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/24__vol2__019/schedules_m73.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 58,
+          "cell_assertions": 58,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/24__vol2__019/schedules_m73_performance.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 58,
+          "cell_assertions": 1044,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/24__vol2__019/supporting_evidence.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "25__vol2__053",
+      "rank": 25,
+      "pages": 12,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/25__vol2__053.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/25__vol2__053/controls_context_mh502.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 13
+        },
+        {
+          "file": "work/25__vol2__053/equipment_reconciliation.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/25__vol2__053/metadata.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 28
+        },
+        {
+          "file": "work/25__vol2__053/point_applications.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/25__vol2__053/points_mh502.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 19,
+          "cell_assertions": 228,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/25__vol2__053/schedules_mh601.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 7,
+          "rows": 69,
+          "cell_assertions": 778,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/25__vol2__053/supporting_evidence.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 2
+        }
+      ]
+    },
+    {
+      "id": "26__vol2__031",
+      "rank": 26,
+      "pages": 90,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/26__vol2__031.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/26__vol2__031/controls_context.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 17
+        },
+        {
+          "file": "work/26__vol2__031/equipment_reconciliation.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/26__vol2__031/metadata.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 3
+        },
+        {
+          "file": "work/26__vol2__031/point_applications.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/26__vol2__031/points.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 21,
+          "cell_assertions": 21,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/26__vol2__031/schedules.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 3,
+          "rows": 32,
+          "cell_assertions": 32,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/26__vol2__031/supporting_evidence.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "27__vol1__21",
+      "rank": 27,
+      "pages": 128,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/27__vol1__21.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/27__vol1__21/controls_context.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 9
+        },
+        {
+          "file": "work/27__vol1__21/equipment_reconciliation.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/27__vol1__21/metadata.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 2
+        },
+        {
+          "file": "work/27__vol1__21/point_applications.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/27__vol1__21/points.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 1,
+          "cell_assertions": 1,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/27__vol1__21/schedules.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 1,
+          "cell_assertions": 1,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/27__vol1__21/supporting_evidence.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "28__vol1__26",
+      "rank": 28,
+      "pages": 64,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/28__vol1__26.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/28__vol1__26/controls_context.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 3
+        },
+        {
+          "file": "work/28__vol1__26/equipment_reconciliation.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/28__vol1__26/metadata.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/28__vol1__26/point_applications.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/28__vol1__26/points.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 1,
+          "cell_assertions": 1,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/28__vol1__26/schedules.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 1,
+          "cell_assertions": 1,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/28__vol1__26/supporting_evidence.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "29__vol2__030",
+      "rank": 29,
+      "pages": 93,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/29__vol2__030.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/29__vol2__030/controls_context.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/29__vol2__030/equipment_reconciliation.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/29__vol2__030/metadata.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 2
+        },
+        {
+          "file": "work/29__vol2__030/point_applications.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/29__vol2__030/points.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 1,
+          "cell_assertions": 1,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/29__vol2__030/schedules.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 1,
+          "cell_assertions": 1,
+          "text_assertions": 4
+        },
+        {
+          "file": "work/29__vol2__030/supporting_evidence.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    },
+    {
+      "id": "30__vol2__058",
+      "rank": 30,
+      "pages": 311,
+      "captured": true,
+      "complete": true,
+      "status": "[Complete; source limitations recorded](records/30__vol2__058.md)",
+      "warnings": [],
+      "partial_modules": [
+        {
+          "file": "work/30__vol2__058/controls_context.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 7
+        },
+        {
+          "file": "work/30__vol2__058/equipment_reconciliation.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/30__vol2__058/metadata.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 3
+        },
+        {
+          "file": "work/30__vol2__058/point_applications.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/30__vol2__058/points.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 6,
+          "cell_assertions": 6,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/30__vol2__058/schedules.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 1,
+          "rows": 6,
+          "cell_assertions": 6,
+          "text_assertions": 0
+        },
+        {
+          "file": "work/30__vol2__058/supporting_evidence.json",
+          "verification_current": true,
+          "pass": true,
+          "tables": 0,
+          "rows": 0,
+          "cell_assertions": 0,
+          "text_assertions": 0
+        }
+      ]
+    }
+  ],
+  "overall_complete": true
+}

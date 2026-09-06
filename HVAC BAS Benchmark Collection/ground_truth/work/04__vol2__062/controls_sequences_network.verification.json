@@ -1,0 +1,727 @@
+{
+  "document_id": "04__vol2__062",
+  "source_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "annotation_sha256": "87b8d7c501f34940b72671b275d4d270b6213d423460b2b712fef41d581b0ed0",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 17,
+  "checks": [
+    {
+      "assertion": "m60-control-system-architecture",
+      "page": 16,
+      "bbox": [
+        1680,
+        495,
+        2050,
+        535
+      ],
+      "expected": "CONTROL SYSTEM ARCHITECTURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONTROL SYSTEM ARCHITECTURE",
+          "word_ids": [
+            295,
+            296,
+            297
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONTROL SYSTEM ARCHITECTURE",
+          "word_ids": [
+            500,
+            501,
+            502
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m60-heat-relief-louver",
+      "page": 16,
+      "bbox": [
+        270,
+        1220,
+        610,
+        1300
+      ],
+      "expected": "HEAT RELIEF FAN W/ LOUVER SEQUENCE OF OPERATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HEAT RELIEF FAN W/ LOUVER SEQUENCE OF OPERATION (EF-6/L-1 & EF-7/L-2)",
+          "word_ids": [
+            1022,
+            1023,
+            1024,
+            1025,
+            1026,
+            1009,
+            1010,
+            1011,
+            996,
+            997,
+            998
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HEAT RELIEF FAN W/ LOUVER SEQUENCE OF OPERATION (EF-6/L-1 & EF-7/L-2)",
+          "word_ids": [
+            1171,
+            1172,
+            1173,
+            1174,
+            1175,
+            1176,
+            1177,
+            1178,
+            1165,
+            1166,
+            1167
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m60-heat-relief-fan",
+      "page": 16,
+      "bbox": [
+        780,
+        1145,
+        1255,
+        1185
+      ],
+      "expected": "HEAT RELIEF FAN SEQUENCE OF OPERATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HEAT RELIEF FAN SEQUENCE OF OPERATION (EF-5)",
+          "word_ids": [
+            1414,
+            1415,
+            1416,
+            1417,
+            1418,
+            1419,
+            1407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HEAT RELIEF FAN SEQUENCE OF OPERATION (EF-5)",
+          "word_ids": [
+            1181,
+            1182,
+            1183,
+            1184,
+            1185,
+            1186,
+            1170
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m60-ductless-split",
+      "page": 16,
+      "bbox": [
+        1380,
+        945,
+        1940,
+        980
+      ],
+      "expected": "DUCTLESS SPLIT SYSTEM SEQUENCE OF OPERATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCTLESS SPLIT SYSTEM SEQUENCE OF OPERATION",
+          "word_ids": [
+            336,
+            337,
+            338,
+            339,
+            340,
+            341
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCTLESS SPLIT SYSTEM SEQUENCE OF OPERATION",
+          "word_ids": [
+            793,
+            794,
+            795,
+            796,
+            797,
+            798
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m60-outdoor-air-temperature",
+      "page": 16,
+      "bbox": [
+        1960,
+        750,
+        2400,
+        810
+      ],
+      "expected": "OUTSIDE AIR TEMPERATURE SEQUENCE OF OPERATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMPERATURE SEQUENCE OF OPERATION",
+          "word_ids": [
+            1441,
+            1442,
+            1435,
+            1436,
+            1437,
+            1438
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMPERATURE SEQUENCE OF OPERATION",
+          "word_ids": [
+            828,
+            829,
+            830,
+            831,
+            832,
+            833
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m61-lab-exhaust",
+      "page": 17,
+      "bbox": [
+        430,
+        800,
+        1100,
+        845
+      ],
+      "expected": "LAB EXHAUST SYSTEM SEQUENCE OF OPERATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4. ALARMS LAB EXHAUST SYSTEM SEQUENCE OF OPERATION",
+          "word_ids": [
+            509,
+            510,
+            511,
+            512,
+            513,
+            514,
+            515,
+            516
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4. ALARMS LAB EXHAUST SYSTEM SEQUENCE OF OPERATION",
+          "word_ids": [
+            631,
+            632,
+            682,
+            683,
+            684,
+            685,
+            686,
+            687
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m61-split-system",
+      "page": 17,
+      "bbox": [
+        1480,
+        830,
+        2150,
+        875
+      ],
+      "expected": "SPLIT SYSTEM SEQUENCE OF OPERATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPLIT SYSTEM SEQUENCE OF OPERATION",
+          "word_ids": [
+            1415,
+            1416,
+            1417,
+            1418,
+            1419
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPLIT SYSTEM SEQUENCE OF OPERATION",
+          "word_ids": [
+            689,
+            690,
+            691,
+            692,
+            693
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m62-heating-water",
+      "page": 18,
+      "bbox": [
+        1020,
+        750,
+        1480,
+        790
+      ],
+      "expected": "HEATING WATER SYSTEM SEQUENCE OF OPERATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HEATING WATER SYSTEM SEQUENCE OF OPERATION",
+          "word_ids": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HEATING WATER SYSTEM SEQUENCE OF OPERATION",
+          "word_ids": [
+            876,
+            877,
+            878,
+            879,
+            880,
+            881
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m62-bacnet-connection",
+      "page": 18,
+      "bbox": [
+        540,
+        1398,
+        650,
+        1460
+      ],
+      "expected": "Bacnet CONNECTION TO BUILDING AUTOMATION SYSTEM (BAS)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Bacnet CONNECTION TO BUILDING AUTOMATION SYSTEM (BAS)",
+          "word_ids": [
+            1073,
+            1074,
+            1075,
+            1076,
+            1077,
+            1078,
+            1079
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Bacnet CONNECTION TO BUILDING AUTOMATION SYSTEM (BAS)",
+          "word_ids": [
+            1126,
+            1127,
+            1128,
+            1129,
+            1130,
+            1131,
+            1132
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m63-vav-ahu",
+      "page": 19,
+      "bbox": [
+        925,
+        1055,
+        1660,
+        1100
+      ],
+      "expected": "VARIABLE AIR VOLUME AIR HANDLING UNIT SEQUENCE OF OPERATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VARIABLE AIR VOLUME AIR HANDLING UNIT SEQUENCE OF OPERATION (AHU-1)",
+          "word_ids": [
+            1920,
+            1921,
+            1922,
+            1923,
+            1924,
+            1925,
+            1926,
+            1927,
+            1928,
+            1929
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VARIABLE AIR VOLUME AIR HANDLING UNIT SEQUENCE OF OPERATION (AHU-1)",
+          "word_ids": [
+            1856,
+            1857,
+            1858,
+            1859,
+            1860,
+            1861,
+            1862,
+            1863,
+            1864,
+            2015
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m64-multiple-hoods",
+      "page": 20,
+      "bbox": [
+        280,
+        940,
+        1085,
+        980
+      ],
+      "expected": "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION",
+          "word_ids": [
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION",
+          "word_ids": [
+            2542,
+            2543,
+            2544,
+            2545,
+            2546,
+            2547,
+            2548,
+            2549,
+            2550
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m64-snorkel",
+      "page": 20,
+      "bbox": [
+        1340,
+        970,
+        2130,
+        1010
+      ],
+      "expected": "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION",
+          "word_ids": [
+            1468,
+            1469,
+            1470,
+            1471,
+            1472,
+            1473,
+            1474,
+            1475,
+            1476
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION (MATERIAL LAB 118 / RESIDENCY NOISE ROOM 130)",
+          "word_ids": [
+            2566,
+            2567,
+            2568,
+            2569,
+            2570,
+            2571,
+            2572,
+            2573,
+            2574,
+            2578,
+            2579,
+            2580,
+            2581,
+            2582,
+            2583,
+            2584,
+            2585
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m64-integration-gateway",
+      "page": 20,
+      "bbox": [
+        170,
+        130,
+        660,
+        152
+      ],
+      "expected": "THE AIR VALVE MANUFACTURER SHALL PROVIDE AN INTEGRATION GATEWAY TO FACILITATE COMMUNICATION BETWEEN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THE AIR VALVE MANUFACTURER SHALL PROVIDE AN INTEGRATION GATEWAY TO FACILITATE COMMUNICATION BETWEEN",
+          "word_ids": [
+            844,
+            845,
+            846,
+            847,
+            848,
+            849,
+            850,
+            851,
+            852,
+            853,
+            854,
+            855,
+            856
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THE AIR VALVE MANUFACTURER SHALL PROVIDE AN INTEGRATION GATEWAY TO FACILITATE COMMUNICATION BETWEEN",
+          "word_ids": [
+            2369,
+            2370,
+            2371,
+            2372,
+            2373,
+            2374,
+            2375,
+            2376,
+            2377,
+            2378,
+            2379,
+            2380,
+            2381
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m65-general-exhaust",
+      "page": 21,
+      "bbox": [
+        525,
+        1030,
+        1350,
+        1070
+      ],
+      "expected": "LAB VENTILATION WITH GENERAL EXHAUST SYSTEM SEQUENCE OF OPERATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LAB VENTILATION WITH GENERAL EXHAUST SYSTEM SEQUENCE OF OPERATION",
+          "word_ids": [
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LAB VENTILATION WITH GENERAL EXHAUST SYSTEM SEQUENCE OF OPERATION",
+          "word_ids": [
+            1606,
+            1607,
+            1608,
+            1609,
+            1610,
+            1611,
+            1612,
+            1613,
+            1614
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m65-electric-unit-heater",
+      "page": 21,
+      "bbox": [
+        1630,
+        1165,
+        2170,
+        1210
+      ],
+      "expected": "ELECTRIC UNIT HEATER SEQUENCE OF OPERATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ELECTRIC UNIT HEATER SEQUENCE OF OPERATION (EH-5)",
+          "word_ids": [
+            1699,
+            1700,
+            1701,
+            1702,
+            1703,
+            1704,
+            1697
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ELECTRIC UNIT HEATER SEQUENCE OF OPERATION (EH-5)",
+          "word_ids": [
+            1846,
+            1847,
+            1848,
+            1849,
+            1850,
+            1851,
+            1817
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m65-general-exhaust-fan",
+      "page": 21,
+      "bbox": [
+        1680,
+        310,
+        2400,
+        355
+      ],
+      "expected": "GENERAL EXHAUST FAN SEQUENCE OF OPERATION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GENERAL EXHAUST FAN SEQUENCE OF OPERATION",
+          "word_ids": [
+            1797,
+            1798,
+            1799,
+            1800,
+            1801,
+            1802
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GENERAL EXHAUST FAN SEQUENCE OF OPERATION",
+          "word_ids": [
+            297,
+            298,
+            299,
+            300,
+            301,
+            302
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m65-integration-gateway",
+      "page": 21,
+      "bbox": [
+        450,
+        150,
+        930,
+        170
+      ],
+      "expected": "THE AIR VALVE MANUFACTURER SHALL PROVIDE AN INTEGRATION GATEWAY TO FACILITATE COMMUNICATION BETWEEN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THE AIR VALVE MANUFACTURER SHALL PROVIDE AN INTEGRATION GATEWAY TO FACILITATE COMMUNICATION BETWEEN",
+          "word_ids": [
+            178,
+            179,
+            180,
+            181,
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THE AIR VALVE MANUFACTURER SHALL PROVIDE AN INTEGRATION GATEWAY TO FACILITATE COMMUNICATION BETWEEN",
+          "word_ids": [
+            1417,
+            1418,
+            1419,
+            1420,
+            1421,
+            1422,
+            1423,
+            1424,
+            1425,
+            1426,
+            1427,
+            1428,
+            1429
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "rank04-sequence-inventory",
+      "actual": 13,
+      "expected": 13,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

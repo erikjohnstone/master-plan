@@ -1,0 +1,2512 @@
+{
+  "document_id": "01__vol2__001",
+  "module_role": "Primary non-duplicated schedule mark registry for Cherry Point equipment identity presentation. All paired/secondary schedule tables remain in schedules_rank01_assembled.json and are not discarded.",
+  "tables": [
+    {
+      "id": "AIR-OPS-CUH",
+      "page": 43,
+      "sheet": "M-602",
+      "building_scope": "Air Operations",
+      "title": "CABINET UNIT HEATER SCHEDULE",
+      "classification": "Cabinet unit heaters",
+      "columns": "mark|type|mounting_style|fan_CFM|fan_ESP_in_WG|fan_motor_HP_or_W|heating_total_capacity_MBH|heating_EWT_F|heating_LWT_F|heating_water_flow_GPM|heating_max_pressure_drop_in_water_column|HHW_runout_size_in|V_phase_Hz|VFD_starter_disconnect_provided_by|notes",
+      "x_edges": [
+        162,
+        220,
+        280,
+        433,
+        475,
+        540,
+        610,
+        680,
+        723,
+        760,
+        837,
+        910,
+        970,
+        1018,
+        1100,
+        1155
+      ],
+      "y_ranges": [
+        [
+          155,
+          173
+        ],
+        [
+          173,
+          190
+        ]
+      ],
+      "rows": [
+        "CUH-A1|CABINET|VERTICAL FLOOR MOUNTED|140|0.1|15W|5.0|130|110|0.5|10|3/4|120/1/60|DIVISION 23|1",
+        "CUH-A2|CABINET|VERTICAL FLOOR MOUNTED|140|0.1|15W|5.0|130|110|0.5|10|3/4|120/1/60|DIVISION 23|1"
+      ],
+      "notes": [
+        "1. IF PROVIDED, EC MOTORS SHALL BE PROVIDED WITH EQUIPMENT TO PREVENT ADDING HARMONICS TO ELECTRICAL SYSTEM (INDUCTOR, ETC.) AND SHALL BE PROGRAMMED TO PREVENT EC MOTOR OVERSPEED."
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            485,
+            62,
+            855,
+            94
+          ],
+          "expected": "CABINET UNIT HEATER SCHEDULE"
+        },
+        {
+          "bbox": [
+            160,
+            90,
+            1155,
+            154
+          ],
+          "expected": "MARK TYPE MOUNTING STYLE FAN DATA CFM ESP IN W G MOTOR HP HEATING COIL DATA TOTAL CAPACITY MBH EWT F LWT F WATER FLOW GPM MAX PRESSURE DROP IN WC HHW ROUNTOUT SIZE IN V P HZ VFD STARTER DISCONNECT PROVIDED BY NOTES"
+        }
+      ],
+      "source_component": "schedules_air_ops_aux.json"
+    },
+    {
+      "id": "AIR-OPS-UH",
+      "page": 43,
+      "sheet": "M-602",
+      "building_scope": "Air Operations",
+      "title": "UNIT HEATER SCHEDULE",
+      "classification": "Unit heaters",
+      "columns": "mark|type|total_capacity_MBH|EWT_LWT_F|water_flow_GPM|max_pressure_drop_in_water_column|HHW_runout_size_in|motor_HP_or_W|V_phase_Hz|notes",
+      "x_edges": [
+        162,
+        220,
+        380,
+        490,
+        600,
+        680,
+        800,
+        915,
+        985,
+        1060,
+        1115
+      ],
+      "y_ranges": [
+        [
+          315,
+          332
+        ],
+        [
+          332,
+          349
+        ],
+        [
+          349,
+          366
+        ],
+        [
+          366,
+          383
+        ],
+        [
+          383,
+          400
+        ]
+      ],
+      "rows": [
+        "UH-A1|HORIZONTAL DISCHARGE|10.9|130/110|1.1|10|3/4|16W|120/1/60|1",
+        "UH-A2|HORIZONTAL DISCHARGE|10.9|130/110|1.1|10|3/4|16W|120/1/60|1",
+        "UH-A3|HORIZONTAL DISCHARGE|9.2|130/110|1.0|10|3/4|16W|120/1/60|1",
+        "UH-A4|HORIZONTAL DISCHARGE|9.2|130/110|1.0|10|3/4|16W|120/1/60|1",
+        "UH-A5|HORIZONTAL DISCHARGE|9.2|130/110|1.0|10|3/4|16W|120/1/60|1"
+      ],
+      "notes": [
+        "1. MOUNTING HEIGHT SHALL BE 9' ABOVE FINISHED FLOOR."
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            510,
+            253,
+            770,
+            284
+          ],
+          "expected": "UNIT HEATER SCHEDULE"
+        },
+        {
+          "bbox": [
+            160,
+            282,
+            1115,
+            313
+          ],
+          "expected": "MARK TYPE TOTAL CAPACITY MBH EWT F LWT F WATER FLOW GPM MAX PRESSURE DROP IN WC HHW ROUNTOUT SIZE IN MOTOR HP V P HZ NOTES"
+        }
+      ],
+      "source_component": "schedules_air_ops_aux.json"
+    },
+    {
+      "id": "AIR-OPS-HUMIDIFIER",
+      "page": 43,
+      "sheet": "M-602",
+      "building_scope": "Air Operations",
+      "title": "HUMIDIFIER SCHEDULE",
+      "classification": "Wall-mount electrode steam humidifier",
+      "columns": "mark|type|capacity_lb_per_hr_as_printed|electric_input_kW|volts_phase_Hz|disconnect_provided_by|notes",
+      "x_edges": [
+        1300,
+        1350,
+        1610,
+        1695,
+        1820,
+        1930,
+        2080,
+        2150
+      ],
+      "y_ranges": [
+        [
+          504,
+          522
+        ]
+      ],
+      "rows": [
+        "H-A1|WALL MOUNT ELECTRODE STEAM HUMIDIFIER|1.0|1.9|120/1/60|DIVISION 23|1,2,3"
+      ],
+      "notes": [
+        "1. PROVIDE UNIT MOUNTED DRAIN PACK AND DRAIN COOLER.",
+        "2. MOUNT HUMIDIFIER WITH BOTTOM AT 4'-0\" ABOVE FINISHED FLOOR.",
+        "3. PROVIDE UNIT WITH HIGH TEMPERATURE CONDENSATE PUMP SUITABLE FOR WORKING TEMPERATURE UP TO 212\u00b0F. PUMP SHALL BE RATED FOR 50 GPH AT 20 FT WC."
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1595,
+            442,
+            1840,
+            472
+          ],
+          "expected": "HUMIDIFIER SCHEDULE"
+        },
+        {
+          "bbox": [
+            1300,
+            472,
+            2150,
+            503
+          ],
+          "expected": "MARK TYPE LB HR MBH ELECTRIC INPUT KW VOLT PHASE HZ DISCONNECT PROVIDED BY NOTES"
+        }
+      ],
+      "source_component": "schedules_air_ops_aux.json"
+    },
+    {
+      "id": "AIR-OPS-PUMP",
+      "page": 42,
+      "sheet": "M-601",
+      "building_scope": "Air Operations",
+      "title": "PUMP SCHEDULE",
+      "classification": "Hydronic pumps / circulators",
+      "columns": "mark|service|type|flow_GPM|TDH_ft_water_column|motor_RPM|min_motor_HP|speed_control|volts|phase|Hz|VFD_or_disconnect_provided_by|remarks",
+      "x_edges": [
+        145,
+        260,
+        475,
+        607,
+        678,
+        743,
+        824,
+        890,
+        968,
+        1030,
+        1098,
+        1151,
+        1265,
+        1332
+      ],
+      "y_ranges": [
+        [
+          1332,
+          1351
+        ],
+        [
+          1351,
+          1368
+        ],
+        [
+          1368,
+          1385
+        ],
+        [
+          1385,
+          1403
+        ],
+        [
+          1403,
+          1420
+        ],
+        [
+          1420,
+          1438
+        ],
+        [
+          1438,
+          1455
+        ],
+        [
+          1455,
+          1473
+        ]
+      ],
+      "rows": [
+        "HHWP-DOAH-A1|DOAH CIRCULATOR|INLINE CIRCULATOR|6.7|22|3250|1/8|-|120|1|60|DIVISION 23|",
+        "HHWP-DOAH-A2|DOAH CIRCULATOR|INLINE CIRCULATOR|4.6|20|3250|1/8|-|120|1|60|DIVISION 23|",
+        "PCHWP-A1|PRIMARY CHILLED WATER PUMP|VERTICAL INLINE|171|109|1760|10|VFD|460|3|60|DIVISION 23|2",
+        "PCHWP-A2|PRIMARY CHILLED WATER PUMP|VERTICAL INLINE|171|109|1760|10|VFD|460|3|60|DIVISION 23|2",
+        "PHHWP-A1|PRIMARY HEATING HOT WATER PUMP|INLINE CIRCULATOR|33|21|1750|1/4|VFD|120|1|60|DIVISION 23|1,2",
+        "PHHWP-A2|PRIMARY HEATING HOT WATER PUMP|INLINE CIRCULATOR|33|21|1750|1/4|VFD|120|1|60|DIVISION 23|1,2",
+        "SHHWP-A1|SECONDARY HEATING HOT WATER PUMP|VERTICAL INLINE|51|68|1760|2|VFD|460|3|60|DIVISION 23|2",
+        "SHHWP-A2|SECONDARY HEATING HOT WATER PUMP|VERTICAL INLINE|51|68|1760|2|VFD|460|3|60|DIVISION 23|2"
+      ],
+      "notes": [
+        "1. PROVIDE WITH BOILER, COORDINATE PRESSURE DROP WITH BOILER. SELECTED PRESSURE DROP SHALL BE BOILER WPD + 10.2 FT WC.",
+        "2. PROVIDE WITH VFD & INTEGRAL DISCONNECT.",
+        "The two DOAH circulator rows have blank remarks cells as printed.",
+        "The source table does not state a unit-system classification beyond the printed labels; TDH is transcribed as FT WC exactly from the header."
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            650,
+            1240,
+            840,
+            1272
+          ],
+          "expected": "PUMP SCHEDULE"
+        },
+        {
+          "bbox": [
+            175,
+            1285,
+            820,
+            1333
+          ],
+          "expected": "MARK SERVICE TYPE FLOW GPM TDH FT WC MOTOR RPM"
+        },
+        {
+          "bbox": [
+            825,
+            1285,
+            1250,
+            1333
+          ],
+          "expected": "MIN MOTOR VFD SPEED POWER VOLTS PHASE HZ DISCONNECT CONTROL HP PROVIDED BY"
+        },
+        {
+          "bbox": [
+            1270,
+            1288,
+            1332,
+            1315
+          ],
+          "expected": "REMARKS"
+        }
+      ],
+      "source_component": "schedules_air_ops_core.json"
+    },
+    {
+      "id": "AIR-OPS-BOILER",
+      "page": 42,
+      "sheet": "M-601",
+      "building_scope": "Air Operations",
+      "title": "BOILER SCHEDULE",
+      "classification": "Natural-gas condensing boilers",
+      "columns": "mark|location|type|leaving_water_temperature_F|entering_water_temperature_F|water_flow_GPM|natural_gas_input_MBH|natural_gas_output_MBH|V_phase_Hz|notes",
+      "x_edges": [
+        1368,
+        1415,
+        1507,
+        1665,
+        1735,
+        1805,
+        1879,
+        1965,
+        2038,
+        2110,
+        2180
+      ],
+      "y_ranges": [
+        [
+          1320,
+          1337
+        ],
+        [
+          1337,
+          1356
+        ]
+      ],
+      "rows": [
+        "B-A1|152 MECH|NATURAL GAS CONDENSING|130|110|33|350|330|120/1/60|1,2",
+        "B-A2|152 MECH|NATURAL GAS CONDENSING|130|110|33|350|330|120/1/60|1,2"
+      ],
+      "notes": [
+        "1. BOILER AHRI CERTIFIED EFFICIENCY SHALL BE MINIMUM OF 95%.",
+        "2. PROVIDE BOILER WITH PHHWP, SEE HVAC PUMP SCHEDULE FOR PUMP INFORMATION."
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1675,
+            1245,
+            1880,
+            1273
+          ],
+          "expected": "BOILER SCHEDULE"
+        },
+        {
+          "bbox": [
+            1370,
+            1280,
+            1965,
+            1319
+          ],
+          "expected": "LVG WATER ENT WATER WATER FLOW NATURAL GAS MARK LOCATION TYPE TEMP F TEMP F GPM INPUT MBH"
+        },
+        {
+          "bbox": [
+            1965,
+            1272,
+            2175,
+            1320
+          ],
+          "expected": "NATURAL GAS OUTPUT MBH V PH HZ NOTES"
+        }
+      ],
+      "source_component": "schedules_air_ops_core.json"
+    },
+    {
+      "id": "AIR-OPS-AHU",
+      "page": 42,
+      "sheet": "M-601",
+      "building_scope": "Air Operations",
+      "title": "AIR HANDLING UNIT SCHEDULE",
+      "classification": "Air-handling units",
+      "columns": "mark|location|supply_air_CFM_max|supply_air_CFM_min|outside_air_CFM|ESP_in_WG|fan_quantity_and_HP|volts_phase_Hz|FLA|MCA|MOCP|total_cooling_MBH|sensible_cooling_MBH|EWT_F|EAT_FDB|EAT_FWB|LAT_FDB|LAT_FWB|max_coil_face_velocity_FPM|coil_rows|water_GPM|max_water_pressure_drop_ft_water_column|notes",
+      "x_edges": [
+        154,
+        216,
+        290,
+        332,
+        365,
+        414,
+        460,
+        526,
+        616,
+        680,
+        745,
+        826,
+        915,
+        990,
+        1025,
+        1060,
+        1095,
+        1126,
+        1160,
+        1265,
+        1335,
+        1385,
+        1530,
+        1600
+      ],
+      "y_ranges": [
+        [
+          151,
+          170
+        ],
+        [
+          170,
+          188
+        ]
+      ],
+      "rows": [
+        "AHU-A1|152 MECH|10,260|4,250|2,200|4.6|(2) @ 10.0|460/3/60|28.65|32.15|45 A|307.3|269.7|45|75.0|61.7|51.1|51.1|500|8|61.5|10|1,2,3,5",
+        "AHU-A2|151 MECH|2,640|1,530|1,530|3.0|(1) @ 5.0|460/3/60|8.85|10.90|20 A|54.4|44.1|45|67.2|59.3|52.0|52.0|500|8|10.9|10|1,2,4,5"
+      ],
+      "notes": [
+        "1. PROVIDE MERV 8 AND MERV 13 FLAT FILTERS UPSTREAM OF COILS.",
+        "2. PROVIDE WITH VFDS. ONE VFD PER FAN. PROVIDE WITH SINGLE POINT ELECTRICAL CONNECTION.",
+        "3. MAXIMUM UNIT DIMENSIONS ARE 126\" LONG 84\" WIDE 60\" HIGH. UNIT SHALL BE MODULAR AND SHALL BE ABLE TO FIT THROUGH 84\"X72\" OPENING.",
+        "4. MAXIMUM UNIT DIMENSIONS ARE 100\" LONG 48\" WIDE 30\" HIGH. UNIT SHALL BE MODULAR AND SHALL BE ABLE TO FIT THROUGH 84\"X72\" OPENING.",
+        "5. ESP INCLUDES 0.5 IN WG FOR MERV 8 & 0.7 IN WG FOR MERV 13 LOADING."
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            720,
+            72,
+            1040,
+            100
+          ],
+          "expected": "AIR HANDLING UNIT SCHEDULE"
+        },
+        {
+          "bbox": [
+            160,
+            100,
+            820,
+            151
+          ],
+          "expected": "MARK LOCATION FAN DATA S A CFM MAX MIN OA CFM E S P IN WG FAN QTY H P ELECTRICAL DATA VOLTS PH HZ FLA MCA MOCP"
+        },
+        {
+          "bbox": [
+            830,
+            100,
+            1530,
+            151
+          ],
+          "expected": "COOLING COIL DATA TOTAL MBH SENSIBLE MBH EWT F EAT FDB EAT FWB LAT FDB LAT FWB MAX COIL FV FPM OF ROWS GPM MAX WATER PRESSURE DROP FT WC"
+        }
+      ],
+      "source_component": "schedules_air_ops_core.json"
+    },
+    {
+      "id": "AIR-OPS-DOAH-1",
+      "page": 42,
+      "sheet": "M-601",
+      "building_scope": "Air Operations",
+      "title": "DEDICATED OUTDOOR AIR UNIT SCHEDULE 1 OF 1",
+      "classification": "Dedicated outdoor-air units; supply/exhaust fan and cooling/heating coil data",
+      "columns": "mark|supply_fan_CFM|supply_external_SP_in_WG|supply_motor_quantity_and_HP|exhaust_fan_CFM|exhaust_external_SP_in_WG|exhaust_min_motor_HP|cooling_total_MBH|cooling_sensible_MBH|cooling_EAT_FDB|cooling_EAT_FWB|cooling_LAT_FDB|cooling_LAT_FWB|cooling_EWT_F|cooling_LWT_F|cooling_GPM|cooling_water_PD_ft_H2O|cooling_max_coil_face_velocity_FPM|heating_MBH|heating_EAT_FDB|heating_LAT_FDB|heating_EWT_F|heating_LWT_F|heating_GPM|heating_water_PD_ft_H2O|heating_max_coil_face_velocity_FPM",
+      "x_edges": [
+        154,
+        216,
+        267,
+        349,
+        452,
+        512,
+        618,
+        716,
+        792,
+        860,
+        930,
+        1000,
+        1070,
+        1144,
+        1213,
+        1284,
+        1349,
+        1425,
+        1500,
+        1562,
+        1645,
+        1725,
+        1795,
+        1870,
+        1938,
+        2013,
+        2135
+      ],
+      "y_ranges": [
+        [
+          397,
+          414
+        ],
+        [
+          414,
+          432
+        ]
+      ],
+      "rows": [
+        "DOAH-A1|2,200|2.0|(1) 5|1,280|1.2|3|127.5|62.9|81.0|72.4|55.0|55.0|45|55|25.5|10|500|66.5|27.0|55.0|130|110|6.7|5.0|500",
+        "DOAH-A2|1,530|1.9|(1) 5|1,380|1.2|3|88.7|43.8|81.0|72.4|55.0|55.0|45|55|17.7|10|500|46.3|27.0|55.0|130|110|4.6|5.0|500"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            890,
+            318,
+            1385,
+            347
+          ],
+          "expected": "DEDICATED OUTDOOR AIR UNIT SCHEDULE 1 OF 1"
+        },
+        {
+          "bbox": [
+            160,
+            345,
+            715,
+            396
+          ],
+          "expected": "MARK SUPPLY FAN CFM EXTERNAL SP IN WG MOTOR QTY HP EXHAUST FAN CFM EXTERNAL SP IN WG MIN MOTOR HP"
+        },
+        {
+          "bbox": [
+            720,
+            345,
+            2130,
+            396
+          ],
+          "expected": "COOLING COIL DATA TOTAL MBH SENSIBLE MBH EAT FDB EAT FWB LAT FDB LAT FWB EWT F LWT F GPM WTR P D FT H20 MAX COIL FV FPM HEATING COIL DATA MBH EAT FDB LAT FDB EWT F LWT F GPM WTR P D FT H20 MAX COIL FV FPM"
+        }
+      ],
+      "source_component": "schedules_air_ops_core.json"
+    },
+    {
+      "id": "AIR-OPS-FCU",
+      "page": 42,
+      "sheet": "M-601",
+      "building_scope": "Air Operations",
+      "title": "FAN COIL UNIT SCHEDULE",
+      "classification": "Fan-coil units",
+      "columns": "mark|type|fan_CFM_cooling_heating|fan_ESP_in_WG|fan_nominal_HP_or_W|cooling_sensible_MBH|cooling_total_MBH|cooling_entering_air_DB_F|cooling_entering_air_WB_F|cooling_leaving_air_DB_F|cooling_leaving_air_WB_F|cooling_entering_water_F|cooling_exit_water_F|cooling_GPM|cooling_max_coil_face_velocity_FPM|cooling_water_PD_ft_head|cooling_piping_runout_size_in|heating_MBH|heating_entering_air_DB_F|heating_entering_water_F|heating_water_temp_delta_F|heating_GPM|heating_max_coil_face_velocity_FPM|heating_water_PD_ft_head|heating_piping_runout_size_in|V_Hz_phase|max_ECM_FLA|starter_disconnect_provided_by|notes",
+      "x_edges": [
+        154,
+        216,
+        430,
+        505,
+        552,
+        610,
+        675,
+        735,
+        790,
+        845,
+        900,
+        960,
+        1030,
+        1100,
+        1145,
+        1220,
+        1265,
+        1320,
+        1370,
+        1430,
+        1500,
+        1570,
+        1620,
+        1685,
+        1750,
+        1825,
+        1895,
+        1965,
+        2100,
+        2180
+      ],
+      "y_ranges": [
+        [
+          837,
+          855
+        ],
+        [
+          855,
+          872
+        ],
+        [
+          872,
+          890
+        ],
+        [
+          890,
+          907
+        ],
+        [
+          907,
+          924
+        ],
+        [
+          924,
+          942
+        ],
+        [
+          942,
+          959
+        ],
+        [
+          959,
+          976
+        ],
+        [
+          976,
+          993
+        ],
+        [
+          993,
+          1011
+        ],
+        [
+          1011,
+          1028
+        ],
+        [
+          1028,
+          1045
+        ],
+        [
+          1045,
+          1062
+        ],
+        [
+          1062,
+          1080
+        ]
+      ],
+      "rows": [
+        "FCU-A1|VERTICAL CABINET|150 / 150|-|107 W|2.7|4.2|80.0|70.0|64.4|62.1|45|55|0.8|500|10|3/4|5.0|50.0|130|20|0.5|500|10|3/4|120/60/1|1.2|DIV 23|1,2,3,5,6",
+        "FCU-A2|VERTICAL CABINET|250 / 250|-|107 W|3.8|5.8|80.0|70.0|66.3|63.4|45|55|1.2|500|10|3/4|5.9|50.0|130|20|0.6|500|10|3/4|120/60/1|1.2|DIV 23|1,2,3,5,6",
+        "FCU-A3|SUSPENDED HORIZONTAL CABINET|620 / -|-|124 W|19.5|24.5|90.0|70.5|61.6|58.7|45|55|4.9|500|10|1|-|-|-|-|-|-|-|-|120/60/1|6.4|DIV 23|1,2,3,4",
+        "FCU-A4|SUSPENDED HORIZONTAL CABINET|1220 / -|-|1/2|22.8|31.7|75.0|65.0|58.1|56.6|45|55|6.3|500|10|1|-|-|-|-|-|-|-|-|120/60/1|6.4|DIV 23|1,2,4,8",
+        "FCU-A5|SUSPENDED HORIZONTAL CABINET|1280 / -|-|1/2|23.7|32.8|75.0|65.0|58.2|56.7|45|55|6.5|500|10|1|-|-|-|-|-|-|-|-|120/60/1|4.8|DIV 23|1,2,4,8",
+        "FCU-A6|SUSPENDED HORIZONTAL CABINET|310 / 190|-|107 W|9.4|11.8|90.0|70.5|62.9|59.4|45|55|2.4|500|10|3/4|5.6|50.0|130|20|0.6|500|10|3/4|120/60/1|1.5|DIV 23|1,2,3,4",
+        "FCU-A7|SUSPENDED HORIZONTAL CABINET|480 / 360|-|124 W|14.6|18.4|90.0|70.5|62.3|59.0|45|55|3.7|500|10|1|11.2|50.0|130|20|1.1|500|10|3/4|120/60/1|1.9|DIV 23|1,2,3,4",
+        "FCU-A8A|SUSPENDED HORIZONTAL CABINET|800 / 500|-|1/2|18.8|23.7|80.0|66.5|58.7|57.1|45|55|4.7|500|10|1|15.1|50.0|130|20|1.5|500|10|3/4|120/60/1|6.4|DIV 23|1,2,4,8",
+        "FCU-A8B|SUSPENDED HORIZONTAL CABINET|800 / 500|-|1/2|18.8|23.7|80.0|66.5|58.7|57.1|45|55|4.7|500|10|1|15.1|50.0|130|20|1.5|500|10|3/4|120/60/1|6.4|DIV 23|1,2,4,8",
+        "FCU-A9|SUSPENDED HORIZONTAL CABINET|160 / 160|-|107 W|5.0|6.4|90.0|70.5|61.0|58.2|45|55|1.3|500|10|3/4|5.0|50.0|130|20|0.5|500|10|3/4|120/60/1|1.3|DIV 23|1,2,3,4",
+        "FCU-A10|SUSPENDED HORIZONTAL DUCTED|5500 / -|0.3|5 HP|127.8|137.9|80.0|66.5|58.9|58.9|45|58.9|19.9|500|10|1 1/2|-|-|-|-|-|-|-|-|460/60/3|8.4|DIV 23|1,2,3,7",
+        "FCU-A11|SUSPENDED HORIZONTAL DUCTED|830 / -|0.3|149 W|23.6|28.7|90.0|70.5|64.4|60.4|45|55|5.7|500|10|1|-|-|-|-|-|-|-|-|120/60/1|3.5|DIV 23|1,2,3,4",
+        "FCU-A12|SUSPENDED HORIZONTAL DUCTED|660 / 500|0.3|1/2|12.5|16.9|75.0|65.0|57.8|56.7|45|55|3.8|500|10|1|10.4|70|130|20|1.0|500|10|3/4|120/60/1|6.4|DIV 23|1,2,4,8",
+        "FCU-A13|SUSPENDED HORIZONTAL DUCTED|670 / 420|0.3|1/2|13.1|17.8|75.0|65.0|57.3|56.4|45|58.6|2.7|500|10|1|10.6|70|130|20|1.1|500|10|3/4|120/60/1|7.5|DIV 23|1,2,4,8"
+      ],
+      "notes": [
+        "1. PROVIDE UNIT WITH UNIT MOUNTED DISCONNECT AND 120V/60HZ/1PH CONTROL VOLTAGE TRANSFORMER.",
+        "2. NUMBER OF MOTORS IN PARENTHESIS.",
+        "3. PROVIDE UNITS WITH FILTER RACK ON THE UNIT INTAKE WITH A 2\" MERV 8 FILTER.",
+        "4. PROVIDE WITH EC TYPE MOTOR. EC MOTORS SHALL BE PROVIDED WITH EQUIPMENT TO PREVENT ADDING HARMONICS TO ELECTRICAL SYSTEM (INDUCTOR, ETC.) AND SHALL BE PROGRAMMED TO PREVENT EC MOTOR OVERSPEED.",
+        "5. PROVIDE WITH CONDENSATE PUMP. PUMP CAPACITY SHALL BE 10 GPH AT 20 FT WC. CONDENSATE PUMP SHALL BE POWERED BY FCU ELECTRICAL CONNECTION.",
+        "6. MOTOR CAN BE EITHER EC TYPE OR TWO SPEED. IF EC TYPE, PROVIDE MOTOR WITH EQUIPMENT TO PREVENT ADDING HARMONICS TO ELECTRICAL SYSTEM (INDUCTOR, ETC.) AND SHALL BE PROGRAMMED TO PREVENT EC MOTOR OVERSPEED.",
+        "7. PROVIDE WITH EITHER MOTOR WITH VFD OR EC TYPE MOTOR. EC MOTORS SHALL BE PROVIDED WITH EQUIPMENT TO PREVENT ADDING HARMONICS TO ELECTRICAL SYSTEM (INDUCTOR, ETC.) AND SHALL BE PROGRAMMED TO PREVENT EC MOTOR OVERSPEED.",
+        "8. PROVIDE UNITS WITH FILTER RACK ON THE UNIT INTAKE WITH BOTH A 2\" MERV 8 PRE-FILTER, AND A MERV 11 FINAL FILTER."
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1030,
+            743,
+            1310,
+            773
+          ],
+          "expected": "FAN COIL UNIT SCHEDULE"
+        },
+        {
+          "bbox": [
+            160,
+            772,
+            1100,
+            836
+          ],
+          "expected": "MARK TYPE FAN DATA CFM CLG HTG ESP IN W G NOMINAL H P COOLING COIL DATA SENSIBLE MBH TOTAL MBH ENT AIR F DB WB LVG AIR F DB WB ENT WTR TEMP F EXT WTR TEMP F"
+        },
+        {
+          "bbox": [
+            1100,
+            772,
+            2180,
+            836
+          ],
+          "expected": "MAX COIL FV FPM W P D FT HD PIPING RUNOUT SIZE IN HEATING COIL DATA MBH ENT AIR F DB ENT WTR TEMP F WTR TEMP T GPM MAX COIL FV FPM W P D FT HD PIPING RUNOUT SIZE IN V HZ PH MAX ECM FLA STARTER DISCONNECT PROVIDED BY NOTES"
+        }
+      ],
+      "source_component": "schedules_air_ops_core.json"
+    },
+    {
+      "id": "AIR-OPS-GRILLE-REGISTER-DIFFUSER",
+      "page": 44,
+      "sheet": "M-603",
+      "building_scope": "Air Operations",
+      "title": "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+      "classification": "Supply, return, exhaust and transfer air terminals",
+      "columns": "mark|type|mounting|face_size_in|neck_size_in|airflow_min_CFM|airflow_max_CFM|max_NC|throw_pattern|notes",
+      "x_edges": [
+        220,
+        280,
+        460,
+        570,
+        700,
+        790,
+        845,
+        890,
+        960,
+        1040,
+        1120
+      ],
+      "y_edges": [
+        559,
+        576,
+        593,
+        610,
+        627,
+        645,
+        662,
+        679,
+        696,
+        713,
+        731,
+        748,
+        765,
+        782,
+        799,
+        817,
+        834,
+        851,
+        868,
+        885,
+        903,
+        920,
+        937,
+        954,
+        971,
+        989,
+        1006,
+        1023,
+        1040
+      ],
+      "rows": [
+        "CD-1|3-CONE SUPPLY|ACT|24x24|6\u00f8|0|155|20|4-WAY|3",
+        "CD-2|3-CONE SUPPLY|ACT|24x24|8\u00f8|156|275|20|4-WAY|3",
+        "CD-3|3-CONE SUPPLY|ACT|24x24|10\u00f8|276|380|20|4-WAY|3",
+        "CD-4|3-CONE SUPPLY|ACT|24x24|12\u00f8|381|470|20|4-WAY|3",
+        "CD-5|3-CONE SUPPLY|SURFACE|12x12|6\u00f8|0|155|20|4-WAY|3",
+        "EG-1|EGGCRATE EXHAUST GRILLE|SURFACE|8x8|6x6|0|150|30|-|3",
+        "EG-2|EGGCRATE EXHAUST GRILLE|SURFACE|12x12|8x8|151|300|30|-|3",
+        "EG-3|EGGCRATE EXHAUST GRILLE|ACT|24x24|8x8|0|200|30|-|3",
+        "EG-4|LOUVERED RETURN GRILLE|DUCT/SURFACE|10x8|8x6|0|180|30|-|3",
+        "LD-1|LINEAR SUPPLY DIFFUSER|SURFACE|4 FT. LONG|8\u00f8|0|175|<10|1-WAY|1,3,4",
+        "LD-2|LINEAR SUPPLY DIFFUSER|SURFACE|3 FT. 11 IN. LONG|8\u00f8|0|175|<10|1-WAY|2,3",
+        "LD-3|LINEAR SUPPLY DIFFUSER|SURFACE|2 FT. 4 IN. LONG|8\u00f8|0|175|<10|1-WAY|2,3",
+        "RG-1|PERFORATED RETURN GRILLE|ACT|24x24|6x6|0|200|30|-|3",
+        "RG-2|PERFORATED RETURN GRILLE|ACT|24x24|8x8|201|350|30|-|3",
+        "RG-3|PERFORATED RETURN GRILLE|ACT|24x24|10x10|351|550|30|-|3",
+        "RG-4|PERFORATED RETURN GRILLE|ACT|24x24|12x12|551|700|30|-|3",
+        "RG-6|FILTERED RETURN GRILLE|ACT|24x24|6x6|0|200|30|-|3,5",
+        "RG-7|FILTERED RETURN GRILLE|ACT|24x24|8x8|201|350|30|-|3,5",
+        "RG-8|FILTERED RETURN GRILLE|ACT|24x24|10x10|351|550|30|-|3,5",
+        "RG-11|LOUVERED RETURN GRILLE|DUCT/SURFACE|10x8|8x6|0|180|30|-|3",
+        "RG-12|FILTERED LOUVERED RETURN GRILLE|DUCT/SURFACE|10x8|8x6|0|180|30|-|3,6",
+        "RG-13|FILTERED LOUVERED RETURN GRILLE|SURFACE|12x12|6x6|0|100|30|-|3,6",
+        "SG-1|LOUVERED SUPPLY GRILLE|DUCT/SURFACE|NECK SIZE + 2\"|SEE DRAWINGS|0|1000|30|-|3",
+        "TG-1|EGGCRATE TRANSFER GRILLE|ACT|24x24|8x8|0|150|30|-|3",
+        "TG-2|LOUVERED TRANSFER GRILLE|DUCT/SURFACE|12x10|10x8|0|200|30|-|3",
+        "TG-3|EGGCRATE TRANSFER GRILLE|SURFACE|12x12|8x8|0|300|30|-|3",
+        "TG-4|LOUVERED TRANSFER GRILLE|DUCT/SURFACE|10x8|8x6|0|200|30|-|3",
+        "TG-5|EGGCRATE TRANSFER GRILLE|SURFACE|12x12|8x8|0|300|30|-|3"
+      ],
+      "notes": [
+        "1. PROVIDE CONTINUOUS LINEAR SLOT DIFFUSER WITH 4 FT LONG ACTIVE SECTIONS. PROVIDE WITH 1 x 1\" SLOT, JET-FLOW TYPE PATTERN. PROVIDE WITH MANUFACTURER'S OPTIONAL INSULATED PLENUM TO MATCH DIFFUSER.",
+        "2. PROVIDE WITH 1 x 1\" SLOT, JET-FLOW TYPE PATTERN. PROVIDE WITH MANUFACTURER'S OPTIONAL INSULATED PLENUM TO MATCH DIFFUSER.",
+        "3. DEVICE RUNOUTS SHALL MATCH NECK SIZE INDICATED ON SCHEDULE, UNLESS OTHERWISE INDICATED ON DRAWINGS.",
+        "4. PROVIDE LSD WITH BLANK PANELS AS INDICATED ON PLANS BETWEEN ACTIVE SECTIONS OF LSDs.",
+        "5. PROVIDE WITH MERV 8 24x24 FILTER.",
+        "6. PROVIDE WITH MERV 8 FILTER."
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            430,
+            480,
+            950,
+            525
+          ],
+          "expected": "GRILLE REGISTER AND DIFFUSER SCHEDULE"
+        },
+        {
+          "bbox": [
+            220,
+            525,
+            1120,
+            559
+          ],
+          "expected": "MARK TYPE MOUNTING FACE SIZE IN NECK SIZE IN AIRFLOW CFM MIN MAX MAX NC THROW PATTERN NOTES"
+        }
+      ],
+      "source_component": "schedules_air_ops_grd.json"
+    },
+    {
+      "id": "AIR-OPS-AIR-COOLED-CHILLER",
+      "page": 44,
+      "sheet": "M-603",
+      "building_scope": "Air Operations",
+      "title": "AIR COOLED CHILLER SCHEDULE",
+      "classification": "Air-cooled chiller",
+      "columns": "mark|capacity_tons|EWT_F|LWT_F|flowrate_GPM|max_pressure_drop_ft_wc|fouling_factor_hr_ft2_F_BTU|volts|phase|Hz|MCA|MOCP|minimum_EER|minimum_IPLV|disconnect_provided_by|notes",
+      "x_edges": [
+        215,
+        260,
+        370,
+        445,
+        520,
+        580,
+        750,
+        885,
+        940,
+        980,
+        1020,
+        1090,
+        1155,
+        1240,
+        1320,
+        1460,
+        1585
+      ],
+      "y_edges": [
+        150,
+        167,
+        184
+      ],
+      "rows": [
+        "CH-A1|56.0|55.4|45|128.5|12|0.0001|460|3|60|147|175|10.0|14.3|DIVISION 23|1,2,3,4",
+        "CH-A2|56.0|55.4|45|128.5|12|0.0001|460|3|60|147|175|10.0|14.3|DIVISION 23|1,2,3,4"
+      ],
+      "notes": [
+        "1. PROVIDE SINGLE POINT OF CONNECTION FOR CHILLER. PROVIDE DISCONNECT SWITCH, NEMA-4X STAINLESS STEEL.",
+        "2. PROVIDE FACTORY APPLIED COIL CORROSION PROTECTION COATING TO MEET ASTM B117 3000 HR. CAPACITY INDICATED WITH COATING ON COIL.",
+        "3. UNIT SHALL HAVE FULL CAPACITY AT 98\u00b0F AMBIENT AND SHALL PROVIDE FULL COOLING DOWN TO 24\u00b0F.",
+        "4. CHILLER SHALL BE EQUIPPED WITH QUICK RESTART. CHILLER SHALL BE CAPABLE OF BEING AT 100% LOAD WITHIN 5 MINUTES OF RESTORATION OF POWER."
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            700,
+            75,
+            1110,
+            115
+          ],
+          "expected": "AIR COOLED CHILLER SCHEDULE"
+        },
+        {
+          "bbox": [
+            215,
+            115,
+            1585,
+            150
+          ],
+          "expected": "MARK CAPACITY TONS EWT F LWT F GPM MAX ALLOWABLE PRESSURE DROP FT WC FOULING FACTOR HR-FT^2-F/BTU ELECTRICAL VOLTS PH Hz MCA MOCP MINIMUM EER MINIMUM IPLV DISCONNECT PROVIDED BY NOTES"
+        }
+      ],
+      "source_component": "schedules_air_ops_m603_compact.json"
+    },
+    {
+      "id": "AIR-OPS-FAN",
+      "page": 44,
+      "sheet": "M-603",
+      "building_scope": "Air Operations",
+      "title": "FAN SCHEDULE",
+      "classification": "Fans",
+      "columns": "mark|service|type|CFM|RPM|ESP_in_wg|max_sones|HP|volts|phase|FLA|notes",
+      "x_edges": [
+        220,
+        280,
+        420,
+        630,
+        670,
+        720,
+        775,
+        830,
+        865,
+        920,
+        960,
+        1005,
+        1060
+      ],
+      "y_edges": [
+        350,
+        367,
+        384,
+        402
+      ],
+      "rows": [
+        "EF-A1|STORAGE BAY VENTILATION|DIRECT DRIVE CENTRIFUGAL INLINE|600|1685|0.50|9.2|0.12|120|1|3.4|",
+        "EF-A2|UPS ROOM EXHAUST|BELT DRIVE CENTRIFUGAL UPBLAST|150|1579|0.40|4.1|0.07|120|1|1.3|1,2,3,4",
+        "EF-A3|BASE NODE EXHAUST|BELT DRIVE CENTRIFUGAL UPBLAST|150|1579|0.40|4.1|0.07|120|1|1.3|1,2,3,4"
+      ],
+      "notes": [
+        "1. PROVIDE FAN WITH AMCA 99-0401 TYPE B SPARK RESISTANT CONSTRUCTION.",
+        "2. UPBLAST FAN SHALL BE DESIGNED TO WITHSTAND WIND LOADS INDICATED ON STRUCTURAL DRAWINGS.",
+        "3. FAN SHALL BE ANCHORED TO RESIST UPLIFT LOADS INDICATED ON STRUCTURAL DRAWINGS.",
+        "4. PROVIDE FAN WITH AUTOMATIC BELT TENSIONER."
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            540,
+            275,
+            685,
+            315
+          ],
+          "expected": "FAN SCHEDULE"
+        },
+        {
+          "bbox": [
+            220,
+            315,
+            1060,
+            350
+          ],
+          "expected": "MARK SERVICE TYPE CFM RPM ESP IN WG MAX SONES HP ELECTRICAL DATA VOLTS PH FLA NOTES"
+        }
+      ],
+      "source_component": "schedules_air_ops_m603_compact.json"
+    },
+    {
+      "id": "AIR-OPS-AIR-SEPARATOR",
+      "page": 44,
+      "sheet": "M-603",
+      "building_scope": "Air Operations",
+      "title": "AIR SEPARATOR SCHEDULE",
+      "classification": "Air separators",
+      "columns": "mark|system_type|type|flowrate_GPM|pipe_size|max_pressure_drop_ft_wc|notes",
+      "x_edges": [
+        220,
+        335,
+        480,
+        565,
+        700,
+        770,
+        900,
+        960
+      ],
+      "y_edges": [
+        1263,
+        1280,
+        1297
+      ],
+      "rows": [
+        "AS-CHW-A1|CHILLED WATER|INLINE|171|4\"|2|",
+        "AS-HHW-A1|HEATING HOT WATER|INLINE|51|2 1/2\"|2|"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            450,
+            1185,
+            780,
+            1230
+          ],
+          "expected": "AIR SEPARATOR SCHEDULE"
+        },
+        {
+          "bbox": [
+            220,
+            1230,
+            960,
+            1263
+          ],
+          "expected": "MARK SYSTEM TYPE TYPE FLOW RATE GPM PIPE SIZE MAX PRESSURE DROP FT WC NOTES"
+        }
+      ],
+      "source_component": "schedules_air_ops_m603_compact.json"
+    },
+    {
+      "id": "AIR-OPS-EXPANSION-TANK",
+      "page": 44,
+      "sheet": "M-603",
+      "building_scope": "Air Operations",
+      "title": "EXPANSION TANK SCHEDULE",
+      "classification": "Expansion tanks",
+      "columns": "mark|system_type|total_volume_gal|acceptance_volume_gal|max_pressure_psig|max_temp_F|notes",
+      "x_edges": [
+        220,
+        340,
+        480,
+        620,
+        750,
+        850,
+        970,
+        1070
+      ],
+      "y_edges": [
+        1386,
+        1403,
+        1420
+      ],
+      "rows": [
+        "ET-CHW-A1|CHILLED WATER|11.0|5.0|125|95.0|",
+        "ET-HHW-A1|HEATING HOT WATER|8.0|5.0|125|130.0|"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            520,
+            1305,
+            900,
+            1350
+          ],
+          "expected": "EXPANSION TANK SCHEDULE"
+        },
+        {
+          "bbox": [
+            220,
+            1350,
+            1070,
+            1386
+          ],
+          "expected": "MARK SYSTEM TYPE TOTAL VOLUME GAL ACCEPTANCE VOLUME GAL MAX PRESSURE PSIG MAX TEMP F NOTES"
+        }
+      ],
+      "source_component": "schedules_air_ops_m603_compact.json"
+    },
+    {
+      "id": "AIR-OPS-DEHUMIDIFIER",
+      "page": 44,
+      "sheet": "M-603",
+      "building_scope": "Air Operations",
+      "title": "DEHUMIDIFIER SCHEDULE",
+      "classification": "Dehumidifiers",
+      "columns": "mark|dry_bulb_F|relative_humidity_percent|capacity_pints_per_hr|FLA|V_PH_HZ|notes",
+      "x_edges": [
+        1730,
+        1810,
+        1880,
+        1950,
+        2005,
+        2055,
+        2135,
+        2230
+      ],
+      "y_edges": [
+        975,
+        993,
+        1010,
+        1027,
+        1045,
+        1062,
+        1080
+      ],
+      "rows": [
+        "DH-A1|90|38|5.3|13.1|120/1/60|1,2",
+        "DH-A2|90|38|5.3|13.1|120/1/60|2",
+        "DH-A3|80|50|6.5|13.1|120/1/60|1,2",
+        "DH-A4|90|38|5.3|13.1|120/1/60|1,2",
+        "DH-A5|90|38|5.3|13.1|120/1/60|1,2",
+        "DH-A6|75|60|5.7|13.1|120/1/60|2"
+      ],
+      "notes": [
+        "1. PROVIDE WITH INTERNAL CONDENSATE PUMP. PUMP SHALL BE CAPABLE OF LIFTING SCHEDULED CONDENSATE CAPACITY BY 17 FT WC.",
+        "2. UNITS SHALL BE PLUG IN. PROVIDE WITH CORD AND PLUG."
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1845,
+            900,
+            2095,
+            940
+          ],
+          "expected": "DEHUMIDIFIER SCHEDULE"
+        },
+        {
+          "bbox": [
+            1730,
+            940,
+            2230,
+            975
+          ],
+          "expected": "MARK F DB RH CAPACITY PINTS/HR FLA V/PH/HZ NOTES"
+        }
+      ],
+      "source_component": "schedules_air_ops_m603_compact.json"
+    },
+    {
+      "id": "AIR-OPS-VAV",
+      "page": 43,
+      "sheet": "M-602",
+      "building_scope": "Air Operations",
+      "title": "VARIABLE AIR VOLUME TERMINAL BOX",
+      "classification": "Series fan-powered variable-air-volume terminal boxes with hot-water heating coils",
+      "columns": "mark|unit_type|served_by|people|design_outdoor_air_CFM|fan_airflow_CFM|max_primary_airflow_CFM|min_primary_airflow_CFM|heating_capacity_MBH|heating_EAT_F|heating_LAT_F|heating_EWT_F|heating_flowrate_GPM|max_heating_water_pressure_drop_ft_water_column|HHW_inlet_size_in|VAV_box_inlet_diameter_in|min_inlet_pressure_in_water_column|sound_level_max_NC|motor_HP|volts_phase_Hz|FLA|notes",
+      "x_edges": [
+        160,
+        250,
+        450,
+        540,
+        585,
+        640,
+        725,
+        815,
+        905,
+        1000,
+        1040,
+        1095,
+        1155,
+        1260,
+        1370,
+        1445,
+        1535,
+        1610,
+        1685,
+        1760,
+        1850,
+        1910,
+        1980
+      ],
+      "y_ranges": [
+        [
+          950,
+          968
+        ],
+        [
+          968,
+          985
+        ],
+        [
+          985,
+          1002
+        ],
+        [
+          1002,
+          1019
+        ],
+        [
+          1019,
+          1037
+        ],
+        [
+          1037,
+          1054
+        ],
+        [
+          1054,
+          1071
+        ],
+        [
+          1071,
+          1089
+        ],
+        [
+          1089,
+          1106
+        ],
+        [
+          1106,
+          1123
+        ],
+        [
+          1123,
+          1140
+        ],
+        [
+          1140,
+          1157
+        ],
+        [
+          1157,
+          1174
+        ],
+        [
+          1174,
+          1191
+        ],
+        [
+          1191,
+          1208
+        ],
+        [
+          1208,
+          1225
+        ],
+        [
+          1225,
+          1242
+        ],
+        [
+          1242,
+          1259
+        ],
+        [
+          1259,
+          1276
+        ],
+        [
+          1276,
+          1293
+        ],
+        [
+          1293,
+          1310
+        ],
+        [
+          1310,
+          1328
+        ],
+        [
+          1328,
+          1345
+        ],
+        [
+          1345,
+          1362
+        ],
+        [
+          1362,
+          1379
+        ],
+        [
+          1379,
+          1397
+        ],
+        [
+          1397,
+          1415
+        ]
+      ],
+      "rows": [
+        "VAV-A101|SERIES FAN POWERED|AHU-A1|4|90|660|440|260|15.8|62.9|85|130|1.6|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A102|SERIES FAN POWERED|AHU-A1|13|125|350|290|240|9.8|59.1|85|130|1.0|10|3/4|6|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A103|SERIES FAN POWERED|AHU-A1|3|50|420|410|140|9.0|65.2|85|130|0.9|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A104|SERIES FAN POWERED|AHU-A1|4|50|280|180|130|7.0|62.0|85|130|0.7|10|3/4|6|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A105|SERIES FAN POWERED|AHU-A1|2|25|160|120|40|3.5|64.8|85|130|0.5|10|3/4|5|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A106A|SERIES FAN POWERED|AHU-A1|6|50|1020|1020|310|23.1|64.0|85|130|2.4|10|3/4|10|0.5|30|1/2|120/1/60|7.1|1,2,3,4,5",
+        "VAV-A106B|SERIES FAN POWERED|AHU-A1|6|80|670|550|170|14.7|64.7|85|130|1.5|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A107|SERIES FAN POWERED|AHU-A1|0|95|1290|440|200|27.1|65.6|85|130|2.8|10|3/4|12|0.5|30|1/2|120/1/60|7.1|1,2,3,4,5",
+        "VAV-A108A|SERIES FAN POWERED|AHU-A1|4|40|760|760|230|16.6|64.8|85|130|1.7|10|3/4|10|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A108B|SERIES FAN POWERED|AHU-A1|4|70|660|420|130|13.9|65.4|85|130|1.4|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A109|SERIES FAN POWERED|AHU-A1|4|55|450|400|140|10.2|64.0|85|130|1.1|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A110|SERIES FAN POWERED|AHU-A1|4|55|310|210|80|6.8|64.6|85|130|0.7|10|3/4|6|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A111|SERIES FAN POWERED|AHU-A1|9|75|380|280|170|9.4|62.2|85|130|1.0|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A112|SERIES FAN POWERED|AHU-A1|8|70|740|740|230|16.8|64.0|85|130|1.7|10|3/4|10|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A113|SERIES FAN POWERED|AHU-A1|11|105|460|380|120|11.0|62.9|85|130|1.1|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A114|SERIES FAN POWERED|AHU-A1|1|10|170|170|170|5.5|55|85|130|0.6|10|3/4|5|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A115|SERIES FAN POWERED|AHU-A2|53|470|910|910|560|24.6|62.4|85|130|2.5|10|3/4|10|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A116|SERIES FAN POWERED|AHU-A2|8|105|440|400|190|10.7|64.1|85|130|1.1|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A117|SERIES FAN POWERED|AHU-A2|3|35|300|270|90|6.8|59.5|85|130|0.7|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A118|SERIES FAN POWERED|AHU-A2|65|565|1060|1060|690|29.1|64.8|85|130|3.0|10|3/4|10|0.5|30|1/2|120/1/60|7.1|1,2,3,4,5",
+        "VAV-A201|SERIES FAN POWERED|AHU-A1|2|45|380|340|220|11.5|57.1|85|130|1.2|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A202|SERIES FAN POWERED|AHU-A1|2|35|440|390|120|9.8|64.5|85|130|1.0|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A203A|SERIES FAN POWERED|AHU-A1|25|165|560|560|310|14.2|61.5|85|130|1.5|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A203B|SERIES FAN POWERED|AHU-A1|14|110|1160|1160|580|25.4|64.8|85|130|2.6|10|3/4|10|0.5|30|1/2|120/1/60|7.1|1,2,3,4,5",
+        "VAV-A204|SERIES FAN POWERED|AHU-A1|7|75|530|500|150|11.6|64.8|85|130|1.2|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A205|SERIES FAN POWERED|AHU-A1|2|20|240|240|80|7.6|55.5|85|130|0.8|10|3/4|5|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-A206|SERIES FAN POWERED|AHU-A1|1|15|270|210|120|6.6|62.2|85|130|0.7|10|3/4|6|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5"
+      ],
+      "notes": [
+        "1. PROVIDE WITH 120V/60HZ/1PH CONTROL VOLTAGE TRANSFORMER.",
+        "2. PROVIDE WITH UNIT MOUNTED DISCONNECT.",
+        "3. PROVIDE EC TYPE MOTOR. EC MOTORS SHALL BE PROVIDED WITH EQUIPMENT TO PREVENT ADDING HARMONICS TO ELECTRICAL SYSTEM (INDUCTOR, ETC.) AND SHALL BE PROGRAMMED TO PREVENT EC MOTOR OVERSPEED.",
+        "4. NUMBER OF OCCUPANTS SHOWN FOR INFORMATIONAL PURPOSES ONLY.",
+        "5. PROVIDE WITH ATTENUATOR IF REQUIRED TO ACHIEVE DESIRED NC LEVELS."
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            870,
+            855,
+            1265,
+            885
+          ],
+          "expected": "VARIABLE AIR VOLUME TERMINAL BOX"
+        },
+        {
+          "bbox": [
+            160,
+            885,
+            1980,
+            949
+          ],
+          "expected": "MARK UNIT TYPE SERVED BY OF PEOPLE DESIGN OA CFM FAN AIRFLOW CFM MAX PRIMARY AIRFLOW CFM MIN PRIMARY AIRFLOW CFM HOT WATER HEATING COIL DATA CAPACITY MBH EAT F LAT F EWT F FLOWRATE GPM MAX WATER PRESSURE DROP FT WC HHW INLET SIZE IN VAV BOX INLET DIAMETER IN MIN INLET PRESS IN WC SOUND LEVEL MAX NC ELECTRICAL MOTOR HP VOLTS PH HZ FLA NOTES"
+        }
+      ],
+      "source_component": "schedules_air_ops_vav.json"
+    },
+    {
+      "id": "M621-AHU-MARKS",
+      "page": 48,
+      "sheet": "M-621",
+      "title": "AIR HANDLING UNIT SCHEDULE",
+      "classification": "ATCT air-handling unit schedule",
+      "columns": "mark",
+      "x_edges": [
+        115,
+        180
+      ],
+      "y_ranges": [
+        [
+          173,
+          191
+        ],
+        [
+          192,
+          209
+        ]
+      ],
+      "rows": [
+        "AHU-T1A",
+        "AHU-T1B"
+      ],
+      "source_component": "schedules_atct_m621.json"
+    },
+    {
+      "id": "M621-FCU-MARKS",
+      "page": 48,
+      "sheet": "M-621",
+      "title": "FAN COIL UNIT SCHEDULE",
+      "classification": "ATCT fan-coil unit schedule",
+      "columns": "mark",
+      "x_edges": [
+        115,
+        175
+      ],
+      "y_ranges": [
+        [
+          427,
+          445
+        ],
+        [
+          446,
+          462
+        ],
+        [
+          463,
+          480
+        ],
+        [
+          481,
+          497
+        ],
+        [
+          498,
+          514
+        ],
+        [
+          515,
+          532
+        ],
+        [
+          533,
+          549
+        ],
+        [
+          550,
+          566
+        ],
+        [
+          567,
+          583
+        ],
+        [
+          584,
+          600
+        ],
+        [
+          601,
+          617
+        ],
+        [
+          618,
+          635
+        ],
+        [
+          636,
+          652
+        ],
+        [
+          653,
+          669
+        ],
+        [
+          670,
+          686
+        ],
+        [
+          687,
+          704
+        ],
+        [
+          705,
+          721
+        ],
+        [
+          722,
+          739
+        ]
+      ],
+      "rows": [
+        "FCU-T1",
+        "FCU-T2",
+        "FCU-T3",
+        "FCU-T4",
+        "FCU-T5A",
+        "FCU-T5B",
+        "FCU-T6",
+        "FCU-T7A",
+        "FCU-T7B",
+        "FCU-T8",
+        "FCU-T9",
+        "FCU-T10",
+        "FCU-T11",
+        "FCU-T12",
+        "FCU-T13",
+        "FCU-T14",
+        "FCU-T15",
+        "FCU-T16"
+      ],
+      "source_component": "schedules_atct_m621.json"
+    },
+    {
+      "id": "M621-CRAH-MARKS",
+      "page": 48,
+      "sheet": "M-621",
+      "title": "COMPUTER ROOM AIR HANDLER TYPE SCHEDULE",
+      "classification": "ATCT computer-room air-handler type schedule",
+      "columns": "mark",
+      "x_edges": [
+        110,
+        180
+      ],
+      "y_ranges": [
+        [
+          950,
+          968
+        ],
+        [
+          969,
+          986
+        ]
+      ],
+      "rows": [
+        "CRAH-T1A",
+        "CRAH-T1B"
+      ],
+      "source_component": "schedules_atct_m621.json"
+    },
+    {
+      "id": "M621-FAN-MARKS",
+      "page": 48,
+      "sheet": "M-621",
+      "title": "FAN SCHEDULE",
+      "classification": "ATCT exhaust/stair-pressurization fan schedule",
+      "columns": "mark",
+      "x_edges": [
+        125,
+        180
+      ],
+      "y_ranges": [
+        [
+          1158,
+          1177
+        ],
+        [
+          1178,
+          1195
+        ],
+        [
+          1196,
+          1212
+        ],
+        [
+          1213,
+          1230
+        ]
+      ],
+      "rows": [
+        "EF-T1",
+        "EF-T2",
+        "SPF-T1",
+        "SPF-T2"
+      ],
+      "source_component": "schedules_atct_m621.json"
+    },
+    {
+      "id": "M621-HUMIDIFIER-MARKS",
+      "page": 48,
+      "sheet": "M-621",
+      "title": "HUMIDIFIER SCHEDULE",
+      "classification": "ATCT humidifier schedule",
+      "columns": "mark",
+      "x_edges": [
+        1525,
+        1570
+      ],
+      "y_ranges": [
+        [
+          812,
+          830
+        ],
+        [
+          831,
+          848
+        ],
+        [
+          849,
+          865
+        ],
+        [
+          866,
+          882
+        ],
+        [
+          883,
+          900
+        ]
+      ],
+      "rows": [
+        "H-T1",
+        "H-T2",
+        "H-T3",
+        "H-T4",
+        "H-T5"
+      ],
+      "source_component": "schedules_atct_m621.json"
+    },
+    {
+      "id": "M621-CABINET-UNIT-HEATER-MARKS",
+      "page": 48,
+      "sheet": "M-621",
+      "title": "CABINET UNIT HEATER SCHEDULE",
+      "classification": "ATCT cabinet-unit-heater schedule",
+      "columns": "mark",
+      "x_edges": [
+        1370,
+        1430
+      ],
+      "y_ranges": [
+        [
+          1125,
+          1143
+        ],
+        [
+          1144,
+          1161
+        ]
+      ],
+      "rows": [
+        "CUH-T1",
+        "CUH-T2"
+      ],
+      "source_component": "schedules_atct_m621.json"
+    },
+    {
+      "id": "M621-PUMP-MARKS",
+      "page": 48,
+      "sheet": "M-621",
+      "title": "PUMP SCHEDULE",
+      "classification": "ATCT pump schedule",
+      "columns": "mark",
+      "x_edges": [
+        1260,
+        1355
+      ],
+      "y_ranges": [
+        [
+          1288,
+          1305
+        ],
+        [
+          1306,
+          1322
+        ],
+        [
+          1323,
+          1339
+        ],
+        [
+          1340,
+          1357
+        ],
+        [
+          1358,
+          1375
+        ],
+        [
+          1376,
+          1392
+        ],
+        [
+          1393,
+          1410
+        ]
+      ],
+      "rows": [
+        "HHWP-DOAH-T1",
+        "PHHWP-T1",
+        "PHHWP-T2",
+        "SCHWP-T1",
+        "SCHWP-T2",
+        "SHHWP-T1",
+        "SHHWP-T2"
+      ],
+      "source_component": "schedules_atct_m621.json"
+    },
+    {
+      "id": "M621-BOILER-MARKS",
+      "page": 48,
+      "sheet": "M-621",
+      "title": "BOILER SCHEDULE",
+      "classification": "ATCT condensing-boiler schedule",
+      "columns": "mark",
+      "x_edges": [
+        130,
+        175
+      ],
+      "y_ranges": [
+        [
+          1417,
+          1435
+        ],
+        [
+          1436,
+          1454
+        ]
+      ],
+      "rows": [
+        "B-T1",
+        "B-T2"
+      ],
+      "source_component": "schedules_atct_m621.json"
+    },
+    {
+      "id": "M611-AHU-MARKS",
+      "page": 45,
+      "sheet": "M-611",
+      "title": "AIR HANDLING UNIT SCHEDULE",
+      "classification": "MTRACON air-handling unit schedule",
+      "columns": "mark",
+      "x_edges": [
+        160,
+        220
+      ],
+      "y_ranges": [
+        [
+          140,
+          160
+        ]
+      ],
+      "rows": [
+        "AHU-M1"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            150,
+            55,
+            1710,
+            125
+          ],
+          "expected": "AIR HANDLING UNIT SCHEDULE"
+        }
+      ],
+      "source_component": "schedules_mtracon_m611.json"
+    },
+    {
+      "id": "M611-FCU-MARKS",
+      "page": 45,
+      "sheet": "M-611",
+      "title": "FAN COIL UNIT SCHEDULE",
+      "classification": "MTRACON fan-coil unit schedule",
+      "columns": "mark",
+      "x_edges": [
+        150,
+        210
+      ],
+      "y_ranges": [
+        [
+          350,
+          369
+        ],
+        [
+          370,
+          386
+        ],
+        [
+          387,
+          403
+        ],
+        [
+          404,
+          421
+        ],
+        [
+          422,
+          438
+        ],
+        [
+          439,
+          455
+        ],
+        [
+          456,
+          472
+        ],
+        [
+          473,
+          490
+        ],
+        [
+          491,
+          507
+        ],
+        [
+          508,
+          524
+        ]
+      ],
+      "rows": [
+        "FCU-M1A",
+        "FCU-M1B",
+        "FCU-M2A",
+        "FCU-M2B",
+        "FCU-M3",
+        "FCU-M4A",
+        "FCU-M4B",
+        "FCU-M5",
+        "FCU-M6",
+        "FCU-M7"
+      ],
+      "source_component": "schedules_mtracon_m611.json"
+    },
+    {
+      "id": "M611-PUMP-MARKS",
+      "page": 45,
+      "sheet": "M-611",
+      "title": "PUMP SCHEDULE",
+      "classification": "MTRACON pump schedule",
+      "columns": "mark",
+      "x_edges": [
+        150,
+        240
+      ],
+      "y_ranges": [
+        [
+          698,
+          717
+        ],
+        [
+          718,
+          734
+        ],
+        [
+          735,
+          751
+        ],
+        [
+          752,
+          769
+        ],
+        [
+          770,
+          786
+        ],
+        [
+          787,
+          803
+        ],
+        [
+          804,
+          820
+        ],
+        [
+          821,
+          838
+        ],
+        [
+          839,
+          855
+        ],
+        [
+          856,
+          872
+        ],
+        [
+          873,
+          890
+        ]
+      ],
+      "rows": [
+        "HHWP-DOAH-M1",
+        "HRHWP-MT1",
+        "HRHWP-MT2",
+        "PCHWP-MT1",
+        "PCHWP-MT2",
+        "PHHWP-M1",
+        "PHHWP-M2",
+        "SCHWP-M1",
+        "SCHWP-M2",
+        "SHHWP-M1",
+        "SHHWP-M2"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            150,
+            630,
+            1290,
+            700
+          ],
+          "expected": "PUMP SCHEDULE"
+        }
+      ],
+      "source_component": "schedules_mtracon_m611.json"
+    },
+    {
+      "id": "M611-BOILER-MARKS",
+      "page": 45,
+      "sheet": "M-611",
+      "title": "BOILER SCHEDULE",
+      "classification": "MTRACON condensing-boiler schedule",
+      "columns": "mark",
+      "x_edges": [
+        1325,
+        1370
+      ],
+      "y_ranges": [
+        [
+          680,
+          699
+        ],
+        [
+          700,
+          718
+        ]
+      ],
+      "rows": [
+        "B-M1",
+        "B-M2"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1310,
+            620,
+            2240,
+            680
+          ],
+          "expected": "BOILER SCHEDULE"
+        }
+      ],
+      "source_component": "schedules_mtracon_m611.json"
+    },
+    {
+      "id": "M611-UNIT-HEATER-MARKS",
+      "page": 45,
+      "sheet": "M-611",
+      "title": "UNIT HEATER SCHEDULE",
+      "classification": "MTRACON unit-heater schedule",
+      "columns": "mark",
+      "x_edges": [
+        1330,
+        1380
+      ],
+      "y_ranges": [
+        [
+          858,
+          878
+        ]
+      ],
+      "rows": [
+        "UH-M1"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1310,
+            810,
+            2240,
+            860
+          ],
+          "expected": "UNIT HEATER SCHEDULE"
+        }
+      ],
+      "source_component": "schedules_mtracon_m611.json"
+    },
+    {
+      "id": "M611-CHILLER-MARKS",
+      "page": 45,
+      "sheet": "M-611",
+      "title": "AIR COOLED HEAT RECOVERY CHILLER SCHEDULE",
+      "classification": "MTRACON air-cooled heat-recovery chiller schedule",
+      "columns": "mark",
+      "x_edges": [
+        155,
+        210
+      ],
+      "y_ranges": [
+        [
+          1115,
+          1135
+        ],
+        [
+          1136,
+          1153
+        ]
+      ],
+      "rows": [
+        "CH-MT1",
+        "CH-MT2"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            150,
+            1020,
+            1550,
+            1080
+          ],
+          "expected": "AIR COOLED HEAT RECOVERY CHILLER SCHEDULE"
+        }
+      ],
+      "source_component": "schedules_mtracon_m611.json"
+    },
+    {
+      "id": "M611-AIR-SEPARATOR-MARKS",
+      "page": 45,
+      "sheet": "M-611",
+      "title": "AIR SEPARATOR SCHEDULE",
+      "classification": "MTRACON air-separator schedule",
+      "columns": "mark",
+      "x_edges": [
+        1635,
+        1710
+      ],
+      "y_ranges": [
+        [
+          1083,
+          1103
+        ],
+        [
+          1104,
+          1120
+        ]
+      ],
+      "rows": [
+        "AS-CHW-M1",
+        "AS-HHW-M1"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            1620,
+            1010,
+            2220,
+            1085
+          ],
+          "expected": "AIR SEPARATOR SCHEDULE"
+        }
+      ],
+      "source_component": "schedules_mtracon_m611.json"
+    },
+    {
+      "id": "M611-CRAH-MARKS",
+      "page": 45,
+      "sheet": "M-611",
+      "title": "COMPUTER ROOM AIR HANDLER TYPE SCHEDULE",
+      "classification": "MTRACON computer-room air-handler type schedule",
+      "columns": "mark",
+      "x_edges": [
+        150,
+        220
+      ],
+      "y_ranges": [
+        [
+          1365,
+          1385
+        ],
+        [
+          1386,
+          1403
+        ],
+        [
+          1404,
+          1420
+        ],
+        [
+          1421,
+          1438
+        ]
+      ],
+      "rows": [
+        "CRAH-M1A",
+        "CRAH-M1B",
+        "CRAH-M2A",
+        "CRAH-M2B"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            150,
+            1300,
+            1840,
+            1365
+          ],
+          "expected": "COMPUTER ROOM AIR HANDLER TYPE SCHEDULE"
+        }
+      ],
+      "source_component": "schedules_mtracon_m611.json"
+    },
+    {
+      "id": "M612-DOAH-M1-PART-1",
+      "page": 46,
+      "sheet": "M-612",
+      "title": "DEDICATED OUTDOOR AIR UNIT SCHEDULE 1 OF 2",
+      "classification": "MTRACON dedicated outdoor air unit schedule \u2014 cooling/heating section",
+      "columns": "mark",
+      "x_edges": [
+        150,
+        220
+      ],
+      "y_ranges": [
+        [
+          771,
+          793
+        ]
+      ],
+      "rows": [
+        "DOAH-M1"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            150,
+            700,
+            1830,
+            770
+          ],
+          "expected": "DEDICATED OUTDOOR AIR UNIT SCHEDULE 1 OF 2"
+        }
+      ],
+      "source_component": "schedules_mtracon_m612_aux.json"
+    },
+    {
+      "id": "M612-RANGE-HOOD-MARKS",
+      "page": 46,
+      "sheet": "M-612",
+      "title": "RANGE HOOD SCHEDULE",
+      "classification": "MTRACON range-hood schedule",
+      "columns": "mark",
+      "x_edges": [
+        1580,
+        1630
+      ],
+      "y_ranges": [
+        [
+          1443,
+          1461
+        ],
+        [
+          1462,
+          1479
+        ],
+        [
+          1480,
+          1497
+        ]
+      ],
+      "rows": [
+        "RH-M1",
+        "RH-M2",
+        "RH-M3"
+      ],
+      "source_component": "schedules_mtracon_m612_aux.json"
+    },
+    {
+      "id": "M613-GRD-MARKS",
+      "page": 47,
+      "sheet": "M-613",
+      "title": "GRILLE, REGISTER, AND DIFFUSER SCHEDULE",
+      "classification": "MTRACON air-device schedule",
+      "columns": "mark",
+      "x_edges": [
+        1340,
+        1395
+      ],
+      "y_ranges": [
+        [
+          324,
+          342
+        ],
+        [
+          343,
+          360
+        ],
+        [
+          361,
+          377
+        ],
+        [
+          378,
+          395
+        ],
+        [
+          396,
+          412
+        ],
+        [
+          413,
+          430
+        ],
+        [
+          431,
+          447
+        ],
+        [
+          448,
+          464
+        ],
+        [
+          465,
+          481
+        ],
+        [
+          482,
+          498
+        ],
+        [
+          499,
+          516
+        ],
+        [
+          517,
+          533
+        ],
+        [
+          534,
+          550
+        ],
+        [
+          551,
+          567
+        ],
+        [
+          568,
+          584
+        ],
+        [
+          585,
+          601
+        ],
+        [
+          602,
+          618
+        ],
+        [
+          619,
+          636
+        ],
+        [
+          637,
+          653
+        ],
+        [
+          654,
+          671
+        ]
+      ],
+      "rows": [
+        "CD-1",
+        "CD-2",
+        "CD-3",
+        "CD-4",
+        "CD-5",
+        "EG-1",
+        "EG-2",
+        "EG-3",
+        "RG-1",
+        "RG-2",
+        "RG-3",
+        "RG-4",
+        "RG-5",
+        "RG-6",
+        "RG-7",
+        "RG-8",
+        "RG-9",
+        "TG-1",
+        "TG-2",
+        "TG-3"
+      ],
+      "source_component": "schedules_mtracon_m613_aux.json"
+    },
+    {
+      "id": "M613-HUMIDIFIER-MARKS",
+      "page": 47,
+      "sheet": "M-613",
+      "title": "HUMIDIFIER SCHEDULE",
+      "classification": "MTRACON humidifier schedule",
+      "columns": "mark",
+      "x_edges": [
+        1350,
+        1400
+      ],
+      "y_ranges": [
+        [
+          836,
+          854
+        ],
+        [
+          855,
+          872
+        ],
+        [
+          873,
+          889
+        ],
+        [
+          890,
+          907
+        ],
+        [
+          908,
+          924
+        ],
+        [
+          925,
+          942
+        ]
+      ],
+      "rows": [
+        "H-M1",
+        "H-M2",
+        "H-M3",
+        "H-M4",
+        "H-M5",
+        "H-M6"
+      ],
+      "source_component": "schedules_mtracon_m613_aux.json"
+    },
+    {
+      "id": "M613-DEHUMIDIFIER-MARKS",
+      "page": 47,
+      "sheet": "M-613",
+      "title": "DEHUMIDIFIER SCHEDULE",
+      "classification": "MTRACON dehumidifier schedule",
+      "columns": "mark",
+      "x_edges": [
+        1350,
+        1400
+      ],
+      "y_ranges": [
+        [
+          1160,
+          1178
+        ],
+        [
+          1179,
+          1196
+        ],
+        [
+          1197,
+          1214
+        ]
+      ],
+      "rows": [
+        "DH-M1",
+        "DH-M2",
+        "DH-M3"
+      ],
+      "source_component": "schedules_mtracon_m613_aux.json"
+    },
+    {
+      "id": "M613-FAN-MARKS",
+      "page": 47,
+      "sheet": "M-613",
+      "title": "FAN SCHEDULE",
+      "classification": "MTRACON UPS exhaust-fan schedule",
+      "columns": "mark",
+      "x_edges": [
+        190,
+        245
+      ],
+      "y_ranges": [
+        [
+          1202,
+          1220
+        ]
+      ],
+      "rows": [
+        "EF-M1"
+      ],
+      "source_component": "schedules_mtracon_m613_aux.json"
+    },
+    {
+      "id": "M613-EXPANSION-TANK-MARKS",
+      "page": 47,
+      "sheet": "M-613",
+      "title": "EXPANSION TANK SCHEDULE",
+      "classification": "MTRACON expansion-tank schedule",
+      "columns": "mark",
+      "x_edges": [
+        175,
+        260
+      ],
+      "y_ranges": [
+        [
+          1410,
+          1428
+        ],
+        [
+          1429,
+          1446
+        ]
+      ],
+      "rows": [
+        "ET-CHW-MT1",
+        "ET-HW-MT1"
+      ],
+      "source_component": "schedules_mtracon_m613_aux.json"
+    },
+    {
+      "id": "M613-CABINET-UNIT-HEATER-MARKS",
+      "page": 47,
+      "sheet": "M-613",
+      "title": "CABINET UNIT HEATER SCHEDULE",
+      "classification": "MTRACON cabinet-unit-heater schedule",
+      "columns": "mark",
+      "x_edges": [
+        840,
+        910
+      ],
+      "y_ranges": [
+        [
+          1444,
+          1463
+        ]
+      ],
+      "rows": [
+        "CUH-M1"
+      ],
+      "source_component": "schedules_mtracon_m613_aux.json"
+    },
+    {
+      "id": "MTRACON-VAV",
+      "page": 46,
+      "sheet": "M-612",
+      "building_scope": "MTRACON",
+      "title": "VARIABLE AIR VOLUME TERMINAL BOX",
+      "classification": "Series fan-powered variable-air-volume terminal boxes with hot-water heating coils",
+      "columns": "mark|unit_type|served_by|people|design_outdoor_air_CFM|fan_airflow_CFM|max_primary_airflow_CFM|min_primary_airflow_CFM|heating_capacity_MBH|heating_EAT_F|heating_LAT_F|heating_EWT_F|heating_flowrate_GPM|max_heating_water_pressure_drop_ft_water_column|HHW_inlet_size_in|VAV_box_inlet_diameter_in|min_inlet_pressure_in_water_column|sound_level_max_NC|motor_HP|volts_phase_Hz|FLA|notes",
+      "x_edges": [
+        150,
+        250,
+        410,
+        490,
+        550,
+        630,
+        710,
+        780,
+        860,
+        930,
+        975,
+        1020,
+        1080,
+        1170,
+        1280,
+        1370,
+        1460,
+        1530,
+        1600,
+        1670,
+        1770,
+        1820,
+        1910
+      ],
+      "y_edges": [
+        156,
+        174,
+        191,
+        208,
+        225,
+        243,
+        260,
+        277,
+        294,
+        312,
+        329,
+        346,
+        363,
+        381,
+        398,
+        415,
+        432,
+        449,
+        467,
+        484,
+        501,
+        518,
+        536,
+        553,
+        570,
+        588
+      ],
+      "rows": [
+        "VAV-M101|SERIES FAN POWERED|AHU-M1|5|71|510|420|140|10.0|63|85|130|1.0|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M102|SERIES FAN POWERED|AHU-M1|3|38|220|220|70|5.0|64|85|130|0.6|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M103|SERIES FAN POWERED|AHU-M1|6|76|660|620|250|14.9|63|85|130|1.5|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M104|SERIES FAN POWERED|AHU-M1|21|219|820|720|410|22.6|56|85|130|2.3|10|3/4|10|0.5|30|1/2|120/1/60|7.1|1,2,3,4,5",
+        "VAV-M105|SERIES FAN POWERED|AHU-M1|7|77|480|400|120|9.2|64|85|130|1.0|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M106|SERIES FAN POWERED|AHU-M1|12|76|370|370|120|8.5|64|85|130|0.9|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M107|SERIES FAN POWERED|AHU-M1|6|71|640|640|200|14.6|64|85|130|1.5|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M108|SERIES FAN POWERED|AHU-M1|4|32|250|250|80|5.7|64|85|130|0.6|10|3/4|5|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M109|SERIES FAN POWERED|AHU-M1|20|238|2250|2250|680|50.9|64|85|130|5.1|10|1.0|16|0.5|30|1|460/3/60|12.0|1,2,3,4,5",
+        "VAV-M110|SERIES FAN POWERED|AHU-M1|7|57|260|240|80|5.8|63|85|130|0.6|10|3/4|5|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M111|SERIES FAN POWERED|AHU-M1|17|178|590|580|340|16.7|58|85|130|1.7|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M112|SERIES FAN POWERED|AHU-M1|25|232|830|770|470|22.0|59|85|130|2.2|10|3/4|10|0.5|30|1/2|120/1/60|7.1|1,2,3,4,5",
+        "VAV-M113|SERIES FAN POWERED|AHU-M1|30|202|610|590|300|15.6|61|85|130|1.6|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M114|SERIES FAN POWERED|AHU-M1|30|276|600|590|420|17.6|57|85|130|1.8|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M115|SERIES FAN POWERED|AHU-M1|1|11|230|210|70|6.8|55|85|130|0.7|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M116|SERIES FAN POWERED|AHU-M1|1|12|170|130|40|2.9|64|85|130|0.5|10|3/4|5|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M117|SERIES FAN POWERED|AHU-M1|10|86|360|290|140|8.1|59|85|130|0.9|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M118|SERIES FAN POWERED|AHU-M1|6|77|510|440|210|12.3|59|85|130|1.3|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M119|SERIES FAN POWERED|AHU-M1|2|20|130|130|40|2.9|64|85|130|0.5|10|3/4|6|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M120|SERIES FAN POWERED|AHU-M1|3|23|210|210|70|4.8|64|85|130|0.5|10|3/4|6|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M121|SERIES FAN POWERED|AHU-M1|10|65|270|270|90|6.5|63|85|130|0.7|10|3/4|6|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M122|SERIES FAN POWERED|AHU-M1|4|41|260|260|80|5.9|64|85|130|0.6|10|3/4|6|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M123|SERIES FAN POWERED|AHU-M1|9|120|880|650|200|14.7|64|85|130|1.5|10|3/4|8|0.5|30|1/2|120/1/60|7.1|1,2,3,4,5",
+        "VAV-M124|SERIES FAN POWERED|AHU-M1|0|48|300|300|100|9.7|55|85|130|1.0|10|3/4|6|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5",
+        "VAV-M125|SERIES FAN POWERED|AHU-M1|4|98|540|540|180|17.5|55|85|130|1.8|10|3/4|8|0.5|30|1/3|120/1/60|4.6|1,2,3,4,5"
+      ],
+      "notes": [
+        "1. PROVIDE WITH 120V/60HZ/1PH CONTROL VOLTAGE TRANSFORMER.",
+        "2. PROVIDE WITH UNIT MOUNTED DISCONNECT.",
+        "3. MOTOR SHALL BE EC TYPE. EC MOTORS SHALL BE PROVIDED WITH EQUIPMENT TO PREVENT ADDING HARMONICS TO ELECTRICAL SYSTEM (INDUCTOR, ETC.) AND SHALL BE PROGRAMMED TO PREVENT EC MOTOR OVERSPEED.",
+        "4. NUMBER OF OCCUPANTS SHOWN FOR INFORMATION ONLY.",
+        "5. PROVIDE WITH ATTENUATOR IF REQUIRED TO ACHIEVE DESIRED NC LEVELS."
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            850,
+            55,
+            1215,
+            90
+          ],
+          "expected": "VARIABLE AIR VOLUME TERMINAL BOX"
+        },
+        {
+          "bbox": [
+            150,
+            90,
+            1910,
+            156
+          ],
+          "expected": "MARK UNIT TYPE SERVED BY PEOPLE DESIGN OA CFM FAN AIRFLOW CFM MAX PRIMARY AIRFLOW CFM MIN PRIMARY AIRFLOW CFM HOT WATER HEATING COIL DATA CAPACITY MBH EAT F LAT F EWT F FLOWRATE GPM MAX WATER PRESSURE DROP FT WC HHW INLET SIZE IN VAV BOX INLET DIAMETER IN MIN INLET PRESS IN WC SOUND LEVEL MAX NC ELECTRICAL MOTOR HP VOLTS PH HZ FLA NOTES"
+        }
+      ],
+      "source_component": "schedules_mtracon_vav.json"
+    }
+  ],
+  "secondary_mark_tables": [
+    {
+      "table": "AIR-OPS-DOAH-2",
+      "reason": "same equipment mark is detailed in the paired primary schedule table or is repeated sound-power data"
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "reason": "same equipment mark is detailed in the paired primary schedule table or is repeated sound-power data"
+    },
+    {
+      "table": "M612-DOAH-M1-PART-2",
+      "reason": "same equipment mark is detailed in the paired primary schedule table or is repeated sound-power data"
+    }
+  ],
+  "registry_count_semantics": "A source mark establishes only its printed schedule identity and classification. GRD and vibration/secondary contexts are not converted into installed plan, actuator, controller or field-I/O quantities.",
+  "assertions": [],
+  "inventory_checks": [
+    {
+      "id": "rank01-primary-identity-tables",
+      "records_path": [
+        "tables"
+      ],
+      "expected": 40,
+      "unique_key": "id"
+    },
+    {
+      "id": "rank01-secondary-mark-tables",
+      "records_path": [
+        "secondary_mark_tables"
+      ],
+      "expected": 3,
+      "unique_key": "table"
+    }
+  ]
+}

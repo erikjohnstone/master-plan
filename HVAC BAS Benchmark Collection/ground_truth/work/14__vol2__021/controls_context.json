@@ -1,0 +1,84 @@
+{
+  "document_id": "14__vol2__021",
+  "module_role": "Cross-sheet sequence, diagram, and BAS-network ground truth from M-801 through M-805. It records printed control behavior and explicit omissions without converting sequences to unsupplied final programming or installed I/O quantities.",
+  "controls_sources": ["M-801 / PDF p15", "M-802 / PDF p16", "M-803 / PDF p17", "M-804 / PDF p18", "M-805 / PDF p19"],
+  "network_architecture": {
+    "BAS_role": "Building automation system (BAS) receives/controls printed sequences and displays/alarms described on M-803 through M-805.",
+    "boiler_sequencing_controllers": "Each boiler has a full-modulation sequencing controller capable of independent operation and interoperability with BAS.",
+    "lab_ahu_controller": "Factory-installed unit-mounted independent DDC controller; M-804 expressly requires BACnet compliance and BAS/DDC interoperability.",
+    "airside_exhaust_controllers": "M-804 says high-plume/exhaust factory DDC controllers are independent yet connected/interoperable with BAS using DDC.",
+    "explicit_BACnet_observation": "M-803 diagram calls out an OA-duct reference temperature sensor over BACnet for OA temperature; M-804 calls the laboratory AHU controller BACnet compliant.",
+    "failure_mode": "For the M-803 secondary chilled-water pumps, communications-network failure commands fixed pump speed.",
+    "not_stated": ["network topology", "controller makes/models", "IP addressing", "BACnet instance numbers", "router/switch topology", "final field panel count", "final terminal count"]
+  },
+  "sequence_of_operations": {
+    "heating_water_boiler_plant_M803": [
+      "The hot-water plant is two boilers (B-1A/B-1B) and two VFD hot-water pumps (P-3A/P-3B) serving AHUs/roof-top-unit preheat coils and VAV reheat coils.",
+      "BAS/manual override can start and stop the hot-water plant; an adjustable one-minute delay plus differential-pressure proof precedes sequencing-controller enablement.",
+      "Pumps rotate weekly by least runtime; the lead isolation valve opens, lag isolation valve closes, one pump operates, and an alarming lead-pump failure starts the lag pump.",
+      "BAS uses current switches for proof and alarms if actual status departs BAS start/stop after the adjustable proving period.",
+      "VFD speed is controlled using DPS-1 sensed differential pressure against the DPS-2/DPS-3 desired setpoint; the TAB contractor supplies minimum-output-vector-graph settings for defined operating DP settings.",
+      "Boilers rotate weekly by least runtime. In remote, their sequencing controllers control boiler temperature/reset/firing/sequence; local leaves the boiler to internal control.",
+      "The lead boiler starts low-fire on low HWS temperature; 60% firing plus still-low HWS after adjustable 20 minutes enables the next boiler, while all enabled boilers modulate in parallel.",
+      "HWS reset uses TS-OA. Differential-pressure reset is 25 psi to 5 psi adjustable; coil-valve position determines the critical zone, with stated 85%, 95%, and 97% damper-position reset logic.",
+      "Gas pressure is displayed at BAS. A hardwired manual-mushroom emergency interface shuts down boilers independent of BMS programming and creates a BMS alarm. BAS sends variable HWS setpoint to each sequencing controller."
+    ],
+    "chilled_water_and_ice_storage_M803": [
+      "The chilled-water system is manually started and runs continuously.",
+      "The lead primary pump runs continuously with the lead chiller; failure starts the second pump/alarm and supports manual or timed lead rotation.",
+      "A differential-pressure sensor at each chiller measures evaporator supply-to-return drop; active-chiller pressure controls primary-pump speed. When both chillers run, both signals are averaged and both primary pumps run in tandem.",
+      "Chiller isolation opens before differential-pressure-switch flow proof enables internal controls; manufacturer controls operate compressors/condenser fans while DDC can adjust power-limit setting.",
+      "Secondary pumps start continuously, use a 4-20 mA DC VFD speed command, operate in unison to maintain differential pressure, stage on low DP, and start the next pump on failure/alarm. Communication failure fixes pump speed.",
+      "V-2 keeps secondary CHW no colder than 5.5 C; it closes to the secondary circuit when both secondary pumps are off, bypassing primary water back to the chiller.",
+      "The load monitor uses secondary CHW flow plus building supply/return temperature.",
+      "Ice modes are make ice, use ice, and bypass. Make ice needs low-demand billing and inventory no greater than 80%; use ice needs high-demand billing, inventory greater than 25%, and at least one secondary pump. All modes may be commanded from the operator workstation.",
+      "In make-ice mode, the lead primary pump/chiller run and V-1 opens to storage; storage discharge reaches -2.2 C before change to use-ice or bypass. In use-ice mode V-1 maintains 5.5 C primary supply. In bypass V-1 closes to storage; both primary pumps/chillers stop if both secondary pumps stop."
+    ],
+    "laboratory_airside_M804": [
+      "Laboratory AHUs 1, 2, 4 and 5 have factory-installed independent DDC, unit-mounted controller, BACnet-compliant BAS interoperability, hand-off-auto on major equipment, 15-minute analog trending, status change-of-value trending, 60-day archive, and dynamic color display.",
+      "AHU start/stop is time-of-day program logic with controller/BAS override. CHW/HW valves reset discharge-air temperature from outdoor air conditions. Supply fans run continuously and VFDs maintain static pressure.",
+      "Supply/exhaust static reset uses VAV damper positions: 95% open causes upward reset and less than 85% open causes downward reset at stated adjustable five-percent/ten-minute bands; initial static setpoint is 1.5 in wg adjustable.",
+      "Freeze protection is a hardwired low-limit switch interlocked with VFD: low limit trip closes OA damper, drives valves fully open, alarms BAS, and requires manual reset.",
+      "High-plume and general laboratory exhaust have factory DDC controllers, daily fan alternation, at least one operating fan, pressure-based fan staging, automatic-damper proof before full VFD ramp, and a 3,500 fpm minimum discharge-velocity control target.",
+      "M-802 supplies the laboratory/chemistry-room VAV and fume-hood logic: the hood controller uses sash position/face velocity/exhaust airflow; the room controller uses the total hood-exhaust setpoint, supply-valve flow and room temperature to maintain air-flow tracking differential, room pressurization and temperature with PID loops. The points are remotely monitored/controlled through the BAS.",
+      "M-804 covers fan-coil, laboratory AHU, hood/general-exhaust control diagrams and five printed I/O matrices. Its 42 source rows and their printed AI/DI/AO/DO matrix circles are captured separately in points_m804_m805; matrix rows are not an installed terminal total."
+    ],
+    "administration_airside_M805": [
+      "M-805 provides administration AHU-3/AHU-6, return-air VAV, unit-heater, fume-hood/BIO-safety-cabinet alarm, mechanical-room exhaust, and stair-ventilation sequences plus the administration AHU and VAV I/O matrices.",
+      "Administration AHU logic provides morning warm-up/pre-cool, optimum start/stop, timed override, occupied/unoccupied modes, supply-duct-static reset using VAV-damper position, ventilation flow/setpoint logic, preheat/cooling valve control, return-fan static control, airflow monitoring, hardwired freezestat action, smoke shutdown and listed fan/filter/CO2/humidity/mixed-air alarms.",
+      "The printed VAV reheat sequence uses local space temperature, supply-air volume modulation, HWS reheat-valve control, occupied/unoccupied/morning-warm-up logic and ventilation/economizer context. The unit heater starts its fan/opens HWS valve at the adjustable thermostat condition; mechanical-room exhaust proves the damper open before its exhaust fan energizes.",
+      "All 33 M-805 matrix rows and their printed AI/DI/AO/DO category circles are captured in points_m804_m805. The 25 AI, 8 DI, 10 AO and 2 DO circles are logical matrix assignments, not an installed controller I/O-card/terminal count."
+    ]
+  },
+  "control_diagram_bindings": [
+    {"source_sheet": "M-801", "system": "Laboratory AHUs", "equipment_scope": ["AHU-1", "AHU-2", "AHU-4", "AHU-5"]},
+    {"source_sheet": "M-801", "system": "Administration AHUs", "equipment_scope": ["AHU-3", "AHU-6"]},
+    {"source_sheet": "M-801", "system": "Lab fume hood exhaust with standby fan", "equipment_scope": ["EF-1/2", "EF-4/5", "EF-10/11", "EF-12/13"]},
+    {"source_sheet": "M-801", "system": "General laboratory exhaust", "equipment_scope": ["EF-3", "EF-6", "EF-14", "EF-15"]},
+    {"source_sheet": "M-802", "system": "Typical single-duct VAV laboratory/chemistry room control", "equipment_scope": ["laboratory supply/exhaust/hood valves"]},
+    {"source_sheet": "M-803", "system": "Heating water and chilled-water/ice-storage", "equipment_scope": ["B-1A", "B-1B", "B-2A", "B-2B", "P-1A,B", "P-2A,B", "P-3A,B", "P-4A,B", "P-5A,B", "P-6A,B", "CH-1", "CH-2", "CH-3", "CH-4", "T-5", "T-6"]},
+    {"source_sheet": "M-804", "system": "Laboratory AHU and hood/general-exhaust I/O matrices", "equipment_scope": ["laboratory AHU controller template", "fume hood/VAV AHU controller template", "fume hood exhaust controller template", "general exhaust controller template"]},
+    {"source_sheet": "M-805", "system": "Administration AHU and VAV-return I/O matrices", "equipment_scope": ["AHU-3", "AHU-6", "administration AHU controller template", "VAV return controller template"]}
+  ],
+  "sensor_and_zone_ledger": [
+    {"source_scope":"M-802 laboratory/chemistry single-duct VAV diagrams","sensor_or_thermostat_mapping":"Room thermostat shown at the VAV control diagram; hood controller uses sash position, face velocity and exhaust airflow; room controller uses room temperature, supply-valve airflow and hood/general-exhaust airflow.","count_status":"one controller-template mapping per printed diagram; the supplied sheet provides no total installed-room/VAV multiplier"},
+    {"source_scope":"M-804 laboratory AHU matrix","sensor_or_thermostat_mapping":"One template lists 3 humidity sensors, 4 temperature sensors, 2 differential-pressure devices, one supply-duct-static point, one down-duct-static point, one freezestat, one high-static safety sensor and two smoke detectors.","count_status":"per printed AHU matrix template; not a global installed count"},
+    {"source_scope":"M-805 administration AHU matrix","sensor_or_thermostat_mapping":"One template lists 3 humidity sensors, 6 temperature sensors, 3 differential-pressure points, 2 static-pressure points, 2 high-static-pressure points, one freezestat and 2 smoke detectors; the VAV-return template separately shows a space-temperature symbol and flow/static-pressure points.","count_status":"per printed controller template; not a global installed count"},
+    {"source_scope":"M-803 chilled-water/ice matrix","sensor_or_thermostat_mapping":"One template lists 8 temperature sensors, 3 differential-pressure points and 2 flow meters with chiller/primary-secondary equipment rows.","count_status":"per printed controller matrix; not a global installed count"},
+    {"source_scope":"M-803 hot-water boiler matrix","sensor_or_thermostat_mapping":"The visually transcribed boiler template lists 4 temperature sensors and 6 differential-pressure/differential-pressure-sensor rows alongside critical-zone damper, pump, VFD and valve rows.","count_status":"per printed boiler matrix; not a global installed count"}
+  ],
+  "tables": [],
+  "assertions": [
+    {"id": "m803-weekly-pump-alternation", "page": 17, "bbox": [400,1360,865,1380], "expected": "PUMPS ALTERNATE TO EQUALIZE RUNTIME. SELECTION OF THE LEAD PUMP IS EVALUATED ON A WEEKLY BASIS."},
+    {"id": "m803-dp-reset", "page": 17, "bbox": [900,1338,1305,1358], "expected": "10.1. DIFFERENTIAL SET POINT SHALL BE AUTOMATICALLY RESET BETWEEN 25PSI TO 5 PSI (ADJ.)"},
+    {"id": "m803-hardwired-boiler-emergency", "page": 17, "bbox": [895,1532,1370,1555], "expected": "THERE SHALL BE HARDWIRED INTERFACE BETWEEN THE BOILERS AND THE MANUAL MUSHROOM TYPE SHUT-OFF"},
+    {"id": "m803-fixed-speed-on-network-failure", "page": 17, "bbox": [2085,1254,2545,1275], "expected": "IN EVENT OF COMMUNICATIONS NETWORK FAILURE, PUMP SPEED WILL BE CONTROLLED AT A FIXED SPEED."},
+    {"id": "m803-make-ice-inventory-threshold", "page": 17, "bbox": [2085,1475,2480,1495], "expected": "ICE INVENTORY SENSOR INDICATES ICE INVENTORY IS NO GREATER THAN 80% OF MAXIMUM."},
+    {"id": "m804-bacnet-compliant", "page": 18, "bbox": [255,850,450,870], "expected": "CONTROLLER SHALL BE BACNET COMPLIANT."},
+    {"id": "m804-exhaust-fan-daily-alternation", "page": 18, "bbox": [1715,955,1880,980], "expected": "FANS SHALL BE ALTERNATED DAILY."},
+    {"id": "m804-3500fpm-velocity", "page": 18, "bbox": [1715,1165,2100,1190], "expected": "MINIMUM 3500FPM. HOWEVER, THE OUTSIDE AIR DAMPER(S) SHALL CLOSE DURING START UP"}
+  ],
+  "inventory_checks": [
+    {"id": "controls-diagram-bindings", "records_path": ["control_diagram_bindings"], "expected": 8}
+  ]
+}

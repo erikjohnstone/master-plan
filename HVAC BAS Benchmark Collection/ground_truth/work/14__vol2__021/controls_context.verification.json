@@ -1,0 +1,508 @@
+{
+  "document_id": "14__vol2__021",
+  "source_sha256": "4d883afdd3b2d94ea2e14621dc49df77bc10ca0548bfd077c436420c43ae75f8",
+  "annotation_sha256": "c30c1ad7fc3123925a1c5d4a9b9f8be28a20309bc0b440e4ab7b3524e6329f50",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 8,
+  "checks": [
+    {
+      "assertion": "m803-weekly-pump-alternation",
+      "page": 17,
+      "bbox": [
+        400,
+        1360,
+        865,
+        1380
+      ],
+      "expected": "PUMPS ALTERNATE TO EQUALIZE RUNTIME. SELECTION OF THE LEAD PUMP IS EVALUATED ON A WEEKLY BASIS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PUMPS ALTERNATE TO EQUALIZE RUNTIME. SELECTION OF THE LEAD PUMP IS EVALUATED ON A WEEKLY BASIS.",
+          "word_ids": [
+            457,
+            458,
+            459,
+            460,
+            461,
+            462,
+            463,
+            464,
+            465,
+            466,
+            467,
+            468,
+            469,
+            470,
+            471,
+            472
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PUMPS ALTERNATE TO EQUALIZE RUNTIME. SELECTION OF THE LEAD PUMP IS EVALUATED ON A WEEKLY BASIS.",
+          "word_ids": [
+            1783,
+            1784,
+            1785,
+            1786,
+            1787,
+            1788,
+            1789,
+            1790,
+            1791,
+            1792,
+            1793,
+            1794,
+            1795,
+            1796,
+            1797,
+            1798
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m803-dp-reset",
+      "page": 17,
+      "bbox": [
+        900,
+        1338,
+        1305,
+        1358
+      ],
+      "expected": "10.1. DIFFERENTIAL SET POINT SHALL BE AUTOMATICALLY RESET BETWEEN 25PSI TO 5 PSI (ADJ.)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.1. DIFFERENTIAL SET POINT SHALL BE AUTOMATICALLY RESET BETWEEN 25PSI TO 5 PSI (ADJ.)",
+          "word_ids": [
+            1146,
+            1147,
+            1148,
+            1149,
+            1150,
+            1151,
+            1152,
+            1153,
+            1154,
+            1155,
+            1156,
+            1157,
+            1158,
+            1159
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.1. DIFFERENTIAL SET POINT SHALL BE AUTOMATICALLY RESET BETWEEN 25PSI TO 5 PSI (ADJ.)",
+          "word_ids": [
+            1597,
+            1598,
+            1599,
+            1600,
+            1601,
+            1602,
+            1603,
+            1604,
+            1605,
+            1606,
+            1607,
+            1608,
+            1609,
+            1610
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m803-hardwired-boiler-emergency",
+      "page": 17,
+      "bbox": [
+        895,
+        1532,
+        1370,
+        1555
+      ],
+      "expected": "THERE SHALL BE HARDWIRED INTERFACE BETWEEN THE BOILERS AND THE MANUAL MUSHROOM TYPE SHUT-OFF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THERE SHALL BE HARDWIRED INTERFACE BETWEEN THE BOILERS AND THE MANUAL MUSHROOM TYPE SHUT-OFF SWITCHES LOCATED AT EACH DOORWAY. NO BMS PROGRAMMING SHALL BE REQUIRED FOR THE INTERFACE. UPON",
+          "word_ids": [
+            1326,
+            1327,
+            1328,
+            1329,
+            1330,
+            1331,
+            1332,
+            1333,
+            1334,
+            1335,
+            1336,
+            1337,
+            1338,
+            1339,
+            1340,
+            1341,
+            1342,
+            1343,
+            1344,
+            1345,
+            1346,
+            1347,
+            1348,
+            1349,
+            1350,
+            1351,
+            1352,
+            1353,
+            1354
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THERE SHALL BE HARDWIRED INTERFACE BETWEEN THE BOILERS AND THE MANUAL MUSHROOM TYPE SHUT-OFF SWITCHES LOCATED AT EACH DOORWAY. NO BMS PROGRAMMING SHALL BE REQUIRED FOR THE INTERFACE. UPON",
+          "word_ids": [
+            182,
+            183,
+            184,
+            185,
+            186,
+            187,
+            188,
+            189,
+            190,
+            191,
+            192,
+            193,
+            194,
+            195,
+            196,
+            197,
+            198,
+            199,
+            200,
+            201,
+            202,
+            203,
+            204,
+            205,
+            206,
+            207,
+            208,
+            209,
+            210
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m803-fixed-speed-on-network-failure",
+      "page": 17,
+      "bbox": [
+        2085,
+        1254,
+        2545,
+        1275
+      ],
+      "expected": "IN EVENT OF COMMUNICATIONS NETWORK FAILURE, PUMP SPEED WILL BE CONTROLLED AT A FIXED SPEED.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "IN EVENT OF COMMUNICATIONS NETWORK FAILURE, PUMP SPEED WILL BE CONTROLLED AT A FIXED SPEED.",
+          "word_ids": [
+            2185,
+            2186,
+            2187,
+            2188,
+            2189,
+            2190,
+            2191,
+            2192,
+            2193,
+            2194,
+            2195,
+            2196,
+            2197,
+            2198,
+            2199
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "IN EVENT OF COMMUNICATIONS NETWORK FAILURE, PUMP SPEED WILL BE CONTROLLED AT A FIXED SPEED.",
+          "word_ids": [
+            1087,
+            1088,
+            1089,
+            1090,
+            1091,
+            1092,
+            1093,
+            1094,
+            1095,
+            1096,
+            1097,
+            1098,
+            1099,
+            1100,
+            1101
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m803-make-ice-inventory-threshold",
+      "page": 17,
+      "bbox": [
+        2085,
+        1475,
+        2480,
+        1495
+      ],
+      "expected": "ICE INVENTORY SENSOR INDICATES ICE INVENTORY IS NO GREATER THAN 80% OF MAXIMUM.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ICE INVENTORY SENSOR INDICATES ICE INVENTORY IS NO GREATER THAN 80% OF MAXIMUM.",
+          "word_ids": [
+            2314,
+            2315,
+            2316,
+            2317,
+            2318,
+            2319,
+            2320,
+            2321,
+            2322,
+            2323,
+            2324,
+            2325,
+            2326
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ICE INVENTORY SENSOR INDICATES ICE INVENTORY IS NO GREATER THAN 80% OF MAXIMUM.",
+          "word_ids": [
+            1483,
+            1484,
+            1485,
+            1486,
+            1487,
+            1488,
+            1489,
+            1490,
+            1491,
+            1492,
+            1493,
+            1494,
+            1495
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m804-bacnet-compliant",
+      "page": 18,
+      "bbox": [
+        255,
+        850,
+        450,
+        870
+      ],
+      "expected": "CONTROLLER SHALL BE BACNET COMPLIANT.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONTROLLER SHALL BE BACNET COMPLIANT.",
+          "word_ids": [
+            1126,
+            1127,
+            1128,
+            1129,
+            1130
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONTROLLER SHALL BE BACNET COMPLIANT.",
+          "word_ids": [
+            240,
+            241,
+            242,
+            243,
+            244
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m804-exhaust-fan-daily-alternation",
+      "page": 18,
+      "bbox": [
+        1715,
+        955,
+        1880,
+        980
+      ],
+      "expected": "FANS SHALL BE ALTERNATED DAILY.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FANS SHALL BE ALTERNATED DAILY. A MINIMUM OF ONE EXHAUST FAN SHALL",
+          "word_ids": [
+            731,
+            732,
+            733,
+            734,
+            735,
+            737,
+            738,
+            739,
+            740,
+            741,
+            742,
+            743
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FANS SHALL BE ALTERNATED DAILY. A MINIMUM OF ONE EXHAUST FAN SHALL",
+          "word_ids": [
+            1335,
+            1336,
+            1337,
+            1338,
+            1339,
+            1341,
+            1342,
+            1343,
+            1344,
+            1345,
+            1346,
+            1347
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m804-3500fpm-velocity",
+      "page": 18,
+      "bbox": [
+        1715,
+        1165,
+        2100,
+        1190
+      ],
+      "expected": "MINIMUM 3500FPM. HOWEVER, THE OUTSIDE AIR DAMPER(S) SHALL CLOSE DURING START UP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MODULATE OUTSIDE AIR DAMPER(S) TO MAINTAIN THE FAN DISCHARGE VELOCITY AT ITS MINIMUM 3500FPM. HOWEVER, THE OUTSIDE AIR DAMPER(S) SHALL CLOSE DURING START UP OF THE FAN SYSTEM AND THEN SHALL MODULATE OPEN AS NEEDED AFTER EXHAUST STATIC",
+          "word_ids": [
+            955,
+            956,
+            957,
+            958,
+            959,
+            960,
+            961,
+            962,
+            963,
+            964,
+            965,
+            966,
+            967,
+            968,
+            969,
+            970,
+            971,
+            972,
+            973,
+            974,
+            975,
+            976,
+            977,
+            978,
+            979,
+            980,
+            981,
+            982,
+            983,
+            984,
+            985,
+            986,
+            987,
+            988,
+            989,
+            990,
+            991,
+            992
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MODULATE OUTSIDE AIR DAMPER(S) TO MAINTAIN THE FAN DISCHARGE VELOCITY AT ITS MINIMUM 3500FPM. HOWEVER, THE OUTSIDE AIR DAMPER(S) SHALL CLOSE DURING START UP OF THE FAN SYSTEM AND THEN SHALL MODULATE OPEN AS NEEDED AFTER EXHAUST STATIC",
+          "word_ids": [
+            1559,
+            1560,
+            1561,
+            1562,
+            1563,
+            1564,
+            1565,
+            1566,
+            1567,
+            1568,
+            1569,
+            1570,
+            1571,
+            1572,
+            1573,
+            1574,
+            1575,
+            1576,
+            1577,
+            1578,
+            1579,
+            1580,
+            1581,
+            1582,
+            1583,
+            1584,
+            1585,
+            1586,
+            1587,
+            1588,
+            1589,
+            1590,
+            1591,
+            1592,
+            1593,
+            1594,
+            1595,
+            1596
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "controls-diagram-bindings",
+      "actual": 8,
+      "expected": 8,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

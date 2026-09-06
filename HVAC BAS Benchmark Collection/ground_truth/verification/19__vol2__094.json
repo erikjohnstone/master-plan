@@ -1,0 +1,121 @@
+{
+  "id": "19__vol2__094",
+  "record_sha256": "9bdb2c358626b78aebe1330a7ada8f6431637df637e526007c99e3b3dbdad5ef",
+  "checked_utc": "2026-09-05T03:15:14.194352+00:00",
+  "errors": [],
+  "modules": {
+    "metadata": {
+      "components": [
+        {
+          "annotation_sha256": "ec378e75230156507c158decbddaff29285840809539af29d63e242473ff3d50",
+          "cell_assertions": 0,
+          "text_assertions": 41,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 41,
+      "pass": true
+    },
+    "schedules": {
+      "components": [
+        {
+          "annotation_sha256": "5417f0dab47d228436b0605431ad4482bfe32a3649b360405f80b5f16d48f39a",
+          "cell_assertions": 236,
+          "text_assertions": 4,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 236,
+      "text_assertions": 4,
+      "pass": true
+    },
+    "points": {
+      "components": [
+        {
+          "annotation_sha256": "b23a6af8e4c0b2ba9742c845a99d6789ee5c1536f4040226a78a0931cb534ee9",
+          "cell_assertions": 0,
+          "text_assertions": 8,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 8,
+      "pass": true
+    },
+    "controls_context": {
+      "components": [
+        {
+          "annotation_sha256": "b23a6af8e4c0b2ba9742c845a99d6789ee5c1536f4040226a78a0931cb534ee9",
+          "cell_assertions": 0,
+          "text_assertions": 8,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 8,
+      "pass": true
+    },
+    "equipment_reconciliation": {
+      "components": [
+        {
+          "annotation_sha256": "de4d65264d0c069e5defe45719420d6c0060c9ba8ad9aca8641e9ef76287e8dc",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "point_applications": {
+      "components": [
+        {
+          "annotation_sha256": "99ef8b80aa8f3eb2bfcf049a63c7b8c9e21e721b38e8a5581024801d7f205299",
+          "cell_assertions": 0,
+          "text_assertions": 0,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 0,
+      "text_assertions": 0,
+      "pass": true
+    },
+    "supporting_evidence": {
+      "components": [
+        {
+          "annotation_sha256": "9a33b8eef8f8e813bf3878e842c66d1f448dea3ca8df07a14794f4b241269ae6",
+          "cell_assertions": 36,
+          "text_assertions": 2,
+          "pass": true
+        }
+      ],
+      "cell_assertions": 36,
+      "text_assertions": 2,
+      "pass": true
+    }
+  },
+  "source_files_sha256": {
+    "work/19__vol2__094/document_manifest.json": "f2a3f90de742b85eabc0ff5f82d879529ad482536586969f3f434a015ad1b0c5",
+    "work/19__vol2__094/metadata.json": "ec378e75230156507c158decbddaff29285840809539af29d63e242473ff3d50",
+    "work/19__vol2__094/schedules_m401.json": "5417f0dab47d228436b0605431ad4482bfe32a3649b360405f80b5f16d48f39a",
+    "work/19__vol2__094/controls_context_m201.json": "b23a6af8e4c0b2ba9742c845a99d6789ee5c1536f4040226a78a0931cb534ee9",
+    "work/19__vol2__094/equipment_reconciliation.json": "de4d65264d0c069e5defe45719420d6c0060c9ba8ad9aca8641e9ef76287e8dc",
+    "work/19__vol2__094/point_applications.json": "99ef8b80aa8f3eb2bfcf049a63c7b8c9e21e721b38e8a5581024801d7f205299",
+    "work/19__vol2__094/supporting_evidence.json": "9a33b8eef8f8e813bf3878e842c66d1f448dea3ca8df07a14794f4b241269ae6",
+    "reviews/19__vol2__094/p1-p1-full-poppler.png": "d07c89cef17e41825b1c188dfe4a573e5b4ceb3b5738518e57af3b3090c95971",
+    "reviews/19__vol2__094/p2-p2-full-poppler.png": "555f218da78c94a18420538f7dc2e6622540eb3ba9d99297208828c328f8cf95",
+    "reviews/19__vol2__094/p3-p3-full-poppler.png": "ccad34d2bea8c7cd1965ec474c0f9a2daeed937be09241fdfab978700bbb829e",
+    "reviews/19__vol2__094/p4-p4-full-poppler.png": "16737d4a538fd90efdb74e0732ffcaa3cfb4a2b41df9312c652b7f6633637eb2",
+    "reviews/19__vol2__094/p5-p5-full-poppler.png": "01f95fb0eaf1e39ca818c7967d450306f04947efb7003bbc26d80c6a1d76879c",
+    "reviews/19__vol2__094/p6-p6-full-poppler.png": "b245fae415471a0ff4f44f2d86939fff86da95d15221219129ade8490efd7530",
+    "reviews/19__vol2__094/p7-p7-full-poppler.png": "d8ddc7335beca64db87811bf106f4b6da0bf9a0881903d11d9a2bbbcb94445dd",
+    "reviews/19__vol2__094/p8-p8-full-poppler.png": "3d0b82435759bef48442b19772792ac5f115a69a2c8edffb3f40485e4264e230",
+    "reviews/19__vol2__094/p9-p9-full-poppler.png": "ad86d82c600fa2864951c638c22c936f102880d6b01de95ee5ad2c996434b1f7"
+  },
+  "scope": "Rechecks every embedded authored module against MuPDF and Poppler, exact bundle/source identity, authored page/requirement coverage and review-file integrity. Visual interpretation and completeness are coordinator audit assertions, not automatic parser proof.",
+  "bounded_assertions": 335,
+  "independent_engine_checks": 670,
+  "pass": true
+}

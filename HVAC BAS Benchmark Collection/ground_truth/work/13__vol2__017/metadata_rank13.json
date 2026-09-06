@@ -1,0 +1,236 @@
+{
+  "document_id": "13__vol2__017",
+  "module_role": "Project/title-block facts, full page/sheet ledger, scale boundary and complete visual-review disposition.",
+  "tables": [],
+  "project": {
+    "project_name_as_printed": "BUILDING 101",
+    "facility_as_printed": "NIST, GAITHERSBURG, MD",
+    "issue_date_as_printed": "06/10/2022",
+    "cover_sheet_as_printed": "G-001 / 101-1262",
+    "assertion_ids": [
+      "cover-building",
+      "cover-nist",
+      "cover-gaithersburg",
+      "cover-issue-date",
+      "cover-sheet-id"
+    ]
+  },
+  "scale_semantics": {
+    "takeoff_scale_status": "No global scale is asserted across this mixed plan, schedule, sequence, diagram and mixed-discipline drawing set.",
+    "boundary": "Local drawing scales and title-block plot scale are not transformed into a document-wide takeoff quantity."
+  },
+  "visual_review_pages": [
+    {
+      "page": 1,
+      "sheet": "G-001",
+      "render": "reviews/13__vol2__017/p1-p1-full-poppler.png",
+      "finding": "Cover, drawing list, project identity, title-block and map context visually reviewed."
+    },
+    {
+      "page": 2,
+      "sheet": "S-001",
+      "render": "reviews/13__vol2__017/p2-p2-full-poppler.png",
+      "finding": "Structural general-notes sheet visually reviewed as mixed-discipline source context."
+    },
+    {
+      "page": 3,
+      "sheet": "S-101",
+      "render": "reviews/13__vol2__017/p3-p3-full-poppler.png",
+      "finding": "Structural framing-plan sheet visually reviewed as mixed-discipline source context."
+    },
+    {
+      "page": 4,
+      "sheet": "M-001",
+      "render": "reviews/13__vol2__017/p4-p4-full-poppler.png",
+      "finding": "Mechanical general-notes sheet visually reviewed."
+    },
+    {
+      "page": 5,
+      "sheet": "MD-101",
+      "render": "reviews/13__vol2__017/p5-p5-full-poppler.png",
+      "finding": "Mechanical demolition floor-plan sheet visually reviewed."
+    },
+    {
+      "page": 6,
+      "sheet": "MD-201",
+      "render": "reviews/13__vol2__017/p6-p6-full-poppler.png",
+      "finding": "Mechanical demolition floor-plan sheet visually reviewed."
+    },
+    {
+      "page": 7,
+      "sheet": "M-101",
+      "render": "reviews/13__vol2__017/p7-p7-full-poppler.png",
+      "finding": "New-work mechanical floor-plan sheet visually reviewed."
+    },
+    {
+      "page": 8,
+      "sheet": "M-201",
+      "render": "reviews/13__vol2__017/p8-p8-full-poppler.png",
+      "finding": "New-work mechanical floor-plan sheet visually reviewed."
+    },
+    {
+      "page": 9,
+      "sheet": "M-501",
+      "render": "reviews/13__vol2__017/p9-p9-full-poppler.png",
+      "finding": "Mechanical ACU-detail sheet visually reviewed."
+    },
+    {
+      "page": 10,
+      "sheet": "M-502",
+      "render": "reviews/13__vol2__017/p10-p10-full-poppler.png",
+      "finding": "Mechanical return-fan/detail sheet visually reviewed."
+    },
+    {
+      "page": 11,
+      "sheet": "M-503",
+      "render": "reviews/13__vol2__017/p11-p11-full-poppler.png",
+      "finding": "Mechanical piping/freezestat detail sheet visually reviewed."
+    },
+    {
+      "page": 12,
+      "sheet": "M-601",
+      "render": "reviews/13__vol2__017/p12-p12-full-poppler.png",
+      "finding": "M-601 dense equipment schedules visually reviewed; selected literal ACU-family tables retained separately."
+    },
+    {
+      "page": 13,
+      "sheet": "M-602",
+      "render": "reviews/13__vol2__017/p13-p13-full-poppler.png",
+      "finding": "M-602 dense equipment schedules visually reviewed; selected literal ACU-family tables retained separately."
+    },
+    {
+      "page": 14,
+      "sheet": "M-603",
+      "render": "reviews/13__vol2__017/p14-p14-full-poppler.png",
+      "finding": "M-603 ventilation schedule/calculation tables visually reviewed; retained as context, not transcribed inventory."
+    },
+    {
+      "page": 15,
+      "sheet": "M-701",
+      "render": "reviews/13__vol2__017/p15-p15-full-poppler.png",
+      "finding": "M-701 mechanical control diagrams visually reviewed."
+    },
+    {
+      "page": 16,
+      "sheet": "M-702",
+      "render": "reviews/13__vol2__017/p16-p16-full-poppler.png",
+      "finding": "M-702 ACU sequence-of-operations sheet visually reviewed; bounded clauses retained separately."
+    },
+    {
+      "page": 17,
+      "sheet": "M-703",
+      "render": "reviews/13__vol2__017/p17-p17-full-poppler.png",
+      "finding": "M-703 DDC input/output source matrices visually reviewed; all 60 literal rows retained separately."
+    },
+    {
+      "page": 18,
+      "sheet": "M-801",
+      "render": "reviews/13__vol2__017/p18-p18-full-poppler.png",
+      "finding": "M-801 mechanical air-flow diagrams visually reviewed."
+    },
+    {
+      "page": 19,
+      "sheet": "E-001",
+      "render": "reviews/13__vol2__017/p19-p19-full-poppler.png",
+      "finding": "Electrical cover/legend sheet visually reviewed as mixed-discipline source context."
+    },
+    {
+      "page": 20,
+      "sheet": "ED-100",
+      "render": "reviews/13__vol2__017/p20-p20-full-poppler.png",
+      "finding": "Electrical demolition-plan sheet visually reviewed as mixed-discipline source context."
+    },
+    {
+      "page": 21,
+      "sheet": "E-101",
+      "render": "reviews/13__vol2__017/p21-p21-full-poppler.png",
+      "finding": "Electrical new-work-plan sheet visually reviewed as mixed-discipline source context."
+    },
+    {
+      "page": 22,
+      "sheet": "E-600",
+      "render": "reviews/13__vol2__017/p22-p22-full-poppler.png",
+      "finding": "Electrical diagrams-and-schedules sheet visually reviewed as mixed-discipline source context."
+    },
+    {
+      "page": 23,
+      "sheet": "E-601",
+      "render": "reviews/13__vol2__017/p23-p23-full-poppler.png",
+      "finding": "Electrical motor-control-center/elevation sheet visually reviewed as mixed-discipline source context."
+    },
+    {
+      "page": 24,
+      "sheet": "FA-100",
+      "render": "reviews/13__vol2__017/p24-p24-full-poppler.png",
+      "finding": "Fire-alarm one-line sheet visually reviewed as mixed-discipline source context."
+    },
+    {
+      "page": 25,
+      "sheet": "FA-101",
+      "render": "reviews/13__vol2__017/p25-p25-full-poppler.png",
+      "finding": "Fire-alarm input/output matrix sheet visually reviewed as mixed-discipline source context."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "cover-building",
+      "page": 1,
+      "bbox": [
+        860,
+        1436,
+        984,
+        1468
+      ],
+      "expected": "BUILDING 101",
+      "mode": "exact"
+    },
+    {
+      "id": "cover-nist",
+      "page": 1,
+      "bbox": [
+        2850,
+        1628,
+        2869,
+        1662
+      ],
+      "expected": "NIST",
+      "mode": "exact"
+    },
+    {
+      "id": "cover-gaithersburg",
+      "page": 1,
+      "bbox": [
+        2879,
+        1590,
+        2898,
+        1700
+      ],
+      "expected": "MD GAITHERSBURG,",
+      "mode": "exact"
+    },
+    {
+      "id": "cover-issue-date",
+      "page": 1,
+      "bbox": [
+        2901,
+        1064,
+        2920,
+        1111
+      ],
+      "expected": "06/10/2022",
+      "mode": "exact"
+    },
+    {
+      "id": "cover-sheet-id",
+      "page": 1,
+      "bbox": [
+        2844,
+        2058,
+        2960,
+        2091
+      ],
+      "expected": "101-1262",
+      "mode": "contains"
+    }
+  ]
+}

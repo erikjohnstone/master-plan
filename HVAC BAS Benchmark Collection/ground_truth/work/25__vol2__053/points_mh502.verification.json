@@ -1,0 +1,6054 @@
+{
+  "document_id": "25__vol2__053",
+  "source_sha256": "7eaefacf7f42a077e98d3fa1fd01bc96f03a03d444e29ffda7838895dc2e1d57",
+  "annotation_sha256": "8b288125a5044e426b7ac04a0a84198e4e7b0c873b16b44e54c118dade01b7c1",
+  "tables": 1,
+  "rows": 19,
+  "cell_assertions": 228,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 1,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        638.88,
+        2430.352,
+        654.239
+      ],
+      "expected": "ZONE TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ZONE TEMPERATURE",
+          "word_ids": [
+            2,
+            3
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ZONE TEMPERATURE",
+          "word_ids": [
+            368,
+            369
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 1,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        638.88,
+        2455.192,
+        654.239
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            41
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            370
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 1,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        638.88,
+        2479.928,
+        654.239
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 1,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        638.88,
+        2504.643,
+        654.239
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 1,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        638.88,
+        2530.802,
+        654.239
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 1,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        638.88,
+        2555.641,
+        654.239
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 1,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        638.88,
+        2578.811,
+        654.239
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 1,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        638.88,
+        2612.514,
+        654.239
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 1,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        638.88,
+        2654.524,
+        654.239
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 1,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        638.88,
+        2696.514,
+        654.239
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            65
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            989
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 1,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        638.88,
+        2745.368,
+        654.239
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 1,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        638.88,
+        2868.369,
+        654.239
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            58
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            990
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 2,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        654.239,
+        2430.352,
+        669.601
+      ],
+      "expected": "ZONE TEMPERATURE SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ZONE TEMPERATURE SETPOINT",
+          "word_ids": [
+            4,
+            5,
+            6
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ZONE TEMPERATURE SETPOINT",
+          "word_ids": [
+            397,
+            398,
+            399
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 2,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        654.239,
+        2455.192,
+        669.601
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            42
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            400
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 2,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        654.239,
+        2479.928,
+        669.601
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 2,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        654.239,
+        2504.643,
+        669.601
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 2,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        654.239,
+        2530.802,
+        669.601
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 2,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        654.239,
+        2555.641,
+        669.601
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 2,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        654.239,
+        2578.811,
+        669.601
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 2,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        654.239,
+        2612.514,
+        669.601
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 2,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        654.239,
+        2654.524,
+        669.601
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 2,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        654.239,
+        2696.514,
+        669.601
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 2,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        654.239,
+        2745.368,
+        669.601
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 2,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        654.239,
+        2868.369,
+        669.601
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            59
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            991
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 3,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        669.601,
+        2430.352,
+        684.84
+      ],
+      "expected": "AIRFLOW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AIRFLOW",
+          "word_ids": [
+            7
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AIRFLOW",
+          "word_ids": [
+            401
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 3,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        669.601,
+        2455.192,
+        684.84
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            43
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            402
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 3,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        669.601,
+        2479.928,
+        684.84
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 3,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        669.601,
+        2504.643,
+        684.84
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 3,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        669.601,
+        2530.802,
+        684.84
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 3,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        669.601,
+        2555.641,
+        684.84
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 3,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        669.601,
+        2578.811,
+        684.84
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 3,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        669.601,
+        2612.514,
+        684.84
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 3,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        669.601,
+        2654.524,
+        684.84
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 3,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        669.601,
+        2696.514,
+        684.84
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            66
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            403
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 3,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        669.601,
+        2745.368,
+        684.84
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 3,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        669.601,
+        2868.369,
+        684.84
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            60
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            404
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 4,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        684.84,
+        2430.352,
+        700.08
+      ],
+      "expected": "DISCHARGE AIR TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DISCHARGE AIR TEMPERATURE",
+          "word_ids": [
+            8,
+            9,
+            10
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DISCHARGE AIR TEMPERATURE",
+          "word_ids": [
+            405,
+            406,
+            407
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 4,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        684.84,
+        2455.192,
+        700.08
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            44
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            408
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 4,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        684.84,
+        2479.928,
+        700.08
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 4,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        684.84,
+        2504.643,
+        700.08
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 4,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        684.84,
+        2530.802,
+        700.08
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 4,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        684.84,
+        2555.641,
+        700.08
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 4,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        684.84,
+        2578.811,
+        700.08
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 4,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        684.84,
+        2612.514,
+        700.08
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 4,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        684.84,
+        2654.524,
+        700.08
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 4,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        684.84,
+        2696.514,
+        700.08
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            67
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            409
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 4,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        684.84,
+        2745.368,
+        700.08
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 4,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        684.84,
+        2868.369,
+        700.08
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            61
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            410
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 5,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        700.08,
+        2430.352,
+        715.319
+      ],
+      "expected": "ZONE DAMPER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ZONE DAMPER",
+          "word_ids": [
+            11,
+            12
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ZONE DAMPER",
+          "word_ids": [
+            446,
+            447
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 5,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        700.08,
+        2455.192,
+        715.319
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 5,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        700.08,
+        2479.928,
+        715.319
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            93
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            448
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 5,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        700.08,
+        2504.643,
+        715.319
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 5,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        700.08,
+        2530.802,
+        715.319
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 5,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        700.08,
+        2555.641,
+        715.319
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 5,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        700.08,
+        2578.811,
+        715.319
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 5,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        700.08,
+        2612.514,
+        715.319
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 5,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        700.08,
+        2654.524,
+        715.319
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 5,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        700.08,
+        2696.514,
+        715.319
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 5,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        700.08,
+        2745.368,
+        715.319
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 5,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        700.08,
+        2868.369,
+        715.319
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            62
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            992
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 6,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        715.319,
+        2430.352,
+        729.6
+      ],
+      "expected": "REHEATING VALVE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "REHEATING VALVE",
+          "word_ids": [
+            13,
+            14
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "REHEATING VALVE",
+          "word_ids": [
+            449,
+            450
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 6,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        715.319,
+        2455.192,
+        729.6
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 6,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        715.319,
+        2479.928,
+        729.6
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            94
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            490
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 6,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        715.319,
+        2504.643,
+        729.6
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 6,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        715.319,
+        2530.802,
+        729.6
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 6,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        715.319,
+        2555.641,
+        729.6
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 6,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        715.319,
+        2578.811,
+        729.6
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 6,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        715.319,
+        2612.514,
+        729.6
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 6,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        715.319,
+        2654.524,
+        729.6
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 6,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        715.319,
+        2696.514,
+        729.6
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            68
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            993
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 6,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        715.319,
+        2745.368,
+        729.6
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 6,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        715.319,
+        2868.369,
+        729.6
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            63
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            999
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 7,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        729.6,
+        2430.352,
+        743.879
+      ],
+      "expected": "MAXIMUM OCCUPIED AIRFLOW SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAXIMUM OCCUPIED AIRFLOW SETPOINT",
+          "word_ids": [
+            15,
+            16,
+            17,
+            18
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAXIMUM OCCUPIED AIRFLOW SETPOINT",
+          "word_ids": [
+            451,
+            452,
+            453,
+            454
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 7,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        729.6,
+        2455.192,
+        743.879
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 7,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        729.6,
+        2479.928,
+        743.879
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 7,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        729.6,
+        2504.643,
+        743.879
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 7,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        729.6,
+        2530.802,
+        743.879
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 7,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        729.6,
+        2555.641,
+        743.879
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            91
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            997
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 7,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        729.6,
+        2578.811,
+        743.879
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 7,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        729.6,
+        2612.514,
+        743.879
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 7,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        729.6,
+        2654.524,
+        743.879
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 7,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        729.6,
+        2696.514,
+        743.879
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            69
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            994
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 7,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        729.6,
+        2745.368,
+        743.879
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 7,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        729.6,
+        2868.369,
+        743.879
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            64
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1000
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 8,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        743.879,
+        2430.352,
+        758.16
+      ],
+      "expected": "HEATING MODE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HEATING MODE",
+          "word_ids": [
+            19,
+            20
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HEATING MODE",
+          "word_ids": [
+            455,
+            456
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 8,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        743.879,
+        2455.192,
+        758.16
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 8,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        743.879,
+        2479.928,
+        758.16
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 8,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        743.879,
+        2504.643,
+        758.16
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 8,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        743.879,
+        2530.802,
+        758.16
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 8,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        743.879,
+        2555.641,
+        758.16
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 8,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        743.879,
+        2578.811,
+        758.16
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            92
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            998
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 8,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        743.879,
+        2612.514,
+        758.16
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 8,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        743.879,
+        2654.524,
+        758.16
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 8,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        743.879,
+        2696.514,
+        758.16
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            70
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            995
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 8,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        743.879,
+        2745.368,
+        758.16
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 8,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        743.879,
+        2868.369,
+        758.16
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 9,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        758.16,
+        2430.352,
+        772.439
+      ],
+      "expected": "HEATING SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HEATING SETPOINT",
+          "word_ids": [
+            21,
+            22
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HEATING SETPOINT",
+          "word_ids": [
+            457,
+            458
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 9,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        758.16,
+        2455.192,
+        772.439
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 9,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        758.16,
+        2479.928,
+        772.439
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 9,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        758.16,
+        2504.643,
+        772.439
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 9,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        758.16,
+        2530.802,
+        772.439
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 9,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        758.16,
+        2555.641,
+        772.439
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 9,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        758.16,
+        2578.811,
+        772.439
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 9,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        758.16,
+        2612.514,
+        772.439
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 9,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        758.16,
+        2654.524,
+        772.439
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 9,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        758.16,
+        2696.514,
+        772.439
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            82
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            996
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 9,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        758.16,
+        2745.368,
+        772.439
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 9,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        758.16,
+        2868.369,
+        772.439
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            71
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1003
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 10,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        772.439,
+        2430.352,
+        786.72
+      ],
+      "expected": "COOLING SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COOLING SETPOINT",
+          "word_ids": [
+            23,
+            24
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COOLING SETPOINT",
+          "word_ids": [
+            459,
+            460
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 10,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        772.439,
+        2455.192,
+        786.72
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 10,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        772.439,
+        2479.928,
+        786.72
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 10,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        772.439,
+        2504.643,
+        786.72
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 10,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        772.439,
+        2530.802,
+        786.72
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 10,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        772.439,
+        2555.641,
+        786.72
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 10,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        772.439,
+        2578.811,
+        786.72
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 10,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        772.439,
+        2612.514,
+        786.72
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 10,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        772.439,
+        2654.524,
+        786.72
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 10,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        772.439,
+        2696.514,
+        786.72
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            83
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1004
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 10,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        772.439,
+        2745.368,
+        786.72
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 10,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        772.439,
+        2868.369,
+        786.72
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            72
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1005
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 11,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        786.72,
+        2430.352,
+        801.119
+      ],
+      "expected": "HIGH ZONE TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH ZONE TEMPERATURE",
+          "word_ids": [
+            25,
+            26,
+            27
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH ZONE TEMPERATURE",
+          "word_ids": [
+            461,
+            462,
+            463
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 11,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        786.72,
+        2455.192,
+        801.119
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 11,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        786.72,
+        2479.928,
+        801.119
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 11,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        786.72,
+        2504.643,
+        801.119
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 11,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        786.72,
+        2530.802,
+        801.119
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 11,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        786.72,
+        2555.641,
+        801.119
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 11,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        786.72,
+        2578.811,
+        801.119
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 11,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        786.72,
+        2612.514,
+        801.119
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 11,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        786.72,
+        2654.524,
+        801.119
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 11,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        786.72,
+        2696.514,
+        801.119
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 11,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        786.72,
+        2745.368,
+        801.119
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            90
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1006
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 11,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        786.72,
+        2868.369,
+        801.119
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 12,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        801.119,
+        2430.352,
+        815.4
+      ],
+      "expected": "LOW ZONE TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOW ZONE TEMPERATURE",
+          "word_ids": [
+            28,
+            29,
+            30
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOW ZONE TEMPERATURE",
+          "word_ids": [
+            464,
+            465,
+            466
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 12,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        801.119,
+        2455.192,
+        815.4
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 12,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        801.119,
+        2479.928,
+        815.4
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 12,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        801.119,
+        2504.643,
+        815.4
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 12,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        801.119,
+        2530.802,
+        815.4
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 12,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        801.119,
+        2555.641,
+        815.4
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 12,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        801.119,
+        2578.811,
+        815.4
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 12,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        801.119,
+        2612.514,
+        815.4
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 12,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        801.119,
+        2654.524,
+        815.4
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 12,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        801.119,
+        2696.514,
+        815.4
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 12,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        801.119,
+        2745.368,
+        815.4
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            89
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1007
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 12,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        801.119,
+        2868.369,
+        815.4
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 13,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        815.4,
+        2430.352,
+        829.679
+      ],
+      "expected": "HIGH DISCHARGE TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH DISCHARGE TEMPERATURE",
+          "word_ids": [
+            31,
+            32,
+            33
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH DISCHARGE TEMPERATURE",
+          "word_ids": [
+            467,
+            468,
+            469
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 13,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        815.4,
+        2455.192,
+        829.679
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 13,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        815.4,
+        2479.928,
+        829.679
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 13,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        815.4,
+        2504.643,
+        829.679
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 13,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        815.4,
+        2530.802,
+        829.679
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 13,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        815.4,
+        2555.641,
+        829.679
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 13,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        815.4,
+        2578.811,
+        829.679
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 13,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        815.4,
+        2612.514,
+        829.679
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 13,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        815.4,
+        2654.524,
+        829.679
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 13,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        815.4,
+        2696.514,
+        829.679
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 13,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        815.4,
+        2745.368,
+        829.679
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            84
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1008
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 13,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        815.4,
+        2868.369,
+        829.679
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 14,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        829.679,
+        2430.352,
+        843.96
+      ],
+      "expected": "LOW DISCHARGE TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "LOW DISCHARGE TEMPERATURE",
+          "word_ids": [
+            34,
+            35,
+            36
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "LOW DISCHARGE TEMPERATURE",
+          "word_ids": [
+            470,
+            471,
+            472
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 14,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        829.679,
+        2455.192,
+        843.96
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 14,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        829.679,
+        2479.928,
+        843.96
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 14,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        829.679,
+        2504.643,
+        843.96
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 14,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        829.679,
+        2530.802,
+        843.96
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 14,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        829.679,
+        2555.641,
+        843.96
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 14,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        829.679,
+        2578.811,
+        843.96
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 14,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        829.679,
+        2612.514,
+        843.96
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 14,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        829.679,
+        2654.524,
+        843.96
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 14,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        829.679,
+        2696.514,
+        843.96
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 14,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        829.679,
+        2745.368,
+        843.96
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            85
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1009
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 14,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        829.679,
+        2868.369,
+        843.96
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 15,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        843.96,
+        2430.352,
+        857.52
+      ],
+      "expected": "HIGH ZONE HUMIDITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HIGH ZONE HUMIDITY",
+          "word_ids": [
+            96,
+            97,
+            98
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HIGH ZONE HUMIDITY",
+          "word_ids": [
+            473,
+            474,
+            475
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 15,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        843.96,
+        2455.192,
+        857.52
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 15,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        843.96,
+        2479.928,
+        857.52
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 15,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        843.96,
+        2504.643,
+        857.52
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 15,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        843.96,
+        2530.802,
+        857.52
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 15,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        843.96,
+        2555.641,
+        857.52
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 15,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        843.96,
+        2578.811,
+        857.52
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 15,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        843.96,
+        2612.514,
+        857.52
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 15,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        843.96,
+        2654.524,
+        857.52
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 15,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        843.96,
+        2696.514,
+        857.52
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 15,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        843.96,
+        2745.368,
+        857.52
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            113
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1010
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 15,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        843.96,
+        2868.369,
+        857.52
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 16,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        857.52,
+        2430.352,
+        871.801
+      ],
+      "expected": "MINIMUM OCCUPIED AIR FLOW SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MINIMUM OCCUPIED AIR FLOW SETPOINT",
+          "word_ids": [
+            99,
+            100,
+            101,
+            102,
+            103
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MINIMUM OCCUPIED AIR FLOW SETPOINT",
+          "word_ids": [
+            476,
+            477,
+            478,
+            479,
+            480
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 16,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        857.52,
+        2455.192,
+        871.801
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 16,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        857.52,
+        2479.928,
+        871.801
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 16,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        857.52,
+        2504.643,
+        871.801
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 16,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        857.52,
+        2530.802,
+        871.801
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 16,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        857.52,
+        2555.641,
+        871.801
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            120
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1013
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 16,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        857.52,
+        2578.811,
+        871.801
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 16,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        857.52,
+        2612.514,
+        871.801
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 16,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        857.52,
+        2654.524,
+        871.801
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 16,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        857.52,
+        2696.514,
+        871.801
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            114
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1011
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 16,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        857.52,
+        2745.368,
+        871.801
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 16,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        857.52,
+        2868.369,
+        871.801
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            118
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1016
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 17,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        871.801,
+        2430.352,
+        886.08
+      ],
+      "expected": "MINIMUM UNOCCUPIED AIRFLOW SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MINIMUM UNOCCUPIED AIRFLOW SETPOINT",
+          "word_ids": [
+            104,
+            105,
+            106,
+            107
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MINIMUM UNOCCUPIED AIRFLOW SETPOINT",
+          "word_ids": [
+            481,
+            482,
+            483,
+            484
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 17,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        871.801,
+        2455.192,
+        886.08
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 17,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        871.801,
+        2479.928,
+        886.08
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 17,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        871.801,
+        2504.643,
+        886.08
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 17,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        871.801,
+        2530.802,
+        886.08
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 17,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        871.801,
+        2555.641,
+        886.08
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            121
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1014
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 17,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        871.801,
+        2578.811,
+        886.08
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 17,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        871.801,
+        2612.514,
+        886.08
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 17,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        871.801,
+        2654.524,
+        886.08
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 17,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        871.801,
+        2696.514,
+        886.08
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            115
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1012
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 17,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        871.801,
+        2745.368,
+        886.08
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 17,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        871.801,
+        2868.369,
+        886.08
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            119
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1017
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 18,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        886.08,
+        2430.352,
+        900.361
+      ],
+      "expected": "ZONE HUMIDITY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ZONE HUMIDITY",
+          "word_ids": [
+            108,
+            109
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ZONE HUMIDITY",
+          "word_ids": [
+            485,
+            486
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 18,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        886.08,
+        2455.192,
+        900.361
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            122
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1015
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 18,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        886.08,
+        2479.928,
+        900.361
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 18,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        886.08,
+        2504.643,
+        900.361
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 18,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        886.08,
+        2530.802,
+        900.361
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 18,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        886.08,
+        2555.641,
+        900.361
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 18,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        886.08,
+        2578.811,
+        900.361
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 18,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        886.08,
+        2612.514,
+        900.361
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 18,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        886.08,
+        2654.524,
+        900.361
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 18,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        886.08,
+        2696.514,
+        900.361
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            116
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1018
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 18,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        886.08,
+        2745.368,
+        900.361
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 18,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        886.08,
+        2868.369,
+        900.361
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 19,
+      "column": "point_name",
+      "page": 11,
+      "bbox": [
+        2194.802,
+        900.361,
+        2430.352,
+        914.759
+      ],
+      "expected": "ZONE HUMIDITY SETPOINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ZONE HUMIDITY SETPOINT",
+          "word_ids": [
+            110,
+            111,
+            112
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ZONE HUMIDITY SETPOINT",
+          "word_ids": [
+            487,
+            488,
+            489
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 19,
+      "column": "AI",
+      "page": 11,
+      "bbox": [
+        2430.352,
+        900.361,
+        2455.192,
+        914.759
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            123
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1020
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 19,
+      "column": "AO",
+      "page": 11,
+      "bbox": [
+        2455.192,
+        900.361,
+        2479.928,
+        914.759
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 19,
+      "column": "BI",
+      "page": 11,
+      "bbox": [
+        2479.928,
+        900.361,
+        2504.643,
+        914.759
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 19,
+      "column": "BO",
+      "page": 11,
+      "bbox": [
+        2504.643,
+        900.361,
+        2530.802,
+        914.759
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 19,
+      "column": "AV",
+      "page": 11,
+      "bbox": [
+        2530.802,
+        900.361,
+        2555.641,
+        914.759
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 19,
+      "column": "BV",
+      "page": 11,
+      "bbox": [
+        2555.641,
+        900.361,
+        2578.811,
+        914.759
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 19,
+      "column": "LOOP",
+      "page": 11,
+      "bbox": [
+        2578.811,
+        900.361,
+        2612.514,
+        914.759
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 19,
+      "column": "SCHED",
+      "page": 11,
+      "bbox": [
+        2612.514,
+        900.361,
+        2654.524,
+        914.759
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 19,
+      "column": "TREND",
+      "page": 11,
+      "bbox": [
+        2654.524,
+        900.361,
+        2696.514,
+        914.759
+      ],
+      "expected": "X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            117
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "X",
+          "word_ids": [
+            1019
+          ]
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 19,
+      "column": "ALARM",
+      "page": 11,
+      "bbox": [
+        2696.514,
+        900.361,
+        2745.368,
+        914.759
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "row": 19,
+      "column": "show_on_graphic",
+      "page": 11,
+      "bbox": [
+        2745.368,
+        900.361,
+        2868.369,
+        914.759
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "header": "VAV TERMINAL UNIT POINT LIST",
+      "page": 11,
+      "bbox": [
+        2180,
+        980,
+        2530,
+        1005
+      ],
+      "engine": "mupdf",
+      "actual": "VAV TERMINAL UNIT POINT LIST",
+      "pass": true
+    },
+    {
+      "table": "MH502-VAV-TERMINAL-UNIT-POINT-LIST",
+      "header": "VAV TERMINAL UNIT POINT LIST",
+      "page": 11,
+      "bbox": [
+        2180,
+        980,
+        2530,
+        1005
+      ],
+      "engine": "poppler",
+      "actual": "VAV TERMINAL UNIT POINT LIST",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "mh502-vav-point-list-rows",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

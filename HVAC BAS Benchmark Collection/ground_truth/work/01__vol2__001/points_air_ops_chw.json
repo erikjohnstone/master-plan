@@ -1,0 +1,120 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All printed entries in the Air Ops chilled-water system points list on MI710 (source PDF page 56): 15 analog inputs, 3 analog outputs, 9 binary inputs and 6 binary outputs. This records controller points and printed flags, not inferred field-device counts.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [56],
+    "render": "reviews/01__vol2__001/p56-p56-controls-poppler.png",
+    "dpi": 180,
+    "finding": "The MI710 chilled-water schematic and its complete right-hand points-list panel were visually reviewed at 180 DPI. Point descriptions, alarm flags and trend flags are retained as printed."
+  },
+  "tables": [
+    {
+      "id": "AIR-OPS-CHW-AI",
+      "page": 56,
+      "sheet": "MI710",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS CHW SYSTEM POINTS LIST - ANALOG INPUT",
+      "classification": "Analog input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1700, 1740, 2020, 2075, 2120],
+      "y_edges": [361, 378, 395, 413, 430, 447, 464, 482, 499, 516, 533, 551, 568, 585, 602, 620],
+      "rows": [
+        "AI01|PCHWP-A2 SPEED (FEEDBACK)|No|Yes",
+        "AI02|CHW FLOWRATE|No|Yes",
+        "AI03|CHW SUPPLY TEMPERATURE|Yes|Yes",
+        "AI04|CH-A1 CHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI05|CHW RETURN TEMPERATURE|Yes|Yes",
+        "AI06|CHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI07|CH-A1 CHW SUPPLY TEMPERATURE|No|Yes",
+        "AI08|CH-A1 CHW RETURN TEMPERATURE|No|Yes",
+        "AI09|CH-A2 CHW DIFFERENTIAL PRESSURE|No|Yes",
+        "AI10|PCHWP-A1 SPEED (FEEDBACK)|No|Yes",
+        "AI11|CH-A2 CHW SUPPLY TEMPERATURE|Yes|Yes",
+        "AI12|CH-A2 CHW RETURN TEMPERATURE|Yes|Yes",
+        "AI13|CHW BYPASS CV-3 POSITION (FEEDBACK)|No|Yes",
+        "AI14|PCHWP-A1 DIFFERENTIAL PRESSURE|No|Yes",
+        "AI15|PCHWP-A2 DIFFERENTIAL PRESSURE|No|Yes"
+      ],
+      "header_evidence": [
+        {"bbox": [1800, 290, 2050, 325], "expected": "AIR OPS CHW SYSTEM POINTS LIST"},
+        {"bbox": [1700, 325, 2120, 352], "expected": "MARK DESCRIPTION ALARM TREND"},
+        {"bbox": [1680, 344, 1800, 361], "expected": "ANALOG INPUT"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-CHW-AO",
+      "page": 56,
+      "sheet": "MI710",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS CHW SYSTEM POINTS LIST - ANALOG OUTPUT",
+      "classification": "Analog output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1700, 1740, 2020, 2075, 2120],
+      "y_edges": [654, 671, 689, 706],
+      "rows": [
+        "AO01|PCHWP-A1 SPEED CONTROL|No|Yes",
+        "AO02|PCHWP-A2 SPEED CONTROL|No|Yes",
+        "AO03|CHW BYPASS CV-3 VALVE CONTROL|No|Yes"
+      ],
+      "header_evidence": [
+        {"bbox": [1680, 628, 1800, 654], "expected": "ANALOG OUTPUT"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-CHW-BI",
+      "page": 56,
+      "sheet": "MI710",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS CHW SYSTEM POINTS LIST - BINARY INPUT",
+      "classification": "Binary input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1700, 1740, 2020, 2075, 2120],
+      "y_edges": [740, 758, 775, 792, 809, 827, 844, 861, 879, 896],
+      "rows": [
+        "BI01|PCHWP-A2 VFD ALARM|Yes|No",
+        "BI02|PCHWP-A1 VFD ALARM|Yes|No",
+        "BI03|PCHWP-A1 VFD STATUS|No|Yes",
+        "BI04|PCHWP-A2 VFD STATUS|No|Yes",
+        "BI05|CH-A1 FLOW SWITCH|Yes|No",
+        "BI06|CH-A1 CV-1 POSITION (FEEDBACK)|No|Yes",
+        "BI07|CH-A2 FLOW SWITCH|Yes|No",
+        "BI08|CH-A2 CV-2 POSITION (FEEDBACK)|No|Yes",
+        "BI09|AIR OPS CHILLER PLANT DDC RESET|No|No"
+      ],
+      "header_evidence": [
+        {"bbox": [1680, 714, 1800, 740], "expected": "BINARY INPUT"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-CHW-BO",
+      "page": 56,
+      "sheet": "MI710",
+      "building_scope": "Air Operations",
+      "title": "AIR OPS CHW SYSTEM POINTS LIST - BINARY OUTPUT",
+      "classification": "Binary output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [1700, 1740, 2020, 2075, 2120],
+      "y_edges": [930, 947, 965, 982, 999, 1016, 1034],
+      "rows": [
+        "BO01|CH-A1 CV-1 VALVE CONTROL|No|No",
+        "BO02|PCHWP-A2 ENABLE|No|No",
+        "BO03|CH-A1 CHILLER CONTROL|No|No",
+        "BO04|CH-A2 CHILLER CONTROL|No|No",
+        "BO05|CH-A2 CV-2 VALVE CONTROL|No|No",
+        "BO06|PCHWP-A1 ENABLE|No|No"
+      ],
+      "header_evidence": [
+        {"bbox": [1680, 904, 1800, 930], "expected": "BINARY OUTPUT"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "air-ops-chw-ai-count", "records_path": ["tables", 0, "rows"], "expected": 15},
+    {"id": "air-ops-chw-ao-count", "records_path": ["tables", 1, "rows"], "expected": 3},
+    {"id": "air-ops-chw-bi-count", "records_path": ["tables", 2, "rows"], "expected": 9},
+    {"id": "air-ops-chw-bo-count", "records_path": ["tables", 3, "rows"], "expected": 6}
+  ],
+  "remaining_work": "Capture the remaining system point lists, control diagrams, sequences, DDC-network relationships and plan-level field-device reconciliation."
+}

@@ -1,0 +1,838 @@
+{
+  "document_id": "04__vol2__062",
+  "module_role": "Cross-reference registry for every M5.0-M5.3 schedule table. It preserves printed schedule identities and classifications but deliberately does not turn schedule types into facility-wide installed counts.",
+  "tables": [],
+  "schedule_registry_schema": {
+    "namespace_separator": "-",
+    "identity_columns": {
+      "tag": "tag"
+    },
+    "anchor_records_path": [
+      "primary_anchors"
+    ],
+    "non_instance_table_ids": [
+      "M51-DIFFUSERS",
+      "M51-RETURN-EXHAUST-GRILLES"
+    ]
+  },
+  "scheduled_families": [
+    {
+      "module": "schedules_m50_air_valves.json",
+      "bundle_module": "schedules",
+      "table": "M50-ROOM-SUPPLY-AIR-VALVES",
+      "class": "room_supply_air_valve",
+      "scope": "M5.0 literal room-supply-air-valve schedule rows; no separate clean tag column is asserted",
+      "rows": 9
+    },
+    {
+      "module": "schedules_m50_air_valves.json",
+      "bundle_module": "schedules",
+      "table": "M50-GENERAL-EXHAUST-AIR-VALVES",
+      "class": "general_exhaust_air_valve",
+      "scope": "M5.0 literal general-exhaust-air-valve schedule rows; no separate clean tag column is asserted",
+      "rows": 7
+    },
+    {
+      "module": "schedules_m50_air_valves.json",
+      "bundle_module": "schedules",
+      "table": "M50-SNORKEL-EXHAUST-AIR-VALVES",
+      "class": "snorkel_exhaust_air_valve",
+      "scope": "M5.0 literal snorkel-exhaust-air-valve schedule rows; no separate clean tag column is asserted",
+      "rows": 5
+    },
+    {
+      "module": "schedules_m51_control_valves.json",
+      "bundle_module": "schedules",
+      "table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES",
+      "class": "hot_water_reheat_control_valve",
+      "scope": "M5.1 reheat control-valve schedule",
+      "rows": 9,
+      "tag": [
+        "CV-1",
+        "CV-2",
+        "CV-3",
+        "CV-4",
+        "CV-5",
+        "CV-6",
+        "CV-7",
+        "CV-8",
+        "CV-9"
+      ]
+    },
+    {
+      "module": "schedules_m51_control_valves.json",
+      "bundle_module": "schedules",
+      "table": "M51-BYPASS-CONTROL-VALVE",
+      "class": "heating_water_bypass_control_valve",
+      "scope": "M5.1 literal bypass-control-valve source row",
+      "rows": 1
+    },
+    {
+      "module": "schedules_m52_equipment.json",
+      "bundle_module": "schedules",
+      "table": "M52-ELECTRIC-HEATERS",
+      "class": "electric_heater",
+      "scope": "M5.2 electric-heater schedule",
+      "rows": 9,
+      "tag": [
+        "EH-1",
+        "EH-2",
+        "EH-3",
+        "EH-4",
+        "EH-5",
+        "EH-6",
+        "EH-7",
+        "EH-8",
+        "EH-9"
+      ]
+    },
+    {
+      "module": "schedules_m52_equipment.json",
+      "bundle_module": "schedules",
+      "table": "M52-MECHANICAL-SPECIALTY",
+      "class": "mechanical_specialty_equipment",
+      "scope": "M5.2 specialty-equipment schedule",
+      "rows": 4,
+      "tag": [
+        "AS-1",
+        "ET-1",
+        "FM-1",
+        "PF-1"
+      ]
+    },
+    {
+      "module": "schedules_m52_equipment.json",
+      "bundle_module": "schedules",
+      "table": "M52-GAS-SPLIT-SYSTEM",
+      "class": "gas_split_system",
+      "scope": "M5.2 one shared indoor/outdoor split-system schedule row",
+      "rows": 1,
+      "tag": [
+        "F-1 , CU-1"
+      ]
+    },
+    {
+      "module": "schedules_m52_equipment.json",
+      "bundle_module": "schedules",
+      "table": "M52-SOUND-ATTENUATOR",
+      "class": "sound_attenuator",
+      "scope": "M5.2 sound-attenuator schedule",
+      "rows": 1,
+      "tag": [
+        "SA-1"
+      ]
+    },
+    {
+      "module": "schedules_m52_equipment.json",
+      "bundle_module": "schedules",
+      "table": "M52-PENTHOUSE",
+      "class": "penthouse",
+      "scope": "M5.2 penthouse schedule",
+      "rows": 1,
+      "tag": [
+        "PH-1"
+      ]
+    },
+    {
+      "module": "schedules_m52_equipment.json",
+      "bundle_module": "schedules",
+      "table": "M52-LOUVERS",
+      "class": "louver",
+      "scope": "M5.2 louver schedule",
+      "rows": 2,
+      "tag": [
+        "L-1",
+        "L-2"
+      ]
+    },
+    {
+      "module": "schedules_m52_equipment.json",
+      "bundle_module": "schedules",
+      "table": "M52-DUCTLESS-SPLIT-HIGH-WALL",
+      "class": "ductless_split_system",
+      "scope": "M5.2 one shared indoor/outdoor ductless schedule row",
+      "rows": 1,
+      "tag": [
+        "DFC-1 , DCU-1"
+      ]
+    },
+    {
+      "module": "schedules_m53_ahu.json",
+      "bundle_module": "schedules",
+      "table": "M53-AIR-HANDLING-UNIT",
+      "class": "air_handling_unit",
+      "scope": "M5.3 AHU schedule",
+      "rows": 1,
+      "tag": [
+        "AHU-1"
+      ]
+    },
+    {
+      "module": "schedules_m51_core_equipment.json",
+      "bundle_module": "schedules",
+      "table": "M51-CONDENSING-HOT-WATER-BOILERS",
+      "class": "condensing_boiler",
+      "scope": "M5.1 boiler schedule",
+      "rows": 2,
+      "tag": [
+        "B-1",
+        "B-2"
+      ]
+    },
+    {
+      "module": "schedules_m51_core_equipment.json",
+      "bundle_module": "schedules",
+      "table": "M51-HOT-WATER-REHEAT-COILS",
+      "class": "hot_water_reheat_coil",
+      "scope": "M5.1 reheat-coil schedule",
+      "rows": 9,
+      "tag": [
+        "HC-1",
+        "HC-2",
+        "HC-3",
+        "HC-4",
+        "HC-5",
+        "HC-6",
+        "HC-7",
+        "HC-8",
+        "HC-9"
+      ]
+    },
+    {
+      "module": "schedules_m51_core_equipment.json",
+      "bundle_module": "schedules",
+      "table": "M51-HUMIDIFIER",
+      "class": "humidifier",
+      "scope": "M5.1 humidifier schedule",
+      "rows": 1,
+      "tag": [
+        "HUM-1"
+      ]
+    },
+    {
+      "module": "schedules_m51_core_equipment.json",
+      "bundle_module": "schedules",
+      "table": "M51-LAB-EXHAUST-FAN",
+      "class": "laboratory_exhaust_fan",
+      "scope": "M5.1 laboratory-exhaust-fan schedule",
+      "rows": 1,
+      "tag": [
+        "LEF-1"
+      ]
+    },
+    {
+      "module": "schedules_m50_core_equipment.json",
+      "bundle_module": "schedules",
+      "table": "M50-CANOPY-HOODS",
+      "class": "canopy_hood",
+      "scope": "M5.0 canopy-hood schedule",
+      "rows": 4,
+      "tag": [
+        "CH-1",
+        "CH-2",
+        "CH-3",
+        "CH-4"
+      ]
+    },
+    {
+      "module": "schedules_m50_core_equipment.json",
+      "bundle_module": "schedules",
+      "table": "M50-PUMPS",
+      "class": "pump",
+      "scope": "M5.0 pump schedule",
+      "rows": 4,
+      "tag": [
+        "BP-1",
+        "BP-2",
+        "HWP-1",
+        "HWP-2"
+      ]
+    },
+    {
+      "module": "schedules_m50_core_equipment.json",
+      "bundle_module": "schedules",
+      "table": "M50-EXHAUST-FANS",
+      "class": "exhaust_fan",
+      "scope": "M5.0 exhaust-fan schedule",
+      "rows": 6,
+      "tag": [
+        "EF-1",
+        "EF-2",
+        "EF-3",
+        "EF-4",
+        "EF-5",
+        "EF-6"
+      ]
+    },
+    {
+      "module": "schedules_m50_core_equipment.json",
+      "bundle_module": "schedules",
+      "table": "M50-SNORKEL-HOODS",
+      "class": "snorkel_hood",
+      "scope": "M5.0 snorkel-hood schedule",
+      "rows": 5,
+      "tag": [
+        "SN-1",
+        "SN-2",
+        "SN-3",
+        "SN-4",
+        "SN-5"
+      ]
+    },
+    {
+      "module": "schedules_m51_air_devices.json",
+      "bundle_module": "schedules",
+      "table": "M51-DIFFUSERS",
+      "class": "diffuser_type",
+      "scope": "M5.1 source-symbol diffuser schedule rows; clean tags are in the cited symbol registry",
+      "rows": 7
+    },
+    {
+      "module": "schedules_m51_air_devices.json",
+      "bundle_module": "schedules",
+      "table": "M51-RETURN-EXHAUST-GRILLES",
+      "class": "return_or_exhaust_grille_type",
+      "scope": "M5.1 source-symbol grille schedule rows; clean tags are in the cited symbol registry",
+      "rows": 4
+    }
+  ],
+  "schedule_counts": {
+    "tables": 23,
+    "rows": 94,
+    "building_scoped_tag_identities_including_outlet_types": 61,
+    "other_scheduled_tag_identities": 61,
+    "interpretation": "Counts are literal clean-tag schedule-row identities only. The 21 M5.0 air-valve literal rows, one BCV literal row and eleven D/R symbol-registry tags are retained below but are not converted to separate clean-tag schedule-table identities by this registry."
+  },
+  "primary_anchors": [
+    {
+      "id": "M51-CV-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_control_valve",
+      "source_table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES"
+    },
+    {
+      "id": "M51-CV-2",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_control_valve",
+      "source_table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES"
+    },
+    {
+      "id": "M51-CV-3",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_control_valve",
+      "source_table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES"
+    },
+    {
+      "id": "M51-CV-4",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_control_valve",
+      "source_table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES"
+    },
+    {
+      "id": "M51-CV-5",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_control_valve",
+      "source_table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES"
+    },
+    {
+      "id": "M51-CV-6",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_control_valve",
+      "source_table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES"
+    },
+    {
+      "id": "M51-CV-7",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_control_valve",
+      "source_table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES"
+    },
+    {
+      "id": "M51-CV-8",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_control_valve",
+      "source_table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES"
+    },
+    {
+      "id": "M51-CV-9",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_control_valve",
+      "source_table": "M51-HOT-WATER-REHEAT-CONTROL-VALVES"
+    },
+    {
+      "id": "M52-EH-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "electric_heater",
+      "source_table": "M52-ELECTRIC-HEATERS"
+    },
+    {
+      "id": "M52-EH-2",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "electric_heater",
+      "source_table": "M52-ELECTRIC-HEATERS"
+    },
+    {
+      "id": "M52-EH-3",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "electric_heater",
+      "source_table": "M52-ELECTRIC-HEATERS"
+    },
+    {
+      "id": "M52-EH-4",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "electric_heater",
+      "source_table": "M52-ELECTRIC-HEATERS"
+    },
+    {
+      "id": "M52-EH-5",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "electric_heater",
+      "source_table": "M52-ELECTRIC-HEATERS"
+    },
+    {
+      "id": "M52-EH-6",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "electric_heater",
+      "source_table": "M52-ELECTRIC-HEATERS"
+    },
+    {
+      "id": "M52-EH-7",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "electric_heater",
+      "source_table": "M52-ELECTRIC-HEATERS"
+    },
+    {
+      "id": "M52-EH-8",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "electric_heater",
+      "source_table": "M52-ELECTRIC-HEATERS"
+    },
+    {
+      "id": "M52-EH-9",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "electric_heater",
+      "source_table": "M52-ELECTRIC-HEATERS"
+    },
+    {
+      "id": "M52-AS-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "mechanical_specialty_equipment",
+      "source_table": "M52-MECHANICAL-SPECIALTY"
+    },
+    {
+      "id": "M52-ET-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "mechanical_specialty_equipment",
+      "source_table": "M52-MECHANICAL-SPECIALTY"
+    },
+    {
+      "id": "M52-FM-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "mechanical_specialty_equipment",
+      "source_table": "M52-MECHANICAL-SPECIALTY"
+    },
+    {
+      "id": "M52-PF-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "mechanical_specialty_equipment",
+      "source_table": "M52-MECHANICAL-SPECIALTY"
+    },
+    {
+      "id": "M52-F-1 , CU-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "gas_split_system",
+      "source_table": "M52-GAS-SPLIT-SYSTEM"
+    },
+    {
+      "id": "M52-SA-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "sound_attenuator",
+      "source_table": "M52-SOUND-ATTENUATOR"
+    },
+    {
+      "id": "M52-PH-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "penthouse",
+      "source_table": "M52-PENTHOUSE"
+    },
+    {
+      "id": "M52-L-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "louver",
+      "source_table": "M52-LOUVERS"
+    },
+    {
+      "id": "M52-L-2",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "louver",
+      "source_table": "M52-LOUVERS"
+    },
+    {
+      "id": "M52-DFC-1 , DCU-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "ductless_split_system",
+      "source_table": "M52-DUCTLESS-SPLIT-HIGH-WALL"
+    },
+    {
+      "id": "M53-AHU-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "air_handling_unit",
+      "source_table": "M53-AIR-HANDLING-UNIT"
+    },
+    {
+      "id": "M51-B-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "condensing_boiler",
+      "source_table": "M51-CONDENSING-HOT-WATER-BOILERS"
+    },
+    {
+      "id": "M51-B-2",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "condensing_boiler",
+      "source_table": "M51-CONDENSING-HOT-WATER-BOILERS"
+    },
+    {
+      "id": "M51-HC-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_coil",
+      "source_table": "M51-HOT-WATER-REHEAT-COILS"
+    },
+    {
+      "id": "M51-HC-2",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_coil",
+      "source_table": "M51-HOT-WATER-REHEAT-COILS"
+    },
+    {
+      "id": "M51-HC-3",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_coil",
+      "source_table": "M51-HOT-WATER-REHEAT-COILS"
+    },
+    {
+      "id": "M51-HC-4",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_coil",
+      "source_table": "M51-HOT-WATER-REHEAT-COILS"
+    },
+    {
+      "id": "M51-HC-5",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_coil",
+      "source_table": "M51-HOT-WATER-REHEAT-COILS"
+    },
+    {
+      "id": "M51-HC-6",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_coil",
+      "source_table": "M51-HOT-WATER-REHEAT-COILS"
+    },
+    {
+      "id": "M51-HC-7",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_coil",
+      "source_table": "M51-HOT-WATER-REHEAT-COILS"
+    },
+    {
+      "id": "M51-HC-8",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_coil",
+      "source_table": "M51-HOT-WATER-REHEAT-COILS"
+    },
+    {
+      "id": "M51-HC-9",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "hot_water_reheat_coil",
+      "source_table": "M51-HOT-WATER-REHEAT-COILS"
+    },
+    {
+      "id": "M51-HUM-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "humidifier",
+      "source_table": "M51-HUMIDIFIER"
+    },
+    {
+      "id": "M51-LEF-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "laboratory_exhaust_fan",
+      "source_table": "M51-LAB-EXHAUST-FAN"
+    },
+    {
+      "id": "M50-CH-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "canopy_hood",
+      "source_table": "M50-CANOPY-HOODS"
+    },
+    {
+      "id": "M50-CH-2",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "canopy_hood",
+      "source_table": "M50-CANOPY-HOODS"
+    },
+    {
+      "id": "M50-CH-3",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "canopy_hood",
+      "source_table": "M50-CANOPY-HOODS"
+    },
+    {
+      "id": "M50-CH-4",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "canopy_hood",
+      "source_table": "M50-CANOPY-HOODS"
+    },
+    {
+      "id": "M50-BP-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "pump",
+      "source_table": "M50-PUMPS"
+    },
+    {
+      "id": "M50-BP-2",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "pump",
+      "source_table": "M50-PUMPS"
+    },
+    {
+      "id": "M50-HWP-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "pump",
+      "source_table": "M50-PUMPS"
+    },
+    {
+      "id": "M50-HWP-2",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "pump",
+      "source_table": "M50-PUMPS"
+    },
+    {
+      "id": "M50-EF-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "exhaust_fan",
+      "source_table": "M50-EXHAUST-FANS"
+    },
+    {
+      "id": "M50-EF-2",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "exhaust_fan",
+      "source_table": "M50-EXHAUST-FANS"
+    },
+    {
+      "id": "M50-EF-3",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "exhaust_fan",
+      "source_table": "M50-EXHAUST-FANS"
+    },
+    {
+      "id": "M50-EF-4",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "exhaust_fan",
+      "source_table": "M50-EXHAUST-FANS"
+    },
+    {
+      "id": "M50-EF-5",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "exhaust_fan",
+      "source_table": "M50-EXHAUST-FANS"
+    },
+    {
+      "id": "M50-EF-6",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "exhaust_fan",
+      "source_table": "M50-EXHAUST-FANS"
+    },
+    {
+      "id": "M50-SN-1",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "snorkel_hood",
+      "source_table": "M50-SNORKEL-HOODS"
+    },
+    {
+      "id": "M50-SN-2",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "snorkel_hood",
+      "source_table": "M50-SNORKEL-HOODS"
+    },
+    {
+      "id": "M50-SN-3",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "snorkel_hood",
+      "source_table": "M50-SNORKEL-HOODS"
+    },
+    {
+      "id": "M50-SN-4",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "snorkel_hood",
+      "source_table": "M50-SNORKEL-HOODS"
+    },
+    {
+      "id": "M50-SN-5",
+      "status": "schedule_identity_only",
+      "page": null,
+      "zone": "No plan placement or installed multiplicity is inferred from a schedule type row.",
+      "classification": "snorkel_hood",
+      "source_table": "M50-SNORKEL-HOODS"
+    }
+  ],
+  "additional_identities": [
+    {
+      "status": "source_literal_row_not_reformatted_as_clean_tag_column",
+      "source": "M5.1 / M51-BYPASS-CONTROL-VALVE row 1",
+      "tag_as_printed": "BCV-1",
+      "reason": "The source module deliberately retains this one-row schedule as a literal source row rather than inventing a clean tag column."
+    },
+    {
+      "status": "source_symbol_registry",
+      "source": "M5.1 / M51-DIFFUSERS and M51-RETURN-EXHAUST-GRILLES",
+      "tags_as_printed": [
+        "D-1",
+        "D-2",
+        "D-3",
+        "D-4",
+        "D-5",
+        "D-6",
+        "D-7",
+        "R-1",
+        "R-2",
+        "R-3",
+        "R-4"
+      ],
+      "reason": "The source symbol cells combine tag, size and CFM graphic text; the separate dual-engine-checked symbol registry preserves clean tag witnesses without claiming installed quantities.",
+      "evidence_status": "The named assertion IDs live in the independently verified schedules_m51_air_devices component; this coordinator module does not duplicate their bounds."
+    },
+    {
+      "status": "shared_schedule_row_pair",
+      "source": "M5.2 / M52-GAS-SPLIT-SYSTEM row 1 and M52-DUCTLESS-SPLIT-SYSTEM row 1",
+      "tags_as_printed": [
+        "F-1 , CU-1",
+        "DFC-1 , DCU-1"
+      ],
+      "reason": "Each printed row is a shared indoor/outdoor pair reference; it is not split into invented equipment quantities or summed electrical loads."
+    }
+  ],
+  "control_valve_and_damper_schedule_status": {
+    "control_valve_schedule": "Present: M5.1 has nine hot-water reheat control-valve rows plus one literal heating-water bypass control-valve row.",
+    "damper_actuator_schedule": "Not supplied as a standalone schedule. Visual review found damper/actuator contexts and motorized dampers, but no table with actuator tag, make/model, torque, signal, fail action and installed quantity is asserted.",
+    "boundary": "Do not infer damper-actuator quantities or specifications from louver, fan, damper symbol, or sequence context."
+  },
+  "source_boundary": "The schedule registry validates only authored schedule table coverage, source identity cells and explicit classifications. It is not a plan takeoff or an installed-device total."
+}

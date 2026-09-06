@@ -1,0 +1,1685 @@
+{
+  "document_id": "04__vol2__062",
+  "source_sha256": "9dafcead2eb5fe3679921f336ccd7ca4813da1524580c5fee75a87c99e1b2707",
+  "annotation_sha256": "b5d4768ab0ab3804a71f1d65574551d0f2236eab2df81c4878654d033e14d155",
+  "tables": 4,
+  "rows": 25,
+  "cell_assertions": 50,
+  "text_assertions": 4,
+  "checks": [
+    {
+      "table": "M62-BOILER-PUBLISHED-POINTS-LEDGER",
+      "row": 1,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1525,
+        547,
+        1544,
+        558
+      ],
+      "expected": "1.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.",
+          "word_ids": [
+            986
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.",
+          "word_ids": [
+            603
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-BOILER-PUBLISHED-POINTS-LEDGER",
+      "row": 1,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        1544,
+        547,
+        1650,
+        558
+      ],
+      "expected": "STATUS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS.",
+          "word_ids": [
+            987
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS.",
+          "word_ids": [
+            842
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-BOILER-PUBLISHED-POINTS-LEDGER",
+      "row": 2,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1525,
+        559,
+        1544,
+        570
+      ],
+      "expected": "2.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.",
+          "word_ids": [
+            988
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.",
+          "word_ids": [
+            604
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-BOILER-PUBLISHED-POINTS-LEDGER",
+      "row": 2,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        1544,
+        559,
+        1650,
+        570
+      ],
+      "expected": "ALARM.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARM.",
+          "word_ids": [
+            989
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARM.",
+          "word_ids": [
+            843
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-BOILER-PUBLISHED-POINTS-LEDGER",
+      "row": 3,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1525,
+        571,
+        1544,
+        582
+      ],
+      "expected": "3.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.",
+          "word_ids": [
+            990
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.",
+          "word_ids": [
+            605
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-BOILER-PUBLISHED-POINTS-LEDGER",
+      "row": 3,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        1544,
+        571,
+        1650,
+        582
+      ],
+      "expected": "CAPACITY FEEDBACK.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CAPACITY FEEDBACK.",
+          "word_ids": [
+            991,
+            992
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CAPACITY FEEDBACK.",
+          "word_ids": [
+            844,
+            845
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-BOILER-PUBLISHED-POINTS-LEDGER",
+      "row": 4,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1525,
+        583,
+        1544,
+        594
+      ],
+      "expected": "4.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4.",
+          "word_ids": [
+            993
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4.",
+          "word_ids": [
+            606
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-BOILER-PUBLISHED-POINTS-LEDGER",
+      "row": 4,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        1544,
+        583,
+        1650,
+        594
+      ],
+      "expected": "FIRING RATE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FIRING RATE.",
+          "word_ids": [
+            994,
+            995
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FIRING RATE.",
+          "word_ids": [
+            846,
+            847
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-BOILER-PUBLISHED-POINTS-LEDGER",
+      "row": 5,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1525,
+        595,
+        1544,
+        606
+      ],
+      "expected": "5.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.",
+          "word_ids": [
+            996
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.",
+          "word_ids": [
+            607
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-BOILER-PUBLISHED-POINTS-LEDGER",
+      "row": 5,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        1544,
+        595,
+        1650,
+        606
+      ],
+      "expected": "SET POINT.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SET POINT.",
+          "word_ids": [
+            997,
+            998
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SET POINT.",
+          "word_ids": [
+            848,
+            849
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-VFD-PUBLISHED-POINTS-LEDGER",
+      "row": 1,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1525,
+        639,
+        1544,
+        649
+      ],
+      "expected": "1.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.",
+          "word_ids": [
+            1016
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.",
+          "word_ids": [
+            867
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-VFD-PUBLISHED-POINTS-LEDGER",
+      "row": 1,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        1544,
+        639,
+        1650,
+        649
+      ],
+      "expected": "ENABLE/DISABLE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ENABLE/DISABLE.",
+          "word_ids": [
+            1017
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ENABLE/DISABLE.",
+          "word_ids": [
+            868
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-VFD-PUBLISHED-POINTS-LEDGER",
+      "row": 2,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1525,
+        650,
+        1544,
+        661
+      ],
+      "expected": "2.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.",
+          "word_ids": [
+            1018
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.",
+          "word_ids": [
+            869
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-VFD-PUBLISHED-POINTS-LEDGER",
+      "row": 2,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        1544,
+        650,
+        1650,
+        661
+      ],
+      "expected": "STATUS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STATUS.",
+          "word_ids": [
+            1019
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STATUS.",
+          "word_ids": [
+            870
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-VFD-PUBLISHED-POINTS-LEDGER",
+      "row": 3,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1525,
+        662,
+        1544,
+        673
+      ],
+      "expected": "3.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.",
+          "word_ids": [
+            1020
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.",
+          "word_ids": [
+            871
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-VFD-PUBLISHED-POINTS-LEDGER",
+      "row": 3,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        1544,
+        662,
+        1650,
+        673
+      ],
+      "expected": "SPEED CONTROL.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPEED CONTROL.",
+          "word_ids": [
+            1021,
+            1022
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPEED CONTROL.",
+          "word_ids": [
+            872,
+            873
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-VFD-PUBLISHED-POINTS-LEDGER",
+      "row": 4,
+      "column": "tag",
+      "page": 18,
+      "bbox": [
+        1525,
+        674,
+        1544,
+        687
+      ],
+      "expected": "4.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4.",
+          "word_ids": [
+            1023
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4.",
+          "word_ids": [
+            874
+          ]
+        }
+      }
+    },
+    {
+      "table": "M62-VFD-PUBLISHED-POINTS-LEDGER",
+      "row": 4,
+      "column": "point_name",
+      "page": 18,
+      "bbox": [
+        1544,
+        674,
+        1650,
+        687
+      ],
+      "expected": "ALARMS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARMS.",
+          "word_ids": [
+            1024
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARMS.",
+          "word_ids": [
+            875
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-WRITEABLE-POINTS-LEDGER",
+      "row": 1,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1685,
+        166,
+        1705,
+        180
+      ],
+      "expected": "a.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "a.",
+          "word_ids": [
+            1663
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "a.",
+          "word_ids": [
+            1465
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-WRITEABLE-POINTS-LEDGER",
+      "row": 1,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1705,
+        166,
+        1950,
+        180
+      ],
+      "expected": "UNIT ENABLE / DISABLE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "UNIT ENABLE / DISABLE",
+          "word_ids": [
+            1664,
+            1665,
+            1666,
+            1667
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "UNIT ENABLE / DISABLE",
+          "word_ids": [
+            1466,
+            1467,
+            1468,
+            1469
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-WRITEABLE-POINTS-LEDGER",
+      "row": 2,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1685,
+        180,
+        1705,
+        191
+      ],
+      "expected": "b.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "b.",
+          "word_ids": [
+            1668
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "b.",
+          "word_ids": [
+            1470
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-WRITEABLE-POINTS-LEDGER",
+      "row": 2,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1705,
+        180,
+        1950,
+        191
+      ],
+      "expected": "DUCT STATIC PRESSURE RESET SET POINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCT STATIC PRESSURE RESET SET POINT",
+          "word_ids": [
+            1669,
+            1670,
+            1671,
+            1672,
+            1673,
+            1674
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCT STATIC PRESSURE RESET SET POINT",
+          "word_ids": [
+            1471,
+            1472,
+            1473,
+            1474,
+            1475,
+            1476
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-WRITEABLE-POINTS-LEDGER",
+      "row": 3,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1685,
+        191,
+        1705,
+        203
+      ],
+      "expected": "c.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "c.",
+          "word_ids": [
+            1675
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "c.",
+          "word_ids": [
+            1477
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-WRITEABLE-POINTS-LEDGER",
+      "row": 3,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1705,
+        191,
+        1950,
+        203
+      ],
+      "expected": "SUPPLY AIR TEMPERATURE RESET SET POINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE RESET SET POINT",
+          "word_ids": [
+            1676,
+            1677,
+            1678,
+            1679,
+            1680,
+            1681
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE RESET SET POINT",
+          "word_ids": [
+            1478,
+            1479,
+            1480,
+            1481,
+            1482,
+            1483
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-WRITEABLE-POINTS-LEDGER",
+      "row": 4,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1685,
+        203,
+        1705,
+        214
+      ],
+      "expected": "d.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "d.",
+          "word_ids": [
+            1682
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "d.",
+          "word_ids": [
+            1484
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-WRITEABLE-POINTS-LEDGER",
+      "row": 4,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1705,
+        203,
+        1950,
+        214
+      ],
+      "expected": "BUILDING STATIC PRESSURE SET POINT",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BUILDING STATIC PRESSURE SET POINT",
+          "word_ids": [
+            1683,
+            1684,
+            1685,
+            1686,
+            1687
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BUILDING STATIC PRESSURE SET POINT",
+          "word_ids": [
+            1485,
+            1486,
+            1487,
+            1488,
+            1489
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-WRITEABLE-POINTS-LEDGER",
+      "row": 5,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1685,
+        214,
+        1705,
+        226
+      ],
+      "expected": "e.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "e.",
+          "word_ids": [
+            1688
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "e.",
+          "word_ids": [
+            1490
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-WRITEABLE-POINTS-LEDGER",
+      "row": 5,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1705,
+        214,
+        1950,
+        226
+      ],
+      "expected": "OUTSIDE AIR MINIMUM POSITION",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE AIR MINIMUM POSITION",
+          "word_ids": [
+            1689,
+            1690,
+            1691,
+            1692
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE AIR MINIMUM POSITION",
+          "word_ids": [
+            1491,
+            1492,
+            1493,
+            1494
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 1,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1685,
+        247,
+        1705,
+        259
+      ],
+      "expected": "a.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "a.",
+          "word_ids": [
+            1696
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "a.",
+          "word_ids": [
+            1185
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 1,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1705,
+        247,
+        1950,
+        259
+      ],
+      "expected": "SUPPLY AIR TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE",
+          "word_ids": [
+            1697,
+            1698,
+            1699
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY AIR TEMPERATURE",
+          "word_ids": [
+            1186,
+            1187,
+            1188
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 2,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1685,
+        259,
+        1705,
+        271
+      ],
+      "expected": "b.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "b.",
+          "word_ids": [
+            1700
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "b.",
+          "word_ids": [
+            1189
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 2,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1705,
+        259,
+        1950,
+        271
+      ],
+      "expected": "OUTSIDE AIR TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMPERATURE",
+          "word_ids": [
+            1701,
+            1702,
+            1703
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "OUTSIDE AIR TEMPERATURE",
+          "word_ids": [
+            1190,
+            1191,
+            1192
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 3,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1685,
+        271,
+        1705,
+        283
+      ],
+      "expected": "c.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "c.",
+          "word_ids": [
+            1704
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "c.",
+          "word_ids": [
+            1193
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 3,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1705,
+        271,
+        1950,
+        283
+      ],
+      "expected": "SUPPLY FAN(S) STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN(S) STATUS",
+          "word_ids": [
+            1705,
+            1706,
+            1707
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN(S) STATUS",
+          "word_ids": [
+            1194,
+            1195,
+            1196
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 4,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1685,
+        283,
+        1705,
+        294
+      ],
+      "expected": "d.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "d.",
+          "word_ids": [
+            1708
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "d.",
+          "word_ids": [
+            1197
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 4,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1705,
+        283,
+        1950,
+        294
+      ],
+      "expected": "SUPPLY FAN(S) VFD FREQUENCY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN(S) VFD FREQUENCY",
+          "word_ids": [
+            1709,
+            1710,
+            1711,
+            1712
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN(S) VFD FREQUENCY",
+          "word_ids": [
+            1198,
+            1199,
+            1200,
+            1201
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 5,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1685,
+        294,
+        1705,
+        306
+      ],
+      "expected": "e.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "e.",
+          "word_ids": [
+            1713
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "e.",
+          "word_ids": [
+            1202
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 5,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1705,
+        294,
+        1950,
+        306
+      ],
+      "expected": "BUILDING PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BUILDING PRESSURE",
+          "word_ids": [
+            1714,
+            1715
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BUILDING PRESSURE",
+          "word_ids": [
+            1203,
+            1204
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 6,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1685,
+        306,
+        1705,
+        317
+      ],
+      "expected": "f.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "f.",
+          "word_ids": [
+            1716
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "f.",
+          "word_ids": [
+            1205
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 6,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1705,
+        306,
+        1950,
+        317
+      ],
+      "expected": "COMPRESSOR(S) SUCTION PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COMPRESSOR(S) SUCTION PRESSURE",
+          "word_ids": [
+            1717,
+            1718,
+            1719
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COMPRESSOR(S) SUCTION PRESSURE",
+          "word_ids": [
+            1206,
+            1207,
+            1208
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 7,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1685,
+        317,
+        1705,
+        328
+      ],
+      "expected": "g.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "g.",
+          "word_ids": [
+            1720
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "g.",
+          "word_ids": [
+            1209
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 7,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1705,
+        317,
+        1950,
+        328
+      ],
+      "expected": "COMPRESSOR(S) DISCHARGE PRESSURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COMPRESSOR(S) DISCHARGE PRESSURE",
+          "word_ids": [
+            1721,
+            1722,
+            1723
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COMPRESSOR(S) DISCHARGE PRESSURE",
+          "word_ids": [
+            1210,
+            1211,
+            1212
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 8,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1685,
+        328,
+        1705,
+        340
+      ],
+      "expected": "h.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "h.",
+          "word_ids": [
+            1724
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "h.",
+          "word_ids": [
+            1213
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 8,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1705,
+        328,
+        1950,
+        340
+      ],
+      "expected": "COMPRESSOR(S) SATURATED CONDENSING TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COMPRESSOR(S) SATURATED CONDENSING TEMPERATURE",
+          "word_ids": [
+            1725,
+            1726,
+            1727,
+            1728
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COMPRESSOR(S) SATURATED CONDENSING TEMPERATURE",
+          "word_ids": [
+            1214,
+            1215,
+            1216,
+            1217
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 9,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1685,
+        340,
+        1705,
+        351
+      ],
+      "expected": "i.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "i.",
+          "word_ids": [
+            1729
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "i.",
+          "word_ids": [
+            1218
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 9,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1705,
+        340,
+        1950,
+        351
+      ],
+      "expected": "COMPRESSOR(S) SATURATED SUCTION TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "COMPRESSOR(S) SATURATED SUCTION TEMPERATURE",
+          "word_ids": [
+            1730,
+            1731,
+            1732,
+            1733
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "COMPRESSOR(S) SATURATED SUCTION TEMPERATURE",
+          "word_ids": [
+            1219,
+            1220,
+            1221,
+            1222
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 10,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1685,
+        351,
+        1705,
+        362
+      ],
+      "expected": "j.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "j.",
+          "word_ids": [
+            1734
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "j.",
+          "word_ids": [
+            1223
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 10,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1705,
+        351,
+        1950,
+        362
+      ],
+      "expected": "ALARMS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ALARMS",
+          "word_ids": [
+            1735
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ALARMS",
+          "word_ids": [
+            1224
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 11,
+      "column": "tag",
+      "page": 19,
+      "bbox": [
+        1685,
+        363,
+        1705,
+        374
+      ],
+      "expected": "k.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "k.",
+          "word_ids": [
+            1736
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "k.",
+          "word_ids": [
+            1225
+          ]
+        }
+      }
+    },
+    {
+      "table": "M63-AHU-READABLE-POINTS-LEDGER",
+      "row": 11,
+      "column": "point_name",
+      "page": 19,
+      "bbox": [
+        1705,
+        363,
+        1950,
+        374
+      ],
+      "expected": "FILTER STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FILTER STATUS",
+          "word_ids": [
+            1737,
+            1738
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FILTER STATUS",
+          "word_ids": [
+            1226,
+            1227
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m62-boiler-points-ledger-title",
+      "page": 18,
+      "bbox": [
+        1510,
+        498,
+        1620,
+        520
+      ],
+      "expected": "BOILER POINTS LIST :",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BOILER POINTS LIST :",
+          "word_ids": [
+            961,
+            962,
+            963,
+            964
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BOILER POINTS LIST :",
+          "word_ids": [
+            578,
+            579,
+            580,
+            581
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m62-vfd-points-ledger-title",
+      "page": 18,
+      "bbox": [
+        1510,
+        613,
+        1620,
+        635
+      ],
+      "expected": "VFD POINTS LIST :",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VFD POINTS LIST :",
+          "word_ids": [
+            999,
+            1000,
+            1001,
+            1002
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VFD POINTS LIST :",
+          "word_ids": [
+            850,
+            851,
+            852,
+            853
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m63-writeable-ledger-heading",
+      "page": 19,
+      "bbox": [
+        1680,
+        154,
+        1780,
+        171
+      ],
+      "expected": "1. WRITEABLE POINTS:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1. WRITEABLE POINTS:",
+          "word_ids": [
+            1660,
+            1661,
+            1662
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1. WRITEABLE POINTS:",
+          "word_ids": [
+            1462,
+            1463,
+            1464
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m63-readable-ledger-heading",
+      "page": 19,
+      "bbox": [
+        1680,
+        234,
+        1780,
+        251
+      ],
+      "expected": "2. READABLE POINTS:",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2. READABLE POINTS:",
+          "word_ids": [
+            1693,
+            1694,
+            1695
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2. READABLE POINTS:",
+          "word_ids": [
+            1182,
+            1183,
+            1184
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

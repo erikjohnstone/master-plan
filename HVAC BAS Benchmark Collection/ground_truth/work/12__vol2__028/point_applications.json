@@ -1,0 +1,31 @@
+{
+  "document_id": "12__vol2__028",
+  "status": "corroborated_document_component",
+  "scope": "Source-matrix ownership ledger. Every printed BAS point row is retained in its own P&ID/template matrix. The supplied archive omits the plan-level installed-equipment roster and controller wiring, so a source-matrix scope is the maximum defensible ownership: it is not a physical terminal, device, controller, or zone assignment.",
+  "tables": [],
+  "ledger_mode": "source_matrix_templates_v1",
+  "source_points_composite": "Composite `points` module, embedding all seven independently verified point-matrix modules.",
+  "ownership_binding_semantics": "`ownership_scope` identifies only the printed P&ID/template/system scope. It does not create a physical owner or multiply template rows by a presumed quantity.",
+  "expanded_count_warning": "The ledger contains 193 printed source-matrix rows. This is a row count across reusable templates and system P&IDs, not a count of installed BAS devices, field terminals, controllers, or wires.",
+  "applications": [
+    {"id": "M506-MINI-SPLIT", "source_table": "M506-MINI-SPLIT", "ownership_scope": "M-506 mini-split P&ID template", "physical_installation_count": {"status": "not_stated", "value": null}},
+    {"id": "M506-SWITCHED-EF", "source_table": "M506-SWITCHED-EF", "ownership_scope": "M-506 switch-controlled exhaust-fan P&ID template", "physical_installation_count": {"status": "not_stated", "value": null}},
+    {"id": "M506-WATER-METER", "source_table": "M506-WATER-METER", "ownership_scope": "M-506 water-meter point template", "physical_installation_count": {"status": "not_stated", "value": null}},
+    {"id": "M506-GAS-METER", "source_table": "M506-GAS-METER", "ownership_scope": "M-506 gas-meter point template", "physical_installation_count": {"status": "not_stated", "value": null}},
+    {"id": "M506-ELECTRIC-METER", "source_table": "M506-ELECTRIC-METER", "ownership_scope": "M-506 electric-meter point template", "physical_installation_count": {"status": "not_stated", "value": null}},
+    {"id": "M506-GLOBAL", "source_table": "M506-GLOBAL", "ownership_scope": "M-506 global point template", "physical_installation_count": {"status": "not_stated", "value": null}},
+    {"id": "M507-CHILLED-WATER-SYSTEM", "source_table": "M507-CHILLED-WATER-SYSTEM", "ownership_scope": "M-507 chilled-water-system P&ID", "physical_installation_count": {"status": "not_stated", "value": null}},
+    {"id": "M508-HEATING-WATER-SYSTEM", "source_table": "M508-HEATING-WATER-SYSTEM", "ownership_scope": "M-508 heating-water-system P&ID", "physical_installation_count": {"status": "not_stated", "value": null}},
+    {"id": "M510-FCU", "source_table": "M510-FCU", "ownership_scope": "M-510 fan-coil-unit P&ID template", "physical_installation_count": {"status": "not_stated", "value": null}},
+    {"id": "M511-DOAS3", "source_table": "M511-DOAS3", "ownership_scope": "M-511 DOAS-3 P&ID", "physical_installation_count": {"status": "not_stated", "value": null}},
+    {"id": "M511-VAV", "source_table": "M511-VAV", "ownership_scope": "M-511 non-fan-powered VAV-terminal template", "physical_installation_count": {"status": "not_stated", "value": null}},
+    {"id": "M512-DOAS12", "source_table": "M512-DOAS12", "ownership_scope": "M-512 DOAS-1-or-2 P&ID template", "physical_installation_count": {"status": "not_stated", "value": null}}
+  ],
+  "listed_template_counts": {"source_rows": 193, "tables": 12},
+  "expanded_template_counts": {"source_rows": 193},
+  "installed_IO_total": {"status": "not_stated_in_supplied_archive_excerpt", "value": null, "reason": "No plan-level installed-equipment/controller roster or terminal assignment is supplied."},
+  "point_transport": {"status": "not_stated_per_point", "value": null, "note": "BACNET/BAS context is captured in the controls components; no per-point transport or wiring assignment is printed."},
+  "inventory_checks": [
+    {"id": "point-source-matrix-applications", "records_path": ["applications"], "expected": 12, "unique_key": "source_table"}
+  ]
+}

@@ -1,0 +1,3632 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "b9c33681b63ea531cf328df0e485feaec0f79fde6b981de7c0fa12ffc97358bc",
+  "tables": 12,
+  "rows": 26,
+  "cell_assertions": 104,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "FCU-COOL-AI",
+      "row": 1,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        400,
+        1116,
+        440,
+        1137
+      ],
+      "expected": "AI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            1462
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            271
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-AI",
+      "row": 1,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        440,
+        1116,
+        585,
+        1137
+      ],
+      "expected": "SPACE TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPACE TEMPERATURE",
+          "word_ids": [
+            1463,
+            1464
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPACE TEMPERATURE",
+          "word_ids": [
+            272,
+            273
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-AI",
+      "row": 1,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        585,
+        1116,
+        635,
+        1137
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1465
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            316
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-AI",
+      "row": 1,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        635,
+        1116,
+        680,
+        1137
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1466
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            322
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-AI",
+      "row": 2,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        400,
+        1137,
+        440,
+        1154
+      ],
+      "expected": "AI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            1467
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            274
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-AI",
+      "row": 2,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        440,
+        1137,
+        585,
+        1154
+      ],
+      "expected": "CHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL",
+          "word_ids": [
+            1468,
+            1469,
+            1470
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL",
+          "word_ids": [
+            275,
+            276,
+            277
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-AI",
+      "row": 2,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        585,
+        1137,
+        635,
+        1154
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1471
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            317
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-AI",
+      "row": 2,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        635,
+        1137,
+        680,
+        1154
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1472
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            323
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-AI",
+      "row": 3,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        400,
+        1154,
+        440,
+        1190
+      ],
+      "expected": "AI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            1473
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            278
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-AI",
+      "row": 3,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        440,
+        1154,
+        585,
+        1190
+      ],
+      "expected": "DISCHARGE AIR TEMPERATURE SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DISCHARGE AIR TEMPERATURE SENSOR",
+          "word_ids": [
+            1474,
+            1475,
+            1476,
+            1477
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DISCHARGE AIR TEMPERATURE SENSOR",
+          "word_ids": [
+            279,
+            280,
+            281,
+            282
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-AI",
+      "row": 3,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        585,
+        1154,
+        635,
+        1190
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1478
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            318
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-AI",
+      "row": 3,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        635,
+        1154,
+        680,
+        1190
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1479
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            324
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-AI",
+      "header": "FCU WITH COOLING COILS DDC POINTS LIST",
+      "page": 67,
+      "bbox": [
+        400,
+        1065,
+        680,
+        1105
+      ],
+      "engine": "mupdf",
+      "actual": "FCU WITH COOLING COILS DDC POINTS LIST MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "FCU-COOL-AI",
+      "header": "FCU WITH COOLING COILS DDC POINTS LIST",
+      "page": 67,
+      "bbox": [
+        400,
+        1065,
+        680,
+        1105
+      ],
+      "engine": "poppler",
+      "actual": "FCU WITH COOLING COILS DDC POINTS LIST MARK DESCRIPTION ALARM TREND",
+      "pass": true
+    },
+    {
+      "table": "FCU-COOL-AI",
+      "header": "ANALOG INPUT",
+      "page": 67,
+      "bbox": [
+        395,
+        1095,
+        690,
+        1116
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "FCU-COOL-AI",
+      "header": "ANALOG INPUT",
+      "page": 67,
+      "bbox": [
+        395,
+        1095,
+        690,
+        1116
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "FCU-COOL-AO",
+      "row": 1,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        400,
+        1217,
+        440,
+        1238
+      ],
+      "expected": "AO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            1482
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            285
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-AO",
+      "row": 1,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        440,
+        1217,
+        585,
+        1238
+      ],
+      "expected": "CHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL",
+          "word_ids": [
+            1483,
+            1484,
+            1485
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL",
+          "word_ids": [
+            286,
+            287,
+            288
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-AO",
+      "row": 1,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        585,
+        1217,
+        635,
+        1238
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1486
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            319
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-AO",
+      "row": 1,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        635,
+        1217,
+        680,
+        1238
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1487
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1002
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 67,
+      "bbox": [
+        395,
+        1190,
+        500,
+        1217
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "FCU-COOL-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 67,
+      "bbox": [
+        395,
+        1190,
+        500,
+        1217
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "row": 1,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        400,
+        1269,
+        440,
+        1290
+      ],
+      "expected": "BI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            1490
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            291
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "row": 1,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        440,
+        1269,
+        585,
+        1290
+      ],
+      "expected": "FAN STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN STATUS",
+          "word_ids": [
+            1491,
+            1492
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN STATUS",
+          "word_ids": [
+            292,
+            293
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "row": 1,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        585,
+        1269,
+        635,
+        1290
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1493
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            320
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "row": 1,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        635,
+        1269,
+        680,
+        1290
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1494
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            927
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "row": 2,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        400,
+        1290,
+        440,
+        1320
+      ],
+      "expected": "BI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            1495
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            294
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "row": 2,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        440,
+        1290,
+        585,
+        1320
+      ],
+      "expected": "SECONDARY DRAIN PAN OVERFLOW SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SECONDARY DRAIN PAN OVERFLOW SWITCH",
+          "word_ids": [
+            1496,
+            1497,
+            1498,
+            1499,
+            1500
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SECONDARY DRAIN PAN OVERFLOW SWITCH",
+          "word_ids": [
+            295,
+            296,
+            297,
+            298,
+            299
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "row": 2,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        585,
+        1290,
+        635,
+        1320
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1501
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            321
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "row": 2,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        635,
+        1290,
+        680,
+        1320
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1502
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            928
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "row": 3,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        400,
+        1320,
+        440,
+        1338
+      ],
+      "expected": "BI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            1503
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            300
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "row": 3,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        440,
+        1320,
+        585,
+        1338
+      ],
+      "expected": "DIRTY FILTER SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIRTY FILTER SWITCH",
+          "word_ids": [
+            1504,
+            1505,
+            1506
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIRTY FILTER SWITCH",
+          "word_ids": [
+            301,
+            302,
+            303
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "row": 3,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        585,
+        1320,
+        635,
+        1338
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1507
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1003
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "row": 3,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        635,
+        1320,
+        680,
+        1338
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1508
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            929
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "row": 4,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        400,
+        1338,
+        440,
+        1360
+      ],
+      "expected": "BI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            1509
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            304
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "row": 4,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        440,
+        1338,
+        585,
+        1360
+      ],
+      "expected": "FCU DDC RESET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU DDC RESET",
+          "word_ids": [
+            1510,
+            1511,
+            1512
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU DDC RESET",
+          "word_ids": [
+            305,
+            306,
+            307
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "row": 4,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        585,
+        1338,
+        635,
+        1360
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1513
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1004
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "row": 4,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        635,
+        1338,
+        680,
+        1360
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1514
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            930
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "header": "BINARY INPUT",
+      "page": 67,
+      "bbox": [
+        395,
+        1243,
+        500,
+        1269
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "FCU-COOL-BI",
+      "header": "BINARY INPUT",
+      "page": 67,
+      "bbox": [
+        395,
+        1243,
+        500,
+        1269
+      ],
+      "engine": "poppler",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "FCU-COOL-BO",
+      "row": 1,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        400,
+        1387,
+        440,
+        1410
+      ],
+      "expected": "BO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            1517
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            311
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BO",
+      "row": 1,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        440,
+        1387,
+        585,
+        1410
+      ],
+      "expected": "FAN START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN START/STOP",
+          "word_ids": [
+            1518,
+            1519
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN START/STOP",
+          "word_ids": [
+            312,
+            313
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BO",
+      "row": 1,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        585,
+        1387,
+        635,
+        1410
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1520
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            325
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BO",
+      "row": 1,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        635,
+        1387,
+        680,
+        1410
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1521
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            326
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-COOL-BO",
+      "header": "BINARY OUTPUT",
+      "page": 67,
+      "bbox": [
+        395,
+        1360,
+        500,
+        1387
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "FCU-COOL-BO",
+      "header": "BINARY OUTPUT",
+      "page": 67,
+      "bbox": [
+        395,
+        1360,
+        500,
+        1387
+      ],
+      "engine": "poppler",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "row": 1,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        1200,
+        1129,
+        1235,
+        1150
+      ],
+      "expected": "AI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            1537
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            643
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "row": 1,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        1235,
+        1129,
+        1465,
+        1150
+      ],
+      "expected": "SPACE TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPACE TEMPERATURE",
+          "word_ids": [
+            1538,
+            1539
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPACE TEMPERATURE",
+          "word_ids": [
+            644,
+            645
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "row": 1,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        1465,
+        1129,
+        1510,
+        1150
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1540
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            705
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "row": 1,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        1510,
+        1129,
+        1560,
+        1150
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1541
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            754
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "row": 2,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        1200,
+        1150,
+        1235,
+        1167
+      ],
+      "expected": "AI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            1542
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            646
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "row": 2,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        1235,
+        1150,
+        1465,
+        1167
+      ],
+      "expected": "CHW VALVE CONTROL (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL (FEEDBACK)",
+          "word_ids": [
+            1543,
+            1544,
+            1545,
+            1546
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL (FEEDBACK)",
+          "word_ids": [
+            647,
+            648,
+            649,
+            650
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "row": 2,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        1465,
+        1150,
+        1510,
+        1167
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            706
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "row": 2,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        1510,
+        1150,
+        1560,
+        1167
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1548
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            755
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "row": 3,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        1200,
+        1167,
+        1235,
+        1184
+      ],
+      "expected": "AI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            1549
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI03",
+          "word_ids": [
+            651
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "row": 3,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        1235,
+        1167,
+        1465,
+        1184
+      ],
+      "expected": "HHW VALVE CONTROL (FEEDBACK)",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL (FEEDBACK)",
+          "word_ids": [
+            1550,
+            1551,
+            1552,
+            1553
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL (FEEDBACK)",
+          "word_ids": [
+            652,
+            653,
+            654,
+            655
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "row": 3,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        1465,
+        1167,
+        1510,
+        1184
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1554
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            707
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "row": 3,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        1510,
+        1167,
+        1560,
+        1184
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1555
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            756
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "row": 4,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        1200,
+        1184,
+        1235,
+        1202
+      ],
+      "expected": "AI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI04",
+          "word_ids": [
+            1556
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI04",
+          "word_ids": [
+            656
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "row": 4,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        1235,
+        1184,
+        1465,
+        1202
+      ],
+      "expected": "DISCHARGE AIR TEMPERATURE SENSOR",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DISCHARGE AIR TEMPERATURE SENSOR",
+          "word_ids": [
+            1557,
+            1558,
+            1559,
+            1560
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DISCHARGE AIR TEMPERATURE SENSOR",
+          "word_ids": [
+            657,
+            658,
+            659,
+            660
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "row": 4,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        1465,
+        1184,
+        1510,
+        1202
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1561
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            708
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "row": 4,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        1510,
+        1184,
+        1560,
+        1202
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1562
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            757
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "header": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+      "page": 67,
+      "bbox": [
+        1200,
+        1060,
+        1560,
+        1101
+      ],
+      "engine": "mupdf",
+      "actual": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "header": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+      "page": 67,
+      "bbox": [
+        1200,
+        1060,
+        1560,
+        1101
+      ],
+      "engine": "poppler",
+      "actual": "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "header": "ANALOG INPUT",
+      "page": 67,
+      "bbox": [
+        1195,
+        1108,
+        1300,
+        1129
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "FCU-HEAT-COOL-AI",
+      "header": "ANALOG INPUT",
+      "page": 67,
+      "bbox": [
+        1195,
+        1108,
+        1300,
+        1129
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "FCU-HEAT-COOL-AO",
+      "row": 1,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        1200,
+        1233,
+        1235,
+        1253
+      ],
+      "expected": "AO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            1565
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            697
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AO",
+      "row": 1,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        1235,
+        1233,
+        1465,
+        1253
+      ],
+      "expected": "CHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL",
+          "word_ids": [
+            1566,
+            1567,
+            1568
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CHW VALVE CONTROL",
+          "word_ids": [
+            698,
+            699,
+            700
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AO",
+      "row": 1,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        1465,
+        1233,
+        1510,
+        1253
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1569
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            709
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AO",
+      "row": 1,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        1510,
+        1233,
+        1560,
+        1253
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1570
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            815
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AO",
+      "row": 2,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        1200,
+        1253,
+        1235,
+        1270
+      ],
+      "expected": "AO02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            1571
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO02",
+          "word_ids": [
+            701
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AO",
+      "row": 2,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        1235,
+        1253,
+        1465,
+        1270
+      ],
+      "expected": "HHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL",
+          "word_ids": [
+            1572,
+            1573,
+            1574
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL",
+          "word_ids": [
+            702,
+            703,
+            704
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AO",
+      "row": 2,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        1465,
+        1253,
+        1510,
+        1270
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1575
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            710
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AO",
+      "row": 2,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        1510,
+        1253,
+        1560,
+        1270
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1576
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            816
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 67,
+      "bbox": [
+        1195,
+        1205,
+        1300,
+        1233
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "FCU-HEAT-COOL-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 67,
+      "bbox": [
+        1195,
+        1205,
+        1300,
+        1233
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "row": 1,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        1200,
+        1302,
+        1235,
+        1323
+      ],
+      "expected": "BI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            1579
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            713
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "row": 1,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        1235,
+        1302,
+        1465,
+        1323
+      ],
+      "expected": "SUPPLY FAN START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN START/STOP",
+          "word_ids": [
+            1580,
+            1581,
+            1582
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN START/STOP",
+          "word_ids": [
+            714,
+            715,
+            716
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "row": 1,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        1465,
+        1302,
+        1510,
+        1323
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1583
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            717
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "row": 1,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        1510,
+        1302,
+        1560,
+        1323
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1584
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            790
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "row": 2,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        1200,
+        1323,
+        1235,
+        1340
+      ],
+      "expected": "BI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            1585
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            718
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "row": 2,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        1235,
+        1323,
+        1465,
+        1340
+      ],
+      "expected": "DIRTY FILTER SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIRTY FILTER SWITCH",
+          "word_ids": [
+            1586,
+            1587,
+            1588
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIRTY FILTER SWITCH",
+          "word_ids": [
+            719,
+            720,
+            721
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "row": 2,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        1465,
+        1323,
+        1510,
+        1340
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1589
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            722
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "row": 2,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        1510,
+        1323,
+        1560,
+        1340
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1590
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            791
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "row": 3,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        1200,
+        1340,
+        1235,
+        1357
+      ],
+      "expected": "BI03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            1591
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI03",
+          "word_ids": [
+            723
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "row": 3,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        1235,
+        1340,
+        1465,
+        1357
+      ],
+      "expected": "SECOUNDARY DRAIN PAN OVERFLOW SWITCH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SECOUNDARY DRAIN PAN OVERFLOW SWITCH",
+          "word_ids": [
+            1592,
+            1593,
+            1594,
+            1595,
+            1596
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SECOUNDARY DRAIN PAN OVERFLOW SWITCH",
+          "word_ids": [
+            724,
+            725,
+            726,
+            727,
+            728
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "row": 3,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        1465,
+        1340,
+        1510,
+        1357
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1597
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            729
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "row": 3,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        1510,
+        1340,
+        1560,
+        1357
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1598
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            792
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "row": 4,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        1200,
+        1357,
+        1235,
+        1374
+      ],
+      "expected": "BI04",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            1599
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI04",
+          "word_ids": [
+            730
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "row": 4,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        1235,
+        1357,
+        1465,
+        1374
+      ],
+      "expected": "FCU DDC RESET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU DDC RESET",
+          "word_ids": [
+            1600,
+            1601,
+            1602
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU DDC RESET",
+          "word_ids": [
+            731,
+            732,
+            733
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "row": 4,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        1465,
+        1357,
+        1510,
+        1374
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1603
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            734
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "row": 4,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        1510,
+        1357,
+        1560,
+        1374
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1604
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            793
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "header": "BINARY INPUT",
+      "page": 67,
+      "bbox": [
+        1195,
+        1274,
+        1300,
+        1302
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "FCU-HEAT-COOL-BI",
+      "header": "BINARY INPUT",
+      "page": 67,
+      "bbox": [
+        1195,
+        1274,
+        1300,
+        1302
+      ],
+      "engine": "poppler",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "FCU-HEAT-COOL-BO",
+      "row": 1,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        1200,
+        1405,
+        1235,
+        1429
+      ],
+      "expected": "BO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            1607
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            737
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BO",
+      "row": 1,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        1235,
+        1405,
+        1465,
+        1429
+      ],
+      "expected": "SUPPLY FAN START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY FAN START/STOP",
+          "word_ids": [
+            1608,
+            1609,
+            1610
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY FAN START/STOP",
+          "word_ids": [
+            738,
+            739,
+            740
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BO",
+      "row": 1,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        1465,
+        1405,
+        1510,
+        1429
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1611
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            753
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BO",
+      "row": 1,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        1510,
+        1405,
+        1560,
+        1429
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1612
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            807
+          ]
+        }
+      }
+    },
+    {
+      "table": "FCU-HEAT-COOL-BO",
+      "header": "BINARY OUTPUT",
+      "page": 67,
+      "bbox": [
+        1195,
+        1377,
+        1300,
+        1405
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "FCU-HEAT-COOL-BO",
+      "header": "BINARY OUTPUT",
+      "page": 67,
+      "bbox": [
+        1195,
+        1377,
+        1300,
+        1405
+      ],
+      "engine": "poppler",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "UNIT-HEATER-AI",
+      "row": 1,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        1745,
+        1214,
+        1785,
+        1235
+      ],
+      "expected": "AI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            1624
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI01",
+          "word_ids": [
+            769
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-AI",
+      "row": 1,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        1785,
+        1214,
+        1930,
+        1235
+      ],
+      "expected": "SPACE TEMPERATURE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SPACE TEMPERATURE",
+          "word_ids": [
+            1625,
+            1626
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SPACE TEMPERATURE",
+          "word_ids": [
+            770,
+            771
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-AI",
+      "row": 1,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        1930,
+        1214,
+        1985,
+        1235
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1627
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            778
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-AI",
+      "row": 1,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        1985,
+        1214,
+        2040,
+        1235
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1628
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            780
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-AI",
+      "row": 2,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        1745,
+        1235,
+        1785,
+        1252
+      ],
+      "expected": "AI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            1629
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI02",
+          "word_ids": [
+            772
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-AI",
+      "row": 2,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        1785,
+        1235,
+        1930,
+        1252
+      ],
+      "expected": "HHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL",
+          "word_ids": [
+            1630,
+            1631,
+            1632
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL",
+          "word_ids": [
+            773,
+            774,
+            775
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-AI",
+      "row": 2,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        1930,
+        1235,
+        1985,
+        1252
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1633
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            779
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-AI",
+      "row": 2,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        1985,
+        1235,
+        2040,
+        1252
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1634
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            781
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-AI",
+      "header": "UNIT HEATER DDC POINTS LIST",
+      "page": 67,
+      "bbox": [
+        1750,
+        1145,
+        2040,
+        1186
+      ],
+      "engine": "mupdf",
+      "actual": "UNIT HEATER DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "UNIT-HEATER-AI",
+      "header": "UNIT HEATER DDC POINTS LIST",
+      "page": 67,
+      "bbox": [
+        1750,
+        1145,
+        2040,
+        1186
+      ],
+      "engine": "poppler",
+      "actual": "UNIT HEATER DDC POINTS LIST",
+      "pass": true
+    },
+    {
+      "table": "UNIT-HEATER-AI",
+      "header": "ANALOG INPUT",
+      "page": 67,
+      "bbox": [
+        1745,
+        1193,
+        1845,
+        1214
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "UNIT-HEATER-AI",
+      "header": "ANALOG INPUT",
+      "page": 67,
+      "bbox": [
+        1745,
+        1193,
+        1845,
+        1214
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG INPUT",
+      "pass": true
+    },
+    {
+      "table": "UNIT-HEATER-AO",
+      "row": 1,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        1745,
+        1283,
+        1785,
+        1308
+      ],
+      "expected": "AO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            1637
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO01",
+          "word_ids": [
+            784
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-AO",
+      "row": 1,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        1785,
+        1283,
+        1930,
+        1308
+      ],
+      "expected": "HHW VALVE CONTROL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL",
+          "word_ids": [
+            1638,
+            1639,
+            1640
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HHW VALVE CONTROL",
+          "word_ids": [
+            785,
+            786,
+            787
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-AO",
+      "row": 1,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        1930,
+        1283,
+        1985,
+        1308
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1641
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            788
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-AO",
+      "row": 1,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        1985,
+        1283,
+        2040,
+        1308
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1642
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            789
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 67,
+      "bbox": [
+        1745,
+        1256,
+        1845,
+        1283
+      ],
+      "engine": "mupdf",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "UNIT-HEATER-AO",
+      "header": "ANALOG OUTPUT",
+      "page": 67,
+      "bbox": [
+        1745,
+        1256,
+        1845,
+        1283
+      ],
+      "engine": "poppler",
+      "actual": "ANALOG OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "UNIT-HEATER-BI",
+      "row": 1,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        1745,
+        1335,
+        1785,
+        1356
+      ],
+      "expected": "BI01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            1645
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI01",
+          "word_ids": [
+            796
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-BI",
+      "row": 1,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        1785,
+        1335,
+        1930,
+        1356
+      ],
+      "expected": "FAN STATUS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN STATUS",
+          "word_ids": [
+            1646,
+            1647
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN STATUS",
+          "word_ids": [
+            797,
+            798
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-BI",
+      "row": 1,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        1930,
+        1335,
+        1985,
+        1356
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1648
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            803
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-BI",
+      "row": 1,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        1985,
+        1335,
+        2040,
+        1356
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1649
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            805
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-BI",
+      "row": 2,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        1745,
+        1356,
+        1785,
+        1373
+      ],
+      "expected": "BI02",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            1650
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI02",
+          "word_ids": [
+            799
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-BI",
+      "row": 2,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        1785,
+        1356,
+        1930,
+        1373
+      ],
+      "expected": "CUH/UH DDC RESET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CUH/UH DDC RESET",
+          "word_ids": [
+            1651,
+            1652,
+            1653
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CUH/UH DDC RESET",
+          "word_ids": [
+            800,
+            801,
+            802
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-BI",
+      "row": 2,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        1930,
+        1356,
+        1985,
+        1373
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1654
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            804
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-BI",
+      "row": 2,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        1985,
+        1356,
+        2040,
+        1373
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1655
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            806
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-BI",
+      "header": "BINARY INPUT",
+      "page": 67,
+      "bbox": [
+        1745,
+        1308,
+        1845,
+        1335
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "UNIT-HEATER-BI",
+      "header": "BINARY INPUT",
+      "page": 67,
+      "bbox": [
+        1745,
+        1308,
+        1845,
+        1335
+      ],
+      "engine": "poppler",
+      "actual": "BINARY INPUT",
+      "pass": true
+    },
+    {
+      "table": "UNIT-HEATER-BO",
+      "row": 1,
+      "column": "mark",
+      "page": 67,
+      "bbox": [
+        1745,
+        1404,
+        1785,
+        1428
+      ],
+      "expected": "BO01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            1658
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO01",
+          "word_ids": [
+            810
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-BO",
+      "row": 1,
+      "column": "description",
+      "page": 67,
+      "bbox": [
+        1785,
+        1404,
+        1930,
+        1428
+      ],
+      "expected": "FAN START/STOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FAN START/STOP",
+          "word_ids": [
+            1659,
+            1660
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FAN START/STOP",
+          "word_ids": [
+            811,
+            812
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-BO",
+      "row": 1,
+      "column": "alarm",
+      "page": 67,
+      "bbox": [
+        1930,
+        1404,
+        1985,
+        1428
+      ],
+      "expected": "No",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            1661
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "No",
+          "word_ids": [
+            813
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-BO",
+      "row": 1,
+      "column": "trend",
+      "page": 67,
+      "bbox": [
+        1985,
+        1404,
+        2040,
+        1428
+      ],
+      "expected": "Yes",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            1662
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "Yes",
+          "word_ids": [
+            814
+          ]
+        }
+      }
+    },
+    {
+      "table": "UNIT-HEATER-BO",
+      "header": "BINARY OUTPUT",
+      "page": 67,
+      "bbox": [
+        1745,
+        1377,
+        1845,
+        1404
+      ],
+      "engine": "mupdf",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    },
+    {
+      "table": "UNIT-HEATER-BO",
+      "header": "BINARY OUTPUT",
+      "page": 67,
+      "bbox": [
+        1745,
+        1377,
+        1845,
+        1404
+      ],
+      "engine": "poppler",
+      "actual": "BINARY OUTPUT",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "fcu-cool-ai",
+      "actual": 3,
+      "expected": 3,
+      "pass": true
+    },
+    {
+      "id": "fcu-cool-ao",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "id": "fcu-cool-bi",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    },
+    {
+      "id": "fcu-cool-bo",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "id": "fcu-heat-cool-ai",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    },
+    {
+      "id": "fcu-heat-cool-ao",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    },
+    {
+      "id": "fcu-heat-cool-bi",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    },
+    {
+      "id": "fcu-heat-cool-bo",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "id": "unit-heater-ai",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    },
+    {
+      "id": "unit-heater-ao",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    },
+    {
+      "id": "unit-heater-bi",
+      "actual": 2,
+      "expected": 2,
+      "pass": true
+    },
+    {
+      "id": "unit-heater-bo",
+      "actual": 1,
+      "expected": 1,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

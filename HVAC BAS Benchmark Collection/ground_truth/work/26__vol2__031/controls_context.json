@@ -1,0 +1,273 @@
+{
+  "document_id": "26__vol2__031",
+  "module_role": "M-400 source-bounded heating-water/HX, humidifier, AHU, VAV and BACnet context.",
+  "tables": [],
+  "assertions": [
+    {
+      "id": "m400-hx-reset",
+      "page": 68,
+      "bbox": [
+        1460,
+        1545,
+        2000,
+        1655
+      ],
+      "expected": "THE LEAVING HOT WATER TEMPERATURE SHALL BE RESET INVERSELY WITH THE OUTDOOR TEMPERATURE AS SCHEDULED.",
+      "mode": "contains"
+    },
+    {
+      "id": "m400-hx-failover",
+      "page": 68,
+      "bbox": [
+        1460,
+        1610,
+        2000,
+        1655
+      ],
+      "expected": "IN THE EVENT THE PUMP FAILS TO START WITHIN 30 SECONDS, AN ALARM SHALL BE INITIATED AND THE SECOND PUMP SHALL START AUTOMATICALLY.",
+      "mode": "contains"
+    },
+    {
+      "id": "m400-valve-sequence",
+      "page": 68,
+      "bbox": [
+        1460,
+        1650,
+        2000,
+        1730
+      ],
+      "expected": "V-1 (1/3) MODULATES TO MAINTAIN HW TEMPERATURE AT SETPOINT.",
+      "mode": "contains"
+    },
+    {
+      "id": "m400-hx-standby",
+      "page": 68,
+      "bbox": [
+        1460,
+        1705,
+        2000,
+        1730
+      ],
+      "expected": "HX-2, V-3 AND V-4 ARE FULLY REDUNDANT AND SHALL BE OPERATED ON A DUTY/STANDBY MODE.",
+      "mode": "contains"
+    },
+    {
+      "id": "m400-humidifier-setpoint",
+      "page": 68,
+      "bbox": [
+        2375,
+        1555,
+        2910,
+        1610
+      ],
+      "expected": "HUMIDIFIER VALVE V-1 SHALL MODULATE TO MAINTAIN THE RETURN (OR EXHAUST) AIR HUMIDITY SET POINT TO 30% (ADJUSTABLE).",
+      "mode": "contains"
+    },
+    {
+      "id": "m400-humidifier-bas-enable",
+      "page": 68,
+      "bbox": [
+        2375,
+        1575,
+        2910,
+        1620
+      ],
+      "expected": "THE ON/OFF CONTROL VALVE V-2 SHALL BE ENABLED THROUGH BAS.",
+      "mode": "contains"
+    },
+    {
+      "id": "m400-humidifier-high-limit",
+      "page": 68,
+      "bbox": [
+        2375,
+        1605,
+        2910,
+        1655
+      ],
+      "expected": "THE HIGH LIMIT HUMIDITY SENSOR, LOCATED IN THE SUPPLY AIR DUCT 3000MM [10 FEET] AWAY FROM THE HUMIDIFIER SHALL DISABLE THE HUMIDIFIER AND GIVE AN ALARM SIGNAL TO THE BAS",
+      "mode": "contains"
+    },
+    {
+      "id": "m400-ahu-start-stop",
+      "page": 69,
+      "bbox": [
+        460,
+        970,
+        1400,
+        1030
+      ],
+      "expected": "UNIT IS NORMALLY STARTED AND STOPPED REMOTELY AT THE ECC. H-O-A SWITCH SHALL BE KEPT",
+      "mode": "contains"
+    },
+    {
+      "id": "m400-ahu-supply-temp",
+      "page": 69,
+      "bbox": [
+        460,
+        1070,
+        1400,
+        1110
+      ],
+      "expected": "SUPPLY AIR TEMPERATURE, SENSED BY TT-1, SHALL BE MAINTAINED AT SETPOINT VIA DIGITAL",
+      "mode": "contains"
+    },
+    {
+      "id": "m400-ahu-oa-temperature",
+      "page": 69,
+      "bbox": [
+        460,
+        1105,
+        1400,
+        1140
+      ],
+      "expected": "WHEN THE TEMPERATURE OF THE OUTSIDE AIR, SENSED BY TT-2, IS ABOVE 75°F (ADJ) [23.8°C], THE",
+      "mode": "contains"
+    },
+    {
+      "id": "m400-vav-no-deadband",
+      "page": 68,
+      "bbox": [
+        1160,
+        385,
+        1400,
+        425
+      ],
+      "expected": "UPON FALL IN SPACE TEMPERATURE THE VAV DAMPER WILL MODULATE TO MINIMUM POSITION.",
+      "mode": "contains"
+    },
+    {
+      "id": "m400-vav-valve",
+      "page": 68,
+      "bbox": [
+        1160,
+        420,
+        1400,
+        475
+      ],
+      "expected": "UPON FURTHER DROP IN SPACE TEMPERATURE VALVE V-1 WILL MODULATE TO MAINTAIN SET POINT",
+      "mode": "contains"
+    },
+    {
+      "id": "m400-vav-deadband",
+      "page": 68,
+      "bbox": [
+        1430,
+        395,
+        1680,
+        445
+      ],
+      "expected": "DEADBAND OF 2° F BETWEEN HEATING AND COOLING SET POINTS WILL BE MAINTAINED.",
+      "mode": "contains"
+    },
+    {
+      "id": "m400-network-remain",
+      "page": 68,
+      "bbox": [
+        2300,
+        980,
+        2800,
+        1000
+      ],
+      "expected": "EXISTING ECC, ASSOCIATED COMMUNICATION NETWORK AND CONTROLLERS TO REMAIN.",
+      "mode": "contains"
+    },
+    {
+      "id": "m400-network-new",
+      "page": 68,
+      "bbox": [
+        2300,
+        990,
+        2800,
+        1010
+      ],
+      "expected": "INSTALL NEW BACNET COMMUNICATION NETWORK TO AREA OF NEW WORK.",
+      "mode": "contains"
+    },
+    {
+      "id": "m400-network-controller",
+      "page": 68,
+      "bbox": [
+        2300,
+        1000,
+        2800,
+        1020
+      ],
+      "expected": "INSTALL BUILDING CONTROLLER (B-BC) AND BACNET COMMUNICATION NETWORK AS REQUIRED.",
+      "mode": "contains"
+    },
+    {
+      "id": "m400-network-controllers",
+      "page": 68,
+      "bbox": [
+        2300,
+        1010,
+        2800,
+        1030
+      ],
+      "expected": "INSTALL NEW CONTROLLERS (B-AAC, B-ASC) AS REQUIRED.",
+      "mode": "contains"
+    }
+  ],
+  "network_architecture": {
+    "published_integration": [
+      "Existing ECC, associated communication network and controllers remain.",
+      "New BACnet communication network is installed to the new-work area.",
+      "Building controller (B-BC), BACnet network and B-AAC/B-ASC controllers are installed as required; diagram labels Ethernet communication and BACnet MS/TP communication."
+    ],
+    "assertion_ids": [
+      "m400-network-remain",
+      "m400-network-new",
+      "m400-network-controller",
+      "m400-network-controllers"
+    ],
+    "boundary": "The published architecture does not state final device addresses, BACnet object list, router/media quantities, controller/card/terminal schedule, field wiring/termination schedule or final installed controller totals."
+  },
+  "sequence_inventory": [
+    {
+      "id": "m400-dual-heat-exchanger",
+      "sheet": "M-400",
+      "assertion_ids": [
+        "m400-hx-reset",
+        "m400-hx-failover",
+        "m400-valve-sequence",
+        "m400-hx-standby"
+      ]
+    },
+    {
+      "id": "m400-steam-humidifier",
+      "sheet": "M-400",
+      "assertion_ids": [
+        "m400-humidifier-setpoint",
+        "m400-humidifier-bas-enable",
+        "m400-humidifier-high-limit"
+      ]
+    },
+    {
+      "id": "m400-air-handling-unit",
+      "sheet": "M-400",
+      "assertion_ids": [
+        "m400-ahu-start-stop",
+        "m400-ahu-supply-temp",
+        "m400-ahu-oa-temperature"
+      ]
+    },
+    {
+      "id": "m400-variable-volume-air-terminal",
+      "sheet": "M-400",
+      "assertion_ids": [
+        "m400-vav-no-deadband",
+        "m400-vav-valve",
+        "m400-vav-deadband"
+      ]
+    }
+  ],
+  "sensors_and_control_symbol_context": {
+    "published_context": "M-400 publishes temperature/room-temperature, moisture/humidity, pressure, static-pressure, differential-pressure, flow, current, smoke, freezestat, hand-switch, valve/damper position controller, VFD and controller-panel function contexts.",
+    "assertion_ids": [
+      "m400-humidifier-high-limit",
+      "m400-ahu-supply-temp",
+      "m400-vav-no-deadband"
+    ],
+    "boundary": "The symbol list and diagrams are not transformed into installed-device, zone, controller, actuator, valve, damper or cable quantities."
+  }
+}

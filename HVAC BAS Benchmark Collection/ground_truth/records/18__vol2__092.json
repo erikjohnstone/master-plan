@@ -1,0 +1,2952 @@
+{
+  "id": "18__vol2__092",
+  "rank": 18,
+  "title": "Guaranteed Rate Field HVAC / AHU Renovation - Phase IX",
+  "source_pdf": "pdf/18__vol2__092__Guaranteed_Rate_Field_HVAC_Phase_IX.pdf",
+  "source_sha256": "85613e85e63e6e3e527a722dc93a9797b2b1edd57a8ec22fc96b4a808bc0f0a5",
+  "page_count": 13,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete ground truth for all thirteen supplied Guaranteed Rate Field HVAC/AHU Renovation Phase IX sheets: exact title-block/project/sheet review; all twenty rows and 421 cells in M3.01's eight schedules; all eleven explicitly printed M4.02 typical-points rows; specific BAS wiring, integration, safety and limited sequence text; M2.01's valve-chart sample distinction; and source conflict/reconciliation ledgers. No unprinted installed I/O total, controller terminal count, protocol, network topology, control-valve schedule, individual FCU-5 identities or unresolved tag/location alias is invented.",
+  "reading_notes": [
+    "All thirteen supplied pages were reviewed as full-page 180 DPI Poppler renders. MuPDF and Poppler independently corroborate each authored schedule/points cell and bounded text assertion.",
+    "M3.01 has eight populated schedules / 20 rows. FCU-5's literal QTY cell is 11; it remains one source schedule row plus an explicit source quantity rather than eleven fabricated location tags.",
+    "The populated Automatic Control Damper Schedule has exactly ACD 1 and ACD 2. Both print fail CLOSED. Its note assigns dampers to MC and listed-fail-position actuators to BASC.",
+    "M4.02's fan-coil and air-handling-unit lists are expressly TYPICAL. Their 11 source rows are preserved as templates, not multiplied by schedule or plan items into an installed I/O count.",
+    "M2.01's VALVE TAG AND VALVE CHART SAMPLE is deliberately excluded as a populated project control-valve schedule. The M3.01 Refrigeration Schedule's CH 1 versus the Chiller Schedule's CH 2, and FCU-1's source-location conflict, remain unresolved source discrepancies."
+  ],
+  "module_order": [
+    "metadata",
+    "schedules",
+    "points",
+    "controls_context",
+    "equipment_reconciliation",
+    "point_applications",
+    "supporting_evidence"
+  ],
+  "module_sources": {
+    "schedules": [
+      "schedules_m301"
+    ],
+    "points": [
+      "points_m402"
+    ],
+    "controls_context": [
+      "controls_context_m402"
+    ]
+  },
+  "requirement_audit": [
+    {
+      "id": "project_identity",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Project name, Chicago site, project number and issued-for-bid date are captured from repeated title blocks; blank revision-log structure is not treated as an event.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "project"
+        ]
+      ]
+    },
+    {
+      "id": "sheet_details",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Every supplied page has exact title and sheet-number witnesses plus a full-page visual finding.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "scale_verification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "M0.02/M0.03/M0.04 print 1/32\" = 1'-0\"; M1 sheets are VARIES and details/schedules/specifications are AS NOTED, so title-block scale is not treated as a global conversion where it is non-specific.",
+      "evidence": [
+        [
+          "modules",
+          "metadata",
+          "scale_semantics"
+        ]
+      ]
+    },
+    {
+      "id": "equipment_tags_and_classification",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All 20 schedule-row identities are classified, with 12 non-reference physical/assembly anchors. Outlet types, coordination categories and refrigeration cross-references remain outside a field-device total.",
+      "evidence": [
+        [
+          "modules",
+          "equipment_reconciliation",
+          "scheduled_families"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "primary_anchors"
+        ]
+      ]
+    },
+    {
+      "id": "schedule_rows_and_specs",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All cells of the 20 rows in eight M3.01 schedules are retained: chiller, FCU, automatic-control damper, condensing unit, outlet, DX coil, coordination and refrigeration schedules.",
+      "evidence": [
+        [
+          "modules",
+          "schedules",
+          "tables"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "schedule_counts"
+        ]
+      ]
+    },
+    {
+      "id": "point_lists_and_equipment_ownership",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Eleven exact source rows in two TYPICAL M4.02 points lists are retained. Prose-level BASC/EC/MC obligations are captured but no per-row physical owner, terminal, controller or installed I/O multiplication is supplied.",
+      "evidence": [
+        [
+          "modules",
+          "points",
+          "tables"
+        ],
+        [
+          "modules",
+          "point_applications",
+          "installed_IO_total"
+        ],
+        [
+          "modules",
+          "controls_context",
+          "ownership_and_wiring"
+        ]
+      ]
+    },
+    {
+      "id": "network_architecture",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All work is incorporated into the existing Siemens BAS and graphically represented there; protocol, transport, controller model, addressing and topology are not stated.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "network_architecture"
+        ]
+      ]
+    },
+    {
+      "id": "sequences_and_diagrams",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Specific FCU-1 OA-damper, fire/smoke shutdown and water-coil freeze-protection behaviors are retained. No universal standalone sequence is inferred for every scheduled unit.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sequence_of_operations"
+        ]
+      ]
+    },
+    {
+      "id": "space_sensors_and_zones",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Typical temperature/wall-switch/thermostat roles and BASC sensor-placement requirements are recorded; neither physical count nor location-tagged zone mapping is stated.",
+      "evidence": [
+        [
+          "modules",
+          "controls_context",
+          "sensor_and_zone_ledger"
+        ]
+      ]
+    },
+    {
+      "id": "source_limitations_and_conflicts",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "The M2.01 valve chart is a sample, not a populated control-valve schedule. M3.01 contains a two-row ACD schedule; schedule tag/location discrepancies are preserved without aliasing.",
+      "evidence": [
+        [
+          "modules",
+          "supporting_evidence",
+          "source_limitations"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "source_conflicts"
+        ],
+        [
+          "modules",
+          "equipment_reconciliation",
+          "control_valve_and_damper_schedule_status"
+        ]
+      ]
+    },
+    {
+      "id": "all_page_visual_review",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "All thirteen supplied pages were reviewed at full-page resolution; saved Poppler renders and concise page dispositions are embedded and hash-checked.",
+      "evidence": [
+        [
+          "page_review"
+        ],
+        [
+          "modules",
+          "metadata",
+          "visual_review_pages"
+        ]
+      ]
+    },
+    {
+      "id": "independent_corroboration",
+      "result": "reviewed_with_source_limitations_recorded",
+      "finding": "Bundle build and validation rerun every authored module against retained MuPDF and Poppler captures, then record current source/manifest/module digests.",
+      "evidence": [
+        [
+          "module_source_sha256"
+        ],
+        [
+          "module_sha256"
+        ]
+      ]
+    }
+  ],
+  "page_review": [
+    {
+      "page": 1,
+      "review_status": "complete",
+      "render": "reviews/18__vol2__092/p1-p1-full-poppler-poppler.png",
+      "finding": "M0.01 cover/index: project identity and supplied thirteen-sheet index; no schedule or formal points list."
+    },
+    {
+      "page": 2,
+      "review_status": "complete",
+      "render": "reviews/18__vol2__092/p2-p2-full-poppler-poppler.png",
+      "finding": "M0.02 service-level overall mechanical plan at 1/32\" = 1'-0\"; plan context."
+    },
+    {
+      "page": 3,
+      "review_status": "complete",
+      "render": "reviews/18__vol2__092/p3-p3-full-poppler-poppler.png",
+      "finding": "M0.03 level-200 overall mechanical plan at 1/32\" = 1'-0\"; plan context."
+    },
+    {
+      "page": 4,
+      "review_status": "complete",
+      "render": "reviews/18__vol2__092/p4-p4-full-poppler-poppler.png",
+      "finding": "M0.04 level-400 overall mechanical plan at 1/32\" = 1'-0\"; plan context."
+    },
+    {
+      "page": 5,
+      "review_status": "complete",
+      "render": "reviews/18__vol2__092/p5-p5-full-poppler-poppler.png",
+      "finding": "M1.01 service-level mechanical work plan; title-block scale VARIES."
+    },
+    {
+      "page": 6,
+      "review_status": "complete",
+      "render": "reviews/18__vol2__092/p6-p6-full-poppler-poppler.png",
+      "finding": "M1.02 service-level mechanical work plan; title-block scale VARIES."
+    },
+    {
+      "page": 7,
+      "review_status": "complete",
+      "render": "reviews/18__vol2__092/p7-p7-full-poppler-poppler.png",
+      "finding": "M1.03 service-level mechanical work plan; title-block scale VARIES."
+    },
+    {
+      "page": 8,
+      "review_status": "complete",
+      "render": "reviews/18__vol2__092/p8-p8-full-poppler-poppler.png",
+      "finding": "M1.21 200-level mechanical work plan; title-block scale VARIES."
+    },
+    {
+      "page": 9,
+      "review_status": "complete",
+      "render": "reviews/18__vol2__092/p9-p9-full-poppler-poppler.png",
+      "finding": "M1.41 400-level mechanical work plan; title-block scale VARIES."
+    },
+    {
+      "page": 10,
+      "review_status": "complete",
+      "render": "reviews/18__vol2__092/p10-p10-full-poppler-poppler.png",
+      "finding": "M2.01 mechanical details, including the explicitly marked VALVE TAG AND VALVE CHART SAMPLE."
+    },
+    {
+      "page": 11,
+      "review_status": "complete",
+      "render": "reviews/18__vol2__092/p11-p11-full-poppler-poppler.png",
+      "finding": "M3.01 mechanical schedules: eight populated tables / 20 rows, transcribed cell-for-cell."
+    },
+    {
+      "page": 12,
+      "review_status": "complete",
+      "render": "reviews/18__vol2__092/p12-p12-full-poppler-poppler.png",
+      "finding": "M4.01 mechanical specifications/general requirements; title-block scale AS NOTED."
+    },
+    {
+      "page": 13,
+      "review_status": "complete",
+      "render": "reviews/18__vol2__092/p13-p13-full-poppler-poppler.png",
+      "finding": "M4.02 mechanical specifications: typical FCU/AHU points lists and BAS integration/wiring/safety/sequence requirements."
+    }
+  ],
+  "declared_checks": [
+    {
+      "id": "supplied-pages",
+      "path": [
+        "modules",
+        "metadata",
+        "visual_review_pages"
+      ],
+      "operation": "length",
+      "expected": 13
+    },
+    {
+      "id": "full-page-review",
+      "path": [
+        "page_review"
+      ],
+      "operation": "length",
+      "expected": 13
+    },
+    {
+      "id": "schedule-tables",
+      "path": [
+        "modules",
+        "equipment_reconciliation",
+        "schedule_counts",
+        "tables"
+      ],
+      "expected": 8
+    },
+    {
+      "id": "schedule-rows",
+      "path": [
+        "modules",
+        "equipment_reconciliation",
+        "schedule_counts",
+        "rows"
+      ],
+      "expected": 20
+    },
+    {
+      "id": "typical-source-point-rows",
+      "path": [
+        "modules",
+        "point_applications",
+        "listed_template_counts",
+        "source_rows"
+      ],
+      "expected": 11
+    }
+  ],
+  "completion_checks": {
+    "every_source_page_reviewed": true,
+    "all_explicit_objective_categories_reviewed": true,
+    "all_populated_schedule_and_points_rows_captured": true,
+    "source_conflicts_and_unavailable_fields_preserved": true,
+    "two_engine_checks_current": true,
+    "final_assembly_audit_complete": true
+  },
+  "verification_semantics": "MuPDF and Poppler independently captured all thirteen supplied vector-PDF pages. Current authored schedule/points cells and bounded text assertions are rechecked by both engines at build and validation time. Parser agreement corroborates literal source text/cells and their declared bounds; full-page Poppler review establishes page disposition, visual table/detail context and source limitations. Neither process creates missing device quantities, point/terminal counts, controller/panel details, network attributes, valve schedules, aliases or zone mappings.",
+  "schema_version": "authored-module-bundle-v1",
+  "bundle_manifest": "work/18__vol2__092/document_manifest.json",
+  "bundle_manifest_sha256": "f8c17a965942cfc0b6aa8d0a5eddb3e49ae9a24346965bd0becb99fab7059a0e",
+  "review_render_sha256": {
+    "reviews/18__vol2__092/p1-p1-full-poppler-poppler.png": "f34fd8e11ceb388e123cb130492f459d0c20485b34aa312fc49a6176bfebcb86",
+    "reviews/18__vol2__092/p2-p2-full-poppler-poppler.png": "50a55a2bd908d3c3f7861cbab2d47afce8748cc553eb115e1418db2b4cc8a75b",
+    "reviews/18__vol2__092/p3-p3-full-poppler-poppler.png": "9c989ec5163d592750b446d65e0963fd5230fd44c9484585fa203502160e9430",
+    "reviews/18__vol2__092/p4-p4-full-poppler-poppler.png": "621c3a40fe49363c4cfd30107b4bc5fb763facc4c81fc737f51aa29696afad9f",
+    "reviews/18__vol2__092/p5-p5-full-poppler-poppler.png": "a960297d58fd93615d23eafc2ec5fa0c324873f53e89916ccd78ae202ee06a94",
+    "reviews/18__vol2__092/p6-p6-full-poppler-poppler.png": "88d9d9aa9377da2c15ead3c54f298d31a5fc9bea1af80a6fd22f9221ad0de11e",
+    "reviews/18__vol2__092/p7-p7-full-poppler-poppler.png": "1156cb74b19e93ce436feb94e35096ed9f1b5e70f679a6a30cf60f7b42b62c8b",
+    "reviews/18__vol2__092/p8-p8-full-poppler-poppler.png": "9cd2e60bece99f5d28b06563566ddc1ed23d75fa406284645085abf416e48eb7",
+    "reviews/18__vol2__092/p9-p9-full-poppler-poppler.png": "4f20c262ac12c0b263003192937cf7037af2fd2a5c2fac43e249a46b3f5fbf7d",
+    "reviews/18__vol2__092/p10-p10-full-poppler-poppler.png": "23482daaee94add7ff74dbe748f5df6efeb11b4a41b5aa0c7796b5b5600006d0",
+    "reviews/18__vol2__092/p11-p11-full-poppler-poppler.png": "a25260cbecf8854b6fc3988bc3b16273cc7635774f7f419728c837d341cb5da3",
+    "reviews/18__vol2__092/p12-p12-full-poppler-poppler.png": "09f286c719515097f2b8232f6c127eac69830039ed0d307e1673297526a00a54",
+    "reviews/18__vol2__092/p13-p13-full-poppler-poppler.png": "28ca84c188ef5ed85d41dc880c67da6e8013de01dde583d16aca46734fc30c50"
+  },
+  "modules": {
+    "metadata": {
+      "document_id": "18__vol2__092",
+      "module_role": "Exact project/title-block/sheet/scale context and complete full-page visual-review ledger for the supplied thirteen-sheet set.",
+      "scope": "Complete ground truth for the thirteen supplied sheets only. The ledger does not assert that unprovided disciplines, revisions, records or controller submittals are part of the source.",
+      "project": {
+        "name": "GUARANTEED RATE FIELD - HVAC / AHU RENOVATION - PHASE IX",
+        "site": "333 WEST 35TH STREET, CHICAGO, IL 60616",
+        "project_number": "19165",
+        "issue": "ISSUED FOR BID",
+        "issue_date": "10.07.2019",
+        "document_date_context": "Repeated title-block issue line",
+        "revision_date": {
+          "status": "not_stated_in_supplied_title_blocks",
+          "value": null,
+          "note": "Blank revision-log heading/rows are not reclassified as revision events."
+        }
+      },
+      "scale_semantics": {
+        "finding": "All thirteen supplied pages were visually reviewed. M0.02/M0.03/M0.04 print 1/32\" = 1'-0\"; the M1 work-plan sheets print VARIES; M2.01/M3.01/M4.01/M4.02 print AS NOTED. The cover does not establish a plan scale. No source page is treated as having a universal measurable scale when its title block says VARIES or AS NOTED.",
+        "overview_plan_sheets": [
+          {
+            "page": 2,
+            "sheet": "M0.02",
+            "scale": "1/32\" = 1'-0\""
+          },
+          {
+            "page": 3,
+            "sheet": "M0.03",
+            "scale": "1/32\" = 1'-0\""
+          },
+          {
+            "page": 4,
+            "sheet": "M0.04",
+            "scale": "1/32\" = 1'-0\""
+          }
+        ],
+        "global_measured_takeoff_warning": "Per-view scales may need to be read from individual captions on VARIES/AS NOTED sheets; no global conversion is invented from the title block."
+      },
+      "visual_review_pages": [
+        {
+          "page": 1,
+          "sheet": "M0.01",
+          "title": "MECHANICAL COVER PAGE",
+          "review_status": "complete",
+          "finding": "Cover/index, title-block identity and supplied thirteen-sheet index; no equipment schedule or BAS points list.",
+          "render": "reviews/18__vol2__092/p1-p1-full-poppler-poppler.png"
+        },
+        {
+          "page": 2,
+          "sheet": "M0.02",
+          "title": "SERVICE LEVEL OVERALL MECHANICAL PLAN",
+          "review_status": "complete",
+          "finding": "Service-level overall mechanical plan at 1/32\" = 1'-0\"; spatial plan context, not a schedule or formal controls matrix.",
+          "render": "reviews/18__vol2__092/p2-p2-full-poppler-poppler.png"
+        },
+        {
+          "page": 3,
+          "sheet": "M0.03",
+          "title": "LEVEL 200 OVERALL MECHANICAL PLAN",
+          "review_status": "complete",
+          "finding": "Level-200 overall mechanical plan at 1/32\" = 1'-0\"; plan context for work areas/equipment labels.",
+          "render": "reviews/18__vol2__092/p3-p3-full-poppler-poppler.png"
+        },
+        {
+          "page": 4,
+          "sheet": "M0.04",
+          "title": "LEVEL 400 OVERALL MECHANICAL PLAN",
+          "review_status": "complete",
+          "finding": "Level-400 overall mechanical plan at 1/32\" = 1'-0\"; plan context for work areas/equipment labels.",
+          "render": "reviews/18__vol2__092/p4-p4-full-poppler-poppler.png"
+        },
+        {
+          "page": 5,
+          "sheet": "M1.01",
+          "title": "SERVICE LEVEL MECHANICAL WORK PLAN",
+          "review_status": "complete",
+          "finding": "Service-level mechanical work-plan sheet; title block prints VARIES and the page is reviewed as plan/detail context rather than a single global scale.",
+          "render": "reviews/18__vol2__092/p5-p5-full-poppler-poppler.png"
+        },
+        {
+          "page": 6,
+          "sheet": "M1.02",
+          "title": "SERVICE LEVEL MECHANICAL WORK PLAN",
+          "review_status": "complete",
+          "finding": "Second service-level mechanical work-plan sheet; title block prints VARIES.",
+          "render": "reviews/18__vol2__092/p6-p6-full-poppler-poppler.png"
+        },
+        {
+          "page": 7,
+          "sheet": "M1.03",
+          "title": "SERVICE LEVEL MECHANICAL WORK PLAN",
+          "review_status": "complete",
+          "finding": "Third service-level mechanical work-plan sheet; title block prints VARIES.",
+          "render": "reviews/18__vol2__092/p7-p7-full-poppler-poppler.png"
+        },
+        {
+          "page": 8,
+          "sheet": "M1.21",
+          "title": "200 LEVEL MECHANICAL WORK PLAN",
+          "review_status": "complete",
+          "finding": "200-level mechanical work plan; title block prints VARIES and no plan symbol is transformed into a points count.",
+          "render": "reviews/18__vol2__092/p8-p8-full-poppler-poppler.png"
+        },
+        {
+          "page": 9,
+          "sheet": "M1.41",
+          "title": "400 LEVEL MECHANICAL WORK PLAN",
+          "review_status": "complete",
+          "finding": "400-level mechanical work plan; title block prints VARIES.",
+          "render": "reviews/18__vol2__092/p9-p9-full-poppler-poppler.png"
+        },
+        {
+          "page": 10,
+          "sheet": "M2.01",
+          "title": "MECHANICAL DETAILS",
+          "review_status": "complete",
+          "finding": "Mechanical details, including a valve-tag/valve-chart sample detail. Its sample graphic is not treated as a populated project control-valve schedule.",
+          "render": "reviews/18__vol2__092/p10-p10-full-poppler-poppler.png"
+        },
+        {
+          "page": 11,
+          "sheet": "M3.01",
+          "title": "MECHANICAL SCHEDULES",
+          "review_status": "complete",
+          "finding": "Eight populated schedule tables: chiller, fan coils, automatic control dampers, condensing units, grilles/registers/diffusers, DX coil, mechanical/electrical coordination and refrigeration. All 20 source rows are transcribed cell-for-cell.",
+          "render": "reviews/18__vol2__092/p11-p11-full-poppler-poppler.png"
+        },
+        {
+          "page": 12,
+          "sheet": "M4.01",
+          "title": "MECHANICAL SPECIFICATIONS",
+          "review_status": "complete",
+          "finding": "Mechanical specification/general-requirements sheet; title block prints AS NOTED.",
+          "render": "reviews/18__vol2__092/p12-p12-full-poppler-poppler.png"
+        },
+        {
+          "page": 13,
+          "sheet": "M4.02",
+          "title": "MECHANICAL SPECIFICATIONS",
+          "review_status": "complete",
+          "finding": "Mechanical controls/specifications page with two printed typical points lists, BAS integration/wiring/safety requirements and limited explicit sequences; not an installed per-device I/O matrix.",
+          "render": "reviews/18__vol2__092/p13-p13-full-poppler-poppler.png"
+        }
+      ],
+      "tables": [],
+      "assertion_groups": [
+        {
+          "id": "all-sheet-title-blocks",
+          "covers_all_source_pages": true,
+          "templates": [
+            {
+              "id": "drawing-title",
+              "field": "title",
+              "bbox": [
+                2770,
+                1785,
+                2980,
+                1850
+              ],
+              "mode": "exact"
+            },
+            {
+              "id": "sheet-number",
+              "field": "sheet_number",
+              "bbox": [
+                2770,
+                2025,
+                2980,
+                2080
+              ],
+              "mode": "exact"
+            }
+          ],
+          "records": [
+            {
+              "id": "1",
+              "page": 1,
+              "title": "MECHANICAL COVER PAGE",
+              "sheet_number": "M0.01"
+            },
+            {
+              "id": "2",
+              "page": 2,
+              "title": "SERVICE LEVEL OVERALL MECHANICAL PLAN",
+              "sheet_number": "M0.02"
+            },
+            {
+              "id": "3",
+              "page": 3,
+              "title": "LEVEL 200 OVERALL MECHANICAL PLAN",
+              "sheet_number": "M0.03"
+            },
+            {
+              "id": "4",
+              "page": 4,
+              "title": "LEVEL 400 OVERALL MECHANICAL PLAN",
+              "sheet_number": "M0.04"
+            },
+            {
+              "id": "5",
+              "page": 5,
+              "title": "SERVICE LEVEL MECHANICAL WORK PLAN",
+              "sheet_number": "M1.01"
+            },
+            {
+              "id": "6",
+              "page": 6,
+              "title": "SERVICE LEVEL MECHANICAL WORK PLAN",
+              "sheet_number": "M1.02"
+            },
+            {
+              "id": "7",
+              "page": 7,
+              "title": "SERVICE LEVEL MECHANICAL WORK PLAN",
+              "sheet_number": "M1.03"
+            },
+            {
+              "id": "8",
+              "page": 8,
+              "title": "200 LEVEL MECHANICAL WORK PLAN",
+              "sheet_number": "M1.21"
+            },
+            {
+              "id": "9",
+              "page": 9,
+              "title": "400 LEVEL MECHANICAL WORK PLAN",
+              "sheet_number": "M1.41"
+            },
+            {
+              "id": "10",
+              "page": 10,
+              "title": "MECHANICAL DETAILS",
+              "sheet_number": "M2.01"
+            },
+            {
+              "id": "11",
+              "page": 11,
+              "title": "MECHANICAL SCHEDULES",
+              "sheet_number": "M3.01"
+            },
+            {
+              "id": "12",
+              "page": 12,
+              "title": "MECHANICAL SPECIFICATIONS",
+              "sheet_number": "M4.01"
+            },
+            {
+              "id": "13",
+              "page": 13,
+              "title": "MECHANICAL SPECIFICATIONS",
+              "sheet_number": "M4.02"
+            }
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "project-name",
+          "page": 2,
+          "bbox": [
+            2770,
+            1660,
+            2990,
+            1730
+          ],
+          "expected": "PROJECT: GUARANTEED RATE FIELD - HVAC / AHU RENOVATION - PHASE IX",
+          "mode": "exact"
+        },
+        {
+          "id": "project-site",
+          "page": 2,
+          "bbox": [
+            2770,
+            1730,
+            2990,
+            1770
+          ],
+          "expected": "333 WEST 35TH STREET CHICAGO, IL 60616",
+          "mode": "exact"
+        },
+        {
+          "id": "project-issue",
+          "page": 2,
+          "bbox": [
+            2770,
+            1440,
+            2990,
+            1470
+          ],
+          "expected": "10.07.2019 ISSUED FOR BID",
+          "mode": "exact"
+        },
+        {
+          "id": "project-number",
+          "page": 2,
+          "bbox": [
+            2770,
+            1940,
+            2980,
+            1970
+          ],
+          "expected": "PROJECT NO: 19165",
+          "mode": "exact"
+        },
+        {
+          "id": "m002-scale",
+          "page": 2,
+          "bbox": [
+            2770,
+            1965,
+            2990,
+            1990
+          ],
+          "expected": "SCALE: 1/32\" = 1'-0\"",
+          "mode": "exact"
+        },
+        {
+          "id": "m003-scale",
+          "page": 3,
+          "bbox": [
+            2770,
+            1965,
+            2990,
+            1990
+          ],
+          "expected": "SCALE: 1/32\" = 1'-0\"",
+          "mode": "exact"
+        },
+        {
+          "id": "m004-scale",
+          "page": 4,
+          "bbox": [
+            2770,
+            1965,
+            2990,
+            1990
+          ],
+          "expected": "SCALE: 1/32\" = 1'-0\"",
+          "mode": "exact"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "full-page-visual-review",
+          "records_path": [
+            "visual_review_pages"
+          ],
+          "expected": 13,
+          "unique_key": "page"
+        }
+      ]
+    },
+    "schedules": {
+      "document_id": "18__vol2__092",
+      "module_role": "Exact M3.01 schedule cells. Each row is retained in the source schedule's own scope; equipment, outlet and coordination rows are not converted to inferred installed totals.",
+      "source_sheet": "M3.01",
+      "source_page": 11,
+      "tables": [
+        {
+          "id": "CH-M301-AIR-COOLED-CHILLER",
+          "page": 11,
+          "sheet": "M3.01",
+          "title": "AIR COOLED CHILLER SCHEDULE (CH)",
+          "classification": "Air-cooled chiller schedule",
+          "columns": "tag|service|location|manufacturer|model|type|shipping_weight_lbs|operating_weight_lbs|length_in|width_in|height_in|nominal_capacity_tons|actual_capacity_tons|full_load_efficiency_eer|iplv_eer|eer_at_100_percent|circuit_quantity|circuit_1_capacity|circuit_2_capacity|refrigerant_type|capacity_control_steps|ambient_air_temp_f|condenser_fan_quantity|condenser_fan_total_kw|condenser_fan_cfm_per_fan|evaporator_gpm|evaporator_max_pressure_drop_ft|evaporator_ewt_f|evaporator_lwt_f|circuit_1_mca|circuit_2_mca|circuit_1_mocp|circuit_2_mocp|volts|hz|phase|notes",
+          "x_edges": [
+            118.31,
+            172.62,
+            244.62,
+            316.62,
+            370.62,
+            443.64,
+            544.38,
+            616.38,
+            688.38,
+            742.38,
+            796.38,
+            850.38,
+            922.38,
+            994.38,
+            1066.44,
+            1120.44,
+            1174.44,
+            1246.44,
+            1318.44,
+            1390.44,
+            1444.44,
+            1516.44,
+            1570.44,
+            1628.04,
+            1682.04,
+            1736.04,
+            1790.04,
+            1854.84,
+            1908.84,
+            1962.84,
+            2006.04,
+            2049.24,
+            2092.44,
+            2135.64,
+            2178.84,
+            2222.04,
+            2265.24,
+            2319.0
+          ],
+          "y_edges": [
+            204.3,
+            234.95
+          ],
+          "rows": [
+            "CH 2|LEFT FIELD|NEAR GATE 6|DAIKIN|AWV026A|AIR COOLED SCREW COMP.|24893|26813|523.2|87.6|100.1|475.0|475.0|9.715|18.06|9.715|2|200|175|R134A|VFD|95.0|26|62.0||1136|23.0|54.0|44.0|570|440|700|600|460|60|3|SEE BELOW"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                118,
+                96,
+                2319,
+                204
+              ],
+              "expected": "GENERAL DATA DIMENSIONAL DATA PERFORMANCE DATA COMPRESSOR DATA CONDENSER FAN DATA EVAPORATOR DATA ELECTRICAL DATA"
+            }
+          ]
+        },
+        {
+          "id": "FCU-M301-FAN-COIL-2-PIPE-CHILLED-WATER",
+          "page": 11,
+          "sheet": "M3.01",
+          "title": "FAN COIL SCHEDULE - (2-PIPE CHILLED WATER) (FCU)",
+          "classification": "Two-pipe chilled-water fan-coil schedule",
+          "columns": "tag|qty|service|location|manufacturer|model|orientation|approx_weight_lbs|length_in|width_in|height_in|fan_speed|nominal_airflow_cfm|water_flow_gpm|esp_in_wg|water_pressure_drop_ft_hd|coil_rows|min_coil_working_pressure_psig|eat_db_f|eat_wb_f|lat_db_f|lat_wb_f|ewt_f|total_capacity_mbh|sensible_capacity_mbh|fla|volts|hz|phase|notes",
+          "x_edges": [
+            118.31,
+            172.62,
+            208.62,
+            280.62,
+            352.62,
+            406.62,
+            532.62,
+            611.88,
+            665.88,
+            719.88,
+            773.88,
+            827.88,
+            881.88,
+            935.88,
+            989.88,
+            1043.88,
+            1108.68,
+            1151.88,
+            1223.88,
+            1259.88,
+            1295.88,
+            1331.88,
+            1367.88,
+            1411.08,
+            1465.08,
+            1519.08,
+            1575.48,
+            1618.68,
+            1661.88,
+            1705.08,
+            1759.0
+          ],
+          "y_edges": [
+            776.22,
+            812.22,
+            848.22,
+            884.22,
+            920.22,
+            956.22
+          ],
+          "rows": [
+            "FCU 1|1|LEVEL 200 SECTION 7|LEVEL 200 SECTION 7|CARRIER|42CAA03BLFY6YYAR|HORIZONTAL DUCTED|39|17.5|25.25|8.75|HIGH|300|1.4|0.4|8.6|4|175.0|75.0|67.0|54.7|54.1|44.0|6.3|3.5|0.35|277|60|1|SEE BELOW",
+            "FCU 2|1|LEVEL 200 SECTION 7|LEVEL 200 SECTION 7|CARRIER|42DAA08LLFY6YYBR|HORIZONTAL DUCTED|79|27.5|28.0|16.4|HIGH|800|3.4|0.5|1.79|7|175.0|75.0|67.0|61.6|60.5|44.0|20.4|19.4|1.35|277|60|1|SEE BELOW",
+            "FCU 3|1|VISITORS CLUBHOUSE|VISITORS CLUBHOUSE|CARRIER|42DAA10BLFY6YYAR|HORIZONTAL DUCTED|90|27.5|32.0|16.4|HIGH|1000|5.3|0.5|4.23|4|175.0|75.0|67.0|59.4|58.4|44.0|24.4|15.1|1.85|277|60|1|SEE BELOW",
+            "FCU 4|1|ISFA CONF. ROOM|ISFA CONF. ROOM|CARRIER|42DAA12BLFY6YYAR|HORIZONTAL DUCTED|108|27.5|37.0|16.4|HIGH|1200|7.6|0.5|10.35|4|175.0|75.0|67.0|59.3|58.2|44.0|34.6|21.3|2.7|277|60|1|SEE BELOW",
+            "FCU 5|11|PRESSBOX|PRESSBOX|CARRIER|42DAA16BLFY6YYAR|HORIZONTAL DUCTED|124|27.5|47.0|16.4|HIGH|1600|10.9|0.5|7.84|4|175.0|75.0|67.0|60.3|59.1|44.0|50.1|31.8|3.7|277|60|1|SEE BELOW"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                118,
+                668,
+                1759,
+                776
+              ],
+              "expected": "FAN COIL SCHEDULE 2-PIPE CHILLED WATER FCU TAG QTY GENERAL DATA DIMENSIONAL DATA UNIT DATA COOLING DATA ELECTRICAL DATA"
+            }
+          ]
+        },
+        {
+          "id": "ACD-M301-AUTOMATIC-CONTROL-DAMPER",
+          "page": 11,
+          "sheet": "M3.01",
+          "title": "AUTOMATIC CONTROL DAMPER SCHEDULE (ACD)",
+          "classification": "Automatic control damper and actuator responsibility schedule",
+          "columns": "tag|service|location|manufacturer|model|size_width_x_height|blade_style|damper_fail_position|notes",
+          "x_edges": [
+            2088.98,
+            2142.96,
+            2239.74,
+            2326.02,
+            2398.02,
+            2470.02,
+            2542.02,
+            2614.02,
+            2686.02,
+            2758.0
+          ],
+          "y_edges": [
+            1042.25,
+            1073.1,
+            1103.76
+          ],
+          "rows": [
+            "ACD 1|VISITORS CLUBHOUSE|VISITORS CLUBHOUSE|RUSKIN|CDTI-50|12x10|OPPOSED|CLOSED|SEE BELOW",
+            "ACD 2|ISFA CONFERENCE|PRESSBOX|RUSKIN|CDTI-50|VERIFY EXISTING|OPPOSED|CLOSED|SEE BELOW"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                2089,
+                969,
+                2758,
+                1042
+              ],
+              "expected": "AUTOMATIC CONTROL DAMPER SCHEDULE ACD TAG SERVICE LOCATION MANUF MODEL SIZE WIDTH X HEIGHT BLADE STYLE DAMPER FAIL POSITION NOTES"
+            }
+          ]
+        },
+        {
+          "id": "CU-M301-CONDENSING-UNIT",
+          "page": 11,
+          "sheet": "M3.01",
+          "title": "CONDENSING UNITS SCHEDULE (CU)",
+          "classification": "Condensing-unit schedule",
+          "columns": "tag|service|location|manufacturer|model|shipping_weight_lbs|operating_weight_lbs|length_in|width_in|height_in|circuit_qty|compressor_type|total_capacity_mbh|sensible_capacity_mbh|eer|refrigerant_type|suction_line_size_in|liquid_line_size_in|hot_gas_line_size_in|eat_f|fla|mca|mocp|volts|hz|phase|notes",
+          "x_edges": [
+            118.31,
+            172.62,
+            280.62,
+            352.62,
+            406.62,
+            532.62,
+            604.68,
+            676.68,
+            730.68,
+            784.68,
+            838.68,
+            892.68,
+            946.68,
+            1018.68,
+            1090.68,
+            1135.68,
+            1189.68,
+            1243.68,
+            1297.68,
+            1351.68,
+            1396.68,
+            1439.88,
+            1483.08,
+            1526.28,
+            1569.48,
+            1612.68,
+            1655.88,
+            1709.94
+          ],
+          "y_edges": [
+            1308.72,
+            1339.32,
+            1369.92,
+            1400.52
+          ],
+          "rows": [
+            "CU 1|PATIO AHU|200 LEVEL SECTION 2|CARRIER|38APS030|1282|1282|88.4|40.3|78.6|2|SCROLL|373.5||10.8|PURON||||95.0||66.3|90|460|60|3|SEE BELOW",
+            "CU 2|SCORE BOARD CONTROL|200 LEVEL SECTION 5|CARRIER|38AUDC16A0A6-0A0A0|731|731|86.4|43.4|50.4|1|SCROLL|185.7||13.4|PURON||||95.0||29.9|40|460|60|3|SEE BELOW",
+            "CU 3|SCORE BOARD CONTROL|200 LEVEL SECTION 5|CARRIER|38AUDC16A0A6-0A0A0|731|731|86.4|43.4|50.4|1|SCROLL|185.7||13.4|PURON||||95.0||29.9|40|460|60|3|SEE BELOW"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                118,
+                1191,
+                1710,
+                1309
+              ],
+              "expected": "GENERAL DATA DIMENSIONAL DATA PERFORMANCE DATA ELECTRICAL DATA"
+            }
+          ]
+        },
+        {
+          "id": "OUTLET-M301-GRILLE-REGISTER-DIFFUSER",
+          "page": 11,
+          "sheet": "M3.01",
+          "title": "GRILLES, REGISTERS, AND DIFFUSER SCHEDULE",
+          "classification": "Air-outlet type schedule",
+          "columns": "tag|manufacturer|model|type|service|module_size|material|border_type|maximum_nc|notes",
+          "x_edges": [
+            1983.98,
+            2019.96,
+            2091.96,
+            2163.96,
+            2289.96,
+            2362.02,
+            2434.02,
+            2506.02,
+            2578.02,
+            2650.02,
+            2758.0
+          ],
+          "y_edges": [
+            1265.76,
+            1296.18
+          ],
+          "rows": [
+            "A|PRICE|530FF|RETURN AIR FILTER GRILLE|RETURN|24x24|STEEL|LAY-IN|30|SEE BELOW"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1984,
+                1175,
+                2758,
+                1266
+              ],
+              "expected": "GRILLES REGISTERS AND DIFFUSER SCHEDULE TAG MFR MODEL TYPE SERVICE MODULE SIZE MATERIAL BORDER TYPE MAXIMUM NC NOTES"
+            }
+          ]
+        },
+        {
+          "id": "DX-M301-DX-COIL",
+          "page": 11,
+          "sheet": "M3.01",
+          "title": "DX COIL SCHEDULE (DC)",
+          "classification": "DX coil schedule",
+          "columns": "tag|service|location|manufacturer|model|total_area_sf|rows|fpi|height_in|width_in|depth_in|eat_db_f|eat_wb_f|lat_db_f|lat_wb_f|cfm|apd|total_capacity|sensible_capacity|notes",
+          "x_edges": [
+            1749.98,
+            1803.96,
+            1861.56,
+            1919.16,
+            1973.16,
+            2045.16,
+            2099.16,
+            2142.36,
+            2185.56,
+            2239.56,
+            2293.56,
+            2347.62,
+            2383.62,
+            2419.62,
+            2455.62,
+            2491.62,
+            2534.82,
+            2570.82,
+            2628.42,
+            2686.02,
+            2758.0
+          ],
+          "y_edges": [
+            1509.06,
+            1539.66
+          ],
+          "rows": [
+            "DC 1|CU-1|PATIO|COMM. COILS|4DX-8-45 X 89.5 X 4 - 9 AL|27.97|4|9|45.0|89.5|6.5|80.0|67.0|59.0|57.0|12,000|0.34\"|377,970|277,600|SEE BELOW"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1750,
+                1423,
+                2758,
+                1509
+              ],
+              "expected": "TAG SERVICE LOCATION MODEL ROWS FPI HEIGHT WIDTH DEPTH CFM APD NOTES"
+            }
+          ]
+        },
+        {
+          "id": "COORD-M301-MECHANICAL-ELECTRICAL-COORDINATION",
+          "page": 11,
+          "sheet": "M3.01",
+          "title": "MECHANICAL / ELECTRICAL COORDINATION SCHEDULE",
+          "classification": "Trade-responsibility coordination schedule",
+          "columns": "equipment_tag|equipment_description|unit_mounted_vfd|unit_mounted_starter|unit_mounted_disconnect|unit_mounted_overcurrent_protection|unit_mounted_single_point_connection|remote_vfd|remote_starter|remote_disconnect|remote_overcurrent_protection|volts|hz|phase|remarks",
+          "x_edges": [
+            118.31,
+            172.62,
+            320.82,
+            392.82,
+            464.82,
+            536.82,
+            626.82,
+            698.82,
+            770.82,
+            842.82,
+            914.82,
+            1004.88,
+            1058.88,
+            1112.88,
+            1166.88,
+            1346.94
+          ],
+          "y_edges": [
+            1933.68,
+            1969.68,
+            2005.68,
+            2041.68
+          ],
+          "rows": [
+            "FCU|FAN COIL UNIT|-|-|-|-|YES|-|-|EC|EC|277|60|3|EXISTING DISCONNECT SWITCH MAY BE RE-USED.",
+            "CU|CONDENSING UNIT|-|-|-|-|YES|-|-|EC|EC|460|60|3|",
+            "CH|CHILLER|MFG|-|MFG|-|NO|-|-|-|EC|460|60|3|"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                118,
+                1628,
+                1347,
+                1664
+              ],
+              "expected": "MECHANICAL ELECTRICAL COORDINATION SCHEDULE"
+            }
+          ]
+        },
+        {
+          "id": "REFRIG-M301-REFRIGERATION",
+          "page": 11,
+          "sheet": "M3.01",
+          "title": "REFRIGERATION SCHEDULE",
+          "classification": "Refrigeration schedule",
+          "columns": "equipment_tag|qty|location|refrigerant_type|refrigerant_circuit|refrigerant_charge_lbs|compressor_type|compressor_qty|compressor_hp|tons|remote|self_contained|air_cooled|water_cooled|notes",
+          "x_edges": [
+            1862.23,
+            1907.46,
+            1938.96,
+            2046.96,
+            2100.96,
+            2136.96,
+            2208.96,
+            2262.96,
+            2308.02,
+            2353.02,
+            2398.02,
+            2470.02,
+            2578.02,
+            2632.02,
+            2686.02,
+            2758.0
+          ],
+          "y_edges": [
+            1846.86,
+            1882.86,
+            1918.86,
+            1954.86,
+            1990.86
+          ],
+          "rows": [
+            "CH 1|1|LEFT FIELD|R134A|2|549|SCREW|2||475|NO|YES|YES|NO|SEE BELOW",
+            "CU 1|1|200 LEVEL ROOF|R410A|2||SCROLL|2||30|YES|NO|YES|NO|SEE BELOW",
+            "CU 2|1|500 LEVEL ROOF|R410A|1||SCROLL|2||15|YES|NO|YES|NO|SEE BELOW",
+            "CU 3|1|500 LEVEL ROOF|R410A|1||SCROLL|2||15|YES|NO|YES|NO|SEE BELOW"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1862,
+                1757,
+                2758,
+                1847
+              ],
+              "expected": "REFRIGERATION SCHEDULE REFRIGERANT COMPRESSOR QTY LOCATION REMOTE SELF-CONTAINED NOTES"
+            }
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "m301-chiller-factory-ddc",
+          "page": 11,
+          "bbox": [
+            118,
+            392,
+            1325,
+            416
+          ],
+          "expected": "9. FACTORY MOUNTED AND WIRED MICROTECH II DDC CONTROLS WITH BAS INTERFACE.",
+          "mode": "exact"
+        },
+        {
+          "id": "m301-fcu-controls-coordination",
+          "page": 11,
+          "bbox": [
+            118,
+            1026,
+            1640,
+            1048
+          ],
+          "expected": "4. COORDINATE CONTROLS WITH BUILDING TEMPERATURE CONTROLS CONTRACTOR FOR THERMOSTATS, CONTROL VALVES, INTERCONNECTION OF FAN COIL AND ELECTRIC HEATING COIL.",
+          "mode": "exact"
+        },
+        {
+          "id": "m301-fcu-verify-quantities",
+          "page": 11,
+          "bbox": [
+            118,
+            1115,
+            720,
+            1135
+          ],
+          "expected": "9. VERIFY QUANTITIES PRIOR TO ORDERING.",
+          "mode": "exact"
+        },
+        {
+          "id": "m301-acd-mc-basc-responsibility",
+          "page": 11,
+          "bbox": [
+            2089,
+            1118,
+            2758,
+            1140
+          ],
+          "expected": "1. DAMPER SHALL BE FURNISHED BY MC. ACTUATOR WITH FAIL POSITION INDICATED IN SCHEDULE SHALL BE FURNISHED BY BASC.",
+          "mode": "exact"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "m301-schedule-tables",
+          "records_path": [
+            "tables"
+          ],
+          "expected": 8,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "points": {
+      "document_id": "18__vol2__092",
+      "module_role": "Exact M4.02 typical BAS points lists. These are printed templates, not a controller export, terminal schedule, or per-equipment installed I/O count.",
+      "source_sheet": "M4.02",
+      "source_page": 13,
+      "tables": [
+        {
+          "id": "M402-TYPICAL-FAN-COIL-POINTS",
+          "page": 13,
+          "sheet": "M4.02",
+          "title": "THE FOLLOWING SHALL BE A TYPICAL POINTS LIST FOR A FAN COIL UNIT",
+          "classification": "Typical fan-coil BAS points list",
+          "columns": "tag|point_name",
+          "x_edges": [
+            1790.0,
+            1850.0,
+            2150.0
+          ],
+          "y_edges": [
+            780.0,
+            796.0,
+            808.0,
+            819.0,
+            830.0,
+            842.0,
+            853.0
+          ],
+          "rows": [
+            "AO-1:|MODULATING CHILLED WATER VALVE CONTROL",
+            "AI-1:|FAN COIL DISCHARGE AIR TEMPERATURE",
+            "DI-1:|OCCUPIED WALL SWITCH",
+            "DO-1:|FAN COMMAND ON/OFF",
+            "DO-2:|ELECTRIC HEAT COIL COMMAND ON/OFF",
+            "COMM:|THERMOSTAT"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1770,
+                757,
+                2160,
+                776
+              ],
+              "expected": "3. THE FOLLOWING SHALL BE A TYPICAL POINTS LIST FOR A FAN COIL UNIT:"
+            }
+          ]
+        },
+        {
+          "id": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+          "page": 13,
+          "sheet": "M4.02",
+          "title": "THE FOLLOWING SHALL BE A TYPICAL POINTS LIST FOR AN AIR HANDLING UNIT",
+          "classification": "Typical air-handling-unit BAS points list",
+          "columns": "tag|point_name",
+          "x_edges": [
+            1790.0,
+            1850.0,
+            2180.0
+          ],
+          "y_edges": [
+            882.0,
+            899.0,
+            910.0,
+            921.0,
+            933.0,
+            944.0
+          ],
+          "rows": [
+            "AO-1:|MODULATING CHILLED WATER VALVE CONTROL",
+            "AI-2:|RETURN AIR TEMPERATURE",
+            "AI-1:|DISCHARGE AIR TEMPERATURE",
+            "DO-1:|FAN COMMAND ON/OFF",
+            "COMM:|THERMOSTAT"
+          ],
+          "header_evidence": [
+            {
+              "bbox": [
+                1770,
+                859,
+                2190,
+                878
+              ],
+              "expected": "3. THE FOLLOWING SHALL BE A TYPICAL POINTS LIST FOR AN AIR HANDLING UNIT:"
+            }
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "id": "m402-fcu1-oa-damper-operation",
+          "page": 13,
+          "bbox": [
+            1770,
+            950,
+            2720,
+            992
+          ],
+          "expected": "4. FCU-1 IN ISFA CONFERENCE ROOM SHALL HAVE OUTDOOR AIR DUCTWORK AND ASSOCIATED MOTORIZED DAMPER INSTALLED. OA DAMPER SHALL ONLY OPEN TO CFM INDICATED AFTER PROOF OF FCU OPERATION.",
+          "mode": "exact"
+        },
+        {
+          "id": "m402-smoke-fire-ddc-behavior",
+          "page": 13,
+          "bbox": [
+            1770,
+            996,
+            2720,
+            1070
+          ],
+          "expected": "5. THE ELECTRICAL CONTRACTOR SHALL FURNISH AND INSTALL SMOKE AND/OR HEAT DETECTORS IN AIR SUPPLY SYSTEM OVER 2000 CFM. AN ADDRESSABLE FIRE ALARM RELAY SHALL BE FURNISHED AND INSTALLED BY THE ELECTRICAL CONTRACTOR. BAS CONTRACTOR SHALL PICK UP SIGNAL FROM RELAY AND PROVIDE A PROGRAM TO STOP SUPPLY FAN INTERLOCKED WITH THE SYSTEM SENSING FIRE OR SMOKE. DDC PROGRAM SHALL ALSO SHOW FIRE IN UNIT ALARM AT TIME OF SHUT DOWN.",
+          "mode": "exact"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "m402-typical-points-tables",
+          "records_path": [
+            "tables"
+          ],
+          "expected": 2,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "controls_context": {
+      "document_id": "18__vol2__092",
+      "module_role": "M4.02 controls, safety, integration, wiring and sequence context. This records the supplied written requirements without converting typical lists or prose responsibilities into an unprinted installed controller/terminal roster.",
+      "source_sheet": "M4.02",
+      "source_page": 13,
+      "network_architecture": {
+        "existing_system": "Existing Siemens building automation system currently in operation within Guaranteed Rate Field",
+        "integration_requirement": "All project work shall be incorporated into the existing Siemens BAS; all control items indicated below shall be provided in graphic form on the building BAS system.",
+        "protocol": {
+          "status": "not_stated",
+          "value": null
+        },
+        "transport": {
+          "status": "not_stated",
+          "value": null
+        },
+        "controller_model_or_panel": {
+          "status": "not_stated",
+          "value": null
+        },
+        "addressing_or_network_topology": {
+          "status": "not_stated",
+          "value": null
+        }
+      },
+      "ownership_and_wiring": {
+        "basc": [
+          "All low-voltage control wiring, power wiring and conduit associated with control valves, actuators and controllers installed as part of the project.",
+          "May reuse compatible existing relays/current sensing relays/current transducers; reused conduit, wiring, sensors or switches must be tested before use and included in the project warranty.",
+          "Hard-wired control points are mapped to system graphics for building-staff viewing.",
+          "Adequate bid time for complete on-site commissioning with the mechanical contractor and other trades."
+        ],
+        "electrical_contractor": "Furnishes/installs smoke and/or heat detectors in air supply systems over 2000 CFM and the addressable fire-alarm relay; the BAS contractor picks up the relay signal.",
+        "source_boundary": "M3.01 separately assigns the scheduled automatic dampers to MC and the listed-fail-position actuators to BASC. No row-level assignment is printed for the two M4.02 typical point lists."
+      },
+      "sequence_of_operations": [
+        {
+          "id": "fcu1-outdoor-air-damper",
+          "scope": "FCU-1 in ISFA conference room",
+          "source_behavior": "Outdoor-air ductwork and associated motorized damper; OA damper shall only open to the indicated CFM after proof of FCU operation.",
+          "source_status": "specific written behavior"
+        },
+        {
+          "id": "fire-smoke-fan-shutdown",
+          "scope": "Air supply system over 2000 CFM",
+          "source_behavior": "BAS picks up the addressable fire-alarm relay signal, stops the supply fan when interlocked fire/smoke is sensed, and the DDC program shows a fire-in-unit alarm at shutdown.",
+          "source_status": "specific written behavior"
+        },
+        {
+          "id": "freeze-protection",
+          "scope": "All water coils",
+          "source_behavior": "BASC furnishes/installs manual-reset safety devices; each water coil has a downstream averaging-element freeze-stat with non-adjustable 40°F setpoint, manual reset and hardwired fan-shutdown interlock when any 12-inch element length is below 40°F.",
+          "source_status": "specific written safety interlock"
+        }
+      ],
+      "sensor_and_zone_ledger": {
+        "source_typed_roles": "M4.02's two lists print fan-coil/air-handling discharge-air temperature, AHU return-air temperature, occupied wall switch and thermostat context; they are typical list rows rather than location-tagged installed sensor quantities.",
+        "placement_requirement": "Temperature and pressure sensors must avoid false readings; BASC reviews plans, reports potential causes before rough-in and relocates improperly located false-reading sensors at its expense.",
+        "physical_sensor_count": {
+          "status": "not_stated",
+          "value": null
+        },
+        "zone_mapping": {
+          "status": "not_stated",
+          "value": null
+        }
+      },
+      "source_limitations": [
+        "The supplied set has two explicitly labeled typical points lists, not an equipment-instance matrix, controller schedule, panel terminal list, network point export, or installed I/O total.",
+        "No communications protocol, transport, controller/panel model, address, baud rate, network topology or per-point physical owner is printed.",
+        "M4.02 contains specific behaviors for FCU-1 OA damper, fire/smoke shutdown and coil freeze protection, but not a system-wide standalone written sequence for every scheduled unit."
+      ],
+      "tables": [],
+      "assertions": [
+        {
+          "id": "m402-siemens-bas-integration",
+          "page": 13,
+          "bbox": [
+            1770,
+            668,
+            2740,
+            730
+          ],
+          "expected": "1. ALL WORK ASSOCIATED WITH THIS PROJECT SHALL BE INCORPORATED INTO THE EXISTING SIEMENS BUILDING AUTOMATION SYSTEM CURRENTLY IN OPERATION WITHIN GUARANTEED RATE FIELD. THE SCOPE OF WORK SHALL BE AS FOLLOWS FOR EACH COMPONENT ASSOCIATED WITH THIS PROJECT. ALL CONTROL ITEMS INDICATED BELOW SHALL BE PROVIDED IN GRAPHIC FORM ON THE BUILDING BAS SYSTEM.",
+          "mode": "exact"
+        },
+        {
+          "id": "m402-basc-wiring-responsibility",
+          "page": 13,
+          "bbox": [
+            1770,
+            360,
+            2250,
+            401
+          ],
+          "expected": "15. THE BASC IS RESPONSIBLE FOR ALL LOW VOLTAGE CONTROL WIRING, POWER WIRING, AND CONDUIT ASSOCIATED WITH ALL CONTROL VALVES, ACTUATORS, CONTROLLERS, ETC., BEING INSTALLED AS A PART OF THIS PROJECT.",
+          "mode": "exact"
+        },
+        {
+          "id": "m402-basc-reuse-graphics-warranty",
+          "page": 13,
+          "bbox": [
+            1770,
+            405,
+            2250,
+            475
+          ],
+          "expected": "16. THE BASC MAY RE-USE ANY EXISTING RELAYS, CURRENT SENSING RELAYS, AND CURRENT TRANSDUCERS PROVIDED THEY ARE COMPATIBLE WITH THE NEW CONTROLLERS. ALL HARD WIRED CONTROL POINTS ARE TO BE MAPPED TO THE SYSTEM GRAPHICS FOR EASY VIEWING BY BUILDING STAFF. ANY CONDUIT, WIRING, SENSORS, OR SWITCHES THAT ARE RE-USED BY THE BASC ARE TO BE TESTED PRIOR TO USE AND INCLUDED IN THE PROJECT WARRANTY.",
+          "mode": "exact"
+        },
+        {
+          "id": "m402-freeze-stat-protection",
+          "page": 13,
+          "bbox": [
+            1770,
+            202,
+            2250,
+            288
+          ],
+          "expected": "12. THE BASC SHALL FURNISH AND INSTALL MANUAL RESET SAFETY DEVICES FOR ANY AND ALL CONDITIONS THAT COULD DAMAGE THE EQUIPMENT AND / OR REPRESENT A THREAT TO HUMAN SAFETY. ALL WATER COILS SHALL BE PROTECTED BY AN AVERAGING ELEMENT FREEZE-STAT WITH A NON-ADJUSTABLE 40°F SET POINT, MANUAL RESET, AND HARDWIRED INTERLOCK TO SHUT DOWN THE ASSOCIATED FAN ANY TIME THE TEMPERATURE ACROSS ANY 12\" LENGTH OF THE AVERAGING ELEMENT FALLS BELOW 40°F. FREEZE-STATS SHALL BE INSTALLED DOWNSTREAM OF ALL WATER COILS.",
+          "mode": "exact"
+        },
+        {
+          "id": "m402-ddc-power-source",
+          "page": 13,
+          "bbox": [
+            1770,
+            520,
+            2250,
+            548
+          ],
+          "expected": "18. CONTRACTOR SHALL OBTAIN POWER FOR THE NEW DDC CONTROL SYSTEM FROM THE NEAREST SOURCE.",
+          "mode": "exact"
+        },
+        {
+          "id": "m402-basc-commissioning",
+          "page": 13,
+          "bbox": [
+            1770,
+            555,
+            2250,
+            603
+          ],
+          "expected": "19. THE BASC SHALL INCLUDE ADEQUATE TIME IN HIS BID FOR COMPLETE COMMISSIONING OF THE MECHANICAL SYSTEMS, ON SITE IN COORDINATION WITH THE MECHANICAL CONTRACTOR AND OTHER TRADES AS REQUIRED TO MAKE ALL EQUIPMENT COMPLETE AND FULLY OPERATIONAL.",
+          "mode": "exact"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "m402-written-sequences",
+          "records_path": [
+            "sequence_of_operations"
+          ],
+          "expected": 3,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "equipment_reconciliation": {
+      "document_id": "18__vol2__092",
+      "module_role": "Reconciles every M3.01 schedule table identity to its printed source scope. Schedule rows, outlet types, coordination categories, refrigeration cross-references and M2.01 sample detail graphics are kept distinct rather than silently merged into physical equipment counts.",
+      "schedule_registry_schema": {
+        "namespace_separator": "-",
+        "identity_columns": {
+          "tag": "tag",
+          "equipment_tag": "equipment_tag"
+        },
+        "anchor_records_path": [
+          "primary_anchors"
+        ],
+        "non_instance_table_ids": [
+          "OUTLET-M301-GRILLE-REGISTER-DIFFUSER",
+          "COORD-M301-MECHANICAL-ELECTRICAL-COORDINATION",
+          "REFRIG-M301-REFRIGERATION"
+        ]
+      },
+      "scheduled_families": [
+        {
+          "module": "schedules_m301.json",
+          "bundle_module": "schedules",
+          "table": "CH-M301-AIR-COOLED-CHILLER",
+          "rows": 1,
+          "class": "Air-cooled chiller",
+          "tag": [
+            "CH 2"
+          ]
+        },
+        {
+          "module": "schedules_m301.json",
+          "bundle_module": "schedules",
+          "table": "FCU-M301-FAN-COIL-2-PIPE-CHILLED-WATER",
+          "rows": 5,
+          "class": "Two-pipe chilled-water fan coil schedule mark",
+          "tag": [
+            "FCU 1",
+            "FCU 2",
+            "FCU 3",
+            "FCU 4",
+            "FCU 5"
+          ]
+        },
+        {
+          "module": "schedules_m301.json",
+          "bundle_module": "schedules",
+          "table": "ACD-M301-AUTOMATIC-CONTROL-DAMPER",
+          "rows": 2,
+          "class": "Automatic control damper",
+          "tag": [
+            "ACD 1",
+            "ACD 2"
+          ]
+        },
+        {
+          "module": "schedules_m301.json",
+          "bundle_module": "schedules",
+          "table": "CU-M301-CONDENSING-UNIT",
+          "rows": 3,
+          "class": "Condensing unit",
+          "tag": [
+            "CU 1",
+            "CU 2",
+            "CU 3"
+          ]
+        },
+        {
+          "module": "schedules_m301.json",
+          "bundle_module": "schedules",
+          "table": "OUTLET-M301-GRILLE-REGISTER-DIFFUSER",
+          "rows": 1,
+          "class": "Air-outlet type",
+          "tag": [
+            "A"
+          ]
+        },
+        {
+          "module": "schedules_m301.json",
+          "bundle_module": "schedules",
+          "table": "DX-M301-DX-COIL",
+          "rows": 1,
+          "class": "DX coil",
+          "tag": [
+            "DC 1"
+          ]
+        },
+        {
+          "module": "schedules_m301.json",
+          "bundle_module": "schedules",
+          "table": "COORD-M301-MECHANICAL-ELECTRICAL-COORDINATION",
+          "rows": 3,
+          "class": "Trade-coordination equipment category",
+          "equipment_tag": [
+            "FCU",
+            "CU",
+            "CH"
+          ]
+        },
+        {
+          "module": "schedules_m301.json",
+          "bundle_module": "schedules",
+          "table": "REFRIG-M301-REFRIGERATION",
+          "rows": 4,
+          "class": "Refrigeration schedule cross-reference",
+          "equipment_tag": [
+            "CH 1",
+            "CU 1",
+            "CU 2",
+            "CU 3"
+          ]
+        }
+      ],
+      "schedule_counts": {
+        "tables": 8,
+        "rows": 20,
+        "building_scoped_tag_identities_including_outlet_types": 20,
+        "other_scheduled_tag_identities": 12
+      },
+      "primary_anchors": [
+        {
+          "id": "CH-CH 2",
+          "scope": "Scheduled air-cooled chiller",
+          "visual_anchor": "M3.01 Air Cooled Chiller Schedule row CH 2; left field / near gate 6."
+        },
+        {
+          "id": "FCU-FCU 1",
+          "scope": "Scheduled fan-coil mark",
+          "visual_anchor": "M3.01 FCU row FCU 1, quantity 1, level 200 section 7."
+        },
+        {
+          "id": "FCU-FCU 2",
+          "scope": "Scheduled fan-coil mark",
+          "visual_anchor": "M3.01 FCU row FCU 2, quantity 1, level 200 section 7."
+        },
+        {
+          "id": "FCU-FCU 3",
+          "scope": "Scheduled fan-coil mark",
+          "visual_anchor": "M3.01 FCU row FCU 3, quantity 1, visitors clubhouse."
+        },
+        {
+          "id": "FCU-FCU 4",
+          "scope": "Scheduled fan-coil mark",
+          "visual_anchor": "M3.01 FCU row FCU 4, quantity 1, ISFA conference room."
+        },
+        {
+          "id": "FCU-FCU 5",
+          "scope": "Scheduled fan-coil mark",
+          "visual_anchor": "M3.01 FCU row FCU 5 prints quantity 11. The one schedule row and its printed quantity remain distinct from eleven individually located equipment identities."
+        },
+        {
+          "id": "ACD-ACD 1",
+          "scope": "Scheduled automatic control damper",
+          "visual_anchor": "M3.01 ACD row ACD 1: Visitors Clubhouse, 12x10, opposed blade, fail closed."
+        },
+        {
+          "id": "ACD-ACD 2",
+          "scope": "Scheduled automatic control damper",
+          "visual_anchor": "M3.01 ACD row ACD 2: ISFA Conference / Pressbox, verify existing size, opposed blade, fail closed."
+        },
+        {
+          "id": "CU-CU 1",
+          "scope": "Scheduled condensing unit",
+          "visual_anchor": "M3.01 Condensing Units row CU 1; patio AHU / 200 level section 2."
+        },
+        {
+          "id": "CU-CU 2",
+          "scope": "Scheduled condensing unit",
+          "visual_anchor": "M3.01 Condensing Units row CU 2; score board control / 200 level section 5."
+        },
+        {
+          "id": "CU-CU 3",
+          "scope": "Scheduled condensing unit",
+          "visual_anchor": "M3.01 Condensing Units row CU 3; score board control / 200 level section 5."
+        },
+        {
+          "id": "DX-DC 1",
+          "scope": "Scheduled DX coil",
+          "visual_anchor": "M3.01 DX Coil row DC 1 cites CU-1 at patio; the row is kept as a scheduled coil identity and is not added to the CU quantity."
+        }
+      ],
+      "plan_and_detail_reconciliation": [
+        {
+          "id": "m301-fcu-quantity-semantics",
+          "sheet": "M3.01",
+          "finding": "Five FCU schedule marks print quantities 1, 1, 1, 1 and 11. The record retains five source rows plus their literal quantity cells; it does not manufacture eleven separately anchored FCU-5 tags."
+        },
+        {
+          "id": "m301-damper-actuator-split",
+          "sheet": "M3.01",
+          "finding": "ACD-1 and ACD-2 are populated automatic-control-damper rows. Their note assigns damper furnishing to MC and the listed-fail-position actuator to BASC."
+        },
+        {
+          "id": "m301-refrigeration-cross-reference",
+          "sheet": "M3.01",
+          "finding": "The refrigeration schedule contains four reference rows. It is indexed independently from the equipment schedules and not used as a second equipment-instance count."
+        },
+        {
+          "id": "m201-valve-chart-sample",
+          "sheet": "M2.01",
+          "finding": "Full-page visual review identifies the valve tag/chart as a sample detail; it has no populated project valve rows and is not counted as a control-valve schedule."
+        }
+      ],
+      "control_valve_and_damper_schedule_status": {
+        "control_valve_schedule": {
+          "status": "not_present_as_populated_schedule",
+          "value": null,
+          "note": "M2.01 has a valve-tag/valve-chart sample detail, but no populated project control-valve schedule row is supplied."
+        },
+        "damper_actuator_schedule": {
+          "status": "present",
+          "source": "M3.01 ACD schedule",
+          "rows": 2,
+          "note": "ACD 1 and ACD 2 are populated schedule rows; both are opposed blade / fail closed. MC furnishes dampers and BASC furnishes actuators with the printed fail position."
+        }
+      },
+      "source_conflicts": [
+        {
+          "id": "chiller-tag-discrepancy",
+          "scope": "M3.01 chiller vs refrigeration schedules",
+          "finding": "The Air Cooled Chiller Schedule prints CH 2 at left field / near gate 6, while the Refrigeration Schedule prints CH 1 at left field with 475 tons. The source does not explicitly state that these are the same unit, so no alias is invented."
+        },
+        {
+          "id": "fcu1-location-discrepancy",
+          "scope": "M3.01 FCU schedule vs M4.02 sequence",
+          "finding": "M3.01 locates FCU 1 at Level 200 Section 7, while M4.02 says FCU-1 is in the ISFA conference room for the OA-damper behavior. The conflicting printed location context is retained without correction."
+        }
+      ],
+      "valve_aliases": [],
+      "tables": [],
+      "assertions": [],
+      "inventory_checks": [
+        {
+          "id": "scheduled-families",
+          "records_path": [
+            "scheduled_families"
+          ],
+          "expected": 8,
+          "unique_key": "table"
+        },
+        {
+          "id": "scheduled-primary-anchors",
+          "records_path": [
+            "primary_anchors"
+          ],
+          "expected": 12,
+          "unique_key": "id"
+        },
+        {
+          "id": "plan-detail-reconciliation",
+          "records_path": [
+            "plan_and_detail_reconciliation"
+          ],
+          "expected": 4,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "point_applications": {
+      "document_id": "18__vol2__092",
+      "module_role": "Source-template points ledger. M4.02 labels both point lists as typical, so their rows are preserved as authored templates without multiplying them by fan-coil, air-handler, damper or valve schedule quantities.",
+      "ledger_mode": "source_matrix_templates_v1",
+      "source_points_composite": "points_m402 holds the two source lists: six rows for a typical fan coil and five rows for a typical air handling unit.",
+      "ownership_binding_semantics": "M4.02 establishes BASC/EC duties in prose, and M3.01 establishes the MC/BASC split for the two ACD rows, but it does not assign an owner, controller, terminal or transport to every row in either typical list.",
+      "expanded_count_warning": "11 is the count of printed typical-list source rows, not a physical point count, logical I/O total, controller terminal count, or multiplication by the 15 scheduled fan-coil units implied by FCU quantities.",
+      "applications": [
+        {
+          "id": "typical-fan-coil",
+          "source_table": "M402-TYPICAL-FAN-COIL-POINTS",
+          "ownership_scope": "Typical template scope only; no instance mapping, row-level ownership, wiring method or controller terminal is stated."
+        },
+        {
+          "id": "typical-air-handling-unit",
+          "source_table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+          "ownership_scope": "Typical template scope only; no instance mapping, row-level ownership, wiring method or controller terminal is stated."
+        }
+      ],
+      "listed_template_counts": {
+        "source_rows": 11,
+        "tables": 2
+      },
+      "expanded_template_counts": {
+        "source_rows": 11
+      },
+      "installed_IO_total": {
+        "status": "not_stated_in_supplied_set",
+        "value": null,
+        "reason": "No installed equipment-instance points matrix, controller schedule, panel terminal list, network point export or source multiplier is supplied."
+      },
+      "point_transport": {
+        "status": "not_stated_per_symbol",
+        "value": null,
+        "note": "Integration to the existing Siemens BAS is required but no protocol/transport is assigned to individual typical points."
+      },
+      "tables": [],
+      "assertions": [],
+      "inventory_checks": [
+        {
+          "id": "typical-points-applications",
+          "records_path": [
+            "applications"
+          ],
+          "expected": 2,
+          "unique_key": "id"
+        }
+      ]
+    },
+    "supporting_evidence": {
+      "document_id": "18__vol2__092",
+      "module_role": "Supporting full-set evidence and source limitations that qualify schedule/points use. It preserves a visible M2.01 sample-chart distinction instead of creating an unprinted valve schedule.",
+      "source_limitations": [
+        "M2.01 explicitly labels the detail VALVE TAG AND VALVE CHART SAMPLE. It is a detail/template witness, not a populated source schedule for project control-valve counts.",
+        "M3.01 has a populated automatic-control-damper schedule but no populated control-valve schedule.",
+        "M4.02's 11 source point rows are two typical points lists. No equipment instance/terminal/controller/network expansion rule is printed.",
+        "M3.01's schedule quantities and M4.02's specific FCU-1 location wording conflict in scope and are retained as source data rather than reconciled by assumption."
+      ],
+      "tables": [],
+      "assertions": [
+        {
+          "id": "m201-valve-tag-chart-sample",
+          "page": 10,
+          "bbox": [
+            1840,
+            1995,
+            2250,
+            2025
+          ],
+          "expected": "VALVE TAG AND VALVE CHART SAMPLE",
+          "mode": "exact"
+        }
+      ],
+      "inventory_checks": [
+        {
+          "id": "supporting-source-limitations",
+          "records_path": [
+            "source_limitations"
+          ],
+          "expected": 4
+        }
+      ]
+    }
+  },
+  "module_sha256": {
+    "metadata": "a560edec7c30f1fb88e4c2bf6d6c4ad15d2b030bf47e15dfc38653c6d25b8e65",
+    "schedules": "e53809889cfa283aa4675a0d90ad8e0d9fc2497b7f6d6ed98fbedee68dcff3c1",
+    "points": "0002f35d9e5187ddf4670f35337a1c9fe29d05afcfe59c4b9fc83cfdce34d681",
+    "controls_context": "3dc5d0848a9d2694616f1f4832c2db3f4cd1cb7f3542d5755b25e341d9b08212",
+    "equipment_reconciliation": "94b14c17a565b1449566ec5f8bde39e7eed01344fb105e73e6dd9d1e40e013d5",
+    "point_applications": "947c724c92ea3d8ef76a8748247b9f80af841ad3c533206fab4bfb3ca8381987",
+    "supporting_evidence": "59a254d64a85e131f654e0f800cfe0d2b443692973604cd77a0cf4ade467fe57"
+  },
+  "module_source_sha256": {
+    "metadata": {
+      "metadata": "a560edec7c30f1fb88e4c2bf6d6c4ad15d2b030bf47e15dfc38653c6d25b8e65"
+    },
+    "schedules": {
+      "schedules_m301": "e53809889cfa283aa4675a0d90ad8e0d9fc2497b7f6d6ed98fbedee68dcff3c1"
+    },
+    "points": {
+      "points_m402": "0002f35d9e5187ddf4670f35337a1c9fe29d05afcfe59c4b9fc83cfdce34d681"
+    },
+    "controls_context": {
+      "controls_context_m402": "3dc5d0848a9d2694616f1f4832c2db3f4cd1cb7f3542d5755b25e341d9b08212"
+    },
+    "equipment_reconciliation": {
+      "equipment_reconciliation": "94b14c17a565b1449566ec5f8bde39e7eed01344fb105e73e6dd9d1e40e013d5"
+    },
+    "point_applications": {
+      "point_applications": "947c724c92ea3d8ef76a8748247b9f80af841ad3c533206fab4bfb3ca8381987"
+    },
+    "supporting_evidence": {
+      "supporting_evidence": "59a254d64a85e131f654e0f800cfe0d2b443692973604cd77a0cf4ade467fe57"
+    }
+  },
+  "equipment_inventory": [
+    {
+      "id": "CH-CH 2",
+      "tag": "CH 2",
+      "classification": "Air-cooled chiller",
+      "identity_column": "tag",
+      "source_table": "CH-M301-AIR-COOLED-CHILLER",
+      "source_row": 1,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "tag": "CH 2",
+        "service": "LEFT FIELD",
+        "location": "NEAR GATE 6",
+        "manufacturer": "DAIKIN",
+        "model": "AWV026A",
+        "type": "AIR COOLED SCREW COMP.",
+        "shipping_weight_lbs": "24893",
+        "operating_weight_lbs": "26813",
+        "length_in": "523.2",
+        "width_in": "87.6",
+        "height_in": "100.1",
+        "nominal_capacity_tons": "475.0",
+        "actual_capacity_tons": "475.0",
+        "full_load_efficiency_eer": "9.715",
+        "iplv_eer": "18.06",
+        "eer_at_100_percent": "9.715",
+        "circuit_quantity": "2",
+        "circuit_1_capacity": "200",
+        "circuit_2_capacity": "175",
+        "refrigerant_type": "R134A",
+        "capacity_control_steps": "VFD",
+        "ambient_air_temp_f": "95.0",
+        "condenser_fan_quantity": "26",
+        "condenser_fan_total_kw": "62.0",
+        "condenser_fan_cfm_per_fan": "",
+        "evaporator_gpm": "1136",
+        "evaporator_max_pressure_drop_ft": "23.0",
+        "evaporator_ewt_f": "54.0",
+        "evaporator_lwt_f": "44.0",
+        "circuit_1_mca": "570",
+        "circuit_2_mca": "440",
+        "circuit_1_mocp": "700",
+        "circuit_2_mocp": "600",
+        "volts": "460",
+        "hz": "60",
+        "phase": "3",
+        "notes": "SEE BELOW"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "CH-CH 2",
+        "scope": "Scheduled air-cooled chiller",
+        "visual_anchor": "M3.01 Air Cooled Chiller Schedule row CH 2; left field / near gate 6."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "FCU-FCU 1",
+      "tag": "FCU 1",
+      "classification": "Two-pipe chilled-water fan coil schedule mark",
+      "identity_column": "tag",
+      "source_table": "FCU-M301-FAN-COIL-2-PIPE-CHILLED-WATER",
+      "source_row": 1,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "tag": "FCU 1",
+        "qty": "1",
+        "service": "LEVEL 200 SECTION 7",
+        "location": "LEVEL 200 SECTION 7",
+        "manufacturer": "CARRIER",
+        "model": "42CAA03BLFY6YYAR",
+        "orientation": "HORIZONTAL DUCTED",
+        "approx_weight_lbs": "39",
+        "length_in": "17.5",
+        "width_in": "25.25",
+        "height_in": "8.75",
+        "fan_speed": "HIGH",
+        "nominal_airflow_cfm": "300",
+        "water_flow_gpm": "1.4",
+        "esp_in_wg": "0.4",
+        "water_pressure_drop_ft_hd": "8.6",
+        "coil_rows": "4",
+        "min_coil_working_pressure_psig": "175.0",
+        "eat_db_f": "75.0",
+        "eat_wb_f": "67.0",
+        "lat_db_f": "54.7",
+        "lat_wb_f": "54.1",
+        "ewt_f": "44.0",
+        "total_capacity_mbh": "6.3",
+        "sensible_capacity_mbh": "3.5",
+        "fla": "0.35",
+        "volts": "277",
+        "hz": "60",
+        "phase": "1",
+        "notes": "SEE BELOW"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "FCU-FCU 1",
+        "scope": "Scheduled fan-coil mark",
+        "visual_anchor": "M3.01 FCU row FCU 1, quantity 1, level 200 section 7."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "FCU-FCU 2",
+      "tag": "FCU 2",
+      "classification": "Two-pipe chilled-water fan coil schedule mark",
+      "identity_column": "tag",
+      "source_table": "FCU-M301-FAN-COIL-2-PIPE-CHILLED-WATER",
+      "source_row": 2,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "tag": "FCU 2",
+        "qty": "1",
+        "service": "LEVEL 200 SECTION 7",
+        "location": "LEVEL 200 SECTION 7",
+        "manufacturer": "CARRIER",
+        "model": "42DAA08LLFY6YYBR",
+        "orientation": "HORIZONTAL DUCTED",
+        "approx_weight_lbs": "79",
+        "length_in": "27.5",
+        "width_in": "28.0",
+        "height_in": "16.4",
+        "fan_speed": "HIGH",
+        "nominal_airflow_cfm": "800",
+        "water_flow_gpm": "3.4",
+        "esp_in_wg": "0.5",
+        "water_pressure_drop_ft_hd": "1.79",
+        "coil_rows": "7",
+        "min_coil_working_pressure_psig": "175.0",
+        "eat_db_f": "75.0",
+        "eat_wb_f": "67.0",
+        "lat_db_f": "61.6",
+        "lat_wb_f": "60.5",
+        "ewt_f": "44.0",
+        "total_capacity_mbh": "20.4",
+        "sensible_capacity_mbh": "19.4",
+        "fla": "1.35",
+        "volts": "277",
+        "hz": "60",
+        "phase": "1",
+        "notes": "SEE BELOW"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "FCU-FCU 2",
+        "scope": "Scheduled fan-coil mark",
+        "visual_anchor": "M3.01 FCU row FCU 2, quantity 1, level 200 section 7."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "FCU-FCU 3",
+      "tag": "FCU 3",
+      "classification": "Two-pipe chilled-water fan coil schedule mark",
+      "identity_column": "tag",
+      "source_table": "FCU-M301-FAN-COIL-2-PIPE-CHILLED-WATER",
+      "source_row": 3,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "tag": "FCU 3",
+        "qty": "1",
+        "service": "VISITORS CLUBHOUSE",
+        "location": "VISITORS CLUBHOUSE",
+        "manufacturer": "CARRIER",
+        "model": "42DAA10BLFY6YYAR",
+        "orientation": "HORIZONTAL DUCTED",
+        "approx_weight_lbs": "90",
+        "length_in": "27.5",
+        "width_in": "32.0",
+        "height_in": "16.4",
+        "fan_speed": "HIGH",
+        "nominal_airflow_cfm": "1000",
+        "water_flow_gpm": "5.3",
+        "esp_in_wg": "0.5",
+        "water_pressure_drop_ft_hd": "4.23",
+        "coil_rows": "4",
+        "min_coil_working_pressure_psig": "175.0",
+        "eat_db_f": "75.0",
+        "eat_wb_f": "67.0",
+        "lat_db_f": "59.4",
+        "lat_wb_f": "58.4",
+        "ewt_f": "44.0",
+        "total_capacity_mbh": "24.4",
+        "sensible_capacity_mbh": "15.1",
+        "fla": "1.85",
+        "volts": "277",
+        "hz": "60",
+        "phase": "1",
+        "notes": "SEE BELOW"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "FCU-FCU 3",
+        "scope": "Scheduled fan-coil mark",
+        "visual_anchor": "M3.01 FCU row FCU 3, quantity 1, visitors clubhouse."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "FCU-FCU 4",
+      "tag": "FCU 4",
+      "classification": "Two-pipe chilled-water fan coil schedule mark",
+      "identity_column": "tag",
+      "source_table": "FCU-M301-FAN-COIL-2-PIPE-CHILLED-WATER",
+      "source_row": 4,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "tag": "FCU 4",
+        "qty": "1",
+        "service": "ISFA CONF. ROOM",
+        "location": "ISFA CONF. ROOM",
+        "manufacturer": "CARRIER",
+        "model": "42DAA12BLFY6YYAR",
+        "orientation": "HORIZONTAL DUCTED",
+        "approx_weight_lbs": "108",
+        "length_in": "27.5",
+        "width_in": "37.0",
+        "height_in": "16.4",
+        "fan_speed": "HIGH",
+        "nominal_airflow_cfm": "1200",
+        "water_flow_gpm": "7.6",
+        "esp_in_wg": "0.5",
+        "water_pressure_drop_ft_hd": "10.35",
+        "coil_rows": "4",
+        "min_coil_working_pressure_psig": "175.0",
+        "eat_db_f": "75.0",
+        "eat_wb_f": "67.0",
+        "lat_db_f": "59.3",
+        "lat_wb_f": "58.2",
+        "ewt_f": "44.0",
+        "total_capacity_mbh": "34.6",
+        "sensible_capacity_mbh": "21.3",
+        "fla": "2.7",
+        "volts": "277",
+        "hz": "60",
+        "phase": "1",
+        "notes": "SEE BELOW"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "FCU-FCU 4",
+        "scope": "Scheduled fan-coil mark",
+        "visual_anchor": "M3.01 FCU row FCU 4, quantity 1, ISFA conference room."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "FCU-FCU 5",
+      "tag": "FCU 5",
+      "classification": "Two-pipe chilled-water fan coil schedule mark",
+      "identity_column": "tag",
+      "source_table": "FCU-M301-FAN-COIL-2-PIPE-CHILLED-WATER",
+      "source_row": 5,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "tag": "FCU 5",
+        "qty": "11",
+        "service": "PRESSBOX",
+        "location": "PRESSBOX",
+        "manufacturer": "CARRIER",
+        "model": "42DAA16BLFY6YYAR",
+        "orientation": "HORIZONTAL DUCTED",
+        "approx_weight_lbs": "124",
+        "length_in": "27.5",
+        "width_in": "47.0",
+        "height_in": "16.4",
+        "fan_speed": "HIGH",
+        "nominal_airflow_cfm": "1600",
+        "water_flow_gpm": "10.9",
+        "esp_in_wg": "0.5",
+        "water_pressure_drop_ft_hd": "7.84",
+        "coil_rows": "4",
+        "min_coil_working_pressure_psig": "175.0",
+        "eat_db_f": "75.0",
+        "eat_wb_f": "67.0",
+        "lat_db_f": "60.3",
+        "lat_wb_f": "59.1",
+        "ewt_f": "44.0",
+        "total_capacity_mbh": "50.1",
+        "sensible_capacity_mbh": "31.8",
+        "fla": "3.7",
+        "volts": "277",
+        "hz": "60",
+        "phase": "1",
+        "notes": "SEE BELOW"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "FCU-FCU 5",
+        "scope": "Scheduled fan-coil mark",
+        "visual_anchor": "M3.01 FCU row FCU 5 prints quantity 11. The one schedule row and its printed quantity remain distinct from eleven individually located equipment identities."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "ACD-ACD 1",
+      "tag": "ACD 1",
+      "classification": "Automatic control damper",
+      "identity_column": "tag",
+      "source_table": "ACD-M301-AUTOMATIC-CONTROL-DAMPER",
+      "source_row": 1,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "tag": "ACD 1",
+        "service": "VISITORS CLUBHOUSE",
+        "location": "VISITORS CLUBHOUSE",
+        "manufacturer": "RUSKIN",
+        "model": "CDTI-50",
+        "size_width_x_height": "12x10",
+        "blade_style": "OPPOSED",
+        "damper_fail_position": "CLOSED",
+        "notes": "SEE BELOW"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "ACD-ACD 1",
+        "scope": "Scheduled automatic control damper",
+        "visual_anchor": "M3.01 ACD row ACD 1: Visitors Clubhouse, 12x10, opposed blade, fail closed."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "ACD-ACD 2",
+      "tag": "ACD 2",
+      "classification": "Automatic control damper",
+      "identity_column": "tag",
+      "source_table": "ACD-M301-AUTOMATIC-CONTROL-DAMPER",
+      "source_row": 2,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "tag": "ACD 2",
+        "service": "ISFA CONFERENCE",
+        "location": "PRESSBOX",
+        "manufacturer": "RUSKIN",
+        "model": "CDTI-50",
+        "size_width_x_height": "VERIFY EXISTING",
+        "blade_style": "OPPOSED",
+        "damper_fail_position": "CLOSED",
+        "notes": "SEE BELOW"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "ACD-ACD 2",
+        "scope": "Scheduled automatic control damper",
+        "visual_anchor": "M3.01 ACD row ACD 2: ISFA Conference / Pressbox, verify existing size, opposed blade, fail closed."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "CU-CU 1",
+      "tag": "CU 1",
+      "classification": "Condensing unit",
+      "identity_column": "tag",
+      "source_table": "CU-M301-CONDENSING-UNIT",
+      "source_row": 1,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "tag": "CU 1",
+        "service": "PATIO AHU",
+        "location": "200 LEVEL SECTION 2",
+        "manufacturer": "CARRIER",
+        "model": "38APS030",
+        "shipping_weight_lbs": "1282",
+        "operating_weight_lbs": "1282",
+        "length_in": "88.4",
+        "width_in": "40.3",
+        "height_in": "78.6",
+        "circuit_qty": "2",
+        "compressor_type": "SCROLL",
+        "total_capacity_mbh": "373.5",
+        "sensible_capacity_mbh": "",
+        "eer": "10.8",
+        "refrigerant_type": "PURON",
+        "suction_line_size_in": "",
+        "liquid_line_size_in": "",
+        "hot_gas_line_size_in": "",
+        "eat_f": "95.0",
+        "fla": "",
+        "mca": "66.3",
+        "mocp": "90",
+        "volts": "460",
+        "hz": "60",
+        "phase": "3",
+        "notes": "SEE BELOW"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "CU-CU 1",
+        "scope": "Scheduled condensing unit",
+        "visual_anchor": "M3.01 Condensing Units row CU 1; patio AHU / 200 level section 2."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "CU-CU 2",
+      "tag": "CU 2",
+      "classification": "Condensing unit",
+      "identity_column": "tag",
+      "source_table": "CU-M301-CONDENSING-UNIT",
+      "source_row": 2,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "tag": "CU 2",
+        "service": "SCORE BOARD CONTROL",
+        "location": "200 LEVEL SECTION 5",
+        "manufacturer": "CARRIER",
+        "model": "38AUDC16A0A6-0A0A0",
+        "shipping_weight_lbs": "731",
+        "operating_weight_lbs": "731",
+        "length_in": "86.4",
+        "width_in": "43.4",
+        "height_in": "50.4",
+        "circuit_qty": "1",
+        "compressor_type": "SCROLL",
+        "total_capacity_mbh": "185.7",
+        "sensible_capacity_mbh": "",
+        "eer": "13.4",
+        "refrigerant_type": "PURON",
+        "suction_line_size_in": "",
+        "liquid_line_size_in": "",
+        "hot_gas_line_size_in": "",
+        "eat_f": "95.0",
+        "fla": "",
+        "mca": "29.9",
+        "mocp": "40",
+        "volts": "460",
+        "hz": "60",
+        "phase": "3",
+        "notes": "SEE BELOW"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "CU-CU 2",
+        "scope": "Scheduled condensing unit",
+        "visual_anchor": "M3.01 Condensing Units row CU 2; score board control / 200 level section 5."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "CU-CU 3",
+      "tag": "CU 3",
+      "classification": "Condensing unit",
+      "identity_column": "tag",
+      "source_table": "CU-M301-CONDENSING-UNIT",
+      "source_row": 3,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "tag": "CU 3",
+        "service": "SCORE BOARD CONTROL",
+        "location": "200 LEVEL SECTION 5",
+        "manufacturer": "CARRIER",
+        "model": "38AUDC16A0A6-0A0A0",
+        "shipping_weight_lbs": "731",
+        "operating_weight_lbs": "731",
+        "length_in": "86.4",
+        "width_in": "43.4",
+        "height_in": "50.4",
+        "circuit_qty": "1",
+        "compressor_type": "SCROLL",
+        "total_capacity_mbh": "185.7",
+        "sensible_capacity_mbh": "",
+        "eer": "13.4",
+        "refrigerant_type": "PURON",
+        "suction_line_size_in": "",
+        "liquid_line_size_in": "",
+        "hot_gas_line_size_in": "",
+        "eat_f": "95.0",
+        "fla": "",
+        "mca": "29.9",
+        "mocp": "40",
+        "volts": "460",
+        "hz": "60",
+        "phase": "3",
+        "notes": "SEE BELOW"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "CU-CU 3",
+        "scope": "Scheduled condensing unit",
+        "visual_anchor": "M3.01 Condensing Units row CU 3; score board control / 200 level section 5."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "OUTLET-A",
+      "tag": "A",
+      "classification": "Air-outlet type",
+      "identity_column": "tag",
+      "source_table": "OUTLET-M301-GRILLE-REGISTER-DIFFUSER",
+      "source_row": 1,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "tag": "A",
+        "manufacturer": "PRICE",
+        "model": "530FF",
+        "type": "RETURN AIR FILTER GRILLE",
+        "service": "RETURN",
+        "module_size": "24x24",
+        "material": "STEEL",
+        "border_type": "LAY-IN",
+        "maximum_nc": "30",
+        "notes": "SEE BELOW"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "DX-DC 1",
+      "tag": "DC 1",
+      "classification": "DX coil",
+      "identity_column": "tag",
+      "source_table": "DX-M301-DX-COIL",
+      "source_row": 1,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "tag": "DC 1",
+        "service": "CU-1",
+        "location": "PATIO",
+        "manufacturer": "COMM. COILS",
+        "model": "4DX-8-45 X 89.5 X 4 - 9 AL",
+        "total_area_sf": "27.97",
+        "rows": "4",
+        "fpi": "9",
+        "height_in": "45.0",
+        "width_in": "89.5",
+        "depth_in": "6.5",
+        "eat_db_f": "80.0",
+        "eat_wb_f": "67.0",
+        "lat_db_f": "59.0",
+        "lat_wb_f": "57.0",
+        "cfm": "12,000",
+        "apd": "0.34\"",
+        "total_capacity": "377,970",
+        "sensible_capacity": "277,600",
+        "notes": "SEE BELOW"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": {
+        "id": "DX-DC 1",
+        "scope": "Scheduled DX coil",
+        "visual_anchor": "M3.01 DX Coil row DC 1 cites CU-1 at patio; the row is kept as a scheduled coil identity and is not added to the CU quantity."
+      },
+      "outlet_instances": null
+    },
+    {
+      "id": "COORD-FCU",
+      "tag": "FCU",
+      "classification": "Trade-coordination equipment category",
+      "identity_column": "equipment_tag",
+      "source_table": "COORD-M301-MECHANICAL-ELECTRICAL-COORDINATION",
+      "source_row": 1,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "equipment_tag": "FCU",
+        "equipment_description": "FAN COIL UNIT",
+        "unit_mounted_vfd": "-",
+        "unit_mounted_starter": "-",
+        "unit_mounted_disconnect": "-",
+        "unit_mounted_overcurrent_protection": "-",
+        "unit_mounted_single_point_connection": "YES",
+        "remote_vfd": "-",
+        "remote_starter": "-",
+        "remote_disconnect": "EC",
+        "remote_overcurrent_protection": "EC",
+        "volts": "277",
+        "hz": "60",
+        "phase": "3",
+        "remarks": "EXISTING DISCONNECT SWITCH MAY BE RE-USED."
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "COORD-CU",
+      "tag": "CU",
+      "classification": "Trade-coordination equipment category",
+      "identity_column": "equipment_tag",
+      "source_table": "COORD-M301-MECHANICAL-ELECTRICAL-COORDINATION",
+      "source_row": 2,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "equipment_tag": "CU",
+        "equipment_description": "CONDENSING UNIT",
+        "unit_mounted_vfd": "-",
+        "unit_mounted_starter": "-",
+        "unit_mounted_disconnect": "-",
+        "unit_mounted_overcurrent_protection": "-",
+        "unit_mounted_single_point_connection": "YES",
+        "remote_vfd": "-",
+        "remote_starter": "-",
+        "remote_disconnect": "EC",
+        "remote_overcurrent_protection": "EC",
+        "volts": "460",
+        "hz": "60",
+        "phase": "3",
+        "remarks": ""
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "COORD-CH",
+      "tag": "CH",
+      "classification": "Trade-coordination equipment category",
+      "identity_column": "equipment_tag",
+      "source_table": "COORD-M301-MECHANICAL-ELECTRICAL-COORDINATION",
+      "source_row": 3,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "equipment_tag": "CH",
+        "equipment_description": "CHILLER",
+        "unit_mounted_vfd": "MFG",
+        "unit_mounted_starter": "-",
+        "unit_mounted_disconnect": "MFG",
+        "unit_mounted_overcurrent_protection": "-",
+        "unit_mounted_single_point_connection": "NO",
+        "remote_vfd": "-",
+        "remote_starter": "-",
+        "remote_disconnect": "-",
+        "remote_overcurrent_protection": "EC",
+        "volts": "460",
+        "hz": "60",
+        "phase": "3",
+        "remarks": ""
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "REFRIG-CH 1",
+      "tag": "CH 1",
+      "classification": "Refrigeration schedule cross-reference",
+      "identity_column": "equipment_tag",
+      "source_table": "REFRIG-M301-REFRIGERATION",
+      "source_row": 1,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "equipment_tag": "CH 1",
+        "qty": "1",
+        "location": "LEFT FIELD",
+        "refrigerant_type": "R134A",
+        "refrigerant_circuit": "2",
+        "refrigerant_charge_lbs": "549",
+        "compressor_type": "SCREW",
+        "compressor_qty": "2",
+        "compressor_hp": "",
+        "tons": "475",
+        "remote": "NO",
+        "self_contained": "YES",
+        "air_cooled": "YES",
+        "water_cooled": "NO",
+        "notes": "SEE BELOW"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "REFRIG-CU 1",
+      "tag": "CU 1",
+      "classification": "Refrigeration schedule cross-reference",
+      "identity_column": "equipment_tag",
+      "source_table": "REFRIG-M301-REFRIGERATION",
+      "source_row": 2,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "equipment_tag": "CU 1",
+        "qty": "1",
+        "location": "200 LEVEL ROOF",
+        "refrigerant_type": "R410A",
+        "refrigerant_circuit": "2",
+        "refrigerant_charge_lbs": "",
+        "compressor_type": "SCROLL",
+        "compressor_qty": "2",
+        "compressor_hp": "",
+        "tons": "30",
+        "remote": "YES",
+        "self_contained": "NO",
+        "air_cooled": "YES",
+        "water_cooled": "NO",
+        "notes": "SEE BELOW"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "REFRIG-CU 2",
+      "tag": "CU 2",
+      "classification": "Refrigeration schedule cross-reference",
+      "identity_column": "equipment_tag",
+      "source_table": "REFRIG-M301-REFRIGERATION",
+      "source_row": 3,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "equipment_tag": "CU 2",
+        "qty": "1",
+        "location": "500 LEVEL ROOF",
+        "refrigerant_type": "R410A",
+        "refrigerant_circuit": "1",
+        "refrigerant_charge_lbs": "",
+        "compressor_type": "SCROLL",
+        "compressor_qty": "2",
+        "compressor_hp": "",
+        "tons": "15",
+        "remote": "YES",
+        "self_contained": "NO",
+        "air_cooled": "YES",
+        "water_cooled": "NO",
+        "notes": "SEE BELOW"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    },
+    {
+      "id": "REFRIG-CU 3",
+      "tag": "CU 3",
+      "classification": "Refrigeration schedule cross-reference",
+      "identity_column": "equipment_tag",
+      "source_table": "REFRIG-M301-REFRIGERATION",
+      "source_row": 4,
+      "source_page": 11,
+      "literal_schedule_row": {
+        "equipment_tag": "CU 3",
+        "qty": "1",
+        "location": "500 LEVEL ROOF",
+        "refrigerant_type": "R410A",
+        "refrigerant_circuit": "1",
+        "refrigerant_charge_lbs": "",
+        "compressor_type": "SCROLL",
+        "compressor_qty": "2",
+        "compressor_hp": "",
+        "tons": "15",
+        "remote": "YES",
+        "self_contained": "NO",
+        "air_cooled": "YES",
+        "water_cooled": "NO",
+        "notes": "SEE BELOW"
+      },
+      "row_semantics": "All cells belong to the cited row. Indoor/outdoor pair rows are shared references, not doubled schedule quantities or per-unit electrical sums.",
+      "primary_anchor": null,
+      "outlet_instances": null
+    }
+  ],
+  "point_application_ledger": [
+    {
+      "id": "typical-fan-coil/AO-1:",
+      "application": "typical-fan-coil",
+      "source_table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "source_row": 1,
+      "page": 13,
+      "sheet": "M4.02",
+      "row_bbox": [
+        1790.0,
+        780.0,
+        2150.0,
+        796.0
+      ],
+      "tag_as_printed": "AO-1:",
+      "point_name_as_printed": "MODULATING CHILLED WATER VALVE CONTROL",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "AO-1:",
+        "point_name": "MODULATING CHILLED WATER VALVE CONTROL"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Typical template scope only; no instance mapping, row-level ownership, wiring method or controller terminal is stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "typical-fan-coil/AI-1:",
+      "application": "typical-fan-coil",
+      "source_table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "source_row": 2,
+      "page": 13,
+      "sheet": "M4.02",
+      "row_bbox": [
+        1790.0,
+        796.0,
+        2150.0,
+        808.0
+      ],
+      "tag_as_printed": "AI-1:",
+      "point_name_as_printed": "FAN COIL DISCHARGE AIR TEMPERATURE",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "AI-1:",
+        "point_name": "FAN COIL DISCHARGE AIR TEMPERATURE"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Typical template scope only; no instance mapping, row-level ownership, wiring method or controller terminal is stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "typical-fan-coil/DI-1:",
+      "application": "typical-fan-coil",
+      "source_table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "source_row": 3,
+      "page": 13,
+      "sheet": "M4.02",
+      "row_bbox": [
+        1790.0,
+        808.0,
+        2150.0,
+        819.0
+      ],
+      "tag_as_printed": "DI-1:",
+      "point_name_as_printed": "OCCUPIED WALL SWITCH",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "DI-1:",
+        "point_name": "OCCUPIED WALL SWITCH"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Typical template scope only; no instance mapping, row-level ownership, wiring method or controller terminal is stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "typical-fan-coil/DO-1:",
+      "application": "typical-fan-coil",
+      "source_table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "source_row": 4,
+      "page": 13,
+      "sheet": "M4.02",
+      "row_bbox": [
+        1790.0,
+        819.0,
+        2150.0,
+        830.0
+      ],
+      "tag_as_printed": "DO-1:",
+      "point_name_as_printed": "FAN COMMAND ON/OFF",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "DO-1:",
+        "point_name": "FAN COMMAND ON/OFF"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Typical template scope only; no instance mapping, row-level ownership, wiring method or controller terminal is stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "typical-fan-coil/DO-2:",
+      "application": "typical-fan-coil",
+      "source_table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "source_row": 5,
+      "page": 13,
+      "sheet": "M4.02",
+      "row_bbox": [
+        1790.0,
+        830.0,
+        2150.0,
+        842.0
+      ],
+      "tag_as_printed": "DO-2:",
+      "point_name_as_printed": "ELECTRIC HEAT COIL COMMAND ON/OFF",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "DO-2:",
+        "point_name": "ELECTRIC HEAT COIL COMMAND ON/OFF"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Typical template scope only; no instance mapping, row-level ownership, wiring method or controller terminal is stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "typical-fan-coil/COMM:",
+      "application": "typical-fan-coil",
+      "source_table": "M402-TYPICAL-FAN-COIL-POINTS",
+      "source_row": 6,
+      "page": 13,
+      "sheet": "M4.02",
+      "row_bbox": [
+        1790.0,
+        842.0,
+        2150.0,
+        853.0
+      ],
+      "tag_as_printed": "COMM:",
+      "point_name_as_printed": "THERMOSTAT",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "COMM:",
+        "point_name": "THERMOSTAT"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Typical template scope only; no instance mapping, row-level ownership, wiring method or controller terminal is stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "typical-air-handling-unit/AO-1:",
+      "application": "typical-air-handling-unit",
+      "source_table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "source_row": 1,
+      "page": 13,
+      "sheet": "M4.02",
+      "row_bbox": [
+        1790.0,
+        882.0,
+        2180.0,
+        899.0
+      ],
+      "tag_as_printed": "AO-1:",
+      "point_name_as_printed": "MODULATING CHILLED WATER VALVE CONTROL",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "AO-1:",
+        "point_name": "MODULATING CHILLED WATER VALVE CONTROL"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Typical template scope only; no instance mapping, row-level ownership, wiring method or controller terminal is stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "typical-air-handling-unit/AI-2:",
+      "application": "typical-air-handling-unit",
+      "source_table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "source_row": 2,
+      "page": 13,
+      "sheet": "M4.02",
+      "row_bbox": [
+        1790.0,
+        899.0,
+        2180.0,
+        910.0
+      ],
+      "tag_as_printed": "AI-2:",
+      "point_name_as_printed": "RETURN AIR TEMPERATURE",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "AI-2:",
+        "point_name": "RETURN AIR TEMPERATURE"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Typical template scope only; no instance mapping, row-level ownership, wiring method or controller terminal is stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "typical-air-handling-unit/AI-1:",
+      "application": "typical-air-handling-unit",
+      "source_table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "source_row": 3,
+      "page": 13,
+      "sheet": "M4.02",
+      "row_bbox": [
+        1790.0,
+        910.0,
+        2180.0,
+        921.0
+      ],
+      "tag_as_printed": "AI-1:",
+      "point_name_as_printed": "DISCHARGE AIR TEMPERATURE",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "AI-1:",
+        "point_name": "DISCHARGE AIR TEMPERATURE"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Typical template scope only; no instance mapping, row-level ownership, wiring method or controller terminal is stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "typical-air-handling-unit/DO-1:",
+      "application": "typical-air-handling-unit",
+      "source_table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "source_row": 4,
+      "page": 13,
+      "sheet": "M4.02",
+      "row_bbox": [
+        1790.0,
+        921.0,
+        2180.0,
+        933.0
+      ],
+      "tag_as_printed": "DO-1:",
+      "point_name_as_printed": "FAN COMMAND ON/OFF",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "DO-1:",
+        "point_name": "FAN COMMAND ON/OFF"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Typical template scope only; no instance mapping, row-level ownership, wiring method or controller terminal is stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    },
+    {
+      "id": "typical-air-handling-unit/COMM:",
+      "application": "typical-air-handling-unit",
+      "source_table": "M402-TYPICAL-AIR-HANDLING-UNIT-POINTS",
+      "source_row": 5,
+      "page": 13,
+      "sheet": "M4.02",
+      "row_bbox": [
+        1790.0,
+        933.0,
+        2180.0,
+        944.0
+      ],
+      "tag_as_printed": "COMM:",
+      "point_name_as_printed": "THERMOSTAT",
+      "printed_flag_columns": {},
+      "literal_source_row": {
+        "tag": "COMM:",
+        "point_name": "THERMOSTAT"
+      },
+      "ownership": {
+        "status": "source_template_or_schematic_scope_only",
+        "value": "Typical template scope only; no instance mapping, row-level ownership, wiring method or controller terminal is stated.",
+        "physical_owner": {
+          "status": "not_stated_in_supplied_excerpt",
+          "value": null
+        }
+      },
+      "application_qualification": {}
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "document_id": "03__vol1__27",
+  "module_role": "Full-set qualification and explicit source limitations for the White Sturgeon Fish Hatchery HVAC/BAS ground-truth record.",
+  "source_limitations": [
+    "The M-601 through M-604 source schedules preserve 111 literal rows across 19 tables. Their 75 tag/indoor-tag identities are schedule scope, not a separately validated installed plan-symbol count; M-601 grille/register/diffuser marks are schedule types rather than plan-placement quantities.",
+    "The E-702 PLC I/O list preserves 52 literal records and its printed AI/AO/DI/DO column quantities. These are not expanded into a final controller-card, terminal, field-device, cable or field-wiring count.",
+    "The source states ETHERNET/IP, BACNET /IP and MODBUS TCP/IP in E-702 and diagrams an Allen-Bradley CompactLogix 5380 / Compact 5000 I/O / PanelView Plus 7 / Ethernet Tap context on E-501. It does not publish a final network-address, subnet/VLAN, controller-card, terminal or switch-port schedule.",
+    "M-702 and M-703 publish controls diagrams and written sequence context. Those assertions remain source-sheet scoped and are not transformed into additional unprinted point rows or complete commissioning logic.",
+    "M-603 publishes four control-valve rows and three louver rows. The supplied source has no standalone damper-actuator schedule providing tag, make/model, torque, signal, fail action and installed quantity, so none is fabricated.",
+    "Sensor/instrument schedule and E-702 rows identify named instruments and PLC actions, but the supplied source does not establish facility-wide installed counts for space sensors, CO2 sensors or smart thermostats. No such total is inferred from repeated diagrams, control templates or generic note text.",
+    "All 38 source pages were visually reviewed at full page. MuPDF and Poppler independently corroborate every authored literal schedule/PLC-I/O cell and bounded metadata/controls assertion; parser agreement does not prove physical plan quantities or supply unprinted BAS configuration."
+  ],
+  "visual_evidence": [
+    {
+      "purpose": "M-601 schedule review",
+      "render": "reviews/03__vol1__27/p13-p13-full-poppler.png",
+      "engine": "poppler"
+    },
+    {
+      "purpose": "M-603 instrumentation, control-valve and louver schedule review",
+      "render": "reviews/03__vol1__27/p15-p15-full-poppler.png",
+      "engine": "poppler"
+    },
+    {
+      "purpose": "M-702 control diagrams and written sequence review",
+      "render": "reviews/03__vol1__27/p18-p18-full-poppler.png",
+      "engine": "poppler"
+    },
+    {
+      "purpose": "M-703 aerated-water sequence review",
+      "render": "reviews/03__vol1__27/p19-p19-full-poppler.png",
+      "engine": "poppler"
+    },
+    {
+      "purpose": "E-501 network/control-diagram review",
+      "render": "reviews/03__vol1__27/p33-p33-full-poppler.png",
+      "engine": "poppler"
+    },
+    {
+      "purpose": "E-702 PLC I/O list review",
+      "render": "reviews/03__vol1__27/p38-p38-full-poppler.png",
+      "engine": "poppler"
+    }
+  ],
+  "tables": [],
+  "assertions": [],
+  "inventory_checks": [
+    {
+      "id": "rank03-source-limitations",
+      "records_path": [
+        "source_limitations"
+      ],
+      "expected": 7
+    },
+    {
+      "id": "rank03-supporting-visual-evidence",
+      "records_path": [
+        "visual_evidence"
+      ],
+      "expected": 6
+    }
+  ]
+}

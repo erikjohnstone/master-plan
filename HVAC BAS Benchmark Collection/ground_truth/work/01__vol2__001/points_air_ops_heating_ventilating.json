@@ -1,0 +1,97 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All printed entries in the Air Operations heating-and-ventilating DDC point list on MI743 (source PDF page 70): 3 analog inputs, 2 analog outputs, 6 binary inputs and 5 binary outputs. This records controller points and printed flags, not inferred field-device quantities.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [70],
+    "render": "reviews/01__vol2__001/p70-p70-controls-poppler.png",
+    "dpi": 180,
+    "finding": "The complete MI743 page was visually reviewed at 180 DPI. The point-list matrix, system control diagram and sequence are all visible; the written sequence is captured separately."
+  },
+  "tables": [
+    {
+      "id": "AIR-OPS-HV-AI",
+      "page": 70,
+      "sheet": "MI743",
+      "building_scope": "Air Operations storage bay",
+      "title": "AIR OPS H&V DDC POINTS LIST - ANALOG INPUT",
+      "classification": "Analog input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [792, 825, 1000, 1045, 1090],
+      "y_edges": [145, 162, 179, 196],
+      "rows": [
+        "AI01|SPACE TEMPERATURE|Yes|Yes",
+        "AI02|UH-A1 HHW VALVE CONTROL|No|Yes",
+        "AI03|UH-A2 HHW VALVE CONTROL|No|Yes"
+      ],
+      "header_evidence": [
+        {"bbox": [790, 82, 1090, 109], "expected": "AIR OPS H&V DDC POINTS LIST"},
+        {"bbox": [790, 109, 1090, 131], "expected": "MARK DESCRIPTION ALARM TREND"},
+        {"bbox": [790, 126, 875, 145], "expected": "ANALOG INPUT"}
+      ]
+    },
+    {
+      "id": "AIR-OPS-HV-AO",
+      "page": 70,
+      "sheet": "MI743",
+      "building_scope": "Air Operations storage bay",
+      "title": "AIR OPS H&V DDC POINTS LIST - ANALOG OUTPUT",
+      "classification": "Analog output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [792, 825, 1000, 1045, 1090],
+      "y_edges": [231, 248, 266],
+      "rows": ["AO01|UH-A1 HHW VALVE CONTROL|No|No", "AO02|UH-A2 HHW VALVE CONTROL|No|No"],
+      "header_evidence": [{"bbox": [790, 213, 885, 231], "expected": "ANALOG OUTPUT"}]
+    },
+    {
+      "id": "AIR-OPS-HV-BI",
+      "page": 70,
+      "sheet": "MI743",
+      "building_scope": "Air Operations storage bay",
+      "title": "AIR OPS H&V DDC POINTS LIST - BINARY INPUT",
+      "classification": "Binary input",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [792, 825, 1000, 1045, 1090],
+      "y_edges": [300, 318, 335, 352, 370, 387, 405],
+      "rows": [
+        "BI01|OA DAMPER END SWITCH|Yes|No",
+        "BI02|EA DAMPER END SWITCH|Yes|No",
+        "BI03|EF-A1 STATUS (FEEDBACK)|Yes|No",
+        "BI04|UH-A1 FAN STATUS|Yes|No",
+        "BI05|UH-A2 FAN STATUS|Yes|No",
+        "BI06|AIR OPS H&V DDC RESET|Yes|Yes"
+      ],
+      "header_evidence": [{"bbox": [790, 282, 880, 300], "expected": "BINARY INPUT"}]
+    },
+    {
+      "id": "AIR-OPS-HV-BO",
+      "page": 70,
+      "sheet": "MI743",
+      "building_scope": "Air Operations storage bay",
+      "title": "AIR OPS H&V DDC POINTS LIST - BINARY OUTPUT",
+      "classification": "Binary output",
+      "columns": "mark|description|alarm|trend",
+      "x_edges": [792, 825, 1000, 1045, 1090],
+      "y_edges": [439, 456, 473, 491, 508, 526],
+      "rows": [
+        "BO01|OA DAMPER OPEN/CLOSE|No|No",
+        "BO02|EA DAMPER OPEN/CLOSE|No|No",
+        "BO03|EF-A1 START/STOP|No|No",
+        "BO04|UH-A1 FAN START/STOP|No|No",
+        "BO05|UH-A2 FAN START/STOP|No|No"
+      ],
+      "header_evidence": [{"bbox": [790, 420, 885, 439], "expected": "BINARY OUTPUT"}]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "air-ops-hv-ai-count", "records_path": ["tables", 0, "rows"], "expected": 3},
+    {"id": "air-ops-hv-ao-count", "records_path": ["tables", 1, "rows"], "expected": 2},
+    {"id": "air-ops-hv-bi-count", "records_path": ["tables", 2, "rows"], "expected": 6},
+    {"id": "air-ops-hv-bo-count", "records_path": ["tables", 3, "rows"], "expected": 5}
+  ],
+  "source_conflicts": [
+    {"table": "AIR-OPS-HV-BI", "finding": "BI06 is printed with both Alarm and Trend as Yes, even though it is a reset point. The printed flags are retained."}
+  ],
+  "remaining_work": "Capture MI743 sequence prose as bounded assertions, reconcile printed points to actual planned/scheduled applications, and continue full equipment, controls, network and sensor audit."
+}

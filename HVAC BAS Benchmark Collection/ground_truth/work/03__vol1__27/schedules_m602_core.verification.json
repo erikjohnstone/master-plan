@@ -1,0 +1,7854 @@
+{
+  "document_id": "03__vol1__27",
+  "source_sha256": "2e123db08407f97acd6bc6387ecab6e08ad8204971fb5c24a3668bbd34dec0cf",
+  "annotation_sha256": "17a8f8a19b4746c98adbdee8da0c0b42b02b1e7800cfe9c26d9b864a74d57304",
+  "tables": 5,
+  "rows": 17,
+  "cell_assertions": 250,
+  "text_assertions": 2,
+  "checks": [
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 1,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        470,
+        145,
+        525,
+        188
+      ],
+      "expected": "DT-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DT-1",
+          "word_ids": [
+            39
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DT-1",
+          "word_ids": [
+            44
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 1,
+      "column": "location",
+      "page": 14,
+      "bbox": [
+        525,
+        145,
+        600,
+        188
+      ],
+      "expected": "MAIN RM.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAIN RM.",
+          "word_ids": [
+            40,
+            41
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAIN RM.",
+          "word_ids": [
+            45,
+            46
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 1,
+      "column": "system",
+      "page": 14,
+      "bbox": [
+        600,
+        145,
+        710,
+        188
+      ],
+      "expected": "BOOSTER PUMP DRAWDOWN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BOOSTER PUMP DRAWDOWN",
+          "word_ids": [
+            42,
+            43,
+            44
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BOOSTER PUMP DRAWDOWN",
+          "word_ids": [
+            47,
+            48,
+            49
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        710,
+        145,
+        840,
+        188
+      ],
+      "expected": "ARMSTRONG FX-60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ARMSTRONG FX-60",
+          "word_ids": [
+            45,
+            46
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ARMSTRONG FX-60",
+          "word_ids": [
+            50,
+            51
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 1,
+      "column": "type",
+      "page": 14,
+      "bbox": [
+        840,
+        145,
+        915,
+        188
+      ],
+      "expected": "BLADDER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BLADDER",
+          "word_ids": [
+            47
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BLADDER",
+          "word_ids": [
+            52
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 1,
+      "column": "system_volume_gal",
+      "page": 14,
+      "bbox": [
+        915,
+        145,
+        975,
+        188
+      ],
+      "expected": "N/A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "N/A",
+          "word_ids": [
+            48
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "N/A",
+          "word_ids": [
+            53
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 1,
+      "column": "low_temp_f",
+      "page": 14,
+      "bbox": [
+        975,
+        145,
+        1035,
+        188
+      ],
+      "expected": "48",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "48",
+          "word_ids": [
+            49
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "48",
+          "word_ids": [
+            54
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 1,
+      "column": "high_temp_f",
+      "page": 14,
+      "bbox": [
+        1035,
+        145,
+        1100,
+        188
+      ],
+      "expected": "140",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "140",
+          "word_ids": [
+            50
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "140",
+          "word_ids": [
+            55
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 1,
+      "column": "required_tank_volume_gal",
+      "page": 14,
+      "bbox": [
+        1100,
+        145,
+        1165,
+        188
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            51
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            56
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 1,
+      "column": "required_acceptance_volume_gal",
+      "page": 14,
+      "bbox": [
+        1165,
+        145,
+        1240,
+        188
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            52
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            57
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 1,
+      "column": "fluid",
+      "page": 14,
+      "bbox": [
+        1240,
+        145,
+        1325,
+        188
+      ],
+      "expected": "WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            53
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            58
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 1,
+      "column": "charge_pressure_psig",
+      "page": 14,
+      "bbox": [
+        1325,
+        145,
+        1390,
+        188
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            54
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            59
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 1,
+      "column": "operating_pressure_psig",
+      "page": 14,
+      "bbox": [
+        1390,
+        145,
+        1450,
+        188
+      ],
+      "expected": "45",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            55
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            60
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 1,
+      "column": "maop_psig",
+      "page": 14,
+      "bbox": [
+        1450,
+        145,
+        1510,
+        188
+      ],
+      "expected": "150",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            56
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "150",
+          "word_ids": [
+            61
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 1,
+      "column": "connection_size_in",
+      "page": 14,
+      "bbox": [
+        1510,
+        145,
+        1575,
+        188
+      ],
+      "expected": "1/2\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2\"",
+          "word_ids": [
+            57
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2\"",
+          "word_ids": [
+            62
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 1,
+      "column": "operating_weight_lbs",
+      "page": 14,
+      "bbox": [
+        1575,
+        145,
+        1625,
+        188
+      ],
+      "expected": "175",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "175",
+          "word_ids": [
+            58
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "175",
+          "word_ids": [
+            63
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 1,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1625,
+        145,
+        2170,
+        188
+      ],
+      "expected": "THIS TANK IS PART OF THE WATER BOOSTER PUMP BP-1 ASSEMBLY.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "THIS TANK IS PART OF THE WATER BOOSTER PUMP BP-1 ASSEMBLY.",
+          "word_ids": [
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "THIS TANK IS PART OF THE WATER BOOSTER PUMP BP-1 ASSEMBLY.",
+          "word_ids": [
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 2,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        470,
+        188,
+        525,
+        229
+      ],
+      "expected": "ET-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ET-1",
+          "word_ids": [
+            70
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ET-1",
+          "word_ids": [
+            75
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 2,
+      "column": "location",
+      "page": 14,
+      "bbox": [
+        525,
+        188,
+        600,
+        229
+      ],
+      "expected": "MAIN RM.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAIN RM.",
+          "word_ids": [
+            71,
+            72
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAIN RM.",
+          "word_ids": [
+            76,
+            77
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 2,
+      "column": "system",
+      "page": 14,
+      "bbox": [
+        600,
+        188,
+        710,
+        229
+      ],
+      "expected": "EVAPORATOR LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EVAPORATOR LOOP",
+          "word_ids": [
+            73,
+            74
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EVAPORATOR LOOP",
+          "word_ids": [
+            78,
+            79
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        710,
+        188,
+        840,
+        229
+      ],
+      "expected": "FLAMCO NEXP-023",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FLAMCO NEXP-023",
+          "word_ids": [
+            75,
+            76
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FLAMCO NEXP-023",
+          "word_ids": [
+            80,
+            81
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 2,
+      "column": "type",
+      "page": 14,
+      "bbox": [
+        840,
+        188,
+        915,
+        229
+      ],
+      "expected": "BLADDER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BLADDER",
+          "word_ids": [
+            77
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BLADDER",
+          "word_ids": [
+            82
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 2,
+      "column": "system_volume_gal",
+      "page": 14,
+      "bbox": [
+        915,
+        188,
+        975,
+        229
+      ],
+      "expected": "1100",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1100",
+          "word_ids": [
+            78
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1100",
+          "word_ids": [
+            83
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 2,
+      "column": "low_temp_f",
+      "page": 14,
+      "bbox": [
+        975,
+        188,
+        1035,
+        229
+      ],
+      "expected": "40",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "40",
+          "word_ids": [
+            79
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "40",
+          "word_ids": [
+            84
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 2,
+      "column": "high_temp_f",
+      "page": 14,
+      "bbox": [
+        1035,
+        188,
+        1100,
+        229
+      ],
+      "expected": "85",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "85",
+          "word_ids": [
+            80
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "85",
+          "word_ids": [
+            85
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 2,
+      "column": "required_tank_volume_gal",
+      "page": 14,
+      "bbox": [
+        1100,
+        188,
+        1165,
+        229
+      ],
+      "expected": "23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            81
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            86
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 2,
+      "column": "required_acceptance_volume_gal",
+      "page": 14,
+      "bbox": [
+        1165,
+        188,
+        1240,
+        229
+      ],
+      "expected": "23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            82
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            87
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 2,
+      "column": "fluid",
+      "page": 14,
+      "bbox": [
+        1240,
+        188,
+        1325,
+        229
+      ],
+      "expected": "WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            83
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            88
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 2,
+      "column": "charge_pressure_psig",
+      "page": 14,
+      "bbox": [
+        1325,
+        188,
+        1390,
+        229
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            84
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            89
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 2,
+      "column": "operating_pressure_psig",
+      "page": 14,
+      "bbox": [
+        1390,
+        188,
+        1450,
+        229
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            85
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            90
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 2,
+      "column": "maop_psig",
+      "page": 14,
+      "bbox": [
+        1450,
+        188,
+        1510,
+        229
+      ],
+      "expected": "125",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            86
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            91
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 2,
+      "column": "connection_size_in",
+      "page": 14,
+      "bbox": [
+        1510,
+        188,
+        1575,
+        229
+      ],
+      "expected": "1\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1\"",
+          "word_ids": [
+            87
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1\"",
+          "word_ids": [
+            92
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 2,
+      "column": "operating_weight_lbs",
+      "page": 14,
+      "bbox": [
+        1575,
+        188,
+        1625,
+        229
+      ],
+      "expected": "420",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "420",
+          "word_ids": [
+            88
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "420",
+          "word_ids": [
+            93
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 2,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1625,
+        188,
+        2170,
+        229
+      ],
+      "expected": "INSTALL WITH PRESSURE RELIEF VALVE, PRESSURE GAUGE, INTEGRITY MONITOR, AND AIR ACCESS VALVE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INSTALL WITH PRESSURE RELIEF VALVE, PRESSURE GAUGE, INTEGRITY MONITOR, AND AIR ACCESS VALVE.",
+          "word_ids": [
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INSTALL WITH PRESSURE RELIEF VALVE, PRESSURE GAUGE, INTEGRITY MONITOR, AND AIR ACCESS VALVE.",
+          "word_ids": [
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 3,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        470,
+        229,
+        525,
+        270
+      ],
+      "expected": "ET-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ET-2",
+          "word_ids": [
+            102
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ET-2",
+          "word_ids": [
+            107
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 3,
+      "column": "location",
+      "page": 14,
+      "bbox": [
+        525,
+        229,
+        600,
+        270
+      ],
+      "expected": "MAIN RM.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAIN RM.",
+          "word_ids": [
+            103,
+            104
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAIN RM.",
+          "word_ids": [
+            108,
+            109
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 3,
+      "column": "system",
+      "page": 14,
+      "bbox": [
+        600,
+        229,
+        710,
+        270
+      ],
+      "expected": "CONDENSER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CONDENSER LOOP",
+          "word_ids": [
+            105,
+            106
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CONDENSER LOOP",
+          "word_ids": [
+            110,
+            111
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 3,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        710,
+        229,
+        840,
+        270
+      ],
+      "expected": "FLAMCO NEXP-106",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FLAMCO NEXP-106",
+          "word_ids": [
+            107,
+            108
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FLAMCO NEXP-106",
+          "word_ids": [
+            112,
+            113
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 3,
+      "column": "type",
+      "page": 14,
+      "bbox": [
+        840,
+        229,
+        915,
+        270
+      ],
+      "expected": "BLADDER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BLADDER",
+          "word_ids": [
+            109
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BLADDER",
+          "word_ids": [
+            114
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 3,
+      "column": "system_volume_gal",
+      "page": 14,
+      "bbox": [
+        915,
+        229,
+        975,
+        270
+      ],
+      "expected": "1100",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1100",
+          "word_ids": [
+            110
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1100",
+          "word_ids": [
+            115
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 3,
+      "column": "low_temp_f",
+      "page": 14,
+      "bbox": [
+        975,
+        229,
+        1035,
+        270
+      ],
+      "expected": "48",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "48",
+          "word_ids": [
+            111
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "48",
+          "word_ids": [
+            116
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 3,
+      "column": "high_temp_f",
+      "page": 14,
+      "bbox": [
+        1035,
+        229,
+        1100,
+        270
+      ],
+      "expected": "158",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "158",
+          "word_ids": [
+            112
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "158",
+          "word_ids": [
+            117
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 3,
+      "column": "required_tank_volume_gal",
+      "page": 14,
+      "bbox": [
+        1100,
+        229,
+        1165,
+        270
+      ],
+      "expected": "106",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "106",
+          "word_ids": [
+            113
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "106",
+          "word_ids": [
+            118
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 3,
+      "column": "required_acceptance_volume_gal",
+      "page": 14,
+      "bbox": [
+        1165,
+        229,
+        1240,
+        270
+      ],
+      "expected": "106",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "106",
+          "word_ids": [
+            114
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "106",
+          "word_ids": [
+            119
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 3,
+      "column": "fluid",
+      "page": 14,
+      "bbox": [
+        1240,
+        229,
+        1325,
+        270
+      ],
+      "expected": "WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            115
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            120
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 3,
+      "column": "charge_pressure_psig",
+      "page": 14,
+      "bbox": [
+        1325,
+        229,
+        1390,
+        270
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            116
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            121
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 3,
+      "column": "operating_pressure_psig",
+      "page": 14,
+      "bbox": [
+        1390,
+        229,
+        1450,
+        270
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            117
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            122
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 3,
+      "column": "maop_psig",
+      "page": 14,
+      "bbox": [
+        1450,
+        229,
+        1510,
+        270
+      ],
+      "expected": "125",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            118
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            123
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 3,
+      "column": "connection_size_in",
+      "page": 14,
+      "bbox": [
+        1510,
+        229,
+        1575,
+        270
+      ],
+      "expected": "1 1/2\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 1/2\"",
+          "word_ids": [
+            119,
+            120
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 1/2\"",
+          "word_ids": [
+            124,
+            125
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 3,
+      "column": "operating_weight_lbs",
+      "page": 14,
+      "bbox": [
+        1575,
+        229,
+        1625,
+        270
+      ],
+      "expected": "1200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1200",
+          "word_ids": [
+            121
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1200",
+          "word_ids": [
+            126
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 3,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1625,
+        229,
+        2170,
+        270
+      ],
+      "expected": "INSTALL WITH PRESSURE RELIEF VALVE, PRESSURE GAUGE, INTEGRITY MONITOR, AND AIR ACCESS VALVE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "INSTALL WITH PRESSURE RELIEF VALVE, PRESSURE GAUGE, INTEGRITY MONITOR, AND AIR ACCESS VALVE.",
+          "word_ids": [
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "INSTALL WITH PRESSURE RELIEF VALVE, PRESSURE GAUGE, INTEGRITY MONITOR, AND AIR ACCESS VALVE.",
+          "word_ids": [
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138,
+            139
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 4,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        470,
+        270,
+        525,
+        312
+      ],
+      "expected": "ET-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ET-3",
+          "word_ids": [
+            135
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ET-3",
+          "word_ids": [
+            140
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 4,
+      "column": "location",
+      "page": 14,
+      "bbox": [
+        525,
+        270,
+        600,
+        312
+      ],
+      "expected": "MAIN RM.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAIN RM.",
+          "word_ids": [
+            136,
+            137
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAIN RM.",
+          "word_ids": [
+            141,
+            142
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 4,
+      "column": "system",
+      "page": 14,
+      "bbox": [
+        600,
+        270,
+        710,
+        312
+      ],
+      "expected": "TEMPERED WATER LOOP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEMPERED WATER LOOP",
+          "word_ids": [
+            138,
+            139,
+            140
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEMPERED WATER LOOP",
+          "word_ids": [
+            143,
+            144,
+            145
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 4,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        710,
+        270,
+        840,
+        312
+      ],
+      "expected": "FLAMCO NEXP-023",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FLAMCO NEXP-023",
+          "word_ids": [
+            141,
+            142
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FLAMCO NEXP-023",
+          "word_ids": [
+            146,
+            147
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 4,
+      "column": "type",
+      "page": 14,
+      "bbox": [
+        840,
+        270,
+        915,
+        312
+      ],
+      "expected": "BLADDER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BLADDER",
+          "word_ids": [
+            143
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BLADDER",
+          "word_ids": [
+            148
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 4,
+      "column": "system_volume_gal",
+      "page": 14,
+      "bbox": [
+        915,
+        270,
+        975,
+        312
+      ],
+      "expected": "300",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            144
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "300",
+          "word_ids": [
+            149
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 4,
+      "column": "low_temp_f",
+      "page": 14,
+      "bbox": [
+        975,
+        270,
+        1035,
+        312
+      ],
+      "expected": "45",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            145
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "45",
+          "word_ids": [
+            150
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 4,
+      "column": "high_temp_f",
+      "page": 14,
+      "bbox": [
+        1035,
+        270,
+        1100,
+        312
+      ],
+      "expected": "95",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "95",
+          "word_ids": [
+            146
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "95",
+          "word_ids": [
+            151
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 4,
+      "column": "required_tank_volume_gal",
+      "page": 14,
+      "bbox": [
+        1100,
+        270,
+        1165,
+        312
+      ],
+      "expected": "23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            147
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            152
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 4,
+      "column": "required_acceptance_volume_gal",
+      "page": 14,
+      "bbox": [
+        1165,
+        270,
+        1240,
+        312
+      ],
+      "expected": "23",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            148
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "23",
+          "word_ids": [
+            153
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 4,
+      "column": "fluid",
+      "page": 14,
+      "bbox": [
+        1240,
+        270,
+        1325,
+        312
+      ],
+      "expected": "WATER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            149
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER",
+          "word_ids": [
+            154
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 4,
+      "column": "charge_pressure_psig",
+      "page": 14,
+      "bbox": [
+        1325,
+        270,
+        1390,
+        312
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            150
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            155
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 4,
+      "column": "operating_pressure_psig",
+      "page": 14,
+      "bbox": [
+        1390,
+        270,
+        1450,
+        312
+      ],
+      "expected": "30",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            151
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "30",
+          "word_ids": [
+            156
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 4,
+      "column": "maop_psig",
+      "page": 14,
+      "bbox": [
+        1450,
+        270,
+        1510,
+        312
+      ],
+      "expected": "125",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            152
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "125",
+          "word_ids": [
+            157
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 4,
+      "column": "connection_size_in",
+      "page": 14,
+      "bbox": [
+        1510,
+        270,
+        1575,
+        312
+      ],
+      "expected": "1\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1\"",
+          "word_ids": [
+            153
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1\"",
+          "word_ids": [
+            158
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 4,
+      "column": "operating_weight_lbs",
+      "page": 14,
+      "bbox": [
+        1575,
+        270,
+        1625,
+        312
+      ],
+      "expected": "282",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "282",
+          "word_ids": [
+            154
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "282",
+          "word_ids": [
+            159
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "row": 4,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1625,
+        270,
+        2170,
+        312
+      ],
+      "expected": "POTABLE WATER COMPATIBLE BLADDER AND FITTINGS. INSTALL WITH PRESSURE RELIEF VALVE, PRESSURE GAUGE, INTEGRITY MONITOR, AND AIR ACCESS VALVE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "POTABLE WATER COMPATIBLE BLADDER AND FITTINGS. INSTALL WITH PRESSURE RELIEF VALVE, PRESSURE GAUGE, INTEGRITY MONITOR, AND AIR ACCESS VALVE.",
+          "word_ids": [
+            155,
+            156,
+            157,
+            158,
+            159,
+            160,
+            161,
+            162,
+            163,
+            164,
+            165,
+            166,
+            167,
+            168,
+            169,
+            170,
+            171,
+            172,
+            173
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "POTABLE WATER COMPATIBLE BLADDER AND FITTINGS. INSTALL WITH PRESSURE RELIEF VALVE, PRESSURE GAUGE, INTEGRITY MONITOR, AND AIR ACCESS VALVE.",
+          "word_ids": [
+            160,
+            161,
+            162,
+            163,
+            164,
+            165,
+            166,
+            167,
+            168,
+            169,
+            170,
+            171,
+            172,
+            173,
+            174,
+            175,
+            176,
+            177,
+            178
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "header": "EXPANSION TANK SCHEDULE TAG LOCATION SYSTEM MANUFACTURER MODEL TYPE VOLUME FLUID CHARGE PRESS MAOP REMARKS",
+      "page": 14,
+      "bbox": [
+        470,
+        55,
+        2170,
+        145
+      ],
+      "engine": "mupdf",
+      "actual": "EXPANSION TANK SCHEDULE SYSTEM CHARGE OPER. LOW HIGH REQ'D VOLUME (GAL) MAOP CONN. OPER. WT. TAG LOCATION SYSTEM MANUFACTURER/ MODEL TYPE VOLUME FLUID PRESS. PRESS. REMARKS TEMP. (°F) TEMP. (°F) (PSIG) SIZE (IN) (LBS) (GAL.) TANK ACCEPTANCE (PSIG) (PSIG)",
+      "pass": true
+    },
+    {
+      "table": "M602-EXPANSION-TANKS",
+      "header": "EXPANSION TANK SCHEDULE TAG LOCATION SYSTEM MANUFACTURER MODEL TYPE VOLUME FLUID CHARGE PRESS MAOP REMARKS",
+      "page": 14,
+      "bbox": [
+        470,
+        55,
+        2170,
+        145
+      ],
+      "engine": "poppler",
+      "actual": "EXPANSION TANK SCHEDULE SYSTEM CHARGE OPER. LOW HIGH REQ'D VOLUME (GAL) MAOP CONN. OPER. WT. TAG LOCATION SYSTEM MANUFACTURER/ MODEL TYPE VOLUME FLUID PRESS. PRESS. REMARKS TEMP. (°F) TEMP. (°F) (PSIG) SIZE (IN) (LBS) (GAL.) TANK ACCEPTANCE (PSIG) (PSIG)",
+      "pass": true
+    },
+    {
+      "table": "M602-WSHP-ASSEMBLY-TAG",
+      "row": 1,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        530,
+        700,
+        590,
+        740
+      ],
+      "expected": "WSHP-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WSHP-1",
+          "word_ids": [
+            230
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WSHP-1",
+          "word_ids": [
+            492
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "module",
+      "page": 14,
+      "bbox": [
+        590,
+        400,
+        650,
+        456
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            231
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            245
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "merged_location_serves_source_cell",
+      "page": 14,
+      "bbox": [
+        650,
+        400,
+        805,
+        456
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        805,
+        400,
+        950,
+        456
+      ],
+      "expected": "WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS",
+          "word_ids": [
+            237,
+            238,
+            239,
+            240
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS",
+          "word_ids": [
+            246,
+            247,
+            248,
+            249
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "refrigerant_circuits_charge",
+      "page": 14,
+      "bbox": [
+        950,
+        400,
+        1060,
+        456
+      ],
+      "expected": "R-454B / 2 /10 LBS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R-454B / 2 /10 LBS",
+          "word_ids": [
+            241,
+            242,
+            243,
+            244,
+            245
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R-454B / 2 /10 LBS",
+          "word_ids": [
+            250,
+            251,
+            252,
+            253,
+            254
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "load_side_ewt_f",
+      "page": 14,
+      "bbox": [
+        1060,
+        400,
+        1126,
+        456
+      ],
+      "expected": "110",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            246
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            255
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "load_side_gpm",
+      "page": 14,
+      "bbox": [
+        1126,
+        400,
+        1170,
+        456
+      ],
+      "expected": "39.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "39.9",
+          "word_ids": [
+            247
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "39.9",
+          "word_ids": [
+            256
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "source_side_ewt_f",
+      "page": 14,
+      "bbox": [
+        1170,
+        400,
+        1224,
+        456
+      ],
+      "expected": "52",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "52",
+          "word_ids": [
+            248
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "52",
+          "word_ids": [
+            257
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "source_side_gpm",
+      "page": 14,
+      "bbox": [
+        1224,
+        400,
+        1265,
+        456
+      ],
+      "expected": "97.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "97.4",
+          "word_ids": [
+            249
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "97.4",
+          "word_ids": [
+            258
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "cooling",
+      "page": 14,
+      "bbox": [
+        1265,
+        400,
+        1330,
+        456
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "heating_mbh",
+      "page": 14,
+      "bbox": [
+        1330,
+        400,
+        1378,
+        456
+      ],
+      "expected": "414.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "414.3",
+          "word_ids": [
+            251
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "414.3",
+          "word_ids": [
+            259
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "heating_kw_in",
+      "page": 14,
+      "bbox": [
+        1378,
+        400,
+        1425,
+        456
+      ],
+      "expected": "32.88",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "32.88",
+          "word_ids": [
+            252
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "32.88",
+          "word_ids": [
+            260
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "heating_lwt_f",
+      "page": 14,
+      "bbox": [
+        1425,
+        400,
+        1482,
+        456
+      ],
+      "expected": "130.78",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "130.78",
+          "word_ids": [
+            253
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "130.78",
+          "word_ids": [
+            261
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "full_load_kw_per_ton",
+      "page": 14,
+      "bbox": [
+        1482,
+        400,
+        1537,
+        456
+      ],
+      "expected": "0.752",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.752",
+          "word_ids": [
+            254
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.752",
+          "word_ids": [
+            262
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "full_load_eer",
+      "page": 14,
+      "bbox": [
+        1537,
+        400,
+        1573,
+        456
+      ],
+      "expected": "16.00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16.00",
+          "word_ids": [
+            255
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16.00",
+          "word_ids": [
+            263
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "part_load_iplv_kw_per_ton",
+      "page": 14,
+      "bbox": [
+        1573,
+        400,
+        1628,
+        456
+      ],
+      "expected": "0.575",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.575",
+          "word_ids": [
+            256
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.575",
+          "word_ids": [
+            264
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "part_load_iplv_eer",
+      "page": 14,
+      "bbox": [
+        1628,
+        400,
+        1664,
+        456
+      ],
+      "expected": "20.00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20.00",
+          "word_ids": [
+            257
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20.00",
+          "word_ids": [
+            265
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "volts",
+      "page": 14,
+      "bbox": [
+        1664,
+        400,
+        1716,
+        456
+      ],
+      "expected": "480",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "480",
+          "word_ids": [
+            258
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "480",
+          "word_ids": [
+            266
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "phase",
+      "page": 14,
+      "bbox": [
+        1716,
+        400,
+        1730,
+        456
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            259
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            267
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "fla",
+      "page": 14,
+      "bbox": [
+        1730,
+        400,
+        1780,
+        456
+      ],
+      "expected": "49.50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "49.50",
+          "word_ids": [
+            260
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "49.50",
+          "word_ids": [
+            268
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "mca",
+      "page": 14,
+      "bbox": [
+        1780,
+        400,
+        1820,
+        456
+      ],
+      "expected": "55.70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.70",
+          "word_ids": [
+            261
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.70",
+          "word_ids": [
+            269
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "mocp",
+      "page": 14,
+      "bbox": [
+        1820,
+        400,
+        1860,
+        456
+      ],
+      "expected": "80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            262
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            270
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 1,
+      "column": "unit_weight_lbs",
+      "page": 14,
+      "bbox": [
+        1860,
+        400,
+        1900,
+        456
+      ],
+      "expected": "3,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3,000",
+          "word_ids": [
+            263
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3,000",
+          "word_ids": [
+            393
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "module",
+      "page": 14,
+      "bbox": [
+        590,
+        456,
+        650,
+        511
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            341
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            271
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "merged_location_serves_source_cell",
+      "page": 14,
+      "bbox": [
+        650,
+        456,
+        805,
+        511
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        805,
+        456,
+        950,
+        511
+      ],
+      "expected": "WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS",
+          "word_ids": [
+            342,
+            343,
+            344,
+            345
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS",
+          "word_ids": [
+            272,
+            273,
+            274,
+            275
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "refrigerant_circuits_charge",
+      "page": 14,
+      "bbox": [
+        950,
+        456,
+        1060,
+        511
+      ],
+      "expected": "R-454B / 2 /10 LBS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R-454B / 2 /10 LBS",
+          "word_ids": [
+            346,
+            347,
+            348,
+            349,
+            350
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R-454B / 2 /10 LBS",
+          "word_ids": [
+            276,
+            277,
+            278,
+            279,
+            280
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "load_side_ewt_f",
+      "page": 14,
+      "bbox": [
+        1060,
+        456,
+        1126,
+        511
+      ],
+      "expected": "110",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            351
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            281
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "load_side_gpm",
+      "page": 14,
+      "bbox": [
+        1126,
+        456,
+        1170,
+        511
+      ],
+      "expected": "39.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "39.9",
+          "word_ids": [
+            352
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "39.9",
+          "word_ids": [
+            282
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "source_side_ewt_f",
+      "page": 14,
+      "bbox": [
+        1170,
+        456,
+        1224,
+        511
+      ],
+      "expected": "52",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "52",
+          "word_ids": [
+            353
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "52",
+          "word_ids": [
+            283
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "source_side_gpm",
+      "page": 14,
+      "bbox": [
+        1224,
+        456,
+        1265,
+        511
+      ],
+      "expected": "97.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "97.4",
+          "word_ids": [
+            354
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "97.4",
+          "word_ids": [
+            284
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "cooling",
+      "page": 14,
+      "bbox": [
+        1265,
+        456,
+        1330,
+        511
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "heating_mbh",
+      "page": 14,
+      "bbox": [
+        1330,
+        456,
+        1378,
+        511
+      ],
+      "expected": "414.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "414.3",
+          "word_ids": [
+            355
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "414.3",
+          "word_ids": [
+            285
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "heating_kw_in",
+      "page": 14,
+      "bbox": [
+        1378,
+        456,
+        1425,
+        511
+      ],
+      "expected": "32.88",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "32.88",
+          "word_ids": [
+            356
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "32.88",
+          "word_ids": [
+            286
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "heating_lwt_f",
+      "page": 14,
+      "bbox": [
+        1425,
+        456,
+        1482,
+        511
+      ],
+      "expected": "130.78",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "130.78",
+          "word_ids": [
+            357
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "130.78",
+          "word_ids": [
+            287
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "full_load_kw_per_ton",
+      "page": 14,
+      "bbox": [
+        1482,
+        456,
+        1537,
+        511
+      ],
+      "expected": "0.752",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.752",
+          "word_ids": [
+            358
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.752",
+          "word_ids": [
+            288
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "full_load_eer",
+      "page": 14,
+      "bbox": [
+        1537,
+        456,
+        1573,
+        511
+      ],
+      "expected": "16.00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16.00",
+          "word_ids": [
+            359
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16.00",
+          "word_ids": [
+            289
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "part_load_iplv_kw_per_ton",
+      "page": 14,
+      "bbox": [
+        1573,
+        456,
+        1628,
+        511
+      ],
+      "expected": "0.575",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.575",
+          "word_ids": [
+            360
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.575",
+          "word_ids": [
+            290
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "part_load_iplv_eer",
+      "page": 14,
+      "bbox": [
+        1628,
+        456,
+        1664,
+        511
+      ],
+      "expected": "20.00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20.00",
+          "word_ids": [
+            361
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20.00",
+          "word_ids": [
+            291
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "volts",
+      "page": 14,
+      "bbox": [
+        1664,
+        456,
+        1716,
+        511
+      ],
+      "expected": "480",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "480",
+          "word_ids": [
+            362
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "480",
+          "word_ids": [
+            292
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "phase",
+      "page": 14,
+      "bbox": [
+        1716,
+        456,
+        1730,
+        511
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            363
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            293
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "fla",
+      "page": 14,
+      "bbox": [
+        1730,
+        456,
+        1780,
+        511
+      ],
+      "expected": "49.50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "49.50",
+          "word_ids": [
+            364
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "49.50",
+          "word_ids": [
+            294
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "mca",
+      "page": 14,
+      "bbox": [
+        1780,
+        456,
+        1820,
+        511
+      ],
+      "expected": "55.70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.70",
+          "word_ids": [
+            365
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.70",
+          "word_ids": [
+            295
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "mocp",
+      "page": 14,
+      "bbox": [
+        1820,
+        456,
+        1860,
+        511
+      ],
+      "expected": "80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            366
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            296
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 2,
+      "column": "unit_weight_lbs",
+      "page": 14,
+      "bbox": [
+        1860,
+        456,
+        1900,
+        511
+      ],
+      "expected": "3,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3,000",
+          "word_ids": [
+            367
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3,000",
+          "word_ids": [
+            412
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "module",
+      "page": 14,
+      "bbox": [
+        590,
+        511,
+        650,
+        566
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            368
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            340
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "merged_location_serves_source_cell",
+      "page": 14,
+      "bbox": [
+        650,
+        511,
+        805,
+        566
+      ],
+      "expected": "AERATED MECHANICAL WATER ROOM HEATING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AERATED MECHANICAL WATER ROOM HEATING",
+          "word_ids": [
+            234,
+            232,
+            235,
+            233,
+            236
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AERATED MECHANICAL WATER ROOM HEATING",
+          "word_ids": [
+            343,
+            341,
+            344,
+            342,
+            345
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        805,
+        511,
+        950,
+        566
+      ],
+      "expected": "WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS",
+          "word_ids": [
+            369,
+            370,
+            371,
+            372
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS",
+          "word_ids": [
+            297,
+            298,
+            299,
+            300
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "refrigerant_circuits_charge",
+      "page": 14,
+      "bbox": [
+        950,
+        511,
+        1060,
+        566
+      ],
+      "expected": "R-454B / 2 /10 LBS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R-454B / 2 /10 LBS",
+          "word_ids": [
+            373,
+            374,
+            375,
+            376,
+            377
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R-454B / 2 /10 LBS",
+          "word_ids": [
+            301,
+            302,
+            303,
+            304,
+            305
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "load_side_ewt_f",
+      "page": 14,
+      "bbox": [
+        1060,
+        511,
+        1126,
+        566
+      ],
+      "expected": "110",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            378
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            306
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "load_side_gpm",
+      "page": 14,
+      "bbox": [
+        1126,
+        511,
+        1170,
+        566
+      ],
+      "expected": "39.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "39.9",
+          "word_ids": [
+            379
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "39.9",
+          "word_ids": [
+            307
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "source_side_ewt_f",
+      "page": 14,
+      "bbox": [
+        1170,
+        511,
+        1224,
+        566
+      ],
+      "expected": "52",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "52",
+          "word_ids": [
+            380
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "52",
+          "word_ids": [
+            308
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "source_side_gpm",
+      "page": 14,
+      "bbox": [
+        1224,
+        511,
+        1265,
+        566
+      ],
+      "expected": "97.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "97.4",
+          "word_ids": [
+            381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "97.4",
+          "word_ids": [
+            309
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "cooling",
+      "page": 14,
+      "bbox": [
+        1265,
+        511,
+        1330,
+        566
+      ],
+      "expected": "NA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NA",
+          "word_ids": [
+            250
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NA",
+          "word_ids": [
+            355
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "heating_mbh",
+      "page": 14,
+      "bbox": [
+        1330,
+        511,
+        1378,
+        566
+      ],
+      "expected": "414.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "414.3",
+          "word_ids": [
+            382
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "414.3",
+          "word_ids": [
+            310
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "heating_kw_in",
+      "page": 14,
+      "bbox": [
+        1378,
+        511,
+        1425,
+        566
+      ],
+      "expected": "32.88",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "32.88",
+          "word_ids": [
+            383
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "32.88",
+          "word_ids": [
+            311
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "heating_lwt_f",
+      "page": 14,
+      "bbox": [
+        1425,
+        511,
+        1482,
+        566
+      ],
+      "expected": "130.78",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "130.78",
+          "word_ids": [
+            384
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "130.78",
+          "word_ids": [
+            312
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "full_load_kw_per_ton",
+      "page": 14,
+      "bbox": [
+        1482,
+        511,
+        1537,
+        566
+      ],
+      "expected": "0.752",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.752",
+          "word_ids": [
+            385
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.752",
+          "word_ids": [
+            313
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "full_load_eer",
+      "page": 14,
+      "bbox": [
+        1537,
+        511,
+        1573,
+        566
+      ],
+      "expected": "16.00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16.00",
+          "word_ids": [
+            386
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16.00",
+          "word_ids": [
+            314
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "part_load_iplv_kw_per_ton",
+      "page": 14,
+      "bbox": [
+        1573,
+        511,
+        1628,
+        566
+      ],
+      "expected": "0.575",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.575",
+          "word_ids": [
+            387
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.575",
+          "word_ids": [
+            315
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "part_load_iplv_eer",
+      "page": 14,
+      "bbox": [
+        1628,
+        511,
+        1664,
+        566
+      ],
+      "expected": "20.00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20.00",
+          "word_ids": [
+            388
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20.00",
+          "word_ids": [
+            316
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "volts",
+      "page": 14,
+      "bbox": [
+        1664,
+        511,
+        1716,
+        566
+      ],
+      "expected": "480",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "480",
+          "word_ids": [
+            389
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "480",
+          "word_ids": [
+            317
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "phase",
+      "page": 14,
+      "bbox": [
+        1716,
+        511,
+        1730,
+        566
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            390
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            318
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "fla",
+      "page": 14,
+      "bbox": [
+        1730,
+        511,
+        1780,
+        566
+      ],
+      "expected": "49.50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "49.50",
+          "word_ids": [
+            391
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "49.50",
+          "word_ids": [
+            319
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "mca",
+      "page": 14,
+      "bbox": [
+        1780,
+        511,
+        1820,
+        566
+      ],
+      "expected": "55.70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.70",
+          "word_ids": [
+            392
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.70",
+          "word_ids": [
+            320
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "mocp",
+      "page": 14,
+      "bbox": [
+        1820,
+        511,
+        1860,
+        566
+      ],
+      "expected": "80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            393
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            321
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 3,
+      "column": "unit_weight_lbs",
+      "page": 14,
+      "bbox": [
+        1860,
+        511,
+        1900,
+        566
+      ],
+      "expected": "3,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3,000",
+          "word_ids": [
+            394
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3,000",
+          "word_ids": [
+            433
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "module",
+      "page": 14,
+      "bbox": [
+        590,
+        566,
+        650,
+        621
+      ],
+      "expected": "4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            395
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            346
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "merged_location_serves_source_cell",
+      "page": 14,
+      "bbox": [
+        650,
+        566,
+        805,
+        621
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        805,
+        566,
+        950,
+        621
+      ],
+      "expected": "WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS",
+          "word_ids": [
+            396,
+            397,
+            398,
+            399
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS",
+          "word_ids": [
+            322,
+            323,
+            324,
+            325
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "refrigerant_circuits_charge",
+      "page": 14,
+      "bbox": [
+        950,
+        566,
+        1060,
+        621
+      ],
+      "expected": "R-454B / 2 /10 LBS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R-454B / 2 /10 LBS",
+          "word_ids": [
+            400,
+            401,
+            402,
+            403,
+            404
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R-454B / 2 /10 LBS",
+          "word_ids": [
+            326,
+            327,
+            328,
+            329,
+            330
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "load_side_ewt_f",
+      "page": 14,
+      "bbox": [
+        1060,
+        566,
+        1126,
+        621
+      ],
+      "expected": "110",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            405
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            349
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "load_side_gpm",
+      "page": 14,
+      "bbox": [
+        1126,
+        566,
+        1170,
+        621
+      ],
+      "expected": "39.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "39.9",
+          "word_ids": [
+            406
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "39.9",
+          "word_ids": [
+            351
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "source_side_ewt_f",
+      "page": 14,
+      "bbox": [
+        1170,
+        566,
+        1224,
+        621
+      ],
+      "expected": "52",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "52",
+          "word_ids": [
+            407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "52",
+          "word_ids": [
+            352
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "source_side_gpm",
+      "page": 14,
+      "bbox": [
+        1224,
+        566,
+        1265,
+        621
+      ],
+      "expected": "97.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "97.4",
+          "word_ids": [
+            408
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "97.4",
+          "word_ids": [
+            356
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "cooling",
+      "page": 14,
+      "bbox": [
+        1265,
+        566,
+        1330,
+        621
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "heating_mbh",
+      "page": 14,
+      "bbox": [
+        1330,
+        566,
+        1378,
+        621
+      ],
+      "expected": "414.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "414.3",
+          "word_ids": [
+            409
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "414.3",
+          "word_ids": [
+            357
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "heating_kw_in",
+      "page": 14,
+      "bbox": [
+        1378,
+        566,
+        1425,
+        621
+      ],
+      "expected": "32.88",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "32.88",
+          "word_ids": [
+            410
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "32.88",
+          "word_ids": [
+            360
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "heating_lwt_f",
+      "page": 14,
+      "bbox": [
+        1425,
+        566,
+        1482,
+        621
+      ],
+      "expected": "130.78",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "130.78",
+          "word_ids": [
+            411
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "130.78",
+          "word_ids": [
+            362
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "full_load_kw_per_ton",
+      "page": 14,
+      "bbox": [
+        1482,
+        566,
+        1537,
+        621
+      ],
+      "expected": "0.752",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.752",
+          "word_ids": [
+            412
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.752",
+          "word_ids": [
+            364
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "full_load_eer",
+      "page": 14,
+      "bbox": [
+        1537,
+        566,
+        1573,
+        621
+      ],
+      "expected": "16.00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16.00",
+          "word_ids": [
+            413
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16.00",
+          "word_ids": [
+            366
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "part_load_iplv_kw_per_ton",
+      "page": 14,
+      "bbox": [
+        1573,
+        566,
+        1628,
+        621
+      ],
+      "expected": "0.575",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.575",
+          "word_ids": [
+            414
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.575",
+          "word_ids": [
+            367
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "part_load_iplv_eer",
+      "page": 14,
+      "bbox": [
+        1628,
+        566,
+        1664,
+        621
+      ],
+      "expected": "20.00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20.00",
+          "word_ids": [
+            415
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20.00",
+          "word_ids": [
+            370
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "volts",
+      "page": 14,
+      "bbox": [
+        1664,
+        566,
+        1716,
+        621
+      ],
+      "expected": "480",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "480",
+          "word_ids": [
+            416
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "480",
+          "word_ids": [
+            371
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "phase",
+      "page": 14,
+      "bbox": [
+        1716,
+        566,
+        1730,
+        621
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            417
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            373
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "fla",
+      "page": 14,
+      "bbox": [
+        1730,
+        566,
+        1780,
+        621
+      ],
+      "expected": "49.50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "49.50",
+          "word_ids": [
+            418
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "49.50",
+          "word_ids": [
+            376
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "mca",
+      "page": 14,
+      "bbox": [
+        1780,
+        566,
+        1820,
+        621
+      ],
+      "expected": "55.70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.70",
+          "word_ids": [
+            419
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.70",
+          "word_ids": [
+            378
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "mocp",
+      "page": 14,
+      "bbox": [
+        1820,
+        566,
+        1860,
+        621
+      ],
+      "expected": "80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            420
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            380
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 4,
+      "column": "unit_weight_lbs",
+      "page": 14,
+      "bbox": [
+        1860,
+        566,
+        1900,
+        621
+      ],
+      "expected": "3,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3,000",
+          "word_ids": [
+            421
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3,000",
+          "word_ids": [
+            452
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "module",
+      "page": 14,
+      "bbox": [
+        590,
+        621,
+        650,
+        676
+      ],
+      "expected": "5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            422
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5",
+          "word_ids": [
+            348
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "merged_location_serves_source_cell",
+      "page": 14,
+      "bbox": [
+        650,
+        621,
+        805,
+        676
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        805,
+        621,
+        950,
+        676
+      ],
+      "expected": "WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS",
+          "word_ids": [
+            423,
+            424,
+            425,
+            426
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER FURNACE T5HS030SN24AACHNN6 GCNNNSSS",
+          "word_ids": [
+            331,
+            332,
+            333,
+            334
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "refrigerant_circuits_charge",
+      "page": 14,
+      "bbox": [
+        950,
+        621,
+        1060,
+        676
+      ],
+      "expected": "R-454B / 2 /10 LBS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "R-454B / 2 /10 LBS",
+          "word_ids": [
+            427,
+            428,
+            429,
+            430,
+            431
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "R-454B / 2 /10 LBS",
+          "word_ids": [
+            335,
+            336,
+            337,
+            338,
+            339
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "load_side_ewt_f",
+      "page": 14,
+      "bbox": [
+        1060,
+        621,
+        1126,
+        676
+      ],
+      "expected": "110",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            432
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            350
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "load_side_gpm",
+      "page": 14,
+      "bbox": [
+        1126,
+        621,
+        1170,
+        676
+      ],
+      "expected": "39.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "39.9",
+          "word_ids": [
+            433
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "39.9",
+          "word_ids": [
+            353
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "source_side_ewt_f",
+      "page": 14,
+      "bbox": [
+        1170,
+        621,
+        1224,
+        676
+      ],
+      "expected": "52",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "52",
+          "word_ids": [
+            434
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "52",
+          "word_ids": [
+            354
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "source_side_gpm",
+      "page": 14,
+      "bbox": [
+        1224,
+        621,
+        1265,
+        676
+      ],
+      "expected": "97.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "97.4",
+          "word_ids": [
+            435
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "97.4",
+          "word_ids": [
+            358
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "cooling",
+      "page": 14,
+      "bbox": [
+        1265,
+        621,
+        1330,
+        676
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "heating_mbh",
+      "page": 14,
+      "bbox": [
+        1330,
+        621,
+        1378,
+        676
+      ],
+      "expected": "414.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "414.3",
+          "word_ids": [
+            436
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "414.3",
+          "word_ids": [
+            359
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "heating_kw_in",
+      "page": 14,
+      "bbox": [
+        1378,
+        621,
+        1425,
+        676
+      ],
+      "expected": "32.88",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "32.88",
+          "word_ids": [
+            437
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "32.88",
+          "word_ids": [
+            361
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "heating_lwt_f",
+      "page": 14,
+      "bbox": [
+        1425,
+        621,
+        1482,
+        676
+      ],
+      "expected": "130.78",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "130.78",
+          "word_ids": [
+            438
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "130.78",
+          "word_ids": [
+            363
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "full_load_kw_per_ton",
+      "page": 14,
+      "bbox": [
+        1482,
+        621,
+        1537,
+        676
+      ],
+      "expected": "0.752",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.752",
+          "word_ids": [
+            439
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.752",
+          "word_ids": [
+            365
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "full_load_eer",
+      "page": 14,
+      "bbox": [
+        1537,
+        621,
+        1573,
+        676
+      ],
+      "expected": "16.00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16.00",
+          "word_ids": [
+            440
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16.00",
+          "word_ids": [
+            368
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "part_load_iplv_kw_per_ton",
+      "page": 14,
+      "bbox": [
+        1573,
+        621,
+        1628,
+        676
+      ],
+      "expected": "0.575",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.575",
+          "word_ids": [
+            441
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.575",
+          "word_ids": [
+            369
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "part_load_iplv_eer",
+      "page": 14,
+      "bbox": [
+        1628,
+        621,
+        1664,
+        676
+      ],
+      "expected": "20.00",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20.00",
+          "word_ids": [
+            442
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20.00",
+          "word_ids": [
+            372
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "volts",
+      "page": 14,
+      "bbox": [
+        1664,
+        621,
+        1716,
+        676
+      ],
+      "expected": "480",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "480",
+          "word_ids": [
+            443
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "480",
+          "word_ids": [
+            374
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "phase",
+      "page": 14,
+      "bbox": [
+        1716,
+        621,
+        1730,
+        676
+      ],
+      "expected": "3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            444
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3",
+          "word_ids": [
+            375
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "fla",
+      "page": 14,
+      "bbox": [
+        1730,
+        621,
+        1780,
+        676
+      ],
+      "expected": "49.50",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "49.50",
+          "word_ids": [
+            445
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "49.50",
+          "word_ids": [
+            377
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "mca",
+      "page": 14,
+      "bbox": [
+        1780,
+        621,
+        1820,
+        676
+      ],
+      "expected": "55.70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "55.70",
+          "word_ids": [
+            446
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "55.70",
+          "word_ids": [
+            379
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "mocp",
+      "page": 14,
+      "bbox": [
+        1820,
+        621,
+        1860,
+        676
+      ],
+      "expected": "80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            447
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            381
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "row": 5,
+      "column": "unit_weight_lbs",
+      "page": 14,
+      "bbox": [
+        1860,
+        621,
+        1900,
+        676
+      ],
+      "expected": "3,000",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3,000",
+          "word_ids": [
+            448
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3,000",
+          "word_ids": [
+            463
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "header": "MODULAR HEAT RECOVERY CHILLER SCHEDULE MODULE MANUFACTURER REFRIGERANT LOAD SIDE SOURCE SIDE CAPACITIES EFFICIENCY UNIT ELECTRICAL",
+      "page": 14,
+      "bbox": [
+        540,
+        325,
+        1900,
+        400
+      ],
+      "engine": "mupdf",
+      "actual": "MODULAR HEAT RECOVERY CHILLER SCHEDULE CAPACITIES EFFICIENCY UNIT ELECTRICAL REQUIREMENT UNIT MANUFACTURER / REFRIGERANT/ TAG MODULE LOCATION SERVES LOAD SIDE SOURCE SIDE COOLING HEATING FULL LOAD PART LOAD IPLV PER MODULE WT. MODEL CIRCUITS/CHARGE EWT ºF GPM EWT ºF GPM MBH KW IN LWT ºF KW/TON EER KW/TON EER VOLTS Ø FLA MCA MOCP (LBS)",
+      "pass": true
+    },
+    {
+      "table": "M602-WSHP-MODULES",
+      "header": "MODULAR HEAT RECOVERY CHILLER SCHEDULE MODULE MANUFACTURER REFRIGERANT LOAD SIDE SOURCE SIDE CAPACITIES EFFICIENCY UNIT ELECTRICAL",
+      "page": 14,
+      "bbox": [
+        540,
+        325,
+        1900,
+        400
+      ],
+      "engine": "poppler",
+      "actual": "MODULAR HEAT RECOVERY CHILLER SCHEDULE CAPACITIES EFFICIENCY UNIT ELECTRICAL REQUIREMENT UNIT MANUFACTURER / REFRIGERANT/ TAG MODULE LOCATION SERVES LOAD SIDE SOURCE SIDE COOLING HEATING FULL LOAD PART LOAD IPLV PER MODULE WT. MODEL CIRCUITS/CHARGE EWT ºF GPM EWT ºF GPM MBH KW IN LWT ºF KW/TON EER KW/TON EER VOLTS Ø FLA MCA MOCP (LBS)",
+      "pass": true
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 1,
+      "column": "accessory",
+      "page": 14,
+      "bbox": [
+        590,
+        775,
+        730,
+        825
+      ],
+      "expected": "BYPASS HEADER KITS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BYPASS HEADER KITS",
+          "word_ids": [
+            460,
+            461,
+            462
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BYPASS HEADER KITS",
+          "word_ids": [
+            498,
+            499,
+            500
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        730,
+        775,
+        960,
+        825
+      ],
+      "expected": "WATER FURNACE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER FURNACE",
+          "word_ids": [
+            463,
+            464
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER FURNACE",
+          "word_ids": [
+            501,
+            502
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 1,
+      "column": "description",
+      "page": 14,
+      "bbox": [
+        960,
+        775,
+        1660,
+        825
+      ],
+      "expected": "PIPE ASSEMBLY WITH BYPASS VALVE, WATER PRESSURE AND TEMPERATURE SENSORS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PIPE ASSEMBLY WITH BYPASS VALVE, WATER PRESSURE AND TEMPERATURE SENSORS.",
+          "word_ids": [
+            465,
+            466,
+            467,
+            468,
+            469,
+            470,
+            471,
+            472,
+            473,
+            474
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PIPE ASSEMBLY WITH BYPASS VALVE, WATER PRESSURE AND TEMPERATURE SENSORS.",
+          "word_ids": [
+            503,
+            504,
+            505,
+            506,
+            507,
+            508,
+            509,
+            510,
+            511,
+            512
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 1,
+      "column": "volts",
+      "page": 14,
+      "bbox": [
+        1660,
+        775,
+        1710,
+        825
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 1,
+      "column": "phase",
+      "page": 14,
+      "bbox": [
+        1710,
+        775,
+        1730,
+        825
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 1,
+      "column": "fla",
+      "page": 14,
+      "bbox": [
+        1730,
+        775,
+        1780,
+        825
+      ],
+      "expected": "NA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NA",
+          "word_ids": [
+            475
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NA",
+          "word_ids": [
+            587
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 1,
+      "column": "mca",
+      "page": 14,
+      "bbox": [
+        1780,
+        775,
+        1820,
+        825
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 1,
+      "column": "mocp",
+      "page": 14,
+      "bbox": [
+        1820,
+        775,
+        1860,
+        825
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 1,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1860,
+        775,
+        2170,
+        825
+      ],
+      "expected": "PROVIDE CHECK-TEST-STARTUP AT SITE. ASSEMBLE PER MANUFACTURER INSTRUCTIONS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PROVIDE CHECK-TEST-STARTUP AT SITE. ASSEMBLE PER MANUFACTURER INSTRUCTIONS.",
+          "word_ids": [
+            476,
+            477,
+            478,
+            479,
+            480,
+            481,
+            482,
+            483
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PROVIDE CHECK-TEST-STARTUP AT SITE. ASSEMBLE PER MANUFACTURER INSTRUCTIONS.",
+          "word_ids": [
+            588,
+            589,
+            590,
+            591,
+            592,
+            593,
+            594,
+            595
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 2,
+      "column": "accessory",
+      "page": 14,
+      "bbox": [
+        590,
+        825,
+        730,
+        875
+      ],
+      "expected": "DIFFERENTIAL WATER PRESSURE TRANSDUCERS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIFFERENTIAL WATER PRESSURE TRANSDUCERS",
+          "word_ids": [
+            484,
+            485,
+            486,
+            487
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIFFERENTIAL WATER PRESSURE TRANSDUCERS",
+          "word_ids": [
+            513,
+            514,
+            515,
+            516
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        730,
+        825,
+        960,
+        875
+      ],
+      "expected": "WATER FURNACE 19P685-01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER FURNACE 19P685-01",
+          "word_ids": [
+            488,
+            489,
+            490
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER FURNACE 19P685-01",
+          "word_ids": [
+            517,
+            518,
+            519
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 2,
+      "column": "description",
+      "page": 14,
+      "bbox": [
+        960,
+        825,
+        1660,
+        875
+      ],
+      "expected": "DIFFERENTIAL HEADER WATER TRANSUCERS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DIFFERENTIAL HEADER WATER TRANSUCERS",
+          "word_ids": [
+            491,
+            492,
+            493,
+            494
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DIFFERENTIAL HEADER WATER TRANSUCERS",
+          "word_ids": [
+            522,
+            523,
+            524,
+            525
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 2,
+      "column": "volts",
+      "page": 14,
+      "bbox": [
+        1660,
+        825,
+        1710,
+        875
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 2,
+      "column": "phase",
+      "page": 14,
+      "bbox": [
+        1710,
+        825,
+        1730,
+        875
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 2,
+      "column": "fla",
+      "page": 14,
+      "bbox": [
+        1730,
+        825,
+        1780,
+        875
+      ],
+      "expected": "NA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NA",
+          "word_ids": [
+            495
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NA",
+          "word_ids": [
+            596
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 2,
+      "column": "mca",
+      "page": 14,
+      "bbox": [
+        1780,
+        825,
+        1820,
+        875
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 2,
+      "column": "mocp",
+      "page": 14,
+      "bbox": [
+        1820,
+        825,
+        1860,
+        875
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 2,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1860,
+        825,
+        2170,
+        875
+      ],
+      "expected": "PROVIDE CHECK-TEST-STARTUP AT SITE. ASSEMBLE PER MANUFACTURER INSTRUCTIONS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PROVIDE CHECK-TEST-STARTUP AT SITE. ASSEMBLE PER MANUFACTURER INSTRUCTIONS.",
+          "word_ids": [
+            496,
+            497,
+            498,
+            499,
+            500,
+            501,
+            502,
+            503
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PROVIDE CHECK-TEST-STARTUP AT SITE. ASSEMBLE PER MANUFACTURER INSTRUCTIONS.",
+          "word_ids": [
+            597,
+            598,
+            599,
+            600,
+            601,
+            602,
+            603,
+            604
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 3,
+      "column": "accessory",
+      "page": 14,
+      "bbox": [
+        590,
+        875,
+        730,
+        925
+      ],
+      "expected": "HEADER END CAPS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HEADER END CAPS",
+          "word_ids": [
+            504,
+            505,
+            506
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HEADER END CAPS",
+          "word_ids": [
+            526,
+            527,
+            528
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 3,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        730,
+        875,
+        960,
+        925
+      ],
+      "expected": "WATER FURNACE/ VICTAULIC 29P522-03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER FURNACE/ VICTAULIC 29P522-03",
+          "word_ids": [
+            507,
+            508,
+            509,
+            510
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER FURNACE/ VICTAULIC 29P522-03",
+          "word_ids": [
+            529,
+            530,
+            531,
+            532
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 3,
+      "column": "description",
+      "page": 14,
+      "bbox": [
+        960,
+        875,
+        1660,
+        925
+      ],
+      "expected": "DUCTILE IRON CAP, COUPLING, AND GASKET",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DUCTILE IRON CAP, COUPLING, AND GASKET",
+          "word_ids": [
+            511,
+            512,
+            513,
+            514,
+            515,
+            516
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DUCTILE IRON CAP, COUPLING, AND GASKET",
+          "word_ids": [
+            533,
+            534,
+            535,
+            536,
+            537,
+            538
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 3,
+      "column": "volts",
+      "page": 14,
+      "bbox": [
+        1660,
+        875,
+        1710,
+        925
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 3,
+      "column": "phase",
+      "page": 14,
+      "bbox": [
+        1710,
+        875,
+        1730,
+        925
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 3,
+      "column": "fla",
+      "page": 14,
+      "bbox": [
+        1730,
+        875,
+        1780,
+        925
+      ],
+      "expected": "NA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NA",
+          "word_ids": [
+            517
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NA",
+          "word_ids": [
+            605
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 3,
+      "column": "mca",
+      "page": 14,
+      "bbox": [
+        1780,
+        875,
+        1820,
+        925
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 3,
+      "column": "mocp",
+      "page": 14,
+      "bbox": [
+        1820,
+        875,
+        1860,
+        925
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 3,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1860,
+        875,
+        2170,
+        925
+      ],
+      "expected": "PROVIDE CHECK-TEST-STARTUP AT SITE. ASSEMBLE PER MANUFACTURER INSTRUCTIONS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PROVIDE CHECK-TEST-STARTUP AT SITE. ASSEMBLE PER MANUFACTURER INSTRUCTIONS.",
+          "word_ids": [
+            518,
+            519,
+            520,
+            521,
+            522,
+            523,
+            524,
+            525
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PROVIDE CHECK-TEST-STARTUP AT SITE. ASSEMBLE PER MANUFACTURER INSTRUCTIONS.",
+          "word_ids": [
+            606,
+            607,
+            608,
+            609,
+            610,
+            611,
+            612,
+            613
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 4,
+      "column": "accessory",
+      "page": 14,
+      "bbox": [
+        590,
+        925,
+        730,
+        975
+      ],
+      "expected": "STRAINER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STRAINER",
+          "word_ids": [
+            526
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STRAINER",
+          "word_ids": [
+            539
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 4,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        730,
+        925,
+        960,
+        975
+      ],
+      "expected": "WATER FURNACE/ VICTAULIC 23P535-03",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER FURNACE/ VICTAULIC 23P535-03",
+          "word_ids": [
+            527,
+            528,
+            529,
+            530
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER FURNACE/ VICTAULIC 23P535-03",
+          "word_ids": [
+            540,
+            541,
+            542,
+            543
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 4,
+      "column": "description",
+      "page": 14,
+      "bbox": [
+        960,
+        925,
+        1660,
+        975
+      ],
+      "expected": "STRAINER, DUCTILE IRON BODY, GROOVED END, 30 MESH SS SCREEN.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STRAINER, DUCTILE IRON BODY, GROOVED END, 30 MESH SS SCREEN.",
+          "word_ids": [
+            531,
+            532,
+            533,
+            534,
+            535,
+            536,
+            537,
+            538,
+            539,
+            540
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STRAINER, DUCTILE IRON BODY, GROOVED END, 30 MESH SS SCREEN.",
+          "word_ids": [
+            544,
+            545,
+            546,
+            547,
+            548,
+            549,
+            550,
+            551,
+            552,
+            553
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 4,
+      "column": "volts",
+      "page": 14,
+      "bbox": [
+        1660,
+        925,
+        1710,
+        975
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 4,
+      "column": "phase",
+      "page": 14,
+      "bbox": [
+        1710,
+        925,
+        1730,
+        975
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 4,
+      "column": "fla",
+      "page": 14,
+      "bbox": [
+        1730,
+        925,
+        1780,
+        975
+      ],
+      "expected": "NA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NA",
+          "word_ids": [
+            541
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NA",
+          "word_ids": [
+            614
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 4,
+      "column": "mca",
+      "page": 14,
+      "bbox": [
+        1780,
+        925,
+        1820,
+        975
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 4,
+      "column": "mocp",
+      "page": 14,
+      "bbox": [
+        1820,
+        925,
+        1860,
+        975
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 4,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1860,
+        925,
+        2170,
+        975
+      ],
+      "expected": "PROVIDE CHECK-TEST-STARTUP AT SITE. ASSEMBLE PER MANUFACTURER INSTRUCTIONS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PROVIDE CHECK-TEST-STARTUP AT SITE. ASSEMBLE PER MANUFACTURER INSTRUCTIONS.",
+          "word_ids": [
+            542,
+            543,
+            544,
+            545,
+            546,
+            547,
+            548,
+            549
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PROVIDE CHECK-TEST-STARTUP AT SITE. ASSEMBLE PER MANUFACTURER INSTRUCTIONS.",
+          "word_ids": [
+            615,
+            616,
+            617,
+            618,
+            619,
+            620,
+            621,
+            622
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 5,
+      "column": "accessory",
+      "page": 14,
+      "bbox": [
+        590,
+        975,
+        730,
+        1050
+      ],
+      "expected": "WSHP MASTER CONTROL PANEL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WSHP MASTER CONTROL PANEL",
+          "word_ids": [
+            550,
+            551,
+            552,
+            553
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WSHP MASTER CONTROL PANEL",
+          "word_ids": [
+            574,
+            575,
+            576,
+            580
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 5,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        730,
+        975,
+        960,
+        1050
+      ],
+      "expected": "WATER FURNACE HSCDB1DUSSC HYDROLINK SUPERVISORY CONTROL PANEL",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WATER FURNACE HSCDB1DUSSC HYDROLINK SUPERVISORY CONTROL PANEL",
+          "word_ids": [
+            554,
+            555,
+            556,
+            557,
+            558,
+            559,
+            560
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WATER FURNACE HSCDB1DUSSC HYDROLINK SUPERVISORY CONTROL PANEL",
+          "word_ids": [
+            572,
+            573,
+            577,
+            578,
+            579,
+            581,
+            582
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 5,
+      "column": "description",
+      "page": 14,
+      "bbox": [
+        960,
+        975,
+        1660,
+        1050
+      ],
+      "expected": "HYDROLINK 2 CONTROLLER BACNET/IP CONTROL INTERFACE CONTROL PANEL ENCLOSURE 20.6\" W X 28.5\" H X 6.6\" DEEP",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HYDROLINK 2 CONTROLLER BACNET/IP CONTROL INTERFACE CONTROL PANEL ENCLOSURE 20.6\" W X 28.5\" H X 6.6\" DEEP",
+          "word_ids": [
+            561,
+            562,
+            563,
+            564,
+            565,
+            566,
+            567,
+            568,
+            569,
+            570,
+            571,
+            572,
+            573,
+            574,
+            575,
+            576,
+            577
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HYDROLINK 2 CONTROLLER BACNET/IP CONTROL INTERFACE CONTROL PANEL ENCLOSURE 20.6\" W X 28.5\" H X 6.6\" DEEP",
+          "word_ids": [
+            555,
+            556,
+            557,
+            558,
+            559,
+            560,
+            561,
+            562,
+            563,
+            564,
+            565,
+            566,
+            567,
+            568,
+            569,
+            570,
+            571
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 5,
+      "column": "volts",
+      "page": 14,
+      "bbox": [
+        1660,
+        975,
+        1710,
+        1050
+      ],
+      "expected": "120",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            578
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            583
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 5,
+      "column": "phase",
+      "page": 14,
+      "bbox": [
+        1710,
+        975,
+        1730,
+        1050
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            579
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            624
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 5,
+      "column": "fla",
+      "page": 14,
+      "bbox": [
+        1730,
+        975,
+        1780,
+        1050
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 5,
+      "column": "mca",
+      "page": 14,
+      "bbox": [
+        1780,
+        975,
+        1820,
+        1050
+      ],
+      "expected": "",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        },
+        "poppler": {
+          "pass": true,
+          "text": "",
+          "word_ids": []
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 5,
+      "column": "mocp",
+      "page": 14,
+      "bbox": [
+        1820,
+        975,
+        1860,
+        1050
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            580
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            623
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "row": 5,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1860,
+        975,
+        2170,
+        1050
+      ],
+      "expected": "SUPERVISORY, SEQUENCING, CONTROL PANEL FOR MODULES TO BE PROVIDED BY CHILLER MANUFACTURER. BACNET/IP INTERFACE, TOUCHPAD HMI.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPERVISORY, SEQUENCING, CONTROL PANEL FOR MODULES TO BE PROVIDED BY CHILLER MANUFACTURER. BACNET/IP INTERFACE, TOUCHPAD HMI.",
+          "word_ids": [
+            581,
+            582,
+            583,
+            584,
+            585,
+            586,
+            587,
+            588,
+            589,
+            590,
+            591,
+            592,
+            593,
+            594,
+            595,
+            596
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPERVISORY, SEQUENCING, CONTROL PANEL FOR MODULES TO BE PROVIDED BY CHILLER MANUFACTURER. BACNET/IP INTERFACE, TOUCHPAD HMI.",
+          "word_ids": [
+            625,
+            626,
+            627,
+            628,
+            629,
+            630,
+            631,
+            632,
+            633,
+            634,
+            635,
+            636,
+            637,
+            638,
+            639,
+            640
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "header": "ACCESSORY MANUFACTURER MODEL DESCRIPTION VOLTS FLA MCA MOCP",
+      "page": 14,
+      "bbox": [
+        590,
+        710,
+        1900,
+        775
+      ],
+      "engine": "mupdf",
+      "actual": "MANUFACTURER / ACCESSORY DESCRIPTION VOLTS Ø FLA MCA MOCP MODEL",
+      "pass": true
+    },
+    {
+      "table": "M602-WSHP-ACCESSORIES",
+      "header": "ACCESSORY MANUFACTURER MODEL DESCRIPTION VOLTS FLA MCA MOCP",
+      "page": 14,
+      "bbox": [
+        590,
+        710,
+        1900,
+        775
+      ],
+      "engine": "poppler",
+      "actual": "MANUFACTURER / ACCESSORY DESCRIPTION VOLTS Ø FLA MCA MOCP MODEL",
+      "pass": true
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 1,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        960,
+        1140,
+        1020,
+        1180
+      ],
+      "expected": "FTR-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FTR-1",
+          "word_ids": [
+            625
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FTR-1",
+          "word_ids": [
+            664
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 1,
+      "column": "location",
+      "page": 14,
+      "bbox": [
+        1020,
+        1140,
+        1115,
+        1180
+      ],
+      "expected": "MAIN ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            626,
+            627
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            665,
+            666
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 1,
+      "column": "serves",
+      "page": 14,
+      "bbox": [
+        1115,
+        1140,
+        1225,
+        1180
+      ],
+      "expected": "WASTEWATER TO HX-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WASTEWATER TO HX-1",
+          "word_ids": [
+            628,
+            629,
+            630
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WASTEWATER TO HX-1",
+          "word_ids": [
+            667,
+            668,
+            669
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        1225,
+        1140,
+        1355,
+        1180
+      ],
+      "expected": "TEKLEEN LPF4-LPE PANEL GB6-LPF",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "TEKLEEN LPF4-LPE PANEL GB6-LPF",
+          "word_ids": [
+            631,
+            632,
+            633,
+            634
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "TEKLEEN LPF4-LPE PANEL GB6-LPF",
+          "word_ids": [
+            670,
+            671,
+            672,
+            673
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 1,
+      "column": "filtration",
+      "page": 14,
+      "bbox": [
+        1355,
+        1140,
+        1450,
+        1180
+      ],
+      "expected": "100 MICRON, 2.5 SF FILTER",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "100 MICRON, 2.5 SF FILTER",
+          "word_ids": [
+            635,
+            636,
+            637,
+            638,
+            639
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "100 MICRON, 2.5 SF FILTER",
+          "word_ids": [
+            674,
+            675,
+            676,
+            677,
+            678
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 1,
+      "column": "minimum_pressure",
+      "page": 14,
+      "bbox": [
+        1450,
+        1140,
+        1530,
+        1180
+      ],
+      "expected": "20 PSI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20 PSI",
+          "word_ids": [
+            640,
+            641
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20 PSI",
+          "word_ids": [
+            679,
+            680
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 1,
+      "column": "pressure_drop",
+      "page": 14,
+      "bbox": [
+        1530,
+        1140,
+        1580,
+        1180
+      ],
+      "expected": "1 PSI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1 PSI",
+          "word_ids": [
+            642,
+            643
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1 PSI",
+          "word_ids": [
+            681,
+            682
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 1,
+      "column": "flow_gpm",
+      "page": 14,
+      "bbox": [
+        1580,
+        1140,
+        1640,
+        1180
+      ],
+      "expected": "265",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "265",
+          "word_ids": [
+            644
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "265",
+          "word_ids": [
+            683
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 1,
+      "column": "volts",
+      "page": 14,
+      "bbox": [
+        1640,
+        1140,
+        1680,
+        1180
+      ],
+      "expected": "110",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            645
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "110",
+          "word_ids": [
+            684
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 1,
+      "column": "phase",
+      "page": 14,
+      "bbox": [
+        1680,
+        1140,
+        1710,
+        1180
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            646
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            685
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 1,
+      "column": "fla",
+      "page": 14,
+      "bbox": [
+        1710,
+        1140,
+        1740,
+        1180
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            647
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            711
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 1,
+      "column": "unit_weight_lbs",
+      "page": 14,
+      "bbox": [
+        1740,
+        1140,
+        1780,
+        1180
+      ],
+      "expected": "200",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            648
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "200",
+          "word_ids": [
+            712
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 1,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1780,
+        1140,
+        2170,
+        1180
+      ],
+      "expected": "AUTOMATIC SELF CLEANING FILTER & CONTROL PANEL. 4\" CLASS 150 CONNECTIONS, 1\" NPT FLUSHING BALL VALVE.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUTOMATIC SELF CLEANING FILTER & CONTROL PANEL. 4\" CLASS 150 CONNECTIONS, 1\" NPT FLUSHING BALL VALVE.",
+          "word_ids": [
+            649,
+            650,
+            651,
+            652,
+            653,
+            654,
+            655,
+            656,
+            657,
+            658,
+            659,
+            660,
+            661,
+            662,
+            663,
+            664
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUTOMATIC SELF CLEANING FILTER & CONTROL PANEL. 4\" CLASS 150 CONNECTIONS, 1\" NPT FLUSHING BALL VALVE.",
+          "word_ids": [
+            713,
+            714,
+            715,
+            716,
+            717,
+            718,
+            719,
+            720,
+            721,
+            722,
+            723,
+            724,
+            725,
+            726,
+            727,
+            728
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 2,
+      "column": "tag",
+      "page": 14,
+      "bbox": [
+        960,
+        1180,
+        1020,
+        1220
+      ],
+      "expected": "STR-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "STR-1",
+          "word_ids": [
+            665
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "STR-1",
+          "word_ids": [
+            686
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 2,
+      "column": "location",
+      "page": 14,
+      "bbox": [
+        1020,
+        1180,
+        1115,
+        1220
+      ],
+      "expected": "MAIN ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            666,
+            667
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MAIN ROOM",
+          "word_ids": [
+            687,
+            688
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 2,
+      "column": "serves",
+      "page": 14,
+      "bbox": [
+        1115,
+        1180,
+        1225,
+        1220
+      ],
+      "expected": "WASTEWATER TO HX-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "WASTEWATER TO HX-1",
+          "word_ids": [
+            668,
+            669,
+            670
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "WASTEWATER TO HX-1",
+          "word_ids": [
+            689,
+            690,
+            695
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 14,
+      "bbox": [
+        1225,
+        1180,
+        1355,
+        1220
+      ],
+      "expected": "KECKLEY STYLE GFV 6\"",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "KECKLEY STYLE GFV 6\"",
+          "word_ids": [
+            671,
+            672,
+            673,
+            674
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "KECKLEY STYLE GFV 6\"",
+          "word_ids": [
+            691,
+            692,
+            693,
+            694
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 2,
+      "column": "filtration",
+      "page": 14,
+      "bbox": [
+        1355,
+        1180,
+        1450,
+        1220
+      ],
+      "expected": "60 MESH",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "60 MESH",
+          "word_ids": [
+            675,
+            676
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "60 MESH",
+          "word_ids": [
+            696,
+            697
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 2,
+      "column": "minimum_pressure",
+      "page": 14,
+      "bbox": [
+        1450,
+        1180,
+        1530,
+        1220
+      ],
+      "expected": "NONE",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            677
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NONE",
+          "word_ids": [
+            698
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 2,
+      "column": "pressure_drop",
+      "page": 14,
+      "bbox": [
+        1530,
+        1180,
+        1580,
+        1220
+      ],
+      "expected": "0.25 PSI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.25 PSI",
+          "word_ids": [
+            678,
+            679
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.25 PSI",
+          "word_ids": [
+            699,
+            700
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 2,
+      "column": "flow_gpm",
+      "page": 14,
+      "bbox": [
+        1580,
+        1180,
+        1640,
+        1220
+      ],
+      "expected": "265",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "265",
+          "word_ids": [
+            680
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "265",
+          "word_ids": [
+            701
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 2,
+      "column": "volts",
+      "page": 14,
+      "bbox": [
+        1640,
+        1180,
+        1680,
+        1220
+      ],
+      "expected": "NA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NA",
+          "word_ids": [
+            681
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NA",
+          "word_ids": [
+            702
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 2,
+      "column": "phase",
+      "page": 14,
+      "bbox": [
+        1680,
+        1180,
+        1710,
+        1220
+      ],
+      "expected": "NA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NA",
+          "word_ids": [
+            682
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NA",
+          "word_ids": [
+            703
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 2,
+      "column": "fla",
+      "page": 14,
+      "bbox": [
+        1710,
+        1180,
+        1740,
+        1220
+      ],
+      "expected": "NA",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "NA",
+          "word_ids": [
+            683
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "NA",
+          "word_ids": [
+            729
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 2,
+      "column": "unit_weight_lbs",
+      "page": 14,
+      "bbox": [
+        1740,
+        1180,
+        1780,
+        1220
+      ],
+      "expected": "120",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            684
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "120",
+          "word_ids": [
+            730
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "row": 2,
+      "column": "remarks",
+      "page": 14,
+      "bbox": [
+        1780,
+        1180,
+        2170,
+        1220
+      ],
+      "expected": "BASKET STRAINER. CLASS 125 FLANGE CONNECTIONS.",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BASKET STRAINER. CLASS 125 FLANGE CONNECTIONS.",
+          "word_ids": [
+            685,
+            686,
+            687,
+            688,
+            689,
+            690
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BASKET STRAINER. CLASS 125 FLANGE CONNECTIONS.",
+          "word_ids": [
+            731,
+            732,
+            733,
+            734,
+            735,
+            736
+          ]
+        }
+      }
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "header": "FILTER STRAINER SCHEDULE TAG LOCATION SERVES MANUFACTURER MODEL FILTRATION PRESSURE FLOW UNIT ELECTRICAL UNIT WT REMARKS",
+      "page": 14,
+      "bbox": [
+        960,
+        1060,
+        2170,
+        1140
+      ],
+      "engine": "mupdf",
+      "actual": "FILTER & STRAINER SCHEDULE PRESSURE UNIT ELECTRICAL UNIT MANUFACTURER / FLOW TAG LOCATION SERVES FILTRATION MINIMUM DROP REQUIREMENTS WT. REMARKS MODEL (GPM) (PSI) (PSI) VOLTS Ø FLA (LBS)",
+      "pass": true
+    },
+    {
+      "table": "M602-FILTERS-STRAINERS",
+      "header": "FILTER STRAINER SCHEDULE TAG LOCATION SERVES MANUFACTURER MODEL FILTRATION PRESSURE FLOW UNIT ELECTRICAL UNIT WT REMARKS",
+      "page": 14,
+      "bbox": [
+        960,
+        1060,
+        2170,
+        1140
+      ],
+      "engine": "poppler",
+      "actual": "FILTER & STRAINER SCHEDULE PRESSURE UNIT ELECTRICAL UNIT MANUFACTURER / FLOW TAG LOCATION SERVES FILTRATION MINIMUM DROP REQUIREMENTS WT. REMARKS MODEL (GPM) (PSI) (PSI) VOLTS Ø FLA (LBS)",
+      "pass": true
+    },
+    {
+      "assertion": "m602-wshp-location",
+      "page": 14,
+      "bbox": [
+        650,
+        510,
+        735,
+        560
+      ],
+      "expected": "MECHANICAL ROOM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL ROOM",
+          "word_ids": [
+            232,
+            233
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL ROOM",
+          "word_ids": [
+            341,
+            342
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "m602-wshp-serves",
+      "page": 14,
+      "bbox": [
+        735,
+        510,
+        805,
+        570
+      ],
+      "expected": "AERATED WATER HEATING",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AERATED WATER HEATING",
+          "word_ids": [
+            234,
+            235,
+            236
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AERATED WATER HEATING",
+          "word_ids": [
+            343,
+            344,
+            345
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m602-core-table-count",
+      "actual": 5,
+      "expected": 5,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

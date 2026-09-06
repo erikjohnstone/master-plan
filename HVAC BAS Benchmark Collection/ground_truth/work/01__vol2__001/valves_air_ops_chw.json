@@ -1,0 +1,79 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "scope": "All printed CHW control-valve schedule rows on Air Operations sheet M-603 (source PDF page 44). Rows preserve the literal unit and valve marks; they are not reconciled installed quantities. The HHW valve schedule and all plan/control-system reconciliation remain open.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [44],
+    "render": "reviews/01__vol2__001/p44-schedules-poppler.png",
+    "dpi": 180,
+    "finding": "The M-603 rendering was visually reviewed separately from native-parser corroboration. The CHW valve grid is a 21-row table with literal printed row/mark relationships retained below."
+  },
+  "tables": [
+    {
+      "id": "AIR-OPS-CHW-CONTROL-VALVE",
+      "page": 44,
+      "sheet": "M-603",
+      "building_scope": "Air Operations",
+      "title": "CHW CONTROL VALVE SCHEDULE",
+      "classification": "Chilled-water control valves",
+      "columns": "unit_mark|valve_mark|flowrate_GPM|valve_size_in|configuration|Cv|notes",
+      "x_edges": [1730, 1805, 1905, 1970, 2020, 2110, 2170, 2230],
+      "y_ranges": [[305, 324], [324, 341], [341, 358], [358, 375], [375, 392], [392, 409], [409, 426], [426, 444], [444, 461], [461, 478], [478, 495], [495, 512], [512, 530], [530, 547], [547, 564], [564, 581], [581, 598], [598, 616], [616, 633], [633, 650], [650, 668]],
+      "rows": [
+        "AHU-A1|CV-AHU-A1-CHW|61.5|2|2-WAY|27.5|1",
+        "AHU-A2|CV-AHU-A2-CHW|10.9|1|2-WAY|4.9|1",
+        "CV-CH-A1|CV-CH-A1|128.0|4|2-WAY|324.0|2",
+        "CV-CH-A2|CV-CH-A2|128.0|4|2-WAY|324.0|2",
+        "CV-CHW-BP-A|CV-CHW-BP-A|58.0|2|2-WAY|25.9|1,3",
+        "DOAH-A1|CV-DOAH-A1-CHW|25.5|1|2-WAY|11.4|1",
+        "DOAH-A2|CV-DOAH-A2-CHW|17.7|1|2-WAY|7.9|1",
+        "FCU-A1|CV-FCU-A1-CHW|0.8|1/2|2-WAY|0.4|1",
+        "FCU-A2|CV-FCU-A2-CHW|1.2|1/2|2-WAY|0.5|1",
+        "FCU-A3|CV-FCU-A3-CHW|4.9|1/2|2-WAY|2.2|1",
+        "FCU-A4|CV-FCU-A4-CHW|6.3|1/2|2-WAY|2.8|1",
+        "FCU-A5|CV-FCU-A5-CHW|6.5|1/2|2-WAY|2.9|1",
+        "FCU-A6|CV-FCU-A6-CHW|2.4|1/2|2-WAY|1.1|1",
+        "FCU-A7|CV-FCU-A7-CHW|3.7|1/2|2-WAY|1.7|1",
+        "FCU-A8A|CV-FCU-A8A-CHW|4.7|1/2|2-WAY|2.1|1",
+        "FCU-A8B|CV-FCU-A8B-CHW|4.7|1/2|2-WAY|2.1|1",
+        "FCU-A9|CV-FCU-A9-CHW|1.3|1/2|2-WAY|0.6|1",
+        "FCU-A10|CV-FCU-A10-CHW|19.9|1|2-WAY|8.9|1",
+        "FCU-A11|CV-FCU-A11-CHW|5.7|1/2|2-WAY|2.5|1",
+        "FCU-A12|CV-FCU-A12-CHW|3.8|1/2|2-WAY|1.7|1",
+        "FCU-A13|CV-FCU-A13-CHW|2.7|1/2|2-WAY|1.2|1"
+      ],
+      "notes": [
+        "1. VALVES SHALL BE MODULATING TYPE.",
+        "2. VALVES SHALL BE TWO POSITION TYPE.",
+        "3. COORDINATE CONTROL VALVE SELECTION WITH CHILLER PROVIDED. GPM SHALL BE GREATER OF EITHER GPM SHOWN OR MINIMUM CHILLER FLOWRATE."
+      ],
+      "parser_exclusions": [
+        {
+          "engine": "mupdf",
+          "word_ids": [1206, 1213],
+          "reason": "The page's visible 180-dpi rendering shows Cv 324.0 for CV-CH-A1 and CV-CH-A2. These two hidden 57.1 vector words occupy the same cells beneath the visibly rendered 324.0; retain this explicit exception rather than treating the concatenated parser text as an engineering value."
+        },
+        {
+          "engine": "poppler",
+          "word_ids": [988, 990],
+          "reason": "The page's visible 180-dpi rendering shows Cv 324.0 for CV-CH-A1 and CV-CH-A2. These two hidden 57.1 vector words occupy the same cells beneath the visibly rendered 324.0; retain this explicit exception rather than treating the concatenated parser text as an engineering value."
+        }
+      ],
+      "header_evidence": [
+        {"bbox": [1800, 246, 2145, 274], "expected": "CHW CONTROL VALVE SCHEDULE"},
+        {"bbox": [1730, 274, 2230, 305], "expected": "UNIT MARK VALVE MARK FLOWRATE GPM VALVE SIZE IN CONFIGURATION CV NOTES"}
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {"id": "air-ops-chw-control-valve-row-count", "records_path": ["tables", 0, "rows"], "expected": 21}
+  ],
+  "source_conflicts": [
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "finding": "No unit-mark/valve-mark mismatch was observed in this CHW table. The two chiller rows visibly render Cv 324.0, while both raw text captures retain overlapped hidden 57.1 vector words; their parser word IDs are explicitly excluded above and must not be treated as a corrected source value. Do not use either observation to repair unrelated HHW-table literals."
+    }
+  ],
+  "remaining_work": "Transcribe the complete HHW control-valve schedule and reconcile both valve tables against the M-601/M-602 equipment tables, piping schematics, plan callouts and BAS sequences without silently correcting source conflicts."
+}

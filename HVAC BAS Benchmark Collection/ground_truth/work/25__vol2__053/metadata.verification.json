@@ -1,0 +1,896 @@
+{
+  "document_id": "25__vol2__053",
+  "source_sha256": "7eaefacf7f42a077e98d3fa1fd01bc96f03a03d444e29ffda7838895dc2e1d57",
+  "annotation_sha256": "516c2fec72e3878f51508d43f1e467badab07f61da1b4cdafbfb407c52d4a257",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 28,
+  "checks": [
+    {
+      "assertion": "project-name",
+      "page": 12,
+      "bbox": [
+        2535,
+        1920,
+        2810,
+        1968
+      ],
+      "expected": "RENOVATE/EXPAND EMERGENCY ROOM SYSTEM",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RENOVATE/EXPAND EMERGENCY ROOM SYSTEM",
+          "word_ids": [
+            148,
+            149,
+            150,
+            151
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RENOVATE/EXPAND EMERGENCY ROOM SYSTEM",
+          "word_ids": [
+            1595,
+            1596,
+            1597,
+            1598
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "project-site",
+      "page": 12,
+      "bbox": [
+        2190,
+        2010,
+        2480,
+        2055
+      ],
+      "expected": "2002 HOLCOMBE BOULEVARD, HOUSTON, TX 77030 4298",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2002 HOLCOMBE BOULEVARD, HOUSTON, TX 77030 4298",
+          "word_ids": [
+            152,
+            153,
+            154,
+            155,
+            156,
+            157,
+            158
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2002 HOLCOMBE BOULEVARD, HOUSTON, TX 77030 4298",
+          "word_ids": [
+            1609,
+            1610,
+            1611,
+            1612,
+            1613,
+            1614,
+            1615
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "va-project-number",
+      "page": 12,
+      "bbox": [
+        2855,
+        1920,
+        2930,
+        1941
+      ],
+      "expected": "580-17-101",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "580-17-101",
+          "word_ids": [
+            165
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "580-17-101",
+          "word_ids": [
+            1624
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "project-date",
+      "page": 12,
+      "bbox": [
+        2540,
+        2055,
+        2650,
+        2075
+      ],
+      "expected": "MARCH 15, 2019",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MARCH 15, 2019",
+          "word_ids": [
+            159,
+            160,
+            161
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MARCH 15, 2019",
+          "word_ids": [
+            1617,
+            1618,
+            1619
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/1/drawing-title",
+      "page": 1,
+      "bbox": [
+        2140,
+        1920,
+        2480,
+        1990
+      ],
+      "expected": "MECHANICAL LEGEND, ABBREVIATIONS, AND GENERAL NOTES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL LEGEND, ABBREVIATIONS, AND GENERAL NOTES",
+          "word_ids": [
+            2560,
+            2561,
+            2562,
+            2563,
+            2564,
+            2565
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL LEGEND, ABBREVIATIONS, AND GENERAL NOTES",
+          "word_ids": [
+            2536,
+            2537,
+            2538,
+            2539,
+            2540,
+            2541
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/1/sheet-number",
+      "page": 1,
+      "bbox": [
+        2830,
+        2010,
+        2950,
+        2055
+      ],
+      "expected": "M-001",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-001",
+          "word_ids": [
+            2559
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-001",
+          "word_ids": [
+            2577
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/2/drawing-title",
+      "page": 2,
+      "bbox": [
+        2140,
+        1920,
+        2480,
+        1990
+      ],
+      "expected": "FIRST FLOOR CEILING HVAC DEMOLITION PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FIRST FLOOR CEILING HVAC DEMOLITION PLAN",
+          "word_ids": [
+            208,
+            209,
+            210,
+            211,
+            212,
+            213
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FIRST FLOOR CEILING HVAC DEMOLITION PLAN",
+          "word_ids": [
+            387,
+            388,
+            389,
+            390,
+            391,
+            392
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/2/sheet-number",
+      "page": 2,
+      "bbox": [
+        2830,
+        2010,
+        2950,
+        2055
+      ],
+      "expected": "MD101",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD101",
+          "word_ids": [
+            207
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD101",
+          "word_ids": [
+            428
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/3/drawing-title",
+      "page": 3,
+      "bbox": [
+        2140,
+        1920,
+        2480,
+        1990
+      ],
+      "expected": "FIRST FLOOR INTERSTITIAL HVAC DEMOLITION PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FIRST FLOOR INTERSTITIAL HVAC DEMOLITION PLAN",
+          "word_ids": [
+            408,
+            409,
+            410,
+            411,
+            412,
+            413
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FIRST FLOOR INTERSTITIAL HVAC DEMOLITION PLAN",
+          "word_ids": [
+            570,
+            571,
+            572,
+            573,
+            574,
+            575
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/3/sheet-number",
+      "page": 3,
+      "bbox": [
+        2830,
+        2010,
+        2950,
+        2055
+      ],
+      "expected": "MD102",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD102",
+          "word_ids": [
+            407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD102",
+          "word_ids": [
+            611
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/4/drawing-title",
+      "page": 4,
+      "bbox": [
+        2140,
+        1920,
+        2480,
+        1990
+      ],
+      "expected": "FIRST FLOOR INTERSTITIAL MECHANICAL PIPING DEMOLITION PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FIRST FLOOR INTERSTITIAL MECHANICAL PIPING DEMOLITION PLAN",
+          "word_ids": [
+            626,
+            627,
+            628,
+            629,
+            630,
+            631,
+            632
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FIRST FLOOR INTERSTITIAL MECHANICAL PIPING DEMOLITION PLAN",
+          "word_ids": [
+            780,
+            781,
+            782,
+            783,
+            784,
+            785,
+            786
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/4/sheet-number",
+      "page": 4,
+      "bbox": [
+        2830,
+        2010,
+        2950,
+        2055
+      ],
+      "expected": "MD103",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MD103",
+          "word_ids": [
+            625
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MD103",
+          "word_ids": [
+            822
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/5/drawing-title",
+      "page": 5,
+      "bbox": [
+        2140,
+        1920,
+        2480,
+        1990
+      ],
+      "expected": "FIRST FLOOR CEILING PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FIRST FLOOR CEILING PLAN",
+          "word_ids": [
+            471,
+            472,
+            473,
+            474
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FIRST FLOOR CEILING PLAN",
+          "word_ids": [
+            569,
+            570,
+            571,
+            572
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/5/sheet-number",
+      "page": 5,
+      "bbox": [
+        2830,
+        2010,
+        2950,
+        2055
+      ],
+      "expected": "MH101",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MH101",
+          "word_ids": [
+            470
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MH101",
+          "word_ids": [
+            608
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/6/drawing-title",
+      "page": 6,
+      "bbox": [
+        2140,
+        1920,
+        2480,
+        1990
+      ],
+      "expected": "FIRST FLOOR INTERSTITIAL COMPOSITE HVAC PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FIRST FLOOR INTERSTITIAL COMPOSITE HVAC PLAN",
+          "word_ids": [
+            426,
+            427,
+            428,
+            429,
+            430,
+            431
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FIRST FLOOR INTERSTITIAL COMPOSITE HVAC PLAN",
+          "word_ids": [
+            513,
+            514,
+            515,
+            516,
+            517,
+            518
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/6/sheet-number",
+      "page": 6,
+      "bbox": [
+        2830,
+        2010,
+        2950,
+        2055
+      ],
+      "expected": "MH102",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MH102",
+          "word_ids": [
+            425
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MH102",
+          "word_ids": [
+            554
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/7/drawing-title",
+      "page": 7,
+      "bbox": [
+        2140,
+        1920,
+        2480,
+        1990
+      ],
+      "expected": "FIRST FLOOR INTERSTITIAL HVAC SUPPLY PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FIRST FLOOR INTERSTITIAL HVAC SUPPLY PLAN",
+          "word_ids": [
+            342,
+            343,
+            344,
+            345,
+            346,
+            347
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FIRST FLOOR INTERSTITIAL HVAC SUPPLY PLAN",
+          "word_ids": [
+            459,
+            460,
+            461,
+            462,
+            463,
+            464
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/7/sheet-number",
+      "page": 7,
+      "bbox": [
+        2830,
+        2010,
+        2950,
+        2055
+      ],
+      "expected": "MH103",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MH103",
+          "word_ids": [
+            341
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MH103",
+          "word_ids": [
+            500
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/8/drawing-title",
+      "page": 8,
+      "bbox": [
+        2140,
+        1920,
+        2480,
+        1990
+      ],
+      "expected": "FIRST FLOOR INTERSTITIAL HVAC EXHAUST/RETURN PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FIRST FLOOR INTERSTITIAL HVAC EXHAUST/RETURN PLAN",
+          "word_ids": [
+            321,
+            322,
+            323,
+            324,
+            325,
+            326
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FIRST FLOOR INTERSTITIAL HVAC EXHAUST/RETURN PLAN",
+          "word_ids": [
+            420,
+            421,
+            422,
+            423,
+            424,
+            425
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/8/sheet-number",
+      "page": 8,
+      "bbox": [
+        2830,
+        2010,
+        2950,
+        2055
+      ],
+      "expected": "MH104",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MH104",
+          "word_ids": [
+            320
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MH104",
+          "word_ids": [
+            461
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/9/drawing-title",
+      "page": 9,
+      "bbox": [
+        2140,
+        1920,
+        2480,
+        1990
+      ],
+      "expected": "FIRST FLOOR INTERSTITIAL MECHANICAL PIPING PLAN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FIRST FLOOR INTERSTITIAL MECHANICAL PIPING PLAN",
+          "word_ids": [
+            411,
+            412,
+            413,
+            414,
+            415,
+            416
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FIRST FLOOR INTERSTITIAL MECHANICAL PIPING PLAN",
+          "word_ids": [
+            454,
+            455,
+            456,
+            457,
+            458,
+            459
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/9/sheet-number",
+      "page": 9,
+      "bbox": [
+        2830,
+        2010,
+        2950,
+        2055
+      ],
+      "expected": "MP101",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MP101",
+          "word_ids": [
+            410
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MP101",
+          "word_ids": [
+            495
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/10/drawing-title",
+      "page": 10,
+      "bbox": [
+        2140,
+        1920,
+        2480,
+        1990
+      ],
+      "expected": "MECHANICAL DETAILS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL DETAILS",
+          "word_ids": [
+            776,
+            777
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL DETAILS",
+          "word_ids": [
+            803,
+            804
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/10/sheet-number",
+      "page": 10,
+      "bbox": [
+        2830,
+        2010,
+        2950,
+        2055
+      ],
+      "expected": "MH501",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MH501",
+          "word_ids": [
+            775
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MH501",
+          "word_ids": [
+            840
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/11/drawing-title",
+      "page": 11,
+      "bbox": [
+        2140,
+        1920,
+        2480,
+        1990
+      ],
+      "expected": "MECHANICAL CONTROLS",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL CONTROLS",
+          "word_ids": [
+            1229,
+            1230
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL CONTROLS",
+          "word_ids": [
+            1246,
+            1247
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/11/sheet-number",
+      "page": 11,
+      "bbox": [
+        2830,
+        2010,
+        2950,
+        2055
+      ],
+      "expected": "MH502",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MH502",
+          "word_ids": [
+            1228
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MH502",
+          "word_ids": [
+            1283
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/12/drawing-title",
+      "page": 12,
+      "bbox": [
+        2140,
+        1920,
+        2480,
+        1990
+      ],
+      "expected": "MECHANICAL SCHEDULES",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL SCHEDULES",
+          "word_ids": [
+            142,
+            143
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL SCHEDULES",
+          "word_ids": [
+            1593,
+            1594
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "all-sheet-title-blocks/12/sheet-number",
+      "page": 12,
+      "bbox": [
+        2830,
+        2010,
+        2950,
+        2055
+      ],
+      "expected": "MH601",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MH601",
+          "word_ids": [
+            141
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MH601",
+          "word_ids": [
+            1630
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "full-page-visual-review",
+      "actual": 12,
+      "expected": 12,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

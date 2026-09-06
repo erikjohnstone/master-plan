@@ -1,0 +1,305 @@
+{
+  "document_id": "08__vol2__044",
+  "module_role": "Source-bounded controls context for the MI-605 generator fuel-oil system and the MI-607 packaged domestic-water-heater interface.",
+  "tables": [],
+  "assertions": [
+    {
+      "id": "mi605-general-scope",
+      "page": 29,
+      "bbox": [
+        1820,
+        270,
+        2315,
+        287
+      ],
+      "expected": "1. THIS SEQUENCE APPLIES TO THE FUEL OIL SYSTEM FEEDING THE NEW EMERGENCY GENERATOR.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi605-general-availability",
+      "page": 29,
+      "bbox": [
+        1820,
+        282,
+        2150,
+        298
+      ],
+      "expected": "2. SYSTEM SHALL BE AVAILABLE FOR OPERATIONAL AT ALL TIMES.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi605-general-standby-power",
+      "page": 29,
+      "bbox": [
+        1820,
+        293,
+        2320,
+        310
+      ],
+      "expected": "3. ALL EQUIPMENT ASSOCIATED WITH THE GENERATOR SHALL BE CONNECTED TO STANDBY POWER.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi605-critical-low-level",
+      "page": 29,
+      "bbox": [
+        1820,
+        338,
+        2345,
+        356
+      ],
+      "expected": "1. CRITICAL LOW LEVEL SWITCH AT 20% SHALL GENERATE A CRITICAL DAY TANK LEVEL ALARM AT THE BMS.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi605-low-level",
+      "page": 29,
+      "bbox": [
+        1820,
+        350,
+        2210,
+        368
+      ],
+      "expected": "2. LEVEL SWITCH AT 40% SHALL GENERATE A LOW LEVEL ALARM AT THE BMS.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi605-high-level-90",
+      "page": 29,
+      "bbox": [
+        1820,
+        361,
+        2372,
+        379
+      ],
+      "expected": "3. LEVEL SWITCH AT 90% SHALL CAUSE THE SHUT DOWN OF THE PUMPS AND CLOSURE OF THE DAY TANK. VALVE.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi605-high-level-95",
+      "page": 29,
+      "bbox": [
+        1820,
+        373,
+        2256,
+        390
+      ],
+      "expected": "4. HIGH LEVEL AT 95% SHALL ENERGIZED THE RETURN PUMP ON UNTIL IT DROPS TO 90%.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi605-leak-detector",
+      "page": 29,
+      "bbox": [
+        1820,
+        408,
+        2440,
+        423
+      ],
+      "expected": "6. LEAK DETECTOR SHALL CAUSE THE SHUTDOWN OF THE PUMPS. THE OIL IN RUPTURE VESSEL ALARM SHALL BE GENERATED AT",
+      "mode": "exact"
+    },
+    {
+      "id": "mi605-pump-failure-delay",
+      "page": 29,
+      "bbox": [
+        1820,
+        465,
+        2420,
+        480
+      ],
+      "expected": "1. PUMP FAILURE ALARM SHALL BE GENERATED AT THE BMS IF THE PUMP IS COMMANDED TO RUN AND AFTER 15 SECONDS",
+      "mode": "exact"
+    },
+    {
+      "id": "mi605-containment-low-points",
+      "page": 29,
+      "bbox": [
+        1820,
+        522,
+        2330,
+        538
+      ],
+      "expected": "1. LEAK DETECTION SHALL BE PLACED AT ALL LOW POINTS IN THE FOS AND FOR CONTAINMENT PIPING.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi605-day-tank-lead-start",
+      "page": 29,
+      "bbox": [
+        1820,
+        568,
+        2399,
+        582
+      ],
+      "expected": "1. CONTROL VALVE TO OPEN, PROVEN OPEN AND LOW LEVEL SWITCH AT 50% SHALL CAUSE THE LEAD PUMP TO START.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi605-day-tank-90-close",
+      "page": 29,
+      "bbox": [
+        1820,
+        602,
+        2360,
+        618
+      ],
+      "expected": "3. HIGH LEVEL SWITCH AT 90% FULL SHALL CAUSE THE PUMP TO SHUT DOWN AND CONTROL VALVE TO CLOSE.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi605-day-tank-95-return",
+      "page": 29,
+      "bbox": [
+        1820,
+        614,
+        2405,
+        630
+      ],
+      "expected": "4. HIGH LEVEL SWITCH AT 95% SHALL ENERGIZE THE RETURN PUMP AND SHALL REMAIN ON UNTIL LEVEL DROPS TO 90%.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi605-day-tank-lead-lag",
+      "page": 29,
+      "bbox": [
+        1820,
+        637,
+        2410,
+        652
+      ],
+      "expected": "6. THE BAS SYSTEM SHALL ALTERNATE THE LEAD/LAG POSITION OF THE PUMPS IN THE DUPLEX PAIR AFTER EACH CYCLE.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi605-existing-panel",
+      "page": 29,
+      "bbox": [
+        1820,
+        681,
+        2015,
+        699
+      ],
+      "expected": "1. THE CONTROL PANEL IS EXISTING.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi605-six-leak-sensors",
+      "page": 29,
+      "bbox": [
+        1820,
+        704,
+        2260,
+        721
+      ],
+      "expected": "3. CONTROL PANEL SHALL BE EQUIPPED TO MONITOR 6 DISCRIMINATING LEAK SENSORS.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi605-building-bas",
+      "page": 29,
+      "bbox": [
+        1820,
+        808,
+        2305,
+        824
+      ],
+      "expected": "7. SYSTEM SHALL HAVE THE CAPABILITY TO SIMULTANEOUSLY COMMUNICATE WITH BUILDING BAS.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi605-alc-tie-in",
+      "page": 29,
+      "bbox": [
+        1820,
+        820,
+        2205,
+        837
+      ],
+      "expected": "8. ALL CONTROL POINTS SHOWN SHALL BE TIED INTO ALC CONTROL SYSTEM,",
+      "mode": "exact"
+    },
+    {
+      "id": "mi607-bacnet-interface",
+      "page": 31,
+      "bbox": [
+        370,
+        1766,
+        1010,
+        1782
+      ],
+      "expected": "1. DOMESTIC HOT WATER HEATER PACKAGE PROVIDED BY DIV.22. CONTROLLER IS BEING PROVIDED WITH BACNET/IP INTERFACE.",
+      "mode": "exact"
+    },
+    {
+      "id": "mi607-package-sequence",
+      "page": 31,
+      "bbox": [
+        370,
+        1812,
+        950,
+        1828
+      ],
+      "expected": "2. SEQUENCE OF OPERATION: ALL CONTROL SEQUENCES SHALL BE PERFORMED BY THE PACKAGE CONTROL SYSTEM",
+      "mode": "exact"
+    },
+    {
+      "id": "mi607-alc-tie-in",
+      "page": 31,
+      "bbox": [
+        370,
+        1835,
+        800,
+        1852
+      ],
+      "expected": "3. ALL CONTROL POINTS SHOWN SHALL BE TIED INTO BOILER ALC CONTROL SYSTEM,",
+      "mode": "exact"
+    }
+  ],
+  "network_architecture": {
+    "published_transport_and_integration": [
+      "MI-605 says the fuel-oil system can simultaneously communicate with building BAS and that its shown points tie into the ALC control system.",
+      "MI-607 states that the package controller is provided with a BACnet/IP interface and that shown points tie into the boiler ALC control system."
+    ],
+    "boundary": "The supplied sheets do not publish a final BAS network topology, controller address list, I/O-card layout, terminal schedule, wiring diagram, or definitive field-device count."
+  },
+  "sequence_inventory": [
+    {
+      "id": "generator-fuel-oil-system",
+      "sheet": "MI-605",
+      "assertion_ids": [
+        "mi605-general-scope",
+        "mi605-general-availability",
+        "mi605-general-standby-power",
+        "mi605-critical-low-level",
+        "mi605-low-level",
+        "mi605-high-level-90",
+        "mi605-high-level-95",
+        "mi605-leak-detector",
+        "mi605-pump-failure-delay",
+        "mi605-containment-low-points",
+        "mi605-day-tank-lead-start",
+        "mi605-day-tank-90-close",
+        "mi605-day-tank-95-return",
+        "mi605-day-tank-lead-lag",
+        "mi605-existing-panel",
+        "mi605-six-leak-sensors",
+        "mi605-building-bas",
+        "mi605-alc-tie-in"
+      ]
+    },
+    {
+      "id": "packaged-domestic-water-heater",
+      "sheet": "MI-607",
+      "assertion_ids": [
+        "mi607-bacnet-interface",
+        "mi607-package-sequence",
+        "mi607-alc-tie-in"
+      ]
+    }
+  ],
+  "control_boundaries": [
+    "The source's apparent wording and grammar, including 'SHALL ENERGIZED' and 'DAY TANK. VALVE.', are retained exactly in bounded assertions rather than silently corrected.",
+    "The published point lists and sequence clauses are not expanded into physical controller, I/O, sensor, valve, actuator, wiring, or installation counts."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "document_id": "19__vol2__094",
+  "source_sha256": "e205afccbaa16d799d33aed3151c5fd06dbe7a6836e1f1132c61aba0c70fdb45",
+  "annotation_sha256": "99ef8b80aa8f3eb2bfcf049a63c7b8c9e21e721b38e8a5581024801d7f205299",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 0,
+  "checks": [],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "formal-source-points-tables",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "id": "formal-source-points-applications",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

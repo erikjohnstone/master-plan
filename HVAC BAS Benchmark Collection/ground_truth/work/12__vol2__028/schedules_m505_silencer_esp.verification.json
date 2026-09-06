@@ -1,0 +1,8296 @@
+{
+  "document_id": "12__vol2__028",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "annotation_sha256": "641b3222eccd6f98955a0e8754e862f4ef7d21f11949cb62cd3b2a68081ebb65",
+  "tables": 2,
+  "rows": 33,
+  "cell_assertions": 278,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 1,
+      "column": "quantity",
+      "page": 1,
+      "bbox": [
+        120,
+        900,
+        175,
+        920
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            562
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            157
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 1,
+      "column": "location_serves",
+      "page": 1,
+      "bbox": [
+        175,
+        900,
+        525,
+        920
+      ],
+      "expected": "GROUP REHEARSAL 123 - SUPPLY/RETURN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 123 - SUPPLY/RETURN",
+          "word_ids": [
+            563,
+            564,
+            565,
+            566,
+            567
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 123 - SUPPLY/RETURN",
+          "word_ids": [
+            158,
+            159,
+            160,
+            161,
+            162
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 1,
+      "column": "duct_width_in",
+      "page": 1,
+      "bbox": [
+        525,
+        900,
+        620,
+        920
+      ],
+      "expected": "18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            568
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            241
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 1,
+      "column": "duct_height_in",
+      "page": 1,
+      "bbox": [
+        620,
+        900,
+        720,
+        920
+      ],
+      "expected": "14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            569
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            255
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 1,
+      "column": "airflow_cfm",
+      "page": 1,
+      "bbox": [
+        720,
+        900,
+        810,
+        920
+      ],
+      "expected": "745",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "745",
+          "word_ids": [
+            570
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "745",
+          "word_ids": [
+            269
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 1,
+      "column": "air_velocity_fpm",
+      "page": 1,
+      "bbox": [
+        810,
+        900,
+        930,
+        920
+      ],
+      "expected": "426",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "426",
+          "word_ids": [
+            571
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "426",
+          "word_ids": [
+            283
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 1,
+      "column": "pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        930,
+        900,
+        1040,
+        920
+      ],
+      "expected": "0.16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.16",
+          "word_ids": [
+            572
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.16",
+          "word_ids": [
+            297
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 1,
+      "column": "dynamic_insertion_loss_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1040,
+        900,
+        1180,
+        920
+      ],
+      "expected": "36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            573
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            311
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 1,
+      "column": "generated_noise_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1180,
+        900,
+        1335,
+        920
+      ],
+      "expected": "21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            574
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            325
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 1,
+      "column": "manufacturer_model",
+      "page": 1,
+      "bbox": [
+        1335,
+        900,
+        1460,
+        920
+      ],
+      "expected": "PRICE/STC-55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            575
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            339
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 1,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        1460,
+        900,
+        1560,
+        920
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            576
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            353
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 2,
+      "column": "quantity",
+      "page": 1,
+      "bbox": [
+        120,
+        920,
+        175,
+        940
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            547
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            163
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 2,
+      "column": "location_serves",
+      "page": 1,
+      "bbox": [
+        175,
+        920,
+        525,
+        940
+      ],
+      "expected": "GROUP REHEARSAL 123 - RETURN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 123 - RETURN",
+          "word_ids": [
+            548,
+            549,
+            550,
+            551,
+            552
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 123 - RETURN",
+          "word_ids": [
+            164,
+            165,
+            166,
+            167,
+            168
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 2,
+      "column": "duct_width_in",
+      "page": 1,
+      "bbox": [
+        525,
+        920,
+        620,
+        940
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            553
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            242
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 2,
+      "column": "duct_height_in",
+      "page": 1,
+      "bbox": [
+        620,
+        920,
+        720,
+        940
+      ],
+      "expected": "8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            554
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            256
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 2,
+      "column": "airflow_cfm",
+      "page": 1,
+      "bbox": [
+        720,
+        920,
+        810,
+        940
+      ],
+      "expected": "160",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "160",
+          "word_ids": [
+            555
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "160",
+          "word_ids": [
+            270
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 2,
+      "column": "air_velocity_fpm",
+      "page": 1,
+      "bbox": [
+        810,
+        920,
+        930,
+        940
+      ],
+      "expected": "288",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "288",
+          "word_ids": [
+            556
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "288",
+          "word_ids": [
+            284
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 2,
+      "column": "pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        930,
+        920,
+        1040,
+        940
+      ],
+      "expected": "0.06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.06",
+          "word_ids": [
+            557
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.06",
+          "word_ids": [
+            298
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 2,
+      "column": "dynamic_insertion_loss_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1040,
+        920,
+        1180,
+        940
+      ],
+      "expected": "37",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "37",
+          "word_ids": [
+            558
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "37",
+          "word_ids": [
+            312
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 2,
+      "column": "generated_noise_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1180,
+        920,
+        1335,
+        940
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            559
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            326
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 2,
+      "column": "manufacturer_model",
+      "page": 1,
+      "bbox": [
+        1335,
+        920,
+        1460,
+        940
+      ],
+      "expected": "PRICE/STC-55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            560
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            340
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 2,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        1460,
+        920,
+        1560,
+        940
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            561
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            354
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 3,
+      "column": "quantity",
+      "page": 1,
+      "bbox": [
+        120,
+        940,
+        175,
+        960
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            532
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            169
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 3,
+      "column": "location_serves",
+      "page": 1,
+      "bbox": [
+        175,
+        940,
+        525,
+        960
+      ],
+      "expected": "GROUP REHEARSAL 123 - SUPPLY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 123 - SUPPLY",
+          "word_ids": [
+            533,
+            534,
+            535,
+            536,
+            537
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 123 - SUPPLY",
+          "word_ids": [
+            170,
+            171,
+            172,
+            173,
+            174
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 3,
+      "column": "duct_width_in",
+      "page": 1,
+      "bbox": [
+        525,
+        940,
+        620,
+        960
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            538
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            243
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 3,
+      "column": "duct_height_in",
+      "page": 1,
+      "bbox": [
+        620,
+        940,
+        720,
+        960
+      ],
+      "expected": "8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            539
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            257
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 3,
+      "column": "airflow_cfm",
+      "page": 1,
+      "bbox": [
+        720,
+        940,
+        810,
+        960
+      ],
+      "expected": "220",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "220",
+          "word_ids": [
+            540
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "220",
+          "word_ids": [
+            271
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 3,
+      "column": "air_velocity_fpm",
+      "page": 1,
+      "bbox": [
+        810,
+        940,
+        930,
+        960
+      ],
+      "expected": "330",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "330",
+          "word_ids": [
+            541
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "330",
+          "word_ids": [
+            285
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 3,
+      "column": "pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        930,
+        940,
+        1040,
+        960
+      ],
+      "expected": "0.08",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.08",
+          "word_ids": [
+            542
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.08",
+          "word_ids": [
+            299
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 3,
+      "column": "dynamic_insertion_loss_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1040,
+        940,
+        1180,
+        960
+      ],
+      "expected": "37",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "37",
+          "word_ids": [
+            543
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "37",
+          "word_ids": [
+            313
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 3,
+      "column": "generated_noise_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1180,
+        940,
+        1335,
+        960
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            544
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            327
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 3,
+      "column": "manufacturer_model",
+      "page": 1,
+      "bbox": [
+        1335,
+        940,
+        1460,
+        960
+      ],
+      "expected": "PRICE/STC-55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            545
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            341
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 3,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        1460,
+        940,
+        1560,
+        960
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            546
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            355
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 4,
+      "column": "quantity",
+      "page": 1,
+      "bbox": [
+        120,
+        960,
+        175,
+        981
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            517
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            175
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 4,
+      "column": "location_serves",
+      "page": 1,
+      "bbox": [
+        175,
+        960,
+        525,
+        981
+      ],
+      "expected": "GROUP REHEARSAL 123 - SUPPLY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 123 - SUPPLY",
+          "word_ids": [
+            518,
+            519,
+            520,
+            521,
+            522
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 123 - SUPPLY",
+          "word_ids": [
+            176,
+            177,
+            178,
+            179,
+            180
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 4,
+      "column": "duct_width_in",
+      "page": 1,
+      "bbox": [
+        525,
+        960,
+        620,
+        981
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            523
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            244
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 4,
+      "column": "duct_height_in",
+      "page": 1,
+      "bbox": [
+        620,
+        960,
+        720,
+        981
+      ],
+      "expected": "8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            524
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            258
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 4,
+      "column": "airflow_cfm",
+      "page": 1,
+      "bbox": [
+        720,
+        960,
+        810,
+        981
+      ],
+      "expected": "60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            525
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            272
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 4,
+      "column": "air_velocity_fpm",
+      "page": 1,
+      "bbox": [
+        810,
+        960,
+        930,
+        981
+      ],
+      "expected": "90",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "90",
+          "word_ids": [
+            526
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "90",
+          "word_ids": [
+            286
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 4,
+      "column": "pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        930,
+        960,
+        1040,
+        981
+      ],
+      "expected": "0.01",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.01",
+          "word_ids": [
+            527
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.01",
+          "word_ids": [
+            300
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 4,
+      "column": "dynamic_insertion_loss_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1040,
+        960,
+        1180,
+        981
+      ],
+      "expected": "38",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "38",
+          "word_ids": [
+            528
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "38",
+          "word_ids": [
+            314
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 4,
+      "column": "generated_noise_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1180,
+        960,
+        1335,
+        981
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            529
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            328
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 4,
+      "column": "manufacturer_model",
+      "page": 1,
+      "bbox": [
+        1335,
+        960,
+        1460,
+        981
+      ],
+      "expected": "PRICE/STC-55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            530
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            342
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 4,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        1460,
+        960,
+        1560,
+        981
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            531
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            356
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 5,
+      "column": "quantity",
+      "page": 1,
+      "bbox": [
+        120,
+        981,
+        175,
+        1001
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            502
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            181
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 5,
+      "column": "location_serves",
+      "page": 1,
+      "bbox": [
+        175,
+        981,
+        525,
+        1001
+      ],
+      "expected": "GROUP REHEARSAL 123 - RETURN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 123 - RETURN",
+          "word_ids": [
+            503,
+            504,
+            505,
+            506,
+            507
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 123 - RETURN",
+          "word_ids": [
+            182,
+            183,
+            184,
+            185,
+            186
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 5,
+      "column": "duct_width_in",
+      "page": 1,
+      "bbox": [
+        525,
+        981,
+        620,
+        1001
+      ],
+      "expected": "18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            508
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            245
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 5,
+      "column": "duct_height_in",
+      "page": 1,
+      "bbox": [
+        620,
+        981,
+        720,
+        1001
+      ],
+      "expected": "14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            509
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            259
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 5,
+      "column": "airflow_cfm",
+      "page": 1,
+      "bbox": [
+        720,
+        981,
+        810,
+        1001
+      ],
+      "expected": "585",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "585",
+          "word_ids": [
+            510
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "585",
+          "word_ids": [
+            273
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 5,
+      "column": "air_velocity_fpm",
+      "page": 1,
+      "bbox": [
+        810,
+        981,
+        930,
+        1001
+      ],
+      "expected": "334",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "334",
+          "word_ids": [
+            511
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "334",
+          "word_ids": [
+            287
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 5,
+      "column": "pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        930,
+        981,
+        1040,
+        1001
+      ],
+      "expected": "0.08",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.08",
+          "word_ids": [
+            512
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.08",
+          "word_ids": [
+            301
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 5,
+      "column": "dynamic_insertion_loss_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1040,
+        981,
+        1180,
+        1001
+      ],
+      "expected": "36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            513
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            315
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 5,
+      "column": "generated_noise_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1180,
+        981,
+        1335,
+        1001
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            514
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            329
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 5,
+      "column": "manufacturer_model",
+      "page": 1,
+      "bbox": [
+        1335,
+        981,
+        1460,
+        1001
+      ],
+      "expected": "PRICE/STC-55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            515
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            343
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 5,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        1460,
+        981,
+        1560,
+        1001
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            516
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            357
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 6,
+      "column": "quantity",
+      "page": 1,
+      "bbox": [
+        120,
+        1001,
+        175,
+        1021
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            487
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            187
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 6,
+      "column": "location_serves",
+      "page": 1,
+      "bbox": [
+        175,
+        1001,
+        525,
+        1021
+      ],
+      "expected": "GROUP REHEARSAL 123 - SUPPLY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 123 - SUPPLY",
+          "word_ids": [
+            488,
+            489,
+            490,
+            491,
+            492
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 123 - SUPPLY",
+          "word_ids": [
+            188,
+            189,
+            190,
+            191,
+            192
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 6,
+      "column": "duct_width_in",
+      "page": 1,
+      "bbox": [
+        525,
+        1001,
+        620,
+        1021
+      ],
+      "expected": "18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            493
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            246
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 6,
+      "column": "duct_height_in",
+      "page": 1,
+      "bbox": [
+        620,
+        1001,
+        720,
+        1021
+      ],
+      "expected": "14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            494
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            260
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 6,
+      "column": "airflow_cfm",
+      "page": 1,
+      "bbox": [
+        720,
+        1001,
+        810,
+        1021
+      ],
+      "expected": "745",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "745",
+          "word_ids": [
+            495
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "745",
+          "word_ids": [
+            274
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 6,
+      "column": "air_velocity_fpm",
+      "page": 1,
+      "bbox": [
+        810,
+        1001,
+        930,
+        1021
+      ],
+      "expected": "426",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "426",
+          "word_ids": [
+            496
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "426",
+          "word_ids": [
+            288
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 6,
+      "column": "pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        930,
+        1001,
+        1040,
+        1021
+      ],
+      "expected": "0.16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.16",
+          "word_ids": [
+            497
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.16",
+          "word_ids": [
+            302
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 6,
+      "column": "dynamic_insertion_loss_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1040,
+        1001,
+        1180,
+        1021
+      ],
+      "expected": "36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            498
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            316
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 6,
+      "column": "generated_noise_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1180,
+        1001,
+        1335,
+        1021
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            499
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            330
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 6,
+      "column": "manufacturer_model",
+      "page": 1,
+      "bbox": [
+        1335,
+        1001,
+        1460,
+        1021
+      ],
+      "expected": "PRICE/STC-55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            500
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            344
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 6,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        1460,
+        1001,
+        1560,
+        1021
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            501
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            358
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 7,
+      "column": "quantity",
+      "page": 1,
+      "bbox": [
+        120,
+        1021,
+        175,
+        1041
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            472
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            193
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 7,
+      "column": "location_serves",
+      "page": 1,
+      "bbox": [
+        175,
+        1021,
+        525,
+        1041
+      ],
+      "expected": "GROUP REHEARSAL 112/111 - SUPPLY/RETURN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 112/111 - SUPPLY/RETURN",
+          "word_ids": [
+            473,
+            474,
+            475,
+            476,
+            477
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 112/111 - SUPPLY/RETURN",
+          "word_ids": [
+            194,
+            195,
+            196,
+            197,
+            198
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 7,
+      "column": "duct_width_in",
+      "page": 1,
+      "bbox": [
+        525,
+        1021,
+        620,
+        1041
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            478
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            247
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 7,
+      "column": "duct_height_in",
+      "page": 1,
+      "bbox": [
+        620,
+        1021,
+        720,
+        1041
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            479
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            261
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 7,
+      "column": "airflow_cfm",
+      "page": 1,
+      "bbox": [
+        720,
+        1021,
+        810,
+        1041
+      ],
+      "expected": "535",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "535",
+          "word_ids": [
+            480
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "535",
+          "word_ids": [
+            275
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 7,
+      "column": "air_velocity_fpm",
+      "page": 1,
+      "bbox": [
+        810,
+        1021,
+        930,
+        1041
+      ],
+      "expected": "482",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "482",
+          "word_ids": [
+            481
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "482",
+          "word_ids": [
+            289
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 7,
+      "column": "pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        930,
+        1021,
+        1040,
+        1041
+      ],
+      "expected": "0.17",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.17",
+          "word_ids": [
+            482
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.17",
+          "word_ids": [
+            303
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 7,
+      "column": "dynamic_insertion_loss_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1040,
+        1021,
+        1180,
+        1041
+      ],
+      "expected": "36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            483
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            317
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 7,
+      "column": "generated_noise_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1180,
+        1021,
+        1335,
+        1041
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            484
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            331
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 7,
+      "column": "manufacturer_model",
+      "page": 1,
+      "bbox": [
+        1335,
+        1021,
+        1460,
+        1041
+      ],
+      "expected": "PRICE/STC-55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            485
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            345
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 7,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        1460,
+        1021,
+        1560,
+        1041
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            486
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            359
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 8,
+      "column": "quantity",
+      "page": 1,
+      "bbox": [
+        120,
+        1041,
+        175,
+        1062
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            457
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            199
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 8,
+      "column": "location_serves",
+      "page": 1,
+      "bbox": [
+        175,
+        1041,
+        525,
+        1062
+      ],
+      "expected": "GROUP REHEARSAL 112/113 - RETURN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 112/113 - RETURN",
+          "word_ids": [
+            458,
+            459,
+            460,
+            461,
+            462
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 112/113 - RETURN",
+          "word_ids": [
+            200,
+            201,
+            202,
+            203,
+            204
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 8,
+      "column": "duct_width_in",
+      "page": 1,
+      "bbox": [
+        525,
+        1041,
+        620,
+        1062
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            463
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            248
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 8,
+      "column": "duct_height_in",
+      "page": 1,
+      "bbox": [
+        620,
+        1041,
+        720,
+        1062
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            464
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            262
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 8,
+      "column": "airflow_cfm",
+      "page": 1,
+      "bbox": [
+        720,
+        1041,
+        810,
+        1062
+      ],
+      "expected": "385",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "385",
+          "word_ids": [
+            465
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "385",
+          "word_ids": [
+            276
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 8,
+      "column": "air_velocity_fpm",
+      "page": 1,
+      "bbox": [
+        810,
+        1041,
+        930,
+        1062
+      ],
+      "expected": "347",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "347",
+          "word_ids": [
+            466
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "347",
+          "word_ids": [
+            290
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 8,
+      "column": "pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        930,
+        1041,
+        1040,
+        1062
+      ],
+      "expected": "0.18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.18",
+          "word_ids": [
+            467
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.18",
+          "word_ids": [
+            304
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 8,
+      "column": "dynamic_insertion_loss_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1040,
+        1041,
+        1180,
+        1062
+      ],
+      "expected": "36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            468
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            318
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 8,
+      "column": "generated_noise_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1180,
+        1041,
+        1335,
+        1062
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            469
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            332
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 8,
+      "column": "manufacturer_model",
+      "page": 1,
+      "bbox": [
+        1335,
+        1041,
+        1460,
+        1062
+      ],
+      "expected": "PRICE/STC-55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            470
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            346
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 8,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        1460,
+        1041,
+        1560,
+        1062
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            471
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            360
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 9,
+      "column": "quantity",
+      "page": 1,
+      "bbox": [
+        120,
+        1062,
+        175,
+        1082
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            442
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            205
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 9,
+      "column": "location_serves",
+      "page": 1,
+      "bbox": [
+        175,
+        1062,
+        525,
+        1082
+      ],
+      "expected": "GROUP REHEARSAL 112/113 - SUPPLY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 112/113 - SUPPLY",
+          "word_ids": [
+            443,
+            444,
+            445,
+            446,
+            447
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 112/113 - SUPPLY",
+          "word_ids": [
+            206,
+            207,
+            208,
+            209,
+            210
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 9,
+      "column": "duct_width_in",
+      "page": 1,
+      "bbox": [
+        525,
+        1062,
+        620,
+        1082
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            448
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            249
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 9,
+      "column": "duct_height_in",
+      "page": 1,
+      "bbox": [
+        620,
+        1062,
+        720,
+        1082
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            449
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            263
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 9,
+      "column": "airflow_cfm",
+      "page": 1,
+      "bbox": [
+        720,
+        1062,
+        810,
+        1082
+      ],
+      "expected": "535",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "535",
+          "word_ids": [
+            450
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "535",
+          "word_ids": [
+            277
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 9,
+      "column": "air_velocity_fpm",
+      "page": 1,
+      "bbox": [
+        810,
+        1062,
+        930,
+        1082
+      ],
+      "expected": "482",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "482",
+          "word_ids": [
+            451
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "482",
+          "word_ids": [
+            291
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 9,
+      "column": "pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        930,
+        1062,
+        1040,
+        1082
+      ],
+      "expected": "0.17",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.17",
+          "word_ids": [
+            452
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.17",
+          "word_ids": [
+            305
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 9,
+      "column": "dynamic_insertion_loss_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1040,
+        1062,
+        1180,
+        1082
+      ],
+      "expected": "36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            453
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            319
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 9,
+      "column": "generated_noise_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1180,
+        1062,
+        1335,
+        1082
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            454
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            333
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 9,
+      "column": "manufacturer_model",
+      "page": 1,
+      "bbox": [
+        1335,
+        1062,
+        1460,
+        1082
+      ],
+      "expected": "PRICE/STC-55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            455
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            347
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 9,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        1460,
+        1062,
+        1560,
+        1082
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            456
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            361
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 10,
+      "column": "quantity",
+      "page": 1,
+      "bbox": [
+        120,
+        1082,
+        175,
+        1102
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            427
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            211
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 10,
+      "column": "location_serves",
+      "page": 1,
+      "bbox": [
+        175,
+        1082,
+        525,
+        1102
+      ],
+      "expected": "GROUP REHEARSAL 114/113 - SUPPLY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 114/113 - SUPPLY",
+          "word_ids": [
+            428,
+            429,
+            430,
+            431,
+            432
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 114/113 - SUPPLY",
+          "word_ids": [
+            212,
+            213,
+            214,
+            215,
+            216
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 10,
+      "column": "duct_width_in",
+      "page": 1,
+      "bbox": [
+        525,
+        1082,
+        620,
+        1102
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            433
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            250
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 10,
+      "column": "duct_height_in",
+      "page": 1,
+      "bbox": [
+        620,
+        1082,
+        720,
+        1102
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            434
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            264
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 10,
+      "column": "airflow_cfm",
+      "page": 1,
+      "bbox": [
+        720,
+        1082,
+        810,
+        1102
+      ],
+      "expected": "245",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            435
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "245",
+          "word_ids": [
+            278
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 10,
+      "column": "air_velocity_fpm",
+      "page": 1,
+      "bbox": [
+        810,
+        1082,
+        930,
+        1102
+      ],
+      "expected": "221",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "221",
+          "word_ids": [
+            436
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "221",
+          "word_ids": [
+            292
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 10,
+      "column": "pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        930,
+        1082,
+        1040,
+        1102
+      ],
+      "expected": "0.06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.06",
+          "word_ids": [
+            437
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.06",
+          "word_ids": [
+            306
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 10,
+      "column": "dynamic_insertion_loss_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1040,
+        1082,
+        1180,
+        1102
+      ],
+      "expected": "36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            438
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            320
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 10,
+      "column": "generated_noise_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1180,
+        1082,
+        1335,
+        1102
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            439
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            334
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 10,
+      "column": "manufacturer_model",
+      "page": 1,
+      "bbox": [
+        1335,
+        1082,
+        1460,
+        1102
+      ],
+      "expected": "PRICE/STC-55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            440
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            348
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 10,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        1460,
+        1082,
+        1560,
+        1102
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            441
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            362
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 11,
+      "column": "quantity",
+      "page": 1,
+      "bbox": [
+        120,
+        1102,
+        175,
+        1122
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            412
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            217
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 11,
+      "column": "location_serves",
+      "page": 1,
+      "bbox": [
+        175,
+        1102,
+        525,
+        1122
+      ],
+      "expected": "GROUP REHEARSAL 114/113 - RETURN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 114/113 - RETURN",
+          "word_ids": [
+            413,
+            414,
+            415,
+            416,
+            417
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 114/113 - RETURN",
+          "word_ids": [
+            218,
+            219,
+            220,
+            221,
+            222
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 11,
+      "column": "duct_width_in",
+      "page": 1,
+      "bbox": [
+        525,
+        1102,
+        620,
+        1122
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            418
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            251
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 11,
+      "column": "duct_height_in",
+      "page": 1,
+      "bbox": [
+        620,
+        1102,
+        720,
+        1122
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            419
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            265
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 11,
+      "column": "airflow_cfm",
+      "page": 1,
+      "bbox": [
+        720,
+        1102,
+        810,
+        1122
+      ],
+      "expected": "385",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "385",
+          "word_ids": [
+            420
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "385",
+          "word_ids": [
+            279
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 11,
+      "column": "air_velocity_fpm",
+      "page": 1,
+      "bbox": [
+        810,
+        1102,
+        930,
+        1122
+      ],
+      "expected": "347",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "347",
+          "word_ids": [
+            421
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "347",
+          "word_ids": [
+            293
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 11,
+      "column": "pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        930,
+        1102,
+        1040,
+        1122
+      ],
+      "expected": "0.08",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.08",
+          "word_ids": [
+            422
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.08",
+          "word_ids": [
+            307
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 11,
+      "column": "dynamic_insertion_loss_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1040,
+        1102,
+        1180,
+        1122
+      ],
+      "expected": "36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            423
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            321
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 11,
+      "column": "generated_noise_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1180,
+        1102,
+        1335,
+        1122
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            424
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            335
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 11,
+      "column": "manufacturer_model",
+      "page": 1,
+      "bbox": [
+        1335,
+        1102,
+        1460,
+        1122
+      ],
+      "expected": "PRICE/STC-55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            425
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            349
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 11,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        1460,
+        1102,
+        1560,
+        1122
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            426
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            363
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 12,
+      "column": "quantity",
+      "page": 1,
+      "bbox": [
+        120,
+        1122,
+        175,
+        1143
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            397
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            223
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 12,
+      "column": "location_serves",
+      "page": 1,
+      "bbox": [
+        175,
+        1122,
+        525,
+        1143
+      ],
+      "expected": "GROUP REHEARSAL 112/111 - SUPPLY/RETURN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 112/111 - SUPPLY/RETURN",
+          "word_ids": [
+            398,
+            399,
+            400,
+            401,
+            402
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 112/111 - SUPPLY/RETURN",
+          "word_ids": [
+            224,
+            225,
+            226,
+            227,
+            228
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 12,
+      "column": "duct_width_in",
+      "page": 1,
+      "bbox": [
+        525,
+        1122,
+        620,
+        1143
+      ],
+      "expected": "18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            403
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "18",
+          "word_ids": [
+            252
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 12,
+      "column": "duct_height_in",
+      "page": 1,
+      "bbox": [
+        620,
+        1122,
+        720,
+        1143
+      ],
+      "expected": "14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            404
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            266
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 12,
+      "column": "airflow_cfm",
+      "page": 1,
+      "bbox": [
+        720,
+        1122,
+        810,
+        1143
+      ],
+      "expected": "800",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "800",
+          "word_ids": [
+            405
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "800",
+          "word_ids": [
+            280
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 12,
+      "column": "air_velocity_fpm",
+      "page": 1,
+      "bbox": [
+        810,
+        1122,
+        930,
+        1143
+      ],
+      "expected": "457",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "457",
+          "word_ids": [
+            406
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "457",
+          "word_ids": [
+            294
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 12,
+      "column": "pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        930,
+        1122,
+        1040,
+        1143
+      ],
+      "expected": "0.16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.16",
+          "word_ids": [
+            407
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.16",
+          "word_ids": [
+            308
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 12,
+      "column": "dynamic_insertion_loss_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1040,
+        1122,
+        1180,
+        1143
+      ],
+      "expected": "36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            408
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            322
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 12,
+      "column": "generated_noise_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1180,
+        1122,
+        1335,
+        1143
+      ],
+      "expected": "21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            409
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            336
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 12,
+      "column": "manufacturer_model",
+      "page": 1,
+      "bbox": [
+        1335,
+        1122,
+        1460,
+        1143
+      ],
+      "expected": "PRICE/STC-55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            410
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            350
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 12,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        1460,
+        1122,
+        1560,
+        1143
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            411
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            364
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 13,
+      "column": "quantity",
+      "page": 1,
+      "bbox": [
+        120,
+        1143,
+        175,
+        1163
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            382
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            229
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 13,
+      "column": "location_serves",
+      "page": 1,
+      "bbox": [
+        175,
+        1143,
+        525,
+        1163
+      ],
+      "expected": "GROUP REHEARSAL 112/113 - SUPPLY/RETURN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 112/113 - SUPPLY/RETURN",
+          "word_ids": [
+            383,
+            384,
+            385,
+            386,
+            387
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 112/113 - SUPPLY/RETURN",
+          "word_ids": [
+            230,
+            231,
+            232,
+            233,
+            234
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 13,
+      "column": "duct_width_in",
+      "page": 1,
+      "bbox": [
+        525,
+        1143,
+        620,
+        1163
+      ],
+      "expected": "16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            388
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "16",
+          "word_ids": [
+            253
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 13,
+      "column": "duct_height_in",
+      "page": 1,
+      "bbox": [
+        620,
+        1143,
+        720,
+        1163
+      ],
+      "expected": "10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            389
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10",
+          "word_ids": [
+            267
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 13,
+      "column": "airflow_cfm",
+      "page": 1,
+      "bbox": [
+        720,
+        1143,
+        810,
+        1163
+      ],
+      "expected": "520",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "520",
+          "word_ids": [
+            390
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "520",
+          "word_ids": [
+            281
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 13,
+      "column": "air_velocity_fpm",
+      "page": 1,
+      "bbox": [
+        810,
+        1143,
+        930,
+        1163
+      ],
+      "expected": "468",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "468",
+          "word_ids": [
+            391
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "468",
+          "word_ids": [
+            295
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 13,
+      "column": "pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        930,
+        1143,
+        1040,
+        1163
+      ],
+      "expected": "0.16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.16",
+          "word_ids": [
+            392
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.16",
+          "word_ids": [
+            309
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 13,
+      "column": "dynamic_insertion_loss_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1040,
+        1143,
+        1180,
+        1163
+      ],
+      "expected": "36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            393
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            323
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 13,
+      "column": "generated_noise_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1180,
+        1143,
+        1335,
+        1163
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            394
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            337
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 13,
+      "column": "manufacturer_model",
+      "page": 1,
+      "bbox": [
+        1335,
+        1143,
+        1460,
+        1163
+      ],
+      "expected": "PRICE/STC-55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            395
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            351
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 13,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        1460,
+        1143,
+        1560,
+        1163
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            396
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            365
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 14,
+      "column": "quantity",
+      "page": 1,
+      "bbox": [
+        120,
+        1163,
+        175,
+        1183
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            367
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            235
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 14,
+      "column": "location_serves",
+      "page": 1,
+      "bbox": [
+        175,
+        1163,
+        525,
+        1183
+      ],
+      "expected": "GROUP REHEARSAL 114/113 - SUPPLY/RETURN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 114/113 - SUPPLY/RETURN",
+          "word_ids": [
+            368,
+            369,
+            370,
+            371,
+            372
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "GROUP REHEARSAL 114/113 - SUPPLY/RETURN",
+          "word_ids": [
+            236,
+            237,
+            238,
+            239,
+            240
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 14,
+      "column": "duct_width_in",
+      "page": 1,
+      "bbox": [
+        525,
+        1163,
+        620,
+        1183
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            373
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            254
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 14,
+      "column": "duct_height_in",
+      "page": 1,
+      "bbox": [
+        620,
+        1163,
+        720,
+        1183
+      ],
+      "expected": "8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            374
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8",
+          "word_ids": [
+            268
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 14,
+      "column": "airflow_cfm",
+      "page": 1,
+      "bbox": [
+        720,
+        1163,
+        810,
+        1183
+      ],
+      "expected": "260",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "260",
+          "word_ids": [
+            375
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "260",
+          "word_ids": [
+            282
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 14,
+      "column": "air_velocity_fpm",
+      "page": 1,
+      "bbox": [
+        810,
+        1163,
+        930,
+        1183
+      ],
+      "expected": "390",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "390",
+          "word_ids": [
+            376
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "390",
+          "word_ids": [
+            296
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 14,
+      "column": "pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        930,
+        1163,
+        1040,
+        1183
+      ],
+      "expected": "0.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.1",
+          "word_ids": [
+            377
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.1",
+          "word_ids": [
+            310
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 14,
+      "column": "dynamic_insertion_loss_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1040,
+        1163,
+        1180,
+        1183
+      ],
+      "expected": "36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            378
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            324
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 14,
+      "column": "generated_noise_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1180,
+        1163,
+        1335,
+        1183
+      ],
+      "expected": "21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            379
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            338
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 14,
+      "column": "manufacturer_model",
+      "page": 1,
+      "bbox": [
+        1335,
+        1163,
+        1460,
+        1183
+      ],
+      "expected": "PRICE/STC-55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            380
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            352
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 14,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        1460,
+        1163,
+        1560,
+        1183
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            381
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            366
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 15,
+      "column": "quantity",
+      "page": 1,
+      "bbox": [
+        120,
+        1213,
+        175,
+        1233
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            350
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            369
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 15,
+      "column": "location_serves",
+      "page": 1,
+      "bbox": [
+        175,
+        1213,
+        525,
+        1233
+      ],
+      "expected": "ROCK REHEARSAL 218 - SUPPLY/RETURN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "ROCK REHEARSAL 218 - SUPPLY/RETURN",
+          "word_ids": [
+            351,
+            352,
+            353,
+            354,
+            355
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "ROCK REHEARSAL 218 - SUPPLY/RETURN",
+          "word_ids": [
+            370,
+            371,
+            372,
+            373,
+            374
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 15,
+      "column": "duct_width_in",
+      "page": 1,
+      "bbox": [
+        525,
+        1213,
+        620,
+        1233
+      ],
+      "expected": "14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            356
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            380
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 15,
+      "column": "duct_height_in",
+      "page": 1,
+      "bbox": [
+        620,
+        1213,
+        720,
+        1233
+      ],
+      "expected": "14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            357
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "14",
+          "word_ids": [
+            382
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 15,
+      "column": "airflow_cfm",
+      "page": 1,
+      "bbox": [
+        720,
+        1213,
+        810,
+        1233
+      ],
+      "expected": "540",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "540",
+          "word_ids": [
+            358
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "540",
+          "word_ids": [
+            384
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 15,
+      "column": "air_velocity_fpm",
+      "page": 1,
+      "bbox": [
+        810,
+        1213,
+        930,
+        1233
+      ],
+      "expected": "397",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "397",
+          "word_ids": [
+            359
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "397",
+          "word_ids": [
+            386
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 15,
+      "column": "pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        930,
+        1213,
+        1040,
+        1233
+      ],
+      "expected": "0.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.1",
+          "word_ids": [
+            360
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.1",
+          "word_ids": [
+            388
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 15,
+      "column": "dynamic_insertion_loss_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1040,
+        1213,
+        1180,
+        1233
+      ],
+      "expected": "36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            361
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            390
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 15,
+      "column": "generated_noise_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1180,
+        1213,
+        1335,
+        1233
+      ],
+      "expected": "21",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            362
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "21",
+          "word_ids": [
+            392
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 15,
+      "column": "manufacturer_model",
+      "page": 1,
+      "bbox": [
+        1335,
+        1213,
+        1460,
+        1233
+      ],
+      "expected": "PRICE/STC-55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            363
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            394
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 15,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        1460,
+        1213,
+        1560,
+        1233
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            364
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            396
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 16,
+      "column": "quantity",
+      "page": 1,
+      "bbox": [
+        120,
+        1233,
+        175,
+        1253
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            336
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            375
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 16,
+      "column": "location_serves",
+      "page": 1,
+      "bbox": [
+        175,
+        1233,
+        525,
+        1253
+      ],
+      "expected": "VEST 212 - SUPPLY/RETURN",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "VEST 212 - SUPPLY/RETURN",
+          "word_ids": [
+            337,
+            338,
+            339,
+            340
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "VEST 212 - SUPPLY/RETURN",
+          "word_ids": [
+            376,
+            377,
+            378,
+            379
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 16,
+      "column": "duct_width_in",
+      "page": 1,
+      "bbox": [
+        525,
+        1233,
+        620,
+        1253
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            341
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            381
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 16,
+      "column": "duct_height_in",
+      "page": 1,
+      "bbox": [
+        620,
+        1233,
+        720,
+        1253
+      ],
+      "expected": "12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            342
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "12",
+          "word_ids": [
+            383
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 16,
+      "column": "airflow_cfm",
+      "page": 1,
+      "bbox": [
+        720,
+        1233,
+        810,
+        1253
+      ],
+      "expected": "330",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "330",
+          "word_ids": [
+            343
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "330",
+          "word_ids": [
+            385
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 16,
+      "column": "air_velocity_fpm",
+      "page": 1,
+      "bbox": [
+        810,
+        1233,
+        930,
+        1253
+      ],
+      "expected": "330",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "330",
+          "word_ids": [
+            344
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "330",
+          "word_ids": [
+            387
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 16,
+      "column": "pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        930,
+        1233,
+        1040,
+        1253
+      ],
+      "expected": "0.08",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.08",
+          "word_ids": [
+            345
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.08",
+          "word_ids": [
+            389
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 16,
+      "column": "dynamic_insertion_loss_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1040,
+        1233,
+        1180,
+        1253
+      ],
+      "expected": "36",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            346
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "36",
+          "word_ids": [
+            391
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 16,
+      "column": "generated_noise_db_at_125hz",
+      "page": 1,
+      "bbox": [
+        1180,
+        1233,
+        1335,
+        1253
+      ],
+      "expected": "20",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            347
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "20",
+          "word_ids": [
+            393
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 16,
+      "column": "manufacturer_model",
+      "page": 1,
+      "bbox": [
+        1335,
+        1233,
+        1460,
+        1253
+      ],
+      "expected": "PRICE/STC-55",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            348
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "PRICE/STC-55",
+          "word_ids": [
+            395
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "row": 16,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        1460,
+        1233,
+        1560,
+        1253
+      ],
+      "expected": "1,2,3,4,5,6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            349
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2,3,4,5,6",
+          "word_ids": [
+            397
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "header": "NOISE CONTROL DUCT SILENCER SCHEDULE",
+      "page": 1,
+      "bbox": [
+        120,
+        780,
+        470,
+        805
+      ],
+      "engine": "mupdf",
+      "actual": "NOISE CONTROL DUCT SILENCER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M505-DUCT-SILENCER",
+      "header": "NOISE CONTROL DUCT SILENCER SCHEDULE",
+      "page": 1,
+      "bbox": [
+        120,
+        780,
+        470,
+        805
+      ],
+      "engine": "poppler",
+      "actual": "NOISE CONTROL DUCT SILENCER SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 1,
+      "column": "mark",
+      "page": 1,
+      "bbox": [
+        1570,
+        878,
+        1660,
+        897
+      ],
+      "expected": "FCU 1-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU 1-3",
+          "word_ids": [
+            755,
+            756
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU 1-3",
+          "word_ids": [
+            408,
+            409
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 1,
+      "column": "fan_type",
+      "page": 1,
+      "bbox": [
+        1660,
+        878,
+        1770,
+        897
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            757
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            422
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 1,
+      "column": "ducts_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        1770,
+        878,
+        1885,
+        897
+      ],
+      "expected": "0.33",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.33",
+          "word_ids": [
+            758
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.33",
+          "word_ids": [
+            429
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 1,
+      "column": "duct_silencer_pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        1885,
+        878,
+        2025,
+        897
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            759
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            436
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 1,
+      "column": "total_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        2025,
+        878,
+        2160,
+        897
+      ],
+      "expected": "0.33",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.33",
+          "word_ids": [
+            760
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.33",
+          "word_ids": [
+            443
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 1,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        2160,
+        878,
+        2240,
+        897
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            761
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            450
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 2,
+      "column": "mark",
+      "page": 1,
+      "bbox": [
+        1570,
+        899,
+        1660,
+        918
+      ],
+      "expected": "FCU 1-4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU 1-4",
+          "word_ids": [
+            748,
+            749
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU 1-4",
+          "word_ids": [
+            410,
+            411
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 2,
+      "column": "fan_type",
+      "page": 1,
+      "bbox": [
+        1660,
+        899,
+        1770,
+        918
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            750
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            423
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 2,
+      "column": "ducts_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        1770,
+        899,
+        1885,
+        918
+      ],
+      "expected": "0.51",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.51",
+          "word_ids": [
+            751
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.51",
+          "word_ids": [
+            430
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 2,
+      "column": "duct_silencer_pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        1885,
+        899,
+        2025,
+        918
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            752
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            437
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 2,
+      "column": "total_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        2025,
+        899,
+        2160,
+        918
+      ],
+      "expected": "0.51",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.51",
+          "word_ids": [
+            753
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.51",
+          "word_ids": [
+            444
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 2,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        2160,
+        899,
+        2240,
+        918
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            754
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            451
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 3,
+      "column": "mark",
+      "page": 1,
+      "bbox": [
+        1570,
+        920,
+        1660,
+        939
+      ],
+      "expected": "FCU 1-5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU 1-5",
+          "word_ids": [
+            741,
+            742
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU 1-5",
+          "word_ids": [
+            412,
+            413
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 3,
+      "column": "fan_type",
+      "page": 1,
+      "bbox": [
+        1660,
+        920,
+        1770,
+        939
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            743
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            424
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 3,
+      "column": "ducts_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        1770,
+        920,
+        1885,
+        939
+      ],
+      "expected": "0.45",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.45",
+          "word_ids": [
+            744
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.45",
+          "word_ids": [
+            431
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 3,
+      "column": "duct_silencer_pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        1885,
+        920,
+        2025,
+        939
+      ],
+      "expected": "0.84",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.84",
+          "word_ids": [
+            745
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.84",
+          "word_ids": [
+            438
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 3,
+      "column": "total_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        2025,
+        920,
+        2160,
+        939
+      ],
+      "expected": "1.29",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.29",
+          "word_ids": [
+            746
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.29",
+          "word_ids": [
+            445
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 3,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        2160,
+        920,
+        2240,
+        939
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            747
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            452
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 4,
+      "column": "mark",
+      "page": 1,
+      "bbox": [
+        1570,
+        941,
+        1660,
+        960
+      ],
+      "expected": "FCU 1-6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU 1-6",
+          "word_ids": [
+            734,
+            735
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU 1-6",
+          "word_ids": [
+            414,
+            415
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 4,
+      "column": "fan_type",
+      "page": 1,
+      "bbox": [
+        1660,
+        941,
+        1770,
+        960
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            736
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            425
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 4,
+      "column": "ducts_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        1770,
+        941,
+        1885,
+        960
+      ],
+      "expected": "0.09",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.09",
+          "word_ids": [
+            737
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.09",
+          "word_ids": [
+            432
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 4,
+      "column": "duct_silencer_pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        1885,
+        941,
+        2025,
+        960
+      ],
+      "expected": "0.15",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.15",
+          "word_ids": [
+            738
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.15",
+          "word_ids": [
+            439
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 4,
+      "column": "total_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        2025,
+        941,
+        2160,
+        960
+      ],
+      "expected": "0.24",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.24",
+          "word_ids": [
+            739
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.24",
+          "word_ids": [
+            446
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 4,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        2160,
+        941,
+        2240,
+        960
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            740
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            453
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 5,
+      "column": "mark",
+      "page": 1,
+      "bbox": [
+        1570,
+        962,
+        1660,
+        981
+      ],
+      "expected": "FCU 1-7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU 1-7",
+          "word_ids": [
+            727,
+            728
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU 1-7",
+          "word_ids": [
+            416,
+            417
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 5,
+      "column": "fan_type",
+      "page": 1,
+      "bbox": [
+        1660,
+        962,
+        1770,
+        981
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            729
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            426
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 5,
+      "column": "ducts_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        1770,
+        962,
+        1885,
+        981
+      ],
+      "expected": "0.31",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.31",
+          "word_ids": [
+            730
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.31",
+          "word_ids": [
+            433
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 5,
+      "column": "duct_silencer_pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        1885,
+        962,
+        2025,
+        981
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            731
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            440
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 5,
+      "column": "total_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        2025,
+        962,
+        2160,
+        981
+      ],
+      "expected": "0.31",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.31",
+          "word_ids": [
+            732
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.31",
+          "word_ids": [
+            447
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 5,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        2160,
+        962,
+        2240,
+        981
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            733
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            454
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 6,
+      "column": "mark",
+      "page": 1,
+      "bbox": [
+        1570,
+        983,
+        1660,
+        1002
+      ],
+      "expected": "FCU 1-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU 1-8",
+          "word_ids": [
+            720,
+            721
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU 1-8",
+          "word_ids": [
+            418,
+            419
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 6,
+      "column": "fan_type",
+      "page": 1,
+      "bbox": [
+        1660,
+        983,
+        1770,
+        1002
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            722
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            427
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 6,
+      "column": "ducts_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        1770,
+        983,
+        1885,
+        1002
+      ],
+      "expected": "0.38",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.38",
+          "word_ids": [
+            723
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.38",
+          "word_ids": [
+            434
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 6,
+      "column": "duct_silencer_pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        1885,
+        983,
+        2025,
+        1002
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            724
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            441
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 6,
+      "column": "total_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        2025,
+        983,
+        2160,
+        1002
+      ],
+      "expected": "0.38",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.38",
+          "word_ids": [
+            725
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.38",
+          "word_ids": [
+            448
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 6,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        2160,
+        983,
+        2240,
+        1002
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            726
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            455
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 7,
+      "column": "mark",
+      "page": 1,
+      "bbox": [
+        1570,
+        1004,
+        1660,
+        1023
+      ],
+      "expected": "FCU 1-9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU 1-9",
+          "word_ids": [
+            713,
+            714
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU 1-9",
+          "word_ids": [
+            420,
+            421
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 7,
+      "column": "fan_type",
+      "page": 1,
+      "bbox": [
+        1660,
+        1004,
+        1770,
+        1023
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            715
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            428
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 7,
+      "column": "ducts_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        1770,
+        1004,
+        1885,
+        1023
+      ],
+      "expected": "0.32",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.32",
+          "word_ids": [
+            716
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.32",
+          "word_ids": [
+            435
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 7,
+      "column": "duct_silencer_pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        1885,
+        1004,
+        2025,
+        1023
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            717
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            442
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 7,
+      "column": "total_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        2025,
+        1004,
+        2160,
+        1023
+      ],
+      "expected": "0.32",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.32",
+          "word_ids": [
+            718
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.32",
+          "word_ids": [
+            449
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 7,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        2160,
+        1004,
+        2240,
+        1023
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            719
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            456
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 8,
+      "column": "mark",
+      "page": 1,
+      "bbox": [
+        1570,
+        1046,
+        1660,
+        1064
+      ],
+      "expected": "FCU 2-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU 2-1",
+          "word_ids": [
+            706,
+            707
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU 2-1",
+          "word_ids": [
+            457,
+            458
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 8,
+      "column": "fan_type",
+      "page": 1,
+      "bbox": [
+        1660,
+        1046,
+        1770,
+        1064
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            708
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            465
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 8,
+      "column": "ducts_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        1770,
+        1046,
+        1885,
+        1064
+      ],
+      "expected": "0.22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.22",
+          "word_ids": [
+            709
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.22",
+          "word_ids": [
+            469
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 8,
+      "column": "duct_silencer_pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        1885,
+        1046,
+        2025,
+        1064
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            710
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            473
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 8,
+      "column": "total_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        2025,
+        1046,
+        2160,
+        1064
+      ],
+      "expected": "0.22",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.22",
+          "word_ids": [
+            711
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.22",
+          "word_ids": [
+            477
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 8,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        2160,
+        1046,
+        2240,
+        1064
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            712
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            481
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 9,
+      "column": "mark",
+      "page": 1,
+      "bbox": [
+        1570,
+        1067,
+        1660,
+        1085
+      ],
+      "expected": "FCU 2-8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU 2-8",
+          "word_ids": [
+            699,
+            700
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU 2-8",
+          "word_ids": [
+            459,
+            460
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 9,
+      "column": "fan_type",
+      "page": 1,
+      "bbox": [
+        1660,
+        1067,
+        1770,
+        1085
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            701
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            466
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 9,
+      "column": "ducts_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        1770,
+        1067,
+        1885,
+        1085
+      ],
+      "expected": "0.56",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.56",
+          "word_ids": [
+            702
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.56",
+          "word_ids": [
+            470
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 9,
+      "column": "duct_silencer_pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        1885,
+        1067,
+        2025,
+        1085
+      ],
+      "expected": "0.16",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.16",
+          "word_ids": [
+            703
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.16",
+          "word_ids": [
+            474
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 9,
+      "column": "total_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        2025,
+        1067,
+        2160,
+        1085
+      ],
+      "expected": "0.72",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.72",
+          "word_ids": [
+            704
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.72",
+          "word_ids": [
+            478
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 9,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        2160,
+        1067,
+        2240,
+        1085
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            705
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            482
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 10,
+      "column": "mark",
+      "page": 1,
+      "bbox": [
+        1570,
+        1088,
+        1660,
+        1106
+      ],
+      "expected": "FCU 2-13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU 2-13",
+          "word_ids": [
+            692,
+            693
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU 2-13",
+          "word_ids": [
+            461,
+            462
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 10,
+      "column": "fan_type",
+      "page": 1,
+      "bbox": [
+        1660,
+        1088,
+        1770,
+        1106
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            694
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            467
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 10,
+      "column": "ducts_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        1770,
+        1088,
+        1885,
+        1106
+      ],
+      "expected": "0.67",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.67",
+          "word_ids": [
+            695
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.67",
+          "word_ids": [
+            471
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 10,
+      "column": "duct_silencer_pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        1885,
+        1088,
+        2025,
+        1106
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            696
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            475
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 10,
+      "column": "total_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        2025,
+        1088,
+        2160,
+        1106
+      ],
+      "expected": "0.67",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.67",
+          "word_ids": [
+            697
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.67",
+          "word_ids": [
+            479
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 10,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        2160,
+        1088,
+        2240,
+        1106
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            698
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            483
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 11,
+      "column": "mark",
+      "page": 1,
+      "bbox": [
+        1570,
+        1109,
+        1660,
+        1127
+      ],
+      "expected": "FCU 2-14",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU 2-14",
+          "word_ids": [
+            685,
+            686
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU 2-14",
+          "word_ids": [
+            463,
+            464
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 11,
+      "column": "fan_type",
+      "page": 1,
+      "bbox": [
+        1660,
+        1109,
+        1770,
+        1127
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            687
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            468
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 11,
+      "column": "ducts_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        1770,
+        1109,
+        1885,
+        1127
+      ],
+      "expected": "0.25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.25",
+          "word_ids": [
+            688
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.25",
+          "word_ids": [
+            472
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 11,
+      "column": "duct_silencer_pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        1885,
+        1109,
+        2025,
+        1127
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            689
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            476
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 11,
+      "column": "total_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        2025,
+        1109,
+        2160,
+        1127
+      ],
+      "expected": "0.25",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.25",
+          "word_ids": [
+            690
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.25",
+          "word_ids": [
+            480
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 11,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        2160,
+        1109,
+        2240,
+        1127
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            691
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            484
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 12,
+      "column": "mark",
+      "page": 1,
+      "bbox": [
+        1570,
+        1152,
+        1660,
+        1168
+      ],
+      "expected": "DOAS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAS-1",
+          "word_ids": [
+            679
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAS-1",
+          "word_ids": [
+            485
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 12,
+      "column": "fan_type",
+      "page": 1,
+      "bbox": [
+        1660,
+        1152,
+        1770,
+        1168
+      ],
+      "expected": "SUPPLY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY",
+          "word_ids": [
+            680
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY",
+          "word_ids": [
+            486
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 12,
+      "column": "ducts_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        1770,
+        1152,
+        1885,
+        1168
+      ],
+      "expected": "0.42",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.42",
+          "word_ids": [
+            681
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.42",
+          "word_ids": [
+            487
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 12,
+      "column": "duct_silencer_pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        1885,
+        1152,
+        2025,
+        1168
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            682
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            488
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 12,
+      "column": "total_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        2025,
+        1152,
+        2160,
+        1168
+      ],
+      "expected": "0.42",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.42",
+          "word_ids": [
+            683
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.42",
+          "word_ids": [
+            489
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 12,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        2160,
+        1152,
+        2240,
+        1168
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            684
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            537
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 13,
+      "column": "mark",
+      "page": 1,
+      "bbox": [
+        1570,
+        1173,
+        1660,
+        1189
+      ],
+      "expected": "DOAS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAS-2",
+          "word_ids": [
+            673
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAS-2",
+          "word_ids": [
+            490
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 13,
+      "column": "fan_type",
+      "page": 1,
+      "bbox": [
+        1660,
+        1173,
+        1770,
+        1189
+      ],
+      "expected": "SUPPLY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY",
+          "word_ids": [
+            674
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY",
+          "word_ids": [
+            491
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 13,
+      "column": "ducts_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        1770,
+        1173,
+        1885,
+        1189
+      ],
+      "expected": "0.18",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.18",
+          "word_ids": [
+            675
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.18",
+          "word_ids": [
+            492
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 13,
+      "column": "duct_silencer_pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        1885,
+        1173,
+        2025,
+        1189
+      ],
+      "expected": "0.72",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.72",
+          "word_ids": [
+            676
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.72",
+          "word_ids": [
+            493
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 13,
+      "column": "total_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        2025,
+        1173,
+        2160,
+        1189
+      ],
+      "expected": "0.90",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.90",
+          "word_ids": [
+            677
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.90",
+          "word_ids": [
+            494
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 13,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        2160,
+        1173,
+        2240,
+        1189
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            678
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            538
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 14,
+      "column": "mark",
+      "page": 1,
+      "bbox": [
+        1570,
+        1194,
+        1660,
+        1210
+      ],
+      "expected": "DOAS-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAS-3",
+          "word_ids": [
+            667
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAS-3",
+          "word_ids": [
+            495
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 14,
+      "column": "fan_type",
+      "page": 1,
+      "bbox": [
+        1660,
+        1194,
+        1770,
+        1210
+      ],
+      "expected": "SUPPLY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "SUPPLY",
+          "word_ids": [
+            668
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "SUPPLY",
+          "word_ids": [
+            496
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 14,
+      "column": "ducts_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        1770,
+        1194,
+        1885,
+        1210
+      ],
+      "expected": "0.34",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.34",
+          "word_ids": [
+            669
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.34",
+          "word_ids": [
+            497
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 14,
+      "column": "duct_silencer_pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        1885,
+        1194,
+        2025,
+        1210
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            670
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            498
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 14,
+      "column": "total_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        2025,
+        1194,
+        2160,
+        1210
+      ],
+      "expected": "0.34",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.34",
+          "word_ids": [
+            671
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.34",
+          "word_ids": [
+            499
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 14,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        2160,
+        1194,
+        2240,
+        1210
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            672
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            539
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 15,
+      "column": "mark",
+      "page": 1,
+      "bbox": [
+        1570,
+        1215,
+        1660,
+        1231
+      ],
+      "expected": "DOAS-1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAS-1",
+          "word_ids": [
+            661
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAS-1",
+          "word_ids": [
+            500
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 15,
+      "column": "fan_type",
+      "page": 1,
+      "bbox": [
+        1660,
+        1215,
+        1770,
+        1231
+      ],
+      "expected": "EXHAUST",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST",
+          "word_ids": [
+            662
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST",
+          "word_ids": [
+            501
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 15,
+      "column": "ducts_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        1770,
+        1215,
+        1885,
+        1231
+      ],
+      "expected": "0.79",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.79",
+          "word_ids": [
+            663
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.79",
+          "word_ids": [
+            502
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 15,
+      "column": "duct_silencer_pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        1885,
+        1215,
+        2025,
+        1231
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            664
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            503
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 15,
+      "column": "total_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        2025,
+        1215,
+        2160,
+        1231
+      ],
+      "expected": "0.79",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.79",
+          "word_ids": [
+            665
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.79",
+          "word_ids": [
+            504
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 15,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        2160,
+        1215,
+        2240,
+        1231
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            666
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            540
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 16,
+      "column": "mark",
+      "page": 1,
+      "bbox": [
+        1570,
+        1236,
+        1660,
+        1252
+      ],
+      "expected": "DOAS-2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAS-2",
+          "word_ids": [
+            655
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAS-2",
+          "word_ids": [
+            505
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 16,
+      "column": "fan_type",
+      "page": 1,
+      "bbox": [
+        1660,
+        1236,
+        1770,
+        1252
+      ],
+      "expected": "EXHAUST",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST",
+          "word_ids": [
+            656
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST",
+          "word_ids": [
+            506
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 16,
+      "column": "ducts_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        1770,
+        1236,
+        1885,
+        1252
+      ],
+      "expected": "0.39",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.39",
+          "word_ids": [
+            657
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.39",
+          "word_ids": [
+            507
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 16,
+      "column": "duct_silencer_pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        1885,
+        1236,
+        2025,
+        1252
+      ],
+      "expected": "0.67",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.67",
+          "word_ids": [
+            658
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.67",
+          "word_ids": [
+            508
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 16,
+      "column": "total_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        2025,
+        1236,
+        2160,
+        1252
+      ],
+      "expected": "1.06",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.06",
+          "word_ids": [
+            659
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.06",
+          "word_ids": [
+            509
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 16,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        2160,
+        1236,
+        2240,
+        1252
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            660
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            541
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 17,
+      "column": "mark",
+      "page": 1,
+      "bbox": [
+        1570,
+        1257,
+        1660,
+        1274
+      ],
+      "expected": "DOAS-3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAS-3",
+          "word_ids": [
+            649
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAS-3",
+          "word_ids": [
+            510
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 17,
+      "column": "fan_type",
+      "page": 1,
+      "bbox": [
+        1660,
+        1257,
+        1770,
+        1274
+      ],
+      "expected": "EXHAUST",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "EXHAUST",
+          "word_ids": [
+            650
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "EXHAUST",
+          "word_ids": [
+            511
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 17,
+      "column": "ducts_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        1770,
+        1257,
+        1885,
+        1274
+      ],
+      "expected": "0.88",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.88",
+          "word_ids": [
+            651
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.88",
+          "word_ids": [
+            512
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 17,
+      "column": "duct_silencer_pressure_drop_in_wg",
+      "page": 1,
+      "bbox": [
+        1885,
+        1257,
+        2025,
+        1274
+      ],
+      "expected": "-",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            652
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "-",
+          "word_ids": [
+            513
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 17,
+      "column": "total_esp_in_wg",
+      "page": 1,
+      "bbox": [
+        2025,
+        1257,
+        2160,
+        1274
+      ],
+      "expected": "0.88",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.88",
+          "word_ids": [
+            653
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.88",
+          "word_ids": [
+            514
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "row": 17,
+      "column": "notes",
+      "page": 1,
+      "bbox": [
+        2160,
+        1257,
+        2240,
+        1274
+      ],
+      "expected": "1,2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            654
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,2",
+          "word_ids": [
+            542
+          ]
+        }
+      }
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "header": "EXTERNAL STATIC PRESSURE SCHEDULE",
+      "page": 1,
+      "bbox": [
+        1570,
+        780,
+        1900,
+        805
+      ],
+      "engine": "mupdf",
+      "actual": "EXTERNAL STATIC PRESSURE SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "M505-EXTERNAL-STATIC-PRESSURE",
+      "header": "EXTERNAL STATIC PRESSURE SCHEDULE",
+      "page": 1,
+      "bbox": [
+        1570,
+        780,
+        1900,
+        805
+      ],
+      "engine": "poppler",
+      "actual": "EXTERNAL STATIC PRESSURE SCHEDULE",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "m505-duct-silencer-row-count",
+      "actual": 16,
+      "expected": 16,
+      "pass": true
+    },
+    {
+      "id": "m505-external-static-pressure-row-count",
+      "actual": 17,
+      "expected": 17,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

@@ -1,0 +1,324 @@
+{
+  "document_id": "03__vol1__27",
+  "module_role": "Exact E-702 White Sturgeon PLC I/O list. Each row is an equipment/control-record I/O declaration rather than an inferred field-device expansion. The normalized point_name key preserves the literal ACTION column because this source prints no separate point-name column.",
+  "source_sheet": "E-702",
+  "source_page": 38,
+  "source_column_mapping": {
+    "tag": "TAG",
+    "point_name": "ACTION; E-702 does not print a separate point-name column.",
+    "io_count_columns": "ANALOG INPUT/OUTPUT, DIGITAL INPUT/OUTPUT, and POWER 24VDC"
+  },
+  "tables": [
+    {
+      "id": "E702-WHITE-STURGEON-PLC-IO-LIST",
+      "page": 38,
+      "sheet": "E-702",
+      "title": "IO LIST WHITE STURGEON PLC",
+      "classification": "Literal PLC I/O device/control record",
+      "columns": "tag|analog_input|analog_output|digital_input|digital_output|power_24vdc|communication_protocol|primary_display|primary_display_units|secondary_display|secondary_display_units|point_name|cable|conduit",
+      "x_edges": [
+        388,
+        525,
+        568,
+        611,
+        656,
+        703,
+        749,
+        900,
+        987,
+        1056,
+        1124,
+        1197,
+        1825,
+        2098,
+        2165
+      ],
+      "y_ranges": [
+        [
+          115.91,
+          130.51
+        ],
+        [
+          131.09,
+          145.69
+        ],
+        [
+          146.27,
+          160.87
+        ],
+        [
+          161.45,
+          176.05
+        ],
+        [
+          176.63,
+          191.23
+        ],
+        [
+          191.81,
+          206.41
+        ],
+        [
+          206.99,
+          221.59
+        ],
+        [
+          222.17,
+          236.77
+        ],
+        [
+          237.35,
+          251.95
+        ],
+        [
+          252.53,
+          267.13
+        ],
+        [
+          267.71,
+          282.31
+        ],
+        [
+          282.89,
+          297.49
+        ],
+        [
+          298.07,
+          312.67
+        ],
+        [
+          313.25,
+          327.85
+        ],
+        [
+          328.43,
+          343.03
+        ],
+        [
+          343.61,
+          358.21
+        ],
+        [
+          358.79,
+          373.39
+        ],
+        [
+          373.97,
+          388.57
+        ],
+        [
+          389.15,
+          403.75
+        ],
+        [
+          404.33,
+          418.93
+        ],
+        [
+          419.51,
+          434.11
+        ],
+        [
+          434.69,
+          449.29
+        ],
+        [
+          449.87,
+          464.47
+        ],
+        [
+          465.05,
+          479.65
+        ],
+        [
+          480.23,
+          494.83
+        ],
+        [
+          495.41,
+          510.01
+        ],
+        [
+          510.59,
+          525.19
+        ],
+        [
+          525.77,
+          540.37
+        ],
+        [
+          540.95,
+          555.55
+        ],
+        [
+          556.13,
+          570.73
+        ],
+        [
+          571.31,
+          585.91
+        ],
+        [
+          586.49,
+          601.09
+        ],
+        [
+          601.67,
+          616.27
+        ],
+        [
+          616.85,
+          631.45
+        ],
+        [
+          632.03,
+          646.63
+        ],
+        [
+          647.21,
+          661.81
+        ],
+        [
+          662.39,
+          676.99
+        ],
+        [
+          677.57,
+          692.17
+        ],
+        [
+          692.75,
+          707.35
+        ],
+        [
+          707.93,
+          722.53
+        ],
+        [
+          723.11,
+          737.71
+        ],
+        [
+          738.29,
+          752.89
+        ],
+        [
+          753.47,
+          768.07
+        ],
+        [
+          768.65,
+          783.25
+        ],
+        [
+          783.83,
+          798.43
+        ],
+        [
+          799.01,
+          813.61
+        ],
+        [
+          814.19,
+          828.79
+        ],
+        [
+          829.37,
+          843.97
+        ],
+        [
+          844.55,
+          859.15
+        ],
+        [
+          859.73,
+          874.33
+        ],
+        [
+          874.91,
+          889.51
+        ],
+        [
+          890.09,
+          904.69
+        ]
+      ],
+      "rows": [
+        "HWP-1||1|1|1||ETHERNET/IP|STATUS|ON/OFF|PUMP SPEED|RPM|START/STOP PUMP, MOTOR RUN STATUS, MOTOR CONTROL, & FEEDBACK|(4) 1/C #16 AWG, (1) 1/PR/SH #18 AWG, (1) CAT6, (1) #12G|3/4\"C",
+        "HWP-2||1|1|1||ETHERNET/IP|STATUS|ON/OFF|PUMP SPEED|RPM|START/STOP PUMP, MOTOR RUN STATUS, MOTOR CONTROL, & FEEDBACK|(4) 1/C #16 AWG, (1) 1/PR/SH #18 AWG, (1) CAT6, (1) #12G|3/4\"C",
+        "HWP-3||1|1|1||ETHERNET/IP|STATUS|ON/OFF|PUMP SPEED|RPM|START/STOP PUMP, MOTOR RUN STATUS, MOTOR CONTROL, & FEEDBACK|(4) 1/C #16 AWG, (1) 1/PR/SH #18 AWG, (1) CAT6, (1) #12G|3/4\"C",
+        "HWP-4||1|1|1||ETHERNET/IP|STATUS|ON/OFF|PUMP SPEED|RPM|START/STOP PUMP, MOTOR RUN STATUS, MOTOR CONTROL, & FEEDBACK|(4) 1/C #16 AWG, (1) 1/PR/SH #18 AWG, (1) CAT6, (1) #12G|3/4\"C",
+        "HWP-5||1|1|1||ETHERNET/IP|STATUS|ON/OFF|PUMP SPEED|RPM|START/STOP PUMP, MOTOR RUN STATUS, MOTOR CONTROL, & FEEDBACK|(4) 1/C #16 AWG, (1) 1/PR/SH #18 AWG, (1) CAT6, (1) #12G|3/4\"C",
+        "HWP-6||1|1|1||ETHERNET/IP|STATUS|ON/OFF|PUMP SPEED|RPM|START/STOP PUMP, MOTOR RUN STATUS, MOTOR CONTROL, & FEEDBACK|(4) 1/C #16 AWG, (1) 1/PR/SH #18 AWG, (1) CAT6, (1) #12G|3/4\"C",
+        "CP-1||1|1|1||ETHERNET/IP|STATUS|ON/OFF|PUMP SPEED|RPM|START/STOP PUMP, MOTOR RUN STATUS, MOTOR CONTROL, & FEEDBACK|(4) 1/C #16 AWG, (1) 1/PR/SH #18 AWG, (1) CAT6, (1) #12G|3/4\"C",
+        "CP-2||1|1|1||ETHERNET/IP|STATUS|ON/OFF|PUMP SPEED|RPM|START/STOP PUMP, MOTOR RUN STATUS, MOTOR CONTROL, & FEEDBACK|(4) 1/C #16 AWG, (1) 1/PR/SH #18 AWG, (1) CAT6, (1) #12G|3/4\"C",
+        "EP-1||1|1|1||ETHERNET/IP|STATUS|ON/OFF|PUMP SPEED|RPM|START/STOP PUMP, MOTOR RUN STATUS, MOTOR CONTROL, & FEEDBACK|(4) 1/C #16 AWG, (1) 1/PR/SH #18 AWG, (1) CAT6, (1) #12G|3/4\"C",
+        "EP-2||1|1|1||ETHERNET/IP|STATUS|ON/OFF|PUMP SPEED|RPM|START/STOP PUMP, MOTOR RUN STATUS, MOTOR CONTROL, & FEEDBACK|(4) 1/C #16 AWG, (1) 1/PR/SH #18 AWG, (1) CAT6, (1) #12G|3/4\"C",
+        "EP-3||1|1|1||ETHERNET/IP|STATUS|ON/OFF|PUMP SPEED|RPM|START/STOP PUMP, MOTOR RUN STATUS, MOTOR CONTROL, & FEEDBACK|(4) 1/C #16 AWG, (1) 1/PR/SH #18 AWG, (1) CAT6, (1) #12G|3/4\"C",
+        "EP-4||1|1|1||ETHERNET/IP|STATUS|ON/OFF|PUMP SPEED|RPM|START/STOP PUMP, MOTOR RUN STATUS, MOTOR CONTROL, & FEEDBACK|(4) 1/C #16 AWG, (1) 1/PR/SH #18 AWG, (1) CAT6, (1) #12G|3/4\"C",
+        "LIFT STATION|||4|1||NONE|STATUS|ON/OFF|PUMP SPEED|RPM|START/STOP PUMP, MOTOR RUN STATUS, HIGH/LOW FLOAT SWITHC FOR VALVE CONTROL, & LOW LOW FLOAT SWITCH FOR ALARM|(12) 1/C #16 AWG, (1) #12G|3/4\"C",
+        "BS-1 PNL||||||BACNET /IP|STATUS|ALARM|PUMP SPEED|RPM|ALARM, MOTOR RUN STATUS, & FEEDBACK|(1) CAT6, (1) #12G|1/2\"C",
+        "WSHP-1||||||BACNET /IP|STATUS|ON/OFF|||ENABLE/DISABLE|(1) CAT6, (1) #12G|1/2\"C",
+        "LSH-135|||1|||NONE|STATUS|HIGH|||CLOSED SWITCH TO CLOSE LCV-135|(2) 1/C #16 AWG, (1) #12G|1/2\"C",
+        "LSL-135|||1|||NONE|STATUS|LOW|||CLOSED SWITCH TO OPEN LCV-135|(2) 1/C #16 AWG, (1) #12G|1/2\"C",
+        "LSLL-135|||1|||NONE|STATUS|ALARM|||ALARM, STOP PUMPS|(2) 1/C #16 AWG, (1) #12G|1/2\"C",
+        "LCV-135||||2||NONE|STATUS|OPEN/CLOSED|||OPEN/CLOSE VALVE COMMAND|(4) 1/C #16 AWG, (1) #12G|1/2\"C",
+        "PIT-116|1|||||NONE|VALUE|PSI|||DISPLAY AND ALARM IF PRESSURE IS LOW|(1) 1/PR/SH #18 AWG, (1) #12G|1/2\"C",
+        "PIT-115|1|||||NONE|VALUE|PSI|||DISPLAY AND ALARM IF PRESSURE IS LOW|(1) 1/PR/SH #18 AWG, (1) #12G|1/2\"C",
+        "PIT-114|1|||||NONE|VALUE|PSI|||DISPLAY AND ALARM IF PRESSURE IS LOW|(1) 1/PR/SH #18 AWG, (1) #12G|1/2\"C",
+        "PIT-113|1|||||NONE|VALUE|PSI|||DISPLAY AND ALARM IF PRESSURE IS LOW|(1) 1/PR/SH #18 AWG, (1) #12G|1/2\"C",
+        "DPIT-117|1|||||NONE|VALUE|PSI|||DISPLAY & CONTROL INPUT FOR HWP-5,6 SPEED|(1) 1/PR/SH #18 AWG, (1) #12G|1/2\"C",
+        "TCV-105|1|1|||1|NONE|VALUE|%SIGNAL|VALUE|%OPEN|PRIMARY TAW TEMPERATURE CONTROL, 4-20mA CONTROL, 2-10VDC POSITION FEED BACK, 24VDC POWER|(2) 1/C #16AWG, (2) 1/PR/SH #18 AWG, (1) #12G|3/4\"C",
+        "TE-105|1 RTD|||||NONE|VALUE|°C|||PRIMARY TAW TEMPERATURE|(1) 3/C/SH #18 AWG, (1) #12G|1/2\"C",
+        "FIT-143|1|||||NONE|VALUE|GPM|TOTAL|GALLONS|CAW FLOW RATE, DISPLAY AND TOTALIZE|(1) 1/PR/SH #18 AWG, (1) #12G|1/2\"C",
+        "FIT-145|1|||||NONE|VALUE|GPM|TOTAL|GALLONS|CAW FLOW RATE, DISPLAY AND TOTALIZE|(1) 1/PR/SH #18 AWG, (1) #12G|1/2\"C",
+        "TE-110|1 RTD|||||NONE|VALUE|°C|||TAW SUPPLY TEMPERATURE|(1) 3/C/SH #18 AWG, (1) #12G|1/2\"C",
+        "TCV-110A|1|1|||1|NONE|VALUE|%SIGNAL|VALUE|%OPEN|PRIMARY TAW TEMPERATURE CONTROL, 4-20mA CONTROL, 2-10VDC POSITION FEED BACK, 24VDC POWER|(2) 1/C #16AWG, (2) 1/PR/SH #18 AWG, (1) #12G|1/2\"C",
+        "TCV-110B|1|1|||1|NONE|VALUE|%SIGNAL|VALUE|%OPEN|PRIMARY TAW TEMPERATURE CONTROL, 4-20mA CONTROL, 2-10VDC POSITION FEED BACK, 24VDC POWER|(2) 1/C #16AWG, (2) 1/PR/SH #18 AWG, (1) #12G|1/2\"C",
+        "TE-100|1 RTD|||||NONE|VALUE|°C|||EFLUENT TO HX TEMPERATURE|(1) 3/C/SH #18 AWG, (1) #12G|1/2\"C",
+        "PIT-221|1|||||NONE|VALUE|PSI|||DISPLAY AND ALARM IF PRESSURE IS LOW, WSHP EVAPORATOR INLET|(1) 1/PR/SH #18 AWG, (1) #12G|1/2\"C",
+        "PIT-222|1|||||NONE|VALUE|PSI|||DISPLAY AND ALARM IF PRESSURE IS LOW, WSHP CONDENSER INLET|(1) 1/PR/SH #18 AWG, (1) #12G|1/2\"C",
+        "TE-101|1 RTD|||||NONE|VALUE|°C|||BT-1 TEMPERATURE|(1) 3/C/SH #18 AWG, (1) #12G|1/2\"C",
+        "TE-102|1 RTD|||||NONE|VALUE|°C|||BT-2 TEMPERATURE|(1) 3/C/SH #18 AWG, (1) #12G|1/2\"C",
+        "TE-203|1 RTD|||||NONE|VALUE|°C|||BT-3 TEMPERATURE|(1) 3/C/SH #18 AWG, (1) #12G|1/2\"C",
+        "TE-204|1 RTD|||||NONE|VALUE|°C|||BT-4 TEMPERATURE|(1) 3/C/SH #18 AWG, (1) #12G|1/2\"C",
+        "REFIGERANT LEAK DETECTION|||1||1|NONE|STATUS|ALARM|||ALARM WHEN REFIGERENT LEAK IS DETECTED|(4) 1/C #16 AWG, (1) #12G|1/2\"C",
+        "EF-3||1|1|1||NONE|STATUS|ON/OFF|FAN SPEED|RPM|START/STOP FAN, MOTOR RUN STATUS, FAN SPPED CONTROL|(4) 1/C #16 AWG,(1) 1/PR/SH #18 AWG, (1) #12G|3/4\"C",
+        "PLUG VALVE||||2||NONE|STATUS|OPEN/CLOSED|||OPEN/CLOSE VALVE COMMAND|(4) 1/C #16 AWG, (1) #12G|1/2\"C",
+        "HORN 1||||1||NONE|STATUS|ALARM|||NOTIFICATION OF ALAMR THROUGH ELECTRONIC ALARM HORN|(2) 1/C #16 AWG, (1) #12G|1/2\"C",
+        "HORN 2||||1||NONE|STATUS|ALARM|||NOTIFICATION OF ALAMR THROUGH ELECTRONIC ALARM HORN|(2) 1/C #16 AWG, (1) #12G|1/2\"C",
+        "HORN 3||||1||NONE|STATUS|ALARM|||NOTIFICATION OF ALAMR THROUGH ELECTRONIC ALARM HORN|(2) 1/C #16 AWG, (1) #12G|1/2\"C",
+        "FISH HATCHERY CONTROL PANEL||||||MODBUS TCP/IP|STATUS|ALARM|||COMMUNICATE WITH EXISTING FISH HATCHERY BUILDING CONTROL PANEL FOR EMERGENCY ALARM DIAL OUT|(1) CAT6, (1) #12G|1/2\"C",
+        "5D-1|||1|||NONE|STATUS|ALARM|||ALARM WHEN LOW LEVEL|(2) 1/C #16 AWG, (1) #12G|1/2\"C",
+        "5D-2|||1|||NONE|STATUS|ALARM|||ALARM WHEN LOW LEVEL|(2) 1/C #16 AWG, (1) #12G|1/2\"C",
+        "5D-3|||1|||NONE|STATUS|ALARM|||ALARM WHEN LOW LEVEL|(2) 1/C #16 AWG, (1) #12G|1/2\"C",
+        "5D-4|||1|||NONE|STATUS|ALARM|||ALARM WHEN LOW LEVEL|(2) 1/C #16 AWG, (1) #12G|1/2\"C",
+        "15D-1|||1|||NONE|STATUS|ALARM|||ALARM WHEN LOW LEVEL|(2) 1/C #16 AWG, (1) #12G|1/2\"C",
+        "15D-2|||1|||NONE|STATUS|ALARM|||ALARM WHEN LOW LEVEL|(2) 1/C #16 AWG, (1) #12G|1/2\"C",
+        "TE-300|1|||||NONE|VALUE|°C|||HVAC OUTSIDE AIR TEMPERATURE SENSOR, START STOP HWP-5/6|(2) 1/PR/SH #18 AWG, (1) #12G|1/2\"C"
+      ],
+      "header_evidence": [
+        {
+          "bbox": [
+            385,
+            70,
+            2165,
+            111
+          ],
+          "expected": "TAG ANALOG INPUT OUTPUT DIGITAL POWER 24VDC COMMUNICATION PROTOCOL PRIMARY DISPLAY SECONDARY DISPLAY ACTION CABLE CONDUIT"
+        }
+      ]
+    }
+  ],
+  "inventory_checks": [
+    {
+      "id": "e702-plc-io-source-rows",
+      "records_path": [
+        "tables",
+        0,
+        "rows"
+      ],
+      "expected": 52
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "id": "15__vol2__067",
+  "rank": 15,
+  "title": "SLAC LCLS-II-HE Process Cooling Water Skid",
+  "source_pdf": "pdf/15__vol2__067__SLAC_LCLS_II_HE_Process_Cooling_Water_Skid.pdf",
+  "source_sha256": "254931f1c37ac5afb3b9ad70d21ae7c2001c2f645c29ca8d92c4aefdc294fa1d",
+  "page_count": 13,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete ground truth for all 13 supplied SLAC LCLS-II-HE PCW-skid sheets: project/title-block and page review; eight strict M7.0 equipment schedule tables with 10 rows/146 cells; schedule-inventory treatment of pipe, pressure-test, duct, utility-riser and demand tables; M6.3 typed I/O P&ID callouts; Modbus TCP/Ignition/EPICS context; sequence and alarm context; schedule/diagram reconciliation; and explicit limits on point-controller, valve and damper-actuator facts. This record does not invent PLC terminal/card counts, a point-list matrix, device register map, control-valve Cv/actuator/fail position, damper torque/fail action, installed quantity multiplier or an unprovided site address.",
+  "reading_notes": [
+    "All 13 supplied pages were visually reviewed as full-page 144 DPI Poppler renders. The P&ID and schedule sheet received additional high-resolution Poppler crop review. Every authored schedule cell and bounded assertion is independently checked against retained MuPDF and Poppler evidence.",
+    "M7.0's strict equipment component captures two N+1 PCW pumps, one PCW/CHW heat exchanger, two pump VFDs, one compressed-air regulator, one grille row, one relocated reheat coil, one existing AHU reference row and one PCW air separator row. Pot feeder, expansion tank and filter are retained in the source-inventory boundary.",
+    "M6.3 prints 23 typed diagram callouts: 15 AI, two DI, four AO and two DO. It is not a final point/PLC-terminal schedule and it explicitly assigns production of a points list to the I&C contractor, so the record does not manufacture an installed I/O total.",
+    "The controls record preserves the 42 PSIG adjustable differential-pressure control, 63°F adjustable PCW temperature control, continuous dual-pump operation, pump failure response, makeup behavior, defined alarms, Modbus TCP to Ignition SCADA and mirrored EPICS context.",
+    "The M6.3 diagram contains a modulating CHW valve and makeup actuator but the supplied set has neither a true control-valve schedule nor a damper-actuator schedule; unsupported selection data remain unavailable."
+  ],
+  "module_order": ["metadata", "schedules", "points", "controls_context", "equipment_reconciliation", "point_applications", "supporting_evidence"],
+  "module_sources": {"schedules": ["schedules_m70"], "points": ["points_m63"], "controls_context": ["controls_context_m63"]},
+  "requirement_audit": [
+    {"id": "project_identity", "result": "reviewed_with_source_limitations_recorded", "finding": "Title-block/project identity is recorded as B950/NEH LCLS-II-HE:EI with SLAC/DOE context. Menlo Park, CA is marked archive metadata rather than a printed address.", "evidence": [["modules", "metadata", "project"]]},
+    {"id": "sheet_details", "result": "reviewed_with_source_limitations_recorded", "finding": "Every supplied page has a sheet/title disposition and saved full-page Poppler review render; representative title-block text is bounded and checked.", "evidence": [["modules", "metadata", "visual_review_pages"]]},
+    {"id": "scale_verification", "result": "reviewed_with_source_limitations_recorded", "finding": "Plan/detail scales vary by view and include NTS. No global geometry conversion is invented.", "evidence": [["modules", "metadata", "scale_semantics"]]},
+    {"id": "equipment_tags_and_classification", "result": "reviewed_with_source_limitations_recorded", "finding": "Ten strict schedule identities are registered and classified; new, existing, relocated and P&ID-only devices remain distinct. Supplemental feeder/tank/filter identities retain their source scope.", "evidence": [["modules", "equipment_reconciliation", "scheduled_families"], ["modules", "equipment_reconciliation", "additional_identities"]]},
+    {"id": "schedule_rows_and_specs", "result": "reviewed_with_source_limitations_recorded", "finding": "The strict M7.0 package preserves 10 schedule rows and 146 exact source cells, including pumps, heat exchanger, VFDs and process equipment specifications. Separate pipe/duct/testing/riser/demand schedule existence and purpose are recorded without falsely merging them into BAS devices.", "evidence": [["modules", "schedules", "tables"], ["modules", "schedules", "additional_schedule_inventory"]]},
+    {"id": "point_lists_and_equipment_ownership", "result": "reviewed_with_source_limitations_recorded", "finding": "Twenty-three M6.3 typed P&ID callouts are retained with source scopes. The set has no final points list/PLC terminal schedule; zero unprinted point applications are emitted.", "evidence": [["modules", "points", "diagram_callouts"], ["modules", "point_applications", "diagram_callout_ledger"]]},
+    {"id": "network_architecture", "result": "reviewed_with_source_limitations_recorded", "finding": "M6.3 states CAT6 Ethernet for Modbus TCP to Ignition SCADA and mirrored EPICS context, while expressly recorded missing register/address/controller-topology fields remain unavailable.", "evidence": [["modules", "controls_context", "network_architecture"]]},
+    {"id": "sequences_and_diagrams", "result": "reviewed_with_source_limitations_recorded", "finding": "The continuous-pump, 42 PSIG DP, 63°F CHW-valve, failure, makeup and alarm sequence contexts are transcribed from M6.3.", "evidence": [["modules", "controls_context", "sequences"]]},
+    {"id": "space_sensors_and_zones", "result": "reviewed_with_source_limitations_recorded", "finding": "This source is a process-water skid P&ID; physical room thermostat/sensor counts are not stated. Process instruments are retained as diagram callouts instead.", "evidence": [["modules", "controls_context", "sensor_and_zone_ledger"]]},
+    {"id": "source_limitations_and_conflicts", "result": "reviewed_with_source_limitations_recorded", "finding": "Absence of final points/terminal schedule, detailed network map, control-valve schedule and damper-actuator schedule is explicit; demand figures are not reclassified as device quantities.", "evidence": [["modules", "supporting_evidence", "source_limitations"], ["modules", "equipment_reconciliation", "control_valve_and_damper_schedule_status"]]},
+    {"id": "all_page_visual_review", "result": "reviewed_with_source_limitations_recorded", "finding": "All 13 supplied source pages received a full-page visual disposition with saved render paths hash-checked in the record.", "evidence": [["page_review"], ["modules", "metadata", "visual_review_pages"]]},
+    {"id": "independent_corroboration", "result": "reviewed_with_source_limitations_recorded", "finding": "Bundle build rechecks every authored module against retained MuPDF and Poppler captures and records source/module/render digests.", "evidence": [["module_source_sha256"], ["module_sha256"]]}
+  ],
+  "page_review": [
+    {"page": 1, "review_status": "complete", "render": "reviews/15__vol2__067/p1-p1-full-poppler-poppler.png", "finding": "M0.0 legends/general notes and mechanical project context."},
+    {"page": 2, "review_status": "complete", "render": "reviews/15__vol2__067/p2-p2-full-poppler-poppler.png", "finding": "MD3.0 demolition process-piping plan."},
+    {"page": 3, "review_status": "complete", "render": "reviews/15__vol2__067/p3-p3-full-poppler-poppler.png", "finding": "M3.0 new process-piping plan/enlarged PCW-skid context."},
+    {"page": 4, "review_status": "complete", "render": "reviews/15__vol2__067/p4-p4-full-poppler-poppler.png", "finding": "M5.1 mechanical skid/manifold/support details."},
+    {"page": 5, "review_status": "complete", "render": "reviews/15__vol2__067/p5-p5-full-poppler-poppler.png", "finding": "M6.0 existing/new PCW mechanical schematic."},
+    {"page": 6, "review_status": "complete", "render": "reviews/15__vol2__067/p6-p6-full-poppler-poppler.png", "finding": "M6.3 PCW P&ID with typed I/O, sequences and network context."},
+    {"page": 7, "review_status": "complete", "render": "reviews/15__vol2__067/p7-p7-full-poppler-poppler.png", "finding": "M6.4 existing/new PCW flow diagrams."},
+    {"page": 8, "review_status": "complete", "render": "reviews/15__vol2__067/p8-p8-full-poppler-poppler.png", "finding": "M7.0 dense mechanical schedules, riser utility and demand tables."},
+    {"page": 9, "review_status": "complete", "render": "reviews/15__vol2__067/p9-p9-full-poppler-poppler.png", "finding": "S0.1 structural specifications/sheet list."},
+    {"page": 10, "review_status": "complete", "render": "reviews/15__vol2__067/p10-p10-full-poppler-poppler.png", "finding": "S3.1 basement PCW skid structural plan."},
+    {"page": 11, "review_status": "complete", "render": "reviews/15__vol2__067/p11-p11-full-poppler-poppler.png", "finding": "S5.0 structural support details."},
+    {"page": 12, "review_status": "complete", "render": "reviews/15__vol2__067/p12-p12-full-poppler-poppler.png", "finding": "S5.1 PCW skid support/penetration details."},
+    {"page": 13, "review_status": "complete", "render": "reviews/15__vol2__067/p13-p13-full-poppler-poppler.png", "finding": "S5.2 PCW skid base/anchorage details."}
+  ],
+  "declared_checks": [
+    {"id": "supplied-pages", "path": ["modules", "metadata", "visual_review_pages"], "operation": "length", "expected": 13},
+    {"id": "full-page-review", "path": ["page_review"], "operation": "length", "expected": 13},
+    {"id": "strict-schedule-tables", "path": ["modules", "schedules", "tables"], "operation": "length", "expected": 8},
+    {"id": "typed-pid-callouts", "path": ["modules", "points", "diagram_callouts"], "operation": "length", "expected": 23},
+    {"id": "sequence-contexts", "path": ["modules", "controls_context", "sequences"], "operation": "length", "expected": 8}
+  ],
+  "completion_checks": {"every_source_page_reviewed": true, "all_explicit_objective_categories_reviewed": true, "all_populated_schedule_and_points_rows_captured": true, "source_conflicts_and_unavailable_fields_preserved": true, "two_engine_checks_current": true, "final_assembly_audit_complete": true},
+  "verification_semantics": "MuPDF and Poppler independently captured all 13 supplied vector-PDF pages. Every authored strict schedule cell and bounded text witness is rechecked by both engines at build/validation time; full-page Poppler review establishes page disposition, visual table/P&ID context and stated limitations. These processes corroborate literal source content and declared bounds; they do not infer missing controller terminals, physical I/O quantities, schedule rows, quantities, network attributes or valve/actuator selection data."
+}

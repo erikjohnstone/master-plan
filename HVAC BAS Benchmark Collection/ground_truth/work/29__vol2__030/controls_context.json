@@ -1,0 +1,83 @@
+{
+  "document_id": "29__vol2__030",
+  "module_role": "M-601/M-603 BACnet and control-symbol context.",
+  "tables": [],
+  "assertions": [
+    {
+      "id": "m601-bacnet-interface",
+      "page": 84,
+      "bbox": [
+        150,
+        775,
+        1040,
+        815
+      ],
+      "expected": "PROVIDE WITH BACNET CONTROL INTERFACE. SEE SPECIFICATIONS AND CONTROL DIAGRAM FOR ADDITIONAL INFORMATION. PROVIDE WITH TEMPERATURE AND HUMIDITY SENSOR.",
+      "mode": "contains"
+    },
+    {
+      "id": "m601-bacnet-campus",
+      "page": 84,
+      "bbox": [
+        150,
+        790,
+        1040,
+        820
+      ],
+      "expected": "FURNISH WITH AN ADAPTER FOR INTEGRATION WITH VA CAMPUS BMS VIA BACNET.",
+      "mode": "contains"
+    },
+    {
+      "id": "m603-controls-symbols",
+      "page": 87,
+      "bbox": [
+        540,
+        215,
+        770,
+        260
+      ],
+      "expected": "CONTROLS SYMBOLS",
+      "mode": "contains"
+    },
+    {
+      "id": "m603-time-clock",
+      "page": 87,
+      "bbox": [
+        1165,
+        1045,
+        1540,
+        1080
+      ],
+      "expected": "TIME CLOCK CONTROLLING EQUIPMENT ON A SCHEDULE",
+      "mode": "contains"
+    }
+  ],
+  "network_architecture": {
+    "published_integration": [
+      "Selected equipment must provide a BACnet control interface and an adapter for integration with VA campus BMS."
+    ],
+    "assertion_ids": [
+      "m601-bacnet-interface",
+      "m601-bacnet-campus"
+    ],
+    "boundary": "No final network topology, device addresses, object list, router/media quantities, controller/card/terminal schedule or wiring design is published."
+  },
+  "sequence_inventory": [
+    {
+      "id": "m603-time-clock-control-context",
+      "sheet": "M-603",
+      "assertion_ids": [
+        "m603-time-clock"
+      ],
+      "boundary": "This is a published time-clock symbol context, not an asserted system sequence."
+    }
+  ],
+  "sensors_and_control_symbol_context": {
+    "published_context": "Equipment note calls for BACnet interface and temperature/humidity sensor; M-603 provides controls symbols and a time-clock function.",
+    "assertion_ids": [
+      "m601-bacnet-interface",
+      "m603-controls-symbols"
+    ],
+    "boundary": "No physical sensor, zone or control-device quantity is derived."
+  }
+}

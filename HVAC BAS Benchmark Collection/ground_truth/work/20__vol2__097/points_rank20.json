@@ -1,0 +1,11 @@
+{
+  "document_id": "20__vol2__097",
+  "module_role": "Formal BAS point-list disposition.",
+  "tables": [],
+  "assertions": [],
+  "point_list_status": {
+    "formal_row_matrix": "not_published_in_supplied_drawings",
+    "finding": "H-601 publishes control logic and E-603 publishes wiring diagrams, but no conventional tabular BAS point-list matrix.",
+    "boundary": "No point, controller, I/O, terminal, wiring, relay, thermostat, timer, sensor or device count is inferred from diagrams or symbols."
+  }
+}

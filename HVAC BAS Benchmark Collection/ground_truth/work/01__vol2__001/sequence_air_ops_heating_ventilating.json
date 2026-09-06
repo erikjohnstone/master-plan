@@ -1,0 +1,36 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "tables": [],
+  "scope": "Bounded source-text assertions from the Air Operations storage-bay heating-and-ventilating sequence of operation on MI743 (source PDF page 70). The source's copy-forward terminology is retained and not corrected to an inferred system description.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [70],
+    "render": "reviews/01__vol2__001/p70-p70-controls-poppler.png",
+    "dpi": 180,
+    "finding": "MI743 was visually reviewed at 180 DPI. The control diagram, point matrix and entire written sequence are present on one page."
+  },
+  "sequence_scope": {
+    "sheet": "MI743",
+    "sequence_heading": "3.3.12 AIR OPS - STORAGE BAY HEATING & VENTILATING CONTROLS",
+    "equipment": "EF-A1, UH-A1 and UH-A2 control application",
+    "coverage": ["ventilation cooling", "heating", "proofs/safeties", "reset", "damper/exhaust control", "HHW control", "alarms", "setpoints"]
+  },
+  "assertions": [
+    {"id": "ventilation-cooling-enable", "page": 70, "bbox": [160, 500, 790, 550], "mode": "contains", "expected": "WHEN ZN-T RISES ABOVE ZN-T-SP-HL (WITH A 2 DEGREES F DEADBAND), ENABLE THE VENTILATION COOLING CONTROL LOOP"},
+    {"id": "heating-enable", "page": 70, "bbox": [160, 570, 790, 620], "mode": "contains", "expected": "WHEN ZN-T DROPS BELOW ZN-T-SP-LL (WITH A 3 DEGREES F DEADBAND), ENABLE THE HEATING CONTROL LOOP"},
+    {"id": "source-safety-response", "page": 70, "bbox": [160, 640, 790, 720], "mode": "contains", "expected": "FAILURE OF ANY PROOF OR ACTIVATION OF ANY SAFETY RESULT IN ALL CONTROL LOOPS BEING DISABLED AND THE FAN COIL UNIT FAN AND HUMIDIFIER BEING COMMANDED OFF UNTIL RESET"},
+    {"id": "printed-proofs", "page": 70, "bbox": [160, 738, 370, 805], "mode": "contains", "expected": "EXHAUST FAN STATUS (PROOF) (EF-S)"},
+    {"id": "reset-paths", "page": 70, "bbox": [160, 822, 790, 873], "mode": "contains", "expected": "DDC HARDWARE RESET OF ALL PROOFS AND SAFETIES SHALL BE VIA A LOCAL BINARY PUSH-BUTTON (RST-BUT) INPUT TO THE DDC HARDWARE, VIA A REMOTE COMMAND TO THE DDC HARDWARE"},
+    {"id": "ventilation-damper-sequence", "page": 70, "bbox": [160, 892, 790, 944], "mode": "contains", "expected": "ONCE THE DAMPER POSITION IS PROVEN OPEN, ENERGIZE EXHAUST FAN. WHEN THIS LOOP IS DISABLED, THE EXHAUST FAN SHALL BE DE-ENERGIZED AND THE AFTER A 15 SECOND DELAY BOTH THE OA AND EA DAMPER SHALL CLOSE"},
+    {"id": "heating-hhw-control", "page": 70, "bbox": [160, 962, 790, 1016], "mode": "contains", "expected": "DDC HARDWARE SHALL ENERGIZE THE UNIT HEATER FANS AND MODULATE THE HHW VALVE TO MAINTAIN ZONE TEMPERATURE (ZN-T) AT SPACE LOW LIMIT SETPOINT (ZN-T-SP-LL) AS SHOWN"},
+    {"id": "heating-disable-close", "page": 70, "bbox": [160, 980, 790, 1016], "mode": "contains", "expected": "WHEN THIS LOOP IS DISABLED, THE UNIT HEATERS SHALL BE DE-ENERGIZED AND THE HHW VAVLES SHALL CLOSE"},
+    {"id": "low-temperature-alarm", "page": 70, "bbox": [160, 1035, 310, 1058], "mode": "contains", "expected": "LOW TEMPERATURE: 40°F"},
+    {"id": "limit-setpoints", "page": 70, "bbox": [160, 1130, 315, 1172], "mode": "contains", "expected": "HIGH LIMIT SETPOINT: 80°F"}
+  ],
+  "source_conflicts": [
+    {"finding": "The written safety response refers to SUPPLY FAN, HUMIDIFIER and FAN COIL UNIT FAN even though the MI743 diagram/point matrix identify EF-A1 and unit heaters. The verbatim source statement is retained as evidence and is not reconciled into invented controls."},
+    {"finding": "The written heating disable instruction spells HHW VAVLES. The source spelling is retained."}
+  ],
+  "remaining_work": "Reconcile the MI743 template to actual plan/schedule instances and continue full document controls, equipment, network, scale and sensor review."
+}

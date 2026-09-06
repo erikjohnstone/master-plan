@@ -1,0 +1,1752 @@
+{
+  "document_id": "12__vol2__028",
+  "source_sha256": "c62b086bc4b947bc7b87e237c415df1417ec4ebd5a3bf6b15bc7328890859d4d",
+  "annotation_sha256": "e81ab3b65a0d618f6c7aab8316798491026199ac0733df8280909b9c2dfe0f04",
+  "tables": 0,
+  "rows": 0,
+  "cell_assertions": 0,
+  "text_assertions": 54,
+  "checks": [
+    {
+      "assertion": "sheets/1/sheet-number",
+      "page": 1,
+      "bbox": [
+        2276,
+        1478,
+        2368,
+        1518
+      ],
+      "expected": "M-505",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-505",
+          "word_ids": [
+            146
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-505",
+          "word_ids": [
+            785
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/1/sheet-title",
+      "page": 1,
+      "bbox": [
+        2330,
+        1138,
+        2351,
+        1375
+      ],
+      "expected": "HVAC SCHEDULE AND DETAILS IV",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HVAC SCHEDULE AND DETAILS IV",
+          "word_ids": [
+            147,
+            148,
+            149,
+            150,
+            151
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HVAC SCHEDULE AND DETAILS IV",
+          "word_ids": [
+            663,
+            664,
+            665,
+            666,
+            667
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/1/project",
+      "page": 1,
+      "bbox": [
+        2270,
+        1170,
+        2286,
+        1322
+      ],
+      "expected": "RENOVATION OF BUILDING 615",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            152,
+            153,
+            154,
+            155
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            740,
+            741,
+            742,
+            743
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/1/site",
+      "page": 1,
+      "bbox": [
+        2285,
+        894,
+        2313,
+        1023
+      ],
+      "expected": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            156,
+            157,
+            158,
+            159,
+            160,
+            161,
+            162,
+            163
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            673,
+            674,
+            675,
+            676,
+            677,
+            678,
+            679,
+            680
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/1/issue-date",
+      "page": 1,
+      "bbox": [
+        2278,
+        640,
+        2295,
+        730
+      ],
+      "expected": "AUGUST 12, 2019",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            181,
+            182,
+            183
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            98,
+            99,
+            100
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/1/contract",
+      "page": 1,
+      "bbox": [
+        2305,
+        640,
+        2318,
+        730
+      ],
+      "expected": "W9126G19B3286",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            783
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            103
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/2/sheet-number",
+      "page": 2,
+      "bbox": [
+        2276,
+        1478,
+        2368,
+        1518
+      ],
+      "expected": "M-506",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-506",
+          "word_ids": [
+            738
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-506",
+          "word_ids": [
+            1214
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/2/sheet-title",
+      "page": 2,
+      "bbox": [
+        2330,
+        1122,
+        2351,
+        1372
+      ],
+      "expected": "MECHANICAL CONTROL SCHEMATICS I",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL CONTROL SCHEMATICS I",
+          "word_ids": [
+            739,
+            740,
+            741,
+            742
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL CONTROL SCHEMATICS I",
+          "word_ids": [
+            736,
+            737,
+            738,
+            739
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/2/project",
+      "page": 2,
+      "bbox": [
+        2270,
+        1170,
+        2286,
+        1322
+      ],
+      "expected": "RENOVATION OF BUILDING 615",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            743,
+            744,
+            745,
+            746
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            829,
+            830,
+            831,
+            832
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/2/site",
+      "page": 2,
+      "bbox": [
+        2285,
+        894,
+        2313,
+        1023
+      ],
+      "expected": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            747,
+            748,
+            749,
+            750,
+            751,
+            752,
+            753,
+            754
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            407,
+            408,
+            409,
+            410,
+            411,
+            412,
+            413,
+            414
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/2/issue-date",
+      "page": 2,
+      "bbox": [
+        2278,
+        640,
+        2295,
+        730
+      ],
+      "expected": "AUGUST 12, 2019",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            772,
+            773,
+            774
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            815,
+            816,
+            817
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/2/contract",
+      "page": 2,
+      "bbox": [
+        2305,
+        640,
+        2318,
+        730
+      ],
+      "expected": "W9126G19B3286",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            1211
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            820
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/3/sheet-number",
+      "page": 3,
+      "bbox": [
+        2276,
+        1478,
+        2368,
+        1518
+      ],
+      "expected": "M-507",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-507",
+          "word_ids": [
+            393
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-507",
+          "word_ids": [
+            489
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/3/sheet-title",
+      "page": 3,
+      "bbox": [
+        2330,
+        1121,
+        2351,
+        1373
+      ],
+      "expected": "MECHANICAL CONTROL SCHEMATICS II",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL CONTROL SCHEMATICS II",
+          "word_ids": [
+            394,
+            395,
+            396,
+            397
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL CONTROL SCHEMATICS II",
+          "word_ids": [
+            351,
+            352,
+            353,
+            354
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/3/project",
+      "page": 3,
+      "bbox": [
+        2270,
+        1170,
+        2286,
+        1322
+      ],
+      "expected": "RENOVATION OF BUILDING 615",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            398,
+            399,
+            400,
+            401
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            416,
+            417,
+            418,
+            419
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/3/site",
+      "page": 3,
+      "bbox": [
+        2285,
+        894,
+        2313,
+        1023
+      ],
+      "expected": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            402,
+            403,
+            404,
+            405,
+            406,
+            407,
+            408,
+            409
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            382,
+            383,
+            384,
+            385,
+            386,
+            387,
+            388,
+            389
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/3/issue-date",
+      "page": 3,
+      "bbox": [
+        2278,
+        640,
+        2295,
+        730
+      ],
+      "expected": "AUGUST 12, 2019",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            427,
+            428,
+            429
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            424,
+            425,
+            426
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/3/contract",
+      "page": 3,
+      "bbox": [
+        2305,
+        640,
+        2318,
+        730
+      ],
+      "expected": "W9126G19B3286",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            490
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            429
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/4/sheet-number",
+      "page": 4,
+      "bbox": [
+        2276,
+        1478,
+        2368,
+        1518
+      ],
+      "expected": "M-508",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-508",
+          "word_ids": [
+            454
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-508",
+          "word_ids": [
+            549
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/4/sheet-title",
+      "page": 4,
+      "bbox": [
+        2330,
+        1119,
+        2351,
+        1375
+      ],
+      "expected": "MECHANICAL CONTROL SCHEMATICS III",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL CONTROL SCHEMATICS III",
+          "word_ids": [
+            455,
+            456,
+            457,
+            458
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL CONTROL SCHEMATICS III",
+          "word_ids": [
+            448,
+            449,
+            450,
+            451
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/4/project",
+      "page": 4,
+      "bbox": [
+        2270,
+        1170,
+        2286,
+        1322
+      ],
+      "expected": "RENOVATION OF BUILDING 615",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            459,
+            460,
+            461,
+            462
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            526,
+            527,
+            528,
+            529
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/4/site",
+      "page": 4,
+      "bbox": [
+        2285,
+        894,
+        2313,
+        1023
+      ],
+      "expected": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            463,
+            464,
+            465,
+            466,
+            467,
+            468,
+            469,
+            470
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            478,
+            479,
+            480,
+            481,
+            482,
+            483,
+            484,
+            485
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/4/issue-date",
+      "page": 4,
+      "bbox": [
+        2278,
+        640,
+        2295,
+        730
+      ],
+      "expected": "AUGUST 12, 2019",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            488,
+            489,
+            490
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            491,
+            492,
+            493
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/4/contract",
+      "page": 4,
+      "bbox": [
+        2305,
+        640,
+        2318,
+        730
+      ],
+      "expected": "W9126G19B3286",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            551
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            496
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/5/sheet-number",
+      "page": 5,
+      "bbox": [
+        2276,
+        1478,
+        2368,
+        1518
+      ],
+      "expected": "M-509",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-509",
+          "word_ids": [
+            2185
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-509",
+          "word_ids": [
+            2294
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/5/sheet-title",
+      "page": 5,
+      "bbox": [
+        2330,
+        1119,
+        2351,
+        1376
+      ],
+      "expected": "MECHANICAL CONTROL SCHEMATICS IV",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL CONTROL SCHEMATICS IV",
+          "word_ids": [
+            2186,
+            2187,
+            2188,
+            2189
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL CONTROL SCHEMATICS IV",
+          "word_ids": [
+            96,
+            97,
+            98,
+            99
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/5/project",
+      "page": 5,
+      "bbox": [
+        2270,
+        1170,
+        2286,
+        1322
+      ],
+      "expected": "RENOVATION OF BUILDING 615",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            2190,
+            2191,
+            2192,
+            2193
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            2286,
+            2287,
+            2288,
+            2289
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/5/site",
+      "page": 5,
+      "bbox": [
+        2285,
+        894,
+        2313,
+        1023
+      ],
+      "expected": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            2194,
+            2195,
+            2196,
+            2197,
+            2198,
+            2199,
+            2200,
+            2201
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            1333,
+            1334,
+            1335,
+            1336,
+            1337,
+            1338,
+            1339,
+            1340
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/5/issue-date",
+      "page": 5,
+      "bbox": [
+        2278,
+        640,
+        2295,
+        730
+      ],
+      "expected": "AUGUST 12, 2019",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            2219,
+            2220,
+            2221
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            1348,
+            1349,
+            1350
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/5/contract",
+      "page": 5,
+      "bbox": [
+        2305,
+        640,
+        2318,
+        730
+      ],
+      "expected": "W9126G19B3286",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            2295
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            1353
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/6/sheet-number",
+      "page": 6,
+      "bbox": [
+        2276,
+        1478,
+        2368,
+        1518
+      ],
+      "expected": "M-510",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-510",
+          "word_ids": [
+            885
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-510",
+          "word_ids": [
+            1095
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/6/sheet-title",
+      "page": 6,
+      "bbox": [
+        2330,
+        1121,
+        2351,
+        1374
+      ],
+      "expected": "MECHANICAL CONTROL SCHEMATICS V",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL CONTROL SCHEMATICS V",
+          "word_ids": [
+            886,
+            887,
+            888,
+            889
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL CONTROL SCHEMATICS V",
+          "word_ids": [
+            1029,
+            1030,
+            1031,
+            1032
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/6/project",
+      "page": 6,
+      "bbox": [
+        2270,
+        1170,
+        2286,
+        1322
+      ],
+      "expected": "RENOVATION OF BUILDING 615",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            890,
+            891,
+            892,
+            893
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            1024,
+            1025,
+            1026,
+            1027
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/6/site",
+      "page": 6,
+      "bbox": [
+        2285,
+        894,
+        2313,
+        1023
+      ],
+      "expected": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            894,
+            895,
+            896,
+            897,
+            898,
+            899,
+            900,
+            901
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            529,
+            530,
+            531,
+            532,
+            533,
+            534,
+            535,
+            536
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/6/issue-date",
+      "page": 6,
+      "bbox": [
+        2278,
+        640,
+        2295,
+        730
+      ],
+      "expected": "AUGUST 12, 2019",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            919,
+            920,
+            921
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            159,
+            160,
+            161
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/6/contract",
+      "page": 6,
+      "bbox": [
+        2305,
+        640,
+        2318,
+        730
+      ],
+      "expected": "W9126G19B3286",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            1097
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            164
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/7/sheet-number",
+      "page": 7,
+      "bbox": [
+        2276,
+        1478,
+        2368,
+        1518
+      ],
+      "expected": "M-511",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-511",
+          "word_ids": [
+            654
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-511",
+          "word_ids": [
+            956
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/7/sheet-title",
+      "page": 7,
+      "bbox": [
+        2330,
+        1121,
+        2351,
+        1372
+      ],
+      "expected": "MECHANICAL CONTROL SCHEMATIC VI",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL CONTROL SCHEMATIC VI",
+          "word_ids": [
+            655,
+            656,
+            657,
+            658
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL CONTROL SCHEMATIC VI",
+          "word_ids": [
+            800,
+            801,
+            802,
+            803
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/7/project",
+      "page": 7,
+      "bbox": [
+        2270,
+        1170,
+        2286,
+        1322
+      ],
+      "expected": "RENOVATION OF BUILDING 615",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            659,
+            660,
+            661,
+            662
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            865,
+            866,
+            867,
+            868
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/7/site",
+      "page": 7,
+      "bbox": [
+        2285,
+        894,
+        2313,
+        1023
+      ],
+      "expected": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            663,
+            664,
+            665,
+            666,
+            667,
+            668,
+            669,
+            670
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            806,
+            807,
+            808,
+            809,
+            810,
+            811,
+            812,
+            813
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/7/issue-date",
+      "page": 7,
+      "bbox": [
+        2278,
+        640,
+        2295,
+        730
+      ],
+      "expected": "AUGUST 12, 2019",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            688,
+            689,
+            690
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            822,
+            823,
+            824
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/7/contract",
+      "page": 7,
+      "bbox": [
+        2305,
+        640,
+        2318,
+        730
+      ],
+      "expected": "W9126G19B3286",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            958
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            827
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/8/sheet-number",
+      "page": 8,
+      "bbox": [
+        2276,
+        1478,
+        2368,
+        1518
+      ],
+      "expected": "M-512",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-512",
+          "word_ids": [
+            454
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-512",
+          "word_ids": [
+            706
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/8/sheet-title",
+      "page": 8,
+      "bbox": [
+        2330,
+        1119,
+        2351,
+        1373
+      ],
+      "expected": "MECHANICAL CONTROL SCHEMATIC VII",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "MECHANICAL CONTROL SCHEMATIC VII",
+          "word_ids": [
+            455,
+            456,
+            457,
+            458
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "MECHANICAL CONTROL SCHEMATIC VII",
+          "word_ids": [
+            535,
+            536,
+            537,
+            538
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/8/project",
+      "page": 8,
+      "bbox": [
+        2270,
+        1170,
+        2286,
+        1322
+      ],
+      "expected": "RENOVATION OF BUILDING 615",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            459,
+            460,
+            461,
+            462
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            490,
+            491,
+            492,
+            493
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/8/site",
+      "page": 8,
+      "bbox": [
+        2285,
+        894,
+        2313,
+        1023
+      ],
+      "expected": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            463,
+            464,
+            465,
+            466,
+            467,
+            468,
+            469,
+            470
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            545,
+            546,
+            547,
+            548,
+            549,
+            550,
+            551,
+            552
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/8/issue-date",
+      "page": 8,
+      "bbox": [
+        2278,
+        640,
+        2295,
+        730
+      ],
+      "expected": "AUGUST 12, 2019",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            488,
+            489,
+            490
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            557,
+            558,
+            559
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/8/contract",
+      "page": 8,
+      "bbox": [
+        2305,
+        640,
+        2318,
+        730
+      ],
+      "expected": "W9126G19B3286",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            708
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            562
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/9/sheet-number",
+      "page": 9,
+      "bbox": [
+        2276,
+        1478,
+        2368,
+        1518
+      ],
+      "expected": "M-601",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "M-601",
+          "word_ids": [
+            43
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "M-601",
+          "word_ids": [
+            1928
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/9/sheet-title",
+      "page": 9,
+      "bbox": [
+        2330,
+        1181,
+        2351,
+        1312
+      ],
+      "expected": "HVAC SCHEDULES I",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "HVAC SCHEDULES I",
+          "word_ids": [
+            44,
+            45,
+            46
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "HVAC SCHEDULES I",
+          "word_ids": [
+            1865,
+            1866,
+            1867
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/9/project",
+      "page": 9,
+      "bbox": [
+        2270,
+        1170,
+        2286,
+        1322
+      ],
+      "expected": "RENOVATION OF BUILDING 615",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            47,
+            48,
+            49,
+            50
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "RENOVATION OF BUILDING 615",
+          "word_ids": [
+            1812,
+            1813,
+            1814,
+            1815
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/9/site",
+      "page": 9,
+      "bbox": [
+        2285,
+        894,
+        2313,
+        1023
+      ],
+      "expected": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "JOINT BASE SAN ANTONIO FORT SAM HOUSTON, TX",
+          "word_ids": [
+            1906,
+            1907,
+            1908,
+            1909,
+            1910,
+            1911,
+            1912,
+            1913
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/9/issue-date",
+      "page": 9,
+      "bbox": [
+        2278,
+        640,
+        2295,
+        730
+      ],
+      "expected": "AUGUST 12, 2019",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            76,
+            77,
+            78
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AUGUST 12, 2019",
+          "word_ids": [
+            1005,
+            1006,
+            1007
+          ]
+        }
+      }
+    },
+    {
+      "assertion": "sheets/9/contract",
+      "page": 9,
+      "bbox": [
+        2305,
+        640,
+        2318,
+        730
+      ],
+      "expected": "W9126G19B3286",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            1930
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "W9126G19B3286",
+          "word_ids": [
+            1010
+          ]
+        }
+      }
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "full-page-visual-review",
+      "actual": 9,
+      "expected": 9,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

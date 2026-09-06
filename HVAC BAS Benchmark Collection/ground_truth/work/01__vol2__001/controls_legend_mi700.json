@@ -1,0 +1,65 @@
+{
+  "document_id": "01__vol2__001",
+  "status": "partial_document_audit",
+  "tables": [],
+  "scope": "Source-bounded control-symbol and abbreviation meanings from MI700 (source PDF page 50). This is a legend, not a count of devices installed in the project; it supplies the source vocabulary needed for later plan-level sensor and actuator reconciliation.",
+  "coordinate_system": "Displayed PDF page, points, top-left origin; 2448 x 1584.",
+  "visual_review": {
+    "pages": [50],
+    "render": "reviews/01__vol2__001/p50-p50-controls-poppler.png",
+    "dpi": 180,
+    "finding": "The complete MI700 controls-general-notes sheet was rendered and visually reviewed at 180 DPI. It contains a schematic-symbol key and abbreviation/acronym list, without project installed quantities."
+  },
+  "legend_semantics": {
+    "sheet": "MI700",
+    "point_types": [
+      {"source_mark": "AI#", "meaning": "ANALOG INPUT", "assertion_ids": ["symbol-ai"]},
+      {"source_mark": "AO#", "meaning": "ANALOG OUTPUT", "assertion_ids": ["symbol-ao"]},
+      {"source_mark": "BI#", "meaning": "BINARY INPUT", "assertion_ids": ["symbol-bi"]},
+      {"source_mark": "BO#", "meaning": "BINARY OUTPUT", "assertion_ids": ["symbol-bo"]},
+      {"source_mark": "DI", "meaning": "DIGITAL INPUT", "assertion_ids": ["abbreviation-di"]},
+      {"source_mark": "DO", "meaning": "DIGITAL OUTPUT", "assertion_ids": ["abbreviation-do"]}
+    ],
+    "sensor_and_field_device_symbols": [
+      {"meaning": "SMOKE DETECTOR, DUCT-MOUNTED", "assertion_ids": ["duct-smoke"]},
+      {"meaning": "TEMPERATURE SENSOR", "assertion_ids": ["temperature-sensor"]},
+      {"meaning": "SPACE THERMOSTAT WITH SPECIFIED IO FUNCTIONS", "assertion_ids": ["space-thermostat"]},
+      {"meaning": "SPACE HUMIDITY SENSOR WITH SPECIFIED IO FUNCTIONS", "assertion_ids": ["space-humidity"]},
+      {"meaning": "TEMPERATURE AVERAGING SENSOR", "assertion_ids": ["temperature-averaging"]},
+      {"meaning": "DUCT STATIC PRESSURE SENSOR", "assertion_ids": ["duct-static-pressure"]},
+      {"meaning": "DIFFERENTIAL PRESSURE SENSOR", "assertion_ids": ["differential-pressure"]},
+      {"meaning": "TEMPERATURE LOW LIMIT / FREEZESTAT", "assertion_ids": ["freezestat"]},
+      {"meaning": "AIR FLOW MEASURING STATION", "assertion_ids": ["airflow-station"]},
+      {"meaning": "CARBON DIOXIDE MONITOR", "assertion_ids": ["co2-monitor"]},
+      {"meaning": "CONTROL VALVE, TWO WAY, DDC", "assertion_ids": ["ddc-control-valve"]},
+      {"meaning": "MOTORIZED DAMPER, PARALLEL BLADE", "assertion_ids": ["parallel-blade-damper"]},
+      {"meaning": "MOTORIZED DAMPER, OPPOSED BLADE", "assertion_ids": ["opposed-blade-damper"]}
+    ],
+    "limits": [
+      "Legend entries identify only the intended symbol/abbreviation semantics. They do not establish a physical count, location or application of a device.",
+      "The source distinguishes BINARY and DIGITAL point terms; no cross-sheet reclassification is made here."
+    ]
+  },
+  "assertions": [
+    {"id": "symbol-ai", "page": 50, "bbox": [680, 1335, 790, 1370], "mode": "contains", "expected": "ANALOG INPUT"},
+    {"id": "symbol-ao", "page": 50, "bbox": [680, 1385, 790, 1412], "mode": "contains", "expected": "ANALOG OUTPUT"},
+    {"id": "symbol-bi", "page": 50, "bbox": [680, 1238, 790, 1270], "mode": "contains", "expected": "BINARY INPUT"},
+    {"id": "symbol-bo", "page": 50, "bbox": [680, 1285, 790, 1320], "mode": "contains", "expected": "BINARY OUTPUT"},
+    {"id": "abbreviation-di", "page": 50, "bbox": [1050, 630, 1200, 655], "mode": "contains", "expected": "DI DIGITAL INPUT"},
+    {"id": "abbreviation-do", "page": 50, "bbox": [1050, 644, 1210, 675], "mode": "contains", "expected": "DO DIGITAL OUTPUT"},
+    {"id": "duct-smoke", "page": 50, "bbox": [680, 205, 880, 235], "mode": "contains", "expected": "SMOKE DETECTOR, DUCT-MOUNTED"},
+    {"id": "temperature-sensor", "page": 50, "bbox": [680, 320, 830, 350], "mode": "contains", "expected": "TEMPERATURE SENSOR"},
+    {"id": "space-thermostat", "page": 50, "bbox": [680, 375, 910, 412], "mode": "contains", "expected": "SPACE THERMOSTAT WITH SPECIFIED IO FUNCTIONS"},
+    {"id": "space-humidity", "page": 50, "bbox": [680, 430, 910, 468], "mode": "contains", "expected": "SPACE HUMIDITY SENSOR WITH SPECIFIED IO FUNCTIONS"},
+    {"id": "temperature-averaging", "page": 50, "bbox": [680, 480, 910, 510], "mode": "contains", "expected": "TEMPERATURE AVERAGING SENSOR"},
+    {"id": "duct-static-pressure", "page": 50, "bbox": [680, 640, 880, 665], "mode": "contains", "expected": "DUCT STATIC PRESSURE SENSOR"},
+    {"id": "differential-pressure", "page": 50, "bbox": [680, 695, 880, 725], "mode": "contains", "expected": "DIFFERENTIAL PRESSURE SENSOR"},
+    {"id": "freezestat", "page": 50, "bbox": [680, 560, 920, 590], "mode": "contains", "expected": "TEMPERATURE LOW LIMIT / FREEZESTAT"},
+    {"id": "airflow-station", "page": 50, "bbox": [680, 920, 900, 945], "mode": "contains", "expected": "AIR FLOW MEASURING STATION"},
+    {"id": "co2-monitor", "page": 50, "bbox": [1050, 405, 1260, 435], "mode": "contains", "expected": "CO2 CARBON DIOXIDE MONITOR"},
+    {"id": "ddc-control-valve", "page": 50, "bbox": [230, 970, 470, 1012], "mode": "contains", "expected": "CONTROL VALVE, TWO WAY, DDC"},
+    {"id": "parallel-blade-damper", "page": 50, "bbox": [230, 660, 470, 710], "mode": "contains", "expected": "MOTORIZED DAMPER, PARALLEL BLADE"},
+    {"id": "opposed-blade-damper", "page": 50, "bbox": [230, 748, 470, 795], "mode": "contains", "expected": "MOTORIZED DAMPER, OPPOSED BLADE"}
+  ],
+  "remaining_work": "Use these source-defined meanings when reconciling every visible plan/schematic sensor, thermostat, damper actuator and control valve to a building/zone; do not turn the legend itself into a device count."
+}

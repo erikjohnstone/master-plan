@@ -1,0 +1,10 @@
+{
+  "document_id": "29__vol2__030",
+  "module_role": "Explicit source limits.",
+  "tables": [],
+  "source_limitations": [
+    "All 93 pages are visually reviewed. This record retains three literal fan-coil schedule rows, selected schedule titles, BACnet integration notes and one control-symbol row.",
+    "The source does not establish final field-device ownership, controller/card/terminal assignments, addresses, point database, wiring, installed quantities or a complete BAS network takeoff.",
+    "No global scale or plan-derived quantity is asserted."
+  ]
+}

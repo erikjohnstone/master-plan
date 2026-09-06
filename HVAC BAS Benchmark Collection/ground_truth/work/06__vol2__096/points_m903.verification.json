@@ -1,0 +1,1724 @@
+{
+  "document_id": "06__vol2__096",
+  "source_sha256": "72da836a803740382b319b718c1f10d8daeff6e5dbe869f1e68ff173ea4092ec",
+  "annotation_sha256": "5b0ab54853f0534b962e93a927b66237566c78b6b0e1b51c0ac923f578ca8282",
+  "tables": 1,
+  "rows": 41,
+  "cell_assertions": 41,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 1,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1206,
+        760,
+        1220
+      ],
+      "expected": "AI-1 RETURN FAN B VOLUME X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-1 RETURN FAN B VOLUME X X",
+          "word_ids": [
+            1673,
+            1674,
+            1675,
+            1676,
+            1677,
+            1678,
+            1679
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-1 RETURN FAN B VOLUME X X",
+          "word_ids": [
+            476,
+            519,
+            520,
+            521,
+            522,
+            694,
+            747
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 2,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1220,
+        760,
+        1233
+      ],
+      "expected": "AI-2 RETURN FAN A VOLUME X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-2 RETURN FAN A VOLUME X X",
+          "word_ids": [
+            1680,
+            1681,
+            1682,
+            1683,
+            1684,
+            1685,
+            1686
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-2 RETURN FAN A VOLUME X X",
+          "word_ids": [
+            477,
+            523,
+            524,
+            525,
+            526,
+            695,
+            748
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 3,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1233,
+        760,
+        1246
+      ],
+      "expected": "AI-3 OUTDOOR TEMEPRATURE (GLOBAL) X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-3 OUTDOOR TEMEPRATURE (GLOBAL) X X",
+          "word_ids": [
+            1687,
+            1688,
+            1689,
+            1690,
+            1691,
+            1692
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-3 OUTDOOR TEMEPRATURE (GLOBAL) X X",
+          "word_ids": [
+            478,
+            527,
+            528,
+            529,
+            696,
+            749
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 4,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1246,
+        760,
+        1259
+      ],
+      "expected": "AI-4 SPACE DIFFERENCIAL PRESSURE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-4 SPACE DIFFERENCIAL PRESSURE X X",
+          "word_ids": [
+            1693,
+            1694,
+            1695,
+            1696,
+            1697,
+            1698
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-4 SPACE DIFFERENCIAL PRESSURE X X",
+          "word_ids": [
+            479,
+            530,
+            531,
+            532,
+            697,
+            750
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 5,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1259,
+        760,
+        1272
+      ],
+      "expected": "AI-5 MIXED AIR TEMPERATURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-5 MIXED AIR TEMPERATURE X X X",
+          "word_ids": [
+            1699,
+            1700,
+            1701,
+            1702,
+            1703,
+            1704,
+            1705
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-5 MIXED AIR TEMPERATURE X X X",
+          "word_ids": [
+            480,
+            533,
+            534,
+            535,
+            698,
+            732,
+            751
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 6,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1272,
+        760,
+        1285
+      ],
+      "expected": "AI-6 PREHEAT COIL DISCHARGE TEMPERATURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-6 PREHEAT COIL DISCHARGE TEMPERATURE X X X",
+          "word_ids": [
+            1706,
+            1707,
+            1708,
+            1709,
+            1710,
+            1711,
+            1712,
+            1713
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-6 PREHEAT COIL DISCHARGE TEMPERATURE X X X",
+          "word_ids": [
+            481,
+            536,
+            537,
+            538,
+            539,
+            699,
+            733,
+            752
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 7,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1285,
+        760,
+        1298
+      ],
+      "expected": "AI-7 SUPPLY AIR TEMPERATURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-7 SUPPLY AIR TEMPERATURE X X X",
+          "word_ids": [
+            1714,
+            1715,
+            1716,
+            1717,
+            1718,
+            1719,
+            1720
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-7 SUPPLY AIR TEMPERATURE X X X",
+          "word_ids": [
+            482,
+            540,
+            541,
+            542,
+            700,
+            734,
+            753
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 8,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1298,
+        760,
+        1311
+      ],
+      "expected": "AI-8 SUPPLY AIR STATIC PRESSURE (AT UNIT) X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-8 SUPPLY AIR STATIC PRESSURE (AT UNIT) X X",
+          "word_ids": [
+            1721,
+            1722,
+            1723,
+            1724,
+            1725,
+            1726,
+            1727,
+            1728,
+            1729
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-8 SUPPLY AIR STATIC PRESSURE (AT UNIT) X X",
+          "word_ids": [
+            483,
+            543,
+            544,
+            545,
+            546,
+            547,
+            548,
+            701,
+            754
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 9,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1311,
+        760,
+        1325
+      ],
+      "expected": "AI-9 SUPPLY FAN A VOLUME X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-9 SUPPLY FAN A VOLUME X X",
+          "word_ids": [
+            1730,
+            1731,
+            1732,
+            1733,
+            1734,
+            1735,
+            1736
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-9 SUPPLY FAN A VOLUME X X",
+          "word_ids": [
+            484,
+            549,
+            550,
+            551,
+            552,
+            702,
+            755
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 10,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1325,
+        760,
+        1338
+      ],
+      "expected": "AI-10 SUPPLY FAN B VOLUME X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-10 SUPPLY FAN B VOLUME X X",
+          "word_ids": [
+            1737,
+            1738,
+            1739,
+            1740,
+            1741,
+            1742,
+            1743
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-10 SUPPLY FAN B VOLUME X X",
+          "word_ids": [
+            485,
+            553,
+            554,
+            555,
+            556,
+            703,
+            756
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 11,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1338,
+        760,
+        1351
+      ],
+      "expected": "AI-11 SPACE HUMIDITY X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-11 SPACE HUMIDITY X X X",
+          "word_ids": [
+            1744,
+            1745,
+            1746,
+            1747,
+            1748,
+            1749
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-11 SPACE HUMIDITY X X X",
+          "word_ids": [
+            486,
+            557,
+            558,
+            704,
+            735,
+            757
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 12,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1351,
+        760,
+        1364
+      ],
+      "expected": "AI-12 RETURN AIR TEMPERATURE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-12 RETURN AIR TEMPERATURE X X",
+          "word_ids": [
+            1750,
+            1751,
+            1752,
+            1753,
+            1754,
+            1755
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-12 RETURN AIR TEMPERATURE X X",
+          "word_ids": [
+            487,
+            559,
+            560,
+            561,
+            705,
+            758
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 13,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1364,
+        760,
+        1377
+      ],
+      "expected": "AI-13 STATIC PRESSURE 90% THRU SYSTEM X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-13 STATIC PRESSURE 90% THRU SYSTEM X X",
+          "word_ids": [
+            1756,
+            1757,
+            1758,
+            1759,
+            1760,
+            1761,
+            1762,
+            1763
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-13 STATIC PRESSURE 90% THRU SYSTEM X X",
+          "word_ids": [
+            488,
+            562,
+            563,
+            564,
+            565,
+            566,
+            706,
+            759
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 14,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1377,
+        760,
+        1390
+      ],
+      "expected": "AI-14 OUTDOOR AIRFLOW X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-14 OUTDOOR AIRFLOW X X X",
+          "word_ids": [
+            1764,
+            1765,
+            1766,
+            1767,
+            1768,
+            1769
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-14 OUTDOOR AIRFLOW X X X",
+          "word_ids": [
+            489,
+            567,
+            568,
+            707,
+            736,
+            760
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 15,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1390,
+        760,
+        1403
+      ],
+      "expected": "AI-15 PREHEAT COIL HWR TEMPERATURE X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-15 PREHEAT COIL HWR TEMPERATURE X X X",
+          "word_ids": [
+            1770,
+            1771,
+            1772,
+            1773,
+            1774,
+            1775,
+            1776,
+            1777
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-15 PREHEAT COIL HWR TEMPERATURE X X X",
+          "word_ids": [
+            490,
+            569,
+            570,
+            571,
+            572,
+            708,
+            737,
+            761
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 16,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1403,
+        760,
+        1416
+      ],
+      "expected": "AI-16 SUPPLY AIR HUMIDITY X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AI-16 SUPPLY AIR HUMIDITY X X",
+          "word_ids": [
+            1778,
+            1779,
+            1780,
+            1781,
+            1782,
+            1783
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AI-16 SUPPLY AIR HUMIDITY X X",
+          "word_ids": [
+            491,
+            573,
+            574,
+            575,
+            709,
+            762
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 17,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1416,
+        760,
+        1429
+      ],
+      "expected": "AO-1 RETURN FAN B VFC X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-1 RETURN FAN B VFC X X",
+          "word_ids": [
+            1784,
+            1785,
+            1786,
+            1787,
+            1788,
+            1789,
+            1790
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-1 RETURN FAN B VFC X X",
+          "word_ids": [
+            492,
+            576,
+            577,
+            578,
+            579,
+            710,
+            763
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 18,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1429,
+        760,
+        1442
+      ],
+      "expected": "AO-2 RETURN FAN A VFC X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-2 RETURN FAN A VFC X X",
+          "word_ids": [
+            1791,
+            1792,
+            1793,
+            1794,
+            1795,
+            1796,
+            1797
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-2 RETURN FAN A VFC X X",
+          "word_ids": [
+            493,
+            580,
+            581,
+            582,
+            583,
+            711,
+            764
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 19,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1442,
+        760,
+        1456
+      ],
+      "expected": "AO-3 SUPPLY FAN A VFC X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-3 SUPPLY FAN A VFC X X",
+          "word_ids": [
+            1798,
+            1799,
+            1800,
+            1801,
+            1802,
+            1803,
+            1804
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-3 SUPPLY FAN A VFC X X",
+          "word_ids": [
+            494,
+            584,
+            585,
+            586,
+            587,
+            712,
+            765
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 20,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1456,
+        760,
+        1469
+      ],
+      "expected": "AO-4 SUPPLY FAN B VFC X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-4 SUPPLY FAN B VFC X X",
+          "word_ids": [
+            1805,
+            1806,
+            1807,
+            1808,
+            1809,
+            1810,
+            1811
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-4 SUPPLY FAN B VFC X X",
+          "word_ids": [
+            495,
+            588,
+            589,
+            590,
+            591,
+            713,
+            766
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 21,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1469,
+        760,
+        1482
+      ],
+      "expected": "AO-5 PREHEAT COIL VALVE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-5 PREHEAT COIL VALVE X X",
+          "word_ids": [
+            1812,
+            1813,
+            1814,
+            1815,
+            1816,
+            1817
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-5 PREHEAT COIL VALVE X X",
+          "word_ids": [
+            496,
+            592,
+            593,
+            594,
+            714,
+            767
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 22,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1482,
+        760,
+        1495
+      ],
+      "expected": "AO-6 COOLING COIL VALVE X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-6 COOLING COIL VALVE X X",
+          "word_ids": [
+            1818,
+            1819,
+            1820,
+            1821,
+            1822,
+            1823
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-6 COOLING COIL VALVE X X",
+          "word_ids": [
+            497,
+            595,
+            596,
+            597,
+            715,
+            768
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 23,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1495,
+        760,
+        1508
+      ],
+      "expected": "AO-7 RETURN AIR DAMPER X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-7 RETURN AIR DAMPER X X",
+          "word_ids": [
+            1824,
+            1825,
+            1826,
+            1827,
+            1828,
+            1829
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-7 RETURN AIR DAMPER X X",
+          "word_ids": [
+            498,
+            598,
+            599,
+            600,
+            716,
+            769
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 24,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1508,
+        760,
+        1521
+      ],
+      "expected": "AO-8 OUTDOOR AIR DAMPER X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-8 OUTDOOR AIR DAMPER X X",
+          "word_ids": [
+            1830,
+            1831,
+            1832,
+            1833,
+            1834,
+            1835
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-8 OUTDOOR AIR DAMPER X X",
+          "word_ids": [
+            499,
+            601,
+            602,
+            603,
+            717,
+            770
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 25,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1521,
+        760,
+        1534
+      ],
+      "expected": "AO-9 RELIEF AIR DAMPER X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AO-9 RELIEF AIR DAMPER X X",
+          "word_ids": [
+            1836,
+            1837,
+            1838,
+            1839,
+            1840,
+            1841
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AO-9 RELIEF AIR DAMPER X X",
+          "word_ids": [
+            500,
+            604,
+            605,
+            606,
+            718,
+            771
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 26,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1534,
+        760,
+        1547
+      ],
+      "expected": "BI-1 PREFILTER ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-1 PREFILTER ALARM X X X",
+          "word_ids": [
+            1842,
+            1843,
+            1844,
+            1845,
+            1846,
+            1847
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-1 PREFILTER ALARM X X X",
+          "word_ids": [
+            501,
+            607,
+            608,
+            719,
+            738,
+            772
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 27,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1547,
+        760,
+        1560
+      ],
+      "expected": "BI-2 SAFETY LOW LIMIT STAT ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-2 SAFETY LOW LIMIT STAT ALARM X X X",
+          "word_ids": [
+            1848,
+            1849,
+            1850,
+            1851,
+            1852,
+            1853,
+            1854,
+            1855,
+            1856
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-2 SAFETY LOW LIMIT STAT ALARM X X X",
+          "word_ids": [
+            502,
+            609,
+            610,
+            611,
+            612,
+            613,
+            720,
+            739,
+            773
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 28,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1560,
+        760,
+        1573
+      ],
+      "expected": "BI-3 RETURN AIR LOW STATIC ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-3 RETURN AIR LOW STATIC ALARM X X X",
+          "word_ids": [
+            1857,
+            1858,
+            1859,
+            1860,
+            1861,
+            1862,
+            1863,
+            1864,
+            1865
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-3 RETURN AIR LOW STATIC ALARM X X X",
+          "word_ids": [
+            503,
+            614,
+            615,
+            616,
+            617,
+            618,
+            721,
+            740,
+            774
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 29,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1573,
+        760,
+        1587
+      ],
+      "expected": "BI-4 SUPPLY AIR HIGH STATIC ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-4 SUPPLY AIR HIGH STATIC ALARM X X X",
+          "word_ids": [
+            1866,
+            1867,
+            1868,
+            1869,
+            1870,
+            1871,
+            1872,
+            1873,
+            1874
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-4 SUPPLY AIR HIGH STATIC ALARM X X X",
+          "word_ids": [
+            504,
+            619,
+            620,
+            621,
+            622,
+            623,
+            722,
+            741,
+            775
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 30,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1587,
+        760,
+        1600
+      ],
+      "expected": "BI-5 RETURN FAN B STATUS X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-5 RETURN FAN B STATUS X X X",
+          "word_ids": [
+            1875,
+            1876,
+            1877,
+            1878,
+            1879,
+            1880,
+            1881,
+            1882
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-5 RETURN FAN B STATUS X X X",
+          "word_ids": [
+            505,
+            624,
+            625,
+            626,
+            627,
+            723,
+            742,
+            776
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 31,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1600,
+        760,
+        1613
+      ],
+      "expected": "BI-6 RETURN FAN A STATUS X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-6 RETURN FAN A STATUS X X X",
+          "word_ids": [
+            1883,
+            1884,
+            1885,
+            1886,
+            1887,
+            1888,
+            1889,
+            1890
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-6 RETURN FAN A STATUS X X X",
+          "word_ids": [
+            506,
+            628,
+            629,
+            630,
+            631,
+            724,
+            743,
+            777
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 32,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1613,
+        760,
+        1626
+      ],
+      "expected": "BI-7 SUPPLY FAN A STATUS X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-7 SUPPLY FAN A STATUS X X X",
+          "word_ids": [
+            1891,
+            1892,
+            1893,
+            1894,
+            1895,
+            1896,
+            1897,
+            1898
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-7 SUPPLY FAN A STATUS X X X",
+          "word_ids": [
+            507,
+            632,
+            633,
+            634,
+            635,
+            725,
+            744,
+            778
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 33,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1626,
+        760,
+        1639
+      ],
+      "expected": "BI-8 SUPPLY FAN B STATUS X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-8 SUPPLY FAN B STATUS X X X",
+          "word_ids": [
+            1899,
+            1900,
+            1901,
+            1902,
+            1903,
+            1904,
+            1905,
+            1906
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-8 SUPPLY FAN B STATUS X X X",
+          "word_ids": [
+            508,
+            636,
+            637,
+            638,
+            639,
+            726,
+            745,
+            779
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 34,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1639,
+        760,
+        1652
+      ],
+      "expected": "BI-9 HEATING COIL PUMP STATUS X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-9 HEATING COIL PUMP STATUS X",
+          "word_ids": [
+            1907,
+            1908,
+            1909,
+            1910,
+            1911,
+            1912
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-9 HEATING COIL PUMP STATUS X",
+          "word_ids": [
+            509,
+            640,
+            641,
+            642,
+            643,
+            780
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 35,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1652,
+        760,
+        1665
+      ],
+      "expected": "BI-10 UPS LOW BATTERY ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-10 UPS LOW BATTERY ALARM X X X",
+          "word_ids": [
+            1913,
+            1914,
+            1915,
+            1916,
+            1917,
+            1918,
+            1919,
+            1920
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-10 UPS LOW BATTERY ALARM X X X",
+          "word_ids": [
+            510,
+            644,
+            645,
+            646,
+            647,
+            728,
+            730,
+            781
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 36,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1665,
+        760,
+        1678
+      ],
+      "expected": "BI-11 UPS ON BATTERY ALARM X X X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BI-11 UPS ON BATTERY ALARM X X X",
+          "word_ids": [
+            1921,
+            1922,
+            1923,
+            1924,
+            1925,
+            1926,
+            1927,
+            1928
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BI-11 UPS ON BATTERY ALARM X X X",
+          "word_ids": [
+            511,
+            648,
+            649,
+            650,
+            651,
+            729,
+            731,
+            782
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 37,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1678,
+        760,
+        1691
+      ],
+      "expected": "BO-1 RETURN FAN B START-STOP X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-1 RETURN FAN B START-STOP X",
+          "word_ids": [
+            1929,
+            1930,
+            1931,
+            1932,
+            1933,
+            1934
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-1 RETURN FAN B START-STOP X",
+          "word_ids": [
+            512,
+            652,
+            653,
+            654,
+            655,
+            783
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 38,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1691,
+        760,
+        1704
+      ],
+      "expected": "BO-2 RETURN FAN A START-STOP X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-2 RETURN FAN A START-STOP X",
+          "word_ids": [
+            1935,
+            1936,
+            1937,
+            1938,
+            1939,
+            1940
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-2 RETURN FAN A START-STOP X",
+          "word_ids": [
+            513,
+            656,
+            657,
+            658,
+            659,
+            784
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 39,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1704,
+        760,
+        1718
+      ],
+      "expected": "BO-3 SUPPLY FAN A START-STOP X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-3 SUPPLY FAN A START-STOP X",
+          "word_ids": [
+            1941,
+            1942,
+            1943,
+            1944,
+            1945,
+            1946
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-3 SUPPLY FAN A START-STOP X",
+          "word_ids": [
+            514,
+            660,
+            661,
+            662,
+            663,
+            785
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 40,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1718,
+        760,
+        1731
+      ],
+      "expected": "BO-4 SUPPLY FAN B START-STOP X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-4 SUPPLY FAN B START-STOP X",
+          "word_ids": [
+            1947,
+            1948,
+            1949,
+            1950,
+            1951,
+            1952
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-4 SUPPLY FAN B START-STOP X",
+          "word_ids": [
+            515,
+            664,
+            665,
+            666,
+            667,
+            786
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "row": 41,
+      "column": "source_row_as_printed",
+      "page": 33,
+      "bbox": [
+        365,
+        1731,
+        760,
+        1745
+      ],
+      "expected": "BO-5 HEATING COIL PUMP START-STOP X",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "BO-5 HEATING COIL PUMP START-STOP X",
+          "word_ids": [
+            1953,
+            1954,
+            1955,
+            1956,
+            1957,
+            1958
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "BO-5 HEATING COIL PUMP START-STOP X",
+          "word_ids": [
+            516,
+            668,
+            669,
+            670,
+            671,
+            787
+          ]
+        }
+      }
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "header": "SCHEDULE OF DDC POINTS",
+      "page": 33,
+      "bbox": [
+        490,
+        1168,
+        630,
+        1190
+      ],
+      "engine": "mupdf",
+      "actual": "SCHEDULE OF DDC POINTS",
+      "pass": true
+    },
+    {
+      "table": "M903-AHU-4-DDC",
+      "header": "SCHEDULE OF DDC POINTS",
+      "page": 33,
+      "bbox": [
+        490,
+        1168,
+        630,
+        1190
+      ],
+      "engine": "poppler",
+      "actual": "SCHEDULE OF DDC POINTS",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

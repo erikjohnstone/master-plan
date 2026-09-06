@@ -1,0 +1,2052 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "8be556487d7af6ade0cad66cf950a483f591de7af4588c6d4e7c31d520a36897",
+  "tables": 1,
+  "rows": 4,
+  "cell_assertions": 68,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 1,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        1200,
+        1352,
+        1290,
+        1370
+      ],
+      "expected": "AHU-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-A1",
+          "word_ids": [
+            1444
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-A1",
+          "word_ids": [
+            545
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 1,
+      "column": "inlet_return_62_5Hz",
+      "page": 44,
+      "bbox": [
+        1290,
+        1352,
+        1345,
+        1370
+      ],
+      "expected": "76",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "76",
+          "word_ids": [
+            1445
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "76",
+          "word_ids": [
+            551
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 1,
+      "column": "inlet_return_125Hz",
+      "page": 44,
+      "bbox": [
+        1345,
+        1352,
+        1390,
+        1370
+      ],
+      "expected": "77",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "77",
+          "word_ids": [
+            1446
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "77",
+          "word_ids": [
+            790
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 1,
+      "column": "inlet_return_250Hz",
+      "page": 44,
+      "bbox": [
+        1390,
+        1352,
+        1430,
+        1370
+      ],
+      "expected": "78",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "78",
+          "word_ids": [
+            1447
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "78",
+          "word_ids": [
+            791
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 1,
+      "column": "inlet_return_500Hz",
+      "page": 44,
+      "bbox": [
+        1430,
+        1352,
+        1465,
+        1370
+      ],
+      "expected": "78",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "78",
+          "word_ids": [
+            1448
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "78",
+          "word_ids": [
+            792
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 1,
+      "column": "inlet_return_1000Hz",
+      "page": 44,
+      "bbox": [
+        1465,
+        1352,
+        1500,
+        1370
+      ],
+      "expected": "72",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "72",
+          "word_ids": [
+            1449
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "72",
+          "word_ids": [
+            793
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 1,
+      "column": "inlet_return_2000Hz",
+      "page": 44,
+      "bbox": [
+        1500,
+        1352,
+        1535,
+        1370
+      ],
+      "expected": "75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "75",
+          "word_ids": [
+            1450
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "75",
+          "word_ids": [
+            794
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 1,
+      "column": "inlet_return_4000Hz",
+      "page": 44,
+      "bbox": [
+        1535,
+        1352,
+        1570,
+        1370
+      ],
+      "expected": "71",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "71",
+          "word_ids": [
+            1451
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "71",
+          "word_ids": [
+            795
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 1,
+      "column": "inlet_return_8000Hz",
+      "page": 44,
+      "bbox": [
+        1570,
+        1352,
+        1610,
+        1370
+      ],
+      "expected": "63",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "63",
+          "word_ids": [
+            1452
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "63",
+          "word_ids": [
+            556
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 1,
+      "column": "outlet_62_5Hz",
+      "page": 44,
+      "bbox": [
+        1610,
+        1352,
+        1650,
+        1370
+      ],
+      "expected": "88",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "88",
+          "word_ids": [
+            1453
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "88",
+          "word_ids": [
+            561
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 1,
+      "column": "outlet_125Hz",
+      "page": 44,
+      "bbox": [
+        1650,
+        1352,
+        1690,
+        1370
+      ],
+      "expected": "84",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "84",
+          "word_ids": [
+            1454
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "84",
+          "word_ids": [
+            706
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 1,
+      "column": "outlet_250Hz",
+      "page": 44,
+      "bbox": [
+        1690,
+        1352,
+        1725,
+        1370
+      ],
+      "expected": "86",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "86",
+          "word_ids": [
+            1455
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "86",
+          "word_ids": [
+            707
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 1,
+      "column": "outlet_500Hz",
+      "page": 44,
+      "bbox": [
+        1725,
+        1352,
+        1765,
+        1370
+      ],
+      "expected": "92",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "92",
+          "word_ids": [
+            1456
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "92",
+          "word_ids": [
+            708
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 1,
+      "column": "outlet_1000Hz",
+      "page": 44,
+      "bbox": [
+        1765,
+        1352,
+        1800,
+        1370
+      ],
+      "expected": "86",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "86",
+          "word_ids": [
+            1457
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "86",
+          "word_ids": [
+            709
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 1,
+      "column": "outlet_2000Hz",
+      "page": 44,
+      "bbox": [
+        1800,
+        1352,
+        1830,
+        1370
+      ],
+      "expected": "87",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "87",
+          "word_ids": [
+            1458
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "87",
+          "word_ids": [
+            710
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 1,
+      "column": "outlet_4000Hz",
+      "page": 44,
+      "bbox": [
+        1830,
+        1352,
+        1865,
+        1370
+      ],
+      "expected": "81",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "81",
+          "word_ids": [
+            1459
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "81",
+          "word_ids": [
+            711
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 1,
+      "column": "outlet_8000Hz",
+      "page": 44,
+      "bbox": [
+        1865,
+        1352,
+        1910,
+        1370
+      ],
+      "expected": "74",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "74",
+          "word_ids": [
+            1460
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "74",
+          "word_ids": [
+            712
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 2,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        1200,
+        1370,
+        1290,
+        1387
+      ],
+      "expected": "AHU-A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-A2",
+          "word_ids": [
+            1461
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-A2",
+          "word_ids": [
+            546
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 2,
+      "column": "inlet_return_62_5Hz",
+      "page": 44,
+      "bbox": [
+        1290,
+        1370,
+        1345,
+        1387
+      ],
+      "expected": "72",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "72",
+          "word_ids": [
+            1462
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "72",
+          "word_ids": [
+            552
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 2,
+      "column": "inlet_return_125Hz",
+      "page": 44,
+      "bbox": [
+        1345,
+        1370,
+        1390,
+        1387
+      ],
+      "expected": "70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            1463
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            796
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 2,
+      "column": "inlet_return_250Hz",
+      "page": 44,
+      "bbox": [
+        1390,
+        1370,
+        1430,
+        1387
+      ],
+      "expected": "68",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "68",
+          "word_ids": [
+            1464
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "68",
+          "word_ids": [
+            797
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 2,
+      "column": "inlet_return_500Hz",
+      "page": 44,
+      "bbox": [
+        1430,
+        1370,
+        1465,
+        1387
+      ],
+      "expected": "70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            1465
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            798
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 2,
+      "column": "inlet_return_1000Hz",
+      "page": 44,
+      "bbox": [
+        1465,
+        1370,
+        1500,
+        1387
+      ],
+      "expected": "65",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "65",
+          "word_ids": [
+            1466
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "65",
+          "word_ids": [
+            799
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 2,
+      "column": "inlet_return_2000Hz",
+      "page": 44,
+      "bbox": [
+        1500,
+        1370,
+        1535,
+        1387
+      ],
+      "expected": "66",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "66",
+          "word_ids": [
+            1467
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "66",
+          "word_ids": [
+            800
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 2,
+      "column": "inlet_return_4000Hz",
+      "page": 44,
+      "bbox": [
+        1535,
+        1370,
+        1570,
+        1387
+      ],
+      "expected": "61",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "61",
+          "word_ids": [
+            1468
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "61",
+          "word_ids": [
+            801
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 2,
+      "column": "inlet_return_8000Hz",
+      "page": 44,
+      "bbox": [
+        1570,
+        1370,
+        1610,
+        1387
+      ],
+      "expected": "56",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "56",
+          "word_ids": [
+            1469
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "56",
+          "word_ids": [
+            557
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 2,
+      "column": "outlet_62_5Hz",
+      "page": 44,
+      "bbox": [
+        1610,
+        1370,
+        1650,
+        1387
+      ],
+      "expected": "83",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "83",
+          "word_ids": [
+            1470
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "83",
+          "word_ids": [
+            562
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 2,
+      "column": "outlet_125Hz",
+      "page": 44,
+      "bbox": [
+        1650,
+        1370,
+        1690,
+        1387
+      ],
+      "expected": "82",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "82",
+          "word_ids": [
+            1471
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "82",
+          "word_ids": [
+            713
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 2,
+      "column": "outlet_250Hz",
+      "page": 44,
+      "bbox": [
+        1690,
+        1370,
+        1725,
+        1387
+      ],
+      "expected": "79",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "79",
+          "word_ids": [
+            1472
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "79",
+          "word_ids": [
+            714
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 2,
+      "column": "outlet_500Hz",
+      "page": 44,
+      "bbox": [
+        1725,
+        1370,
+        1765,
+        1387
+      ],
+      "expected": "80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            1473
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            715
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 2,
+      "column": "outlet_1000Hz",
+      "page": 44,
+      "bbox": [
+        1765,
+        1370,
+        1800,
+        1387
+      ],
+      "expected": "78",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "78",
+          "word_ids": [
+            1474
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "78",
+          "word_ids": [
+            716
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 2,
+      "column": "outlet_2000Hz",
+      "page": 44,
+      "bbox": [
+        1800,
+        1370,
+        1830,
+        1387
+      ],
+      "expected": "76",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "76",
+          "word_ids": [
+            1475
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "76",
+          "word_ids": [
+            717
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 2,
+      "column": "outlet_4000Hz",
+      "page": 44,
+      "bbox": [
+        1830,
+        1370,
+        1865,
+        1387
+      ],
+      "expected": "69",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "69",
+          "word_ids": [
+            1476
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "69",
+          "word_ids": [
+            718
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 2,
+      "column": "outlet_8000Hz",
+      "page": 44,
+      "bbox": [
+        1865,
+        1370,
+        1910,
+        1387
+      ],
+      "expected": "63",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "63",
+          "word_ids": [
+            1477
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "63",
+          "word_ids": [
+            719
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 3,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        1200,
+        1387,
+        1290,
+        1404
+      ],
+      "expected": "DOAH-A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH-A2",
+          "word_ids": [
+            1478
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH-A2",
+          "word_ids": [
+            547
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 3,
+      "column": "inlet_return_62_5Hz",
+      "page": 44,
+      "bbox": [
+        1290,
+        1387,
+        1345,
+        1404
+      ],
+      "expected": "72",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "72",
+          "word_ids": [
+            1479
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "72",
+          "word_ids": [
+            553
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 3,
+      "column": "inlet_return_125Hz",
+      "page": 44,
+      "bbox": [
+        1345,
+        1387,
+        1390,
+        1404
+      ],
+      "expected": "70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            1480
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            802
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 3,
+      "column": "inlet_return_250Hz",
+      "page": 44,
+      "bbox": [
+        1390,
+        1387,
+        1430,
+        1404
+      ],
+      "expected": "71",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "71",
+          "word_ids": [
+            1481
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "71",
+          "word_ids": [
+            803
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 3,
+      "column": "inlet_return_500Hz",
+      "page": 44,
+      "bbox": [
+        1430,
+        1387,
+        1465,
+        1404
+      ],
+      "expected": "71",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "71",
+          "word_ids": [
+            1482
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "71",
+          "word_ids": [
+            804
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 3,
+      "column": "inlet_return_1000Hz",
+      "page": 44,
+      "bbox": [
+        1465,
+        1387,
+        1500,
+        1404
+      ],
+      "expected": "67",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "67",
+          "word_ids": [
+            1483
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "67",
+          "word_ids": [
+            805
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 3,
+      "column": "inlet_return_2000Hz",
+      "page": 44,
+      "bbox": [
+        1500,
+        1387,
+        1535,
+        1404
+      ],
+      "expected": "67",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "67",
+          "word_ids": [
+            1484
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "67",
+          "word_ids": [
+            806
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 3,
+      "column": "inlet_return_4000Hz",
+      "page": 44,
+      "bbox": [
+        1535,
+        1387,
+        1570,
+        1404
+      ],
+      "expected": "60",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            1485
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "60",
+          "word_ids": [
+            807
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 3,
+      "column": "inlet_return_8000Hz",
+      "page": 44,
+      "bbox": [
+        1570,
+        1387,
+        1610,
+        1404
+      ],
+      "expected": "57",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "57",
+          "word_ids": [
+            1486
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "57",
+          "word_ids": [
+            558
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 3,
+      "column": "outlet_62_5Hz",
+      "page": 44,
+      "bbox": [
+        1610,
+        1387,
+        1650,
+        1404
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1487
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            563
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 3,
+      "column": "outlet_125Hz",
+      "page": 44,
+      "bbox": [
+        1650,
+        1387,
+        1690,
+        1404
+      ],
+      "expected": "76",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "76",
+          "word_ids": [
+            1488
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "76",
+          "word_ids": [
+            720
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 3,
+      "column": "outlet_250Hz",
+      "page": 44,
+      "bbox": [
+        1690,
+        1387,
+        1725,
+        1404
+      ],
+      "expected": "74",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "74",
+          "word_ids": [
+            1489
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "74",
+          "word_ids": [
+            721
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 3,
+      "column": "outlet_500Hz",
+      "page": 44,
+      "bbox": [
+        1725,
+        1387,
+        1765,
+        1404
+      ],
+      "expected": "74",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "74",
+          "word_ids": [
+            1490
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "74",
+          "word_ids": [
+            722
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 3,
+      "column": "outlet_1000Hz",
+      "page": 44,
+      "bbox": [
+        1765,
+        1387,
+        1800,
+        1404
+      ],
+      "expected": "70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            1491
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            723
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 3,
+      "column": "outlet_2000Hz",
+      "page": 44,
+      "bbox": [
+        1800,
+        1387,
+        1830,
+        1404
+      ],
+      "expected": "68",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "68",
+          "word_ids": [
+            1492
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "68",
+          "word_ids": [
+            724
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 3,
+      "column": "outlet_4000Hz",
+      "page": 44,
+      "bbox": [
+        1830,
+        1387,
+        1865,
+        1404
+      ],
+      "expected": "61",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "61",
+          "word_ids": [
+            1493
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "61",
+          "word_ids": [
+            725
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 3,
+      "column": "outlet_8000Hz",
+      "page": 44,
+      "bbox": [
+        1865,
+        1387,
+        1910,
+        1404
+      ],
+      "expected": "56",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "56",
+          "word_ids": [
+            1494
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "56",
+          "word_ids": [
+            726
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 4,
+      "column": "mark",
+      "page": 44,
+      "bbox": [
+        1200,
+        1404,
+        1290,
+        1422
+      ],
+      "expected": "DOAH-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH-A1",
+          "word_ids": [
+            1495
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH-A1",
+          "word_ids": [
+            548
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 4,
+      "column": "inlet_return_62_5Hz",
+      "page": 44,
+      "bbox": [
+        1290,
+        1404,
+        1345,
+        1422
+      ],
+      "expected": "77",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "77",
+          "word_ids": [
+            1496
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "77",
+          "word_ids": [
+            554
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 4,
+      "column": "inlet_return_125Hz",
+      "page": 44,
+      "bbox": [
+        1345,
+        1404,
+        1390,
+        1422
+      ],
+      "expected": "76",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "76",
+          "word_ids": [
+            1497
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "76",
+          "word_ids": [
+            808
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 4,
+      "column": "inlet_return_250Hz",
+      "page": 44,
+      "bbox": [
+        1390,
+        1404,
+        1430,
+        1422
+      ],
+      "expected": "73",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "73",
+          "word_ids": [
+            1498
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "73",
+          "word_ids": [
+            809
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 4,
+      "column": "inlet_return_500Hz",
+      "page": 44,
+      "bbox": [
+        1430,
+        1404,
+        1465,
+        1422
+      ],
+      "expected": "77",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "77",
+          "word_ids": [
+            1499
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "77",
+          "word_ids": [
+            810
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 4,
+      "column": "inlet_return_1000Hz",
+      "page": 44,
+      "bbox": [
+        1465,
+        1404,
+        1500,
+        1422
+      ],
+      "expected": "75",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "75",
+          "word_ids": [
+            1500
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "75",
+          "word_ids": [
+            811
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 4,
+      "column": "inlet_return_2000Hz",
+      "page": 44,
+      "bbox": [
+        1500,
+        1404,
+        1535,
+        1422
+      ],
+      "expected": "73",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "73",
+          "word_ids": [
+            1501
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "73",
+          "word_ids": [
+            812
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 4,
+      "column": "inlet_return_4000Hz",
+      "page": 44,
+      "bbox": [
+        1535,
+        1404,
+        1570,
+        1422
+      ],
+      "expected": "68",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "68",
+          "word_ids": [
+            1502
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "68",
+          "word_ids": [
+            813
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 4,
+      "column": "inlet_return_8000Hz",
+      "page": 44,
+      "bbox": [
+        1570,
+        1404,
+        1610,
+        1422
+      ],
+      "expected": "63",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "63",
+          "word_ids": [
+            1503
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "63",
+          "word_ids": [
+            559
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 4,
+      "column": "outlet_62_5Hz",
+      "page": 44,
+      "bbox": [
+        1610,
+        1404,
+        1650,
+        1422
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1504
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            564
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 4,
+      "column": "outlet_125Hz",
+      "page": 44,
+      "bbox": [
+        1650,
+        1404,
+        1690,
+        1422
+      ],
+      "expected": "81",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "81",
+          "word_ids": [
+            1505
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "81",
+          "word_ids": [
+            727
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 4,
+      "column": "outlet_250Hz",
+      "page": 44,
+      "bbox": [
+        1690,
+        1404,
+        1725,
+        1422
+      ],
+      "expected": "79",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "79",
+          "word_ids": [
+            1506
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "79",
+          "word_ids": [
+            728
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 4,
+      "column": "outlet_500Hz",
+      "page": 44,
+      "bbox": [
+        1725,
+        1404,
+        1765,
+        1422
+      ],
+      "expected": "80",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            1507
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "80",
+          "word_ids": [
+            729
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 4,
+      "column": "outlet_1000Hz",
+      "page": 44,
+      "bbox": [
+        1765,
+        1404,
+        1800,
+        1422
+      ],
+      "expected": "78",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "78",
+          "word_ids": [
+            1508
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "78",
+          "word_ids": [
+            730
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 4,
+      "column": "outlet_2000Hz",
+      "page": 44,
+      "bbox": [
+        1800,
+        1404,
+        1830,
+        1422
+      ],
+      "expected": "77",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "77",
+          "word_ids": [
+            1509
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "77",
+          "word_ids": [
+            731
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 4,
+      "column": "outlet_4000Hz",
+      "page": 44,
+      "bbox": [
+        1830,
+        1404,
+        1865,
+        1422
+      ],
+      "expected": "70",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            1510
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "70",
+          "word_ids": [
+            732
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "row": 4,
+      "column": "outlet_8000Hz",
+      "page": 44,
+      "bbox": [
+        1865,
+        1404,
+        1910,
+        1422
+      ],
+      "expected": "64",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "64",
+          "word_ids": [
+            1511
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "64",
+          "word_ids": [
+            733
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "header": "FAN SOUND POWER LEVEL SCHEDULE",
+      "page": 44,
+      "bbox": [
+        1360,
+        1270,
+        1720,
+        1315
+      ],
+      "engine": "mupdf",
+      "actual": "FAN SOUND POWER LEVEL SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "header": "FAN SOUND POWER LEVEL SCHEDULE",
+      "page": 44,
+      "bbox": [
+        1360,
+        1270,
+        1720,
+        1315
+      ],
+      "engine": "poppler",
+      "actual": "FAN SOUND POWER LEVEL SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "header": "MARK INLET RETURN SOUND POWER dB OUTLET SOUND POWER dB 62.5 125 250 500 1000 2000 4000 8000",
+      "page": 44,
+      "bbox": [
+        1200,
+        1310,
+        1910,
+        1352
+      ],
+      "engine": "mupdf",
+      "actual": "INLET/RETURN SOUND POWER (dB) OUTLET SOUND POWER (dB) MARK 62.5 125 250 500 1000 2000 4000 8000 62.5 125 250 500 1000 2000 4000 8000",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-FAN-SOUND-POWER",
+      "header": "MARK INLET RETURN SOUND POWER dB OUTLET SOUND POWER dB 62.5 125 250 500 1000 2000 4000 8000",
+      "page": 44,
+      "bbox": [
+        1200,
+        1310,
+        1910,
+        1352
+      ],
+      "engine": "poppler",
+      "actual": "INLET/RETURN SOUND POWER (dB) OUTLET SOUND POWER (dB) MARK 62.5 125 250 500 1000 2000 4000 8000 62.5 125 250 500 1000 2000 4000 8000",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "air-ops-fan-sound-power-row-count",
+      "actual": 4,
+      "expected": 4,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

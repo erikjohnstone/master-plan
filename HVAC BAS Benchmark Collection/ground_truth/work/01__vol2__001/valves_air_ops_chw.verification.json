@@ -1,0 +1,4343 @@
+{
+  "document_id": "01__vol2__001",
+  "source_sha256": "9b83f64b9ef98c22a4053ab4e79665fe7581a620c2908c2239b9216c02e2c0bf",
+  "annotation_sha256": "46b7b4bacab31a64509acd1041e37b1833809566accb4320d561ed6fbfe018c6",
+  "tables": 1,
+  "rows": 21,
+  "cell_assertions": 147,
+  "text_assertions": 0,
+  "checks": [
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        305,
+        1805,
+        324
+      ],
+      "expected": "AHU-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-A1",
+          "word_ids": [
+            1187
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-A1",
+          "word_ids": [
+            1013
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        305,
+        1905,
+        324
+      ],
+      "expected": "CV-AHU-A1-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-AHU-A1-CHW",
+          "word_ids": [
+            1188
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-AHU-A1-CHW",
+          "word_ids": [
+            1014
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        305,
+        1970,
+        324
+      ],
+      "expected": "61.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "61.5",
+          "word_ids": [
+            1189
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "61.5",
+          "word_ids": [
+            1111
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        305,
+        2020,
+        324
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            1190
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            1112
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        305,
+        2110,
+        324
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1191
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1113
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        305,
+        2170,
+        324
+      ],
+      "expected": "27.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "27.5",
+          "word_ids": [
+            1192
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "27.5",
+          "word_ids": [
+            986
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 1,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        305,
+        2230,
+        324
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1193
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            960
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        324,
+        1805,
+        341
+      ],
+      "expected": "AHU-A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "AHU-A2",
+          "word_ids": [
+            1194
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "AHU-A2",
+          "word_ids": [
+            1015
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        324,
+        1905,
+        341
+      ],
+      "expected": "CV-AHU-A2-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-AHU-A2-CHW",
+          "word_ids": [
+            1195
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-AHU-A2-CHW",
+          "word_ids": [
+            1016
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        324,
+        1970,
+        341
+      ],
+      "expected": "10.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "10.9",
+          "word_ids": [
+            1196
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "10.9",
+          "word_ids": [
+            1114
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        324,
+        2020,
+        341
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1197
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1115
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        324,
+        2110,
+        341
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1198
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1116
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        324,
+        2170,
+        341
+      ],
+      "expected": "4.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4.9",
+          "word_ids": [
+            1199
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4.9",
+          "word_ids": [
+            987
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 2,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        324,
+        2230,
+        341
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1200
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            961
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        341,
+        1805,
+        358
+      ],
+      "expected": "CV-CH-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-CH-A1",
+          "word_ids": [
+            1201
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-CH-A1",
+          "word_ids": [
+            1017
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        341,
+        1905,
+        358
+      ],
+      "expected": "CV-CH-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-CH-A1",
+          "word_ids": [
+            1202
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-CH-A1",
+          "word_ids": [
+            1018
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        341,
+        1970,
+        358
+      ],
+      "expected": "128.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "128.0",
+          "word_ids": [
+            1203
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "128.0",
+          "word_ids": [
+            1117
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        341,
+        2020,
+        358
+      ],
+      "expected": "4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            1204
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            1118
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        341,
+        2110,
+        358
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1205
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1119
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        341,
+        2170,
+        358
+      ],
+      "expected": "324.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "324.0",
+          "word_ids": [
+            1702
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "324.0",
+          "word_ids": [
+            989
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 3,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        341,
+        2230,
+        358
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            1207
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            962
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        358,
+        1805,
+        375
+      ],
+      "expected": "CV-CH-A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-CH-A2",
+          "word_ids": [
+            1208
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-CH-A2",
+          "word_ids": [
+            1019
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        358,
+        1905,
+        375
+      ],
+      "expected": "CV-CH-A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-CH-A2",
+          "word_ids": [
+            1209
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-CH-A2",
+          "word_ids": [
+            1020
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        358,
+        1970,
+        375
+      ],
+      "expected": "128.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "128.0",
+          "word_ids": [
+            1210
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "128.0",
+          "word_ids": [
+            1120
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        358,
+        2020,
+        375
+      ],
+      "expected": "4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            1211
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4",
+          "word_ids": [
+            1121
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        358,
+        2110,
+        375
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1212
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1122
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        358,
+        2170,
+        375
+      ],
+      "expected": "324.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "324.0",
+          "word_ids": [
+            1703
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "324.0",
+          "word_ids": [
+            991
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 4,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        358,
+        2230,
+        375
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            1214
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            963
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        375,
+        1805,
+        392
+      ],
+      "expected": "CV-CHW-BP-A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-CHW-BP-A",
+          "word_ids": [
+            1215
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-CHW-BP-A",
+          "word_ids": [
+            1021
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        375,
+        1905,
+        392
+      ],
+      "expected": "CV-CHW-BP-A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-CHW-BP-A",
+          "word_ids": [
+            1216
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-CHW-BP-A",
+          "word_ids": [
+            1022
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        375,
+        1970,
+        392
+      ],
+      "expected": "58.0",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "58.0",
+          "word_ids": [
+            1217
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "58.0",
+          "word_ids": [
+            1123
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        375,
+        2020,
+        392
+      ],
+      "expected": "2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            1218
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2",
+          "word_ids": [
+            1124
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        375,
+        2110,
+        392
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1219
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1125
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        375,
+        2170,
+        392
+      ],
+      "expected": "25.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25.9",
+          "word_ids": [
+            1220
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25.9",
+          "word_ids": [
+            992
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 5,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        375,
+        2230,
+        392
+      ],
+      "expected": "1,3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1,3",
+          "word_ids": [
+            1221
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1,3",
+          "word_ids": [
+            964
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        392,
+        1805,
+        409
+      ],
+      "expected": "DOAH-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH-A1",
+          "word_ids": [
+            1222
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH-A1",
+          "word_ids": [
+            1023
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        392,
+        1905,
+        409
+      ],
+      "expected": "CV-DOAH-A1-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-DOAH-A1-CHW",
+          "word_ids": [
+            1223
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-DOAH-A1-CHW",
+          "word_ids": [
+            1024
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        392,
+        1970,
+        409
+      ],
+      "expected": "25.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "25.5",
+          "word_ids": [
+            1224
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "25.5",
+          "word_ids": [
+            1126
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        392,
+        2020,
+        409
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1225
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1127
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        392,
+        2110,
+        409
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1226
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1128
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        392,
+        2170,
+        409
+      ],
+      "expected": "11.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "11.4",
+          "word_ids": [
+            1227
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "11.4",
+          "word_ids": [
+            993
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 6,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        392,
+        2230,
+        409
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1228
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            965
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        409,
+        1805,
+        426
+      ],
+      "expected": "DOAH-A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "DOAH-A2",
+          "word_ids": [
+            1229
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "DOAH-A2",
+          "word_ids": [
+            1025
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        409,
+        1905,
+        426
+      ],
+      "expected": "CV-DOAH-A2-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-DOAH-A2-CHW",
+          "word_ids": [
+            1230
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-DOAH-A2-CHW",
+          "word_ids": [
+            1026
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        409,
+        1970,
+        426
+      ],
+      "expected": "17.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "17.7",
+          "word_ids": [
+            1231
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "17.7",
+          "word_ids": [
+            1129
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        409,
+        2020,
+        426
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1232
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1130
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        409,
+        2110,
+        426
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1233
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1131
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        409,
+        2170,
+        426
+      ],
+      "expected": "7.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "7.9",
+          "word_ids": [
+            1234
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "7.9",
+          "word_ids": [
+            994
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 7,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        409,
+        2230,
+        426
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1235
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            966
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        426,
+        1805,
+        444
+      ],
+      "expected": "FCU-A1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-A1",
+          "word_ids": [
+            1236
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-A1",
+          "word_ids": [
+            1027
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        426,
+        1905,
+        444
+      ],
+      "expected": "CV-FCU-A1-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-FCU-A1-CHW",
+          "word_ids": [
+            1237
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-FCU-A1-CHW",
+          "word_ids": [
+            1028
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        426,
+        1970,
+        444
+      ],
+      "expected": "0.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.8",
+          "word_ids": [
+            1238
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.8",
+          "word_ids": [
+            1132
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        426,
+        2020,
+        444
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1239
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1133
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        426,
+        2110,
+        444
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1240
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1134
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        426,
+        2170,
+        444
+      ],
+      "expected": "0.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            1241
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.4",
+          "word_ids": [
+            995
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 8,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        426,
+        2230,
+        444
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1242
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            967
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        444,
+        1805,
+        461
+      ],
+      "expected": "FCU-A2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-A2",
+          "word_ids": [
+            1243
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-A2",
+          "word_ids": [
+            1029
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        444,
+        1905,
+        461
+      ],
+      "expected": "CV-FCU-A2-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-FCU-A2-CHW",
+          "word_ids": [
+            1244
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-FCU-A2-CHW",
+          "word_ids": [
+            1030
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        444,
+        1970,
+        461
+      ],
+      "expected": "1.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            1245
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            1135
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        444,
+        2020,
+        461
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1246
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1136
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        444,
+        2110,
+        461
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1247
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1137
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        444,
+        2170,
+        461
+      ],
+      "expected": "0.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            1248
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.5",
+          "word_ids": [
+            996
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 9,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        444,
+        2230,
+        461
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1249
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            968
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        461,
+        1805,
+        478
+      ],
+      "expected": "FCU-A3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-A3",
+          "word_ids": [
+            1250
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-A3",
+          "word_ids": [
+            1031
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        461,
+        1905,
+        478
+      ],
+      "expected": "CV-FCU-A3-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-FCU-A3-CHW",
+          "word_ids": [
+            1251
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-FCU-A3-CHW",
+          "word_ids": [
+            1032
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        461,
+        1970,
+        478
+      ],
+      "expected": "4.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4.9",
+          "word_ids": [
+            1252
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4.9",
+          "word_ids": [
+            1138
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        461,
+        2020,
+        478
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1253
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1139
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        461,
+        2110,
+        478
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1254
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1140
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        461,
+        2170,
+        478
+      ],
+      "expected": "2.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.2",
+          "word_ids": [
+            1255
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.2",
+          "word_ids": [
+            997
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 10,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        461,
+        2230,
+        478
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1256
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            969
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        478,
+        1805,
+        495
+      ],
+      "expected": "FCU-A4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-A4",
+          "word_ids": [
+            1257
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-A4",
+          "word_ids": [
+            1033
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        478,
+        1905,
+        495
+      ],
+      "expected": "CV-FCU-A4-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-FCU-A4-CHW",
+          "word_ids": [
+            1258
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-FCU-A4-CHW",
+          "word_ids": [
+            1034
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        478,
+        1970,
+        495
+      ],
+      "expected": "6.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6.3",
+          "word_ids": [
+            1259
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6.3",
+          "word_ids": [
+            1141
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        478,
+        2020,
+        495
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1260
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1142
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        478,
+        2110,
+        495
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1261
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1143
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        478,
+        2170,
+        495
+      ],
+      "expected": "2.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.8",
+          "word_ids": [
+            1262
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.8",
+          "word_ids": [
+            998
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 11,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        478,
+        2230,
+        495
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1263
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            970
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        495,
+        1805,
+        512
+      ],
+      "expected": "FCU-A5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-A5",
+          "word_ids": [
+            1264
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-A5",
+          "word_ids": [
+            1035
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        495,
+        1905,
+        512
+      ],
+      "expected": "CV-FCU-A5-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-FCU-A5-CHW",
+          "word_ids": [
+            1265
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-FCU-A5-CHW",
+          "word_ids": [
+            1036
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        495,
+        1970,
+        512
+      ],
+      "expected": "6.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "6.5",
+          "word_ids": [
+            1266
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "6.5",
+          "word_ids": [
+            1144
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        495,
+        2020,
+        512
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1267
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1145
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        495,
+        2110,
+        512
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1268
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1146
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        495,
+        2170,
+        512
+      ],
+      "expected": "2.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.9",
+          "word_ids": [
+            1269
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.9",
+          "word_ids": [
+            999
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 12,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        495,
+        2230,
+        512
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1270
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            971
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        512,
+        1805,
+        530
+      ],
+      "expected": "FCU-A6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-A6",
+          "word_ids": [
+            1271
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-A6",
+          "word_ids": [
+            1037
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        512,
+        1905,
+        530
+      ],
+      "expected": "CV-FCU-A6-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-FCU-A6-CHW",
+          "word_ids": [
+            1272
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-FCU-A6-CHW",
+          "word_ids": [
+            1038
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        512,
+        1970,
+        530
+      ],
+      "expected": "2.4",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.4",
+          "word_ids": [
+            1273
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.4",
+          "word_ids": [
+            1147
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        512,
+        2020,
+        530
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1274
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1148
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        512,
+        2110,
+        530
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1275
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1149
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        512,
+        2170,
+        530
+      ],
+      "expected": "1.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.1",
+          "word_ids": [
+            1276
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.1",
+          "word_ids": [
+            1000
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 13,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        512,
+        2230,
+        530
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1277
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            972
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        530,
+        1805,
+        547
+      ],
+      "expected": "FCU-A7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-A7",
+          "word_ids": [
+            1278
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-A7",
+          "word_ids": [
+            1039
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        530,
+        1905,
+        547
+      ],
+      "expected": "CV-FCU-A7-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-FCU-A7-CHW",
+          "word_ids": [
+            1279
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-FCU-A7-CHW",
+          "word_ids": [
+            1040
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        530,
+        1970,
+        547
+      ],
+      "expected": "3.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.7",
+          "word_ids": [
+            1280
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.7",
+          "word_ids": [
+            1150
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        530,
+        2020,
+        547
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1281
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1151
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        530,
+        2110,
+        547
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1282
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1152
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        530,
+        2170,
+        547
+      ],
+      "expected": "1.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.7",
+          "word_ids": [
+            1283
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.7",
+          "word_ids": [
+            1001
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 14,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        530,
+        2230,
+        547
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1284
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            973
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        547,
+        1805,
+        564
+      ],
+      "expected": "FCU-A8A",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-A8A",
+          "word_ids": [
+            1285
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-A8A",
+          "word_ids": [
+            1041
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        547,
+        1905,
+        564
+      ],
+      "expected": "CV-FCU-A8A-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-FCU-A8A-CHW",
+          "word_ids": [
+            1286
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-FCU-A8A-CHW",
+          "word_ids": [
+            1042
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        547,
+        1970,
+        564
+      ],
+      "expected": "4.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4.7",
+          "word_ids": [
+            1287
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4.7",
+          "word_ids": [
+            1153
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        547,
+        2020,
+        564
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1288
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1154
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        547,
+        2110,
+        564
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1289
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1155
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        547,
+        2170,
+        564
+      ],
+      "expected": "2.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.1",
+          "word_ids": [
+            1290
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.1",
+          "word_ids": [
+            1002
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 15,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        547,
+        2230,
+        564
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1291
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            974
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        564,
+        1805,
+        581
+      ],
+      "expected": "FCU-A8B",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-A8B",
+          "word_ids": [
+            1292
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-A8B",
+          "word_ids": [
+            1043
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        564,
+        1905,
+        581
+      ],
+      "expected": "CV-FCU-A8B-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-FCU-A8B-CHW",
+          "word_ids": [
+            1293
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-FCU-A8B-CHW",
+          "word_ids": [
+            1044
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        564,
+        1970,
+        581
+      ],
+      "expected": "4.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "4.7",
+          "word_ids": [
+            1294
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "4.7",
+          "word_ids": [
+            1156
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        564,
+        2020,
+        581
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1295
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1157
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        564,
+        2110,
+        581
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1296
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1158
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        564,
+        2170,
+        581
+      ],
+      "expected": "2.1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.1",
+          "word_ids": [
+            1297
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.1",
+          "word_ids": [
+            1003
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 16,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        564,
+        2230,
+        581
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1298
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            975
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        581,
+        1805,
+        598
+      ],
+      "expected": "FCU-A9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-A9",
+          "word_ids": [
+            1299
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-A9",
+          "word_ids": [
+            1045
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        581,
+        1905,
+        598
+      ],
+      "expected": "CV-FCU-A9-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-FCU-A9-CHW",
+          "word_ids": [
+            1300
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-FCU-A9-CHW",
+          "word_ids": [
+            1046
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        581,
+        1970,
+        598
+      ],
+      "expected": "1.3",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.3",
+          "word_ids": [
+            1301
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.3",
+          "word_ids": [
+            1159
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        581,
+        2020,
+        598
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1302
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1160
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        581,
+        2110,
+        598
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1303
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1161
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        581,
+        2170,
+        598
+      ],
+      "expected": "0.6",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            1304
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "0.6",
+          "word_ids": [
+            1004
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 17,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        581,
+        2230,
+        598
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1305
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            976
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        598,
+        1805,
+        616
+      ],
+      "expected": "FCU-A10",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-A10",
+          "word_ids": [
+            1306
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-A10",
+          "word_ids": [
+            1047
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        598,
+        1905,
+        616
+      ],
+      "expected": "CV-FCU-A10-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-FCU-A10-CHW",
+          "word_ids": [
+            1307
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-FCU-A10-CHW",
+          "word_ids": [
+            1048
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        598,
+        1970,
+        616
+      ],
+      "expected": "19.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "19.9",
+          "word_ids": [
+            1308
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "19.9",
+          "word_ids": [
+            1162
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        598,
+        2020,
+        616
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1309
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1163
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        598,
+        2110,
+        616
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1310
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1164
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        598,
+        2170,
+        616
+      ],
+      "expected": "8.9",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "8.9",
+          "word_ids": [
+            1311
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "8.9",
+          "word_ids": [
+            1005
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 18,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        598,
+        2230,
+        616
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1312
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            977
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        616,
+        1805,
+        633
+      ],
+      "expected": "FCU-A11",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-A11",
+          "word_ids": [
+            1313
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-A11",
+          "word_ids": [
+            1049
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        616,
+        1905,
+        633
+      ],
+      "expected": "CV-FCU-A11-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-FCU-A11-CHW",
+          "word_ids": [
+            1314
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-FCU-A11-CHW",
+          "word_ids": [
+            1050
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        616,
+        1970,
+        633
+      ],
+      "expected": "5.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "5.7",
+          "word_ids": [
+            1315
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "5.7",
+          "word_ids": [
+            1165
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        616,
+        2020,
+        633
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1316
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1166
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        616,
+        2110,
+        633
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1317
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1167
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        616,
+        2170,
+        633
+      ],
+      "expected": "2.5",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            1318
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.5",
+          "word_ids": [
+            1006
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 19,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        616,
+        2230,
+        633
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1319
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            978
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        633,
+        1805,
+        650
+      ],
+      "expected": "FCU-A12",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-A12",
+          "word_ids": [
+            1320
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-A12",
+          "word_ids": [
+            1051
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        633,
+        1905,
+        650
+      ],
+      "expected": "CV-FCU-A12-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-FCU-A12-CHW",
+          "word_ids": [
+            1321
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-FCU-A12-CHW",
+          "word_ids": [
+            1052
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        633,
+        1970,
+        650
+      ],
+      "expected": "3.8",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "3.8",
+          "word_ids": [
+            1322
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "3.8",
+          "word_ids": [
+            1168
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        633,
+        2020,
+        650
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1323
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1169
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        633,
+        2110,
+        650
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1324
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1170
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        633,
+        2170,
+        650
+      ],
+      "expected": "1.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.7",
+          "word_ids": [
+            1325
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.7",
+          "word_ids": [
+            1007
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 20,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        633,
+        2230,
+        650
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1326
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            979
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "unit_mark",
+      "page": 44,
+      "bbox": [
+        1730,
+        650,
+        1805,
+        668
+      ],
+      "expected": "FCU-A13",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "FCU-A13",
+          "word_ids": [
+            1327
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "FCU-A13",
+          "word_ids": [
+            1053
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "valve_mark",
+      "page": 44,
+      "bbox": [
+        1805,
+        650,
+        1905,
+        668
+      ],
+      "expected": "CV-FCU-A13-CHW",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "CV-FCU-A13-CHW",
+          "word_ids": [
+            1328
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "CV-FCU-A13-CHW",
+          "word_ids": [
+            1054
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "flowrate_GPM",
+      "page": 44,
+      "bbox": [
+        1905,
+        650,
+        1970,
+        668
+      ],
+      "expected": "2.7",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2.7",
+          "word_ids": [
+            1329
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2.7",
+          "word_ids": [
+            1171
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "valve_size_in",
+      "page": 44,
+      "bbox": [
+        1970,
+        650,
+        2020,
+        668
+      ],
+      "expected": "1/2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1330
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1/2",
+          "word_ids": [
+            1172
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "configuration",
+      "page": 44,
+      "bbox": [
+        2020,
+        650,
+        2110,
+        668
+      ],
+      "expected": "2-WAY",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1331
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "2-WAY",
+          "word_ids": [
+            1173
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "Cv",
+      "page": 44,
+      "bbox": [
+        2110,
+        650,
+        2170,
+        668
+      ],
+      "expected": "1.2",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            1332
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1.2",
+          "word_ids": [
+            1008
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "row": 21,
+      "column": "notes",
+      "page": 44,
+      "bbox": [
+        2170,
+        650,
+        2230,
+        668
+      ],
+      "expected": "1",
+      "engines": {
+        "mupdf": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            1333
+          ]
+        },
+        "poppler": {
+          "pass": true,
+          "text": "1",
+          "word_ids": [
+            980
+          ]
+        }
+      }
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "header": "CHW CONTROL VALVE SCHEDULE",
+      "page": 44,
+      "bbox": [
+        1800,
+        246,
+        2145,
+        274
+      ],
+      "engine": "mupdf",
+      "actual": "CHW CONTROL VALVE SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "header": "CHW CONTROL VALVE SCHEDULE",
+      "page": 44,
+      "bbox": [
+        1800,
+        246,
+        2145,
+        274
+      ],
+      "engine": "poppler",
+      "actual": "CHW CONTROL VALVE SCHEDULE",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "header": "UNIT MARK VALVE MARK FLOWRATE GPM VALVE SIZE IN CONFIGURATION CV NOTES",
+      "page": 44,
+      "bbox": [
+        1730,
+        274,
+        2230,
+        305
+      ],
+      "engine": "mupdf",
+      "actual": "FLOWRATE VALVE UNIT MARK VALVE MARK (GPM) SIZE (IN) CONFIGURATION Cv NOTES",
+      "pass": true
+    },
+    {
+      "table": "AIR-OPS-CHW-CONTROL-VALVE",
+      "header": "UNIT MARK VALVE MARK FLOWRATE GPM VALVE SIZE IN CONFIGURATION CV NOTES",
+      "page": 44,
+      "bbox": [
+        1730,
+        274,
+        2230,
+        305
+      ],
+      "engine": "poppler",
+      "actual": "FLOWRATE VALVE UNIT MARK VALVE MARK (GPM) SIZE (IN) CONFIGURATION Cv NOTES",
+      "pass": true
+    }
+  ],
+  "pass": true,
+  "errors": [],
+  "inventory_checks": [
+    {
+      "id": "air-ops-chw-control-valve-row-count",
+      "actual": 21,
+      "expected": 21,
+      "pass": true
+    }
+  ],
+  "text_absence_checks": [],
+  "linked_annotation_sha256": {},
+  "scope": "Verifies authored cell content/position, header witnesses, bounded text and annotation consistency. Does not prove engineering interpretation, physical counts or complete-document review."
+}

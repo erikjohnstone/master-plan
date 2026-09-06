@@ -1,0 +1,62 @@
+{
+  "document_id": "01__vol2__001",
+  "module_role": "Full-set qualification and explicit source limitations for the Cherry Point HVAC/BAS ground-truth record.",
+  "source_limitations": [
+    "The 243 primary identities are non-duplicated literal schedule marks, not an installed plan-symbol count. The assembled source schedule evidence preserves 53 source tables and 440 literal rows without applying a plan multiplier.",
+    "The 546 typed point-list rows are reusable source templates across 77 source tables: 210 AI, 189 DI, 66 AO and 81 DO occurrences. They are not final controller-card, terminal, wiring or installed-field-point quantities.",
+    "The source publishes BACnet IP, BACnet MS/TP and BACnet MS/TP UUKL network legends and named controller/cabinet contexts, but not controller make/model beyond source designations, addresses, subnet/VLAN design, final panel/card count or a field-wiring schedule.",
+    "The source has 167 literal control-valve schedule rows, with unit/valve mark, GPM, size, configuration and Cv. It has damper details and point/sequence behavior but no standalone damper-actuator schedule with manufacturer/model, torque, signal, fail action or installed quantity; those fields remain unavailable.",
+    "Literal point-template occurrences include seven SPACE TEMPERATURE rows and one SPACE THERMOSTAT row. The point-name ledger has no literal CO2 text row, although MI700 includes a CO2 monitor legend symbol. None of these template observations establishes a facility-wide installed sensor/thermostat count.",
+    "All 75 pages were reviewed visually at full page. MuPDF and Poppler independently recheck every authored literal schedule/point cell and bounded source assertion, but parser agreement does not prove physical plan quantities or fill unprinted BAS configuration fields."
+  ],
+  "visual_evidence": [
+    {
+      "purpose": "dense schedule and control-valve review",
+      "render": "reviews/01__vol2__001/p44-p44-full-poppler.png",
+      "engine": "poppler"
+    },
+    {
+      "purpose": "MTRACON/ATCT schedule and control-valve review",
+      "render": "reviews/01__vol2__001/p47-p47-full-poppler.png",
+      "engine": "poppler"
+    },
+    {
+      "purpose": "network-architecture review",
+      "render": "reviews/01__vol2__001/p51-p51-full-poppler.png",
+      "engine": "poppler"
+    },
+    {
+      "purpose": "DOAH sequence and typed point-list review",
+      "render": "reviews/01__vol2__001/p53-p53-full-poppler.png",
+      "engine": "poppler"
+    },
+    {
+      "purpose": "ATCT AHU typed point-list and sequence review",
+      "render": "reviews/01__vol2__001/p65-p65-full-poppler.png",
+      "engine": "poppler"
+    },
+    {
+      "purpose": "FCU/SFPVAV typed point-list and sequence review",
+      "render": "reviews/01__vol2__001/p71-p71-full-poppler.png",
+      "engine": "poppler"
+    }
+  ],
+  "tables": [],
+  "assertions": [],
+  "inventory_checks": [
+    {
+      "id": "rank01-source-limitations",
+      "records_path": [
+        "source_limitations"
+      ],
+      "expected": 6
+    },
+    {
+      "id": "rank01-supporting-visual-evidence",
+      "records_path": [
+        "visual_evidence"
+      ],
+      "expected": 6
+    }
+  ]
+}

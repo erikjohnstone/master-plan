@@ -1,0 +1,60 @@
+{
+  "document_id": "06__vol2__096",
+  "module_role": "Explicit source limitations and corroboration boundaries for the supplied 36-page set.",
+  "tables": [],
+  "source_limitations": [
+    "M600-M603 provide 25 literal equipment schedule tables / 239 rows, but no separately titled hydronic control-valve schedule. The record does not infer unprinted valve tags, valve authority, actuator torque/signal, fail action, controller terminals, locations or installed quantities.",
+    "M603 provides a 24-row motorized-damper schedule; it is retained with only printed tag/size/24V/normal state/quantity/make/model/remarks.",
+    "M901-M906 provide 229 literal DDC source-matrix rows, including source duplicate labels. They are not a final physical point, controller card, terminal, cable, device or wiring total.",
+    "The published BAS communication notes require LAN transmission plus certain hard-wired signals for loss-of-LAN operation. They do not establish final protocol transport, IP/VLAN, address, port, device count or network topology.",
+    "All 36 pages were visually reviewed through retained Poppler renders. Every authored literal schedule/point row and bounded textual clause is independently rechecked against MuPDF and Poppler captures."
+  ],
+  "text_absence_assertions": [
+    {
+      "id": "rank06-no-control-valve-schedule-title",
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "covers_all_source_pages": true,
+      "patterns": [
+        "CONTROL\\s+VALVE\\s+SCHEDULE"
+      ],
+      "visual_review_qualification": "Native-text absence is not engineering proof; it is paired with full visual review. The limited finding is no standalone schedule title/row set with that wording."
+    }
+  ]
+}

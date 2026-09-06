@@ -1,0 +1,57 @@
+{
+  "id": "16__vol2__069",
+  "rank": 16,
+  "title": "ITD District 2 Laboratory Heating Upgrades Rebid",
+  "source_pdf": "pdf/16__vol2__069__ITD_District_2_Laboratory_Heating_Upgrades_Rebid.pdf",
+  "source_sha256": "ce0c2bb973f87194f0f6ed8d68faaad2a5683129f9d0db1a73415f6051ed06f1",
+  "page_count": 9,
+  "review_status": "complete_with_documented_source_limitations",
+  "scope": "Complete ground truth for all nine supplied pages of the ITD District 2 heating-system-upgrades rebid set: project/sheet/scale review, every M3.0 schedule row and cell, schedule/plan reconciliation, printed control interface rows, network/control context, the written grey existing and bold updated sequence layers, and sensor/valve/actuator source limits. No unprinted installed I/O, controller, valve, damper-actuator, or zone-sensor quantity is invented.",
+  "reading_notes": [
+    "The retained corpus has all nine pages of this supplied drawing set. Full-page Poppler renders establish page-level visual context; MuPDF and Poppler independently corroborate every authored schedule cell and bounded controls/reconciliation assertion.",
+    "M3.0 has 4 schedule tables / 11 line items: 1 existing AHU, 2 existing boilers, 6 new hydronic pumps, and 2 new VFDs. A schedule row is not automatically an installed drawing count; the 11 identities are separately anchored to plan/schematic context.",
+    "M4.0 and M4.1 explicitly say grey is existing control sequence and bold is updated control sequence. This record preserves both layers; it does not manufacture an integrated final control narrative where the source does not do so.",
+    "The only printed VFD and chiller points lists are open-ended interface lists. Their 16 visible source rows lack per-row AI/AO/DI/DO classifications and physical owner/multiplier data, so they are neither retyped nor inflated into a terminal count.",
+    "Legends, schematic transmitter/symbol marks, detail callouts, plan symbols, schedules and physical installed devices are distinct source constructs. Their quantities are retained only where the drawing set actually establishes them."
+  ],
+  "module_order": ["metadata", "schedules", "points", "controls_context", "equipment_reconciliation", "point_applications", "supporting_evidence"],
+  "module_sources": {
+    "schedules": ["schedules_m3"],
+    "points": ["controls_context_m4"],
+    "controls_context": ["controls_context_m4"]
+  },
+  "requirement_audit": [
+    {"id": "project_identity", "result": "reviewed_with_source_limitations_recorded", "finding": "Project name, location, building description, agency, engineering firm, project number, rebid issue and issue date are captured; blank revision grids are not reclassified as revisions.", "evidence": [["modules", "metadata", "project"]]},
+    {"id": "sheet_details", "result": "reviewed_with_source_limitations_recorded", "finding": "Every supplied sheet has a page-level sheet/title/review ledger. Sheet-ID/name lettering is visually legible outlined title-block graphics, so the source limitation is retained rather than asserting a false text-extraction witness.", "evidence": [["modules", "metadata", "visual_review_pages"]]},
+    {"id": "scale_verification", "result": "reviewed_with_source_limitations_recorded", "finding": "The two M1.0 and two E1.0 plan views state 1/4\" = 1'-0\"; detail/controls/schedule pages are not distance-scaled plan views and no supplied page has a graphic scale bar.", "evidence": [["modules", "metadata", "scale_semantics"]]},
+    {"id": "equipment_tags_and_classification", "result": "reviewed_with_source_limitations_recorded", "finding": "All 11 M3.0 marked schedule identities are classified and reconciled to plan/schematic visual context. The BP-2 area-served source conflict remains explicit rather than corrected by assumption.", "evidence": [["modules", "equipment_reconciliation", "scheduled_families"], ["modules", "equipment_reconciliation", "primary_anchors"], ["modules", "equipment_reconciliation", "source_conflicts"]]},
+    {"id": "schedule_rows_and_specs", "result": "reviewed_with_source_limitations_recorded", "finding": "All four M3.0 schedules are retained as 11 exact source rows and 160 two-engine-corrobated cells, including airflow, capacity, flow, electrical, pump, VFD and selection fields.", "evidence": [["modules", "schedules", "tables"], ["modules", "equipment_reconciliation", "schedule_counts"]]},
+    {"id": "point_lists_and_equipment_ownership", "result": "reviewed_with_source_limitations_recorded", "finding": "Every visible row in the 4-row VFD and 12-row chiller interface lists is retained with its source scope. The lists are expressly open-ended and untyped, so no unsupported I/O-type or physical-terminal count is claimed.", "evidence": [["modules", "points", "tables"], ["modules", "point_applications", "applications"], ["modules", "point_applications", "installed_IO_total"]]},
+    {"id": "network_architecture", "result": "reviewed_with_source_limitations_recorded", "finding": "Existing Delta system, BACnet, existing controller/operator components and explicitly absent transport/addressing/baud/controller-model information are recorded exactly at source scope.", "evidence": [["modules", "controls_context", "network_architecture"]]},
+    {"id": "sequences_and_diagrams", "result": "reviewed_with_source_limitations_recorded", "finding": "M4.0 heating-water and M4.1 chilled-water written sequences are separated into existing-grey and updated-bold layers, with the VFD/chiller lists, key reset, delay, lead/lag, alarm, valve, UCP and diagram context retained.", "evidence": [["modules", "controls_context", "source_layer_rule"], ["modules", "controls_context", "sequences"]]},
+    {"id": "space_sensors_and_zones", "result": "reviewed_with_source_limitations_recorded", "finding": "Schematic/integration logical sensor roles are indexed. The supplied set does not map space, CO2 or smart-thermostat devices to zones, so physical counts remain explicitly not stated.", "evidence": [["modules", "controls_context", "sensor_and_zone_ledger"]]},
+    {"id": "source_limitations_and_conflicts", "result": "reviewed_with_source_limitations_recorded", "finding": "No valve/actuator schedules, no zone sensor roster, open-ended interface lists, outlined sheet-ID text, grey/bold layering, schedule-versus-installed distinctions and the BP-2 wording conflict are all explicitly recorded.", "evidence": [["modules", "supporting_evidence", "source_limitations"], ["modules", "equipment_reconciliation", "control_valve_and_damper_schedule_status"]]},
+    {"id": "all_page_visual_review", "result": "reviewed_with_source_limitations_recorded", "finding": "All nine supplied pages were reviewed at full-page resolution; the saved Poppler renders and each sheet finding are embedded and hash-checked in the final record.", "evidence": [["page_review"], ["modules", "metadata", "visual_review_pages"]]},
+    {"id": "independent_corroboration", "result": "reviewed_with_source_limitations_recorded", "finding": "Build and validation rerun every module against the retained MuPDF and Poppler source captures. The final record stores component and bundle digests in addition to the evidence source hash.", "evidence": [["module_source_sha256"], ["module_sha256"]]}
+  ],
+  "page_review": [
+    {"page": 1, "review_status": "complete", "render": "reviews/16__vol2__069/p1-p1-full-poppler.png", "finding": "G0.0 general cover: project identity, vicinity map and drawing index; no BAS schedule or point list."},
+    {"page": 2, "review_status": "complete", "render": "reviews/16__vol2__069/p2-p2-full-poppler.png", "finding": "M0.0 mechanical cover: abbreviations, legend and notes. Legend symbols are not treated as installed inventory."},
+    {"page": 3, "review_status": "complete", "render": "reviews/16__vol2__069/p3-p3-full-poppler.png", "finding": "M1.0 loft mechanical demolition and new-work plans: removed hot/chilled-water pumps, new HWP/BP/CWP/VFD context and AHU-1 3-way valve note."},
+    {"page": 4, "review_status": "complete", "render": "reviews/16__vol2__069/p4-p4-full-poppler.png", "finding": "M2.0 mechanical details: existing/new hot-water piping, boiler and heating-coil details; all detailed views marked not to scale."},
+    {"page": 5, "review_status": "complete", "render": "reviews/16__vol2__069/p5-p5-full-poppler.png", "finding": "M3.0 mechanical schedules: existing AHU/boilers and new pumps/VFDs; all four schedule tables transcribed."},
+    {"page": 6, "review_status": "complete", "render": "reviews/16__vol2__069/p6-p6-full-poppler.png", "finding": "M4.0 controls: legend, Delta architecture, heating-water schematic, grey existing and bold updated sequence layers, VFD points list."},
+    {"page": 7, "review_status": "complete", "render": "reviews/16__vol2__069/p7-p7-full-poppler.png", "finding": "M4.1 controls: chilled-water schematic, grey existing and bold updated sequence layers, open-ended chiller points list and BACnet panel label."},
+    {"page": 8, "review_status": "complete", "render": "reviews/16__vol2__069/p8-p8-full-poppler.png", "finding": "E0.0 electrical cover: legends, general notes and panel schedules; auxiliary electrical context, not a BAS point list."},
+    {"page": 9, "review_status": "complete", "render": "reviews/16__vol2__069/p9-p9-full-poppler.png", "finding": "E1.0 mechanical power plan: demolition/new power context for scheduled pumps/VFDs and related mechanical equipment."}
+  ],
+  "declared_checks": [
+    {"id": "supplied-pages", "path": ["modules", "metadata", "visual_review_pages"], "operation": "length", "expected": 9},
+    {"id": "full-page-review", "path": ["page_review"], "operation": "length", "expected": 9},
+    {"id": "schedule-tables", "path": ["modules", "equipment_reconciliation", "schedule_counts", "tables"], "expected": 4},
+    {"id": "schedule-rows", "path": ["modules", "equipment_reconciliation", "schedule_counts", "rows"], "expected": 11},
+    {"id": "printed-controls-source-rows", "path": ["modules", "point_applications", "listed_template_counts", "source_rows"], "expected": 16}
+  ],
+  "completion_checks": {"every_source_page_reviewed": true, "all_explicit_objective_categories_reviewed": true, "all_populated_schedule_and_points_rows_captured": true, "source_conflicts_and_unavailable_fields_preserved": true, "two_engine_checks_current": true, "final_assembly_audit_complete": true},
+  "verification_semantics": "MuPDF and Poppler independently captured all nine supplied vector-PDF pages. Current authored schedule/point cells and bounded text assertions are rechecked in both engines at bundle build and validation time. Parser agreement corroborates the retained source text/cells and their bounds; full-page Poppler review establishes visual sheet disposition, symbol/line-weight relationships and source limitations. Neither process invents physical device, terminal, controller, valve, damper-actuator, or zone-sensor quantities not established by the supplied PDF."
+}
