@@ -91,6 +91,22 @@ try {
   const r = afterTable[0]?.rect || [];
   check("its rect is normalized 0..1", r.flat?.().every?.((n) => n >= 0 && n <= 1) === true, JSON.stringify(r));
 
+  // ── VIEW IS IDEMPOTENT ──────────────────────────────────────────────────
+  // It was not. Every click appended another markup with a fresh id, and a
+  // highlight paints at fillOpacity 0.18 — two clicks composited to 0.33,
+  // three to 0.45, ten to 0.86, so the box a person was trying to look AT
+  // steadily blacked out the schedule underneath it. It also grew the markup
+  // rail's count and the Agent panel's source list by one per click.
+  for (let i = 0; i < 2; i++) {
+    await panel.locator('button', { hasText: /^View$/ }).first().click();
+    await page.waitForTimeout(700);
+  }
+  const repeated = await page.evaluate(() => window.__opentakeoff.probe.markups().filter((m) => m.source === "schedule_browse"));
+  check("three View clicks leave ONE highlight, not three", repeated.length === 1, `${repeated.length} markups`);
+  check("and it is the same box", JSON.stringify(repeated[0]?.rect) === JSON.stringify(r), JSON.stringify(repeated[0]?.rect));
+  const strays = await page.evaluate(() => window.__opentakeoff.probe.markups().length);
+  check("no stray markups accumulated", strays === before + 1, `${strays} vs ${before + 1}`);
+
   // ── a ROW paints its own cells, on the sheet its ink is on ───────────────
   await sections.first().click();
   await page.waitForTimeout(600);

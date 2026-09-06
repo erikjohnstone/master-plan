@@ -7485,6 +7485,16 @@ export default function TakeoffCanvas() {
   // ink with it. Same discipline as takeoff_cite: one source string buys a
   // whole lifecycle, no new state.
   function clearScheduleBrowseHighlights() {
+    // The ref is filtered SYNCHRONOUSLY as well as inside the updater, because
+    // onPaint clears and then immediately paints: agentAnnotate reads
+    // agentStateRef.current.markups directly, and a queued-but-unflushed
+    // setMarkups would let it append onto the pre-clear list — the state and
+    // the ref would then disagree about which markups exist. The updater keeps
+    // its own write because it is the one that sees the true current list.
+    agentStateRef.current = {
+      ...agentStateRef.current,
+      markups: (agentStateRef.current.markups || []).filter((m) => m.source !== "schedule_browse"),
+    };
     setMarkups((ms) => {
       const next = ms.filter((m) => m.source !== "schedule_browse");
       agentStateRef.current = { ...agentStateRef.current, markups: next };
@@ -12555,6 +12565,18 @@ export default function TakeoffCanvas() {
                 setCommitMsg("That schedule has no geometry on the sheet to show.", "refusal");
                 return;
               }
+              // ONE browse highlight at a time. agentAnnotate appends
+              // unconditionally with a fresh id, and a highlight paints at
+              // fillOpacity 0.18 — so clicking the same View twice stacked two
+              // identical rects and the box composited to 0.33, three to 0.45,
+              // ten to 0.86. It also grew the markup rail's count and the Agent
+              // panel's source list by one per click. The clear already existed
+              // for exactly this (see clearScheduleBrowseHighlights) but was
+              // wired only to panel close, so the teardown half of the
+              // lifecycle shipped without the replace half. Browsing should
+              // also not leave a trail: what you are looking at is the one
+              // thing painted.
+              clearScheduleBrowseHighlights();
               const result = await agentHighlightCitation({
                 sheet,
                 bbox_px: box,
