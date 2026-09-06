@@ -2388,6 +2388,28 @@ test("findLegendGlyphs: a schedule SYMBOL field cannot bless asset underlines as
   assert.deepEqual(findLegendGlyphs(segs, spans), []);
 });
 
+test("findLegendGlyphs: a FILTER TYPE DIAGRAMS section cannot inherit a remote component caption as its heading", () => {
+  const box = (y: number): number[][] => [
+    seg(100, y, 140, y), seg(140, y, 140, y + 60),
+    seg(140, y + 60, 100, y + 60), seg(100, y + 60, 100, y),
+  ];
+  const glyphs = findLegendGlyphs(flat([...box(600), ...box(700), ...box(800)]), [
+    // FIRE ALARM is a legitimate earlier component identity that also looks
+    // heading-like. A chain of intervening component names makes it
+    // vertically reachable unless the explicit diagram title ends it.
+    { text: "FIRE ALARM", x0: 220, y0: 200, x1: 330, y1: 220 },
+    { text: "VARIABLE FREQUENCY DRIVE", x0: 220, y0: 280, x1: 480, y1: 300 },
+    { text: "ELECTRIC TO PNEUMATIC SWITCH", x0: 220, y0: 360, x1: 500, y1: 380 },
+    { text: "OCCUPANCY SENSOR", x0: 220, y0: 440, x1: 410, y1: 460 },
+    { text: "RELAY", x0: 220, y0: 520, x1: 290, y1: 540 },
+    { text: "FILTER TYPE DIAGRAMS", x0: 80, y0: 555, x1: 350, y1: 575 },
+    { text: "FILTER", x0: 220, y0: 615, x1: 290, y1: 635 },
+    { text: "BAG FILTER", x0: 220, y0: 715, x1: 330, y1: 735 },
+    { text: "ROLL FILTER", x0: 220, y0: 815, x1: 340, y1: 835 },
+  ]);
+  assert.deepEqual(glyphs, []);
+});
+
 test("findLegendGlyphs: a callout-key panel ends the symbol legend above it", () => {
   const box = (y: number): number[][] => [
     seg(100, y, 130, y), seg(130, y, 130, y + 25),
@@ -2478,6 +2500,27 @@ test("findLegendGlyphs: a near-edge multi-character tag still proves a four-edge
   const [glyph] = findLegendGlyphs(segs, spans, { minAlignedRows: 1, minUnheadedRows: 1 });
   assert.ok(glyph);
   assert.equal(glyph.caption, "CO2 SENSOR");
+  assert.equal(glyph.kind, "symbol");
+  assert.equal(glyph.seedable, true);
+});
+
+test("findLegendGlyphs: outlined alpha tag strokes touching a closed carrier do not erase the component row", () => {
+  const segs = flat([
+    seg(100, 100, 140, 100), seg(140, 100, 140, 123),
+    seg(140, 123, 100, 123), seg(100, 123, 100, 100),
+    // Duplicate outlined lettering touches the carrier's right edge, making
+    // the connected component richer than the ordinary exact four-edge box.
+    seg(105, 101, 140, 101), seg(140, 101, 140, 123),
+    seg(140, 123, 105, 123),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "CONTROL ELECTRICAL COMPONENTS", x0: 70, y0: 20, x1: 440, y1: 45 },
+    { text: "CSR", x0: 105, y0: 101, x1: 139, y1: 123 },
+    { text: "CURRENT SENSING RELAY", x0: 220, y0: 103, x1: 450, y1: 123 },
+  ];
+  const [glyph] = findLegendGlyphs(segs, spans, { minAlignedRows: 1, minUnheadedRows: 1 });
+  assert.ok(glyph);
+  assert.equal(glyph.caption, "CURRENT SENSING RELAY");
   assert.equal(glyph.kind, "symbol");
   assert.equal(glyph.seedable, true);
 });
@@ -3295,6 +3338,52 @@ test("findLegendGlyphs: a shared piping callout diagram yields distinct, nonseed
   assert.ok(glyphs.every((glyph) => !glyph.seedable));
   assert.equal(new Set(glyphs.map((glyph) => glyph.rect.flat().join(","))).size, 7,
     "one callout identity cannot reuse another row's exact geometry");
+});
+
+test("findLegendGlyphs: a shared BAS point-tag diagram owns three distinct leader definitions", () => {
+  const glyphs = findLegendGlyphs(flat([
+    // Finite jurisdiction for the named component panel.
+    seg(100, 60, 700, 60),
+    // An ordinary wrapped row whose first line also resembles a section
+    // heading. Its accepted caption ownership must keep the zone open.
+    seg(120, 100, 160, 100), seg(160, 100, 160, 130),
+    seg(160, 130, 120, 130), seg(120, 130, 120, 100),
+    // This row-local carrier spans over half, but not all, of the panel and
+    // therefore cannot impersonate a full-width lower boundary.
+    seg(220, 180, 570, 180),
+    // Three final leader segments from one shared tag/circle explanation.
+    seg(460, 225, 500, 225),
+    seg(470, 305, 500, 305),
+    seg(465, 385, 500, 385),
+  ]), [
+    { text: "CONTROL ELECTRICAL COMPONENTS", x0: 110, y0: 20, x1: 390, y1: 40 },
+    { text: "FIRE ALARM", x0: 220, y0: 100, x1: 310, y1: 110 },
+    { text: "CONTROL PANEL", x0: 220, y0: 112, x1: 330, y1: 122 },
+    { text: "POINT NAME'S IDENTIFICATION", x0: 520, y0: 220, x1: 680, y1: 230 },
+    { text: "(CORRESPONDS TO CONTROL", x0: 520, y0: 232, x1: 670, y1: 242 },
+    { text: "ABBREVIATIONS)", x0: 520, y0: 244, x1: 620, y1: 254 },
+    { text: "POINT NAME'S NUMBER", x0: 520, y0: 300, x1: 650, y1: 310 },
+    { text: "(CONSECUTIVELY COUNTED IN RESPECT TO", x0: 520, y0: 312, x1: 690, y1: 322 },
+    { text: "CONTROL ABBREVIATIONS)", x0: 520, y0: 324, x1: 660, y1: 334 },
+    { text: "POINT NUMBER", x0: 520, y0: 380, x1: 610, y1: 390 },
+    { text: "(CONSECUTIVELY", x0: 520, y0: 392, x1: 620, y1: 402 },
+    { text: "COUNTED)", x0: 520, y0: 404, x1: 580, y1: 414 },
+    { text: "FILTER TYPE DIAGRAMS", x0: 110, y0: 470, x1: 300, y1: 490 },
+  ], { ...isolated, maxGlyphDimPx: 120 });
+
+  const points = glyphs.filter((glyph) => /^POINT\b/.test(glyph.caption));
+  assert.deepEqual(points.map((glyph) => glyph.caption), [
+    "POINT NAME'S IDENTIFICATION (CORRESPONDS TO CONTROL ABBREVIATIONS)",
+    "POINT NAME'S NUMBER (CONSECUTIVELY COUNTED IN RESPECT TO CONTROL ABBREVIATIONS)",
+    "POINT NUMBER (CONSECUTIVELY COUNTED)",
+  ]);
+  assert.deepEqual(points.map((glyph) => [glyph.kind, glyph.seedable]), [
+    ["annotation", false], ["annotation", false], ["annotation", false],
+  ]);
+  assert.equal(new Set(points.map((glyph) => glyph.rect.flat().join(","))).size, 3,
+    "each definition owns its own leader terminus");
+  assert.ok(points.every((glyph) => glyph.heading === "CONTROL ELECTRICAL COMPONENTS"));
+  assert.ok(glyphs.every((glyph) => glyph.caption !== "FILTER TYPE DIAGRAMS"));
 });
 
 test("findLegendGlyphs: a routed baseline and its attached invert leader receive one-to-one geometry", () => {

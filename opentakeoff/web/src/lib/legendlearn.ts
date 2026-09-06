@@ -609,6 +609,14 @@ function isDomainHeading(text: string): boolean {
   return /\b(?:AIR|BAS|CONDUIT|CONNECTION|CONTROLS?|DATA|DDC|DAMPER|DEVICES?|DUCT|ELECTRICAL|EQUIPMENT|FIRE|GROUNDING|HVAC|LIGHTING|LINE|MECHANICAL|PIPING|POINT|POWER|RACEWAY|SENSING|TELEPHONE|VALVE|WIRE)\b/i.test(normalizedCaption(text));
 }
 
+/** Discipline-qualified component panels can use more than one modifier
+ * (for example CONTROL ELECTRICAL COMPONENTS), which is stronger ownership
+ * evidence than the generic one-word COMPONENTS heading grammar. */
+function isNamedComponentHeading(text: string): boolean {
+  const normalized = normalizedCaption(text);
+  return isDomainHeading(normalized) && /\bCOMPONENTS$/i.test(normalized);
+}
+
 /** Explicit general-drafting vocabularies are real legends even when their
  * rows are not predominantly MEP terms. They still need repeated geometry
  * and ordinary heading ownership; this predicate only removes the HVAC/BAS
@@ -751,6 +759,10 @@ function isSectionBoundaryText(text: string): boolean {
     // connection schedule" is a common legend caption. Require heading-like
     // text whose final phrase itself names the next section.
     || /^(?:(?:[A-Z0-9&/,\-]+\s+){0,5})?(?:ABBREVIATIONS?|DESIGN\s+CRITERIA|GENERAL\s+(?:PROJECT|MECHANICAL|HVAC|CONTROL)\s+NOTES?|IDENTIFICATION|INDENTIFICATION|LEGEND\s+NOTES?|SCHEDULES?|SEQUENCES?(?:\s+OF\s+OPERATIONS?)?)$/i.test(normalized)
+    // A TYPE DIAGRAMS panel illustrates construction variants; its sketches
+    // are not additional symbol identities owned by an earlier component
+    // caption that happens to read like a discipline heading.
+    || /^(?:(?:[A-Z0-9&/,\-]+\s+){0,5})?TYPE\s+DIAGRAMS$/i.test(normalized)
     // Callout-key panels can sit directly beneath a real symbol legend and
     // repeat the same glyph/text column cadence. They describe how a tag is
     // structured, not additional symbol identities, so their explicit title
@@ -1138,7 +1150,8 @@ function isInternalLegendDimensionCaption(
  * its inner text span, so it is retained. */
 type TextResemblanceContext = {
   /** Tight alphabetic device tags may fill their carrier, but this exception
-   * is safe only inside an explicitly bounded symbol panel. */
+   * is safe only inside an explicitly bounded/named symbol panel whose raw
+   * linework independently proves a closed rectangular carrier. */
   allowNearEdgeAlphaTag?: boolean;
 };
 
@@ -1171,7 +1184,7 @@ function resemblesExtractedText(
     const nearEdgeAlphaTag = !!context.allowNearEdgeAlphaTag
       && /^[A-Z]{2,4}$/i.test(tag)
       && x0 <= s.x0 + 0.75 && x1 >= s.x1 - 0.75;
-    return segmentCount === 4
+    return (segmentCount === 4 || (nearEdgeAlphaTag && (segmentCount ?? 0) >= 4))
       && compactTag
       && (w >= sh * 1.8 || (nearEdgeAlphaTag && w >= sh * 1.2))
       && w <= sw + sh
@@ -1479,6 +1492,34 @@ type TagCalloutZone = {
   bottom: number;
 };
 
+/** A discipline-qualified COMPONENTS panel may use a finite underline as
+ * its only lateral boundary. Recover that source-declared jurisdiction so a
+ * neighboring column's section title cannot prematurely end this panel. */
+function namedComponentPanelJurisdiction(
+  heading: LegendSpan, segs: number[], typicalTextHeight: number,
+): UnderlinedLegendJurisdiction | null {
+  if (!isNamedComponentHeading(heading.text)) return null;
+  const headingCenterX = (heading.x0 + heading.x1) / 2;
+  const headingWidth = heading.x1 - heading.x0;
+  const horizontalTolerance = Math.max(1.5, typicalTextHeight * 0.08);
+  const candidates: UnderlinedLegendJurisdiction[] = [];
+  for (let i = 0; i < segs.length; i += 4) {
+    const ax = segs[i], ay = segs[i + 1], bx = segs[i + 2], by = segs[i + 3];
+    if (Math.abs(ay - by) > horizontalTolerance) continue;
+    const x0 = Math.min(ax, bx), x1 = Math.max(ax, bx);
+    const y = (ay + by) / 2;
+    if (x1 - x0 < Math.max(typicalTextHeight * 12, headingWidth * 1.15)
+      || headingCenterX < x0 - typicalTextHeight
+      || headingCenterX > x1 + typicalTextHeight
+      || y < heading.y1 - typicalTextHeight * 0.1
+      || y > heading.y1 + typicalTextHeight * 2.5) continue;
+    candidates.push({ x0, x1, y });
+  }
+  candidates.sort((a, b) => Math.abs(a.y - heading.y1) - Math.abs(b.y - heading.y1)
+    || (b.x1 - b.x0) - (a.x1 - a.x0) || a.x0 - b.x0);
+  return candidates[0] ?? null;
+}
+
 /** Tag-key panels describe how an equipment/damper/accessory identity is
  * encoded in a drawing callout. Their geometry is not an ordinary
  * SYMBOL-at-left / DESCRIPTION-at-right table: descriptions may sit on
@@ -1505,7 +1546,11 @@ function isLegendCalloutCaption(text: string): boolean {
   // phantom legend rows. Restrict recovery to explicit inline note keys and
   // piping topology/fitting callouts whose leader-sharing layout motivated
   // this path; ordinary device rows remain owned by normal or TAGS pairing.
-  return /^(?:GENERAL\s+NOTE|PLAN\s+NOTE\s+LIST|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|PIPE\s+(?:DROP|RISE|TEE|INVERT\s+ELEVATION\s+TAG)|(?:PIPE\s+)?(?:CAP|PLUG)|(?:REDUCING\s+)?(?:\d+(?:\.\d+)?\s*(?:DEGREE|°)\s+)?TEE)$/i.test(normalized);
+  return /^(?:GENERAL\s+NOTE|PLAN\s+NOTE\s+LIST|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|PIPE\s+(?:DROP|RISE|TEE|INVERT\s+ELEVATION\s+TAG)|(?:PIPE\s+)?(?:CAP|PLUG)|(?:REDUCING\s+)?(?:\d+(?:\.\d+)?\s*(?:DEGREE|°)\s+)?TEE|POINT\s+NAME'S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)\b.*|POINT\s+NUMBER\b.*)$/i.test(normalized);
+}
+
+function isPointTagDefinitionStart(text: string): boolean {
+  return /^POINT\s+NAME'S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)\b|^POINT\s+NUMBER\b/i.test(canonicalLegendCaption(text));
 }
 
 function isWrappedTagIdentityContinuation(
@@ -1559,6 +1604,7 @@ function tagCalloutZones(
   const zones: TagCalloutZone[] = [];
   for (const heading of headings) {
     const headingCenterX = (heading.x0 + heading.x1) / 2;
+    const namedPanel = namedComponentPanelJurisdiction(heading, segs, typicalTextHeight);
     const coveringDividers = sectionDividers.filter((divider) =>
       divider.y0 <= heading.y0 + typicalTextHeight * 2
       && divider.y1 >= heading.y1 - typicalTextHeight * 2);
@@ -1566,16 +1612,24 @@ function tagCalloutZones(
       .sort((a, b) => b.x0 - a.x0)[0];
     const rightDivider = coveringDividers.filter((divider) => divider.x0 > headingCenterX)
       .sort((a, b) => a.x0 - b.x0)[0];
-    const left = Math.max(pageLeft, leftDivider?.x0 ?? heading.x0 - typicalTextHeight * 24);
-    const right = Math.min(pageRight, rightDivider?.x0 ?? heading.x1 + typicalTextHeight * 24);
+    const left = Math.max(pageLeft,
+      namedPanel?.x0 ?? leftDivider?.x0 ?? heading.x0 - typicalTextHeight * 24);
+    const right = Math.min(pageRight,
+      namedPanel?.x1 ?? rightDivider?.x0 ?? heading.x1 + typicalTextHeight * 24);
     const nextBoundary = lines.filter((line) => line !== heading
       && line.y0 > heading.y1 + typicalTextHeight * 0.2
       && isSectionBoundaryText(line.text)
       && line.x1 >= left - typicalTextHeight
       && line.x0 <= right + typicalTextHeight
-      && !claimedPairs.some((pair) => [
-        pair.span.x0, pair.span.y0, pair.span.x1, pair.span.y1,
-      ].every((value, index) => value === [line.x0, line.y0, line.x1, line.y1][index]))
+      // A boundary-looking phrase may be the first physical line of an
+      // already accepted wrapped row (for example FIRE ALARM / CONTROL
+      // PANEL). Containment in that row's owned caption box is the relevant
+      // evidence; exact bbox equality only works for single-line captions.
+      && !claimedPairs.some((pair) => {
+        const slack = typicalTextHeight * 0.1;
+        return line.x0 >= pair.span.x0 - slack && line.x1 <= pair.span.x1 + slack
+          && line.y0 >= pair.span.y0 - slack && line.y1 <= pair.span.y1 + slack;
+      })
       // Generic one-word headings can also be the second line of a tag
       // identity ("EXISTING RELOCATED" / "EQUIPMENT"). A tightly stacked,
       // same-column predecessor proves continuation rather than a new panel.
@@ -1591,7 +1645,10 @@ function tagCalloutZones(
       const y = (ay + by) / 2;
       if (y <= heading.y1 + typicalTextHeight * 2) continue;
       const overlap = Math.max(0, Math.min(x1, right) - Math.max(x0, left));
-      if (overlap >= panelWidth * 0.55) horizontalRuleY.push(y);
+      // A wide device carrier or outlined caption can cover just over half
+      // a narrow component panel. It is still row-local geometry, not a
+      // panel boundary; only a near-full-width source rule may end the zone.
+      if (overlap >= panelWidth * 0.8) horizontalRuleY.push(y);
     }
     const bottom = Math.min(
       nextBoundary?.y0 ?? pageBottom,
@@ -1778,6 +1835,39 @@ function tagCalloutPairs(
           && (verticalBandOverlap >= 0 || tallAdjacentDiagram);
       })].filter(({ rect }, index, all) => all.findIndex((candidate) =>
         candidate.rect.flat().join(",") === rect.flat().join(",")) === index);
+      // A BAS point-tag key commonly has several leaders attached to one
+      // shared box/circle diagram. Whole-component proximity cannot assign
+      // that connected geometry one-to-one: a neighboring row can inherit
+      // the circle plus the next leader and suppress the real caption as a
+      // duplicate. Each definition's short final horizontal leader is the
+      // auditable row-local source geometry, so prefer its unique terminus.
+      const pointLeaderTerminus = isPointTagDefinitionStart(caption.text) ? (() => {
+        const targetY = caption.y0 + typicalTextHeight / 2;
+        const pad = wholeZone.gridPx / 2;
+        const leaders: Array<{ rect: [Point, Point]; score: number }> = [];
+        for (let i = 0; i < segs.length; i += 4) {
+          const ax = segs[i], ay = segs[i + 1], bx = segs[i + 2], by = segs[i + 3];
+          if (segmentAlreadyOwned(ax, ay, bx, by)) continue;
+          const leftX = Math.min(ax, bx), rightX = Math.max(ax, bx);
+          const y = (ay + by) / 2;
+          const length = Math.hypot(bx - ax, by - ay);
+          if (leftX < zone.left || rightX > zone.right
+            || Math.abs(ay - by) > Math.max(1.5, typicalTextHeight * 0.08)
+            || length < typicalTextHeight * 0.5 || length > maxLineStyleDimPx
+            || rightX < caption.x0 - typicalTextHeight * 2
+            || rightX > caption.x0 + typicalTextHeight * 0.25
+            || Math.abs(y - targetY) > typicalTextHeight) continue;
+          const rect: [Point, Point] = [[leftX - pad, y - pad], [rightX + pad, y + pad]];
+          if (usedGeometry.has(rect.flat().join(","))
+            || resemblesExtractedText(rect, rawSpans, 1)) continue;
+          leaders.push({
+            rect,
+            score: Math.abs(caption.x0 - rightX) + Math.abs(y - targetY) * 2,
+          });
+        }
+        return leaders.sort((a, b) => a.score - b.score
+          || (b.rect[1][0] - b.rect[0][0]) - (a.rect[1][0] - a.rect[0][0]))[0] ?? null;
+      })() : null;
       const candidates = allComponents
         .filter(({ rect }) => !usedGeometry.has(rect.flat().join(",")))
         .filter(({ rect }) => {
@@ -1869,14 +1959,16 @@ function tagCalloutPairs(
           && /^[A-Z0-9]{1,4}[.)]?$/i.test(normalizedCaption(span.text)))
           .sort((a, b) => (caption.x0 - a.x1) - (caption.x0 - b.x1))[0]
         : null;
-      if (!inlineKey && !candidates && !fallbackSegment && !fallbackTag) continue;
+      if (!inlineKey && !pointLeaderTerminus
+        && !candidates && !fallbackSegment && !fallbackTag) continue;
       const chosenRect: [Point, Point] = inlineKey
         ? [[inlineKey.x0, inlineKey.y0], [inlineKey.x1, inlineKey.y1]]
+        : pointLeaderTerminus ? pointLeaderTerminus.rect
         : candidates?.rect
         ?? fallbackSegment?.rect
         ?? [[fallbackTag!.span.x0, fallbackTag!.span.y0],
           [fallbackTag!.span.x1, fallbackTag!.span.y1]];
-      const chosenSegments = inlineKey ? 0
+      const chosenSegments = inlineKey ? 0 : pointLeaderTerminus ? 1
         : candidates?.component.edges ?? (fallbackSegment ? 1 : 0);
       usedGeometry.add(chosenRect.flat().join(","));
       pairs.push({
@@ -4441,8 +4533,17 @@ export function findLegendGlyphs(
       && centerX <= jurisdiction.x1 + typicalTextHeight
       && centerY > jurisdiction.y
       && centerY - jurisdiction.y <= Math.max(900, typicalTextHeight * 120));
-    if (!panel) return {};
-    const panelLines = lines.filter((line) => spanInsideUnderlinedPanel(line, [panel]));
+    const namedComponentHeading = lines.filter((line) =>
+      isNamedComponentHeading(line.text)
+      && line.y1 <= centerY
+      && y0 - line.y1 <= Math.max(180, typicalTextHeight * 12)
+      && centerX >= line.x0 - typicalTextHeight * 5
+      && centerX <= line.x1 + typicalTextHeight * 5)
+      .sort((a, b) => (y0 - a.y1) - (y0 - b.y1))[0];
+    if (!panel && !namedComponentHeading) return {};
+    const panelLines = panel
+      ? lines.filter((line) => spanInsideUnderlinedPanel(line, [panel]))
+      : lines;
     const sameCandidateRow = (line: LegendSpan): boolean => {
       const margin = Math.max((y1 - y0) * 0.5, typicalTextHeight * 0.75);
       return line.y1 >= y0 - margin && line.y0 <= y1 + margin;
@@ -4452,8 +4553,31 @@ export function findLegendGlyphs(
         && line.x0 - x1 <= Math.max(maxCaptionGapPx, Math.min(420, typicalTextHeight * 18))
         && sameCandidateRow(line)
         && predicate(line.text));
+    // A text outline can touch its carrier and increase the connected
+    // component above four edges. Prove the independent carrier from four
+    // long raw sides near this component's own bounds before relaxing the
+    // exact-four-edge text-duplicate exception.
+    const edgeTolerance = Math.max(1.5, typicalTextHeight * 0.12);
+    const width = x1 - x0, height = y1 - y0;
+    let top = false, bottom = false, left = false, right = false;
+    for (let i = 0; i < segs.length; i += 4) {
+      const ax = segs[i], ay = segs[i + 1], bx = segs[i + 2], by = segs[i + 3];
+      const sx0 = Math.min(ax, bx), sx1 = Math.max(ax, bx);
+      const sy0 = Math.min(ay, by), sy1 = Math.max(ay, by);
+      if (sx0 < x0 - edgeTolerance || sx1 > x1 + edgeTolerance
+        || sy0 < y0 - edgeTolerance || sy1 > y1 + edgeTolerance) continue;
+      if (Math.abs(ay - by) <= edgeTolerance && sx1 - sx0 >= width * 0.75) {
+        if (Math.abs((ay + by) / 2 - y0) <= edgeTolerance * 2) top = true;
+        if (Math.abs((ay + by) / 2 - y1) <= edgeTolerance * 2) bottom = true;
+      }
+      if (Math.abs(ax - bx) <= edgeTolerance && sy1 - sy0 >= height * 0.65) {
+        if (Math.abs((ax + bx) / 2 - x0) <= edgeTolerance * 2) left = true;
+        if (Math.abs((ax + bx) / 2 - x1) <= edgeTolerance * 2) right = true;
+      }
+    }
     return {
-      allowNearEdgeAlphaTag: externalIdentity(isDiscreteInstalledDeviceCaption),
+      allowNearEdgeAlphaTag: top && bottom && left && right
+        && externalIdentity(isDiscreteInstalledDeviceCaption),
     };
   };
   const relevantSegs = segmentsNearCaptions(
@@ -4627,10 +4751,23 @@ export function findLegendGlyphs(
     return materialGroups.some(({ zone }) => centerX >= zone.x0 && centerX <= zone.x1
       && centerY >= zone.y0 && centerY <= zone.y1);
   };
+  const pointDefinitionStarts = lines.filter((line) => isPointTagDefinitionStart(line.text));
+  const hasPointDefinitionCluster = pointDefinitionStarts.some((line) =>
+    pointDefinitionStarts.filter((other) =>
+      Math.abs(other.x0 - line.x0) <= typicalTextHeight * 2
+      && Math.abs(other.y0 - line.y0) <= typicalTextHeight * 20).length >= 2);
+  const isPointDefinitionHeuristic = (pair: PairCandidate): boolean =>
+    hasPointDefinitionCluster
+    && /\bPOINT(?:\s+NAME'S)?\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)\b/i.test(pair.caption);
   const pairs = [
     ...heuristicPairs.filter((pair) => !replacedHeuristicPairs.has(pair)),
     ...admittedRuledPairs,
-  ].filter((pair) => !insideTagCalloutZone(pair) && !insideMaterialLegendZone(pair));
+  ].filter((pair) => !insideTagCalloutZone(pair)
+    && !insideMaterialLegendZone(pair)
+    // Repeated BAS point-tag definitions are leader-owned callouts. Letting
+    // ordinary wrap logic claim their shared tag/circle diagram fuses two or
+    // more distinct identities before the callout pass can row-slice them.
+    && !isPointDefinitionHeuristic(pair));
   trimRoutedBaselinesWithCallouts(pairs, segs, rawSpans, typicalTextHeight, gridPx);
   const belowPaired = hasBelowCaptionSearch
     ? pairCandidatesBelow(
@@ -4695,7 +4832,7 @@ export function findLegendGlyphs(
     const kind: LegendGlyph["kind"] = isMaterialLegendHeading(heading)
       || isNoninstalledDraftingPanelHeading(heading)
       ? "annotation"
-      : isDraftingAnnotationCaption(pair.caption)
+      : isPointTagDefinitionStart(pair.caption) || isDraftingAnnotationCaption(pair.caption)
       ? "annotation"
       : isControlFunctionCaption(pair.caption, heading) ? "control_function"
       : embeddedCodedLineKey ? "line_style"
@@ -4818,7 +4955,8 @@ export function findLegendGlyphs(
   const legendCallouts = tagCalloutPairs(
     segs, lines, rawSpans, typicalTextHeight, maxGlyphDimPx,
     maxLineStyleDimPx, sectionDividers,
-    (text, span) => isLegendHeadingText(text) && !isTagCalloutHeading(text)
+    (text, span) => (isLegendHeadingText(text) || isNamedComponentHeading(text))
+      && !isTagCalloutHeading(text)
       && !isMaterialLegendHeading(text)
       // Below-caption RCP/P&ID grids have a dedicated ownership path that
       // preserves multiple renditions in one cell. A generic callout pass
@@ -4828,7 +4966,8 @@ export function findLegendGlyphs(
       // SYMBOL/DESCRIPTION tables and normal repeated-column pairing already
       // handle legitimate uses; it cannot safely establish a callout zone.
       && !/^SYMBOL:?$/i.test(normalizedCaption(text))
-      && (/(?:SYMBOLS?|LEGEND|NOTATIONS?|POINT\s+FUNCTION)/i.test(text)
+      && (isNamedComponentHeading(text)
+        || /(?:SYMBOLS?|LEGEND|NOTATIONS?|POINT\s+FUNCTION)/i.test(text)
         || span.y1 - span.y0 >= typicalTextHeight * 1.5)
       && !accepted.some((glyph) => glyph.caption_bbox.flat().every((value, index) =>
         value === [span.x0, span.y0, span.x1, span.y1][index]))
