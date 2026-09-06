@@ -267,13 +267,28 @@ function looksLikeGlyph(
  */
 function segmentsNearCaptions(
   segs: number[], spans: LegendSpan[], maxGlyphDimPx: number, maxCaptionGapPx: number,
+  includeBelowCaptions = false,
 ): number[] {
-  const boxes = spans.map((s) => ({
-    x0: s.x0 - maxCaptionGapPx - maxGlyphDimPx,
-    x1: s.x0,
-    y0: s.y0 - maxGlyphDimPx * 1.5,
-    y1: s.y1 + maxGlyphDimPx * 1.5,
-  }));
+  const boxes = spans.flatMap((s) => {
+    const rightCaptionBox = {
+      x0: s.x0 - maxCaptionGapPx - maxGlyphDimPx,
+      x1: s.x0,
+      y0: s.y0 - maxGlyphDimPx * 1.5,
+      y1: s.y1 + maxGlyphDimPx * 1.5,
+    };
+    if (!includeBelowCaptions) return [rightCaptionBox];
+    // RCP and device-cell legends center symbols ABOVE their descriptions.
+    // Search only a finite page-scaled band above each text run. This is
+    // enabled only on pages that actually declare a legend/symbol section,
+    // preserving the narrow plan-sheet fast path and avoiding arbitrary
+    // plan labels becoming candidate anchors.
+    return [rightCaptionBox, {
+      x0: s.x0 - maxGlyphDimPx,
+      x1: s.x1 + maxGlyphDimPx,
+      y0: s.y0 - maxGlyphDimPx - Math.min(maxCaptionGapPx, maxGlyphDimPx),
+      y1: s.y0,
+    }];
+  });
   const CELL = 256;
   const grid = new Map<string, number[]>();
   for (let i = 0; i < boxes.length; i++) {
@@ -365,6 +380,9 @@ type PairCandidate = {
    * of those lines. */
   captionLines: number;
   kind: "symbol" | "line_style";
+  /** Physical legend layout. Most legends put the caption to the glyph's
+   * right; RCP/fire/electrical cell legends commonly center it below. */
+  layout: "right" | "below";
 };
 
 function glyphKind(
@@ -410,7 +428,24 @@ function isLegendHeadingText(text: string): boolean {
     || /\bNOTATIONS?\b/i.test(normalized)
     || /\bCOMPONENTS\b/i.test(normalized)
     || /\bPOINT\s+FUNCTION(?:\s+SCHEDULE)?\b/i.test(normalized)
-    || /^(?:DUCTWORK|PIPING|VALVES?(?:\s+AND\s+PIPING\s+ACCESSORIES)?|DUCTWORK\s+ACCESSORIES|AIR\s+DISTRIBUTION\s+DEVICES|GRILLES?[,\s]+REGISTERS?\s*(?:&|AND)\s*DIFFUSERS?(?:\s+TAGS?)?|MECHANICAL\s+EQUIPMENT\s+TAGS?|DAMPER\s+TAGS?)$/i.test(normalized);
+    || /^(?:DUCTWORK|PIPING|(?:DUCTWORK|PIPING)\s+SYSTEM\s+ABBREVIATIONS|VALVES?(?:\s+AND\s+PIPING\s+ACCESSORIES)?|DUCTWORK\s+ACCESSORIES|AIR\s+DISTRIBUTION\s+DEVICES|GRILLES?[,\s]+REGISTERS?\s*(?:&|AND)\s*DIFFUSERS?(?:\s+TAGS?)?|MECHANICAL\s+EQUIPMENT\s+TAGS?|DAMPER\s+TAGS?)$/i.test(normalized);
+}
+
+/** Below-caption cell recovery is a specialized reflected-ceiling topology.
+ * A generic LEGEND/SYMBOLS heading is not sufficient: ordinary mechanical
+ * sheets often have a conventional right-caption legend near the top and a
+ * title block or control diagram elsewhere whose boxes happen to sit above
+ * short text. Restricting this alternate orientation to semantic RCP
+ * headings is document-general (not project/page keyed) and keeps those
+ * remote structures out of legend ownership. */
+function isBelowCaptionLegendHeading(text: string): boolean {
+  const normalized = normalizedCaption(text);
+  const namesReflectedCeiling = /\bRCP\b/i.test(normalized)
+    || /\bREFLECTED\s+CEILING(?:\s+PLAN)?\b/i.test(normalized);
+  // Notes such as "refer to architectural reflected ceiling plans" are
+  // common on mechanical sheets. They name another drawing but do not
+  // declare local legend ownership.
+  return namesReflectedCeiling && /\b(?:LEGEND|SYMBOLS?)\b/i.test(normalized);
 }
 
 /** Domain evidence is required when a heading is generic (plain SYMBOLS)
@@ -448,7 +483,13 @@ function isDirectiveProse(text: string): boolean {
  * never promote them to discrete Symbol Sweep seeds. */
 function isDraftingAnnotationCaption(text: string): boolean {
   const normalized = normalizedCaption(text).replace(/^[\s\-–—]+/, "");
-  return /^(?:REVISION\s+(?:REFERENCE|MARKER|NUMBER|TAG)|DETAIL\s+(?:REFERENCE|MARKER|NUMBER|TAG|CALLOUT)|SHEET\s+NOTE(?:\s+(?:CALLOUT|TAG))?|(?:FEEDER|(?:MECHANICAL\s+)?EQUIPMENT)\s+CALLOUT|HOME\s+RUN|CONDUIT,?\s*(?:VERTICAL\s+TRANSITION|CAPPED)|DUCTWORK\s+(?:BREAK|OR\s+PIPING\s+RISE)|INTAKE\s+OR\s+EXHAUST|(?:DIRECTION\s+OF\s+AIRFLOW|FLOW\s+DIRECTION)|(?:UPWARD|DOWNWARD)\s+DIRECTION\s+OF\s+SLOPED\s+PIPING|NEW\s+TO\s+EXISTING\s+CONNECTION\s+POINT|SLOPE\s+PIPE\s+IN\s+DIRECTION\s+OF\s+ARROW|AIR\s+DISTRIBUTION\s+TAG|CONTROL\s+ELEMENT\s+TAG|POINT\s+NAME'?S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)|CHANGE\s+OF\s+ELEVATION|ROOM\s+(?:TAG|NAME|NUMBER)|PLAN\s+(?:NOTE|NORTH)|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|AREA\s+NOT\s+IN\s+CONTRACT|ITEM\s+TO\s+BE\s+DEMOLISHED|CONNECT\s+TO\s+EXISTING|DEMOLISH\s+TO\s+POINT\s+INDICATED|DEMOLITION\b|EXISTING\s+TO\s+REMAIN|DIRECTION\s+OF\s+AIR\s*FLOW|STEEL\s+BARS\s+AS\s+REQUIRED|KEY(?:ED)?\s+(?:CONSTRUCTION\s+)?NOTE|INTERLOCK\s+TO\b|CONNECTION\s+TO\b.*\b(?:BAS|CONTROL|DDC)\b)/i.test(normalized);
+  // Reflected-ceiling legends also explain drawing conventions and finish
+  // swatches. These rows are valuable legend truth, but they do not identify
+  // discrete installed devices and must never become EA sweep seeds.
+  if (/^INDICATES\s+BRACKET\b/i.test(normalized)
+    || /^(?:CEILING\s+HEIGHT|EXPOSED\s+CEILING)$/i.test(normalized)
+    || /^(?:(?:\d+(?:\.\d+)?\s*['"]?\s*[x×]\s*\d+(?:\.\d+)?\s*['"]?\s+)?ACOUSTICAL\s+(?:TILE|PANEL).*\bCEILING|(?:GWB|GYPSUM(?:\s+BOARD)?)\s+CEILING(?:\s*\/\s*SOFFIT)?|(?:EXT(?:ERIOR)?\s+)?EIFS\b.*\bCEILING)$/i.test(normalized)) return true;
+  return /^(?:REVISION\s+(?:REFERENCE|MARKER|NUMBER|TAG)|DETAIL\s+(?:REFERENCE|MARKER|NUMBER|TAG|CALLOUT)|SHEET\s+NOTE(?:\s+(?:CALLOUT|TAG))?|(?:FEEDER|(?:MECHANICAL\s+)?EQUIPMENT)\s+CALLOUT|HOME\s+RUN|CONDUIT,?\s*(?:VERTICAL\s+TRANSITION|CAPPED)|DUCTWORK\s+(?:BREAK|OR\s+PIPING\s+RISE)|INTAKE\s+OR\s+EXHAUST|(?:DIRECTION\s+OF\s+(?:AIRFLOW|FLOW)|FLOW\s+DIRECTION)|(?:SUPPLY|RETURN,?\s+EXHAUST,?\s+OR\s+TRANSFER)\s+AIRFLOW|(?:INCLINED\s+RISE|DECLINED\s+DROP)\s+WITH\s+RESPECT\s+TO\s+AIRFLOW|(?:UPWARD|DOWNWARD)\s+DIRECTION\s+OF\s+SLOPED\s+PIPING|NEW\s+TO\s+EXISTING\s+CONNECTION\s+POINT|SLOPE\s+PIPE\s+IN\s+DIRECTION\s+OF\s+ARROW|AIR\s+DISTRIBUTION\s+TAG|AIR\s+DEVICE\s+TYPE\.\s+REFER\s+TO\s+SCHEDULE\b.*\bAIR\s+DEVICE\s+WITH\s+(?:ROUND|RECTANGULAR)\s+NECK\s+TAG|CONTROL\s+ELEMENT\s+TAG|POINT\s+NAME'?S\s+(?:IDENTIFICATION|INDENIFICATION|NUMBER)|CHANGE\s+OF\s+ELEVATION|ROOM\s+(?:TAG|NAME|NUMBER)|PLAN\s+(?:NOTE|NORTH)|CONTINUATION\s+SYMBOL|POINT\s+WHERE\s+NEW\s+CONNECTS\s+TO\s+EXISTING|AREA\s+NOT\s+IN\s+CONTRACT|ITEM\s+TO\s+BE\s+DEMOLISHED|CONNECT\s+TO\s+EXISTING|DEMOLISH\s+TO\s+POINT\s+INDICATED|DEMOLITION\b|EXISTING\s+TO\s+REMAIN|DIRECTION\s+OF\s+AIR\s*FLOW|STEEL\s+BARS\s+AS\s+REQUIRED|KEY(?:ED)?\s+(?:CONSTRUCTION\s+)?NOTE|INTERLOCK\s+TO\b|CONNECTION\s+TO\b.*\b(?:BAS|CONTROL|DDC)\b)/i.test(normalized);
 }
 
 /** Captions that name a routed medium or drafting line convention rather
@@ -466,6 +507,8 @@ function isRoutedSystemCaption(text: string): boolean {
     || /\b(?:ACTUATOR|CLEANOUT|DAMPER|DETECTOR|DIFFUSER|FAN|FILTER|GAUGE|GRILLE|LOUVER|METER|PANELBOARD|PUMP|REGISTER|REGULATOR|RELAY|SENSOR|STARTER|STRAINER|SWITCH|THERMOSTAT|TRANSMITTER|VALVE|VFD)\b\s+(?:IN|ON)\b.*\b(?:PIPING|LINE)$/i.test(normalized)) return false;
   return /\b(?:PIPING|LINE|SEWER)$/i.test(normalized)
     || /^(?:VENT|DUCTWORK|STORM\s+DRAIN)$/i.test(normalized)
+    || /^(?:(?:SUPPLY|RETURN|EXHAUST|TRANSFER|OUTDOOR)\s+AIR|CONDENSATE\s+DRAIN|REFRIGERANT\s+SUCTION\s*\/\s*LIQUID)$/i.test(normalized)
+    || /^(?:RECTANGULAR\s+DUCT(?:\s+RECTANGULAR\s+DUCT\s+WIDTH.*)?|ROUND\s+DUCT(?:\s+ROUND\s+DUCT\s+DIAMETER.*)?|PIPE(?:\s+PIPE\s*\(DIAMETER.*)?|FLEXIBLE\s+DUCT|ACOUSTICALLY\s+LINED\s+DUCTWORK)$/i.test(normalized)
     || /\b(?:CHILLED|CONDENSER|HEATING|GEOTHERMAL|DOMESTIC|TEMPERED)\s+(?:(?:HOT|COLD)\s+)?WATER(?:\s+(?:SUPPLY|RETURN))?(?:\s*\([^)]*\))?$/i.test(normalized)
     || /\b(?:LOW|MEDIUM|HIGH)\s+PRESSURE\s+NATURAL\s+GAS$/i.test(normalized);
 }
@@ -535,6 +578,39 @@ function resemblesExtractedText(rect: [Point, Point], rawSpans: LegendSpan[]): b
   const tol = Math.max(2.5, Math.min(12, textHeight * 0.4));
   const unionArea = Math.max(1, (ux1 - ux0) * (uy1 - uy0));
   const componentArea = Math.max(1, w * h);
+  // The bounding UNION of several sparse inner tags can fill most of a
+  // carrier even though the text boxes themselves fill very little of it.
+  // A real reviewed coil symbol exposed this: two tiny PDF-text "C" marks
+  // sit near opposite corners of a vector box with a diagonal. Their union
+  // bbox resembles the whole box, but treating that box as duplicate
+  // outlined lettering deletes the physical coil row. Measure the actual
+  // union area covered by the clipped text boxes before using their outer
+  // bbox as text evidence. True outlined multi-run lettering substantially
+  // occupies that bbox; sparse tags inside a carrier do not.
+  const clipped = overlaps.map((s) => ({
+    x0: Math.max(x0, s.x0), y0: Math.max(y0, s.y0),
+    x1: Math.min(x1, s.x1), y1: Math.min(y1, s.y1),
+  })).filter((box) => box.x1 > box.x0 && box.y1 > box.y0);
+  const xs = [...new Set(clipped.flatMap((box) => [box.x0, box.x1]))].sort((a, b) => a - b);
+  let coveredTextArea = 0;
+  for (let i = 1; i < xs.length; i++) {
+    const left = xs[i - 1], right = xs[i];
+    const mid = (left + right) / 2;
+    const intervals = clipped.filter((box) => box.x0 <= mid && box.x1 >= mid)
+      .map((box) => [box.y0, box.y1] as [number, number])
+      .sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+    let coveredY = 0;
+    let interval: [number, number] | null = null;
+    for (const next of intervals) {
+      if (!interval || next[0] > interval[1]) {
+        if (interval) coveredY += interval[1] - interval[0];
+        interval = [...next];
+      } else interval[1] = Math.max(interval[1], next[1]);
+    }
+    if (interval) coveredY += interval[1] - interval[0];
+    coveredTextArea += (right - left) * coveredY;
+  }
+  if (coveredTextArea / componentArea < 0.3) return false;
   // Outline fonts can overshoot the PDF text metrics by several pixels,
   // especially across stacked runs. Relative area agreement distinguishes
   // that duplicate ink from a genuine circle/box surrounding a short tag.
@@ -545,14 +621,14 @@ function resemblesExtractedText(rect: [Point, Point], rawSpans: LegendSpan[]): b
 function pairCandidates(
   candidates: GlyphCandidate[],
   spans: LegendSpan[], rawSpans: LegendSpan[], maxCaptionGapPx: number,
-  typicalTextHeight: number,
+  typicalTextHeight: number, preferBelowCaptions = false,
 ): { pairs: PairCandidate[]; usedSpans: Set<number> } {
   type Edge = { candidate: number; span: number; score: number; gap: number };
   const edges: Edge[] = [];
   for (let ci = 0; ci < candidates.length; ci++) {
     const cand = candidates[ci];
     if (resemblesExtractedText(cand.rect, rawSpans)) continue;
-    const [[, y0], [x1, y1]] = cand.rect;
+    const [[x0, y0], [x1, y1]] = cand.rect;
     const centerY = (y0 + y1) / 2;
     const margin = Math.max((y1 - y0) * 0.5, typicalTextHeight * 0.75);
     for (let si = 0; si < spans.length; si++) {
@@ -572,7 +648,14 @@ function pairCandidates(
       const shadowedByDescription = short.length <= 6 && shortWords <= 2 && spans.some((other, oi) => {
         if (oi === si || other.x0 <= s.x1) return false;
         const otherText = normalizedCaption(other.text);
-        if (!meaningfulCaption(otherText) || otherText.length < short.length + 8 || otherText.split(/\s+/).length < 2) return false;
+        // A legitimate two-word description can be very short (CLEAN OUT
+        // beside an internal CO tag is a reviewed example). Requiring eight
+        // extra characters let the left rendition in a two-variant row pair
+        // with the right rendition's inner tag, which then made the real
+        // caption lose one physical member. Two words plus a five-character
+        // advantage is already much stronger caption evidence than a terse
+        // code while remaining unable to hide a genuine one-word caption.
+        if (!meaningfulCaption(otherText) || otherText.length < short.length + 5 || otherText.split(/\s+/).length < 2) return false;
         const rowOverlap = Math.min(s.y1, other.y1) - Math.max(s.y0, other.y0);
         if (rowOverlap <= 0 && Math.abs((s.y0 + s.y1 - other.y0 - other.y1) / 2) > typicalTextHeight * 0.6) return false;
         return other.x0 - s.x0 <= Math.max(200, typicalTextHeight * 8)
@@ -607,6 +690,29 @@ function pairCandidates(
       // actual vertical interval, while retaining a small center tie-break
       // for two components that both genuinely occupy the row.
       const rowMiss = Math.max(0, y0 - spanCenterY, spanCenterY - y1);
+      // In a headed cell legend, the same-row "caption" can actually be an
+      // internal tag belonging to the neighboring cell (the reviewed RCP
+      // case paired a ceiling-height bubble with the next cell's EXP tag).
+      // When this candidate has a geometrically stronger centered caption
+      // directly below it, let the below-caption path own the glyph. Normal
+      // SYMBOL/DESCRIPTION columns have no horizontally overlapping text
+      // under their glyphs and are unaffected.
+      const betterCaptionBelow = preferBelowCaptions && spans.some((other, oi) => {
+        if (oi === si || !meaningfulCaption(other.text) || isLegendHeadingText(other.text)) return false;
+        const belowText = normalizedCaption(other.text);
+        // A terse tag below the current row is often the identifying text
+        // inside the NEXT row's carrier (CT/DP/AI), not this glyph's cell
+        // caption. Require descriptive text before it can override a valid
+        // right-caption edge.
+        if (belowText.split(/\s+/).length < 2) return false;
+        const belowGap = other.y0 - y1;
+        if (belowGap < -typicalTextHeight * 0.15 || belowGap > typicalTextHeight * 5) return false;
+        const horizontalMiss = Math.max(0, other.x0 - (x0 + x1) / 2, (x0 + x1) / 2 - other.x1);
+        if (horizontalMiss > typicalTextHeight * 2.5) return false;
+        const belowScore = Math.max(0, belowGap) + horizontalMiss * 2;
+        return belowScore + typicalTextHeight * 0.5 < gap + rowMiss * 2;
+      });
+      if (betterCaptionBelow) continue;
       edges.push({
         candidate: ci,
         span: si,
@@ -624,8 +730,19 @@ function pairCandidates(
   const usedSpans = new Set<number>();
   const pairs: PairCandidate[] = [];
   for (const edge of edges) {
-    if (usedCandidates.has(edge.candidate) || usedSpans.has(edge.span)) continue;
+    if (usedCandidates.has(edge.candidate)) continue;
+    // A legend row commonly shows two disconnected renditions of the same
+    // identity (single-line/double-line duct, plan/profile valve, etc.).
+    // Both candidates' best edge is therefore the SAME caption. Once the
+    // first rendition owns it, the second must remain an unpaired member for
+    // expandSymbolPairs to reunite with that row; allowing it to fall through
+    // to its second-best edge makes it steal the next physical caption and
+    // cascades every later row downward. Each candidate gets exactly its
+    // best geometrically eligible caption attempt, even when that caption is
+    // already owned. This preserves true one-to-one caption ownership while
+    // still allowing one row to carry multiple auditable geometry members.
     usedCandidates.add(edge.candidate);
+    if (usedSpans.has(edge.span)) continue;
     usedSpans.add(edge.span);
     const cand = candidates[edge.candidate];
     const span = spans[edge.span];
@@ -637,9 +754,140 @@ function pairCandidates(
       caption: normalizedCaption(span.text),
       captionLines: 1,
       kind: cand.kind,
+      layout: "right",
     });
   }
   return { pairs, usedSpans };
+}
+
+/** Pair a compact vector glyph with a caption centered BELOW it. Reflected
+ * ceiling plan, fire-alarm, and device-cell legends routinely use this
+ * topology instead of a SYMBOL/DESCRIPTION row. The path is intentionally
+ * separate from ordinary right-caption pairing: it is enabled only on a
+ * page with an explicit legend/symbol heading and later has to clear a
+ * repeated headed-cell layout gate. */
+function pairCandidatesBelow(
+  candidates: GlyphCandidate[], spans: LegendSpan[], rawSpans: LegendSpan[],
+  maxCaptionGapPx: number, typicalTextHeight: number,
+  alreadyClaimed: PairCandidate[],
+): { pairs: PairCandidate[]; usedSpans: Set<number> } {
+  type Edge = { candidate: number; span: number; score: number; gap: number };
+  const rectKey = (rect: [Point, Point]) => rect.flat().join(",");
+  const claimedRects = new Set(alreadyClaimed.flatMap((pair) =>
+    pair.members.map((member) => rectKey(member.rect))));
+  const maxVerticalGap = Math.min(maxCaptionGapPx, typicalTextHeight * 5);
+  const horizontalSlack = typicalTextHeight * 2.5;
+  const edges: Edge[] = [];
+
+  for (let ci = 0; ci < candidates.length; ci++) {
+    const cand = candidates[ci];
+    if (claimedRects.has(rectKey(cand.rect)) || resemblesExtractedText(cand.rect, rawSpans)) continue;
+    const [[x0, y0], [x1, y1]] = cand.rect;
+    const cx = (x0 + x1) / 2;
+    for (let si = 0; si < spans.length; si++) {
+      const span = spans[si];
+      if (!meaningfulCaption(span.text) || isLegendHeadingText(span.text)) continue;
+      // Vertical/rotated section labels and table dividers are context, not
+      // below-glyph descriptions.
+      if (span.y1 - span.y0 > typicalTextHeight * 2.2) continue;
+      const gap = span.y0 - y1;
+      if (gap < -typicalTextHeight * 0.15 || gap > maxVerticalGap) continue;
+      const horizontalMiss = Math.max(0, span.x0 - cx, cx - span.x1);
+      if (horizontalMiss > horizontalSlack) continue;
+      const spanCenterX = (span.x0 + span.x1) / 2;
+      edges.push({
+        candidate: ci,
+        span: si,
+        gap: Math.max(0, gap),
+        score: Math.max(0, gap) + horizontalMiss * 2
+          + Math.abs(cx - spanCenterX) * 0.05,
+      });
+    }
+  }
+
+  edges.sort((a, b) => a.score - b.score || a.gap - b.gap
+    || a.candidate - b.candidate || a.span - b.span);
+  const usedCandidates = new Set<number>();
+  const usedSpans = new Set<number>();
+  const pairs: PairCandidate[] = [];
+  for (const edge of edges) {
+    if (usedCandidates.has(edge.candidate)) continue;
+    usedCandidates.add(edge.candidate);
+    if (usedSpans.has(edge.span)) continue;
+    usedSpans.add(edge.span);
+    const cand = candidates[edge.candidate];
+    const span = spans[edge.span];
+    pairs.push({
+      rect: cand.rect,
+      segments: cand.segments,
+      members: [{ rect: cand.rect, segments: cand.segments }],
+      span: { ...span },
+      caption: normalizedCaption(span.text),
+      captionLines: 1,
+      kind: cand.kind,
+      layout: "below",
+    });
+  }
+  return { pairs, usedSpans };
+}
+
+/** Collect side-by-side renditions inside one below-caption legend cell.
+ * Each connected component remains auditable in member_rects. The union may
+ * be wider than one compact glyph because a cell can deliberately present
+ * several fixture variants, but it remains bounded by the caption/cell's
+ * own width and the page-scaled glyph ceiling. */
+function expandBelowCaptionPairs(
+  belowPairs: PairCandidate[], candidates: GlyphCandidate[], rawSpans: LegendSpan[],
+  typicalTextHeight: number, maxGlyphDimPx: number, claimedPairs: PairCandidate[],
+): void {
+  const rectKey = (rect: [Point, Point]) => rect.flat().join(",");
+  const claimed = new Set(claimedPairs.flatMap((pair) =>
+    pair.members.map((member) => rectKey(member.rect))));
+  for (const pair of belowPairs) {
+    const anchorCenterY = (pair.rect[0][1] + pair.rect[1][1]) / 2;
+    const captionWidth = pair.span.x1 - pair.span.x0;
+    const cellX0 = pair.span.x0 - typicalTextHeight * 4;
+    const cellX1 = pair.span.x1 + typicalTextHeight * 4;
+    for (;;) {
+      let best: GlyphCandidate | null = null;
+      let bestDistance = Infinity;
+      for (const candidate of candidates) {
+        if (claimed.has(rectKey(candidate.rect)) || resemblesExtractedText(candidate.rect, rawSpans)) continue;
+        if (candidate.rect[1][1] > pair.span.y0 + typicalTextHeight * 0.2) continue;
+        const candidateCenterX = (candidate.rect[0][0] + candidate.rect[1][0]) / 2;
+        const candidateCenterY = (candidate.rect[0][1] + candidate.rect[1][1]) / 2;
+        if (candidateCenterX < cellX0 || candidateCenterX > cellX1) continue;
+        if (Math.abs(candidateCenterY - anchorCenterY) > typicalTextHeight * 2.5) continue;
+        const horizontalGap = candidate.rect[1][0] < pair.rect[0][0]
+          ? pair.rect[0][0] - candidate.rect[1][0]
+          : pair.rect[1][0] < candidate.rect[0][0]
+            ? candidate.rect[0][0] - pair.rect[1][0] : 0;
+        const verticalGap = candidate.rect[1][1] < pair.rect[0][1]
+          ? pair.rect[0][1] - candidate.rect[1][1]
+          : pair.rect[1][1] < candidate.rect[0][1]
+            ? candidate.rect[0][1] - pair.rect[1][1] : 0;
+        if (horizontalGap > maxGlyphDimPx || verticalGap > typicalTextHeight * 2.5) continue;
+        const unionW = Math.max(pair.rect[1][0], candidate.rect[1][0])
+          - Math.min(pair.rect[0][0], candidate.rect[0][0]);
+        const unionH = Math.max(pair.rect[1][1], candidate.rect[1][1])
+          - Math.min(pair.rect[0][1], candidate.rect[0][1]);
+        const maxCellWidth = Math.max(maxGlyphDimPx * 2.25, captionWidth + typicalTextHeight * 8);
+        if (unionW > maxCellWidth || unionH > maxGlyphDimPx) continue;
+        const distance = Math.hypot(horizontalGap, verticalGap)
+          + Math.abs(candidateCenterY - anchorCenterY) * 0.1;
+        if (distance < bestDistance) { best = candidate; bestDistance = distance; }
+      }
+      if (!best) break;
+      claimed.add(rectKey(best.rect));
+      pair.members.push({ rect: best.rect, segments: best.segments });
+      pair.segments += best.segments;
+      if (best.kind === "symbol") pair.kind = "symbol";
+      pair.rect = [
+        [Math.min(pair.rect[0][0], best.rect[0][0]), Math.min(pair.rect[0][1], best.rect[0][1])],
+        [Math.max(pair.rect[1][0], best.rect[1][0]), Math.max(pair.rect[1][1], best.rect[1][1])],
+      ];
+    }
+  }
 }
 
 /** Reunite a disconnected glyph whose upper fragment was forced onto the
@@ -831,7 +1079,7 @@ function expandSymbolPairs(
   const rectKey = (rect: [Point, Point]) => rect.flat().join(",");
   const claimed = new Set(pairs.flatMap((pair) => pair.members.map((member) => rectKey(member.rect))));
   for (const pair of pairs) {
-    if (pair.kind !== "symbol") continue;
+    if (pair.kind !== "symbol" && !isDiscreteInstalledDeviceCaption(pair.caption)) continue;
     const captionY = (pair.span.y0 + pair.span.y1) / 2;
     for (;;) {
       let best: GlyphCandidate | null = null;
@@ -868,6 +1116,7 @@ function expandSymbolPairs(
       claimed.add(rectKey(best.rect));
       pair.members.push({ rect: best.rect, segments: best.segments });
       pair.segments += best.segments;
+      if (best.kind === "symbol") pair.kind = "symbol";
       pair.rect = [
         [Math.min(pair.rect[0][0], best.rect[0][0]), Math.min(pair.rect[0][1], best.rect[0][1])],
         [Math.max(pair.rect[1][0], best.rect[1][0]), Math.max(pair.rect[1][1], best.rect[1][1])],
@@ -876,8 +1125,27 @@ function expandSymbolPairs(
   }
 }
 
-function hasMultipleSubstantialSymbols(pair: PairCandidate, typicalTextHeight: number): boolean {
+function hasMultipleSubstantialSymbols(
+  pair: PairCandidate, typicalTextHeight: number, heading: string | null,
+): boolean {
   if (pair.kind !== "symbol" || pair.members.length < 2) return false;
+  // A below-caption cell conventionally presents side-by-side renditions
+  // (fixture sizes, grille necks, strobe/horn variants) under one identity.
+  // Preserve those as a non-seedable group whenever two information-rich
+  // components are materially separated on the same display row. Closely
+  // nested or stacked fragments remain one physical symbol.
+  if (pair.layout === "below") {
+    const independent = pair.members.filter((member) => member.segments >= 2);
+    for (let i = 0; i < independent.length; i++) {
+      for (let j = i + 1; j < independent.length; j++) {
+        const a = independent[i].rect, b = independent[j].rect;
+        const centerDx = Math.abs((a[0][0] + a[1][0] - b[0][0] - b[1][0]) / 2);
+        const centerDy = Math.abs((a[0][1] + a[1][1] - b[0][1] - b[1][1]) / 2);
+        if (centerDx >= typicalTextHeight * 1.2 && centerDy <= typicalTextHeight * 2.5) return true;
+      }
+    }
+    return false;
+  }
   // Disconnected components alone do not imply variants: a damper body,
   // blade, actuator, and duct stubs may all be separate strokes but still
   // form one installed symbol. Treat the row as a group only when its own
@@ -887,7 +1155,8 @@ function hasMultipleSubstantialSymbols(pair: PairCandidate, typicalTextHeight: n
     || /\b(?:DOWN\s*\/\s*UP|UP\s*\/\s*DOWN)\b/i.test(pair.caption)
     || /\bRISE\b.*\bDROP\b/i.test(pair.caption)
     || /\bACCESS\s+DOOR\b.*\bACCESS\s+PANEL\b/i.test(pair.caption);
-  if (!declaresAlternatives) return false;
+  const hasExplicitVariantColumns = /^(?:DUCTWORK|PIPING)$/i.test(heading || "");
+  if (!declaresAlternatives && !hasExplicitVariantColumns) return false;
   const independent = pair.members.filter((member) => member.segments >= 2);
   for (let i = 0; i < independent.length; i++) {
     for (let j = i + 1; j < independent.length; j++) {
@@ -899,7 +1168,11 @@ function hasMultipleSubstantialSymbols(pair: PairCandidate, typicalTextHeight: n
         (a[0][0] + a[1][0] - b[0][0] - b[1][0]) / 2,
         (a[0][1] + a[1][1] - b[0][1] - b[1][1]) / 2,
       );
-      if (distance >= typicalTextHeight * 1.2) return true;
+      if (declaresAlternatives && distance >= typicalTextHeight * 1.2) return true;
+      const variantColumns = hasExplicitVariantColumns
+        && Math.abs((a[0][0] + a[1][0] - b[0][0] - b[1][0]) / 2) >= typicalTextHeight * 3
+        && Math.abs((a[0][1] + a[1][1] - b[0][1] - b[1][1]) / 2) <= typicalTextHeight * 1.5;
+      if (variantColumns) return true;
     }
   }
   return false;
@@ -912,37 +1185,74 @@ function hasMultipleSubstantialSymbols(pair: PairCandidate, typicalTextHeight: n
 function attachWrappedCaptions(
   pairs: PairCandidate[], spans: LegendSpan[], usedSpans: Set<number>,
   maxLineGapPx: number, maxIndentDriftPx: number, maxWrapLines: number,
+  typicalTextHeight: number,
 ): void {
-  for (const pair of pairs) {
-    for (let ownedLines = pair.captionLines; ownedLines < maxWrapLines; ownedLines++) {
-      let best = -1;
-      let bestGap = Infinity;
-      let prepend = false;
-      for (let si = 0; si < spans.length; si++) {
-        if (usedSpans.has(si)) continue;
-        const s = spans[si];
-        if (!meaningfulCaption(s.text)) continue;
-        const belowGap = s.y0 - pair.span.y1;
-        const aboveGap = pair.span.y0 - s.y1;
+  // Resolve every currently-adjacent unclaimed line against ALL eligible
+  // rows before mutating one. Greedy pair-by-pair iteration made ownership
+  // depend on reading order: a glyphless qualifier between two rows could
+  // be swallowed by the first pair visited even when its center sat much
+  // closer to the second row's actual glyph. Recomputing after each attach
+  // still permits two/three-line chains, but each physical line goes to the
+  // geometrically best row under the same finite wrap/indent gates.
+  for (;;) {
+    let best: { pairIndex: number; spanIndex: number; prepend: boolean; score: number } | null = null;
+    for (let si = 0; si < spans.length; si++) {
+      if (usedSpans.has(si)) continue;
+      const continuation = spans[si];
+      if (!meaningfulCaption(continuation.text)) continue;
+      const lineCenterY = (continuation.y0 + continuation.y1) / 2;
+      for (let pairIndex = 0; pairIndex < pairs.length; pairIndex++) {
+        const pair = pairs[pairIndex];
+        const belowGap = continuation.y0 - pair.span.y1;
+        const aboveGap = pair.span.y0 - continuation.y1;
         const isBelow = belowGap >= -1;
         const gap = Math.max(0, isBelow ? belowGap : aboveGap);
         if (!isBelow && aboveGap < -1) continue;
-        if (gap > maxLineGapPx || Math.abs(s.x0 - pair.span.x0) > maxIndentDriftPx) continue;
-        if (gap < bestGap) { best = si; bestGap = gap; prepend = !isBelow; }
+        const glyphMiss = Math.max(0, pair.rect[0][1] - lineCenterY, lineCenterY - pair.rect[1][1]);
+        // Text boxes from the same CAD line family can differ by a fraction
+        // of a pixel after font metrics and image-space conversion. Keep a
+        // one-pixel numerical slack around the page-scaled wrap gate; the
+        // global glyph-distance score still decides between adjacent rows.
+        // A third descriptive line can be intentionally spaced farther from
+        // line two when it labels the same tall tag/callout; admit that only
+        // after two lines are already owned and the glyph itself reaches the
+        // candidate line. The geometry requirement keeps ordinary next rows
+        // outside this wider, compound-caption allowance.
+        const compactThirdLine = pair.captionLines > 1
+          && gap <= typicalTextHeight * 1.1
+          && glyphMiss <= typicalTextHeight * 0.9;
+        if ((gap > maxLineGapPx + 1 && !compactThirdLine)
+          || Math.abs(continuation.x0 - pair.span.x0) > maxIndentDriftPx) continue;
+        // Most captions remain capped at maxWrapLines. A compound symbol
+        // with leader labels can legitimately use two additional lines, but
+        // only while those extra line centers remain physically crossed by
+        // (or immediately beside) that same glyph's evidence box.
+        const compoundLineCap = glyphMiss <= typicalTextHeight * 0.5
+          && gap <= typicalTextHeight ? maxWrapLines + 2 : maxWrapLines;
+        if (pair.captionLines >= compoundLineCap) continue;
+        const glyphCenterY = (pair.rect[0][1] + pair.rect[1][1]) / 2;
+        const score = glyphMiss * 2 + gap + Math.abs(lineCenterY - glyphCenterY) * 0.05;
+        if (!best || score < best.score
+          || (score === best.score && (si < best.spanIndex
+            || (si === best.spanIndex && pairIndex < best.pairIndex)))) {
+          best = { pairIndex, spanIndex: si, prepend: !isBelow, score };
+        }
       }
-      if (best < 0) break;
-      const continuation = spans[best];
-      usedSpans.add(best);
-      pair.caption = normalizedCaption(prepend ? `${continuation.text} ${pair.caption}` : `${pair.caption} ${continuation.text}`);
-      pair.captionLines++;
-      pair.span = {
-        text: pair.caption,
-        x0: Math.min(pair.span.x0, continuation.x0),
-        y0: Math.min(pair.span.y0, continuation.y0),
-        x1: Math.max(pair.span.x1, continuation.x1),
-        y1: Math.max(pair.span.y1, continuation.y1),
-      };
     }
+    if (!best) break;
+    const pair = pairs[best.pairIndex];
+    const continuation = spans[best.spanIndex];
+    usedSpans.add(best.spanIndex);
+    pair.caption = normalizedCaption(best.prepend
+      ? `${continuation.text} ${pair.caption}` : `${pair.caption} ${continuation.text}`);
+    pair.captionLines++;
+    pair.span = {
+      text: pair.caption,
+      x0: Math.min(pair.span.x0, continuation.x0),
+      y0: Math.min(pair.span.y0, continuation.y0),
+      x1: Math.max(pair.span.x1, continuation.x1),
+      y1: Math.max(pair.span.y1, continuation.y1),
+    };
   }
 }
 
@@ -952,7 +1262,8 @@ function attachWrappedCaptions(
  * the two owned fragments into one row instead of emitting two fake rows. */
 function mergeOwnedWrapPairs(
   pairs: PairCandidate[], maxLineGapPx: number, maxIndentDriftPx: number,
-  maxGlyphDimPx: number, maxWrapLines: number, rawSpans: LegendSpan[],
+  maxGlyphDimPx: number, typicalTextHeight: number, maxWrapLines: number,
+  rawSpans: LegendSpan[],
 ): PairCandidate[] {
   // Sort by reading order, not exact x. Wrapped lines routinely drift by a
   // fraction of a pixel; x-first ordering can put line 2 before line 1.
@@ -979,6 +1290,41 @@ function mergeOwnedWrapPairs(
       const cx = (current.rect[0][0] + current.rect[1][0]) / 2;
       const nx = (next.rect[0][0] + next.rect[1][0]) / 2;
       if (Math.abs(cx - nx) > maxGlyphDimPx) continue;
+      // Caption leading alone cannot prove a wrap: dense legends routinely
+      // place genuine one-line rows only a few pixels farther apart than
+      // wrapped prose. The geometry must also look like fragments of ONE
+      // compact glyph. Require a locally continuous vertical union, scaled
+      // from this page's own lettering, and keep the ordinary glyph bounds
+      // on both axes. Separate row symbols with the same x cadence therefore
+      // stay separate even when their captions have tight leading.
+      const glyphVerticalGap = next.rect[0][1] > current.rect[1][1]
+        ? next.rect[0][1] - current.rect[1][1]
+        : current.rect[0][1] > next.rect[1][1] ? current.rect[0][1] - next.rect[1][1] : 0;
+      const glyphVerticalOverlap = Math.min(current.rect[1][1], next.rect[1][1])
+        - Math.max(current.rect[0][1], next.rect[0][1]);
+      const unionW = Math.max(current.rect[1][0], next.rect[1][0])
+        - Math.min(current.rect[0][0], next.rect[0][0]);
+      const unionH = Math.max(current.rect[1][1], next.rect[1][1])
+        - Math.min(current.rect[0][1], next.rect[0][1]);
+      const currentH = current.rect[1][1] - current.rect[0][1];
+      const nextH = next.rect[1][1] - next.rect[0][1];
+      const compactUnion = unionH <= Math.min(maxGlyphDimPx, typicalTextHeight * 2.25);
+      // A tall legitimate symbol may already exceed the ordinary compact
+      // wrap height before a tiny lower indicator wins line two (smoke-
+      // damper bodies and VFD displays do this). Permit that only when the
+      // two geometry boxes actually touch/overlap at the page's own text
+      // scale. Merely close, complete rows in a dense legend retain their
+      // separate ownership even though their caption leading is wrap-like.
+      const smallFragmentGap = Math.max(2, typicalTextHeight * 0.2);
+      const materiallyOverlapping = glyphVerticalOverlap > Math.max(1, typicalTextHeight * 0.08);
+      const hasTallBody = Math.max(currentH, nextH) >= typicalTextHeight * 2.25;
+      const joinedTallFragments = materiallyOverlapping
+        || (glyphVerticalGap <= smallFragmentGap
+          && (glyphVerticalGap > 0 || hasTallBody));
+      if (glyphVerticalGap > typicalTextHeight * 0.4
+        || unionW > maxGlyphDimPx
+        || unionH > maxGlyphDimPx
+        || (!compactUnion && !joinedTallFragments)) continue;
       consumed.add(j);
       ownedLines += next.captionLines;
       current = {
@@ -999,6 +1345,7 @@ function mergeOwnedWrapPairs(
           [Math.min(current.rect[0][0], next.rect[0][0]), Math.min(current.rect[0][1], next.rect[0][1])],
           [Math.max(current.rect[1][0], next.rect[1][0]), Math.max(current.rect[1][1], next.rect[1][1])],
         ], 1.8, current.segments + next.segments, maxGlyphDimPx, rawSpans),
+        layout: current.layout,
       };
     }
     out.push(current);
@@ -1234,6 +1581,117 @@ function nearbyLegendHeading(group: PairCandidate[], lines: LegendSpan[], typica
   return candidates.length ? normalizedCaption(candidates[0].text) : null;
 }
 
+/** Assign below-caption cells to the explicit legend heading whose
+ * horizontal jurisdiction contains them. A cell legend is a two-dimensional
+ * grid rather than one repeated x-column, so ordinary alignedGroups cannot
+ * establish it. Requiring an extractable heading, a finite horizontal
+ * reach, repeated cells, and HVAC/BAS domain density keeps arbitrary plan
+ * labels, schedules, and nearby symbology panels out. */
+function headedBelowCaptionGroups(
+  pairs: PairCandidate[], rightPairs: PairCandidate[], lines: LegendSpan[], typicalTextHeight: number,
+  maxCaptionGapPx: number, minAlignedRows: number, layoutEvidenceDisabled: boolean,
+): Array<{ group: PairCandidate[]; heading: string }> {
+  const headings = lines.map((span, index) => ({ span, index }))
+    .filter(({ span }) => isLegendHeadingText(span.text));
+  const grouped = new Map<number, PairCandidate[]>();
+  for (const pair of pairs) {
+    const x0 = Math.min(pair.rect[0][0], pair.span.x0);
+    const x1 = Math.max(pair.rect[1][0], pair.span.x1);
+    const top = Math.min(pair.rect[0][1], pair.span.y0);
+    const supported = headings.filter(({ span }) => {
+      if (span.y1 >= top) return false;
+      const horizontalGap = span.x1 < x0 ? x0 - span.x1
+        : x1 < span.x0 ? span.x0 - x1 : 0;
+      return horizontalGap <= Math.max(maxCaptionGapPx, typicalTextHeight * 12);
+    });
+    if (!supported.length) continue;
+    // Prefer the nearest heading vertically, then the one most directly
+    // overlapping this cell. This keeps adjacent legend panels independent.
+    supported.sort((a, b) => {
+      const aVertical = top - a.span.y1;
+      const bVertical = top - b.span.y1;
+      const aHorizontal = a.span.x1 < x0 ? x0 - a.span.x1
+        : x1 < a.span.x0 ? a.span.x0 - x1 : 0;
+      const bHorizontal = b.span.x1 < x0 ? x0 - b.span.x1
+        : x1 < b.span.x0 ? b.span.x0 - x1 : 0;
+      return aVertical - bVertical || aHorizontal - bHorizontal || a.index - b.index;
+    });
+    const winner = supported[0].index;
+    const entries = grouped.get(winner);
+    if (entries) entries.push(pair);
+    else grouped.set(winner, [pair]);
+  }
+
+  const accepted: Array<{ group: PairCandidate[]; heading: string }> = [];
+  for (const [headingIndex, group] of grouped) {
+    if (group.length < minAlignedRows) continue;
+    const heading = normalizedCaption(lines[headingIndex].text);
+    const domainRows = group.filter((pair) => isHvacBasCaption(pair.caption)).length;
+    const domainFloor = Math.max(2, Math.ceil(group.length * 0.2));
+    if (!layoutEvidenceDisabled && !isDomainHeading(heading) && domainRows < domainFloor) continue;
+
+    // A two-dimensional legend can legitimately mix orientations inside the
+    // same ruled panel. RCP material swatches, for example, put a large hatch
+    // LEFT of its description while the device cells around them put compact
+    // marks ABOVE centered descriptions. The ordinary aligned-column gate
+    // sees those right-caption swatches, but a one- or two-cell material
+    // subsection cannot independently satisfy its repeated-layout threshold.
+    // Once the repeated below-caption cells have established this headed 2-D
+    // panel, admit a right-caption pair only when its caption occupies the
+    // same physical row band and its complete glyph+caption extent stays in
+    // that panel's finite envelope. This derives ownership from topology,
+    // never from project/page/caption exceptions.
+    const augmented = [...group];
+    const regionX0 = Math.min(...group.map((pair) => Math.min(pair.rect[0][0], pair.span.x0)));
+    const regionX1 = Math.max(...group.map((pair) => Math.max(pair.rect[1][0], pair.span.x1)));
+    const regionY0 = Math.min(...group.map((pair) => Math.min(pair.rect[0][1], pair.span.y0)));
+    const regionY1 = Math.max(...group.map((pair) => Math.max(pair.rect[1][1], pair.span.y1)));
+    const envelopeSlack = Math.max(typicalTextHeight * 5, maxCaptionGapPx * 0.25);
+    const identity = (pair: PairCandidate) => `${pair.caption}\u0000${[
+      pair.span.x0, pair.span.y0, pair.span.x1, pair.span.y1,
+    ].join(",")}`;
+    const area = (pair: PairCandidate) => Math.max(1,
+      (pair.rect[1][0] - pair.rect[0][0]) * (pair.rect[1][1] - pair.rect[0][1]));
+    const sameRowBand = (candidate: PairCandidate) => group.some((member) => {
+      const overlap = Math.min(candidate.span.y1, member.span.y1)
+        - Math.max(candidate.span.y0, member.span.y0);
+      const candidateCenter = (candidate.span.y0 + candidate.span.y1) / 2;
+      const memberCenter = (member.span.y0 + member.span.y1) / 2;
+      return overlap >= -typicalTextHeight * 0.15
+        || Math.abs(candidateCenter - memberCenter) <= typicalTextHeight * 1.5;
+    });
+
+    for (const right of rightPairs) {
+      if (right.layout !== "right") continue;
+      const duplicateIndex = augmented.findIndex((member) => identity(member) === identity(right));
+      if (duplicateIndex >= 0) {
+        const existing = augmented[duplicateIndex];
+        // A partial hatch fragment above a caption can be a valid vertical
+        // candidate while the full bordered/hatch swatch to its left is the
+        // true legend evidence. Prefer the right-oriented version only when
+        // it is materially richer in BOTH extent and vector content.
+        if (area(right) >= area(existing) * 1.5 && right.segments > existing.segments) {
+          augmented[duplicateIndex] = right;
+        }
+        continue;
+      }
+      const text = normalizedCaption(right.caption);
+      if (isDirectiveProse(text)) continue;
+      if (text.split(/\s+/).length < 2 && !isHvacBasCaption(text)) continue;
+      const x0 = Math.min(right.rect[0][0], right.span.x0);
+      const x1 = Math.max(right.rect[1][0], right.span.x1);
+      const y0 = Math.min(right.rect[0][1], right.span.y0);
+      const y1 = Math.max(right.rect[1][1], right.span.y1);
+      if (x0 < regionX0 - envelopeSlack || x1 > regionX1 + envelopeSlack
+        || y0 < regionY0 - envelopeSlack || y1 > regionY1 + envelopeSlack
+        || !sameRowBand(right)) continue;
+      augmented.push(right);
+    }
+    accepted.push({ group: augmented, heading });
+  }
+  return accepted;
+}
+
 /** A compact network line-key legend is commonly placed directly above a
  * much larger network architecture diagram. The diagram can accidentally
  * repeat one box+caption x-column under the line keys. Preserve a genuine
@@ -1317,7 +1775,10 @@ export function findLegendGlyphs(
   const maxWrapGapPx = opts.maxWrapGapPx ?? Math.max(8, Math.min(18, typicalTextHeight * 0.45));
   const maxWrapIndentPx = opts.maxWrapIndentPx ?? Math.max(5, Math.min(64, typicalTextHeight * 2.5));
 
-  const relevantSegs = segmentsNearCaptions(segs, spans, maxGlyphDimPx, maxCaptionGapPx);
+  const hasBelowCaptionLegendHeading = lines.some((line) => isBelowCaptionLegendHeading(line.text));
+  const relevantSegs = segmentsNearCaptions(
+    segs, spans, maxGlyphDimPx, maxCaptionGapPx, hasBelowCaptionLegendHeading,
+  );
   const { components: clusters, gridPx } = clusterSegments(relevantSegs, maxGlyphDimPx, maxLineStyleDimPx);
   // Real, measured bug (accuracy-hardening plan, this session): a cluster's
   // bbox here is built from buildMepGraph's own NODED node coordinates,
@@ -1345,23 +1806,44 @@ export function findLegendGlyphs(
     candidates.push({ rect, segments: c.edges, kind: glyphKind(rect, gridPx, c.edges, maxGlyphDimPx, rawSpans) });
   }
 
-  const paired = pairCandidates(candidates, spans, rawSpans, maxCaptionGapPx, typicalTextHeight);
+  const paired = pairCandidates(
+    candidates, spans, rawSpans, maxCaptionGapPx, typicalTextHeight,
+    hasBelowCaptionLegendHeading,
+  );
   const reunitedPairs = mergeDownshiftedGlyphFragments(
     paired.pairs, typicalTextHeight, maxGlyphDimPx, gridPx, rawSpans,
     maxWrapGapPx, maxWrapIndentPx, maxWrapLines,
   );
   expandLineStylePairs(reunitedPairs, candidates, rawSpans, gridPx, typicalTextHeight, maxLineStyleDimPx);
   expandSymbolPairs(reunitedPairs, candidates, rawSpans, typicalTextHeight, maxGlyphDimPx);
-  attachWrappedCaptions(reunitedPairs, spans, paired.usedSpans, maxWrapGapPx, maxWrapIndentPx, maxWrapLines);
+  attachWrappedCaptions(
+    reunitedPairs, spans, paired.usedSpans,
+    maxWrapGapPx, maxWrapIndentPx, maxWrapLines, typicalTextHeight,
+  );
   const mergedPairs = mergeOwnedWrapPairs(
     reunitedPairs,
     maxWrapGapPx,
     maxWrapIndentPx,
     maxGlyphDimPx,
+    typicalTextHeight,
     maxWrapLines,
     rawSpans,
   );
   const pairs = withoutContainedDetailPairs(mergedPairs, typicalTextHeight, maxWrapGapPx);
+  const belowPaired = hasBelowCaptionLegendHeading
+    ? pairCandidatesBelow(
+      candidates, spans, rawSpans, maxCaptionGapPx, typicalTextHeight,
+      pairs,
+    )
+    : { pairs: [] as PairCandidate[], usedSpans: new Set<number>() };
+  attachWrappedCaptions(
+    belowPaired.pairs, spans, belowPaired.usedSpans,
+    maxWrapGapPx, maxWrapIndentPx, maxWrapLines, typicalTextHeight,
+  );
+  expandBelowCaptionPairs(
+    belowPaired.pairs, candidates, rawSpans, typicalTextHeight,
+    maxGlyphDimPx, [...pairs, ...belowPaired.pairs],
+  );
 
   // A nearest glyph+text coincidence is not yet a legend row. Require the
   // repeated two-column topology legends actually use. This is the guard
@@ -1382,6 +1864,41 @@ export function findLegendGlyphs(
   const minUnheadedRows = Math.max(minAlignedRows, opts.minUnheadedRows ?? 15);
   const layoutEvidenceDisabled = minAlignedRows === 1 && minUnheadedRows === 1;
   const accepted: LegendGlyph[] = [];
+  const acceptPair = (pair: PairCandidate, alignedRows: number, heading: string | null) => {
+    const kind: LegendGlyph["kind"] = isDraftingAnnotationCaption(pair.caption)
+      ? "annotation"
+      : isControlFunctionCaption(pair.caption, heading) ? "control_function"
+      : isRoutedSystemCaption(pair.caption) ? "line_style"
+      : pair.kind === "line_style" && isDiscreteInstalledDeviceCaption(pair.caption) ? "symbol"
+      : hasMultipleSubstantialSymbols(pair, typicalTextHeight, heading) ? "symbol_group" : pair.kind;
+    // `seedable` means this is one physical symbol identity that may enter
+    // the mandatory plan-anchor corroboration stage. It does NOT authorize
+    // sweeping directly from legend-scale geometry: tagged circles/boxes
+    // still preserve their caption identity while the handoff locates a
+    // real occurrence on a scaled plan. Only sparse line-fragment rescues,
+    // grouped variants, line keys, and annotations are barred here.
+    const seedable = kind === "symbol" && pair.kind === "symbol";
+    const captionBbox: [Point, Point] = [[pair.span.x0, pair.span.y0], [pair.span.x1, pair.span.y1]];
+    const duplicate = accepted.some((glyph) => glyph.caption === pair.caption
+      && glyph.caption_bbox.flat().every((value, index) => value === captionBbox.flat()[index]));
+    if (duplicate) return;
+    accepted.push({
+      caption: pair.caption,
+      caption_bbox: captionBbox,
+      rect: pair.rect,
+      segments: pair.segments,
+      aligned_rows: alignedRows,
+      heading,
+      kind,
+      seedable,
+      ...(pair.members.length > 1 ? { member_rects: pair.members.map((member) => member.rect) } : {}),
+      ...(kind === "line_style" ? { seed_warning: "Line-style legend keys describe routed systems, not discrete EA symbols; do not send this rect to a count sweep." } : {}),
+      ...(kind === "symbol" && !seedable ? { seed_warning: "This row names a physical installed-device symbol, but the usable vector evidence is only a sparse line fragment (often because its identifying letter is PDF text); preserve the identity and do not send this incomplete rect to a count sweep." } : {}),
+      ...(kind === "annotation" ? { seed_warning: "Drafting/reference annotations are legend truth, not installed devices; do not send this rect to a count sweep." } : {}),
+      ...(kind === "control_function" ? { seed_warning: "This row describes a BAS point, command, control-logic, or sequence function, not a physical installed-device symbol; keep it for controls reasoning and out of EA count sweeps." } : {}),
+      ...(kind === "symbol_group" ? { seed_warning: "This legend row contains multiple substantial disconnected symbols or variants; anchor each intended identity separately on a real plan before counting." } : {}),
+    });
+  };
   for (const indices of groups) {
     let group = withoutEmbeddedGlyphTags(indices.map((i) => pairs[i]), typicalTextHeight);
     if (!group.length) continue;
@@ -1398,31 +1915,13 @@ export function findLegendGlyphs(
     // truth, never glyph-caption truth, even when its numbering is regular.
     if (!layoutEvidenceDisabled && (!heading || !isDomainHeading(heading)) && domainRows < domainFloor) continue;
     if (!layoutEvidenceDisabled && !heading && directiveRows / group.length > 0.15) continue;
-    for (const pair of group) {
-      const kind: LegendGlyph["kind"] = isDraftingAnnotationCaption(pair.caption)
-        ? "annotation"
-        : isControlFunctionCaption(pair.caption, heading) ? "control_function"
-        : isRoutedSystemCaption(pair.caption) ? "line_style"
-        : pair.kind === "line_style" && isDiscreteInstalledDeviceCaption(pair.caption) ? "symbol"
-        : hasMultipleSubstantialSymbols(pair, typicalTextHeight) ? "symbol_group" : pair.kind;
-      const seedable = kind === "symbol" && pair.kind === "symbol";
-      accepted.push({
-        caption: pair.caption,
-        caption_bbox: [[pair.span.x0, pair.span.y0], [pair.span.x1, pair.span.y1]],
-        rect: pair.rect,
-        segments: pair.segments,
-        aligned_rows: group.length,
-        heading,
-        kind,
-        seedable,
-        ...(pair.members.length > 1 ? { member_rects: pair.members.map((member) => member.rect) } : {}),
-        ...(kind === "line_style" ? { seed_warning: "Line-style legend keys describe routed systems, not discrete EA symbols; do not send this rect to a count sweep." } : {}),
-        ...(kind === "symbol" && !seedable ? { seed_warning: "This row names a physical installed-device symbol, but the usable vector evidence is only a sparse line fragment (often because its identifying letter is PDF text); preserve the identity and do not send this incomplete rect to a count sweep." } : {}),
-        ...(kind === "annotation" ? { seed_warning: "Drafting/reference annotations are legend truth, not installed devices; do not send this rect to a count sweep." } : {}),
-        ...(kind === "control_function" ? { seed_warning: "This row describes a BAS point, command, control-logic, or sequence function, not a physical installed-device symbol; keep it for controls reasoning and out of EA count sweeps." } : {}),
-        ...(kind === "symbol_group" ? { seed_warning: "This legend row contains multiple substantial disconnected symbols or variants; anchor each intended identity separately on a real plan before counting." } : {}),
-      });
-    }
+    for (const pair of group) acceptPair(pair, group.length, heading);
+  }
+  for (const { group, heading } of headedBelowCaptionGroups(
+    belowPaired.pairs, pairs, lines, typicalTextHeight, maxCaptionGapPx,
+    minAlignedRows, layoutEvidenceDisabled,
+  )) {
+    for (const pair of group) acceptPair(pair, group.length, heading);
   }
   accepted.sort((a, b) => a.rect[0][1] - b.rect[0][1] || a.rect[0][0] - b.rect[0][0] || a.caption.localeCompare(b.caption));
   return accepted;

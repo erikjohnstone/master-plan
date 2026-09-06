@@ -133,6 +133,45 @@ test("findLegendGlyphs: a real three-line control caption is owned completely", 
   assert.deepEqual(glyphs[0].caption_bbox, [[220, 120], [460, 186]]);
 });
 
+test("findLegendGlyphs: a spaced third caption line is retained only when the same tall glyph reaches it", () => {
+  const tallTag = [
+    seg(100, 100, 140, 100), seg(140, 100, 140, 170),
+    seg(140, 170, 100, 170), seg(100, 170, 100, 100),
+  ];
+  const spans: LegendSpan[] = [
+    { text: "AIR DEVICE TYPE. REFER TO SCHEDULE", x0: 200, y0: 100, x1: 500, y1: 120 },
+    { text: "NECK DIAMETER (INCHES)", x0: 200, y0: 124, x1: 410, y1: 144 },
+    // Deliberately beyond maxWrapGapPx from line two, but still crossed by
+    // the same tag geometry. This is one compound legend identity.
+    { text: "AIR DEVICE WITH ROUND NECK TAG", x0: 200, y0: 158, x1: 470, y1: 178 },
+  ];
+  const glyphs = findLegendGlyphs(flat(tallTag), spans, { ...isolated, maxGlyphDimPx: 120, maxWrapGapPx: 8 });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].caption, "AIR DEVICE TYPE. REFER TO SCHEDULE NECK DIAMETER (INCHES) AIR DEVICE WITH ROUND NECK TAG");
+  assert.equal(glyphs[0].kind, "annotation", "a tag-format key explains drafting notation; it is not an installed device identity");
+  assert.equal(glyphs[0].seedable, false);
+});
+
+test("findLegendGlyphs: leader labels physically crossing one compound glyph can extend its caption to five lines", () => {
+  const compound = [
+    seg(100, 100, 150, 100), seg(150, 100, 150, 196),
+    seg(150, 196, 100, 196), seg(100, 196, 100, 100),
+  ];
+  const texts = [
+    "ACTIVE THROW DIRECTION (TYP)",
+    "INACTIVE / BLOCKED DIRECTION (TYP)",
+    "CEILING SUPPLY AIR DEVICE WITH",
+    "2-WAY DIRECTIONAL THROW",
+    "(OTHER CONFIGURATIONS SIMILAR)",
+  ];
+  const spans: LegendSpan[] = texts.map((text, index) => ({
+    text, x0: 200, y0: 100 + index * 24, x1: 500, y1: 120 + index * 24,
+  }));
+  const glyphs = findLegendGlyphs(flat(compound), spans, { ...isolated, maxGlyphDimPx: 120, maxWrapGapPx: 8 });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].caption, texts.join(" "));
+});
+
 test("findLegendGlyphs: centered and indented damper-description wraps remain one row at the sheet's text scale", () => {
   const segs = flat([...controlValveGlyph(100, 100), ...controlValveGlyph(100, 350)]);
   const spans: LegendSpan[] = [
@@ -167,6 +206,67 @@ test("findLegendGlyphs: two independent (glyph, caption) rows are each found and
   assert.ok(byCaption["2-WAY ELECTRIC CONTROL VALVE"]);
   assert.ok(byCaption["3-WAY ELECTRIC CONTROL VALVE"]);
   assert.ok(byCaption["2-WAY ELECTRIC CONTROL VALVE"].rect[0][1] < byCaption["3-WAY ELECTRIC CONTROL VALVE"].rect[0][1], "the first row's glyph sits above the second's");
+});
+
+test("findLegendGlyphs: a second rendition cannot fall past its own text-only qualifier and steal the next physical row", () => {
+  const box = (x: number, y: number): number[][] => [
+    seg(x, y, x + 24, y), seg(x + 24, y, x + 24, y + 20),
+    seg(x + 24, y + 20, x, y + 20), seg(x, y + 20, x, y),
+  ];
+  const segs = flat([
+    ...box(100, 100), ...box(150, 100),
+    ...box(100, 180), ...box(150, 180),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "RECTANGULAR DUCT", x0: 220, y0: 100, x1: 390, y1: 120 },
+    // A text-only parameter line under the same two drawn variants is a
+    // legitimate continuation of row one, but it has no independent vector
+    // identity. It must not inherit row one's spare variant and then keep
+    // cascading into the next physical symbol row.
+    { text: "RECTANGULAR DUCT WIDTHxHEIGHT (INCHES)", x0: 220, y0: 126, x1: 560, y1: 146 },
+    { text: "RECTANGULAR SUPPLY DUCT TURN DOWN", x0: 220, y0: 180, x1: 520, y1: 200 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 120, maxWrapGapPx: 10 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "RECTANGULAR DUCT RECTANGULAR DUCT WIDTHxHEIGHT (INCHES)",
+    "RECTANGULAR SUPPLY DUCT TURN DOWN",
+  ]);
+  assert.ok(glyphs.every((glyph) => glyph.member_rects?.length === 2));
+});
+
+test("findLegendGlyphs: tight leading does not merge two complete physical legend rows", () => {
+  const box = (y: number): number[][] => [
+    seg(100, y, 124, y), seg(124, y, 124, y + 20),
+    seg(124, y + 20, 100, y + 20), seg(100, y + 20, 100, y),
+  ];
+  const segs = flat([...box(100), ...box(130)]);
+  const spans: LegendSpan[] = [
+    { text: "HYDRONIC PIPE TURN DOWN", x0: 200, y0: 100, x1: 430, y1: 120 },
+    { text: "HYDRONIC PIPE TURN UP", x0: 200, y0: 124, x1: 410, y1: 144 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 120, maxWrapGapPx: 8 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "HYDRONIC PIPE TURN DOWN", "HYDRONIC PIPE TURN UP",
+  ]);
+});
+
+test("findLegendGlyphs: an unclaimed middle caption joins the nearest glyph row, independent of pair order", () => {
+  const box = (y: number): number[][] => [
+    seg(100, y, 124, y), seg(124, y, 124, y + 20),
+    seg(124, y + 20, 100, y + 20), seg(100, y + 20, 100, y),
+  ];
+  const segs = flat([...box(100), ...box(156)]);
+  const spans: LegendSpan[] = [
+    { text: "MANUAL AIR VENT", x0: 200, y0: 100, x1: 370, y1: 120 },
+    // This line has no independently pairable component, but it sits next
+    // to the lower row's geometry and is the first line of that row.
+    { text: "METERED BALANCING VALVE", x0: 200, y0: 140, x1: 450, y1: 160 },
+    { text: "W/ PRESSURE TAPS", x0: 200, y0: 164, x1: 380, y1: 184 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 120, maxWrapGapPx: 20 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "MANUAL AIR VENT", "METERED BALANCING VALVE W/ PRESSURE TAPS",
+  ]);
 });
 
 test("findLegendGlyphs: a terse tag embedded inside the repeated glyph column is not promoted to its own legend row", () => {
@@ -353,6 +453,27 @@ test("findLegendGlyphs: stacked vector-outline text with CAD metric overshoot is
   assert.deepEqual(findLegendGlyphs(segs, spans, isolated), []);
 });
 
+test("findLegendGlyphs: sparse PDF-text tags inside a vector carrier do not make the physical symbol look like outlined text", () => {
+  const coil = flat([
+    seg(100, 100, 140, 100), seg(140, 100, 140, 180),
+    seg(140, 180, 100, 180), seg(100, 180, 100, 100),
+    seg(140, 100, 100, 180),
+  ]);
+  const spans: LegendSpan[] = [
+    // The outer bbox of these two sparse tags nearly fills the carrier,
+    // exactly like the reviewed cooling/heating-coil marks on a real sheet.
+    { text: "C", x0: 103, y0: 102, x1: 113, y1: 122 },
+    { text: "C", x0: 125, y0: 154, x1: 135, y1: 174 },
+    { text: "COOLING COIL", x0: 220, y0: 125, x1: 350, y1: 145 },
+  ];
+  const glyphs = findLegendGlyphs(coil, spans, { ...isolated, maxGlyphDimPx: 120 });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].caption, "COOLING COIL");
+  assert.equal(glyphs[0].kind, "symbol");
+  assert.equal(glyphs[0].seedable, true, "one physical identity may proceed to the mandatory plan-anchor stage");
+  assert.ok(glyphs[0].rect[0][1] <= 100 && glyphs[0].rect[1][1] >= 180);
+});
+
 test("findLegendGlyphs: a dense point matrix's vector X marks never become glyph-caption rows", () => {
   const segs: number[][] = [];
   const spans: LegendSpan[] = [{ text: "BMS POINT FUNCTION SCHEDULE", x0: 60, y0: 20, x1: 450, y1: 45 }];
@@ -481,6 +602,25 @@ test("findLegendGlyphs: an inner short qualifier cannot steal the fuller same-ro
   assert.deepEqual(glyphs.map((glyph) => glyph.caption), ["CARBON MONOXIDE TRANSMITTER", "OCCUPANCY SENSOR"]);
 });
 
+test("findLegendGlyphs: one variant's terse inner tag cannot claim the other variant or hide it from a short two-word caption", () => {
+  const box = (x: number): number[][] => [
+    seg(x, 100, x + 24, 100), seg(x + 24, 100, x + 24, 120),
+    seg(x + 24, 120, x, 120), seg(x, 120, x, 100),
+  ];
+  const spans: LegendSpan[] = [
+    { text: "PIPING", x0: 70, y0: 20, x1: 330, y1: 45 },
+    { text: "CO", x0: 104, y0: 115, x1: 120, y1: 135 },
+    { text: "CO", x0: 214, y0: 115, x1: 230, y1: 135 },
+    { text: "CLEAN OUT", x0: 300, y0: 100, x1: 390, y1: 120 },
+  ];
+  const glyphs = findLegendGlyphs(flat([...box(100), ...box(210)]), spans, { ...isolated, maxGlyphDimPx: 180 });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].caption, "CLEAN OUT");
+  assert.equal(glyphs[0].kind, "symbol_group");
+  assert.equal(glyphs[0].seedable, false);
+  assert.equal(glyphs[0].member_rects?.length, 2);
+});
+
 test("findLegendGlyphs: a centered heading supports the full glyph-to-caption column span, not only the glyph x-coordinate", () => {
   const segs = flat([...controlValveGlyph(100, 100), ...controlValveGlyph(100, 300)]);
   const spans: LegendSpan[] = [
@@ -597,6 +737,52 @@ test("findLegendGlyphs: disconnected symbol fragments that steal two wrapped lin
   assert.equal(glyphs[0].caption, "VARIABLE FREQUENCY DRIVE (VFD)");
   assert.deepEqual(glyphs[0].caption_bbox, [[200, 100], [370, 143]]);
   assert.ok(glyphs[0].rect[1][1] >= 142, "the returned seed rect owns both disconnected fragments");
+});
+
+test("findLegendGlyphs: a touching lower indicator rejoins a tall symbol even when the complete glyph exceeds two text lines", () => {
+  const tallBody = [
+    seg(100, 80, 140, 80), seg(140, 80, 140, 170),
+    seg(140, 170, 100, 170), seg(100, 170, 100, 80),
+  ];
+  const lowerIndicator = [seg(100, 172, 140, 172)];
+  const spans: LegendSpan[] = [
+    { text: "MOTORIZED SMOKE DAMPER", x0: 200, y0: 120, x1: 430, y1: 140 },
+    { text: "NORMALLY OPEN OR CLOSED", x0: 200, y0: 144, x1: 420, y1: 164 },
+  ];
+  const glyphs = findLegendGlyphs(flat([...tallBody, ...lowerIndicator]), spans, {
+    ...isolated, maxGlyphDimPx: 120, maxWrapGapPx: 8,
+  });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].caption, "MOTORIZED SMOKE DAMPER NORMALLY OPEN OR CLOSED");
+  assert.ok(glyphs[0].rect[0][1] <= 80 && glyphs[0].rect[1][1] >= 172);
+});
+
+test("findLegendGlyphs: touching complete valve rows remain separate when the upper glyph is not a page-scale tall body", () => {
+  // Adjacent legend symbols can share an exact padded y boundary. That is
+  // not enough to turn the second row into a wrapped caption line owned by
+  // the first row, even when the upper valve includes a raised actuator.
+  const upperValveBody = [
+    seg(100, 90, 140, 90), seg(140, 90, 140, 110),
+    seg(140, 110, 100, 110), seg(100, 110, 100, 90),
+  ];
+  const upperValveActuator = [
+    seg(112, 115, 128, 115), seg(128, 115, 128, 125),
+    seg(128, 125, 112, 125), seg(112, 125, 112, 115),
+  ];
+  const lowerValve = [
+    seg(100, 126, 140, 126), seg(140, 126, 140, 144),
+    seg(140, 144, 100, 144), seg(100, 144, 100, 126),
+  ];
+  const spans: LegendSpan[] = [
+    { text: "BUTTERFLY VALVE", x0: 200, y0: 95, x1: 365, y1: 115 },
+    { text: "CHECK VALVE", x0: 200, y0: 125, x1: 330, y1: 145 },
+  ];
+  const glyphs = findLegendGlyphs(flat([
+    ...upperValveBody, ...upperValveActuator, ...lowerValve,
+  ]), spans, {
+    ...isolated, maxGlyphDimPx: 120, maxWrapGapPx: 12,
+  });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), ["BUTTERFLY VALVE", "CHECK VALVE"]);
 });
 
 test("findLegendGlyphs: a disconnected glyph cannot donate one fragment to the preceding text-only legend row", () => {
@@ -757,6 +943,26 @@ test("findLegendGlyphs: an intact routed-system swatch may be modestly longer th
   assert.ok(glyphs.every((glyph) => glyph.kind === "line_style" && glyph.seedable === false));
 });
 
+test("findLegendGlyphs: domain system-abbreviation sections are line-key legends, not plain abbreviation tables", () => {
+  const segs = flat([
+    seg(100, 100, 260, 100), seg(100, 160, 260, 160),
+    seg(100, 300, 260, 300), seg(100, 360, 260, 360),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "DUCTWORK SYSTEM ABBREVIATIONS", x0: 70, y0: 20, x1: 430, y1: 45 },
+    { text: "SUPPLY AIR", x0: 300, y0: 90, x1: 430, y1: 110 },
+    { text: "RETURN AIR", x0: 300, y0: 150, x1: 430, y1: 170 },
+    { text: "PIPING SYSTEM ABBREVIATIONS", x0: 70, y0: 220, x1: 430, y1: 245 },
+    { text: "CHILLED WATER SUPPLY", x0: 300, y0: 290, x1: 500, y1: 310 },
+    { text: "CHILLED WATER RETURN", x0: 300, y0: 350, x1: 500, y1: 370 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 120 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "SUPPLY AIR", "RETURN AIR", "CHILLED WATER SUPPLY", "CHILLED WATER RETURN",
+  ]);
+  assert.ok(glyphs.every((glyph) => glyph.kind === "line_style" && !glyph.seedable));
+});
+
 test("findLegendGlyphs: a routed line with an outlined system code embedded in it remains a non-seedable line style", () => {
   const codedLine = [
     seg(100, 100, 365, 100),
@@ -880,6 +1086,11 @@ test("findLegendGlyphs: routing conventions and equipment callouts are annotatio
     "DUCTWORK OR PIPING RISE",
     "INTAKE OR EXHAUST",
     "DIRECTION OF AIRFLOW",
+    "DIRECTION OF FLOW",
+    "SUPPLY AIRFLOW",
+    "RETURN, EXHAUST, OR TRANSFER AIRFLOW",
+    "INCLINED RISE WITH RESPECT TO AIRFLOW",
+    "DECLINED DROP WITH RESPECT TO AIRFLOW",
     "FLOW DIRECTION",
     "DOWNWARD DIRECTION OF SLOPED PIPING",
     "NEW TO EXISTING CONNECTION POINT",
@@ -896,7 +1107,13 @@ test("findLegendGlyphs: routing conventions and equipment callouts are annotatio
 });
 
 test("findLegendGlyphs: routed-medium captions keep hooked solid swatches out of discrete EA sweeps", () => {
-  const captions = ["CHILLED WATER SUPPLY", "DOMESTIC COLD WATER (CW)", "STORM DRAIN"];
+  const captions = [
+    "CHILLED WATER SUPPLY", "DOMESTIC COLD WATER (CW)", "STORM DRAIN",
+    "SUPPLY AIR", "RETURN AIR", "CONDENSATE DRAIN", "REFRIGERANT SUCTION/LIQUID",
+    "RECTANGULAR DUCT RECTANGULAR DUCT WIDTHxHEIGHT (INCHES)",
+    "PIPE PIPE (DIAMETER AND SYSTEM ABBREVIATION)",
+    "FLEXIBLE DUCT", "ACOUSTICALLY LINED DUCTWORK",
+  ];
   const segs = flat(captions.flatMap((_, index) => [
     seg(100, 100 + index * 100, 200, 100 + index * 100),
     seg(200, 100 + index * 100, 200, 120 + index * 100),
@@ -949,6 +1166,81 @@ test("findLegendGlyphs: a sparse physical device stays a symbol identity but can
   assert.match(glyphs[0].seed_warning || "", /sparse line fragment/i);
 });
 
+test("findLegendGlyphs: a line-fragment anchor recovers nearby discrete device geometry before seedability is decided", () => {
+  const segs = flat([
+    seg(100, 110, 180, 110),
+    seg(120, 118, 140, 138), seg(140, 138, 120, 138), seg(120, 138, 120, 118),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "STRAINER", x0: 220, y0: 100, x1: 320, y1: 120 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 120 });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].kind, "symbol");
+  assert.equal(glyphs[0].seedable, true);
+  assert.ok(glyphs[0].segments >= 4);
+});
+
+test("findLegendGlyphs: a generic tagged carrier remains one physical identity eligible for mandatory plan-anchor corroboration", () => {
+  const box = (y: number): number[][] => [
+    seg(100, y, 140, y), seg(140, y, 140, y + 30),
+    seg(140, y + 30, 100, y + 30), seg(100, y + 30, 100, y),
+  ];
+  const segs = flat([...box(100), ...box(180)]);
+  const spans: LegendSpan[] = [
+    { text: "CONTROL DEVICE LEGEND", x0: 70, y0: 20, x1: 420, y1: 45 },
+    { text: "CT", x0: 110, y0: 105, x1: 130, y1: 125 },
+    { text: "CURRENT TRANSMITTER", x0: 220, y0: 105, x1: 430, y1: 125 },
+    { text: "DP", x0: 110, y0: 185, x1: 130, y1: 205 },
+    { text: "DIFFERENTIAL PRESSURE SENSOR", x0: 220, y0: 185, x1: 500, y1: 205 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 120 });
+  assert.equal(glyphs.length, 2);
+  assert.ok(glyphs.every((glyph) => glyph.kind === "symbol" && glyph.seedable));
+  assert.ok(glyphs.every((glyph) => !glyph.seed_warning));
+});
+
+test("findLegendGlyphs: an inner actuator tag does not block a geometry-rich physical assembly from direct seeding", () => {
+  const damper = (y: number): number[][] => [
+    seg(100, y + 20, 210, y + 20),
+    seg(130, y, 150, y + 40), seg(150, y, 130, y + 40),
+    seg(160, y + 5, 180, y + 5), seg(180, y + 5, 180, y + 25),
+    seg(180, y + 25, 160, y + 25), seg(160, y + 25, 160, y + 5),
+  ];
+  const segs = flat([...damper(90), ...damper(190)]);
+  const spans: LegendSpan[] = [
+    { text: "CONTROL DEVICE LEGEND", x0: 70, y0: 20, x1: 420, y1: 45 },
+    { text: "M", x0: 165, y0: 98, x1: 175, y1: 118 },
+    { text: "MOTORIZED OPPOSED BLADE DAMPER", x0: 240, y0: 100, x1: 520, y1: 120 },
+    { text: "M", x0: 165, y0: 198, x1: 175, y1: 218 },
+    { text: "MOTORIZED PARALLEL BLADE DAMPER", x0: 240, y0: 200, x1: 520, y1: 220 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 140 });
+  assert.equal(glyphs.length, 2);
+  assert.ok(glyphs.every((glyph) => glyph.kind === "symbol" && glyph.seedable));
+  assert.ok(glyphs.every((glyph) => !glyph.seed_warning));
+});
+
+test("findLegendGlyphs: explicit single-line and double-line section variants are a nonseedable symbol group", () => {
+  const box = (x: number, y: number): number[][] => [
+    seg(x, y, x + 24, y), seg(x + 24, y, x + 24, y + 20),
+    seg(x + 24, y + 20, x, y + 20), seg(x, y + 20, x, y),
+  ];
+  const segs = flat([
+    ...box(100, 100), ...box(210, 100),
+    ...box(100, 180), ...box(210, 180),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "DUCTWORK", x0: 70, y0: 20, x1: 330, y1: 45 },
+    { text: "SUPPLY DUCT TURN DOWN", x0: 300, y0: 100, x1: 520, y1: 120 },
+    { text: "RETURN DUCT TURN DOWN", x0: 300, y0: 180, x1: 520, y1: 200 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 180 });
+  assert.equal(glyphs.length, 2);
+  assert.ok(glyphs.every((glyph) => glyph.kind === "symbol_group" && !glyph.seedable));
+  assert.ok(glyphs.every((glyph) => glyph.member_rects?.length === 2));
+});
+
 test("findLegendGlyphs: inline pipe devices may span eleven text heights without being clipped as oversized", () => {
   const inlineDevice = (y: number): number[][] => [
     seg(100, y + 20, 310, y + 20),
@@ -964,6 +1256,141 @@ test("findLegendGlyphs: inline pipe devices may span eleven text heights without
   const glyphs = findLegendGlyphs(segs, spans);
   assert.deepEqual(glyphs.map((glyph) => glyph.caption), ["PIPE ANCHOR", "PIPE GUIDE"]);
   assert.ok(glyphs.every((glyph) => glyph.kind === "symbol" && glyph.seedable));
+});
+
+test("findLegendGlyphs: a headed two-dimensional RCP legend pairs multiple columns of symbols with centered captions below", () => {
+  const box = (x: number, y: number): number[][] => [
+    seg(x, y, x + 30, y), seg(x + 30, y, x + 30, y + 30),
+    seg(x + 30, y + 30, x, y + 30), seg(x, y + 30, x, y),
+  ];
+  const segs = flat([
+    ...box(100, 100), ...box(300, 100),
+    ...box(100, 260), ...box(300, 260),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "RCP LEGEND", x0: 80, y0: 20, x1: 380, y1: 45 },
+    { text: "SUPPLY GRILLE", x0: 75, y0: 150, x1: 165, y1: 170 },
+    { text: "RETURN GRILLE", x0: 270, y0: 150, x1: 370, y1: 170 },
+    { text: "SMOKE DETECTOR", x0: 70, y0: 310, x1: 170, y1: 330 },
+    { text: "OCCUPANCY SENSOR", x0: 265, y0: 310, x1: 375, y1: 330 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 80 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "SUPPLY GRILLE", "RETURN GRILLE", "SMOKE DETECTOR", "OCCUPANCY SENSOR",
+  ]);
+  assert.ok(glyphs.every((glyph) => glyph.heading === "RCP LEGEND" && glyph.aligned_rows === 4));
+});
+
+test("findLegendGlyphs: the same below-caption cell grid without an explicit legend heading is rejected", () => {
+  const box = (x: number, y: number): number[][] => [
+    seg(x, y, x + 30, y), seg(x + 30, y, x + 30, y + 30),
+    seg(x + 30, y + 30, x, y + 30), seg(x, y + 30, x, y),
+  ];
+  const segs = flat([...box(100, 100), ...box(300, 100), ...box(100, 260)]);
+  const spans: LegendSpan[] = [
+    { text: "SUPPLY GRILLE", x0: 75, y0: 150, x1: 165, y1: 170 },
+    { text: "RETURN GRILLE", x0: 270, y0: 150, x1: 370, y1: 170 },
+    { text: "SMOKE DETECTOR", x0: 70, y0: 310, x1: 170, y1: 330 },
+  ];
+  assert.deepEqual(findLegendGlyphs(segs, spans, { maxGlyphDimPx: 80 }), []);
+});
+
+test("findLegendGlyphs: a generic mechanical legend heading cannot annex a remote below-caption title block", () => {
+  const box = (x: number, y: number): number[][] => [
+    seg(x, y, x + 30, y), seg(x + 30, y, x + 30, y + 30),
+    seg(x + 30, y + 30, x, y + 30), seg(x, y + 30, x, y),
+  ];
+  const segs = flat([
+    ...box(100, 100), ...box(100, 180),
+    ...box(600, 600), ...box(800, 600),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "MECHANICAL SYMBOLS", x0: 70, y0: 20, x1: 430, y1: 45 },
+    { text: "SUPPLY AIR SENSOR", x0: 220, y0: 105, x1: 410, y1: 125 },
+    { text: "RETURN AIR SENSOR", x0: 220, y0: 185, x1: 410, y1: 205 },
+    { text: "REFER TO ARCHITECTURAL REFLECTED CEILING PLANS FOR EXACT DEVICE LOCATIONS", x0: 500, y0: 400, x1: 1100, y1: 420 },
+    // Repeated boxes above text elsewhere on the sheet are not owned by the
+    // normal right-caption legend merely because that legend has a heading.
+    { text: "PROJECT NO", x0: 570, y0: 650, x1: 690, y1: 670 },
+    { text: "DRAWING NO", x0: 770, y0: 650, x1: 890, y1: 670 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 80 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "SUPPLY AIR SENSOR", "RETURN AIR SENSOR",
+  ]);
+});
+
+test("findLegendGlyphs: neighboring cell tags cannot steal descriptive below captions, and RCP conventions stay nonseedable", () => {
+  const box = (x: number, y: number): number[][] => [
+    seg(x, y, x + 30, y), seg(x + 30, y, x + 30, y + 30),
+    seg(x + 30, y + 30, x, y + 30), seg(x, y + 30, x, y),
+  ];
+  const segs = flat([...box(100, 100), ...box(300, 100), ...box(500, 100)]);
+  const spans: LegendSpan[] = [
+    { text: "MECHANICAL RCP LEGEND", x0: 80, y0: 20, x1: 580, y1: 45 },
+    // Same-row terse tags belong to neighboring/internal cell notation.
+    { text: "EXP", x0: 190, y0: 105, x1: 225, y1: 125 },
+    { text: "CLG", x0: 390, y0: 105, x1: 425, y1: 125 },
+    { text: "CEILING HEIGHT", x0: 70, y0: 150, x1: 170, y1: 170 },
+    { text: "EXPOSED CEILING", x0: 265, y0: 150, x1: 375, y1: 170 },
+    { text: "SMOKE DETECTOR", x0: 465, y0: 150, x1: 575, y1: 170 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 80 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "CEILING HEIGHT", "EXPOSED CEILING", "SMOKE DETECTOR",
+  ]);
+  assert.deepEqual(glyphs.slice(0, 2).map((glyph) => [glyph.kind, glyph.seedable]), [
+    ["annotation", false], ["annotation", false],
+  ]);
+});
+
+test("findLegendGlyphs: a headed RCP cell keeps side-by-side variants as one nonseedable symbol group", () => {
+  const box = (x: number, y: number): number[][] => [
+    seg(x, y, x + 24, y), seg(x + 24, y, x + 24, y + 24),
+    seg(x + 24, y + 24, x, y + 24), seg(x, y + 24, x, y),
+  ];
+  const segs = flat([...box(80, 100), ...box(130, 100), ...box(320, 100)]);
+  const spans: LegendSpan[] = [
+    { text: "RCP LEGEND", x0: 60, y0: 20, x1: 380, y1: 45 },
+    { text: "SUPPLY GRILLE", x0: 70, y0: 150, x1: 180, y1: 170 },
+    { text: "SMOKE DETECTOR", x0: 280, y0: 150, x1: 390, y1: 170 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 80 });
+  assert.equal(glyphs.length, 2);
+  assert.equal(glyphs[0].caption, "SUPPLY GRILLE");
+  assert.equal(glyphs[0].kind, "symbol_group");
+  assert.equal(glyphs[0].seedable, false);
+  assert.equal(glyphs[0].member_rects?.length, 2);
+});
+
+test("findLegendGlyphs: a mixed RCP panel prefers a complete right-caption hatch over a sparse above-caption fragment", () => {
+  const box = (x: number, y: number, size = 30): number[][] => [
+    seg(x, y, x + size, y), seg(x + size, y, x + size, y + size),
+    seg(x + size, y + size, x, y + size), seg(x, y + size, x, y),
+  ];
+  const fullHatch = box(100, 300, 70);
+  const sparseTopFragment = [seg(218, 280, 240, 280), seg(220, 282, 238, 282)];
+  const segs = flat([
+    ...box(100, 100), ...box(320, 100), ...box(520, 250),
+    ...fullHatch, ...sparseTopFragment,
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "RCP LEGEND", x0: 60, y0: 20, x1: 600, y1: 45 },
+    { text: "SUPPLY GRILLE", x0: 70, y0: 150, x1: 170, y1: 170 },
+    { text: "SMOKE DETECTOR", x0: 285, y0: 150, x1: 390, y1: 170 },
+    { text: "OCCUPANCY SENSOR", x0: 480, y0: 300, x1: 590, y1: 320 },
+    { text: "GWB CEILING / SOFFIT", x0: 250, y0: 300, x1: 430, y1: 320 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 90 });
+  const hatch = glyphs.find((glyph) => glyph.caption === "GWB CEILING / SOFFIT");
+  assert.ok(hatch);
+  assert.equal(glyphs.length, 4);
+  assert.ok(hatch.rect[0][0] <= 100 && hatch.rect[0][1] <= 300
+    && hatch.rect[1][0] >= 170 && hatch.rect[1][1] >= 370,
+  "the complete bordered hatch is retained, not only its sparse top fragment");
+  assert.equal(hatch.kind, "annotation");
+  assert.equal(hatch.seedable, false);
+  assert.ok(glyphs.every((glyph) => glyph.aligned_rows === 4));
 });
 
 test("findLegendGlyphs: BAS software and sequence functions are preserved but never become EA sweep seeds", () => {
