@@ -898,6 +898,31 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
             cs.add(round(x0)); cs.add(round(x1))
         return cs
 
+    def _wider_than_a_row(_cells, members) -> bool:
+        bs = [_cells[i].bounds for i in members]
+        w = max(b[2] for b in bs) - min(b[0] for b in bs)
+        hs = sorted(b[3] - b[1] for b in bs)
+        return w > hs[len(hs) // 2] * 3.0
+
+    def _row_agreement(_cells, ma, mb) -> float:
+        """How much of the two blocks' row structure is the SAME rows.
+
+        The mirror of cols_of/jacc used for the vertical case. A table sheared
+        by a heavy internal vertical keeps every one of its row lines on both
+        sides of the cut; two schedules that merely sit side by side do not.
+        """
+        def rows_of(members) -> set:
+            rs = set()
+            for i in members:
+                _x0, y0, _x1, y1 = _cells[i].bounds
+                rs.add(round(y0)); rs.add(round(y1))
+            return rs
+        ra, rb = rows_of(ma), rows_of(mb)
+        if not ra or not rb:
+            return 0.0
+        same = len({r for r in ra if any(abs(r - t) <= 2 for t in rb)})
+        return same / max(len(ra), len(rb))
+
     def vbounds(members):
         bs = [cells[i].bounds for i in members]
         return min(b[0] for b in bs), min(b[1] for b in bs), max(b[2] for b in bs), max(b[3] for b in bs)
@@ -936,8 +961,43 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
                 # at four row heights; a genuine title band between two blocks is
                 # cut back out by _split_at_title_bands below, which reads type
                 # size and so knows a title when the geometry cannot.
+                # A HORIZONTAL SHEAR — the mirror of everything below, and the
+                # case this loop could never repair.
+                #
+                # The weight cut above refuses to union two faces across a
+                # border-weight stroke, and the key it builds is ("v", x) for a
+                # shared VERTICAL edge — so a heavy vertical drawn inside a
+                # table (routine: a key or tag block boxed off from the data)
+                # shears that table sideways. Every test in this loop is about
+                # vertical stacking: the gap is `by0 - ay1`, and acceptance
+                # needs x-overlap >= 0.6 of the narrower block, which two
+                # side-by-side pieces fail unconditionally at ~zero. Observed
+                # as a DOOR SCHEDULE whose box starts at its third column, the
+                # "#" and LOCATION columns simply gone.
+                #
+                # What makes the repair safe is IDENTICAL ROW SETS, exactly as
+                # identical column sets make the vertical case safe. Two
+                # schedules side by side in a margin — the case the weight cut
+                # protects — almost never share every row y; a sheared single
+                # table shares all of them. The pieces must also abut (a real
+                # shear is one stroke wide) and agree at top and bottom.
+                #
+                # AND THE RESULT MUST STILL BE A TABLE, not a wider sliver. Two
+                # one-column strips satisfy every test above and, joined, pass
+                # the two-column grid-ness gate below that each failed alone —
+                # measured, that is exactly what happened on 008_MO#16, where
+                # the merge produced a new 7.2pt-wide "table" 138pt tall. The
+                # same argument the emission gate makes (Kasar, ICDAR 2013):
+                # a table is wider than one of its own rows is tall.
+                xgap = bx0 - ax1 if bx0 >= ax1 else ax0 - bx1
+                horiz = (
+                    abs(ay0 - by0) <= 2 and abs(ay1 - by1) <= 2
+                    and xgap <= 2
+                    and _row_agreement(cells, groups[ka], groups[kb]) >= 0.9
+                    and _wider_than_a_row(cells, groups[ka] + groups[kb])
+                )
                 gap = by0 - ay1 if by0 >= ay1 else ay0 - by1
-                if gap > 14:
+                if not horiz and gap > 14:
                     if abs(ax0 - bx0) > 2 or abs(ax1 - bx1) > 2:
                         continue
                     hs = sorted(cells[i].bounds[3] - cells[i].bounds[1]
@@ -948,14 +1008,15 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
                     same = len({c for c in ca_ if any(abs(c - d) <= 2 for d in cb_)})
                     if same < 0.9 * max(len(ca_), len(cb_)):
                         continue
-                overlap = min(ax1, bx1) - max(ax0, bx0)
-                if overlap < min(ax1 - ax0, bx1 - bx0) * 0.6:
-                    continue
-                ca, cb = cols_of(groups[ka]), cols_of(groups[kb])
-                inter = len({c for c in ca if any(abs(c - d) <= 2 for d in cb)})
-                jacc = inter / max(1, min(len(ca), len(cb)))
-                if jacc < 0.6:                       # divergent columns => two tables
-                    continue
+                if not horiz:
+                    overlap = min(ax1, bx1) - max(ax0, bx0)
+                    if overlap < min(ax1 - ax0, bx1 - bx0) * 0.6:
+                        continue
+                    ca, cb = cols_of(groups[ka]), cols_of(groups[kb])
+                    inter = len({c for c in ca if any(abs(c - d) <= 2 for d in cb)})
+                    jacc = inter / max(1, min(len(ca), len(cb)))
+                    if jacc < 0.6:                   # divergent columns => two tables
+                        continue
                 # A MERGE MUST NOT MAKE THE BLOCK LESS TABLE-SHAPED. Reuniting a
                 # table that was sheared at its header band leaves it
                 # tessellating; anything that drops the combined block below the
