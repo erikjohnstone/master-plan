@@ -79,6 +79,20 @@ test("findLegendGlyphs: a caption split into several real text runs on one line 
   assert.equal(glyphs[0].caption, "2-WAY ELECTRIC CONTROL VALVE");
 });
 
+test("findLegendGlyphs: PDF font seams keep a subscript attached while restoring the following visible word space", () => {
+  const segs = flat(controlValveGlyph(100, 100));
+  const spans: LegendSpan[] = [
+    { text: "CO", x0: 200, y0: 150, x1: 223, y1: 170 },
+    // The subscript arrives later in PDF reading order and almost touches CO.
+    { text: "2", x0: 223.1, y0: 158, x1: 229, y1: 171 },
+    // SENSOR starts a real word space after the completed CO2 token.
+    { text: "SENSOR", x0: 234, y0: 150, x1: 305, y1: 170 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 120 });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].caption, "CO2 SENSOR");
+});
+
 test("findLegendGlyphs: a drawn inline mark may split one caption line without joining the next table column", () => {
   const segs = flat([
     ...controlValveGlyph(100, 100),
@@ -969,6 +983,27 @@ test("findLegendGlyphs: routed-system line-style keys are learned but explicitly
   assert.equal(dashed.segments, 3, "all three disconnected dashes belong to the learned line-style row");
 });
 
+test("findLegendGlyphs: an explicit LINE SYMBOLS section owns construction-status line keys", () => {
+  const segs = flat([
+    seg(100, 100, 250, 100),
+    seg(100, 150, 140, 150), seg(160, 150, 200, 150), seg(220, 150, 250, 150),
+    seg(100, 200, 250, 200),
+    seg(100, 250, 115, 250), seg(130, 250, 145, 250), seg(160, 250, 175, 250),
+    seg(190, 250, 205, 250), seg(220, 250, 235, 250),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "LINE SYMBOLS", x0: 70, y0: 20, x1: 300, y1: 45 },
+    { text: "LIGHT/SCREENED SOLID LINES INDICATE EXISTING TO REMAIN", x0: 300, y0: 90, x1: 780, y1: 110 },
+    { text: "HEAVY DASHED LINES INDICATE EXISTING TO BE REMOVED", x0: 300, y0: 140, x1: 760, y1: 160 },
+    { text: "HEAVY CONTINUOUS LINES INDICATE NEW WORK", x0: 300, y0: 190, x1: 690, y1: 210 },
+    { text: "LIGHT DOT LINES INDICATE FUTURE WORK", x0: 300, y0: 240, x1: 650, y1: 260 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans);
+  assert.equal(glyphs.length, 4);
+  assert.ok(glyphs.every((glyph) => glyph.heading === "LINE SYMBOLS"));
+  assert.ok(glyphs.every((glyph) => glyph.kind === "line_style" && glyph.seedable === false));
+});
+
 test("findLegendGlyphs: a chain of very short dashes is classified from the full swatch, not one arbitrary dash", () => {
   const segs = flat([
     seg(100, 100, 108, 100), seg(118, 100, 126, 100), seg(136, 100, 144, 100),
@@ -1316,6 +1351,46 @@ test("findLegendGlyphs: a line-fragment anchor recovers nearby discrete device g
   assert.equal(glyphs[0].kind, "symbol");
   assert.equal(glyphs[0].seedable, true);
   assert.ok(glyphs[0].segments >= 4);
+});
+
+test("findLegendGlyphs: a quantization-split wide duct carrier reunites both end posts and parallel rails", () => {
+  const rowY = 1700;
+  const endPost = (x: number, y0: number, y1: number, direction: -1 | 1): number[][] => {
+    const mid = (y0 + y1) / 2;
+    return [
+      seg(x, y0, x, mid - 4),
+      seg(x, mid - 4, x + direction * 2, mid - 2),
+      seg(x + direction * 2, mid - 2, x - direction * 2, mid + 2),
+      seg(x - direction * 2, mid + 2, x, mid + 4),
+      seg(x, mid + 4, x, y1),
+    ];
+  };
+  const segs = flat([
+    ...endPost(100, rowY, rowY + 40, -1),
+    ...endPost(240, rowY, rowY + 40, 1),
+    // The 3px endpoint gaps reproduce CAD coordinates that quantize into
+    // four disconnected components even though the rendered carrier closes.
+    // The row is also deliberately 80+ text heights below its heading, as
+    // it was in the real long mechanical legend that exposed this bug.
+    seg(103, rowY, 237, rowY),
+    seg(103, rowY + 40, 237, rowY + 40),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "HVAC SYMBOLS", x0: 70, y0: 20, x1: 250, y1: 40 },
+    { text: "20\"X12\"", x0: 140, y0: rowY + 10, x1: 205, y1: rowY + 30 },
+    { text: "FLAT OVAL DUCT (WIDTH X HEIGHT)", x0: 280, y0: rowY + 10, x1: 560, y1: rowY + 30 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 220 });
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].caption, "FLAT OVAL DUCT (WIDTH X HEIGHT)");
+  assert.equal(glyphs[0].kind, "line_style");
+  assert.equal(glyphs[0].seedable, false);
+  assert.ok(glyphs[0].rect[0][0] < 100 && glyphs[0].rect[1][0] > 240,
+    "the evidence spans both rendered end posts, not only the nearest edge");
+  assert.ok(glyphs[0].rect[0][1] < rowY + 1 && glyphs[0].rect[1][1] > rowY + 39,
+    "the evidence spans both parallel rails");
+  assert.ok((glyphs[0].member_rects?.length ?? 0) >= 4,
+    "all disconnected carrier components remain auditable");
 });
 
 test("findLegendGlyphs: a generic tagged carrier remains one physical identity eligible for mandatory plan-anchor corroboration", () => {
@@ -2163,14 +2238,36 @@ test("findLegendGlyphs: pipe topology, duct-state keys, and BAS I/O receive nons
     "ELBOW, 90°",
     "TEE, OUTLET DOWN",
     "45° PIPE RISE (R) / DROP (D)",
+    "NUMBER OF DETAIL ON SHEET",
+    "NUMBER OF SHEET WHERE DETAIL APPEARS",
+    "ROUND DUCT SIZE TAG (WIDTH X HEIGHT)",
+    "PIPE SLOPE TAG (1/8\"/FT)",
+    "RECTANGULAR SUPPLY/OUTSIDE AIR DUCT RISE",
+    "ROUND RETURN/TRANSFER AIR DUCT DROP",
+    "PIPE TURNED DOWN (T)",
+    "PIPE OUT BOTTOM",
+    "R (RISE), D (DROP) ARROW",
+    "INSULATED METAL PANEL",
   ];
   const lineStyles = [
     "1\" INTERNALLY LINED DUCTWORK",
     "FLAT OVAL DUCT",
+    "FLAT OVAL DUCT (WIDTH X HEIGHT)",
+    "RETANGULAR DUCT (WIDTH X HEIGHT)",
+    "ROUND DUCT",
+    "CONDITIONED OUTSIDE AIR",
+    "RELIEF AIR",
+    "EXHAUST GAS FLUE",
+    "FLEX DUCT",
     "NEW DUCTWORK, FIRST DIMENSION IS SIDE SHOWN",
     "DEMOLISHED/REMOVED DUCTWORK, PIPING AND/OR EQUIPMENT",
   ];
-  const controls = ["BINARY / DIGITAL INPUT", "BINARY / DIGITAL OUTPUT"];
+  const controls = [
+    "BINARY / DIGITAL INPUT",
+    "BINARY / DIGITAL OUTPUT",
+    "ANALOG INPUT (DDC CONTROLLER)",
+    "BINARY OUTPUT (DDC CONTROLLER)",
+  ];
   const captions = [...annotations, ...lineStyles, ...controls];
   const glyphs = findLegendGlyphs(
     flat(captions.flatMap((_, index) => controlValveGlyph(100, 100 + index * 200))),
@@ -2346,6 +2443,28 @@ test("findLegendGlyphs: ruled cells retain disconnected components omitted by th
   assert.equal(glyphs[0].member_rects?.length, 4);
 });
 
+test("findLegendGlyphs: a full-height panel divider blocks legend geometry from stealing adjacent notes prose", () => {
+  const box = (x0: number, y0: number): number[][] => [
+    seg(x0, y0, x0 + 50, y0), seg(x0 + 50, y0, x0 + 50, y0 + 35),
+    seg(x0 + 50, y0 + 35, x0, y0 + 35), seg(x0, y0 + 35, x0, y0),
+  ];
+  const glyphs = findLegendGlyphs(flat([
+    ...box(100, 100), ...box(100, 200),
+    ...box(430, 300), ...box(430, 400),
+    seg(510, 50, 510, 480),
+  ]), [
+    { text: "MECHANICAL PIPING SYMBOLS", x0: 50, y0: 10, x1: 500, y1: 40 },
+    { text: "CHILLED WATER SUPPLY", x0: 220, y0: 105, x1: 430, y1: 130 },
+    { text: "CHILLED WATER RETURN", x0: 220, y0: 205, x1: 430, y1: 230 },
+    { text: "INSTALL ALL EQUIPMENT IN ACCORDANCE WITH THE SPECIFICATIONS", x0: 550, y0: 305, x1: 1080, y1: 330 },
+    { text: "COORDINATE ALL WORK WITH OTHER TRADES", x0: 550, y0: 405, x1: 930, y1: 430 },
+  ]);
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "CHILLED WATER SUPPLY",
+    "CHILLED WATER RETURN",
+  ]);
+});
+
 test("findLegendGlyphs: selector position legends and notation definitions do not terminate ruled tables", () => {
   const box = (x0: number, y0: number, x1: number, y1: number): number[][] => [
     seg(x0, y0, x1, y0), seg(x1, y0, x1, y1),
@@ -2440,4 +2559,195 @@ test("findLegendGlyphs: electrical routing and notation rows remain auditable an
   assert.equal(glyphs.length, captions.length);
   assert.deepEqual(glyphs.map((glyph) => glyph.kind), captions.map(() => "annotation"));
   assert.deepEqual(glyphs.map((glyph) => glyph.seedable), captions.map(() => false));
+});
+
+test("findLegendGlyphs: a two-sided DAMPER TAGS panel row-slices shared carriers without cross-column theft", () => {
+  const box = (x: number, y: number): number[][] => [
+    seg(x, y, x + 30, y), seg(x + 30, y, x + 30, y + 24),
+    seg(x + 30, y + 24, x, y + 24), seg(x, y + 24, x, y),
+  ];
+  const ys = [100, 190, 280];
+  const glyphs = findLegendGlyphs(flat([
+    seg(20, 0, 20, 500), seg(700, 0, 700, 500),
+    // Each column has one shared vertical carrier. Ordinary connected-
+    // component pairing sees a panel-scale object; row slicing must retain
+    // the six independent callout identities around it.
+    seg(250, 70, 250, 340), seg(430, 70, 430, 340),
+    ...ys.flatMap((y) => [...box(235, y), ...box(415, y)]),
+  ]), [
+    { text: "DAMPER TAGS", x0: 260, y0: 20, x1: 440, y1: 40 },
+    ...["FIRE DAMPER", "SMOKE DAMPER", "COMBINATION FIRE/SMOKE DAMPER"]
+      .map((text, index): LegendSpan => ({
+        text, x0: 60, y0: ys[index] + 2, x1: 210, y1: ys[index] + 22,
+      })),
+    ...["MANUAL BALANCING DAMPER", "BACKDRAFT DAMPER", "MOTORIZED DAMPER"]
+      .map((text, index): LegendSpan => ({
+        text, x0: 470, y0: ys[index] + 2, x1: 660, y1: ys[index] + 22,
+      })),
+  ], { maxGlyphDimPx: 120 });
+
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "FIRE DAMPER", "MANUAL BALANCING DAMPER",
+    "SMOKE DAMPER", "BACKDRAFT DAMPER",
+    "COMBINATION FIRE/SMOKE DAMPER", "MOTORIZED DAMPER",
+  ]);
+  assert.ok(glyphs.every((glyph) => glyph.kind === "symbol" && !glyph.seedable));
+  assert.equal(new Set(glyphs.map((glyph) => glyph.rect.flat().join(","))).size, 6,
+    "each tag row owns distinct local geometry");
+});
+
+test("findLegendGlyphs: PIPE ACCESSORY TAGS preserve code plus description blocks in two columns", () => {
+  const box = (x: number, y: number): number[][] => [
+    seg(x, y, x + 30, y), seg(x + 30, y, x + 30, y + 32),
+    seg(x + 30, y + 32, x, y + 32), seg(x, y + 32, x, y),
+  ];
+  const glyphs = findLegendGlyphs(flat([
+    seg(20, 0, 20, 430), seg(700, 0, 700, 430),
+    ...box(235, 100), ...box(415, 100),
+    ...box(235, 230), ...box(415, 230),
+  ]), [
+    { text: "PIPE ACCESSORY TAGS", x0: 240, y0: 20, x1: 460, y1: 40 },
+    { text: "2\" M-CNTRL", x0: 55, y0: 96, x1: 180, y1: 116 },
+    { text: "MOTORIZED CONTROL VALVE", x0: 55, y0: 119, x1: 210, y1: 139 },
+    { text: "2\" BALANCING", x0: 470, y0: 96, x1: 590, y1: 116 },
+    { text: "BALANCING VALVE", x0: 470, y0: 119, x1: 620, y1: 139 },
+    { text: "2\" CHECK", x0: 55, y0: 226, x1: 160, y1: 246 },
+    { text: "CHECK VALVE", x0: 55, y0: 249, x1: 175, y1: 269 },
+    { text: "2\" BUTTERFLY", x0: 470, y0: 226, x1: 600, y1: 246 },
+    { text: "BUTTERFLY VALVE", x0: 470, y0: 249, x1: 630, y1: 269 },
+  ], { maxGlyphDimPx: 120 });
+
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "2\" M-CNTRL MOTORIZED CONTROL VALVE",
+    "2\" BALANCING BALANCING VALVE",
+    "2\" CHECK CHECK VALVE",
+    "2\" BUTTERFLY BUTTERFLY VALVE",
+  ]);
+  assert.ok(glyphs.every((glyph) => glyph.kind === "symbol" && !glyph.seedable));
+  assert.equal(new Set(glyphs.map((glyph) => glyph.rect.flat().join(","))).size, 4);
+});
+
+test("findLegendGlyphs: text-only note keys remain rows and CONTINUATION SYMBOL cannot become a nested heading", () => {
+  const box = (x: number, y: number): number[][] => [
+    seg(x, y, x + 35, y), seg(x + 35, y, x + 35, y + 25),
+    seg(x + 35, y + 25, x, y + 25), seg(x, y + 25, x, y),
+  ];
+  const glyphs = findLegendGlyphs(flat([
+    seg(20, 0, 20, 450), seg(700, 0, 700, 450),
+    ...box(100, 100), ...box(100, 180),
+  ]), [
+    { text: "GENERAL SYMBOLS", x0: 50, y0: 20, x1: 260, y1: 40 },
+    { text: "CONTINUATION SYMBOL", x0: 220, y0: 103, x1: 430, y1: 123 },
+    { text: "POINT WHERE NEW CONNECTS TO EXISTING", x0: 220, y0: 183, x1: 600, y1: 203 },
+    { text: "A.", x0: 100, y0: 263, x1: 120, y1: 283 },
+    { text: "GENERAL NOTE", x0: 220, y0: 263, x1: 360, y1: 283 },
+    { text: "1.", x0: 100, y0: 343, x1: 120, y1: 363 },
+    { text: "PLAN NOTE LIST", x0: 220, y0: 343, x1: 370, y1: 363 },
+  ], { maxGlyphDimPx: 120 });
+
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "CONTINUATION SYMBOL",
+    "POINT WHERE NEW CONNECTS TO EXISTING",
+    "GENERAL NOTE",
+    "PLAN NOTE LIST",
+  ]);
+  assert.ok(glyphs.every((glyph) => glyph.kind === "annotation" && !glyph.seedable));
+  assert.ok(glyphs.every((glyph) => glyph.heading === "GENERAL SYMBOLS"));
+  assert.deepEqual(glyphs.slice(2).map((glyph) => glyph.segments), [0, 0]);
+});
+
+test("findLegendGlyphs: a shared piping callout diagram yields distinct, nonseedable identities", () => {
+  const box = (x: number, y: number): number[][] => [
+    seg(x, y, x + 28, y), seg(x + 28, y, x + 28, y + 22),
+    seg(x + 28, y + 22, x, y + 22), seg(x, y + 22, x, y),
+  ];
+  const ys = [100, 170, 240, 310];
+  const glyphs = findLegendGlyphs(flat([
+    seg(20, 0, 20, 450), seg(700, 0, 700, 450),
+    // A zig-zag carrier connects the physical examples across row bands;
+    // it is diagram content rather than a straight panel divider.
+    seg(300, 80, 310, 145), seg(310, 145, 300, 215),
+    seg(300, 215, 310, 285), seg(310, 285, 300, 355),
+    ...ys.flatMap((y, index) => [
+      ...box(index % 2 ? 282 : 300, y),
+      ...box(index % 2 ? 310 : 282, y),
+    ]),
+  ]), [
+    { text: "MECHANICAL PIPING SYMBOLS", x0: 190, y0: 20, x1: 510, y1: 40 },
+    { text: "PIPE DROP", x0: 60, y0: 102, x1: 180, y1: 122 },
+    { text: "PIPE RISE", x0: 480, y0: 102, x1: 590, y1: 122 },
+    { text: "PIPE TEE", x0: 60, y0: 172, x1: 180, y1: 192 },
+    { text: "PLUG", x0: 480, y0: 172, x1: 550, y1: 192 },
+    { text: "CAP", x0: 60, y0: 242, x1: 130, y1: 262 },
+    { text: "45 DEGREE TEE", x0: 480, y0: 242, x1: 640, y1: 262 },
+    { text: "REDUCING 45 DEGREE TEE", x0: 60, y0: 312, x1: 245, y1: 332 },
+  ], { maxGlyphDimPx: 120 });
+
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "PIPE DROP", "PIPE RISE", "PIPE TEE", "PLUG", "CAP",
+    "45 DEGREE TEE", "REDUCING 45 DEGREE TEE",
+  ]);
+  assert.deepEqual(glyphs.map((glyph) => glyph.kind), [
+    "annotation", "annotation", "annotation", "symbol", "symbol", "symbol", "symbol",
+  ]);
+  assert.ok(glyphs.every((glyph) => !glyph.seedable));
+  assert.equal(new Set(glyphs.map((glyph) => glyph.rect.flat().join(","))).size, 7,
+    "one callout identity cannot reuse another row's exact geometry");
+});
+
+test("findLegendGlyphs: a routed baseline and its attached invert leader receive one-to-one geometry", () => {
+  const glyphs = findLegendGlyphs(flat([
+    seg(100, 100, 360, 100),
+    seg(180, 100, 180, 135),
+    seg(174, 118, 180, 100), seg(186, 118, 180, 100),
+    seg(180, 135, 195, 135),
+  ]), [
+    { text: "PIPING SYMBOLS", x0: 70, y0: 20, x1: 450, y1: 45 },
+    { text: "BELOW GROUND PIPING", x0: 400, y0: 92, x1: 620, y1: 112 },
+    { text: "INVERT: -10'-0\"", x0: 200, y0: 116, x1: 330, y1: 136 },
+    { text: "PIPE INVERT ELEVATION TAG", x0: 400, y0: 140, x1: 650, y1: 160 },
+  ], { ...isolated, maxGlyphDimPx: 300 });
+
+  assert.deepEqual(glyphs.map((glyph) => [glyph.caption, glyph.kind, glyph.seedable]), [
+    ["BELOW GROUND PIPING", "line_style", false],
+    ["PIPE INVERT ELEVATION TAG", "annotation", false],
+  ]);
+  assert.notDeepEqual(glyphs[0].rect, glyphs[1].rect);
+  assert.ok(glyphs[0].rect[1][1] < glyphs[1].rect[1][1],
+    "the routed row owns only the baseline while the callout owns its leader");
+});
+
+test("findLegendGlyphs: explicit PLAN VIEW and DETAIL VIEW columns create groups only for dual-rendition rows", () => {
+  const box = (x: number, y: number): number[][] => [
+    seg(x, y, x + 30, y), seg(x + 30, y, x + 30, y + 30),
+    seg(x + 30, y + 30, x, y + 30), seg(x, y + 30, x, y),
+  ];
+  const glyphs = findLegendGlyphs(flat([
+    ...box(100, 110), ...box(200, 110),
+    ...box(200, 210),
+  ]), [
+    { text: "VALVE AND FITTING SYMBOLS", x0: 50, y0: 10, x1: 350, y1: 35 },
+    { text: "PLAN VIEW", x0: 75, y0: 60, x1: 155, y1: 80 },
+    { text: "DETAIL VIEW", x0: 180, y0: 60, x1: 285, y1: 80 },
+    { text: "GLOBE VALVE", x0: 320, y0: 115, x1: 470, y1: 135 },
+    { text: "UNION", x0: 320, y0: 215, x1: 390, y1: 235 },
+  ], { maxGlyphDimPx: 160 });
+
+  assert.deepEqual(glyphs.map((glyph) => [glyph.caption, glyph.kind, glyph.seedable]), [
+    ["GLOBE VALVE", "symbol_group", false],
+    ["UNION", "symbol", true],
+  ]);
+  assert.equal(glyphs[0].member_rects?.length, 2);
+  assert.equal(glyphs[1].member_rects, undefined);
+});
+
+test("findLegendGlyphs: dense vector sheets compute callout bounds without overflowing the argument stack", () => {
+  const dense: number[] = [];
+  for (let index = 0; index < 70_000; index++) {
+    const y = 10_000 + index;
+    dense.push(10_000, y, 10_010, y);
+  }
+  assert.doesNotThrow(() => findLegendGlyphs(dense, [
+    { text: "MECHANICAL SYMBOLS", x0: 20, y0: 20, x1: 300, y1: 45 },
+  ]));
 });
