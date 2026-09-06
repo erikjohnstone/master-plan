@@ -477,6 +477,238 @@ test("findLegendGlyphs: production mode requires a repeated legend layout and re
   assert.equal(glyphs[0].heading, "CONTROL SYMBOLS");
 });
 
+test("findLegendGlyphs: a ruled domain legend title owns every repeated column inside its finite header rule", () => {
+  const row = (x: number, y: number) => [
+    seg(x, y, x + 30, y), seg(x + 30, y, x + 30, y + 30),
+    seg(x + 30, y + 30, x, y + 30), seg(x, y + 30, x, y),
+  ];
+  const segs = flat([
+    // The title text is deliberately narrow and left-aligned, while its
+    // finite ruled panel spans both independent symbol/description columns.
+    seg(80, 55, 720, 55), seg(80, 320, 720, 320),
+    ...row(100, 100), ...row(100, 180), ...row(100, 260),
+    ...row(420, 100), ...row(420, 180), ...row(420, 260),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "HVAC LEGEND", x0: 100, y0: 20, x1: 250, y1: 40 },
+    { text: "SUPPLY DIFFUSER", x0: 160, y0: 105, x1: 300, y1: 125 },
+    { text: "RETURN GRILLE", x0: 160, y0: 185, x1: 285, y1: 205 },
+    { text: "EXHAUST GRILLE", x0: 160, y0: 265, x1: 300, y1: 285 },
+    { text: "MANUAL VOLUME DAMPER", x0: 480, y0: 105, x1: 680, y1: 125 },
+    { text: "MOTORIZED DAMPER", x0: 480, y0: 185, x1: 650, y1: 205 },
+    { text: "SMOKE DAMPER", x0: 480, y0: 265, x1: 620, y1: 285 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 80 });
+  assert.equal(glyphs.length, 6);
+  assert.ok(glyphs.every((glyph) => glyph.heading === "HVAC LEGEND"));
+  assert.deepEqual(glyphs.map((glyph) => glyph.aligned_rows), [3, 3, 3, 3, 3, 3]);
+});
+
+test("findLegendGlyphs: a ruled domain title does not let a remote shared callout diagram merge distinct fitting identities", () => {
+  const segs = flat([
+    // A finite panel border proves horizontal jurisdiction, but there is no
+    // caption-column chain from this title to the remote callout diagram.
+    seg(50, 60, 800, 60), seg(50, 800, 800, 800),
+    seg(500, 470, 590, 470),
+    // One connected diagram spans both tee labels, just like a piping key
+    // whose separate leaders describe two different branches.
+    seg(440, 510, 590, 510), seg(500, 490, 500, 585),
+    seg(500, 535, 555, 585), seg(555, 585, 590, 585),
+  ]);
+  const glyphs = findLegendGlyphs(segs, [
+    { text: "MECHANICAL PIPING SYMBOLS", x0: 100, y0: 20, x1: 390, y1: 42 },
+    { text: "PLUG", x0: 620, y0: 461, x1: 670, y1: 481 },
+    { text: "REDUCING 45", x0: 620, y0: 515, x1: 745, y1: 535 },
+    { text: "DEGREE TEE", x0: 620, y0: 537, x1: 730, y1: 557 },
+    { text: "45 DEGREE TEE", x0: 620, y0: 569, x1: 760, y1: 589 },
+  ]);
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "PLUG", "REDUCING 45 DEGREE TEE", "45 DEGREE TEE",
+  ]);
+  assert.ok(glyphs.every((glyph) => glyph.heading === "MECHANICAL PIPING SYMBOLS"));
+  assert.ok(glyphs.every((glyph) => !glyph.seedable));
+});
+
+test("findLegendGlyphs: centered DESCRIPTION cells share their declared ruled-table column and inherit the named drafting parent", () => {
+  const rowBox = (y: number) => [
+    seg(120, y + 25, 150, y + 25), seg(150, y + 25, 150, y + 55),
+    seg(150, y + 55, 120, y + 55), seg(120, y + 55, 120, y + 25),
+  ];
+  const segs = flat([
+    seg(80, 10, 700, 10), seg(700, 10, 700, 620),
+    seg(700, 620, 80, 620), seg(80, 620, 80, 10),
+    seg(80, 55, 700, 55), seg(80, 95, 700, 95),
+    seg(80, 195, 700, 195), seg(80, 295, 700, 295),
+    seg(80, 395, 700, 395), seg(80, 495, 700, 495), seg(80, 595, 700, 595),
+    seg(300, 55, 300, 620),
+    ...rowBox(100), ...rowBox(200), ...rowBox(300), ...rowBox(400),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "GENERAL SYMBOLS LEGEND", x0: 190, y0: 20, x1: 560, y1: 42 },
+    { text: "SYMBOL", x0: 130, y0: 65, x1: 205, y1: 85 },
+    { text: "DESCRIPTION", x0: 400, y0: 65, x1: 530, y1: 85 },
+    // These are visibly centered in one DESCRIPTION cell, so their literal
+    // left edges intentionally vary far beyond ordinary caption jitter.
+    { text: "KEY NOTE SYMBOL", x0: 365, y0: 125, x1: 535, y1: 145 },
+    { text: "EQUIPMENT TAG", x0: 410, y0: 225, x1: 550, y1: 245 },
+    { text: "SECTION", x0: 455, y0: 325, x1: 535, y1: 345 },
+    { text: "DETAIL", x0: 330, y0: 425, x1: 400, y1: 445 },
+    // Its midpoint lies in DESCRIPTION, but the sentence begins back inside
+    // SYMBOL. A cell divider is a hard ownership boundary, so this is prose,
+    // not a text-only fifth legend row.
+    { text: "ALL DATA SHALL BE ADJUSTABLE FROM THE OPERATOR WORKSTATION", x0: 180, y0: 525, x1: 650, y1: 545 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 80 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "KEY NOTE SYMBOL", "EQUIPMENT TAG", "SECTION", "DETAIL",
+  ]);
+  assert.ok(glyphs.every((glyph) => glyph.heading === "GENERAL SYMBOLS LEGEND"));
+  assert.ok(glyphs.every((glyph) => glyph.kind === "annotation" && !glyph.seedable));
+  assert.ok(glyphs.every((glyph) => glyph.aligned_rows === 4));
+});
+
+test("findLegendGlyphs: a double-stroked bottom border does not turn an open-row legend into one giant structured row", () => {
+  const box = (y: number): number[][] => [
+    seg(100, y, 140, y), seg(140, y, 140, y + 40),
+    seg(140, y + 40, 100, y + 40), seg(100, y + 40, 100, y),
+  ];
+  const segs = flat([
+    seg(50, 90, 700, 90),
+    // These two plot strokes are one visual bottom border. Their 4px gap is
+    // far smaller than a text row, so it cannot prove an internal row band.
+    seg(50, 500, 700, 500), seg(50, 504, 700, 504),
+    seg(250, 50, 250, 504),
+    ...box(140), ...box(260), ...box(380),
+  ]);
+  const glyphs = findLegendGlyphs(segs, [
+    { text: "ELECTRICAL SYMBOL LEGEND", x0: 70, y0: 20, x1: 430, y1: 45 },
+    { text: "SYMBOL", x0: 100, y0: 60, x1: 180, y1: 82 },
+    { text: "DESCRIPTION", x0: 330, y0: 60, x1: 470, y1: 82 },
+    { text: "CURRENT TRANSFORMER", x0: 330, y0: 148, x1: 540, y1: 170 },
+    { text: "DISCONNECT SWITCH", x0: 330, y0: 268, x1: 530, y1: 290 },
+    { text: "VARIABLE FREQUENCY DRIVE", x0: 330, y0: 388, x1: 610, y1: 410 },
+  ]);
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "CURRENT TRANSFORMER", "DISCONNECT SWITCH", "VARIABLE FREQUENCY DRIVE",
+  ]);
+  assert.ok(glyphs.every((glyph) => glyph.aligned_rows === 3));
+});
+
+test("findLegendGlyphs: a ruled SYMBOL-ABBR-DESCRIPTION table keeps code cells out of learned captions", () => {
+  const box = (y: number): number[][] => [
+    seg(100, y, 140, y), seg(140, y, 140, y + 40),
+    seg(140, y + 40, 100, y + 40), seg(100, y + 40, 100, y),
+  ];
+  const segs = flat([
+    ...[55, 100, 200, 300, 400].map((y) => seg(50, y, 700, y)),
+    seg(50, 55, 50, 400), seg(200, 55, 200, 400),
+    seg(300, 55, 300, 400), seg(700, 55, 700, 400),
+    ...box(125), ...box(225), ...box(325),
+  ]);
+  const glyphs = findLegendGlyphs(segs, [
+    { text: "MECHANICAL SYMBOL LIST", x0: 80, y0: 20, x1: 390, y1: 42 },
+    { text: "SYMBOL", x0: 95, y0: 65, x1: 175, y1: 85 },
+    { text: "ABBR", x0: 220, y0: 65, x1: 275, y1: 85 },
+    { text: "DESCRIPTION", x0: 390, y0: 65, x1: 530, y1: 85 },
+    { text: "CV", x0: 220, y0: 135, x1: 250, y1: 155 },
+    { text: "CONTROL VALVE", x0: 350, y0: 135, x1: 500, y1: 155 },
+    { text: "FD", x0: 220, y0: 235, x1: 250, y1: 255 },
+    { text: "FIRE DAMPER", x0: 350, y0: 235, x1: 480, y1: 255 },
+    { text: "DPS", x0: 220, y0: 335, x1: 260, y1: 355 },
+    { text: "DIFFERENTIAL PRESSURE SENSOR", x0: 350, y0: 335, x1: 650, y1: 355 },
+  ]);
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "CONTROL VALVE", "FIRE DAMPER", "DIFFERENTIAL PRESSURE SENSOR",
+  ]);
+  assert.ok(glyphs.every((glyph) => glyph.heading === "SYMBOL"));
+});
+
+test("findLegendGlyphs: embedded system codes make repeated shallow carriers routed line keys, never countable devices", () => {
+  const codedKey = (y: number) => [
+    seg(100, y, 230, y), seg(230, y, 230, y + 22),
+    seg(230, y + 22, 100, y + 22), seg(100, y + 22, 100, y),
+    seg(100, y + 11, 230, y + 11),
+  ];
+  const segs = flat([...codedKey(100), ...codedKey(150), ...codedKey(200)]);
+  const spans: LegendSpan[] = [
+    { text: "MECHANICAL SYMBOL LIST", x0: 80, y0: 20, x1: 370, y1: 40 },
+    { text: "CS15", x0: 140, y0: 101, x1: 190, y1: 121 },
+    { text: "CLEAN STEAM-NUMBER INDICATES PRESSURE IN PSIG.", x0: 250, y0: 101, x1: 680, y1: 121 },
+    { text: "DPP", x0: 150, y0: 151, x1: 185, y1: 171 },
+    { text: "DRAIN", x0: 250, y0: 151, x1: 315, y1: 171 },
+    { text: "PD", x0: 155, y0: 201, x1: 180, y1: 221 },
+    { text: "PUMPED DISCHARGE", x0: 250, y0: 201, x1: 430, y1: 221 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 160 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "CLEAN STEAM-NUMBER INDICATES PRESSURE IN PSIG.", "DRAIN", "PUMPED DISCHARGE",
+  ]);
+  assert.ok(glyphs.every((glyph) => glyph.kind === "line_style" && !glyph.seedable));
+});
+
+test("findLegendGlyphs: an embedded device tag in a shallow carrier cannot demote a physical device to a routed line key", () => {
+  const taggedCarrier = (y: number) => [
+    seg(100, y, 230, y), seg(230, y, 230, y + 22),
+    seg(230, y + 22, 100, y + 22), seg(100, y + 22, 100, y),
+    seg(100, y + 11, 230, y + 11),
+  ];
+  const segs = flat([...taggedCarrier(100), ...taggedCarrier(150), ...taggedCarrier(200)]);
+  const spans: LegendSpan[] = [
+    { text: "MECHANICAL SYMBOL LIST", x0: 80, y0: 20, x1: 370, y1: 40 },
+    { text: "PG", x0: 150, y0: 101, x1: 180, y1: 121 },
+    { text: "PRESSURE GAUGE", x0: 250, y0: 101, x1: 420, y1: 121 },
+    { text: "H", x0: 158, y0: 151, x1: 172, y1: 171 },
+    { text: "HUMIDIFIER", x0: 250, y0: 151, x1: 365, y1: 171 },
+    { text: "ST", x0: 152, y0: 201, x1: 178, y1: 221 },
+    { text: "STEAM TRAP", x0: 250, y0: 201, x1: 360, y1: 221 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 160 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "PRESSURE GAUGE", "HUMIDIFIER", "STEAM TRAP",
+  ]);
+  assert.ok(glyphs.every((glyph) => glyph.kind === "symbol"));
+});
+
+test("findLegendGlyphs: duct-section and directional drafting keys stay auditable but never countable", () => {
+  const segs = flat([
+    ...controlValveGlyph(100, 100), ...controlValveGlyph(100, 200),
+    ...controlValveGlyph(100, 300), ...controlValveGlyph(100, 400),
+  ]);
+  const captions = [
+    "RISE IN DIRECTION OF AIR FLOW",
+    "SUPPLY/OUTSIDE AIR DUCT SECTION",
+    "PITCH PIPE IN DIRECTION",
+    "DIRECTION OF FLOW IN PIPE",
+  ];
+  const spans: LegendSpan[] = captions.map((text, index) => ({
+    text, x0: 220, y0: 145 + index * 100, x1: 520, y1: 165 + index * 100,
+  }));
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 120 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), captions);
+  assert.ok(glyphs.every((glyph) => glyph.kind === "annotation" && !glyph.seedable));
+});
+
+test("findLegendGlyphs: a physical pipe cap remains a countable fitting identity", () => {
+  const segs = flat(controlValveGlyph(100, 100));
+  const spans: LegendSpan[] = [
+    { text: "PIPE CAP", x0: 220, y0: 145, x1: 310, y1: 165 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, isolated);
+  assert.equal(glyphs.length, 1);
+  assert.equal(glyphs[0].kind, "symbol");
+  assert.equal(glyphs[0].seedable, true);
+});
+
+test("findLegendGlyphs: common CAD font seams inside MEP words are repaired without changing caption geometry", () => {
+  const segs = flat(controlValveGlyph(100, 100));
+  const spans: LegendSpan[] = [
+    { text: "M ANUAL VOLUM E DAM PER W ITH TEM PERATURE SENSO R", x0: 200, y0: 150, x1: 650, y1: 170 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { ...isolated, maxGlyphDimPx: 120 });
+  assert.equal(glyphs[0].caption, "MANUAL VOLUME DAMPER WITH TEMPERATURE SENSOR");
+  assert.deepEqual(glyphs[0].caption_bbox, [[200, 150], [650, 170]]);
+});
+
 test("findLegendGlyphs: vector-outlined abbreviations beside definitions are text, not learned symbols", () => {
   const segs: number[][] = [];
   const spans: LegendSpan[] = [
@@ -1371,6 +1603,27 @@ test("findLegendGlyphs: domain system-abbreviation sections are line-key legends
   assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
     "SUPPLY AIR", "RETURN AIR", "ACID WASTE", "NITROGEN",
   ]);
+  assert.ok(glyphs.every((glyph) => glyph.kind === "line_style" && !glyph.seedable));
+});
+
+test("findLegendGlyphs: an explicit HVAC piping-systems legend makes every routed swatch nonseedable", () => {
+  const segs = flat([
+    ...controlValveGlyph(100, 100), ...controlValveGlyph(100, 200),
+    ...controlValveGlyph(100, 300),
+  ]);
+  const captions = [
+    "REFRIGERANT LIQUID, SUCTION, & HOT GAS BYPASS",
+    "STEAM- LOW PRESSURE OR ATMOSPHERIC",
+    "CONDENSATE",
+  ];
+  const spans: LegendSpan[] = [
+    { text: "HVAC PIPING SYSTEMS LEGEND", x0: 70, y0: 20, x1: 390, y1: 45 },
+    ...captions.map((text, index) => ({
+      text, x0: 220, y0: 145 + index * 100, x1: 650, y1: 165 + index * 100,
+    })),
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 120 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), captions);
   assert.ok(glyphs.every((glyph) => glyph.kind === "line_style" && !glyph.seedable));
 });
 

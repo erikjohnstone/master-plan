@@ -278,7 +278,15 @@ function looksLikeGlyph(
   // Many CAD legends draw the system abbreviation as outlined lettering
   // directly on the line. The connected component is then a long, shallow
   // swatch rather than a one-pixel stroke (real CHWR keys are ~7.4:1).
-  if (w / h >= 6) return w <= maxLineStyleDim;
+  if (w / h >= 6) {
+    // Two distant rules around a title/header can form one shallow component
+    // whose aspect ratio barely resembles a routed swatch. Unlike a real
+    // straight key (nearly one-dimensional) or an outlined coded key (many
+    // edges), that low-information carrier is wider than any compact glyph
+    // and must not steal the first caption immediately below it.
+    if (w > maxDim && segCount <= 2 && w / h < 12) return false;
+    return w <= maxLineStyleDim;
+  }
   if (w > maxDim || h > maxDim) return false;
   const aspect = Math.max(w, h) / Math.max(1, Math.min(w, h));
   if (aspect > 40 && segCount <= 2) return w > h;
@@ -454,6 +462,13 @@ type PairCandidate = {
   structuredBand?: [number, number];
   /** Source text used only when a ruled row has no usable vector member. */
   structuredTextSymbol?: string;
+  /** Repeated ruled tables may center each DESCRIPTION string and each
+   * SYMBOL rendition independently. Their literal left/center coordinates
+   * therefore drift even though the source-declared cells are one column.
+   * These internal anchors preserve that structural alignment without
+   * changing the exact returned caption or glyph bboxes. */
+  alignmentCaptionX?: number;
+  alignmentGlyphX?: number;
   /** Physical legend layout. Most legends put the caption to the glyph's
    * right; RCP/fire/electrical cell legends commonly center it below;
    * material legends commonly put the swatch to the caption's right. */
@@ -490,8 +505,37 @@ function median(values: number[]): number {
   return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 }
 
+// Some CAD font encodings report a word-space at arbitrary glyph seams even
+// though the rendered legend has no space there ("M ANUAL", "VOLUM E",
+// "SENSO R"). This is not ordinary OCR spelling correction: only a bounded
+// vocabulary of stable drawing/MEP terms is rejoined, at any character seam,
+// while every other word and the source bbox remain untouched. The terms are
+// discipline-wide identities used across firms, never project/page tokens.
+const CAD_SEAM_WORDS = [
+  "ACTUATOR", "ALIGNMENT", "ANCHOR", "AUTOMATIC", "BALANCING",
+  "BACKFLOW", "BLADE", "BLANKOFF", "CARBON", "COIL", "CONDENSATE",
+  "CONCENTRIC", "CONNECTION", "CONTROL",
+  "DAMPER", "DIFFERENTIAL", "DIOXIDE", "DIRECTION", "DISCHARGE", "DOWN",
+  "ENCLOSURE", "EXPANSION", "FLEXIBLE", "FLOW", "FOOT", "FURNISHED",
+  "FOB", "FOR", "GAS", "GAUGE", "GPM", "HIGH", "HOSE", "HUMIDIFIER",
+  "HUMIDISTAT", "LIQUID", "MANUAL", "MOUNTED",
+  "MEASUREMENT", "MEDIUM", "METER", "MIXING", "MONITOR", "MONOXIDE",
+  "MOTORIZED", "NORMALLY", "NUMBER", "OCCUPANCY", "OF", "OPPOSED", "OR",
+  "OUTSIDE", "PRESSURE", "PUMP", "PUMPED", "REDUCER", "RELIEF", "SECTION",
+  "SENSOR", "SEQUENTIAL", "SHUTOFF", "SOLENOID", "STATIC", "STRAINER",
+  "SUCTION", "SUPPORT",
+  "SWITCH", "SYMBOL", "TEMPERATURE", "TERMINAL", "THERMOMETER", "THERMOSTAT",
+  "THROTTLING", "TWO", "VALVE", "VELOCITY", "VOLUME", "WATER", "WAY",
+  "WELL", "WITH", "WYE",
+] as const;
+const CAD_SEAM_WORD_RE = new RegExp(
+  `\\b(?:${CAD_SEAM_WORDS.map((word) => [...word].join("\\s*")).join("|")})\\b`,
+  "gi",
+);
+
 function normalizedCaption(text: string): string {
-  return text.trim().replace(/\s+/g, " ");
+  return text.trim().replace(/\s+/g, " ")
+    .replace(CAD_SEAM_WORD_RE, (word) => word.replace(/\s+/g, ""));
 }
 
 /** A leading dash in a SYMBOL / DESCRIPTION table is a visual column
@@ -511,13 +555,13 @@ function isLegendHeadingText(text: string): boolean {
     // Definition prose inside a legend routinely says "symbol indicates".
     // Even when that fragment is only eight words long, it is a caption
     // continuation rather than a nested heading.
-    && !/\b(?:SEE|REFER\s+TO|LEGEND\s+NOTES?|POSITION\s+LEGEND|NOTE\s*\d+|INDICATES?|DENOTES)\b/i.test(normalized)
+    && !/\b(?:SEE|REFER\s+TO|LEGEND\s+NOTES?|POSITION\s+LEGEND|NOTE\s*\d+|INDICATES?|DENOTES|MAY\s+APPLY)\b/i.test(normalized)
     // A row can legitimately name a drafting symbol. Treating identities
     // such as CONTINUATION SYMBOL or PLAN REFERENCE NOTE SYMBOL as nested
     // headings drops their own geometry and lets them claim the rows below.
     && !isDraftingAnnotationCaption(normalized);
   return shortDeclarativeHeading
-    || /^SYMBOL$/i.test(normalized)
+    || /^SYMBOL:?$/i.test(normalized)
     || /^(?:(?:CONTROL|HVAC|MECHANICAL|ELECTRICAL|SYSTEM|DEVICE|NETWORK)\s+)?COMPONENTS$/i.test(normalized)
     || /\bPOINT\s+FUNCTION(?:\s+SCHEDULE)?\b/i.test(normalized)
     || /^(?:GENERAL|LIGHTING|EQUIPMENT|DEVICES|ONE-LINE\s+DIAGRAM|POWER\s+DEVICES|POWER\s+DISTRIBUTION\s+EQUIPMENT|TELEPHONE\s*(?:&|AND)\s*DATA\s+SYSTEMS|FIRE\s+ALARM|GROUNDING\s+AND\s+LIGHTNING\s+PROTECTION|LIGHTNING\s+PROTECTION\s+AND\s+GROUNDING|ELECTRICAL\s+BOXES\s+AND\s+WIRING\s+DEVICES|ELECTRICAL\s+EQUIPMENT|LIGHT\s+CONTROLS|LIGHT\s+FIXTURES|TELECOMMUNICATIONS|SECURITY|CIRCUITING|FIRE\s+DETECTION\s+AND\s+NOTIFICATION|WIRE,?\s+CONDUIT\s+AND\s+RACEWAY|EQUIPMENT\s+CONNECTIONS)$/i.test(normalized)
@@ -570,7 +614,7 @@ function isDomainHeading(text: string): boolean {
  * and ordinary heading ownership; this predicate only removes the HVAC/BAS
  * word-density requirement after that structural proof has succeeded. */
 function isGeneralDraftingLegendHeading(text: string): boolean {
-  return /^(?:GENERAL(?:\s+SYMBOLS?)?|GENERAL\s+PROJECT\s+SYMBOLOGY|STRUCTURAL\s+LEGEND|STANDARD\s+SYMBOLS|ARCHITECTURAL\s+SYMBOLS?|STANDARD\s+MATERIALS\s+LEGEND)$/i.test(normalizedCaption(text));
+  return /^(?:GENERAL(?:\s+SYMBOLS?)?(?:\s+LEGEND)?|GENERAL\s+PROJECT\s+SYMBOLOGY|STRUCTURAL\s+LEGEND|STANDARD\s+SYMBOLS|ARCHITECTURAL\s+SYMBOLS?|STANDARD\s+MATERIALS\s+LEGEND)$/i.test(normalizedCaption(text));
 }
 
 /** Entire panels whose rows define drawing grammar or construction hatch
@@ -578,7 +622,7 @@ function isGeneralDraftingLegendHeading(text: string): boolean {
  * semantic evidence than any device-like noun that may appear inside a row
  * (for example a building-section mark containing a filled square). */
 function isNoninstalledDraftingPanelHeading(text: string | null): boolean {
-  return !!text && /^(?:GENERAL\s+PROJECT\s+SYMBOLOGY|STRUCTURAL\s+LEGEND)$/i.test(normalizedCaption(text));
+  return !!text && /^(?:GENERAL\s+PROJECT\s+SYMBOLOGY|GENERAL\s+SYMBOLS?\s+LEGEND|STRUCTURAL\s+LEGEND)$/i.test(normalizedCaption(text));
 }
 
 function supportsUnderlinedMultiColumnJurisdiction(text: string): boolean {
@@ -586,6 +630,24 @@ function supportsUnderlinedMultiColumnJurisdiction(text: string): boolean {
   // title that explicitly declares SYMBOLS may waive the HVAC/BAS vocabulary
   // gate for a general drafting panel.
   return /^(?:GENERAL\s+PROJECT\s+SYMBOLOGY|STANDARD\s+SYMBOLS|ARCHITECTURAL\s+SYMBOLS?|STANDARD\s+MATERIALS\s+LEGEND)$/i.test(normalizedCaption(text));
+}
+
+/** A strongly discipline-named legend/list may use a narrow, left-aligned
+ * title over several repeated columns. Its own finite header rule is the
+ * horizontal ownership boundary, just as it is for drafting symbology
+ * panels. Generic LEGEND titles remain excluded so one long sheet rule
+ * cannot annex an adjacent notes or schedule panel. */
+function supportsRuledMultiColumnJurisdiction(text: string): boolean {
+  const normalized = normalizedCaption(text);
+  return supportsUnderlinedMultiColumnJurisdiction(normalized)
+    || (isLegendHeadingText(normalized)
+      && isDomainHeading(normalized)
+      // Controls sheets routinely place sequences, notes, and controller
+      // diagrams beside a compact one-column legend under the same ruled
+      // panel. A subsystem title therefore cannot expand laterally unless it
+      // explicitly declares the stronger SYMBOL LIST table contract.
+      && (!/\bCONTROLS?\b/i.test(normalized) || /\bSYMBOL\s+LIST\b/i.test(normalized))
+      && /\b(?:LEGEND|SYMBOLS?|SYMBOLOGY|NOTATIONS?|SYMBOL\s+LIST)\b/i.test(normalized));
 }
 
 function supportsUnderlinedBelowCaptionJurisdiction(text: string): boolean {
@@ -605,7 +667,8 @@ type UnderlinedLegendJurisdiction = { x0: number; x1: number; y: number };
 function underlinedLegendJurisdiction(
   heading: LegendSpan, segs: number[], typicalTextHeight: number,
 ): UnderlinedLegendJurisdiction | null {
-  if (!supportsUnderlinedMultiColumnJurisdiction(heading.text)) return null;
+  if (!supportsRuledMultiColumnJurisdiction(heading.text)) return null;
+  const requiresRepeatedPanelRule = !supportsUnderlinedMultiColumnJurisdiction(heading.text);
   const headingCenterX = (heading.x0 + heading.x1) / 2;
   // A long descriptive SYMBOLOGY title can nearly fill its finite panel
   // rule even though that rule still extends beyond both text edges. Keep
@@ -628,6 +691,28 @@ function underlinedLegendJurisdiction(
       || headingCenterX > x1 + typicalTextHeight
       || y < heading.y1 - typicalTextHeight * 0.2
       || y > heading.y1 + typicalTextHeight * 2.5) continue;
+    if (requiresRepeatedPanelRule) {
+      // A single underline under an ordinary controls title can extend
+      // through an unrelated peer panel. Domain legends earn multi-column
+      // reach only when another same-width rule below proves a finite ruled
+      // body (row divider or bottom boundary).
+      let corroborated = false;
+      for (let j = 0; j < segs.length; j += 4) {
+        const cx0 = Math.min(segs[j], segs[j + 2]);
+        const cx1 = Math.max(segs[j], segs[j + 2]);
+        const cy = (segs[j + 1] + segs[j + 3]) / 2;
+        if (Math.abs(segs[j + 1] - segs[j + 3]) > horizontalTolerance
+          || cy <= y + typicalTextHeight * 2
+          || cy - y > Math.max(900, typicalTextHeight * 120)) continue;
+        const endpointTolerance = typicalTextHeight * 2;
+        if (Math.abs(cx0 - x0) <= endpointTolerance
+          && Math.abs(cx1 - x1) <= endpointTolerance) {
+          corroborated = true;
+          break;
+        }
+      }
+      if (!corroborated) continue;
+    }
     candidates.push({ x0, x1, y });
   }
   candidates.sort((a, b) => Math.abs(a.y - heading.y1) - Math.abs(b.y - heading.y1)
@@ -710,6 +795,7 @@ function isGeneralProjectSymbologyRowCaption(text: string): boolean {
 function isDraftingAnnotationCaption(text: string): boolean {
   const normalized = canonicalLegendCaption(text);
   if (/^ANNOTATIONS?\b/i.test(normalized)) return true;
+  if (/^(?:(?:RISE|DROP)\s+IN\s+DIRECTION\s+OF\s+AIR\s*FLOW|(?:SUPPLY(?:\s*\/\s*OUTSIDE)?|RETURN|EXHAUST\s*\/\s*RELIEF)\s+AIR\s+DUCT\s+SECTION|PIPE\s+UP\s+OR\s+UP\s*\/\s*DOWN|PITCH\s+PIPE\s+IN\s+DIRECTION|DIRECTION\s+OF\s+FLOW\s+IN\s+PIPE|AIRFLOW\s+MEASUREMENT\s+SYMBOL\b.*)$/i.test(normalized)) return true;
   if (/^(?:ELECTRICAL\s+EQUIPMENT\s+FOOTPRINT\b|DUCTWORK\s+SHOWING\s+SIZE\s+AND\s+SYSTEM$|DUCT\s+SECTION\s*[-–—:]\s*(?:SUPPLY|RETURN|EXHAUST|OUTSIDE|RELIEF|TRANSFER)\b)/i.test(normalized)) return true;
   if (/^(?:FEEDER\s+REFERENCE\s+TAG|POINT\s+OF\s+CONNECTION\s*[-–—:]\s*NEW\s+TO\s+EXISTING)$/i.test(normalized)) return true;
   if (isGeneralProjectSymbologyRowCaption(normalized)) return true;
@@ -770,9 +856,51 @@ function isRoutedSystemCaption(text: string): boolean {
     || /\b(?:LOW|MEDIUM|HIGH)\s+PRESSURE\s+NATURAL\s+GAS$/i.test(normalized);
 }
 
+/** Terse coded swatches sometimes name a routed medium without ending in
+ * PIPE/PIPING/LINE. Keep this narrower than isRoutedSystemCaption so a bare
+ * physical DRAIN or STEAM TRAP elsewhere is not globally demoted. */
+function isCodedRoutedMediumCaption(text: string): boolean {
+  const normalized = canonicalLegendCaption(text);
+  return /^(?:CLEAN\s+STEAM(?:\b.*)?|STEAM-NUMBER\b.*|DRAIN|(?:HIGH|LOW)\s+PRESSURE\s+CONDENSATE|PUMPED\s+(?:CONDENSATE|DISCHARGE)|SAFETY\s+RELIEF\s+VENT)$/i.test(normalized);
+}
+
+/** Coded pipe/duct media keys often render as a shallow multi-edge carrier
+ * with a terse system abbreviation printed inside it. Because the inline
+ * PDF text increases the carrier's apparent height, pure aspect-ratio logic
+ * can mistake it for one physical device. Require all three independent
+ * signals—wide shallow geometry, a contained terse code, and external row
+ * caption—before classifying it as a routed line key. */
+function isEmbeddedCodedLineKey(
+  pair: PairCandidate, rawSpans: LegendSpan[], typicalTextHeight: number,
+): boolean {
+  const [[x0, y0], [x1, y1]] = pair.rect;
+  const w = x1 - x0, h = y1 - y0;
+  if (pair.members.length !== 1
+    || w < typicalTextHeight * 5
+    || h > typicalTextHeight * 1.5
+    || w / Math.max(1, h) < 4) return false;
+  // Inline device tags can also make a wide shallow carrier. Semantic device
+  // identity wins unless the caption precisely names a routed medium.
+  if (isDiscreteInstalledDeviceCaption(pair.caption)
+    && !isRoutedSystemCaption(pair.caption)
+    && !isCodedRoutedMediumCaption(pair.caption)) return false;
+  const margin = typicalTextHeight * 0.2;
+  return rawSpans.some((span) => {
+    const compact = normalizedCaption(span.text).replace(/\s+/g, "");
+    const centerX = (span.x0 + span.x1) / 2;
+    const centerY = (span.y0 + span.y1) / 2;
+    return /^[A-Z0-9./-]{1,8}$/i.test(compact)
+      && centerX > x0 + margin && centerX < x1 - margin
+      && centerY > y0 - margin && centerY < y1 + margin
+      // The real description must be outside the carrier. This prevents a
+      // single visible text-symbol cell from proving itself to be a line key.
+      && pair.span.x0 >= x1 + margin;
+  });
+}
+
 function isRoutedSystemLegendHeading(text: string | null): boolean {
   return !!text
-    && /^(?:DUCTWORK|PIPING)(?:\s+SYSTEM)?\s+ABBREVIATIONS$/i.test(normalizedCaption(text));
+    && /^(?:(?:HVAC|MECHANICAL)\s+)?(?:(?:DUCTWORK|PIPING)(?:\s+SYSTEM)?\s+ABBREVIATIONS|(?:DUCTWORK|PIPING)\s+SYSTEMS?\s+LEGEND)$/i.test(normalizedCaption(text));
 }
 
 /** Recover a routed swatch made only from many disconnected, parallel
@@ -850,7 +978,7 @@ function disconnectedParallelStrokeCandidates(
  * the sparse line fragment out of Symbol Sweep by leaving it nonseedable. */
 function isDiscreteInstalledDeviceCaption(text: string): boolean {
   const normalized = canonicalLegendCaption(text);
-  return /\b(?:ACTUATOR|ARRESTOR|CAP|CLEANOUT|DAMPER|DETECTOR|DIFFUSER|DRAIN|FAN|FILTER|GAUGE|GRILLE|GUIDE|HUMIDISTAT|LOUVER|METER|PANELBOARD|PUMP|PUSH\s*BUTTON|REGISTER|REGULATOR|RELAY|SENSOR|SINK|SLEEVE|STARTER|STRAINER|SWITCH|THERMOSTAT|TRANSMITTER|VALVE|VFD)\b/i.test(normalized)
+  return /\b(?:ACTUATOR|ARRESTOR|CAP|CLEANOUT|DAMPER|DETECTOR|DIFFUSER|DRAIN|FAN|FILTER|GAUGE|GRILLE|GUIDE|HUMIDIFIER|HUMIDISTAT|JOINT|LOUVER|METER|PANELBOARD|PUMP|PUSH\s*BUTTON|REGISTER|REGULATOR|RELAY|SENSOR|SINK|SLEEVE|STARTER|STRAINER|SWITCH|THERMOSTAT|TRANSMITTER|TRAP|VALVE|VFD)\b/i.test(normalized)
     || /\b(?:MONITORING|METERING)\s+EQUIPMENT\b/i.test(normalized);
 }
 
@@ -874,7 +1002,7 @@ function meaningfulCaption(text: string): boolean {
   // Ruled and unruled legend tables commonly label their two columns before
   // the first real row. An underline or border immediately to the left can
   // otherwise promote the field name itself as a fake symbol identity.
-  if (/^(?:SYMBOL|NAME|DESCRIPTION|DESIGNATION|TYPE|NUMBER|SIZE|QTY|QUANTITY)$/i.test(normalized)) return false;
+  if (/^(?:SYMBOL|NAME|DESCRIPTION|DESIGNATION|TYPE|NUMBER|SIZE|QTY|QUANTITY):?$/i.test(normalized)) return false;
   return true;
 }
 
@@ -895,6 +1023,7 @@ type SymbolDescriptionHeader = {
   symbol: LegendSpan;
   description: LegendSpan;
   symbolColumnEnd: number;
+  intermediateFieldStart?: number;
 };
 
 /** Exact paired field headers are stronger evidence than a generic SYMBOL
@@ -905,10 +1034,10 @@ function symbolDescriptionHeaders(
 ): SymbolDescriptionHeader[] {
   const headers: SymbolDescriptionHeader[] = [];
   for (const symbol of lines) {
-    if (!/^SYMBOL$/i.test(normalizedCaption(symbol.text))) continue;
+    if (!/^SYMBOL:?$/i.test(normalizedCaption(symbol.text))) continue;
     const symbolCenterY = (symbol.y0 + symbol.y1) / 2;
     const description = lines.filter((candidate) =>
-      /^DESCRIPTION$/i.test(normalizedCaption(candidate.text))
+      /^DESCRIPTION:?$/i.test(normalizedCaption(candidate.text))
       && candidate.x0 > symbol.x1
       && candidate.x0 - symbol.x1 <= typicalTextHeight * 32
       && Math.abs((candidate.y0 + candidate.y1) / 2 - symbolCenterY) <= typicalTextHeight * 0.6)
@@ -925,6 +1054,7 @@ function symbolDescriptionHeaders(
         symbol,
         description,
         symbolColumnEnd: intermediateField?.x0 ?? description.x0,
+        ...(intermediateField ? { intermediateFieldStart: intermediateField.x0 } : {}),
       });
     }
   }
@@ -1150,7 +1280,47 @@ function structuredLegendTables(
   }
   const tables: StructuredLegendTable[] = [];
   for (let headerIndex = 0; headerIndex < headers.length; headerIndex++) {
-    const { symbol, description, symbolColumnEnd } = headers[headerIndex];
+    const { symbol, description, symbolColumnEnd, intermediateFieldStart } = headers[headerIndex];
+    // Centered field labels do not reveal the actual cell boundary. Prefer a
+    // vertical source rule physically between the SYMBOL and DESCRIPTION
+    // headers; this admits every centered body value while keeping text and
+    // geometry on their declared sides. Broken grids still fall back to the
+    // conservative header-derived boundary.
+    const verticalDividers = Array.from({ length: segs.length / 4 }, (_, index) => {
+      const i = index * 4;
+      const ax = segs[i], ay = segs[i + 1], bx = segs[i + 2], by = segs[i + 3];
+      const x = (ax + bx) / 2;
+      return {
+        x,
+        y0: Math.min(ay, by),
+        y1: Math.max(ay, by),
+        length: Math.abs(by - ay),
+        drift: Math.abs(ax - bx),
+      };
+    }).filter((rule) => rule.drift <= Math.max(1.5, typicalTextHeight * 0.08)
+      && rule.length >= typicalTextHeight * 3
+      && rule.x > symbol.x1 + typicalTextHeight * 0.2
+      // PDF font metrics can overshoot a centered header a few pixels across
+      // its true source rule. Permit that small overlap so the long body
+      // divider wins over a shorter decorative/header stroke.
+      && rule.x < description.x0 + typicalTextHeight * 0.5
+      // The divider belongs to this header, not a taller unrelated table
+      // farther down the same x-range.
+      && rule.y0 <= symbol.y1 + typicalTextHeight * 1.5
+      && rule.y1 >= symbol.y1 + typicalTextHeight * 3);
+    const descriptionDivider = [...verticalDividers]
+      .sort((a, b) => b.length - a.length
+        // When a table has SYMBOL | CODE | DESCRIPTION dividers of equal
+        // height, DESCRIPTION begins at the rightmost one.
+        || Math.abs(description.x0 - a.x) - Math.abs(description.x0 - b.x))[0];
+    const symbolDivider = intermediateFieldStart === undefined
+      ? descriptionDivider
+      : [...verticalDividers]
+        .filter((rule) => rule.x < intermediateFieldStart + typicalTextHeight * 0.5)
+        .sort((a, b) => b.length - a.length
+          || Math.abs(intermediateFieldStart - a.x) - Math.abs(intermediateFieldStart - b.x))[0];
+    const declaredSymbolBoundary = symbolDivider?.x ?? symbolColumnEnd;
+    const declaredDescriptionBoundary = descriptionDivider?.x ?? description.x0;
     const localRules = horizontalRules.filter((rule) =>
       rule.x0 <= symbol.x0 + typicalTextHeight * 1.5
       && symbol.x0 - rule.x0 <= typicalTextHeight * 8
@@ -1181,13 +1351,19 @@ function structuredLegendTables(
           // can be equally tall inside the SYMBOL cell and are not titles.
           || (height >= typicalTextHeight * 1.5
             && line.x0 >= description.x0 - typicalTextHeight * 0.75))
-        && !/^(?:SYMBOL|DESCRIPTION)$/i.test(normalizedCaption(line.text));
+        && !/^(?:SYMBOL|DESCRIPTION):?$/i.test(normalizedCaption(line.text));
     }).sort((a, b) => a.y0 - b.y0)[0];
     const stopY = Math.min(
       nextHeader?.symbol.y0 ?? Infinity,
       sectionEnd?.y0 ?? Infinity,
     );
-    const mergeTolerance = Math.max(1.8, typicalTextHeight * 0.12);
+    // CAD table borders are often plotted as two near-coincident parallel
+    // strokes (the reviewed open-row electrical legend has a 0.23-text-
+    // height double bottom border). Those two strokes are one boundary, not
+    // evidence of an internal ruled body row. A real row band must be tall
+    // enough to contain text, so collapsing rules within 0.35 of the local
+    // text height cannot erase a legitimate body row.
+    const mergeTolerance = Math.max(1.8, typicalTextHeight * 0.35);
     const ys = localRules.map((rule) => rule.y0)
       .filter((y) => y >= firstBelowHeader - mergeTolerance && y <= stopY + mergeTolerance)
       .sort((a, b) => a - b);
@@ -1206,8 +1382,8 @@ function structuredLegendTables(
     tables.push({
       left,
       right,
-      symbolRight: symbolColumnEnd - typicalTextHeight * 0.2,
-      descriptionX: description.x0,
+      symbolRight: declaredSymbolBoundary - typicalTextHeight * 0.2,
+      descriptionX: declaredDescriptionBoundary,
       top: boundaries[0],
       bottom: boundaries[boundaries.length - 1],
       boundaries,
@@ -1741,11 +1917,15 @@ function structuredTablePairs(
         const centerY = (line.y0 + line.y1) / 2;
         const centerX = (line.x0 + line.x1) / 2;
         return centerY > top && centerY < bottom
+          // A legitimate description may begin left of its centered header,
+          // but it still begins inside the declared DESCRIPTION cell. Long
+          // prose that starts back in the SYMBOL cell must not be admitted
+          // merely because its midpoint happens to fall to the right.
           && line.x0 >= table.descriptionX - typicalTextHeight * 0.75
           && centerX < table.right
           && meaningfulCaption(line.text)
           && !isLegendHeadingText(line.text)
-          && !/^(?:SYMBOL|DESCRIPTION)$/i.test(normalizedCaption(line.text));
+          && !/^(?:SYMBOL|DESCRIPTION):?$/i.test(normalizedCaption(line.text));
       }).sort((a, b) => {
         const ay = (a.y0 + a.y1) / 2, by = (b.y0 + b.y1) / 2;
         return ay - by || a.x0 - b.x0;
@@ -1816,6 +1996,8 @@ function structuredTablePairs(
         layout: "right",
         structuredRow: true,
         structuredBand: [top, bottom],
+        alignmentCaptionX: table.descriptionX,
+        alignmentGlyphX: (table.left + table.symbolRight) / 2,
         ...(!members.length ? { structuredTextSymbol: textSymbol } : {}),
       });
     }
@@ -3511,7 +3693,9 @@ function alignedGroups(pairs: PairCandidate[], glyphXTolerance: number, captionX
     captionMin: number; captionMax: number;
     glyphMin: number; glyphMax: number;
   };
-  const glyphCenter = (pair: PairCandidate) => (pair.rect[0][0] + pair.rect[1][0]) / 2;
+  const glyphCenter = (pair: PairCandidate) => pair.alignmentGlyphX
+    ?? (pair.rect[0][0] + pair.rect[1][0]) / 2;
+  const captionAnchor = (pair: PairCandidate) => pair.alignmentCaptionX ?? pair.span.x0;
   // Seed and extend columns in reading order. Sorting by caption x first
   // let a remote, slightly-left coincidence near the bottom of a sheet
   // claim the column before its real rows were visited. Its complete-link
@@ -3523,12 +3707,12 @@ function alignedGroups(pairs: PairCandidate[], glyphXTolerance: number, captionX
     const ay = (pairs[a].span.y0 + pairs[a].span.y1) / 2;
     const by = (pairs[b].span.y0 + pairs[b].span.y1) / 2;
     return ay - by
-      || pairs[a].span.x0 - pairs[b].span.x0
+      || captionAnchor(pairs[a]) - captionAnchor(pairs[b])
       || glyphCenter(pairs[a]) - glyphCenter(pairs[b]);
   });
   const groups: Group[] = [];
   for (const index of ordered) {
-    const captionX = pairs[index].span.x0;
+    const captionX = captionAnchor(pairs[index]);
     const glyphX = glyphCenter(pairs[index]);
     let best = -1;
     let bestDistance = Infinity;
@@ -3725,14 +3909,14 @@ function nearbyLegendHeading(
   };
   const isChildSymbolFieldHeader = (parent: LegendSpan, child: LegendSpan): boolean =>
     isNoninstalledDraftingPanelHeading(parent.text)
-    && /^SYMBOL$/i.test(normalizedCaption(child.text))
+    && /^SYMBOL:?$/i.test(normalizedCaption(child.text))
     && child.y1 >= parent.y1 - typicalTextHeight * 0.2
     && child.y0 - parent.y1 <= typicalTextHeight * 4
     && child.x1 >= gx0 - typicalTextHeight * 5
     && child.x0 <= gx1 + typicalTextHeight * 5;
   const candidates = lines.filter((s) => {
     if (!isLegendHeadingText(s.text) || s.y1 > firstY + typicalTextHeight) return false;
-    if (/^SYMBOL$/i.test(normalizedCaption(s.text))) {
+    if (/^SYMBOL:?$/i.test(normalizedCaption(s.text))) {
       // SYMBOL is often the local column label inside a named legend. The
       // named title owns row semantics (discipline, annotation/installable
       // classification, and panel jurisdiction); the field header only
@@ -3764,13 +3948,27 @@ function nearbyLegendHeading(
     // separate network architecture diagram below it.
     const underline = underlinedLegendJurisdiction(s, segs, typicalTextHeight);
     const insideFiniteUnderlinedPanel = !!underline
+      // A finite border proves horizontal ownership, not that every remote
+      // diagram anywhere inside the panel is a legend row. Long discipline-
+      // specific symbol lists must bridge their own caption column down to a
+      // later group. Only the deliberately broad drafting panels, whose
+      // title contract defines every contained convention, may use their
+      // ruled boundary alone as vertical jurisdiction.
+      && supportsUnderlinedMultiColumnJurisdiction(s.text)
       && firstY > underline.y
       && firstY - underline.y <= Math.max(900, typicalTextHeight * 120);
     if (firstY - s.y1 > Math.max(typicalTextHeight * 10, 120)
       && !hasCaptionColumnBridge(s)
       && !insideFiniteUnderlinedPanel) return false;
-    const margin = typicalTextHeight * 5;
     const bounds = boundsFor(s);
+    const finiteRuledJurisdiction = underlinedLegendJurisdiction(s, segs, typicalTextHeight);
+    // A proven panel edge is a hard ownership boundary, with only a small
+    // rendering tolerance. The wider ordinary-title margin is useful when
+    // no border exists, but applying it outside a ruled table annexes bullet
+    // marks and prose from the neighboring notes column.
+    const margin = finiteRuledJurisdiction
+      ? typicalTextHeight * 1.25
+      : typicalTextHeight * 5;
     const headingCenterX = (s.x0 + s.x1) / 2;
     const supportsGlyph = glyphCenterX >= bounds.x0 - margin && glyphCenterX <= bounds.x1 + margin;
     const supportsWholeColumn = headingCenterX >= gx0 - margin && headingCenterX <= gx1 + margin;
@@ -4399,6 +4597,12 @@ export function findLegendGlyphs(
           && !containsAnotherRow);
     });
     if (completeHeuristic) {
+      // The heuristic may already own the exact, more complete row geometry,
+      // but it still lives inside this source-declared table column. Carry
+      // the ruled anchors onto that survivor so centered short/long captions
+      // do not fragment during the later repeated-layout quorum.
+      completeHeuristic.alignmentCaptionX = ruled.alignmentCaptionX;
+      completeHeuristic.alignmentGlyphX = ruled.alignmentGlyphX;
       for (const occupant of occupants) {
         if (occupant !== completeHeuristic) replacedHeuristicPairs.add(occupant);
       }
@@ -4487,12 +4691,14 @@ export function findLegendGlyphs(
   const accepted: LegendGlyph[] = [];
   const acceptPair = (pair: PairCandidate, alignedRows: number, heading: string | null) => {
     pair.caption = canonicalLegendCaption(pair.caption);
+    const embeddedCodedLineKey = isEmbeddedCodedLineKey(pair, rawSpans, typicalTextHeight);
     const kind: LegendGlyph["kind"] = isMaterialLegendHeading(heading)
       || isNoninstalledDraftingPanelHeading(heading)
       ? "annotation"
       : isDraftingAnnotationCaption(pair.caption)
       ? "annotation"
       : isControlFunctionCaption(pair.caption, heading) ? "control_function"
+      : embeddedCodedLineKey ? "line_style"
       : isRoutedSystemLegendHeading(heading) ? "line_style"
       : isRoutedSystemCaption(pair.caption) ? "line_style"
       : pair.kind === "line_style" && isDiscreteInstalledDeviceCaption(pair.caption) ? "symbol"
@@ -4621,7 +4827,7 @@ export function findLegendGlyphs(
       // Bare SYMBOL is also a ubiquitous schedule field header. Structured
       // SYMBOL/DESCRIPTION tables and normal repeated-column pairing already
       // handle legitimate uses; it cannot safely establish a callout zone.
-      && !/^SYMBOL$/i.test(normalizedCaption(text))
+      && !/^SYMBOL:?$/i.test(normalizedCaption(text))
       && (/(?:SYMBOLS?|LEGEND|NOTATIONS?|POINT\s+FUNCTION)/i.test(text)
         || span.y1 - span.y0 >= typicalTextHeight * 1.5)
       && !accepted.some((glyph) => glyph.caption_bbox.flat().every((value, index) =>
