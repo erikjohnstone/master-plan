@@ -9547,8 +9547,10 @@ export function scheduleTableFromODL(
   // key rule every other caller of rowKeyOf uses, and — only if that yields
   // nothing at all — once more against a key column the TABLE ITSELF
   // evidences. See the fallback below the loop for why.
-  const buildRows = (keyCol: number, printedKeys: boolean): void => {
+  const emitted = new Set<number>();
+  const buildRows = (keyCol: number, printedKeys: boolean, only?: Set<number>): void => {
   for (let r = headerEnd; r < R; r++) {
+    if (only && !only.has(r)) continue;
     const seen = new Set<ODLTableCell>();
     const rowCellRef: (ODLTableCell | null)[] = new Array(C).fill(null);
     for (let c = 0; c < C; c++) {
@@ -9574,6 +9576,8 @@ export function scheduleTableFromODL(
     if (printedKeys) {
       const keyCell = grid[r][keyCol];
       if (!keyCell || keyCell["row number"] - 1 !== r) continue;
+      const printed = norm(odlCellText(keyCell)).replace(/\s+/g, " ").trim();
+      if (rows.some((existing) => existing.key === printed)) continue;
     }
     const rawKey = texts[keyCol] || "";
     // GOAL.md rule 22: ODL already knows this row's own real column grid —
@@ -9626,10 +9630,99 @@ export function scheduleTableFromODL(
         if (isCaption) continue;
       }
     }
+    emitted.add(r);
     rows.push({ key: keyRes.key, sheet: sheetKey, ...(keyRes.building ? { building: keyRes.building } : {}), cells });
   }
   };
-  buildRows(keyColIdx >= 0 ? keyColIdx : 0, false);
+  // The rows of this table that are actually rows — computed once, before any
+  // keying, because three different decisions below need the same answer.
+  const dataRows: number[] = [];
+  for (let r = headerEnd; r < R; r++) {
+    const own = new Set<ODLTableCell>();
+    for (let c = 0; c < C; c++) {
+    const cell = grid[r][c];
+    if (cell && cell["row number"] - 1 === r) own.add(cell);
+    }
+    if (!own.size) continue;
+    // A NUMBERED-NOTES BAND IS NOT A ROW OF THIS TABLE. It is drawn inside
+    // the same ruled box — one cell across nearly every column, below the
+    // data — and it holds a sentence, not a value. Counting it as a data row
+    // poisons EVERY column at once, because that one cell is what
+    // grid[r][c] returns for all of them: measured on 03__vol1__27 page 13,
+    // the GRILLES/REGISTERS/DIFFUSERS SCHEDULE's own "1. SEE FLOOR PLANS
+    // FOR..." band made column 0 (a clean 1S/2S/1R/2R/1E) fail the key test
+    // along with all eight others, and the table stayed refused. Same shape
+    // the header loop already recognises above; recognised the same way.
+    if (own.size === 1 && ([...own][0]["column span"] || 1) >= C - 1) continue;
+    if (![...own].some((cl) => odlCellText(cl).trim())) continue;
+    dataRows.push(r);
+  }
+  const findEvidencedKeyColumn = (): number => {
+    let evidenced = -1;
+    if (dataRows.length >= 2) {
+      for (let c = 0; c < C && evidenced < 0; c++) {
+        // A VALUE COUNTS ONCE, ON THE ROW THAT OWNS IT. grid[r][c] returns the
+        // same cell for every row a rowspan covers, so reading it directly
+        // counts a two-row-tall value twice and the column fails its own
+        // distinctness test on a repeat that was never printed twice.
+        // Measured on 03__vol1__27 page 14's MODULAR HEAT RECOVERY CHILLER
+        // SCHEDULE, whose MODULE column reads 1,2,3,4,5 on the page and came
+        // back here as 1,1,2,3,4,5,5. Ownership is the rule the header loop
+        // and maxCovered already use above; use it here too.
+        const vals: string[] = [];
+        for (const r of dataRows) {
+          const cell = grid[r][c];
+          if (!cell || cell["row number"] - 1 !== r) continue;
+          const v = norm(odlCellText(cell)).replace(/\s+/g, " ").trim();
+          if (v) vals.push(v);
+        }
+        // …and a row that owns no cell here is a continuation of the row
+        // above, not a row missing its key, so the completeness bar has to
+        // leave room for them. Same schedule: 5 modules across 7 grid rows,
+        // two of which exist only to carry rowspan-5 cells that start there.
+        if (vals.length < 2 || vals.length < dataRows.length * 0.5) continue;
+        if (!vals.every(printedKeyOk)) continue;
+        if (new Set(vals).size !== vals.length) continue; // repeats: not a key
+        evidenced = c;
+      }
+    }
+    return evidenced;
+  };
+
+  const strictKeyCol = keyColIdx >= 0 ? keyColIdx : 0;
+  buildRows(strictKeyCol, false);
+
+  // WHEN THE STRICT RULE FAILS MOST OF A TABLE, IT IS THE WRONG RULE HERE.
+  //
+  // Keying one row out of four is not evidence that the rule is working; it is
+  // one row that happened to fit. Measured on 04__vol2__062 page 13's RETURN &
+  // EXHAUST GRILLE SCHEDULE, whose key cells hold the tag with the size glued
+  // into it ('R-2 10X6'): one row keyed, three were dropped, and the table
+  // carried a quarter of itself.
+  //
+  // TRY BOTH, KEEP WHICHEVER RECOVERS MORE. An earlier version of this simply
+  // discarded the strict result whenever it looked like a minority, and that
+  // cost two real tables: 08__vol2__044 page 24's GENERATOR DAY TANK and
+  // CONDENSATE PUMP schedules each have ONE row, so "one keyed row out of the
+  // grid rows below the header" trips the minority test the moment a notes
+  // band sits under the data — the strict result was thrown away, no column
+  // qualified to replace it, and a table that had been read correctly was
+  // refused. Speculating about which convention is right is unnecessary when
+  // both can be run and counted.
+  if (rows.length && dataRows.length >= 2 && rows.length * 2 < dataRows.length) {
+    const strictRows = rows.slice();
+    const strictEmitted = new Set(emitted);
+    rows.length = 0;
+    emitted.clear();
+    const evidenced = findEvidencedKeyColumn();
+    if (evidenced >= 0) buildRows(evidenced, true);
+    if (rows.length <= strictRows.length) {
+      rows.length = 0;
+      rows.push(...strictRows);
+      emitted.clear();
+      for (const r of strictEmitted) emitted.add(r);
+    }
+  }
 
   // THE TABLE'S OWN KEY COLUMN, WHEN NO COLUMN HOLDS A TAG.
   //
@@ -9670,56 +9763,38 @@ export function scheduleTableFromODL(
   // keys today can change, and it is confined to this function — rowKeyOf
   // itself is untouched, and the geometric path and symbol sweep key exactly
   // as they did.
+  // THE COLUMN IS ALREADY PROVEN — DO NOT DISCARD A ROW FOR AN ODD MARK.
+  //
+  // When most of a column keys strictly, that column IS the key column; the
+  // table has said so itself. A row that carries a value there and is refused
+  // only because its printed mark has an unusual shape is a row of a schedule
+  // being thrown away over a regex. Measured, both on documents this code has
+  // never seen:
+  //
+  //   11__vol1__05 p39 BUILDING STEAM TRAP  17 of 21 rows key (1-TP28-1 ...);
+  //                                         1-TP36TEMP-1A/1B/1C do not —
+  //                                         letters, digits, letters, and a
+  //                                         hyphen, where CODE_RE is
+  //                                         letters-then-digits
+  //   23__vol2__033 p69 CONVECTOR           30 of 37 key; CV-4C.1/.2/.3 carry
+  //                                         a dotted sub-number
+  //
+  // Widening CODE_RE is not the answer — it is shared with symbol sweep and
+  // resolve_tag, and loosening what counts as a tag EVERYWHERE to rescue four
+  // rows here is the kind of change that has cost this corpus 20 points before
+  // now. This is confined to a table that has already demonstrated its own key
+  // column, and the rescued row must still clear the same bars every printed
+  // key clears: it owns its key cell, the text is usable as a label, and the
+  // key does not collide with one already minted — no new duplicates, which is
+  // what protects the AMBIGUOUS-refusal path downstream.
+  if (rows.length >= 3 && emitted.size < dataRows.length) {
+    const missing = new Set(dataRows.filter((r) => !emitted.has(r)));
+    if (missing.size) buildRows(strictKeyCol, true, missing);
+  }
+
+
   if (!rows.length) {
-    const dataRows: number[] = [];
-    for (let r = headerEnd; r < R; r++) {
-      const own = new Set<ODLTableCell>();
-      for (let c = 0; c < C; c++) {
-        const cell = grid[r][c];
-        if (cell && cell["row number"] - 1 === r) own.add(cell);
-      }
-      if (!own.size) continue;
-      // A NUMBERED-NOTES BAND IS NOT A ROW OF THIS TABLE. It is drawn inside
-      // the same ruled box — one cell across nearly every column, below the
-      // data — and it holds a sentence, not a value. Counting it as a data row
-      // poisons EVERY column at once, because that one cell is what
-      // grid[r][c] returns for all of them: measured on 03__vol1__27 page 13,
-      // the GRILLES/REGISTERS/DIFFUSERS SCHEDULE's own "1. SEE FLOOR PLANS
-      // FOR..." band made column 0 (a clean 1S/2S/1R/2R/1E) fail the key test
-      // along with all eight others, and the table stayed refused. Same shape
-      // the header loop already recognises above; recognised the same way.
-      if (own.size === 1 && ([...own][0]["column span"] || 1) >= C - 1) continue;
-      if (![...own].some((cl) => odlCellText(cl).trim())) continue;
-      dataRows.push(r);
-    }
-    let evidenced = -1;
-    if (dataRows.length >= 2) {
-      for (let c = 0; c < C && evidenced < 0; c++) {
-        // A VALUE COUNTS ONCE, ON THE ROW THAT OWNS IT. grid[r][c] returns the
-        // same cell for every row a rowspan covers, so reading it directly
-        // counts a two-row-tall value twice and the column fails its own
-        // distinctness test on a repeat that was never printed twice.
-        // Measured on 03__vol1__27 page 14's MODULAR HEAT RECOVERY CHILLER
-        // SCHEDULE, whose MODULE column reads 1,2,3,4,5 on the page and came
-        // back here as 1,1,2,3,4,5,5. Ownership is the rule the header loop
-        // and maxCovered already use above; use it here too.
-        const vals: string[] = [];
-        for (const r of dataRows) {
-          const cell = grid[r][c];
-          if (!cell || cell["row number"] - 1 !== r) continue;
-          const v = norm(odlCellText(cell)).replace(/\s+/g, " ").trim();
-          if (v) vals.push(v);
-        }
-        // …and a row that owns no cell here is a continuation of the row
-        // above, not a row missing its key, so the completeness bar has to
-        // leave room for them. Same schedule: 5 modules across 7 grid rows,
-        // two of which exist only to carry rowspan-5 cells that start there.
-        if (vals.length < 2 || vals.length < dataRows.length * 0.5) continue;
-        if (!vals.every(printedKeyOk)) continue;
-        if (new Set(vals).size !== vals.length) continue; // repeats: not a key
-        evidenced = c;
-      }
-    }
+    const evidenced = findEvidencedKeyColumn();
     if (evidenced >= 0) buildRows(evidenced, true);
   }
   if (!rows.length) return refuse(`no keyed data rows (kind ${kind}, key column ${keyColIdx < 0 ? "col 0" : JSON.stringify(headers[keyColIdx])})`);
