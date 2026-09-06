@@ -16,3 +16,12 @@ opentakeoff-corpus/raw/
 opentakeoff-corpus/takeoffs/**/runs/
 opentakeoff-corpus/bulk/
 opentakeoff/mcp/scripts/_tmp_*/
+
+# The 30-document HVAC/BAS benchmark lives on its own branch as Git LFS
+# objects (codex/symbol-sweep-corpus-accuracy). It is materialised here to run
+# against, never committed onto main: the PDFs are 526 MB and committing them
+# as plain blobs would put every byte in this history permanently. To get them:
+#   git lfs fetch origin refs/remotes/origin/codex/symbol-sweep-corpus-accuracy
+#   git checkout <that branch> -- "HVAC BAS Benchmark Collection"
+# then replace each pointer with .git/lfs/objects/<oid[:2]>/<oid[2:4]>/<oid>.
+HVAC BAS Benchmark Collection/
