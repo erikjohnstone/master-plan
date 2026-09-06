@@ -5810,7 +5810,24 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
       return { table: null, nextIdx: toIdx };
     }
   }
-  const table: ScheduleTable = { kind, sheet: sheet.key, title, headers: anchors.map((a) => a.label), rows: out, region: region!, anchors };
+  // THE PRINTED TITLE IS PART OF THE TABLE. `region` here is built from the
+  // header spans plus every token accepted into a cell, so it starts at the
+  // HEADER ROW — and the schedule's own printed caption, sitting above it, is
+  // outside the box. The estimator sees a highlight that excludes the words
+  // "BRANCH CIRCUIT WIRING SCHEDULE (Cu)" and reasonably reads that as the
+  // wrong table. The title's bbox is right here, already found and already
+  // measured (see the caption hunt above); it was simply never unioned in.
+  // adoptContinuationRows has always done this — that inconsistency was the
+  // tell.
+  //
+  // Deliberately AFTER the ANOMALOUS_REGION_HEIGHT_RATIO guard: that guard
+  // reads region[3] against the header band, and a title union only ever
+  // moves region[1], but only if it happens here rather than earlier.
+  const titleBox = title?.bbox;
+  const withTitle = region && Array.isArray(titleBox) && titleBox.length === 4 && titleBox.every((v) => Number.isFinite(v))
+    ? merge(region, titleBox as Bbox)
+    : region;
+  const table: ScheduleTable = { kind, sheet: sheet.key, title, headers: anchors.map((a) => a.label), rows: out, region: withTitle!, anchors };
   if (rotated) table.rotated_headers = true;
   return { table, nextIdx: toIdx };
 }
@@ -7212,6 +7229,11 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
 
     let region: Bbox | null = banded.region;
     for (const t of block.tokens) region = region ? merge(region, bboxOf(t)) : bboxOf(t);
+    // Same as extractTableAt: the printed caption belongs inside the box a
+    // person is shown. adoptContinuationRows already did this; these two
+    // constructors did not, and the inconsistency is what surfaced as a
+    // highlight that excludes its own schedule's title.
+    if (title && region) region = merge(region, title.bbox);
     const table: ScheduleTable = {
       kind: "reference", sheet: sheet.key, title,
       headers: anchors.map((a) => a.label), rows: banded.out, region: region!, anchors,
@@ -7283,6 +7305,19 @@ function mergeContinuation(base: ScheduleTable, frag: ScheduleTable): void {
   for (const r of frag.rows) if (r.building == null && frag.building != null) r.building = frag.building;
   base.parts.push({ sheet: frag.sheet, title: frag.title?.text || "", rows: frag.rows.length, region: frag.region, ...(frag.rotated_headers ? { rotated_headers: true } : {}) });
   base.rows.push(...frag.rows);
+  // ON THE SAME SHEET ONLY. A continued schedule is one table with one
+  // `region`, and a same-sheet continuation (a CONT'D block further down the
+  // page) is genuinely part of that one rectangle — it was never extended, so
+  // the box stopped at the first fragment.
+  //
+  // Never across sheets. Unioning two sheets' boxes produces a rectangle that
+  // describes no page, and it would then be painted on base.sheet — where
+  // agentHighlightCitation's bounds check turns it into a silent "Could not
+  // show that" and the ability to show a continued table is LOST rather than
+  // improved. Cross-sheet parts each carry their own region here (see
+  // base.parts above); showing the right one is the panel's job, not the
+  // geometry's.
+  if (frag.sheet === base.sheet) base.region = merge(base.region, frag.region);
 }
 
 /** A header-less continuation: the sheet repeats the TITLE but not the header
