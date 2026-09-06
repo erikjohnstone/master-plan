@@ -186,7 +186,8 @@ def pick(regions: list, t: dict):
                 best, bestov = r, xo
         if parts:
             lines = [ln for r in parts for ln in r[1]]
-            return (" ".join(r[0] for r in parts), lines, best[2] if best else parts[0][2])
+            cellrows = [cr for r in parts for cr in r[3]]
+            return (" ".join(r[0] for r in parts), lines, best[2] if best else parts[0][2], cellrows)
     title = norm(gt_title(t))
     if title:
         for r in regions:
@@ -207,8 +208,9 @@ def reader_regions(pdf: Path, page: int) -> list:
         byrow = defaultdict(list)
         for b, ws in cells.items():
             byrow[round(b[1])].append((b[0], cell_text(ws)))
-        lines = [" ".join(x for _p, x in sorted(v)) for _k, v in sorted(byrow.items())]
-        out.append((norm(" ".join(lines)), lines, tuple(g["bbox"])))
+        rows = [[x for _p, x in sorted(v)] for _k, v in sorted(byrow.items())]
+        lines = [" ".join(r) for r in rows]
+        out.append((norm(" ".join(lines)), lines, tuple(g["bbox"]), rows))
     return out
 
 
@@ -220,12 +222,13 @@ def pipeline_regions(pdf: Path, page: int) -> list:
     g = graph_for(one_page(pdf, page))
     out = []
     for tb in g.get("tables", []):
-        lines = [" ".join(c.get("text") or "" for _h, c in (row.get("cells") or {}).items())
-                 for row in (tb.get("rows") or [])]
+        rows = [[c.get("text") or "" for _h, c in (row.get("cells") or {}).items()]
+                for row in (tb.get("rows") or [])]
+        lines = [" ".join(r) for r in rows]
         head = " ".join(tb.get("headers") or [])
         title = ((tb.get("title") or {}) or {}).get("text") or ""
         allt = norm(" ".join([title, head] + lines))
-        out.append((allt, lines, tuple(v / 2.0 for v in tb["region"])))
+        out.append((allt, lines, tuple(v / 2.0 for v in tb["region"]), rows))
     return out
 
 
@@ -281,6 +284,30 @@ def main() -> int:
                     tot[e]["tables"] += 1
                     if hit:
                         tot[e]["found"] += 1
+                    # EXACT CELL VALUES, formatting included. Token recall
+                    # answers "did we get the values"; it splits on whitespace
+                    # and commas, so "1, 2" and "1,2" are identical to it and
+                    # it cannot see a cell boundary at all. This compares the
+                    # ground truth's own VALUES against the extracted row's own
+                    # CELLS — one cell, one value, in order — which is the
+                    # question an estimator actually asks. Only the 152 tables
+                    # whose truth records pipe-delimited values can be scored
+                    # this way; the printed-line rows have no cell boundaries
+                    # to compare against.
+                    if isinstance(t.get("columns"), str) and "|" in t["columns"]:
+                        for wr in want:
+                            vals = [norm(x) for x in wr.split("|") if x.strip()]
+                            if not vals:
+                                continue
+                            tot[e]["cellall"] += len(vals)
+                            if not hit:
+                                continue
+                            got = max((lcs(vals, [norm(c) for c in cr if c.strip()])
+                                       for cr in hit[3]), default=0)
+                            tot[e]["cellok"] += got
+                            tot[e]["cellrows"] += 1
+                            if got == len(vals):
+                                tot[e]["cellrows_ok"] += 1
                     ordered = isinstance(t.get("columns"), str) and "|" in t["columns"]
                     rule = lcs if ordered else bag
                     rows_ok = tk = tkall = 0
@@ -321,6 +348,12 @@ def main() -> int:
         print(f"    values recovered        {s['tok']}/{s['tokall']}  ({100.0*s['tok']/max(1,s['tokall']):.1f}%)")
         print(f"    (other ruler)           rows {s['alt_rows_ok']}/{s['rows']}"
               f"  values {s['alt_tok']}/{s['tokall']}  ({100.0*s['alt_tok']/max(1,s['tokall']):.1f}%)")
+        if s["cellall"]:
+            print(f"    EXACT CELL VALUES       {s['cellok']}/{s['cellall']}  "
+                  f"({100.0*s['cellok']/max(1,s['cellall']):.1f}%)   "
+                  f"rows exact {s['cellrows_ok']}/{s['cellrows']}")
+            print(f"      (152 pipe-delimited tables only — one cell, one value, in order,"
+                  f" formatting significant)")
         if s["engine_fail"]:
             print(f"    pages the engine could not process  {s['engine_fail']}")
     print("ALLDONE")

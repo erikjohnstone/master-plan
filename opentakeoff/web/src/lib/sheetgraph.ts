@@ -9577,7 +9577,26 @@ export function scheduleTableFromODL(
   // nothing at all — once more against a key column the TABLE ITSELF
   // evidences. See the fallback below the loop for why.
   const emitted = new Set<number>();
-  const buildRows = (keyCol: number, printedKeys: boolean, only?: Set<number>): void => {
+  /** The printed key this row carries under `cols` — one column, or several
+   * joined, when no single column of the table is unique. Ownership of the
+   * FIRST column is required (a continuation row is not its own row); the rest
+   * are read wherever they sit, so a value shared down a rowspan still
+   * qualifies the row it belongs to. */
+  const printedKeyAt = (r: number, cols: number[]): string | null => {
+    const lead = grid[r][cols[0]];
+    if (!lead || lead["row number"] - 1 !== r) return null;
+    const parts: string[] = [];
+    for (const c of cols) {
+      const cell = grid[r][c];
+      const v = cell ? norm(odlCellText(cell)).replace(/\s+/g, " ").trim() : "";
+      if (v) parts.push(v);
+    }
+    const key = parts.join(" ").trim();
+    return key ? key : null;
+  };
+
+  const buildRows = (keyCols: number[], printedKeys: boolean, only?: Set<number>): void => {
+    const keyCol = keyCols[0];
   for (let r = headerEnd; r < R; r++) {
     if (only && !only.has(r)) continue;
     const seen = new Set<ODLTableCell>();
@@ -9602,10 +9621,10 @@ export function scheduleTableFromODL(
     // mint a second row under the key of the row above — the duplicate-key
     // shape that becomes an AMBIGUOUS refusal downstream, manufactured here
     // out of a cell the sheet drew once.
+    let printed: string | null = null;
     if (printedKeys) {
-      const keyCell = grid[r][keyCol];
-      if (!keyCell || keyCell["row number"] - 1 !== r) continue;
-      const printed = norm(odlCellText(keyCell)).replace(/\s+/g, " ").trim();
+      printed = printedKeyAt(r, keyCols);
+      if (!printed) continue;
       if (rows.some((existing) => existing.key === printed)) continue;
     }
     const rawKey = texts[keyCol] || "";
@@ -9619,7 +9638,7 @@ export function scheduleTableFromODL(
     // REPLACED the geometric extractor's own correct, fuller read.
     const filledCells = texts.filter((s: string) => s.trim()).length;
     const keyRes = printedKeys
-      ? (printedKeyOk(rawKey) ? { key: norm(rawKey).replace(/\s+/g, " ").trim() } : null)
+      ? (printed && printedKeyOk(printed) ? { key: printed } : null)
       : rowKeyOf(rawKey, kind === "room-finish" ? "room-finish" : kind === "equipment" ? "equipment" : "finish", selfEvidenced, false, { inBand: filledCells, anchors: C });
     if (!keyRes) continue; // no recognizable row key — refuse rather than mint a fake row
     const cells: Record<string, TableCell> = {};
@@ -9686,7 +9705,7 @@ export function scheduleTableFromODL(
     if (![...own].some((cl) => odlCellText(cl).trim())) continue;
     dataRows.push(r);
   }
-  const findEvidencedKeyColumn = (): number => {
+  const findEvidencedKeyColumn = (): number[] => {
     let evidenced = -1;
     if (dataRows.length >= 2) {
       for (let c = 0; c < C && evidenced < 0; c++) {
@@ -9715,11 +9734,57 @@ export function scheduleTableFromODL(
         evidenced = c;
       }
     }
-    return evidenced;
+    if (evidenced >= 0) return [evidenced];
+
+    // NO SINGLE COLUMN IS UNIQUE — TWO OF THEM MAY BE.
+    //
+    // Some schedules genuinely have no one column that names a row. Measured
+    // on 12__vol2__028 page 1's NOISE CONTROL DUCT SILENCER SCHEDULE: QTY.
+    // reads "2","1","1"…, and LOCATION & SERVES, the column a person would
+    // call the row's name, prints "GROUP REHEARSAL 123 - SUPPLY" three
+    // separate times because three silencers serve that duct. Neither is a
+    // key, so the table was refused whole and an older extractor's 16x8 read
+    // of an 11-column schedule stood in the graph in its place.
+    //
+    // Pairing LOCATION & SERVES with AIR FLOW makes all 15 rows distinct. That
+    // is precisely what resolveKeyCollisions already does further down this
+    // function — compose the key from a second column that separates the rows
+    // — restricted there to headers named NUMBER/TAG/MARK/ID. Here the header
+    // names nothing useful, so the column is chosen by the same structural
+    // evidence as the single-column case: the pair must make EVERY row
+    // distinct. The no-duplicate-keys invariant is what protects the
+    // AMBIGUOUS-refusal path downstream, and a composite key preserves it
+    // rather than trading it away.
+    //
+    // Leftmost-first on both halves, so the key reads the way the sheet does.
+    for (let c1 = 0; c1 < C; c1++) {
+      const lead: string[] = [];
+      for (const r of dataRows) {
+        const cell = grid[r][c1];
+        if (!cell || cell["row number"] - 1 !== r) continue;
+        const v = norm(odlCellText(cell)).replace(/\s+/g, " ").trim();
+        if (v) lead.push(v);
+      }
+      if (lead.length < 2 || lead.length < dataRows.length * 0.5) continue;
+      if (!lead.every(printedKeyOk)) continue;
+      for (let c2 = 0; c2 < C; c2++) {
+        if (c2 === c1) continue;
+        const keys: string[] = [];
+        for (const r of dataRows) {
+          const k = printedKeyAt(r, [c1, c2]);
+          if (k) keys.push(k);
+        }
+        if (keys.length !== lead.length) continue;
+        if (!keys.every(printedKeyOk)) continue;
+        if (new Set(keys).size !== keys.length) continue;
+        return [c1, c2];
+      }
+    }
+    return [];
   };
 
   const strictKeyCol = keyColIdx >= 0 ? keyColIdx : 0;
-  buildRows(strictKeyCol, false);
+  buildRows([strictKeyCol], false);
 
   // WHEN THE STRICT RULE FAILS MOST OF A TABLE, IT IS THE WRONG RULE HERE.
   //
@@ -9744,7 +9809,7 @@ export function scheduleTableFromODL(
     rows.length = 0;
     emitted.clear();
     const evidenced = findEvidencedKeyColumn();
-    if (evidenced >= 0) buildRows(evidenced, true);
+    if (evidenced.length) buildRows(evidenced, true);
     if (rows.length <= strictRows.length) {
       rows.length = 0;
       rows.push(...strictRows);
@@ -9818,13 +9883,13 @@ export function scheduleTableFromODL(
   // what protects the AMBIGUOUS-refusal path downstream.
   if (rows.length >= 3 && emitted.size < dataRows.length) {
     const missing = new Set(dataRows.filter((r) => !emitted.has(r)));
-    if (missing.size) buildRows(strictKeyCol, true, missing);
+    if (missing.size) buildRows([strictKeyCol], true, missing);
   }
 
 
   if (!rows.length) {
     const evidenced = findEvidencedKeyColumn();
-    if (evidenced >= 0) buildRows(evidenced, true);
+    if (evidenced.length) buildRows(evidenced, true);
   }
   if (!rows.length) return refuse(`no keyed data rows (kind ${kind}, key column ${keyColIdx < 0 ? "col 0" : JSON.stringify(headers[keyColIdx])})`);
   const promotedHeaders = promoteLeadingEngineeringUnits(headers, rows);
