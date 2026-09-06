@@ -331,6 +331,14 @@ export async function runVectorTakeoffPipeline(
     notes: [],
   };
 
+  // Time every stage. See VectorPipelineReport.stage_ms for why.
+  const stageMs: Record<string, number> = (report.stage_ms = {});
+  const timed = async <T>(label: string, fn: () => Promise<T> | T): Promise<T> => {
+    const t0 = Date.now();
+    try { return await fn(); }
+    finally { stageMs[label] = (stageMs[label] ?? 0) + (Date.now() - t0); }
+  };
+
   const stats: MergeExtractedStats = { recovered: 0, added: 0 };
   const touched = new Set<string>();
   const buildings = new Set(g.buildings);
@@ -359,9 +367,11 @@ export async function runVectorTakeoffPipeline(
   const contexts0 = contexts.filter((ctx) => isScheduleTarget(ctx, hooks));
   if (vgMode !== "off" && vectorGridAvailable()) {
     report.layers_run.push(`L1.8:vectorgrid(${vgMode})`);
-    for (const ctx of contexts0) {
-      await runL2VectorGridForSheet(g, ctx, buildings, stats, touched, report, vgMode);
-    }
+    await timed("L1.8:vectorgrid", async () => {
+      for (const ctx of contexts0) {
+        await runL2VectorGridForSheet(g, ctx, buildings, stats, touched, report, vgMode);
+      }
+    });
   }
 
   // L2 ODL — the fallback. Skipped entirely when every schedule-target sheet
@@ -377,7 +387,7 @@ export async function runVectorTakeoffPipeline(
   } else if (!uncovered.length) {
     report.layers_run.push("L2:ODL(not needed)");
   } else {
-    await hooks.runODL(g);
+    await timed("L2:ODL", () => hooks.runODL(g));
     report.layers_run.push(`L2:ODL(fallback on ${uncovered.length}/${contexts0.length} sheets)`);
   }
 
@@ -409,20 +419,22 @@ export async function runVectorTakeoffPipeline(
 
   // L3.5 topology
   report.layers_run.push("L3.5:topology");
-  for (const ctx of contexts) runL35Topology(g, ctx, report);
+  await timed("L3.5:topology", () => { for (const ctx of contexts) runL35Topology(g, ctx, report); });
 
   // L4 cross-source dedup + equivalent collapse
   report.layers_run.push("L4:reconcile-dedup");
-  const collapsed = collapseEquivalentPrimaryTables(g.tables);
-  const deduped = dedupCrossSourceTables(g);
+  const collapsed = await timed("L4:reconcile-dedup", () => collapseEquivalentPrimaryTables(g.tables));
+  const deduped = await timed("L4:reconcile-dedup", () => dedupCrossSourceTables(g));
   if (collapsed) report.notes.push(`L4: collapsed ${collapsed} equivalent primary table read(s).`);
   if (deduped) report.notes.push(`L4: deduped ${deduped} overlapping weaker table read(s).`);
 
   // L4.5 OCR / VLM assist
   report.layers_run.push("L4.5:ocr-vlm-assist");
-  for (const ctx of contexts) {
-    await runL45OcrAssist(g, ctx, hooks, buildings, stats, touched, report);
-  }
+  await timed("L4.5:ocr-vlm-assist", async () => {
+    for (const ctx of contexts) {
+      await runL45OcrAssist(g, ctx, hooks, buildings, stats, touched, report);
+    }
+  });
 
   // L5 classification runs at compile_corpus_takeoff (header geometry + mark shape).
   report.layers_run.push("L5:classify@compile");

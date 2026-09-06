@@ -200,13 +200,32 @@ async function runOne(rec, wantTitle) {
     // carry the rows the truth says are there?
     if (uiGraph && !uiGraph.error) {
       const all = ((rec.modules || {}).schedules || {}).tables || [];
+      // MATCHING BY PRINTED TITLE ALONE REPORTS THE SCORER'S OWN LIMITS AS
+      // PRODUCT FAILURES. Three real cases from the first four sets:
+      //   - 01__vol2__001's truth carries "PIPING CONSTRUCTION SCHEDULE -
+      //     merged buried chilled water row", which is the transcriber's note,
+      //     not a printed title. The UI has ONE table with 3+1 = 4 rows.
+      //   - 03__vol1__27's "MODULAR HEAT RECOVERY CHILLER SCHEDULE —
+      //     ACCESSORIES" is printed simply "ACCESSORIES".
+      //   - 03__vol1__27 p13's SEISMIC AND VIBRATION CONTROL is extracted with
+      //     all 26 rows and title null, because its caption sits outside the
+      //     ruled box. That one IS a product bug, but it is a TITLE bug, and
+      //     scoring it as a missing table hides what actually happened.
+      // So: title first, then the same page with a matching row count.
       const byTitle = new Map();
+      const bySheet = new Map();
       for (const ut of uiGraph.titles || []) {
+        const pageNo = Number(String(ut.sheet || "").split("#").pop());
+        if (Number.isFinite(pageNo)) {
+          if (!bySheet.has(pageNo)) bySheet.set(pageNo, []);
+          bySheet.get(pageNo).push(ut);
+        }
         const k = norm(ut.title);
         if (!k) continue;
         if (!byTitle.has(k)) byTitle.set(k, []);
         byTitle.get(k).push(ut);
       }
+      const claimed = new Set();
       let found = 0, rowsOk = 0, scored = 0, rowsWant = 0, rowsGot = 0;
       const misses = [];
       for (const gt of all) {
@@ -215,10 +234,20 @@ async function runOne(rec, wantTitle) {
         scored++;
         const want = (gt.rows || []).length;
         rowsWant += want;
-        const cands = byTitle.get(gtt) || [];
+        let cands = (byTitle.get(gtt) || []).filter((c) => !claimed.has(c));
+        let how = "title";
+        if (!cands.length) {
+          // same page, unclaimed, row count within one — a titleless or
+          // differently-captioned read of the very table the truth means
+          const near = (bySheet.get(gt.page) || [])
+            .filter((c) => !claimed.has(c) && Math.abs(c.rows - want) <= 1);
+          if (near.length) { cands = near; how = "page+rows"; }
+        }
         if (!cands.length) { misses.push(`NOT FOUND: ${gtTitle(gt)} (p${gt.page}, ${want} rows)`); continue; }
         found++;
         const best = cands.reduce((a, b) => (Math.abs(b.rows - want) < Math.abs(a.rows - want) ? b : a));
+        claimed.add(best);
+        if (how !== "title") misses.push(`TITLE MISSING (matched by ${how}): ${gtTitle(gt)} (p${gt.page}) -> ui title ${JSON.stringify(best.title)}`);
         rowsGot += Math.min(best.rows, want);
         if (best.rows === want) rowsOk++;
         else misses.push(`ROWS ${best.rows} vs ${want}: ${gtTitle(gt)} (p${gt.page})`);

@@ -5714,6 +5714,11 @@ export class Session {
       // text markers are still read everywhere.
       let vecBudget = 30_000_000; // segments across the whole hunt
       let skippedHeavy = 0;
+      // L0/L1 is not free and was never timed. Measured through the UI on a
+      // 31-sheet set: 26 minutes of single-threaded compute before the first
+      // question could be asked, of which the table extractor was 9%. The rest
+      // was here and in the stack below, and had to be inferred from `ps`.
+      const tSpans = Date.now();
       for (const s of this.sheets.values()) {
         if (!s.spans) s.spans = textSpans(s.page);
         const spans = s.spans.map((t) => ({ str: t.str, x: t.x0, y: t.y0, w: t.x1 - t.x0, h: t.y1 - t.y0, ...(t.rot ? { rot: t.rot } : {}) }));
@@ -5734,9 +5739,17 @@ export class Session {
         inputs.push({ key: s.key, sheet_number: s.sheetNumber, spans, ...(segs?.length ? { segs } : {}) });
         if (segs?.length) this.pipelineSegs.set(s.key, segs);
       }
+      const spansMs = Date.now() - tSpans;
+      const tBuild = Date.now();
       this.graph = buildSheetGraph(inputs);
+      const buildMs = Date.now() - tBuild;
       if (skippedHeavy) this.graph.notes.push(`drawn-delta hunt skipped on ${skippedHeavy} sheet(s) — the set's linework exceeded the vector budget; text revision markers (Δ2 / REV 2) were still read everywhere`);
+      const tStack = Date.now();
       await this.runVectorTakeoffStack(this.graph);
+      this.graph.notes.push(
+        `timing: L0/L1 spans+segments ${spansMs}ms over ${inputs.length} sheet(s)`
+        + ` · L2 buildSheetGraph ${buildMs}ms · L1.8-L5 stack ${Date.now() - tStack}ms`,
+      );
     }
     return this.graph;
   }

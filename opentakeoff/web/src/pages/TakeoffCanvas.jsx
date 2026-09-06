@@ -7614,7 +7614,15 @@ export default function TakeoffCanvas() {
           table_count: g.tables?.length,
           titles: (g.tables || []).map((t) => ({
             sheet: t.sheet,
-            title: t.title?.text || t.title || null,
+            // A TITLE IS A STRING OR IT IS NOTHING. `t.title?.text || t.title`
+            // looks right and is not: when a table's title cell is present but
+            // its text is EMPTY, `t.title?.text` is "" — falsy — so the
+            // expression fell through and handed back the whole
+            // {sheet, text, bbox} object where every caller expects a string.
+            // Real, found by driving the UI: 03__vol1__27 sheet 16. This is the
+            // agent's own tool output, so anything doing .toUpperCase() on it
+            // throws, and a scorer comparing titles silently never matches.
+            title: (typeof t.title === "string" ? t.title : (t.title?.text || "")) || null,
             rows: (t.rows || []).length,
             // opts.full: real verification (per-set cell-level audits, UI-path
             // spot-checks) needs the actual header row, not just a row count —

@@ -7913,6 +7913,16 @@ export interface VectorPipelineReport {
     declined_regions?: string[];
     ms: number;
   };
+  /** Wall-clock milliseconds per pipeline stage.
+   *
+   * Added because a real question could not be answered without it: a 31-sheet
+   * set uploaded through the UI took 26 minutes of single-threaded compute
+   * before the estimator could ask anything, and the only timing the report
+   * carried was vectorgrid's own — which turned out to be 9% of it. Everything
+   * else had to be inferred from `ps`. You cannot tune what you do not
+   * measure, and an optimisation argued from a hunch is how this project has
+   * shipped regressions before. */
+  stage_ms?: Record<string, number>;
 }
 
 export interface SheetGraph {
