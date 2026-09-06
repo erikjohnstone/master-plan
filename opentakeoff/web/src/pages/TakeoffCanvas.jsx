@@ -152,6 +152,9 @@ import { libFields, matFieldOverridden, libPushPatch, libRevertPatch, libEntryPa
 import RfiPanel from "../components/RfiPanel.jsx";
 import StampPanel from "../components/StampPanel.jsx";
 import ImportSchedulePanel from "../components/ImportSchedulePanel.jsx";
+import SchedulesPanel from "../components/SchedulesPanel.jsx";
+import { tableTitleText as scheduleTitleText, rowSheet as scheduleRowSheet } from "../lib/scheduleBrowse.js";
+import { sha256Hex, remapGraphSheetKeys } from "../lib/graphKeys.js";
 // Roll goods (#136): lib/rollgoods.js is the pure packing engine (untouched
 // here), lib/rollTakeoff.js the pure shapes→engine bridge; RollPanel is the
 // docked diagram/reorder desk. Cut edits commit through the rollcut command.
@@ -821,6 +824,13 @@ export default function TakeoffCanvas() {
   const [indexProgress, setIndexProgress] = useState({ done: 0, total: 0, phase: "idle" }); // idle | text | ready
   // Session+ODL sheet graph prewarm (WP5) — warms after text index, non-blocking.
   const [graphPrewarm, setGraphPrewarm] = useState({ phase: "idle" }); // idle | warming | ready | error
+  // THE SCHEDULES ARE A PRODUCT OBJECT, NOT A SIDE EFFECT. Indexing already
+  // found every table, every row, and a bbox on every cell — and the only
+  // evidence of it was 22 characters of status text. `graphTables` is the
+  // browsable copy; it is filled from the SAME cache the agent reads, so the
+  // panel costs no fetch and can never disagree with what a tool would say.
+  const [schedulesOpen, setSchedulesOpen] = useState(false);
+  const [graphTables, setGraphTables] = useState([]);
   const graphPrewarmSigRef = useRef("");
   const graphPrewarmBusyRef = useRef(false);
   const commitMsg = commitMsgState.text;   // misnamed for history; just the message bar
@@ -6991,8 +7001,18 @@ export default function TakeoffCanvas() {
     const names = [...new Set(sheets.map((s) => s.name).filter(Boolean))];
     if (!names.length) return null;
     const fd = new FormData();
+    // The endpoint spools uploads CONTENT-ADDRESSED (<sha256>.pdf) so its ODL
+    // and graph caches hit — deliberate, and worth minutes per re-open. The
+    // cost is that every sheet key it hands back is a hash, while every sheet
+    // key in this canvas is the real filename, and the two never compare
+    // equal. Found by clicking a schedule in the Schedules panel: "Sheet
+    // d2e19679…da1.pdf#2 not found." Anything matching a graph table to a
+    // canvas sheet had the same hole. We have the bytes AND the name here, so
+    // this is the one place that can rebuild what the spool discarded.
+    const shaToName = new Map();
     for (const name of names) {
       const bytes = await store.loadPdfData(name);
+      try { shaToName.set(await sha256Hex(bytes), name); } catch { /* no WebCrypto: keys stay as sent */ }
       fd.append("file", new Blob([bytes], { type: "application/pdf" }), name);
     }
     const res = await fetch("/__ot/sheet-graph", { method: "POST", body: fd });
@@ -7000,7 +7020,7 @@ export default function TakeoffCanvas() {
       const err = await res.json().catch(() => ({}));
       throw new Error(err.error || `sheet-graph HTTP ${res.status}`);
     }
-    return await res.json();
+    return remapGraphSheetKeys(await res.json(), shaToName);
   }
 
   /** Shared Session plan tools — same path as MCP (WP5). Falls back to local port when endpoint unavailable. */
@@ -7208,6 +7228,24 @@ export default function TakeoffCanvas() {
     })();
     return () => { cancelled = true; };
   }, [sheets]);
+
+  // Feed the Schedules panel from the SAME cache. Deliberately not its own
+  // fetch: two readers of one index that could disagree is exactly the class of
+  // bug where the panel shows a table the agent then says it cannot find.
+  // ensureAgentGraph() is cache-first, so this is a read, not a rebuild.
+  useEffect(() => {
+    if (!sheets.length) { setGraphTables([]); return; }
+    if (graphPrewarm.phase !== "ready" && !schedulesOpen) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const g = await ensureAgentGraph();
+        if (!cancelled) setGraphTables(Array.isArray(g?.tables) ? g.tables : []);
+      } catch { if (!cancelled) setGraphTables([]); }
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sheets, graphPrewarm.phase, schedulesOpen]);
 
   async function ensureAgentGraph() {
     const sig = sheets.map((s) => `${s.name}:${s.rev ?? 1}`).join("|");
@@ -7430,6 +7468,19 @@ export default function TakeoffCanvas() {
       return next;
     });
     setAgentCitations((list) => list.filter((c) => c.source !== "takeoff_cite"));
+  }
+
+  // The Schedules panel paints with its OWN source, so browsing never disturbs
+  // the compile's provenance highlights and closing the panel takes its own
+  // ink with it. Same discipline as takeoff_cite: one source string buys a
+  // whole lifecycle, no new state.
+  function clearScheduleBrowseHighlights() {
+    setMarkups((ms) => {
+      const next = ms.filter((m) => m.source !== "schedule_browse");
+      agentStateRef.current = { ...agentStateRef.current, markups: next };
+      return next;
+    });
+    setAgentCitations((list) => list.filter((c) => c.source !== "schedule_browse"));
   }
 
   /** Feed finished compile into TakeoffDataPanel (Takeoff + Workflow data tabs). */
@@ -7708,6 +7759,9 @@ export default function TakeoffCanvas() {
         proposals: () => agentProposals,
         acceptAll: () => acceptAllVisibleAgentProposals(),
         shapes: () => shapes,
+        markups: () => markups,
+        graphTables: () => graphTables,
+        openSchedules: () => setSchedulesOpen(true),
       },
     };
   });
@@ -12376,6 +12430,7 @@ export default function TakeoffCanvas() {
           {panelBtn(() => setLeftTab((t) => (t === "stamp" ? null : "stamp")), "stamp", "Stamps — reusable annotations dropped click-to-place", leftTab === "stamp", stampLib.stamps.length)}
           {panelBtn(() => setLeftTab((t) => (t === "rfi" ? null : "rfi")), "rfi", "RFI register — raise, track, and export Requests For Information", leftTab === "rfi", rfis.length)}
           {panelBtn(toggleTakeoffs, "takeoffs", "Takeoffs — conditions + running totals", takeoffsOpen, visibleShapes.length)}
+          {panelBtn(() => setSchedulesOpen((o) => !o), "spec", "Schedules — every table the index found, with its rows; click any tag to show it on the drawing", schedulesOpen, graphTables.length)}
           {panelBtn(() => setAgentOpen((o) => !o), "target", "Agent — describe a takeoff; it stages dashed proposals you accept or reject (bring your own AI key)", agentOpen, agentProposals.length)}
           {rollByCond.size > 0 && panelBtn(() => setRollPanelOpen((o) => !o), "roll", "Roll goods — the cut diagram, cutting order, and figured order footage", rollPanelOpen, rollByCond.size)}
           {layerEntries.length > 0 && panelBtn(() => setLayersOpen((o) => !o), "layers", "PDF layers — what this drawing's own layer table states each ink is; set what One-Click treats as wall and what it ignores", layersOpen, layerEntries.reduce((n, e) => n + e.layers.length, 0))}
@@ -12427,6 +12482,41 @@ export default function TakeoffCanvas() {
             per-condition cut diagrams (to scale, numbered), drag-to-reorder with
             the engine re-pack, the overlay/edit toggles, and the figured order
             lines. A pure view — layout state lives on the shapes (rollcut). */}
+        {schedulesOpen && (
+          <SchedulesPanel
+            tables={graphTables}
+            prewarm={graphPrewarm}
+            indexing={indexProgress.phase === "text"}
+            sheetLabel={tabLabel}
+            onClose={() => { setSchedulesOpen(false); clearScheduleBrowseHighlights(); }}
+            // ONE paint path, the same one the Takeoff panel's cites use
+            // (agentHighlightCitation → flyToMarkup). A table paints its
+            // region; a row paints the union of its cells. A row cites the
+            // sheet its INK is on, which under a continuation is not the
+            // table's base sheet.
+            onPaint={async ({ kind, table, row, bbox }) => {
+              const sheet = kind === "row" ? scheduleRowSheet(table, row) : table.sheet;
+              const box = kind === "row" ? bbox : table.region;
+              if (!sheet || !Array.isArray(box) || box.length !== 4) {
+                setCommitMsg("That schedule has no geometry on the sheet to show.", "refusal");
+                return;
+              }
+              const result = await agentHighlightCitation({
+                sheet,
+                bbox_px: box,
+                row_key: kind === "row" ? (row.key || "") : "",
+                column: "",
+                table_title: scheduleTitleText(table),
+                value: "",
+                text: kind === "row" ? (row.key || "") : scheduleTitleText(table),
+                source: "schedule_browse",
+              });
+              if (result?.error) { setCommitMsg(`Could not show that: ${result.error}`, "refusal"); return; }
+              const markup = agentStateRef.current.markups.find((m) => m.id === result.id);
+              if (markup) flyToMarkup(markup);
+            }}
+          />
+        )}
         {rollPanelOpen && (
           <RollPanel
             layouts={[...rollByCond.entries()].map(([condId, ri]) => {
@@ -12772,16 +12862,27 @@ export default function TakeoffCanvas() {
           const fg = schedulesFailed ? "#FF9E8A" : indexing ? "var(--status-acc)" : "#9AF0C0";
           const track = "rgba(232,238,248,0.22)";
           const fill = schedulesFailed ? "#FF9E8A" : indexing ? "var(--status-acc)" : "#9AF0C0";
+          // THE CHIP IS THE WAY IN. It was a plain <span> with a tooltip:
+          // the app announced it had read every schedule in the set and gave
+          // the estimator nothing to click. It now opens the Schedules panel —
+          // including when the pass FAILED, because the panel is where the
+          // failure gets a full sentence instead of one shouted word.
+          const canOpen = !indexing;
           return (
             <span
-              title={tip}
+              title={canOpen ? `${tip}\n\nClick to open the Schedules panel.` : tip}
               data-index-progress
               data-phase={indexProgress.phase}
               data-done={indexProgress.done}
               data-total={indexProgress.total}
+              role={canOpen ? "button" : undefined}
+              tabIndex={canOpen ? 0 : undefined}
+              onClick={canOpen ? () => setSchedulesOpen(true) : undefined}
+              onKeyDown={canOpen ? (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSchedulesOpen(true); } } : undefined}
               style={{
                 marginLeft: 10, display: "inline-flex", alignItems: "center", gap: 8,
                 minWidth: 0, maxWidth: 320, color: fg, fontWeight: 600,
+                cursor: canOpen ? "pointer" : undefined,
               }}
             >
               <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
