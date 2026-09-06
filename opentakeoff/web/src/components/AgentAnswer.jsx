@@ -3,15 +3,43 @@
 // makes takeoffs unreadable — pipe tables and ** markers look like a dump.
 // This is a small, dependency-free subset aimed at estimator readability.
 
-function inlineMd(text) {
+import { useMemo } from "react";
+import CiteValue from "./CiteValue.jsx";
+import { buildCiteIndex, linkMarks, citeTitle } from "../lib/citeMatch.js";
+
+/** Turn the plain-text runs of an inline pass into clickable evidence.
+ *
+ *  Runs LAST and only over unformatted string slices, so it can never split a
+ *  <strong>/<em>/<code> node the markdown pass already built. A mark inside
+ *  bold text simply stays bold and unlinked — losing a link is fine, corrupting
+ *  the answer is not. */
+function citeNodes(str, cites, onOpenCitation, keyBase) {
+  if (!cites || cites.size === 0) return [str];
+  const segs = linkMarks(str, cites);
+  if (segs.length === 1 && !segs[0].citation) return [str];
+  return segs.map((seg, i) => (seg.citation ? (
+    <CiteValue
+      key={`${keyBase}-c${i}`}
+      text={seg.text}
+      cite={seg.citation}
+      onOpenCitation={onOpenCitation}
+      mono
+      weight={600}
+      title={citeTitle(seg.citation)}
+    />
+  ) : seg.text));
+}
+
+function inlineMd(text, cites, onOpenCitation) {
   const s = String(text || "");
   const nodes = [];
   // Bold **…**, then italic *…*, then inline code `…`, else plain.
   const re = /(\*\*([^*]+)\*\*|\*([^*]+)\*|`([^`]+)`)/g;
   let last = 0;
   let m;
+  const plain = (chunk, at) => nodes.push(...citeNodes(chunk, cites, onOpenCitation, at));
   while ((m = re.exec(s))) {
-    if (m.index > last) nodes.push(s.slice(last, m.index));
+    if (m.index > last) plain(s.slice(last, m.index), last);
     if (m[2] != null) nodes.push(<strong key={m.index}>{m[2]}</strong>);
     else if (m[3] != null) nodes.push(<em key={m.index}>{m[3]}</em>);
     else if (m[4] != null) {
@@ -23,7 +51,7 @@ function inlineMd(text) {
     }
     last = m.index + m[0].length;
   }
-  if (last < s.length) nodes.push(s.slice(last));
+  if (last < s.length) plain(s.slice(last), last);
   return nodes.length ? nodes : s;
 }
 
@@ -54,7 +82,7 @@ function parseTable(lines, start) {
   return { rows, next: i };
 }
 
-function blockNodes(raw) {
+function blockNodes(raw, cites, onOpenCitation) {
   const text = scrubEstimatorNoise(raw);
   const lines = text.replace(/\r\n/g, "\n").split("\n");
   const out = [];
@@ -75,7 +103,7 @@ function blockNodes(raw) {
     }
     out.push(
       <p key={key++} style={{ margin: "0 0 8px", fontSize: 13, lineHeight: 1.55 }}>
-        {inlineMd(joined)}
+        {inlineMd(joined, cites, onOpenCitation)}
       </p>,
     );
   };
@@ -90,7 +118,11 @@ function blockNodes(raw) {
     }
 
     // Evidence / automated gates — keep secondary, never look like the Answer.
-    if (/^\[(?:Evidence gate|Automated check|Loop nudge):/i.test(trimmed)) {
+    // Four alternatives, matching AgentPanel's META_LINE_RE exactly. This list
+    // had three: a [Workflow: …] line was routed to Technical steps by the
+    // panel but rendered here as an ordinary paragraph, so the two disagreed
+    // about what counts as machinery rather than answer.
+    if (/^\[(?:Evidence gate|Automated check|Loop nudge|Workflow):/i.test(trimmed)) {
       out.push(
         <div key={key++} style={{ margin: "6px 0", padding: "6px 8px", borderRadius: 6, background: "var(--paper)", color: "var(--ink-muted)", fontSize: 11, lineHeight: 1.45 }}>
           {trimmed.replace(/^\[|\]$/g, "")}
@@ -114,7 +146,7 @@ function blockNodes(raw) {
       const Tag = level === 1 ? "h3" : level === 2 ? "h4" : "h5";
       out.push(
         <Tag key={key++} style={{ margin: "10px 0 6px", fontSize: level === 1 ? 14.5 : 13.5, fontWeight: 700, lineHeight: 1.35, color: "var(--ink)" }}>
-          {inlineMd(title)}
+          {inlineMd(title, cites, onOpenCitation)}
         </Tag>,
       );
       i += 1;
@@ -133,7 +165,7 @@ function blockNodes(raw) {
                   <tr style={{ background: "var(--paper)" }}>
                     {header.map((cell, ci) => (
                       <th key={ci} style={{ textAlign: "left", padding: "6px 8px", borderBottom: "1px solid var(--ink-faint)", fontWeight: 700, whiteSpace: "nowrap" }}>
-                        {inlineMd(cell)}
+                        {inlineMd(cell, cites, onOpenCitation)}
                       </th>
                     ))}
                   </tr>
@@ -144,7 +176,7 @@ function blockNodes(raw) {
                   <tr key={ri}>
                     {row.map((cell, ci) => (
                       <td key={ci} style={{ padding: "5px 8px", borderBottom: "1px solid var(--ink-faint)", verticalAlign: "top", overflowWrap: "anywhere" }}>
-                        {inlineMd(cell)}
+                        {inlineMd(cell, cites, onOpenCitation)}
                       </td>
                     ))}
                   </tr>
@@ -169,7 +201,7 @@ function blockNodes(raw) {
       out.push(
         <ListTag key={key++} style={{ margin: "0 0 8px", paddingLeft: 18, fontSize: 13, lineHeight: 1.5 }}>
           {items.map((item, ii) => (
-            <li key={ii} style={{ marginBottom: 3 }}>{inlineMd(item)}</li>
+            <li key={ii} style={{ marginBottom: 3 }}>{inlineMd(item, cites, onOpenCitation)}</li>
           ))}
         </ListTag>,
       );
@@ -197,14 +229,18 @@ function blockNodes(raw) {
   return out;
 }
 
-export default function AgentAnswer({ text }) {
+export default function AgentAnswer({ text, citations, onOpenCitation }) {
+  // Marks the run actually cited, indexed once per render rather than per
+  // paragraph. An answer mentioning VAV-1 becomes a link to the ink VAV-1 was
+  // read from — the thing "Sources · N" made you go looking for.
+  const cites = useMemo(() => buildCiteIndex(citations), [citations]);
   if (!text) return null;
   return (
     <div
       data-agent-answer="structured"
       style={{ color: "var(--ink)", overflowWrap: "anywhere", fontFamily: "inherit" }}
     >
-      {blockNodes(text)}
+      {blockNodes(text, cites, onOpenCitation)}
     </div>
   );
 }

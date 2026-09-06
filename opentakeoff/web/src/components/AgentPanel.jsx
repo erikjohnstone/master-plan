@@ -208,6 +208,20 @@ export default function AgentPanel({
   // Sources stay collapsed by default so the Answer stays answer-first —
   // a long card list must not bury the takeoff reply (seen on D03/D04 demos).
   const [showSources, setShowSources] = useState(false);
+
+  // Same cell, painted twice, is one source. Keyed on where the ink IS
+  // (sheet + bbox) plus which cell it is — never on the markup id, which is a
+  // new value on every paint and is exactly why duplicates got through.
+  const dedupedCitations = useMemo(() => {
+    const seen = new Set(), out = [];
+    for (const c of citations) {
+      const k = `${c.sheet || c.sheet_id}|${(c.bbox_px || []).map((n) => Math.round(n)).join(",")}|${c.row_key || ""}|${c.column || ""}`;
+      if (seen.has(k)) continue;
+      seen.add(k);
+      out.push(c);
+    }
+    return out;
+  }, [citations]);
   const threadRef = useRef(null);
   const logRef = useRef(null);
   const { steps, meta, progress, errors } = useMemo(() => splitLog(log), [log]);
@@ -319,7 +333,7 @@ export default function AgentPanel({
                   {m.role === "user" ? "You" : "Answer"}
                 </div>
                 {m.role === "assistant" ? (
-                  <AgentAnswer text={m.text} />
+                  <AgentAnswer text={m.text} citations={citations} onOpenCitation={onOpenCitation} />
                 ) : (
                   <div style={{ color: "var(--ink)", whiteSpace: "pre-wrap", overflowWrap: "anywhere", fontSize: 13, lineHeight: 1.55, fontFamily: "inherit" }}>
                     {m.text}
@@ -420,9 +434,12 @@ export default function AgentPanel({
                   }}
                 >
                   <Icon name={showSources ? "chevronDown" : "chevronRight"} size={13} />
-                  <span>Sources · {citations.length} · click to open</span>
+                  <span>Sources · {dedupedCitations.length} · click to open</span>
                 </button>
-                {showSources && citations.map((c) => (
+                {/* One card per cited CELL, not per paint. A tag painted for
+                    three columns produced three cards that read identically;
+                    this drawer is a list of evidence, not a list of events. */}
+                {showSources && dedupedCitations.map((c) => (
                   <SourceCard key={c.id} citation={c} onOpen={onOpenCitation} />
                 ))}
               </div>

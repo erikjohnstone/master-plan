@@ -13,6 +13,7 @@ import {
   lineLeadValue,
   lineSpecValue,
 } from "../lib/agentTakeoff.js";
+import CiteValue from "./CiteValue.jsx";
 
 /** Cap visible technical columns so each family table stays readable. */
 const UI_SPEC_MAX = 12;
@@ -82,55 +83,6 @@ function shortSheet(sheet) {
   return s.length > 28 ? `…${s.slice(-24)}` : s;
 }
 
-/** Clickable takeoff control — jumps to a schedule row or whole table on the drawings. */
-function CiteValue({ text, cite, onOpenCitation, align = "left", mono = false, weight = 400, title }) {
-  const display = text === "" || text == null ? "—" : String(text);
-  const canJump = cite?.sheet_id && Array.isArray(cite.bbox_px) && cite.bbox_px.length === 4
-    && typeof onOpenCitation === "function";
-  if (!canJump) {
-    return (
-      <span style={{
-        fontFamily: mono ? "var(--f-mono)" : undefined,
-        fontWeight: weight,
-        fontVariantNumeric: align === "right" ? "tabular-nums" : undefined,
-      }}>{display}</span>
-    );
-  }
-  const tip = title
-    || (cite.kind === "table"
-      ? "Jump to this schedule table on the drawings"
-      : "Jump to this equipment / point row on the drawings");
-  return (
-    <button
-      type="button"
-      title={tip}
-      data-takeoff-cite={cite.kind || "row"}
-      onClick={(e) => {
-        e.stopPropagation();
-        onOpenCitation(cite);
-      }}
-      style={{
-        border: "none",
-        background: "transparent",
-        padding: 0,
-        margin: 0,
-        cursor: "pointer",
-        color: "var(--ink)",
-        textAlign: align,
-        font: "inherit",
-        fontFamily: mono ? "var(--f-mono)" : "inherit",
-        fontWeight: weight,
-        fontSize: "inherit",
-        fontVariantNumeric: align === "right" ? "tabular-nums" : undefined,
-        textDecoration: "underline",
-        textDecorationColor: "color-mix(in srgb, var(--ink) 28%, transparent)",
-        textUnderlineOffset: 3,
-      }}
-    >
-      {display}
-    </button>
-  );
-}
 
 export default function TakeoffDataPanel({
   rows = [],

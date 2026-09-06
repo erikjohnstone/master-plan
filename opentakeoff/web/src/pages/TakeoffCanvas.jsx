@@ -7762,6 +7762,17 @@ export default function TakeoffCanvas() {
         markups: () => markups,
         graphTables: () => graphTables,
         openSchedules: () => setSchedulesOpen(true),
+        // Put an answer in the thread without a model call, so the answer's
+        // OWN rendering — inline cites, meta chips, tables — is verifiable in
+        // a container where api.cerebras.ai is unreachable. Citations are the
+        // real objects agentHighlightCitation produces; nothing here fakes the
+        // jump, which still goes through openAgentCitation.
+        cite: (args) => agentHighlightCitation(args),
+        seedAnswer: (text, cites = []) => {
+          setAgentThread((t) => [...t, { role: "assistant", text: String(text || "") }]);
+          if (cites.length) setAgentCitations((l) => [...l, ...cites]);
+          setAgentOpen(true);
+        },
       },
     };
   });
