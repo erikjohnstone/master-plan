@@ -507,7 +507,7 @@ function isLegendHeadingText(text: string): boolean {
   if (normalized.length > 80) return false;
   const words = normalized.split(/\s+/).filter(Boolean).length;
   const shortDeclarativeHeading = words <= 8
-    && /\b(?:LEGEND|SYMBOLS?|NOTATIONS?)\b/i.test(normalized)
+    && /\b(?:LEGEND|SYMBOLS?|SYMBOLOGY|NOTATIONS?)\b/i.test(normalized)
     // Definition prose inside a legend routinely says "symbol indicates".
     // Even when that fragment is only eight words long, it is a caption
     // continuation rather than a nested heading.
@@ -570,14 +570,26 @@ function isDomainHeading(text: string): boolean {
  * and ordinary heading ownership; this predicate only removes the HVAC/BAS
  * word-density requirement after that structural proof has succeeded. */
 function isGeneralDraftingLegendHeading(text: string): boolean {
-  return /^(?:GENERAL(?:\s+SYMBOLS?)?|STANDARD\s+SYMBOLS|ARCHITECTURAL\s+SYMBOLS?|STANDARD\s+MATERIALS\s+LEGEND)$/i.test(normalizedCaption(text));
+  return /^(?:GENERAL(?:\s+SYMBOLS?)?|GENERAL\s+PROJECT\s+SYMBOLOGY|STRUCTURAL\s+LEGEND|STANDARD\s+SYMBOLS|ARCHITECTURAL\s+SYMBOLS?|STANDARD\s+MATERIALS\s+LEGEND)$/i.test(normalizedCaption(text));
+}
+
+/** Entire panels whose rows define drawing grammar or construction hatch
+ * conventions rather than installed equipment. The heading is stronger
+ * semantic evidence than any device-like noun that may appear inside a row
+ * (for example a building-section mark containing a filled square). */
+function isNoninstalledDraftingPanelHeading(text: string | null): boolean {
+  return !!text && /^(?:GENERAL\s+PROJECT\s+SYMBOLOGY|STRUCTURAL\s+LEGEND)$/i.test(normalizedCaption(text));
 }
 
 function supportsUnderlinedMultiColumnJurisdiction(text: string): boolean {
   // ARCHITECTURAL LEGEND commonly titles an abbreviation glossary. Only a
   // title that explicitly declares SYMBOLS may waive the HVAC/BAS vocabulary
   // gate for a general drafting panel.
-  return /^(?:STANDARD\s+SYMBOLS|ARCHITECTURAL\s+SYMBOLS?|STANDARD\s+MATERIALS\s+LEGEND)$/i.test(normalizedCaption(text));
+  return /^(?:GENERAL\s+PROJECT\s+SYMBOLOGY|STANDARD\s+SYMBOLS|ARCHITECTURAL\s+SYMBOLS?|STANDARD\s+MATERIALS\s+LEGEND)$/i.test(normalizedCaption(text));
+}
+
+function supportsUnderlinedBelowCaptionJurisdiction(text: string): boolean {
+  return /^(?:GENERAL\s+PROJECT\s+SYMBOLOGY|STANDARD\s+SYMBOLS|ARCHITECTURAL\s+SYMBOLS?)$/i.test(normalizedCaption(text));
 }
 
 function isMaterialLegendHeading(text: string | null): boolean {
@@ -595,9 +607,14 @@ function underlinedLegendJurisdiction(
 ): UnderlinedLegendJurisdiction | null {
   if (!supportsUnderlinedMultiColumnJurisdiction(heading.text)) return null;
   const headingCenterX = (heading.x0 + heading.x1) / 2;
+  // A long descriptive SYMBOLOGY title can nearly fill its finite panel
+  // rule even though that rule still extends beyond both text edges. Keep
+  // the stronger 1.5x requirement for generic SYMBOLS / material panels,
+  // whose short titles otherwise match unrelated long drafting rules.
+  const titleWidthFactor = /\bSYMBOLOGY\b/i.test(normalizedCaption(heading.text)) ? 1.15 : 1.5;
   const minRuleLength = Math.max(
     typicalTextHeight * 12,
-    (heading.x1 - heading.x0) * 1.5,
+    (heading.x1 - heading.x0) * titleWidthFactor,
   );
   const horizontalTolerance = Math.max(1.5, typicalTextHeight * 0.08);
   const candidates: UnderlinedLegendJurisdiction[] = [];
@@ -686,11 +703,16 @@ function isControllerPinoutCaption(text: string): boolean {
 /** True legend rows can describe drawing-navigation/status conventions
  * rather than installed work. Preserve them as auditable legend truth, but
  * never promote them to discrete Symbol Sweep seeds. */
+function isGeneralProjectSymbologyRowCaption(text: string): boolean {
+  return /^(?:NEW\s+WORK\s+KEYNOTE|DEMOLITION\s+KEYNOTE|EXISTING\s+COLUMN\s+GRID\s+LINE|ELEVATION\s+DATUM|ROOM\s+DESIGNATION|REVISION\s+TAG|PLAN\s+TITLE\s+AND\s+NORTH\s+ARROW|DETAIL,?\s+SECTION,?\s+ELEVATION\s+TITLE|DETAIL\s*\/\s*ENLARGED\s+PLAN|EXTERIOR\s+ELEVATION|BUILDING\s+SECTION|DETAIL\s*\/\s*WALL\s+SECTION|DETAIL\s+SECTION)$/i.test(canonicalLegendCaption(text));
+}
+
 function isDraftingAnnotationCaption(text: string): boolean {
   const normalized = canonicalLegendCaption(text);
   if (/^ANNOTATIONS?\b/i.test(normalized)) return true;
   if (/^(?:ELECTRICAL\s+EQUIPMENT\s+FOOTPRINT\b|DUCTWORK\s+SHOWING\s+SIZE\s+AND\s+SYSTEM$|DUCT\s+SECTION\s*[-–—:]\s*(?:SUPPLY|RETURN|EXHAUST|OUTSIDE|RELIEF|TRANSFER)\b)/i.test(normalized)) return true;
   if (/^(?:FEEDER\s+REFERENCE\s+TAG|POINT\s+OF\s+CONNECTION\s*[-–—:]\s*NEW\s+TO\s+EXISTING)$/i.test(normalized)) return true;
+  if (isGeneralProjectSymbologyRowCaption(normalized)) return true;
   if (/^(?:NUMBER\s+OF\s+DETAIL\s+ON\s+SHEET|NUMBER\s+OF\s+SHEET\s+WHERE\s+DETAIL\s+APPEARS|GENERAL\s+NOTE|PLAN\s+NOTE\s+LIST|(?:SQUARE|OVAL|ROUND)\s+DUCT\s+SIZE\s+TAG\b.*|EXISTING\s+DUCT\s+TAG|DUCT\s+BEING\s+DEMOLISHED|INSULATED\s+METAL\s+PANEL|PIPE\s+(?:SIZE|SLOPE|INVERT\s+ELEVATION|EXISTING)\s+TAG\b.*|EXISTING\s+PIPE\s+TAG|R\s*\(RISE\)\s*,?\s*D\s*\(DROP\)\s*.*|(?:RECTANGULAR|ROUND)\s+(?:SUPPLY\s*\/\s*OUTSIDE|RETURN\s*\/\s*TRANSFER|EXHAUST\s*\/\s*RELIEF)\s+AIR\s+DUCT\s+(?:RISE|DROP)|PIPE\s+(?:TURNED\s+(?:UP|DOWN)(?:\s*\([^)]*\))?|OUT\s+(?:TOP|BOTTOM)))$/i.test(normalized)) return true;
   if (/^(?:SECTION\s+MARK\b.*|DETAIL\s+MARK\b.*|DRAWING\s+TITLE\b.*|DOOR\s+TAG|WINDOW\s+TAG|WALL\s+TYPE\s+TAG|SHEET\s+NOTE\s+MARK\b.*|KEY\s+NOTE\s+MARK\b.*|BREAK\s+LINES?|REVISION\s+BUBBLE\b.*|ELEVATION\s+MARK\b.*|DATUM\s+POINT|SPOT\s+ELEVATION|GRAPHICAL\s+SCALE)$/i.test(normalized)) return true;
   // Row-topology conventions describe how a routed system continues or is
@@ -1175,7 +1197,12 @@ function structuredLegendTables(
       if (last === undefined || y - last > mergeTolerance) boundaries.push(y);
       else boundaries[boundaries.length - 1] = (last + y) / 2;
     }
-    if (boundaries.length < 2) continue;
+    // Header divider + table bottom alone describe one unruled body region,
+    // not one semantic row. Treating that whole region as a structured row
+    // concatenates every description and every glyph in an otherwise valid
+    // open-row legend. At least one internal body rule is required before
+    // rule bands may override ordinary one-to-one caption pairing.
+    if (boundaries.length < 3) continue;
     tables.push({
       left,
       right,
@@ -1821,6 +1848,7 @@ function pairCandidates(
   preferBelowCaption: ((span: LegendSpan) => boolean) | null = null,
   sectionDividers: RectBox[] = [], declaredTableHeaders: SymbolDescriptionHeader[] = [],
   rightCaptionGap: ((candidate: GlyphCandidate, span: LegendSpan) => number) | null = null,
+  preferredRightCaption: ((candidate: GlyphCandidate, span: LegendSpan) => boolean) | null = null,
   textResemblanceContext: ((candidate: GlyphCandidate) => TextResemblanceContext) | null = null,
 ): { pairs: PairCandidate[]; usedSpans: Set<number> } {
   type Edge = { candidate: number; span: number; score: number; gap: number };
@@ -1832,14 +1860,37 @@ function pairCandidates(
     )) continue;
     const [[x0, y0], [x1, y1]] = cand.rect;
     const centerY = (y0 + y1) / 2;
-    const margin = Math.max((y1 - y0) * 0.5, typicalTextHeight * 0.75);
+    const baseMargin = Math.max((y1 - y0) * 0.5, typicalTextHeight * 0.75);
     for (let si = 0; si < spans.length; si++) {
       const s = spans[si];
       if (!meaningfulCaption(s.text) || s.x0 < x1) continue;
+      const allowedCaptionGap = Math.max(maxCaptionGapPx, rightCaptionGap?.(cand, s) ?? 0);
+      const preferred = preferredRightCaption?.(cand, s) ?? false;
+      // A drafting example may place its semantic row label beside a tall
+      // callout sketch rather than directly on the sketch's centerline. A
+      // proven panel-description column earns a wider, still row-bounded
+      // vertical window; ordinary right-caption pairing keeps the tighter
+      // local relationship.
+      const margin = Math.max(baseMargin, preferred ? typicalTextHeight * 2.25 : 0);
       if (s.y1 < y0 - margin || s.y0 > y1 + margin) continue;
       const gap = s.x0 - x1;
-      const allowedCaptionGap = Math.max(maxCaptionGapPx, rightCaptionGap?.(cand, s) ?? 0);
       if (gap > allowedCaptionGap) continue;
+      // Instructional labels drawn inside a symbol example can be closer to
+      // its vector strokes than the real row identity. Once a repeated,
+      // independently proven description column supplies a same-row label
+      // farther right, that label owns the candidate. This is geometric
+      // column precedence, not a blacklist of words such as SECTION NUMBER.
+      const shadowedByPreferredRightCaption = !preferred && !!preferredRightCaption
+        && spans.some((other, oi) => {
+          if (oi === si || other.x0 <= s.x0 + typicalTextHeight) return false;
+          if (!meaningfulCaption(other.text) || !preferredRightCaption(cand, other)) return false;
+          const otherMargin = Math.max(baseMargin, typicalTextHeight * 2.25);
+          if (other.y1 < y0 - otherMargin || other.y0 > y1 + otherMargin) return false;
+          const otherGap = other.x0 - x1;
+          const otherAllowedGap = Math.max(maxCaptionGapPx, rightCaptionGap?.(cand, other) ?? 0);
+          return otherGap >= 0 && otherGap <= otherAllowedGap;
+        });
+      if (shadowedByPreferredRightCaption) continue;
       const spanCenterY = (s.y0 + s.y1) / 2;
       const crossesIndependentPanel = sectionDividers.some((divider) => {
         const x = divider.x0;
@@ -3672,9 +3723,27 @@ function nearbyLegendHeading(
     const bounds = boundsFor(s);
     return bounds.x1 < gx0 ? gx0 - bounds.x1 : bounds.x0 > gx1 ? bounds.x0 - gx1 : 0;
   };
+  const isChildSymbolFieldHeader = (parent: LegendSpan, child: LegendSpan): boolean =>
+    isNoninstalledDraftingPanelHeading(parent.text)
+    && /^SYMBOL$/i.test(normalizedCaption(child.text))
+    && child.y1 >= parent.y1 - typicalTextHeight * 0.2
+    && child.y0 - parent.y1 <= typicalTextHeight * 4
+    && child.x1 >= gx0 - typicalTextHeight * 5
+    && child.x0 <= gx1 + typicalTextHeight * 5;
   const candidates = lines.filter((s) => {
     if (!isLegendHeadingText(s.text) || s.y1 > firstY + typicalTextHeight) return false;
     if (/^SYMBOL$/i.test(normalizedCaption(s.text))) {
+      // SYMBOL is often the local column label inside a named legend. The
+      // named title owns row semantics (discipline, annotation/installable
+      // classification, and panel jurisdiction); the field header only
+      // describes the left column. Prefer the nearby parent when it overlaps
+      // this candidate group instead of allowing vertical proximity to make
+      // the bare word win.
+      const parentLegendHeading = lines.some((other) => other !== s
+        && isLegendHeadingText(other.text)
+        && other.y1 <= s.y0 + typicalTextHeight * 0.2
+        && isChildSymbolFieldHeader(other, s));
+      if (parentLegendHeading) return false;
       // In equipment schedules, SYMBOL is one field among several peers on
       // the same header row. Thin underlines beneath asset IDs otherwise pair
       // with AREA SERVED values and manufacture a fake legend column. A real
@@ -3693,7 +3762,13 @@ function nearbyLegendHeading(
     // loose and bordered legends place their first row within ten local text
     // heights; the larger former window let a top-right DDC legend bless a
     // separate network architecture diagram below it.
-    if (firstY - s.y1 > Math.max(typicalTextHeight * 10, 120) && !hasCaptionColumnBridge(s)) return false;
+    const underline = underlinedLegendJurisdiction(s, segs, typicalTextHeight);
+    const insideFiniteUnderlinedPanel = !!underline
+      && firstY > underline.y
+      && firstY - underline.y <= Math.max(900, typicalTextHeight * 120);
+    if (firstY - s.y1 > Math.max(typicalTextHeight * 10, 120)
+      && !hasCaptionColumnBridge(s)
+      && !insideFiniteUnderlinedPanel) return false;
     const margin = typicalTextHeight * 5;
     const bounds = boundsFor(s);
     const headingCenterX = (s.x0 + s.x1) / 2;
@@ -3705,6 +3780,9 @@ function nearbyLegendHeading(
     // an "AIR DISTRIBUTION DEVICE IDENTIFICATION" panel underneath it.
     return !lines.some((other) => other !== s
       && isSectionBoundaryText(other.text)
+      // A two-column legend's SYMBOL label is a field header governed by
+      // the named title above, not a new section boundary that cancels it.
+      && !isChildSymbolFieldHeader(s, other)
       && other.y0 > s.y1 + typicalTextHeight * 0.2
       && other.y1 < firstY - typicalTextHeight * 0.2
       // A lower header in the adjacent table column must not steal this
@@ -3730,7 +3808,7 @@ function headedBelowCaptionGroups(
 ): Array<{ group: PairCandidate[]; heading: string }> {
   const headings = lines.map((span, index) => ({ span, index }))
     .filter(({ span }) => isBelowCaptionLegendHeading(span.text)
-      || (/^(?:STANDARD\s+SYMBOLS|ARCHITECTURAL\s+SYMBOLS?)$/i.test(normalizedCaption(span.text))
+      || (supportsUnderlinedBelowCaptionJurisdiction(span.text)
         && !!underlinedLegendJurisdiction(span, segs, typicalTextHeight)));
   const grouped = new Map<number, PairCandidate[]>();
   for (const pair of pairs) {
@@ -3770,7 +3848,7 @@ function headedBelowCaptionGroups(
   const accepted: Array<{ group: PairCandidate[]; heading: string }> = [];
   for (const [headingIndex, group] of grouped) {
     const heading = normalizedCaption(lines[headingIndex].text);
-    const underlinedDraftingPanel = /^(?:STANDARD\s+SYMBOLS|ARCHITECTURAL\s+SYMBOLS?)$/i.test(heading)
+    const underlinedDraftingPanel = supportsUnderlinedBelowCaptionJurisdiction(heading)
       && !!underlinedLegendJurisdiction(lines[headingIndex], segs, typicalTextHeight);
     const singletonDraftingAnnotation = underlinedDraftingPanel
       && group.length === 1
@@ -4034,7 +4112,7 @@ export function findLegendGlyphs(
   const hasBelowCaptionLegendHeading = lines.some((line) => isBelowCaptionLegendHeading(line.text));
   const underlinedDraftingBelowCaptionPanels = lines.map((heading) => ({
     heading,
-    jurisdiction: /^(?:STANDARD\s+SYMBOLS|ARCHITECTURAL\s+SYMBOLS?)$/i.test(normalizedCaption(heading.text))
+    jurisdiction: supportsUnderlinedBelowCaptionJurisdiction(heading.text)
       ? underlinedLegendJurisdiction(heading, segs, typicalTextHeight) : null,
   })).filter((entry): entry is { heading: LegendSpan; jurisdiction: UnderlinedLegendJurisdiction } =>
     !!entry.jurisdiction);
@@ -4051,6 +4129,67 @@ export function findLegendGlyphs(
       && span.y0 > jurisdiction.y
       && span.y0 - jurisdiction.y <= Math.max(900, typicalTextHeight * 120));
   };
+  const generalSymbologyBelowCaptionPanels = underlinedDraftingBelowCaptionPanels.filter(({ heading }) =>
+    /^GENERAL\s+PROJECT\s+SYMBOLOGY$/i.test(normalizedCaption(heading.text)));
+  // Callout-style drafting panels put the semantic row identity in a
+  // repeated right-aligned description column, while smaller instructional
+  // labels are embedded inside the example graphic to its left. Learn that
+  // column from the panel's own finite width and repeated right edge.
+  const generalSymbologyRightDescriptionLines = generalSymbologyBelowCaptionPanels.flatMap((panel) => {
+    const { jurisdiction } = panel;
+    const width = jurisdiction.x1 - jurisdiction.x0;
+    const candidates = lines.filter((line) => {
+      if (!spanInsideUnderlinedPanel(line, [panel]) || isLegendHeadingText(line.text)) return false;
+      const centerX = (line.x0 + line.x1) / 2;
+      return meaningfulCaption(line.text)
+        && centerX >= jurisdiction.x0 + width * 0.58
+        && line.x1 >= jurisdiction.x1 - Math.max(typicalTextHeight * 5, width * 0.18);
+    });
+    return candidates.filter((line) => candidates.filter((other) =>
+      Math.abs(other.x1 - line.x1) <= typicalTextHeight * 2.5).length >= 2);
+  });
+  const isGeneralSymbologyRightDescription = (span: LegendSpan): boolean =>
+    generalSymbologyRightDescriptionLines.some((line) =>
+      line.x0 >= span.x0 - typicalTextHeight * 0.25
+      && line.y0 >= span.y0 - typicalTextHeight * 0.25
+      && line.x1 <= span.x1 + typicalTextHeight * 0.25
+      && line.y1 <= span.y1 + typicalTextHeight * 0.25);
+  const completeGeneralSymbologyRightCaption = (pair: PairCandidate): void => {
+    if (!isGeneralSymbologyRightDescription(pair.span)) return;
+    const eligible = generalSymbologyRightDescriptionLines
+      .filter((line) => Math.abs(line.x1 - pair.span.x1) <= typicalTextHeight * 3
+        || (line.x1 >= pair.span.x0 && line.x0 <= pair.span.x1))
+      .sort((a, b) => a.y0 - b.y0 || a.x0 - b.x0);
+    let blockY0 = pair.span.y0;
+    let blockY1 = pair.span.y1;
+    const selected = new Set<number>();
+    for (;;) {
+      let changed = false;
+      for (let index = 0; index < eligible.length; index++) {
+        if (selected.has(index)) continue;
+        const line = eligible[index];
+        const gap = line.y0 > blockY1 ? line.y0 - blockY1
+          : blockY0 > line.y1 ? blockY0 - line.y1 : 0;
+        if (gap > maxWrapGapPx) continue;
+        selected.add(index);
+        blockY0 = Math.min(blockY0, line.y0);
+        blockY1 = Math.max(blockY1, line.y1);
+        changed = true;
+      }
+      if (!changed) break;
+    }
+    const owned = eligible.filter((_, index) => selected.has(index));
+    if (!owned.length) return;
+    pair.caption = canonicalLegendCaption(owned.map((line) => line.text).join(" "));
+    pair.captionLines = owned.length;
+    pair.span = {
+      text: pair.caption,
+      x0: Math.min(...owned.map((line) => line.x0)),
+      y0: Math.min(...owned.map((line) => line.y0)),
+      x1: Math.max(...owned.map((line) => line.x1)),
+      y1: Math.max(...owned.map((line) => line.y1)),
+    };
+  };
   const shouldSearchBelowCaption = (span: LegendSpan): boolean => hasBelowCaptionLegendHeading
     // In a standard drafting panel the alternate orientation is earned by
     // the one convention that is itself normally captioned below its
@@ -4058,7 +4197,14 @@ export function findLegendGlyphs(
     // large search band above all of them can pull in a neighboring
     // abbreviations panel before normal one-to-one pairing runs.
     || (/^GRAPHICAL\s+SCALE$/i.test(normalizedCaption(span.text))
-      && spanInsideUnderlinedPanel(span, underlinedDraftingBelowCaptionPanels));
+      && spanInsideUnderlinedPanel(span, underlinedDraftingBelowCaptionPanels))
+    // General project symbology panels commonly mix caption-below cells at
+    // the top with right-caption callout rows below. Their finite underline
+    // jurisdiction plus explicit drafting-caption semantics enables only
+    // those cells; adjacent notes under the same title-block column remain
+    // ineligible.
+    || (isGeneralProjectSymbologyRowCaption(span.text)
+      && spanInsideUnderlinedPanel(span, generalSymbologyBelowCaptionPanels));
   const draftingRightCaptionGap = (span: LegendSpan): number =>
     isDraftingAnnotationCaption(span.text)
       && spanInsideUnderlinedPanel(span, underlinedDraftingBelowCaptionPanels)
@@ -4067,11 +4213,10 @@ export function findLegendGlyphs(
   const draftingRightCaptionGapForCandidate = (
     candidate: GlyphCandidate, span: LegendSpan,
   ): number => {
-    if (!isDraftingAnnotationCaption(span.text)) return maxCaptionGapPx;
     const candidateCenterX = (candidate.rect[0][0] + candidate.rect[1][0]) / 2;
     const candidateCenterY = (candidate.rect[0][1] + candidate.rect[1][1]) / 2;
     const spanCenterX = (span.x0 + span.x1) / 2;
-    const samePanel = underlinedDraftingBelowCaptionPanels.some(({ jurisdiction }) =>
+    const samePanel = underlinedDraftingBelowCaptionPanels.some(({ heading, jurisdiction }) =>
       candidateCenterX >= jurisdiction.x0 - typicalTextHeight
       && candidateCenterX <= jurisdiction.x1 + typicalTextHeight
       && spanCenterX >= jurisdiction.x0 - typicalTextHeight
@@ -4079,7 +4224,10 @@ export function findLegendGlyphs(
       && candidateCenterY > jurisdiction.y
       && span.y0 > jurisdiction.y
       && Math.max(candidateCenterY, span.y0) - jurisdiction.y
-        <= Math.max(900, typicalTextHeight * 120));
+        <= Math.max(900, typicalTextHeight * 120)
+      && (/^GENERAL\s+PROJECT\s+SYMBOLOGY$/i.test(normalizedCaption(heading.text))
+        ? isGeneralSymbologyRightDescription(span)
+        : isDraftingAnnotationCaption(span.text)));
     return samePanel
       ? Math.max(maxCaptionGapPx, Math.min(420, typicalTextHeight * 18))
       : maxCaptionGapPx;
@@ -4162,7 +4310,9 @@ export function findLegendGlyphs(
   const paired = pairCandidates(
     candidates, spans, rawSpans, maxCaptionGapPx, typicalTextHeight,
     shouldSearchBelowCaption, sectionDividers, declaredTableHeaders,
-    draftingRightCaptionGapForCandidate, draftingTextResemblanceContext,
+    draftingRightCaptionGapForCandidate,
+    (_candidate, span) => isGeneralSymbologyRightDescription(span),
+    draftingTextResemblanceContext,
   );
   const reunitedPairs = mergeDownshiftedGlyphFragments(
     paired.pairs, typicalTextHeight, maxGlyphDimPx, gridPx, rawSpans,
@@ -4307,7 +4457,30 @@ export function findLegendGlyphs(
     // remain far beyond this window.
     Math.max(8, typicalTextHeight * 1.25, conservativeMaxGlyphDimPx * 0.5),
   );
-  const groups = aligned.flatMap((indices) => splitAlignedGroupVertically(indices, pairs, lines, typicalTextHeight));
+  // Some drafting panels right-align their semantic description column.
+  // Long identities therefore begin farther left than short ones even
+  // though every row shares the same exact right edge. Ordinary legends
+  // remain grouped by caption start; only spans already proven to belong to
+  // the finite repeated right-edge column receive this alternate alignment.
+  const rightAlignedDraftingPairs = pairs.map((pair, index) => ({ pair, index }))
+    .filter(({ pair }) => isGeneralSymbologyRightDescription(pair.span));
+  const rightAlignedDraftingGroups = rightAlignedDraftingPairs.length
+    ? alignedGroups(
+      rightAlignedDraftingPairs.map(({ pair }) => ({
+        ...pair,
+        span: { ...pair.span, x0: pair.span.x1 },
+      })),
+      Math.max(conservativeMaxGlyphDimPx, typicalTextHeight * 3),
+      typicalTextHeight * 3,
+    ).flatMap((indices) => splitAlignedGroupVertically(
+      indices.map((index) => rightAlignedDraftingPairs[index].index),
+      pairs, lines, typicalTextHeight,
+    ))
+    : [];
+  const groups = [
+    ...rightAlignedDraftingGroups,
+    ...aligned.flatMap((indices) => splitAlignedGroupVertically(indices, pairs, lines, typicalTextHeight)),
+  ];
   const minAlignedRows = Math.max(1, opts.minAlignedRows ?? 2);
   const minUnheadedRows = Math.max(minAlignedRows, opts.minUnheadedRows ?? 15);
   const layoutEvidenceDisabled = minAlignedRows === 1 && minUnheadedRows === 1;
@@ -4315,6 +4488,7 @@ export function findLegendGlyphs(
   const acceptPair = (pair: PairCandidate, alignedRows: number, heading: string | null) => {
     pair.caption = canonicalLegendCaption(pair.caption);
     const kind: LegendGlyph["kind"] = isMaterialLegendHeading(heading)
+      || isNoninstalledDraftingPanelHeading(heading)
       ? "annotation"
       : isDraftingAnnotationCaption(pair.caption)
       ? "annotation"
@@ -4374,6 +4548,13 @@ export function findLegendGlyphs(
     );
     if (!group.length) continue;
     const heading = nearbyLegendHeading(group, lines, segs, typicalTextHeight);
+    if (/^GENERAL\s+PROJECT\s+SYMBOLOGY$/i.test(heading ?? "")) {
+      group = group.filter((pair) => (pair.layout === "below"
+        && isGeneralProjectSymbologyRowCaption(pair.caption))
+        || isGeneralSymbologyRightDescription(pair.span));
+      if (!group.length) continue;
+      for (const pair of group) completeGeneralSymbologyRightCaption(pair);
+    }
     group = withoutTrailingNetworkDiagram(group, heading, typicalTextHeight, minAlignedRows);
     completeSpecificSectionCaptions(group, lines, heading, typicalTextHeight);
     const specificDisciplineSection = !!heading && isSpecificDisciplineLegendHeading(heading);

@@ -761,6 +761,80 @@ test("findLegendGlyphs: a centered underlined STANDARD SYMBOLS heading owns each
   ]);
 });
 
+test("findLegendGlyphs: a bounded GENERAL PROJECT SYMBOLOGY panel owns mixed caption-below and right-caption drafting cells", () => {
+  const box = (x: number, y: number): number[][] => [
+    seg(x, y, x + 30, y), seg(x + 30, y, x + 30, y + 30),
+    seg(x + 30, y + 30, x, y + 30), seg(x, y + 30, x, y),
+  ];
+  const segs = flat([
+    // The title nearly fills this compact panel; the owning rule is wider,
+    // but not one-and-a-half times the rendered title width.
+    seg(60, 55, 560, 55),
+    ...box(100, 100), ...box(400, 100),
+    ...box(100, 260), ...box(100, 340), ...box(100, 420),
+    // Adjacent note graphics remain outside the semantic below-caption path.
+    ...box(100, 500),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "GENERAL PROJECT SYMBOLOGY", x0: 100, y0: 20, x1: 500, y1: 40 },
+    { text: "NEW WORK KEYNOTE", x0: 60, y0: 150, x1: 170, y1: 170 },
+    { text: "DEMOLITION KEYNOTE", x0: 345, y0: 150, x1: 485, y1: 170 },
+    // Instructional labels inside the example graphic are closer to the
+    // glyph, but the repeated right-aligned column owns row identity.
+    { text: "SECTION NUMBER", x0: 180, y0: 265, x1: 330, y1: 285 },
+    { text: "SHEET WHERE SHOWN", x0: 180, y0: 345, x1: 350, y1: 365 },
+    { text: "ROOM DESIGNATION", x0: 380, y0: 265, x1: 540, y1: 285 },
+    { text: "BUILDING SECTION", x0: 380, y0: 345, x1: 540, y1: 365 },
+    // Right alignment, not a shared x start, owns this longer identity.
+    { text: "DETAIL, SECTION, ELEVATION TITLE", x0: 250, y0: 425, x1: 540, y1: 445 },
+    { text: "GENERAL PHASE EXECUTION", x0: 90, y0: 550, x1: 330, y1: 570 },
+  ];
+  const glyphs = findLegendGlyphs(segs, spans, { maxGlyphDimPx: 120 });
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), [
+    "NEW WORK KEYNOTE", "DEMOLITION KEYNOTE", "ROOM DESIGNATION", "BUILDING SECTION",
+    "DETAIL, SECTION, ELEVATION TITLE",
+  ]);
+  assert.ok(glyphs.every((glyph) => glyph.heading === "GENERAL PROJECT SYMBOLOGY"));
+  assert.ok(glyphs.every((glyph) => glyph.kind === "annotation" && !glyph.seedable));
+});
+
+test("findLegendGlyphs: an unruled STRUCTURAL LEGEND is valid drafting truth while an adjacent abbreviation glossary stays glyphless", () => {
+  const box = (y: number): number[][] => [
+    seg(100, y, 140, y), seg(140, y, 140, y + 25),
+    seg(140, y + 25, 100, y + 25), seg(100, y + 25, 100, y),
+  ];
+  const captions = [
+    "COLUMN REFERENCE LINE (CENTERLINE OF COLUMN)",
+    "SLOPE DIRECTION",
+    "BRICK",
+    "CONCRETE MASONRY UNIT (CMU)",
+  ];
+  const segs = flat([
+    // Outer/header/bottom rules do not make the open body one giant row.
+    seg(60, 10, 690, 10), seg(60, 90, 690, 90), seg(60, 460, 690, 460),
+    ...captions.flatMap((_, index) => box(120 + index * 80)),
+  ]);
+  const spans: LegendSpan[] = [
+    { text: "STRUCTURAL LEGEND", x0: 70, y0: 20, x1: 310, y1: 45 },
+    { text: "SYMBOL", x0: 80, y0: 60, x1: 170, y1: 80 },
+    { text: "DESCRIPTION", x0: 220, y0: 60, x1: 370, y1: 80 },
+    ...captions.map((text, index): LegendSpan => ({
+      text, x0: 220, y0: 123 + index * 80, x1: 650, y1: 143 + index * 80,
+    })),
+    { text: "STRUCTURAL ABBREVIATIONS", x0: 760, y0: 20, x1: 1080, y1: 45 },
+    { text: "AB ANCHOR BOLT", x0: 760, y0: 103, x1: 940, y1: 123 },
+    { text: "AFF ABOVE FINISHED FLOOR", x0: 760, y0: 183, x1: 1040, y1: 203 },
+  ];
+  const glyphs = findLegendGlyphs(
+    segs,
+    spans,
+    { maxGlyphDimPx: 120 },
+  );
+  assert.deepEqual(glyphs.map((glyph) => glyph.caption), captions);
+  assert.ok(glyphs.every((glyph) => glyph.heading === "STRUCTURAL LEGEND"));
+  assert.ok(glyphs.every((glyph) => glyph.kind === "annotation" && !glyph.seedable));
+});
+
 test("findLegendGlyphs: an underline cannot widen an ordinary controls heading into a separate peer column", () => {
   const segs = flat([
     seg(60, 52, 950, 52),
