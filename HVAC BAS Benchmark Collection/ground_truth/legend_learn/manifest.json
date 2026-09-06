@@ -14132,13 +14132,1195 @@
     {"id":"23__vol2__033-p072","document_id":"23__vol2__033","page":72,"review_status":"pending"},
     {"id":"23__vol2__033-p073","document_id":"23__vol2__033","page":73,"review_status":"pending"},
     {"id":"23__vol2__033-p074","document_id":"23__vol2__033","page":74,"review_status":"pending"},
-    {"id":"24__vol2__019-p001","document_id":"24__vol2__019","page":1,"review_status":"pending"},
-    {"id":"24__vol2__019-p002","document_id":"24__vol2__019","page":2,"review_status":"pending"},
+    {"id":"24__vol2__019-p001","document_id":"24__vol2__019","page":1,"sheet_number":"M0.1","review_status":"complete","expected_status":"ok","notes":["Rendered sheet M0.1 reviewed at full-page and source-resolution detail scale. It contains 79 legitimate MECHANICAL FLOOR PLAN SYMBOLS rows across four independent columns (27 valve/accessory rows, 28 piping-symbol rows, 13 control/duct-device rows, and 11 duct/air-system rows), 22 HVAC & PIPING LEGEND route keys, and seven REFERENCE SYMBOLS leader definitions, for 108 rows total. The three AIR SYSTEMS hatch keys are routed truth, not devices; duct rise/drop, offset, flow-arrow, and reference-callout definitions are annotation/nonseedable; the shared AIR SYSTEMS brace label is not a row. Inline piping codes such as SA, HHWS, HPS (PSIG), and CS (PSIG) are text inside full line swatches and are not duplicate legend identities. Exact glyph, member, caption, kind, and seedability output was confirmed on two deterministic clean runs."],"expected_rows":[{"caption":"VERTICAL DUCT RISE","kind":"annotation","seedable":false,"rect":[4515.3,605.7,4747.5,803.7],"caption_bbox":[4772.4,695.8,4943.3,715],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[4727.7,605.7,4747.5,803.7],[4515.3,693.9,4700.7,726.3],[4637.7,708.3,4679.1,710.1]]},{"caption":"ROOM THERMOSTAT","kind":"symbol","seedable":true,"rect":[3730.5,623.7,3768.3,661.5],"caption_bbox":[3827,632.2,3994.9,651.4],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"CLEANOUT","kind":"symbol","seedable":true,"rect":[2843.1,636.3,2906.1,647.1],"caption_bbox":[2975.8,631.4,3064.4,650.6],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"ISOLATION VALVE","kind":"symbol","seedable":true,"rect":[2043.9,641.7,2155.5,654.3],"caption_bbox":[2176.6,634.8,2319.4,654],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"CLEANOUT IN FLOOR","kind":"symbol","seedable":true,"rect":[2843.1,661.5,2911.5,675.9],"caption_bbox":[2975.8,658.6,3145.4,677.8],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2843.1,661.5,2911.5,675.9],[2900.7,665.1,2907.9,672.3]]},{"caption":"SMOKE DETECTOR","kind":"symbol","seedable":true,"rect":[3734.1,668.7,3764.7,699.3],"caption_bbox":[3825.8,671.3,3979,690.5],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"THROTTLING VALVE","kind":"symbol","seedable":true,"rect":[2043.9,672.3,2155.5,686.7],"caption_bbox":[2176.6,666.7,2336.9,685.9],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"RUNNING TRAP","kind":"symbol","seedable":true,"rect":[2843.1,692.1,2954.7,704.7],"caption_bbox":[2975.8,685.4,3099.7,704.6],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2907.9,692.1,2954.7,704.7],[2843.1,692.1,2907.9,704.7],[2909.7,695.7,2915.1,701.1],[2882.7,695.7,2888.1,701.1]]},{"caption":"ANGLE VALVE","kind":"symbol","seedable":true,"rect":[2087.1,701.1,2155.5,729.9],"caption_bbox":[2176.6,698.6,2288.5,717.8],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"FLOW SWITCH","kind":"symbol","seedable":true,"rect":[3737.7,713.7,3761.1,737.1],"caption_bbox":[3825.8,712.6,3942.2,731.8],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"FLOOR DRAIN (ROUND)","kind":"symbol","seedable":true,"rect":[2884.5,720.9,2904.3,740.7],"caption_bbox":[2975.8,719.3,3161.9,738.5],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2884.5,720.9,2904.3,740.7],[2888.1,724.5,2900.7,735.3],[2891.7,726.3,2897.1,733.5],[2886.3,722.7,2902.5,737.1]]},{"caption":"CHECK VALVE","kind":"symbol","seedable":true,"rect":[2043.9,737.1,2155.5,749.7],"caption_bbox":[2176.6,730.6,2290.4,749.8],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"STATIC PRESSURE SENSOR","kind":"symbol","seedable":true,"rect":[3737.7,755.1,3761.1,778.5],"caption_bbox":[3825.8,753.6,4050.7,772.8],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"2-WAY PNEUMATIC CONTROL VALVE","kind":"symbol","seedable":true,"rect":[2043.9,756.9,2155.5,782.1],"caption_bbox":[2176.6,762.5,2469.4,781.7],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"FLOOR DRAIN (RECTANGULAR)","kind":"symbol","seedable":true,"rect":[2884.5,756.9,2904.3,776.7],"caption_bbox":[2975.8,755.3,3225,774.5],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2884.5,756.9,2904.3,776.7],[2888.1,760.5,2900.7,771.3]]},{"caption":"3-WAY PNEUMATIC CONTROL VALVE","kind":"symbol","seedable":true,"rect":[2043.9,791.1,2155.5,828.9],"caption_bbox":[2176.6,794.4,2469.4,813.6],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"TEST PORT","kind":"symbol","seedable":true,"rect":[3741.3,794.7,3757.5,823.5],"caption_bbox":[3825.8,794.9,3917,814.1],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"ROOF DRAIN (RD)","kind":"symbol","seedable":true,"rect":[2884.5,798.3,2904.3,818.1],"caption_bbox":[2975.8,795.8,3116.5,815],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2884.5,798.3,2904.3,818.1],[2888.1,801.9,2900.7,812.7]]},{"caption":"2-WAY ELECTRIC CONTROL VALVE","kind":"symbol","seedable":true,"rect":[2043.9,832.5,2155.5,863.1],"caption_bbox":[2176.6,842.9,2453.6,862.1],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2043.9,848.7,2155.5,863.1],[2092.5,832.5,2106.9,855.9]]},{"caption":"HORIZONTAL FIRE DAMPER","kind":"symbol","seedable":true,"rect":[3692.7,832.5,3806.1,890.1],"caption_bbox":[3825.8,872.6,4045.9,891.8],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[3746.7,832.5,3806.1,890.1],[3692.7,861.3,3721.5,890.1]]},{"caption":"REDUCER-CONCENTRIC","kind":"symbol","seedable":true,"rect":[2843.1,834.3,2954.7,850.5],"caption_bbox":[2975.8,829.2,3179.3,848.4],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"VERTICAL DUCT DROP","kind":"annotation","seedable":false,"rect":[4506.3,857.7,4738.5,1053.9],"caption_bbox":[4763.5,944.4,4944.1,963.6],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[4718.7,857.7,4738.5,1053.9],[4506.3,944.1,4693.5,976.5],[4628.7,958.5,4671.9,960.3]]},{"caption":"REDUCER-ECCENTRIC","kind":"symbol","seedable":true,"rect":[2891.7,861.3,2954.7,870.3],"caption_bbox":[2975.8,856.3,3165.6,875.5],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"3-WAY ELECTRIC CONTROL VALVE","kind":"symbol","seedable":true,"rect":[2043.9,864.9,2155.5,906.3],"caption_bbox":[2176.6,874.8,2453.6,894],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"HORIZONTAL SMOKE/FIRE COMBINATION DAMPER","kind":"symbol","seedable":true,"rect":[3692.7,908.1,3806.1,962.1],"caption_bbox":[3825.8,944.6,4228,963.8],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[3752.1,908.1,3806.1,962.1],[3692.7,933.3,3721.5,962.1]]},{"caption":"SOLENOID VALVE","kind":"symbol","seedable":true,"rect":[2043.9,915.3,2155.5,945.9],"caption_bbox":[2176.6,923.3,2317.3,942.5],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2043.9,915.3,2155.5,945.9],[2096.1,917.1,2103.3,927.9]]},{"caption":"PIPE UNION","kind":"symbol","seedable":true,"rect":[2843.1,933.3,2954.7,944.1],"caption_bbox":[2975.8,926.2,3069.1,945.4],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2902.5,933.3,2954.7,944.1],[2843.1,933.3,2895.3,944.1]]},{"caption":"BUTTERFLY VALVE (ISOLATION OR THROTTLING)","kind":"symbol","seedable":true,"rect":[2043.9,956.7,2155.5,974.7],"caption_bbox":[2176.6,955.2,2566,974.4],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2103.3,962.1,2155.5,974.7],[2099.7,956.7,2105.1,972.9],[2043.9,962.1,2096.1,974.7]]},{"caption":"PIPE ANCHOR","kind":"symbol","seedable":true,"rect":[2843.1,962.1,2954.7,971.1],"caption_bbox":[2975.8,953,3087.6,972.2],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"AUTOMATIC DAMPER (MOTORIZED)","kind":"symbol","seedable":true,"rect":[3649.5,983.7,3807.9,1064.7],"caption_bbox":[3825.8,1022.6,4108.5,1041.8],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"ALIGNMENT GUIDE","kind":"symbol","seedable":false,"rect":[2843.1,987.3,2954.7,998.1],"caption_bbox":[2975.8,979,3126.3,998.2],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2843.1,992.7,2954.7,994.5],[2884.5,987.3,2913.3,989.1],[2884.5,996.3,2913.3,998.1]]},{"caption":"BALL VALVE (ISOLATION OR THROTTLING)","kind":"symbol","seedable":true,"rect":[2043.9,989.1,2155.5,1007.1],"caption_bbox":[2176.6,987.1,2511.3,1006.3],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2106.9,992.7,2155.5,1007.1],[2092.5,989.1,2108.7,1007.1],[2043.9,992.7,2092.5,1007.1]]},{"caption":"AUTOMATIC FLOW CONTROL VALVE","kind":"symbol","seedable":true,"rect":[2043.9,1039.5,2155.5,1059.3],"caption_bbox":[2176.6,1035.8,2465.1,1055],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"PRESSURE GUAGE WITH COCK","kind":"symbol","seedable":true,"rect":[2843.1,1053.9,2954.7,1095.3],"caption_bbox":[2975.8,1081.4,3226.9,1100.6],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2843.1,1089.9,2954.7,1095.3],[2889.9,1053.9,2909.7,1089.9]]},{"caption":"VOLUME DAMPER (MANUAL)","kind":"symbol","seedable":true,"rect":[3649.5,1079.1,3807.9,1131.3],"caption_bbox":[3825.8,1091,4052.1,1110.2],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"PLUG VALVE (ISOLATION OR THROTTLING)","kind":"symbol","seedable":true,"rect":[2043.9,1088.1,2155.5,1104.3],"caption_bbox":[2176.6,1084.3,2516.1,1103.5],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2108.7,1089.9,2155.5,1104.3],[2092.5,1088.1,2106.9,1104.3],[2043.9,1089.9,2090.7,1104.3]]},{"caption":"THERMOMETER","kind":"symbol","seedable":true,"rect":[2843.1,1109.7,2954.7,1142.1],"caption_bbox":[2975.8,1127.8,3103.7,1147],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"SELF ACTUATING TYPE DIFFERENTIAL PRESSURE CONTROL VALVE (DPCV)","kind":"symbol","seedable":true,"rect":[2043.9,1111.5,2155.5,1136.7],"caption_bbox":[2176.6,1116.2,2575,1158.5],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2043.9,1122.3,2155.5,1136.7],[2096.1,1111.5,2103.3,1129.5]]},{"caption":"SUPPLY","kind":"line_style","seedable":false,"rect":[4578.3,1115.1,4616.1,1152.9],"caption_bbox":[4725.6,1120.1,4789.7,1139.3],"heading":"AIR SYSTEMS"},{"caption":"VERTICAL FIRE DAMPER","kind":"symbol","seedable":true,"rect":[3649.5,1149.3,3807.9,1219.5],"caption_bbox":[3825.8,1179.8,4020.2,1199],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"QUICK COUPLING","kind":"symbol","seedable":true,"rect":[2843.1,1161.9,2949.3,1174.5],"caption_bbox":[2975.8,1154.9,3116.3,1174.1],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"AUTOMATIC DPCV","kind":"symbol","seedable":true,"rect":[2043.9,1163.7,2155.5,1190.7],"caption_bbox":[2176.6,1171.2,2322.1,1190.4],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"RETURN","kind":"line_style","seedable":false,"rect":[4578.3,1169.1,4616.1,1206.9],"caption_bbox":[4725.6,1176.2,4793.5,1195.4],"heading":"AIR SYSTEMS"},{"caption":"CAP OR PLUG","kind":"symbol","seedable":true,"rect":[2843.1,1188.9,2951.1,1201.5],"caption_bbox":[2975.8,1181.8,3087.1,1201],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2943.9,1188.9,2951.1,1201.5],[2843.1,1194.3,2945.7,1196.1]]},{"caption":"PRESSURE REGULATING VALVE, FLANGED","kind":"symbol","seedable":true,"rect":[2043.9,1206.9,2155.5,1223.1],"caption_bbox":[2176.6,1203.4,2518.6,1222.6],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2043.9,1208.7,2155.5,1223.1],[2092.5,1206.9,2106.9,1208.7]]},{"caption":"ELBOW-TURNED DOWN","kind":"symbol","seedable":true,"rect":[2843.1,1212.3,2954.7,1232.1],"caption_bbox":[2975.8,1208.9,3174,1228.1],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"EXHAUST","kind":"line_style","seedable":false,"rect":[4578.3,1223.1,4616.1,1260.9],"caption_bbox":[4725.6,1232.6,4802,1251.8],"heading":"AIR SYSTEMS"},{"caption":"PRESSURE REGULATING VALVE, THREADED","kind":"symbol","seedable":true,"rect":[2043.9,1233.9,2155.5,1260.9],"caption_bbox":[2176.6,1242,2531.5,1261.2],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"SMOKE DAMPER","kind":"symbol","seedable":true,"rect":[3649.5,1237.5,3807.9,1307.7],"caption_bbox":[3825.8,1269.1,3959,1288.3],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"ELBOW-TURNED UP OR RISER CONNECTION","kind":"symbol","seedable":true,"rect":[2843.1,1239.3,2954.7,1259.1],"caption_bbox":[2975.8,1235.8,3341,1255],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2938.5,1239.3,2954.7,1259.1],[2843.1,1248.3,2945.7,1250.1]]},{"caption":"TEE OUTLET-DOWN","kind":"symbol","seedable":true,"rect":[2843.1,1266.3,2954.7,1277.1],"caption_bbox":[2975.8,1262.9,3142.6,1282.1],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2891.7,1266.3,2906.1,1269.9],[2843.1,1275.3,2954.7,1277.1]]},{"caption":"PRESSURE REDUCING VALVE","kind":"symbol","seedable":true,"rect":[2043.9,1268.1,2155.5,1298.7],"caption_bbox":[2176.6,1279,2414.2,1298.2],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"TEE OUTLET-UP","kind":"symbol","seedable":true,"rect":[2889.9,1280.7,2954.7,1313.1],"caption_bbox":[2975.8,1289.8,3112.9,1309],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2889.9,1293.3,2954.7,1313.1],[2891.7,1280.7,2906.1,1291.5]]},{"caption":"FLOW INDICATING BALANCE VALVE","kind":"symbol","seedable":true,"rect":[2043.9,1309.5,2155.5,1327.5],"caption_bbox":[2176.6,1307.5,2458.9,1326.7],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"CONNECT OUT OF TOP","kind":"annotation","seedable":false,"rect":[2889.9,1320.3,2954.7,1336.5],"caption_bbox":[2975.8,1316.9,3160.4,1336.1],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"SIDE WALL SUPPLY DIFFUSER","kind":"symbol","seedable":true,"rect":[4596.3,1320.3,4634.1,1334.7],"caption_bbox":[4726.8,1315.2,4967.3,1334.4],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"SMOKE/FIRE COMBINATION DAMPER","kind":"symbol","seedable":true,"rect":[3649.5,1325.7,3807.9,1395.9],"caption_bbox":[3825.8,1358.6,4119,1377.8],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"SAFETY RELIEF VALVE","kind":"symbol","seedable":true,"rect":[2092.5,1332.9,2155.5,1368.9],"caption_bbox":[2176.6,1335.1,2357.1,1354.3],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"DROP OR RISE","kind":"annotation","seedable":false,"rect":[2843.1,1347.3,2954.7,1367.1],"caption_bbox":[2975.8,1343.8,3094.1,1363],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2891.7,1347.3,2954.7,1367.1],[2843.1,1356.3,2900.7,1358.1]]},{"caption":"SIDE WALL RETURN or EXHAUST GRILLE/REGISTER","kind":"symbol","seedable":true,"rect":[4598.1,1374.3,4635.9,1388.7],"caption_bbox":[4726.8,1354.2,4985.6,1395.1],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"DIRECTION OF FLOW","kind":"annotation","seedable":false,"rect":[2843.1,1377.9,2954.7,1388.7],"caption_bbox":[2975.8,1370.9,3143.1,1390.1],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"STRAINER","kind":"symbol","seedable":true,"rect":[2043.9,1385.1,2155.5,1403.1],"caption_bbox":[2176.6,1377.4,2258.4,1396.6],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"DIRECTION OF PIPE PITCH","kind":"annotation","seedable":false,"rect":[2843.1,1392.3,2958.3,1412.1],"caption_bbox":[2975.8,1397.8,3186,1417],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"OF AIR FLOW 45° OFFSETS","kind":"annotation","seedable":false,"rect":[4517.1,1419.3,4677.3,1464.3],"caption_bbox":[4726.8,1443.1,4940.9,1462.3],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[4517.1,1419.3,4677.3,1464.3],[4587.3,1433.7,4599.9,1453.5]]},{"caption":"DIRECTION OF FLOW","kind":"annotation","seedable":false,"rect":[3649.5,1421.1,3807.9,1422.9],"caption_bbox":[3838.6,1423.4,4005.9,1442.6],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"FLOW METER","kind":"symbol","seedable":true,"rect":[2843.1,1422.9,2954.7,1444.5],"caption_bbox":[2975.8,1424.9,3085,1444.1],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2911.5,1437.3,2954.7,1439.1],[2843.1,1437.3,2889.9,1439.1],[2889.9,1422.9,2907.9,1444.5]]},{"caption":"REDUCED PRESSURE BACKFLOW PREVENTOR","kind":"symbol","seedable":true,"rect":[2843.1,1446.3,2960.1,1471.5],"caption_bbox":[2975.8,1451.8,3352.6,1471],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2880.9,1446.3,2916.9,1457.1],[2843.1,1458.9,2960.1,1471.5]]},{"caption":"FLEXIBLE CONNECTION","kind":"symbol","seedable":true,"rect":[2043.9,1448.1,2155.5,1460.7],"caption_bbox":[2176.6,1441.2,2365.4,1460.4],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"ORIFICE PLATE","kind":"symbol","seedable":true,"rect":[2043.9,1478.7,2155.5,1494.9],"caption_bbox":[2176.6,1473.1,2297.8,1492.3],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[2103.3,1478.7,2155.5,1494.9],[2043.9,1478.7,2097.9,1494.9]]},{"caption":"AIR VENT","kind":"symbol","seedable":true,"rect":[2843.1,1489.5,2954.7,1509.3],"caption_bbox":[2975.8,1495.2,3050.5,1514.4],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"UNIT HEATER","kind":"symbol","seedable":true,"rect":[4578.3,1493.1,4643.1,1523.7],"caption_bbox":[4726.8,1503.6,4835,1522.8],"heading":"MECHANICAL FLOOR PLAN SYMBOLS","member_rects":[[4614.3,1505.7,4643.1,1512.9],[4610.7,1503.9,4616.1,1512.9],[4578.3,1493.1,4594.5,1523.7],[4598.1,1507.5,4612.5,1509.3]]},{"caption":"HOSE CONNECTION","kind":"symbol","seedable":true,"rect":[2087.1,1505.7,2112.3,1529.1],"caption_bbox":[2176.6,1505,2336.6,1524.2],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"AIR VENT WITH VALVE","kind":"symbol","seedable":true,"rect":[2843.1,1518.3,2954.7,1563.3],"caption_bbox":[2975.8,1549.9,3153.3,1569.1],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"STEAM TRAP","kind":"symbol","seedable":true,"rect":[2087.1,1538.1,2112.3,1561.5],"caption_bbox":[2176.6,1537,2280.5,1556.2],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"RETURN OR EXHAUST AIR FLOW","kind":"annotation","seedable":false,"rect":[4616.1,1566.9,4657.5,1575.9],"caption_bbox":[4726.8,1561.9,4987.2,1581.1],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"HOSE BIBB","kind":"symbol","seedable":true,"rect":[2043.9,1581.3,2114.1,1592.1],"caption_bbox":[2176.6,1576.1,2264,1595.3],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"SUB-METER FOR COLD WATER, HOT WATER, GAS","kind":"symbol","seedable":true,"rect":[2889.9,1599.3,2909.7,1619.1],"caption_bbox":[2975.8,1596.5,3374.6,1615.7],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"WALL HYDRANT","kind":"symbol","seedable":true,"rect":[2043.9,1608.3,2114.1,1619.1],"caption_bbox":[2176.6,1603,2304.1,1622.2],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"SUPPLY OR OUTSIDE AIR FLOW","kind":"annotation","seedable":false,"rect":[4616.1,1622.7,4657.5,1629.9],"caption_bbox":[4726.8,1613,4978.6,1632.2],"heading":"MECHANICAL FLOOR PLAN SYMBOLS"},{"caption":"SUPPLY AIR","kind":"line_style","seedable":false,"rect":[1802.7,1842.3,2020.5,1844.1],"caption_bbox":[2091.1,1833.1,2186.1,1852.3],"heading":"HVAC & PIPING LEGEND","member_rects":[[1925.1,1842.3,2020.5,1844.1],[1802.7,1842.3,1896.3,1844.1]]},{"caption":"RETURN AIR","kind":"line_style","seedable":false,"rect":[1802.7,1878.3,2020.5,1880.1],"caption_bbox":[2091.1,1869.1,2190.2,1888.3],"heading":"HVAC & PIPING LEGEND","member_rects":[[1925.1,1878.3,2020.5,1880.1],[1802.7,1878.3,1896.3,1880.1]]},{"caption":"TOILET EXHAUST","kind":"line_style","seedable":false,"rect":[1802.7,1914.3,2020.5,1916.1],"caption_bbox":[2091.1,1905.1,2228.7,1924.3],"heading":"HVAC & PIPING LEGEND","member_rects":[[1925.1,1914.3,2020.5,1916.1],[1802.7,1914.3,1896.3,1916.1]]},{"caption":"GENERAL EXHAUST","kind":"line_style","seedable":false,"rect":[1802.7,1950.3,2020.5,1952.1],"caption_bbox":[2091.1,1941.1,2249.9,1960.3],"heading":"HVAC & PIPING LEGEND","member_rects":[[1925.1,1950.3,2020.5,1952.1],[1802.7,1950.3,1896.3,1952.1]]},{"caption":"HEATING HOT WATER SUPPLY","kind":"line_style","seedable":false,"rect":[1802.7,1975.5,2020.5,1998.9],"caption_bbox":[2091.1,1977.1,2334.3,1996.3],"heading":"HVAC & PIPING LEGEND","member_rects":[[1885.5,1975.5,2020.5,1998.9],[1802.7,1986.3,1883.7,1988.1]]},{"caption":"HEATING HOT WATER RETURN","kind":"line_style","seedable":false,"rect":[1802.7,2011.5,2020.5,2034.9],"caption_bbox":[2091.1,2013.1,2338.3,2032.3],"heading":"HVAC & PIPING LEGEND","member_rects":[[1883.7,2011.5,2020.5,2034.9],[1802.7,2022.3,1883.7,2024.1]]},{"caption":"PERIMETER HEATING WATER SUPPLY","kind":"line_style","seedable":false,"rect":[1802.7,2047.5,2020.5,2070.9],"caption_bbox":[2091.1,2049.1,2394.4,2068.3],"heading":"HVAC & PIPING LEGEND"},{"caption":"PERIMETER HEATING WATER RETURN","kind":"line_style","seedable":false,"rect":[1802.7,2083.5,2020.5,2106.9],"caption_bbox":[2091.1,2085.1,2398.4,2104.3],"heading":"HVAC & PIPING LEGEND"},{"caption":"CHILLED WATER SUPPLY","kind":"line_style","seedable":false,"rect":[1802.7,2119.5,2020.5,2142.9],"caption_bbox":[2091.1,2121.1,2291.5,2140.3],"heading":"HVAC & PIPING LEGEND"},{"caption":"CHILLED WATER RETURN","kind":"line_style","seedable":false,"rect":[1802.7,2155.5,2020.5,2178.9],"caption_bbox":[2091.1,2157.1,2295.5,2176.3],"heading":"HVAC & PIPING LEGEND"},{"caption":"REFRIGERANT LIQUID","kind":"line_style","seedable":false,"rect":[1802.7,2202.3,2020.5,2204.1],"caption_bbox":[2091.1,2193.1,2265.5,2212.3],"heading":"HVAC & PIPING LEGEND","member_rects":[[1925.1,2202.3,2020.5,2204.1],[1802.7,2202.3,1896.3,2204.1]]},{"caption":"REFRIGERANT SUCTION","kind":"line_style","seedable":false,"rect":[1802.7,2238.3,2020.5,2240.1],"caption_bbox":[2091.1,2229.1,2284.9,2248.3],"heading":"HVAC & PIPING LEGEND","member_rects":[[1925.1,2238.3,2020.5,2240.1],[1802.7,2238.3,1896.3,2240.1]]},{"caption":"REFRIGERANT HOT GAS","kind":"line_style","seedable":false,"rect":[1892.7,2263.5,2020.5,2286.9],"caption_bbox":[2091.1,2265.1,2285.2,2284.3],"heading":"HVAC & PIPING LEGEND"},{"caption":"CONDENSER WATER SUPPLY","kind":"line_style","seedable":false,"rect":[1802.7,2299.5,2020.5,2322.9],"caption_bbox":[2091.1,2301.1,2327.6,2320.3],"heading":"HVAC & PIPING LEGEND","member_rects":[[1890.9,2299.5,2020.5,2322.9],[1802.7,2310.3,1890.9,2312.1]]},{"caption":"CONDENSER WATER RETURN","kind":"line_style","seedable":false,"rect":[1802.7,2335.5,2020.5,2358.9],"caption_bbox":[2091.1,2337.1,2331.6,2356.3],"heading":"HVAC & PIPING LEGEND","member_rects":[[1890.9,2335.5,2020.5,2358.9],[1802.7,2346.3,1890.9,2348.1]]},{"caption":"HIGH PRESSURE STEAM","kind":"line_style","seedable":false,"rect":[1802.7,2382.3,2020.5,2384.1],"caption_bbox":[2091.1,2373.1,2286,2392.3],"heading":"HVAC & PIPING LEGEND","member_rects":[[1802.7,2382.3,1863.9,2384.1],[1959.3,2382.3,2020.5,2384.1]]},{"caption":"LOW PRESSURE STEAM","kind":"line_style","seedable":false,"rect":[1802.7,2418.3,2020.5,2420.1],"caption_bbox":[2091.1,2409.1,2283.1,2428.3],"heading":"HVAC & PIPING LEGEND","member_rects":[[1802.7,2418.3,1863.9,2420.1],[1959.3,2418.3,2020.5,2420.1]]},{"caption":"HIGH PRESSURE CONDENSATE RETURN","kind":"line_style","seedable":false,"rect":[1802.7,2454.3,2020.5,2456.1],"caption_bbox":[2091.1,2445.1,2415.5,2464.3],"heading":"HVAC & PIPING LEGEND","member_rects":[[1802.7,2454.3,1863.9,2456.1],[1959.3,2454.3,2020.5,2456.1]]},{"caption":"LOW PRESSURE CONDENSATE RETURN","kind":"line_style","seedable":false,"rect":[1802.7,2490.3,2020.5,2492.1],"caption_bbox":[2091.1,2481.1,2412.6,2500.3],"heading":"HVAC & PIPING LEGEND","member_rects":[[1802.7,2490.3,1863.9,2492.1],[1959.3,2490.3,2020.5,2492.1]]},{"caption":"CLEAN STEAM","kind":"line_style","seedable":false,"rect":[1802.7,2526.3,2020.5,2528.1],"caption_bbox":[2091.1,2517.1,2205.6,2536.3],"heading":"HVAC & PIPING LEGEND","member_rects":[[1802.7,2526.3,1867.5,2528.1],[1953.9,2526.3,2020.5,2528.1]]},{"caption":"PUMPED CONDENSATE","kind":"line_style","seedable":false,"rect":[1802.7,2562.3,2020.5,2564.1],"caption_bbox":[2091.1,2553.1,2278.5,2572.3],"heading":"HVAC & PIPING LEGEND","member_rects":[[1925.1,2562.3,2020.5,2564.1],[1802.7,2562.3,1896.3,2564.1]]},{"caption":"CONDENSATE DRAIN","kind":"line_style","seedable":false,"rect":[1802.7,2598.3,2020.5,2600.1],"caption_bbox":[2091.1,2589.1,2259,2608.3],"heading":"HVAC & PIPING LEGEND","member_rects":[[1921.5,2598.3,2020.5,2600.1],[1802.7,2598.3,1901.7,2600.1]]},{"caption":"SECTION NUMBER","kind":"annotation","seedable":false,"rect":[3838.1,3463,3856.5,3464.8],"caption_bbox":[3867.1,3451,4014.4,3470.2],"heading":"REFERENCE SYMBOLS"},{"caption":"RISER DESIGNATION (TYPE AS INDICATED)","kind":"annotation","seedable":false,"rect":[4385.7,3474.9,4461.3,3548.7],"caption_bbox":[4509.6,3496.8,4850,3516],"heading":"REFERENCE SYMBOLS","member_rects":[[4385.7,3474.9,4461.3,3548.7],[4419.9,3482.1,4427.1,3505.5],[4419.9,3518.1,4427.1,3541.5]]},{"caption":"DRAWING NUMBER WHERE DRAWN","kind":"annotation","seedable":false,"rect":[3838.1,3535,3856.5,3536.8],"caption_bbox":[3867.1,3523,4153.6,3542.2],"heading":"REFERENCE SYMBOLS"},{"caption":"DETAIL NUMBER","kind":"annotation","seedable":false,"rect":[3838.1,3566.5,3856.5,3568.3],"caption_bbox":[3867.1,3554.4,3998.8,3573.6],"heading":"REFERENCE SYMBOLS"},{"caption":"DRAWING NUMBER WHERE DRAWN","kind":"annotation","seedable":false,"rect":[3838.1,3638.5,3856.5,3640.3],"caption_bbox":[3867.1,3626.4,4153.6,3645.6],"heading":"REFERENCE SYMBOLS"},{"caption":"DEMO KEY NOTE","kind":"annotation","seedable":false,"rect":[4396.5,3647.7,4607.1,3694.5],"caption_bbox":[4616.9,3658.3,4752.4,3677.5],"heading":"REFERENCE SYMBOLS"},{"caption":"KEY NOTE","kind":"annotation","seedable":false,"rect":[3810,3681.2,3975.8,3683],"caption_bbox":[3986.4,3669.4,4068.2,3688.6],"heading":"REFERENCE SYMBOLS"}]},
+    {
+      "id": "24__vol2__019-p002",
+      "document_id": "24__vol2__019",
+      "page": 2,
+      "sheet_number": "M2.1",
+      "review_status": "complete",
+      "expected_status": "ok",
+      "notes": [
+        "Rendered sheet reviewed against the source at full-page and source-resolution detail scale: 65 legitimate zone-hatch keys (DX-1 through DX-5/6, FCU-1, UH-1, and VAV-1 through VAV-58). The Revit placeholder text “Calculating...” occupies the final empty grid cell and is not a legend identity. Every row is graphic zoning truth and therefore annotation/nonseedable, never a discrete installed-device count seed. Exact four-sided swatch and caption geometry was confirmed on two deterministic runs."
+      ],
+      "expected_rows": [
+        {
+          "caption": "DX-1",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            527.5,
+            3814.1,
+            581.5,
+            3868.1
+          ],
+          "caption_bbox": [
+            595.7,
+            3816.1,
+            681.4,
+            3854.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "UH-1",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            795.8,
+            3814.1,
+            849.8,
+            3868.1
+          ],
+          "caption_bbox": [
+            864,
+            3816.1,
+            951.6,
+            3854.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-6",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1064.4,
+            3814.1,
+            1118.4,
+            3868.1
+          ],
+          "caption_bbox": [
+            1132.6,
+            3816.1,
+            1241.5,
+            3854.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-12",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1332.7,
+            3814.1,
+            1386.7,
+            3868.1
+          ],
+          "caption_bbox": [
+            1400.9,
+            3816.1,
+            1530.7,
+            3854.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-18",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1601,
+            3814.1,
+            1655,
+            3868.1
+          ],
+          "caption_bbox": [
+            1669.2,
+            3816.1,
+            1799.1,
+            3854.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-24",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1869.4,
+            3814.1,
+            1923.4,
+            3868.1
+          ],
+          "caption_bbox": [
+            1937.5,
+            3816.1,
+            2067.4,
+            3854.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-30",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2137.7,
+            3814.1,
+            2191.7,
+            3868.1
+          ],
+          "caption_bbox": [
+            2205.8,
+            3816.1,
+            2335.7,
+            3854.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-36",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2406.2,
+            3814.1,
+            2460.2,
+            3868.1
+          ],
+          "caption_bbox": [
+            2474.2,
+            3816.1,
+            2604,
+            3854.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-42",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2674.6,
+            3814.1,
+            2728.6,
+            3868.1
+          ],
+          "caption_bbox": [
+            2742.7,
+            3816.1,
+            2872.6,
+            3854.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-48",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2942.9,
+            3814.1,
+            2996.9,
+            3868.1
+          ],
+          "caption_bbox": [
+            3011,
+            3816.1,
+            3140.9,
+            3854.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-54",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            3211.2,
+            3814.1,
+            3265.2,
+            3868.1
+          ],
+          "caption_bbox": [
+            3279.4,
+            3816.1,
+            3409.2,
+            3854.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "DX-2",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            527.5,
+            3886.1,
+            581.5,
+            3940.1
+          ],
+          "caption_bbox": [
+            595.7,
+            3888.1,
+            681.4,
+            3926.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-1",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            795.8,
+            3886.1,
+            849.8,
+            3940.1
+          ],
+          "caption_bbox": [
+            864,
+            3888.1,
+            973,
+            3926.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-7",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1064.4,
+            3886.1,
+            1118.4,
+            3940.1
+          ],
+          "caption_bbox": [
+            1132.6,
+            3888.1,
+            1241.5,
+            3926.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-13",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1332.7,
+            3886.1,
+            1386.7,
+            3940.1
+          ],
+          "caption_bbox": [
+            1400.9,
+            3888.1,
+            1530.7,
+            3926.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-19",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1601,
+            3886.1,
+            1655,
+            3940.1
+          ],
+          "caption_bbox": [
+            1669.2,
+            3888.1,
+            1799.1,
+            3926.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-25",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1869.4,
+            3886.1,
+            1923.4,
+            3940.1
+          ],
+          "caption_bbox": [
+            1937.5,
+            3888.1,
+            2067.4,
+            3926.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-31",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2137.7,
+            3886.1,
+            2191.7,
+            3940.1
+          ],
+          "caption_bbox": [
+            2205.8,
+            3888.1,
+            2335.7,
+            3926.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-37",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2406.2,
+            3886.1,
+            2460.2,
+            3940.1
+          ],
+          "caption_bbox": [
+            2474.2,
+            3888.1,
+            2604,
+            3926.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-43",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2674.6,
+            3886.1,
+            2728.6,
+            3940.1
+          ],
+          "caption_bbox": [
+            2742.7,
+            3888.1,
+            2872.6,
+            3926.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-49",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2942.9,
+            3886.1,
+            2996.9,
+            3940.1
+          ],
+          "caption_bbox": [
+            3011,
+            3888.1,
+            3140.9,
+            3926.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-55",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            3211.2,
+            3886.1,
+            3265.2,
+            3940.1
+          ],
+          "caption_bbox": [
+            3279.4,
+            3888.1,
+            3409.2,
+            3926.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "DX-3",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            527.5,
+            3958.1,
+            581.5,
+            4012.1
+          ],
+          "caption_bbox": [
+            595.7,
+            3960.1,
+            681.4,
+            3998.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-2",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            795.8,
+            3958.1,
+            849.8,
+            4012.1
+          ],
+          "caption_bbox": [
+            864,
+            3960.1,
+            973,
+            3998.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-8",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1064.4,
+            3958.1,
+            1118.4,
+            4012.1
+          ],
+          "caption_bbox": [
+            1132.6,
+            3960.1,
+            1241.5,
+            3998.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-14",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1332.7,
+            3958.1,
+            1386.7,
+            4012.1
+          ],
+          "caption_bbox": [
+            1400.9,
+            3960.1,
+            1530.7,
+            3998.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-20",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1601,
+            3958.1,
+            1655,
+            4012.1
+          ],
+          "caption_bbox": [
+            1669.2,
+            3960.1,
+            1799.1,
+            3998.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-26",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1869.4,
+            3958.1,
+            1923.4,
+            4012.1
+          ],
+          "caption_bbox": [
+            1937.5,
+            3960.1,
+            2067.4,
+            3998.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-32",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2137.7,
+            3958.1,
+            2191.7,
+            4012.1
+          ],
+          "caption_bbox": [
+            2205.8,
+            3960.1,
+            2335.7,
+            3998.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-38",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2406.2,
+            3958.1,
+            2460.2,
+            4012.1
+          ],
+          "caption_bbox": [
+            2474.2,
+            3960.1,
+            2604,
+            3998.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-44",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2674.6,
+            3958.1,
+            2728.6,
+            4012.1
+          ],
+          "caption_bbox": [
+            2742.7,
+            3960.1,
+            2872.6,
+            3998.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-50",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2942.9,
+            3958.1,
+            2996.9,
+            4012.1
+          ],
+          "caption_bbox": [
+            3011,
+            3960.1,
+            3140.9,
+            3998.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-56",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            3211.2,
+            3958.1,
+            3265.2,
+            4012.1
+          ],
+          "caption_bbox": [
+            3279.4,
+            3960.1,
+            3409.2,
+            3998.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "DX-4",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            527.5,
+            4030.1,
+            581.5,
+            4084.1
+          ],
+          "caption_bbox": [
+            595.7,
+            4032.1,
+            681.4,
+            4070.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-3",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            795.8,
+            4030.1,
+            849.8,
+            4084.1
+          ],
+          "caption_bbox": [
+            864,
+            4032.1,
+            973,
+            4070.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-9",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1064.4,
+            4030.1,
+            1118.4,
+            4084.1
+          ],
+          "caption_bbox": [
+            1132.6,
+            4032.1,
+            1241.5,
+            4070.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-15",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1332.7,
+            4030.1,
+            1386.7,
+            4084.1
+          ],
+          "caption_bbox": [
+            1400.9,
+            4032.1,
+            1530.7,
+            4070.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-21",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1601,
+            4030.1,
+            1655,
+            4084.1
+          ],
+          "caption_bbox": [
+            1669.2,
+            4032.1,
+            1799.1,
+            4070.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-27",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1869.4,
+            4030.1,
+            1923.4,
+            4084.1
+          ],
+          "caption_bbox": [
+            1937.5,
+            4032.1,
+            2067.4,
+            4070.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-33",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2137.7,
+            4030.1,
+            2191.7,
+            4084.1
+          ],
+          "caption_bbox": [
+            2205.8,
+            4032.1,
+            2335.7,
+            4070.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-39",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2406.2,
+            4030.1,
+            2460.2,
+            4084.1
+          ],
+          "caption_bbox": [
+            2474.2,
+            4032.1,
+            2604,
+            4070.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-45",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2674.6,
+            4030.1,
+            2728.6,
+            4084.1
+          ],
+          "caption_bbox": [
+            2742.7,
+            4032.1,
+            2872.6,
+            4070.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-51",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2942.9,
+            4030.1,
+            2996.9,
+            4084.1
+          ],
+          "caption_bbox": [
+            3011,
+            4032.1,
+            3140.9,
+            4070.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-57",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            3211.2,
+            4030.1,
+            3265.2,
+            4084.1
+          ],
+          "caption_bbox": [
+            3279.4,
+            4032.1,
+            3409.2,
+            4070.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "DX-5/6",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            527.5,
+            4102.1,
+            581.5,
+            4156.1
+          ],
+          "caption_bbox": [
+            595.7,
+            4104.1,
+            712.8,
+            4142.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-4",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            795.8,
+            4102.1,
+            849.8,
+            4156.1
+          ],
+          "caption_bbox": [
+            864,
+            4104.1,
+            973,
+            4142.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-10",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1064.4,
+            4102.1,
+            1118.4,
+            4156.1
+          ],
+          "caption_bbox": [
+            1132.6,
+            4104.1,
+            1262.4,
+            4142.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-16",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1332.7,
+            4102.1,
+            1386.7,
+            4156.1
+          ],
+          "caption_bbox": [
+            1400.9,
+            4104.1,
+            1530.7,
+            4142.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-22",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1601,
+            4102.1,
+            1655,
+            4156.1
+          ],
+          "caption_bbox": [
+            1669.2,
+            4104.1,
+            1799.1,
+            4142.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-28",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1869.4,
+            4102.1,
+            1923.4,
+            4156.1
+          ],
+          "caption_bbox": [
+            1937.5,
+            4104.1,
+            2067.4,
+            4142.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-34",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2137.7,
+            4102.1,
+            2191.7,
+            4156.1
+          ],
+          "caption_bbox": [
+            2205.8,
+            4104.1,
+            2335.7,
+            4142.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-40",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2406.2,
+            4102.1,
+            2460.2,
+            4156.1
+          ],
+          "caption_bbox": [
+            2474.2,
+            4104.1,
+            2604,
+            4142.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-46",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2674.6,
+            4102.1,
+            2728.6,
+            4156.1
+          ],
+          "caption_bbox": [
+            2742.7,
+            4104.1,
+            2872.6,
+            4142.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-52",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2942.9,
+            4102.1,
+            2996.9,
+            4156.1
+          ],
+          "caption_bbox": [
+            3011,
+            4104.1,
+            3140.9,
+            4142.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-58",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            3211.2,
+            4102.1,
+            3265.2,
+            4156.1
+          ],
+          "caption_bbox": [
+            3279.4,
+            4104.1,
+            3409.2,
+            4142.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "FCU-1",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            527.5,
+            4174.1,
+            581.5,
+            4228.1
+          ],
+          "caption_bbox": [
+            595.7,
+            4176.1,
+            706.3,
+            4214.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-5",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            795.8,
+            4174.1,
+            849.8,
+            4228.1
+          ],
+          "caption_bbox": [
+            864,
+            4176.1,
+            973,
+            4214.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-11",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1064.4,
+            4174.1,
+            1118.4,
+            4228.1
+          ],
+          "caption_bbox": [
+            1132.6,
+            4176.1,
+            1262.4,
+            4214.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-17",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1332.7,
+            4174.1,
+            1386.7,
+            4228.1
+          ],
+          "caption_bbox": [
+            1400.9,
+            4176.1,
+            1530.7,
+            4214.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-23",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1601,
+            4174.1,
+            1655,
+            4228.1
+          ],
+          "caption_bbox": [
+            1669.2,
+            4176.1,
+            1799.1,
+            4214.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-29",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            1869.4,
+            4174.1,
+            1923.4,
+            4228.1
+          ],
+          "caption_bbox": [
+            1937.5,
+            4176.1,
+            2067.4,
+            4214.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-35",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2137.7,
+            4174.1,
+            2191.7,
+            4228.1
+          ],
+          "caption_bbox": [
+            2205.8,
+            4176.1,
+            2335.7,
+            4214.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-41",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2406.2,
+            4174.1,
+            2460.2,
+            4228.1
+          ],
+          "caption_bbox": [
+            2474.2,
+            4176.1,
+            2604,
+            4214.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-47",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2674.6,
+            4174.1,
+            2728.6,
+            4228.1
+          ],
+          "caption_bbox": [
+            2742.7,
+            4176.1,
+            2872.6,
+            4214.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        },
+        {
+          "caption": "VAV-53",
+          "kind": "annotation",
+          "seedable": false,
+          "rect": [
+            2942.9,
+            4174.1,
+            2996.9,
+            4228.1
+          ],
+          "caption_bbox": [
+            3011,
+            4176.1,
+            3140.9,
+            4214.2
+          ],
+          "heading": "HVAC ZONE LEGEND"
+        }
+      ]
+    },
     {"id":"24__vol2__019-p017","document_id":"24__vol2__019","page":17,"sheet_number":"M8.1","review_status":"complete","expected_status":"ok","expected_row_count":102,"notes":["Rendered sheet M8.1 reviewed row by row: Sensing Components 26, Control Components 22, Control Symbols 19, Control Electrical Components 32, and three independently leadered BAS point-tag definitions, for 102 legitimate rows total. FILTER TYPE DIAGRAMS contains three instructional construction examples and is explicitly excluded from symbol truth. The source typo INDENIFICATION is preserved verbatim. Exact glyph and caption geometry was checked against the rendered vector sheet."],"expected_rows":[{"caption":"AIR FLOW MEASURING STATION (DUCT)","kind":"symbol","seedable":true,"rect":[1478.7,272.7,1529.1,386.1],"caption_bbox":[1620.5,294.5,1876.8,337],"heading":null},{"caption":"PARALLEL BLADE DAMPER- PNEUMATIC ACTUATOR WITH POSITIONER","kind":"symbol","seedable":true,"rect":[2625.3,278.1,2655.9,387.9],"caption_bbox":[2746.8,303.6,2982.7,369.1],"heading":"CONTROL SYMBOLS"},{"caption":"2-WAY ELECTRIC CONTROL VALVE","kind":"symbol","seedable":true,"rect":[2058.3,287.1,2094.3,346.5],"caption_bbox":[2182.8,304.1,2459.7,323.3],"heading":"CONTROL COMPONENTS","member_rects":[[2063.7,287.1,2088.9,333.9],[2058.3,321.3,2094.3,346.5]]},{"caption":"AUXILIARY CONTACT","kind":"control_function","seedable":false,"rect":[3183.3,287.1,3222.9,310.5],"caption_bbox":[3306.7,284.9,3473.6,304.1],"heading":null},{"caption":"CURRENT INPUT","kind":"control_function","seedable":false,"rect":[3183.3,335.7,3222.9,359.1],"caption_bbox":[3306.7,334.3,3439.5,353.5],"heading":null},{"caption":"3-WAY ELECTRIC CONTROL VALVE","kind":"symbol","seedable":true,"rect":[2058.3,375.3,2094.3,440.1],"caption_bbox":[2182.8,391.9,2459.7,411.1],"heading":"CONTROL COMPONENTS"},{"caption":"CURRENT SENSING RELAY","kind":"symbol","seedable":true,"rect":[3183.3,380.7,3222.9,404.1],"caption_bbox":[3306.7,379.2,3521.6,398.4],"heading":null},{"caption":"FAN INLET BELL HOUSING AIR FLOW MEASURING STATION","kind":"symbol","seedable":true,"rect":[1478.7,391.5,1552.5,485.1],"caption_bbox":[1620.5,423.6,1876.8,466.1],"heading":null},{"caption":"INTEGRAL FACE & BYPASS STEAM HEATING COIL","kind":"symbol","seedable":true,"rect":[2612.7,413.1,2666.7,530.1],"caption_bbox":[2743.2,446.2,2956.6,492.2],"heading":"CONTROL SYMBOLS","member_rects":[[2636.1,413.1,2666.7,530.1],[2618.1,479.7,2628.9,490.5],[2619.9,481.5,2627.1,488.7],[2612.7,450.9,2628.9,530.1]]},{"caption":"CURRENT TRANSDUCER","kind":"symbol","seedable":true,"rect":[3183.3,420.3,3222.9,443.7],"caption_bbox":[3306.7,418.8,3504,438],"heading":null},{"caption":"ENABLE / DISABLE","kind":"control_function","seedable":false,"rect":[3183.3,459.9,3222.9,483.3],"caption_bbox":[3306.7,458.9,3452.5,478.1],"heading":null},{"caption":"2-WAY CONTROL VALVE WITH INTEGRAL THERMOSTAT","kind":"symbol","seedable":true,"rect":[2058.3,468.9,2094.3,555.3],"caption_bbox":[2182.8,488.2,2426.7,530.4],"heading":"CONTROL COMPONENTS","member_rects":[[2061.9,468.9,2090.7,542.7],[2058.3,530.1,2094.3,555.3]]},{"caption":"TEMPERATURE SENSOR","kind":"symbol","seedable":true,"rect":[1500.3,501.3,1530.9,589.5],"caption_bbox":[1620.5,535,1816.7,554.2],"heading":null},{"caption":"SET POINT","kind":"control_function","seedable":false,"rect":[3183.3,508.5,3222.9,533.7],"caption_bbox":[3306.7,508.3,3392.3,527.5],"heading":null},{"caption":"HOT WATER OR STEAM HEATING COIL","kind":"symbol","seedable":true,"rect":[2623.5,558.9,2661.3,650.7],"caption_bbox":[2743.2,573.4,2930.9,619.4],"heading":"CONTROL SYMBOLS"},{"caption":"START / STOP","kind":"control_function","seedable":false,"rect":[3183.3,558.9,3222.9,582.3],"caption_bbox":[3306.7,557.8,3417.7,577],"heading":null},{"caption":"3-WAY CONTROL VALVE WITH INTEGRAL THERMOSTAT","kind":"symbol","seedable":true,"rect":[2058.3,582.3,2094.3,675.9],"caption_bbox":[2182.8,602.9,2426.7,645.1],"heading":"CONTROL COMPONENTS"},{"caption":"VOLTAGE INPUT","kind":"control_function","seedable":false,"rect":[3183.3,609.3,3222.9,632.7],"caption_bbox":[3306.7,607.2,3436.7,626.4],"heading":null},{"caption":"TEMPERATURE SENSOR (AVERAGING)","kind":"symbol","seedable":true,"rect":[1496.7,614.7,1527.3,726.3],"caption_bbox":[1617.1,652.1,1925.4,671.3],"heading":null},{"caption":"VOLTAGE OUTPUT","kind":"control_function","seedable":false,"rect":[3183.3,657.9,3222.9,681.3],"caption_bbox":[3306.7,656.9,3455.1,676.1],"heading":null},{"caption":"CHILLED WATER COOLING COIL","kind":"symbol","seedable":true,"rect":[2623.5,670.5,2661.3,764.1],"caption_bbox":[2743.2,690,2875.1,736.1],"heading":"CONTROL SYMBOLS"},{"caption":"BUTTERFLY VALVE ELECTRIC ACTUATOR","kind":"symbol","seedable":true,"rect":[2063.7,702.9,2088.9,760.5],"caption_bbox":[2182.8,710.2,2356.7,752.4],"heading":"CONTROL COMPONENTS"},{"caption":"VIBRATION SWITCH","kind":"symbol","seedable":true,"rect":[3183.3,708.3,3222.9,731.7],"caption_bbox":[3306.7,706.3,3462.7,725.5],"heading":null},{"caption":"FREEZESTAT","kind":"symbol","seedable":true,"rect":[1502.1,747.9,1532.7,850.5],"caption_bbox":[1620.5,775.2,1726.1,794.4],"heading":null},{"caption":"CURRENT SWITCH","kind":"symbol","seedable":true,"rect":[3183.3,753.3,3222.9,776.7],"caption_bbox":[3306.7,752.2,3455.3,771.4],"heading":null},{"caption":"SEGMENTED BALL VALVE ELECTRIC ACTUATOR","kind":"symbol","seedable":true,"rect":[2063.7,791.1,2088.9,852.3],"caption_bbox":[2182.8,798,2386.9,840.5],"heading":"CONTROL COMPONENTS"},{"caption":"DIRECT EXPANSION HEATING & COOLING COIL","kind":"symbol","seedable":true,"rect":[2623.5,791.1,2661.3,882.9],"caption_bbox":[2743.2,806.6,2952.2,852.7],"heading":"CONTROL SYMBOLS","member_rects":[[2623.5,791.1,2661.3,882.9],[2643.3,854.1,2655.9,879.3]]},{"caption":"ADDRESSABLE RELAY","kind":"symbol","seedable":true,"rect":[3183.3,805.5,3222.9,828.9],"caption_bbox":[3306.7,805.2,3484.6,824.4],"heading":null},{"caption":"TIME DELAY RELAY","kind":"symbol","seedable":true,"rect":[3177.9,855.9,3228.3,882.9],"caption_bbox":[3306.7,858.5,3460.4,877.7],"heading":null},{"caption":"PRESSURE SWITCH","kind":"symbol","seedable":true,"rect":[1507.5,875.7,1532.7,963.9],"caption_bbox":[1620.5,895.2,1778.8,914.4],"heading":null},{"caption":"2-WAY PNEUMATIC CONTROL VALVE","kind":"symbol","seedable":true,"rect":[2058.3,879.3,2094.3,927.9],"caption_bbox":[2182.8,891.4,2475.6,910.6],"heading":"CONTROL COMPONENTS","member_rects":[[2058.3,902.7,2094.3,927.9],[2063.7,879.3,2088.9,915.3]]},{"caption":"WATERSIDE ECONOMIZER COOLING COIL","kind":"symbol","seedable":true,"rect":[2623.5,900.9,2661.3,992.7],"caption_bbox":[2743.2,923.3,2954.9,969.4],"heading":"CONTROL SYMBOLS"},{"caption":"MOTOR STARTER","kind":"symbol","seedable":true,"rect":[3177.9,911.7,3228.3,938.7],"caption_bbox":[3306.7,913.7,3448.1,932.9],"heading":null},{"caption":"3-WAY PNEUMATIC CONTROL VALVE","kind":"symbol","seedable":true,"rect":[2058.3,956.7,2094.3,1008.9],"caption_bbox":[2182.8,970.3,2475.6,989.5],"heading":"CONTROL COMPONENTS"},{"caption":"FIRE ALARM INTERFACE","kind":"symbol","seedable":true,"rect":[3177.9,967.5,3228.3,994.5],"caption_bbox":[3306.7,968.9,3500.4,988.1],"heading":null},{"caption":"PRESSURE SENSOR OR PRESSURESTAT","kind":"symbol","seedable":true,"rect":[1496.7,998.1,1527.3,1079.1],"caption_bbox":[1615.4,1003.9,1778.4,1046.4],"heading":null},{"caption":"ENERGY RECOVERY COIL","kind":"symbol","seedable":true,"rect":[2623.5,1021.5,2661.3,1113.3],"caption_bbox":[2743.2,1039.9,2907.7,1086],"heading":"CONTROL SYMBOLS"},{"caption":"VARIABLE FREQUENCY DRIVE","kind":"symbol","seedable":true,"rect":[3177.9,1021.5,3228.3,1048.5],"caption_bbox":[3306.7,1024.1,3546.3,1043.3],"heading":null},{"caption":"PRESSURE INDEPENDENT CHARACTERIZED CONTROL VALVE","kind":"symbol","seedable":true,"rect":[2067.3,1035.9,2139.3,1102.5],"caption_bbox":[2182.8,1029.7,2535.6,1070.6],"heading":"CONTROL COMPONENTS"},{"caption":"ELECTRONICALLY COMMUTATED MOTOR","kind":"symbol","seedable":true,"rect":[3177.9,1077.3,3228.3,1104.3],"caption_bbox":[3306.7,1079.3,3637.4,1098.5],"heading":null},{"caption":"BUTTERFLY VALVE PNEUMATIC ACTUATOR","kind":"symbol","seedable":true,"rect":[2063.7,1113.3,2088.9,1156.5],"caption_bbox":[2182.8,1112.9,2372.5,1155.4],"heading":"CONTROL COMPONENTS"},{"caption":"FLOW SWITCH","kind":"symbol","seedable":true,"rect":[1502.1,1118.7,1532.7,1190.7],"caption_bbox":[1620.5,1137.8,1736.8,1157],"heading":null},{"caption":"ELECTRIC TO PNEUMATIC SWITCH","kind":"symbol","seedable":true,"rect":[3177.9,1133.1,3228.3,1160.1],"caption_bbox":[3306.7,1134.5,3582.7,1153.7],"heading":null},{"caption":"ELECTRIC DUCT HEATER","kind":"symbol","seedable":true,"rect":[2625.3,1142.1,2655.9,1242.9],"caption_bbox":[2743.2,1199.8,2943.3,1219],"heading":"CONTROL SYMBOLS"},{"caption":"ELECTRIC TO PNEUMATIC VALVE","kind":"symbol","seedable":true,"rect":[3177.9,1187.1,3228.3,1214.1],"caption_bbox":[3306.7,1189.7,3570.8,1208.9],"heading":null},{"caption":"SEGMENTED BALL VALVE PNEUMATIC ACTUATOR","kind":"symbol","seedable":true,"rect":[2063.7,1188.9,2088.9,1237.5],"caption_bbox":[2182.8,1189.2,2386.9,1231.7],"heading":"CONTROL COMPONENTS"},{"caption":"RELATIVE HUMIDITY SENSOR (DUCT)","kind":"symbol","seedable":true,"rect":[1502.1,1223.1,1532.7,1311.3],"caption_bbox":[1620.5,1254.7,1914.6,1273.9],"heading":null},{"caption":"ROTATION MONITORING SENSOR","kind":"symbol","seedable":true,"rect":[3177.9,1242.9,3228.3,1269.9],"caption_bbox":[3306.7,1245.1,3573.8,1264.3],"heading":null},{"caption":"2-WAY SOLENOID VALVE","kind":"symbol","seedable":true,"rect":[2058.3,1264.5,2094.3,1323.9],"caption_bbox":[2182.8,1282.8,2379.7,1302],"heading":"CONTROL COMPONENTS"},{"caption":"GAS FIRED DUCT HEATER","kind":"symbol","seedable":true,"rect":[2619.9,1298.7,2659.5,1361.7],"caption_bbox":[2743.2,1306.6,2950.8,1325.8],"heading":"CONTROL SYMBOLS"},{"caption":"UNIT MANUFACTURER'S CONTROL PANEL","kind":"symbol","seedable":true,"rect":[3163.5,1298.7,3242.7,1361.7],"caption_bbox":[3306.7,1304.2,3499.7,1350.2],"heading":null},{"caption":"SMOKE DETECTOR (DUCT)","kind":"symbol","seedable":true,"rect":[1502.1,1338.3,1532.7,1426.5],"caption_bbox":[1620.5,1371.4,1833.9,1390.6],"heading":null},{"caption":"3-WAY SOLENOID VALVE","kind":"symbol","seedable":true,"rect":[2058.3,1352.7,2094.3,1417.5],"caption_bbox":[2182.8,1370.6,2379.7,1389.8],"heading":"CONTROL COMPONENTS"},{"caption":"REFRIGERANT LEAK MONITORING SYSTEM","kind":"symbol","seedable":true,"rect":[3163.5,1390.5,3242.7,1453.5],"caption_bbox":[3306.7,1395.6,3483.2,1441.7],"heading":null},{"caption":"ELECTRIC HUMIDIFIER","kind":"symbol","seedable":true,"rect":[2632.5,1403.1,2648.7,1516.5],"caption_bbox":[2743.2,1447.9,2921.8,1467.1],"heading":"CONTROL SYMBOLS"},{"caption":"OPPOSED BLADE DAMPER- ELECTRIC ACTUATOR","kind":"symbol","seedable":true,"rect":[2061.9,1428.3,2092.5,1548.9],"caption_bbox":[2182.8,1465.2,2405.1,1507.7],"heading":"CONTROL COMPONENTS"},{"caption":"CARBON DIOXIDE SENSOR (DUCT)","kind":"symbol","seedable":true,"rect":[1487.7,1478.7,1547.1,1538.1],"caption_bbox":[1620.5,1482.2,1894.7,1501.4],"heading":null},{"caption":"FIRE ALARM CONTROL PANEL","kind":"symbol","seedable":true,"rect":[3163.5,1480.5,3242.7,1543.5],"caption_bbox":[3306.7,1486.8,3444.2,1533.1],"heading":null},{"caption":"STEAM HUMIDIFIER","kind":"symbol","seedable":true,"rect":[2632.5,1545.3,2646.9,1656.9],"caption_bbox":[2743.2,1598.9,2897.8,1618.1],"heading":"CONTROL SYMBOLS"},{"caption":"PARALLEL BLADE DAMPER- ELECTRIC ACTUATOR","kind":"symbol","seedable":true,"rect":[2061.9,1568.7,2092.5,1689.3],"caption_bbox":[2182.8,1611.1,2406.6,1653.6],"heading":"CONTROL COMPONENTS"},{"caption":"EMERGENCY PUSH BUTTON","kind":"symbol","seedable":true,"rect":[3136.5,1572.3,3242.7,1635.3],"caption_bbox":[3306.7,1589.5,3532.7,1608.7],"heading":null},{"caption":"CARBON MONOXIDE SENSOR (DUCT)","kind":"symbol","seedable":true,"rect":[1487.7,1574.1,1547.1,1633.5],"caption_bbox":[1620.5,1578.5,1916.8,1597.7],"heading":null},{"caption":"FLOW METER","kind":"symbol","seedable":true,"rect":[1494.9,1656.9,1538.1,1709.1],"caption_bbox":[1620.5,1667.3,1729.6,1686.5],"heading":null},{"caption":"WALL MOUNTED SWITCH","kind":"symbol","seedable":true,"rect":[3183.3,1664.1,3222.9,1691.1],"caption_bbox":[3306.7,1664.6,3507.4,1683.8],"heading":null},{"caption":"GAS FIRED HUMIDIFIER","kind":"symbol","seedable":true,"rect":[2619.9,1705.5,2659.5,1856.7],"caption_bbox":[2743.2,1769.3,2929.2,1788.5],"heading":"CONTROL SYMBOLS"},{"caption":"OCCUPANCY OVER RIDE SWITCH","kind":"symbol","seedable":true,"rect":[3183.3,1705.5,3222.9,1732.5],"caption_bbox":[3306.7,1705.4,3573.3,1724.6],"heading":null},{"caption":"OPPOSED BLADE DAMPER WITH END SWITCH- ELECTRIC ACTUATOR","kind":"symbol","seedable":true,"rect":[2061.9,1710.9,2092.5,1856.7],"caption_bbox":[2182.8,1741.7,2395.3,1807.2],"heading":"CONTROL COMPONENTS"},{"caption":"LEVEL SENSOR","kind":"symbol","seedable":true,"rect":[1503.9,1745.1,1529.1,1827.9],"caption_bbox":[1620.5,1774.3,1744.3,1793.5],"heading":null},{"caption":"OCCUPANCY SENSOR","kind":"symbol","seedable":true,"rect":[3183.3,1745.1,3222.9,1773.9],"caption_bbox":[3306.7,1746.5,3484,1765.7],"heading":null},{"caption":"REFRIGERANT LEAK MONITORING SYSTEM COMBINATION HORN/STROBE","kind":"symbol","seedable":true,"rect":[3192.3,1800.9,3217.5,1836.9],"caption_bbox":[3307.7,1789.2,3651,1835.3],"heading":null,"member_rects":[[3194.1,1800.9,3217.5,1836.9],[3192.3,1831.5,3199.5,1836.9],[3192.3,1813.5,3199.5,1818.9]]},{"caption":"REFRIGERANT LEAK SENSING POINT","kind":"symbol","seedable":true,"rect":[1500.3,1858.5,1530.9,1889.1],"caption_bbox":[1620,1860.7,1913.8,1879.9],"heading":null},{"caption":"HORN OR SIREN","kind":"symbol","seedable":true,"rect":[3190.5,1865.7,3219.3,1908.9],"caption_bbox":[3307.7,1877.5,3438.7,1896.7],"heading":null},{"caption":"PARALLEL BLADE DAMPER WITH END SWITCH- ELECTRIC ACTUATOR","kind":"symbol","seedable":true,"rect":[2061.9,1872.9,2092.5,2018.7],"caption_bbox":[2182.8,1907.3,2396.9,1972.8],"heading":"CONTROL COMPONENTS"},{"caption":"BELL","kind":"symbol","seedable":true,"rect":[3190.5,1937.7,3219.3,1980.9],"caption_bbox":[3307.7,1947.4,3347.4,1966.6],"heading":null},{"caption":"STATIC PRESSURE SENSOR","kind":"symbol","seedable":true,"rect":[1496.7,1939.5,1597.5,2015.1],"caption_bbox":[1620,1954.3,1844.8,1973.5],"heading":null},{"caption":"ULTRAVIOLET LIGHT AIR PURIFIER","kind":"symbol","seedable":true,"rect":[2621.7,1948.5,2657.7,1984.5],"caption_bbox":[2743.2,1955.3,3016.8,1974.5],"heading":"CONTROL SYMBOLS","member_rects":[[2648.7,1975.5,2657.7,1984.5],[2634.3,1955.7,2646.9,1959.3],[2634.3,1948.5,2646.9,1952.1],[2621.7,1975.5,2630.7,1984.5]]},{"caption":"ALTERNATOR","kind":"symbol","seedable":true,"rect":[3185.1,1995.3,3224.7,2034.9],"caption_bbox":[3307.7,1999,3417.1,2018.2],"heading":null},{"caption":"CENTRIFUGAL FAN OR PUMP","kind":"symbol","seedable":true,"rect":[2610.9,2018.7,2684.7,2078.1],"caption_bbox":[2743.2,2029.9,2975.3,2049.1],"heading":"CONTROL SYMBOLS"},{"caption":"OPPOSED BLADE DAMPER- PNEUMATIC ACTUATOR","kind":"symbol","seedable":true,"rect":[2061.9,2029.5,2092.5,2135.7],"caption_bbox":[2182.8,2065.9,2405.2,2108.2],"heading":"CONTROL COMPONENTS"},{"caption":"DIFFERENTIAL PRESSURE SWITCH","kind":"symbol","seedable":true,"rect":[1467.9,2045.7,1559.7,2117.7],"caption_bbox":[1621.2,2071.4,1779.5,2113.7],"heading":null},{"caption":"RELAY","kind":"symbol","seedable":true,"rect":[3185.1,2052.9,3224.7,2090.7],"caption_bbox":[3307.7,2055.8,3361,2075],"heading":null},{"caption":"PROPELLER TYPE FAN","kind":"symbol","seedable":true,"rect":[2634.3,2108.7,2645.1,2195.1],"caption_bbox":[2743.2,2137.7,2924.4,2156.9],"heading":"CONTROL SYMBOLS"},{"caption":"POINT NAME'S INDENIFICATION (CORRESPONDS TO CONTROL ABBREVIATIONS)","kind":"annotation","seedable":false,"rect":[3253,2119,3289.1,2120.8],"caption_bbox":[3299.8,2108.9,3549.1,2171.5],"heading":"CONTROL ELECTRICAL COMPONENTS"},{"caption":"DIFFERENTIAL PRESSURE SENSOR","kind":"symbol","seedable":true,"rect":[1469.7,2146.5,1561.5,2218.5],"caption_bbox":[1619.3,2169.6,1782.1,2212.1],"heading":null},{"caption":"PARALLEL BLADE DAMPER- PNEUMATIC ACTUATOR","kind":"symbol","seedable":true,"rect":[2061.9,2150.1,2092.5,2259.9],"caption_bbox":[2182.8,2186.4,2406.6,2228.9],"heading":"CONTROL COMPONENTS"},{"caption":"POINT NAME'S NUMBER (CONSECUTIVELY COUNTED IN RESPECT TO CONTROL ABBREVIATIONS)","kind":"annotation","seedable":false,"rect":[3275.1,2194.6,3289.4,2196.4],"caption_bbox":[3299.8,2184.3,3655.6,2246.9],"heading":"CONTROL ELECTRICAL COMPONENTS"},{"caption":"ROOF MOUNTED EXHAUST FAN (SINGLE PHASE)","kind":"symbol","seedable":true,"rect":[2573.1,2223.9,2708.1,2294.1],"caption_bbox":[2743.2,2231,2995.4,2277.4],"heading":"CONTROL SYMBOLS","member_rects":[[2573.1,2223.9,2708.1,2245.5],[2618.1,2250.9,2634.3,2261.7],[2573.1,2249.1,2708.1,2294.1]]},{"caption":"POINT NUMBER (CONSECUTIVELY COUNTED)","kind":"annotation","seedable":false,"rect":[3261.9,2261.8,3289.4,2263.6],"caption_bbox":[3299.8,2251,3442.1,2313.6],"heading":"CONTROL ELECTRICAL COMPONENTS"},{"caption":"SPACE TEMPERATURE SENSOR","kind":"symbol","seedable":true,"rect":[1503.9,2272.5,1532.7,2301.3],"caption_bbox":[1620.5,2274.7,1876.5,2293.9],"heading":null},{"caption":"OPPOSED BLADE DAMPER WITH END SWITCH- PNEUMATIC ACTUATOR","kind":"symbol","seedable":true,"rect":[2061.9,2283.3,2092.5,2414.7],"caption_bbox":[2182.8,2312.2,2395.4,2377.7],"heading":"CONTROL COMPONENTS"},{"caption":"THERMOSTAT","kind":"symbol","seedable":true,"rect":[1503.9,2308.5,1532.7,2337.3],"caption_bbox":[1620.5,2310.7,1732.6,2329.9],"heading":null},{"caption":"ROOF MOUNTED EXHAUST FAN (3 PHASE)","kind":"symbol","seedable":true,"rect":[2573.1,2326.5,2708.1,2394.9],"caption_bbox":[2743.2,2333,2995.4,2379.4],"heading":"CONTROL SYMBOLS","member_rects":[[2573.1,2326.5,2708.1,2346.3],[2625.3,2351.7,2681.1,2380.5],[2573.1,2349.9,2708.1,2394.9]]},{"caption":"SPACE HUMIDITY SENSOR","kind":"symbol","seedable":true,"rect":[1503.9,2344.5,1532.7,2373.3],"caption_bbox":[1620.5,2346.7,1831.1,2365.9],"heading":null},{"caption":"HUMIDISTAT","kind":"symbol","seedable":true,"rect":[1503.9,2376.9,1532.7,2405.7],"caption_bbox":[1620.5,2379.1,1719.4,2398.3],"heading":null},{"caption":"PLATE AND FRAME HEAT EXCHANGER","kind":"symbol","seedable":true,"rect":[2596.5,2423.7,2684.7,2492.1],"caption_bbox":[2743.2,2436.2,2895.2,2482.6],"heading":"CONTROL SYMBOLS"},{"caption":"HYDROGEN SENSOR (WALL)","kind":"symbol","seedable":true,"rect":[1487.7,2425.5,1547.1,2456.1],"caption_bbox":[1621.4,2429.3,1848.6,2448.5],"heading":null,"member_rects":[[1487.7,2425.5,1547.1,2456.1],[1509.3,2429.1,1523.7,2452.5]]},{"caption":"PARALLEL BLADE DAMPER WITH END SWITCH- PNEUMATIC ACTUATOR","kind":"symbol","seedable":true,"rect":[2061.9,2438.1,2092.5,2569.5],"caption_bbox":[2182.8,2461.7,2396.9,2527.2],"heading":"CONTROL COMPONENTS"},{"caption":"CARBON DIOXIDE SENSOR (WALL)","kind":"symbol","seedable":true,"rect":[1487.7,2475.9,1547.1,2506.5],"caption_bbox":[1621.4,2480.4,1894.9,2499.6],"heading":null,"member_rects":[[1487.7,2475.9,1547.1,2506.5],[1498.5,2479.5,1534.5,2502.9]]},{"caption":"CARBON MONOXIDE SENSOR (WALL)","kind":"symbol","seedable":true,"rect":[1487.7,2524.5,1547.1,2555.1],"caption_bbox":[1620.5,2528.6,1916.3,2547.8],"heading":null},{"caption":"SHELL AND TUBE HEAT EXCHANGER","kind":"symbol","seedable":true,"rect":[2544.3,2531.7,2735.1,2596.5],"caption_bbox":[2743.2,2539.4,2894.1,2585.8],"heading":"CONTROL SYMBOLS"},{"caption":"AIR FILTER WITH DIFFERENTIAL PRESSURE SENSOR AND PRESSURE GAUGE","kind":"symbol","seedable":true,"rect":[1469.7,2571.3,1561.5,2735.1],"caption_bbox":[1620.5,2620.1,1872.6,2689.2],"heading":null,"member_rects":[[1502.1,2571.3,1532.7,2663.1],[1469.7,2625.3,1561.5,2735.1]]},{"caption":"OPPOSED BLADE DAMPER- PNEUMATIC ACTUATOR WITH POSITIONER","kind":"symbol","seedable":true,"rect":[2061.9,2585.7,2092.5,2691.9],"caption_bbox":[2182.8,2595.1,2418.7,2660.6],"heading":"CONTROL COMPONENTS"}]},
-    {"id":"24__vol2__019-p019","document_id":"24__vol2__019","page":19,"review_status":"pending"},
-    {"id":"24__vol2__019-p020","document_id":"24__vol2__019","page":20,"review_status":"pending"},
-    {"id":"24__vol2__019-p021","document_id":"24__vol2__019","page":21,"review_status":"pending"},
-    {"id":"24__vol2__019-p023","document_id":"24__vol2__019","page":23,"review_status":"pending"},
+    {"id":"24__vol2__019-p019","document_id":"24__vol2__019","page":19,"sheet_number":"M8.3","review_status":"complete","expected_status":"no_rows","expected_row_count":0,"notes":["Rendered sheet M8.3 reviewed in full. It contains a chilled-water control diagram, a seven-part sequence of operation, and an HVAC controls BMS point-function schedule with 22 numbered points. These are controls reasoning and schedule content, not a legend: inline diagram tags, schedule checkboxes, row numbers, and title graphics must produce no learned glyph-caption rows."],"expected_rows":[]},
+    {"id":"24__vol2__019-p020","document_id":"24__vol2__019","page":20,"sheet_number":"M8.4","review_status":"complete","expected_status":"no_rows","expected_row_count":0,"notes":["Rendered sheet M8.4 reviewed in full. It contains two boiler control diagrams, a nine-part heating-hot-water sequence of operation, and an HVAC controls BMS point-function schedule with 32 numbered points across boiler, common, and pump sections. These are diagram, sequence, and schedule truth rather than legend rows; boxed tags, table marks, inline valves, and point callouts must not be promoted as learned symbols."],"expected_rows":[]},
+    {"id":"24__vol2__019-p021","document_id":"24__vol2__019","page":21,"sheet_number":"M8.5","review_status":"complete","expected_status":"no_rows","expected_row_count":0,"notes":["Rendered sheet M8.5 reviewed in full. It contains a dense AHU control schematic, two fan-array probe diagrams, an AHU balancing diagram, keyed notes, an occupancy schedule, and an HVAC controls BMS point-function schedule with 70 numbered points across AHU, global, zone, and space-pressure sections. No symbol legend is present; schematic devices, point tags, schedule cells, checkboxes, and balancing graphics must yield zero learned rows."],"expected_rows":[]},
+    {"id":"24__vol2__019-p023","document_id":"24__vol2__019","page":23,"sheet_number":"M8.7","review_status":"complete","expected_status":"no_rows","expected_row_count":0,"notes":["Rendered sheet M8.7 reviewed in full. It contains constant-air-volume, variable-air-volume, and dual-maximum VAV control diagrams; their sequences of operation and control-sequence graphs; and a 15-point BMS function schedule. The graphs describe control behavior rather than routed legend styles, and repeated diagram devices, inline point tags, table marks, and prose are not learned legend rows."],"expected_rows":[]},
     {"id":"25__vol2__053-p001","document_id":"25__vol2__053","page":1,"review_status":"pending"},
     {"id":"26__vol2__031-p001","document_id":"26__vol2__031","page":1,"review_status":"pending"},
     {"id":"27__vol1__21-p001","document_id":"27__vol1__21","page":1,"review_status":"pending"},
