@@ -3377,7 +3377,21 @@ function bandLimits(anchors: Anchor[]): { x0: number; x1: number; medGap: number
 // CODE_RE exactly as before. Purely additive, same discipline as this
 // regex's own two prior real-gap fixes documented above: every already-
 // matching shape (AHU-1, VVR2-8, IDU-A301, IDU-BC118A, ...) is untouched.
-const CODE_RE = /^(?:[A-Z]{1,4}[A-Z0-9]{0,4}|(?:[A-Z]{1,6}|[A-Z]{1,4}[0-9]{1,2})(?:-(?:[A-Z][A-Z0-9]{0,5}|[0-9]{1,5}[A-Z]{0,3}|[0-9]{1,2}[A-Z][0-9]{2,4}[A-Z]{0,2})){1,4})$/;
+// The prefix segment allows up to FOUR digits and a trailing letter, not two
+// digits and none. A real facility-prefixed convention needs it: SLAC's
+// 15__vol2__067 page 8 keys every schedule B950A-PCWP-1001, B950A-HX-PCWP-1001,
+// B950A-VFD-PCWP-1002, (N) B950A-AS-1001 — building 950A's process cooling
+// water pump 1001 and so on. "B950A" is one letter, three digits, one letter,
+// so it cleared neither [A-Z]{1,6} nor [A-Z]{1,4}[0-9]{1,2}; every row key on
+// that sheet was refused and SIX tables died with them, four declined outright
+// and two reduced to nothing.
+//
+// Still letter-first and still bounded, which is what stops a dimension or a
+// callout number becoming an equipment key. Checked against the junk this
+// guard exists for — 24X12, 208/3, 1/3, 100, 2500, 0.75, 3/4, "1,2,3" — every
+// one still rejected, and every tag shape already relied on (AHU-1, EF-2,
+// CV-CH-A1, RTU-1, P-1, EBB-6) still accepted.
+const CODE_RE = /^(?:[A-Z]{1,4}[A-Z0-9]{0,4}|(?:[A-Z]{1,6}|[A-Z]{1,4}[0-9]{1,4}[A-Z]{0,2})(?:-(?:[A-Z][A-Z0-9]{0,5}|[0-9]{1,5}[A-Z]{0,3}|[0-9]{1,2}[A-Z][0-9]{2,4}[A-Z]{0,2})){1,4})$/;
 // Hyphen segments accept digit-leading unit suffixes with an optional letter
 // trail (AHU-1A / CU-1B / FCU-2A) — common US multi-cottage / multi-unit
 // marking. Pure letter segments (AHU-A1) and pure digits (AHU-1) unchanged.
