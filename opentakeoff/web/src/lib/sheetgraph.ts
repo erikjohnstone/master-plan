@@ -9099,9 +9099,28 @@ export function scheduleTableFromODL(
   let titleCell: ODLTableCell | null = null;
   let bodyStart = 0;
   const row0 = t.rows[0];
-  if (row0 && row0.cells.length === 1 && (row0.cells[0]["column span"] || 1) >= C - 1) {
-    titleCell = row0.cells[0];
-    bodyStart = 1;
+  if (row0) {
+    // A TITLE IS A ROW-0 CELL THAT SPANS THE TABLE. It does not stop being the
+    // title because something narrow shares its row.
+    //
+    // The rule used to require row 0 to hold EXACTLY ONE cell. Measured on
+    // 03__vol1__27 page 13, whose row 0 is:
+    //     col 0, colSpan 8 : "SEISMIC AND VIBRATION CONTROL"
+    //     col 8, colSpan 1 : "SEISMIC RESTRAINT PROVISIONS"
+    // — a nine-column schedule whose title spans eight of them, with one
+    // narrow side column beside it. Two cells, so no title was recognised, and
+    // the table reached the graph with all 26 rows correct and `title: null`.
+    // An estimator asks for a schedule by name and an agent resolves it by
+    // name, so a nameless table is data the product cannot hand back.
+    //
+    // Requiring exactly ONE cell of span >= C-1 keeps this from firing on a
+    // header row (nine single-column cells span nothing) and from guessing
+    // when two cells both span the table and neither is obviously the name.
+    const wide = row0.cells.filter((c) => (c["column span"] || 1) >= C - 1);
+    if (wide.length === 1) {
+      titleCell = wide[0];
+      bodyStart = 1;
+    }
   }
 
   // Header block: consecutive rows whose OWN cells (excluding ones only
