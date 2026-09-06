@@ -5719,7 +5719,13 @@ export class Session {
       // question could be asked, of which the table extractor was 9%. The rest
       // was here and in the stack below, and had to be inferred from `ps`.
       const tSpans = Date.now();
+      // Per-sheet, on stderr, as it goes. A total printed at the end says the
+      // build was slow; it does not say WHICH SHEET, and on a set where one
+      // sheet dominates that is the only question worth answering. Off unless
+      // OPENTAKEOFF_GRAPH_TRACE is set, so normal runs are unchanged.
+      const trace = !!process.env.OPENTAKEOFF_GRAPH_TRACE;
       for (const s of this.sheets.values()) {
+        const tSheet = Date.now();
         if (!s.spans) s.spans = textSpans(s.page);
         const spans = s.spans.map((t) => ({ str: t.str, x: t.x0, y: t.y0, w: t.x1 - t.x0, h: t.y1 - t.y0, ...(t.rot ? { rot: t.rot } : {}) }));
         let segs: number[] | undefined;
@@ -5738,11 +5744,19 @@ export class Session {
         }
         inputs.push({ key: s.key, sheet_number: s.sheetNumber, spans, ...(segs?.length ? { segs } : {}) });
         if (segs?.length) this.pipelineSegs.set(s.key, segs);
+        if (trace) {
+          process.stderr.write(
+            `GRAPH_TRACE sheet=${s.sheetNumber ?? s.key} spans=${spans.length}`
+            + ` segs=${segs ? segs.length / 4 : 0} ms=${Date.now() - tSheet}\n`,
+          );
+        }
       }
       const spansMs = Date.now() - tSpans;
+      if (trace) process.stderr.write(`GRAPH_TRACE spans+segments total ms=${spansMs}\n`);
       const tBuild = Date.now();
       this.graph = buildSheetGraph(inputs);
       const buildMs = Date.now() - tBuild;
+      if (trace) process.stderr.write(`GRAPH_TRACE buildSheetGraph ms=${buildMs}\n`);
       if (skippedHeavy) this.graph.notes.push(`drawn-delta hunt skipped on ${skippedHeavy} sheet(s) — the set's linework exceeded the vector budget; text revision markers (Δ2 / REV 2) were still read everywhere`);
       const tStack = Date.now();
       await this.runVectorTakeoffStack(this.graph);
