@@ -58,7 +58,7 @@ from pathlib import Path
 warnings.filterwarnings("ignore")
 sys.path.insert(0, str(Path(__file__).parent))
 
-from bakeoff import (BACKENDS, BULK, CORPUS, caption_boxes, detail_captions,  # noqa: E402
+from bakeoff import (BACKENDS, BULK, CORPUS, caption_boxes, detail_captions, norm,  # noqa: E402
                      find_pdf,
                      region_owners, single_page_pdf)
 from vectorgrid import segments_from_page  # noqa: E402
@@ -134,6 +134,62 @@ def keyed_sheets():
     return out
 
 
+def calibrate() -> int:
+    """DOES THE DISCOVERY RULER REPRODUCE THE ANSWER WE ALREADY KNOW?
+
+    Run this before believing any --discover number. It points caption
+    discovery at the 32 pages a human has authored titles for and compares,
+    per page, what the regex finds against what is actually there. No
+    extractor runs; this grades the RULER, not vectorgrid.
+
+    It exists because the ruler has been wrong three times in one session and
+    each time its first number was reported before anything checked it. The
+    --discover pass claimed 52.5% recall and a MERGED defect on unseen pages;
+    both were the regex counting notes lists, legends and table ROWS as
+    tables. Ten seconds of this would have shown it.
+
+    A ruler that cannot recover the authored titles has no business being
+    quoted on pages nobody has authored.
+    """
+    from findsheets import captions_in_line
+    import pdfplumber
+
+    tot = dict(authored=0, found=0, extra=0, pages=0)
+    print("CALIBRATION - discovery against the authored titles it should recover\n")
+    print(f"{'sheet':46s} {'authored':>8s} {'found':>6s} {'missed':>7s} {'invented':>9s}")
+    print("-" * 80)
+    for set_id, page, titles in keyed_sheets():
+        try:
+            src = find_pdf(set_id)
+        except SystemExit:
+            continue
+        with pdfplumber.open(src) as doc:
+            txt = doc.pages[page - 1].extract_text() or ""
+        got = [c for ln in txt.splitlines() for c in captions_in_line(ln)]
+        got = list(dict.fromkeys(got))
+        want = {norm(t) for t in titles}
+        have = {norm(t) for t in got}
+        missed = sorted(want - have)
+        invented = sorted(have - want)
+        tot["authored"] += len(want); tot["found"] += len(want & have)
+        tot["extra"] += len(invented); tot["pages"] += 1
+        print(f"{(set_id[:32] + ' p' + str(page)):46s} {len(want):8d} {len(want & have):6d} {len(missed):7d} {len(invented):9d}")
+        for t in missed[:4]:
+            print(f"      MISSED BY THE REGEX   {t[:64]}")
+        for t in invented[:4]:
+            print(f"      NOT A KEYED TABLE     {t[:64]}")
+    n = max(tot["authored"], 1)
+    print("\n" + "=" * 80)
+    print(f"pages                         {tot['pages']}")
+    print(f"authored titles               {tot['authored']}")
+    print(f"recovered by discovery        {tot['found']}/{tot['authored']}  ({100 * tot['found'] / n:.1f}%)")
+    print(f"discovered but NOT a keyed table  {tot['extra']}")
+    print("\nThe second number is the one that matters. Every one of those is a")
+    print("caption the regex believes in and the key does not — a notes list, a")
+    print("legend, or a row — and each becomes a false miss on an unkeyed page.")
+    return 0
+
+
 CAPTION_BAND = 500.0   # how far under a caption its own table may reach
 
 
@@ -197,7 +253,7 @@ def discovered_sheets(min_titles: int, only: set | None, limit: int, skip: int):
     what the extractor already found would silently exclude every table it
     cannot see, and those are the ones worth grading.
     """
-    from findsheets import TITLE
+    from findsheets import captions_in_line
     import pdfplumber
 
     out, seen = [], 0
@@ -210,8 +266,7 @@ def discovered_sheets(min_titles: int, only: set | None, limit: int, skip: int):
             with pdfplumber.open(pdf) as doc:
                 for pno, page in enumerate(doc.pages, 1):
                     txt = page.extract_text() or ""
-                    titles = [ln.strip() for ln in txt.splitlines() if TITLE.match(ln.strip())]
-                    titles = [t for t in titles if len(t.split()) >= 2]
+                    titles = [c for ln in txt.splitlines() for c in captions_in_line(ln)]
                     # de-dup: one page really can print the same caption twice,
                     # and caption_boxes would hand both the same box
                     titles = list(dict.fromkeys(titles))
@@ -241,7 +296,11 @@ def main() -> int:
     ap.add_argument("--skip", type=int, default=0, help="--discover: resume, skipping this many pages")
     ap.add_argument("--docs", default="", help="--discover: comma-separated document stems")
     ap.add_argument("--json", default="", help="write per-page verdicts here")
+    ap.add_argument("--calibrate", action="store_true",
+                    help="grade the DISCOVERY RULER against the authored titles before trusting it")
     a = ap.parse_args()
+    if a.calibrate:
+        return calibrate()
     fn = BACKENDS[a.backend]
     rows_json = []
 
