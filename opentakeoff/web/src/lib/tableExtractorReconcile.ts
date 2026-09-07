@@ -129,18 +129,38 @@ export function adoptVectorGridTables(
   touchedSheets: Set<string>,
 ): { adopted: number; displaced: number } {
   if (!built.length) return { adopted: 0, displaced: 0 };
-  const overlapsAny = (t: ScheduleTable) =>
-    built.some((b) => {
-      const ix = Math.max(0, Math.min(t.region[2], b.region[2]) - Math.max(t.region[0], b.region[0]));
-      const iy = Math.max(0, Math.min(t.region[3], b.region[3]) - Math.max(t.region[1], b.region[1]));
-      return ix * iy > 0;
+  const overlaps = (t: ScheduleTable, b: ScheduleTable) => {
+    const ix = Math.max(0, Math.min(t.region[2], b.region[2]) - Math.max(t.region[0], b.region[0]));
+    const iy = Math.max(0, Math.min(t.region[3], b.region[3]) - Math.max(t.region[1], b.region[1]));
+    return ix * iy > 0;
+  };
+  // vectorgrid "is the reading" on a sheet it touched, not a candidate to
+  // merge — but that only holds when its read is actually at least as good.
+  // Unconditional displacement let a vectorgrid table that split a schedule
+  // at a column rule (reading only the left half) silently discard a
+  // sheetgraph table that had every column right — the box shrank and whole
+  // columns vanished with no signal anywhere. Keep the existing table
+  // wherever every vectorgrid table overlapping it is strictly less
+  // complete (fewer headers, or same headers with fewer non-empty cells).
+  let displaced = 0;
+  const kept: ScheduleTable[] = [];
+  for (const t of g.tables) {
+    if (t.sheet !== sheetKey) { kept.push(t); continue; }
+    const overlapping = built.filter((b) => overlaps(t, b));
+    if (!overlapping.length) { kept.push(t); continue; }
+    const existing = tableCompleteness(t);
+    const vectorGridWins = overlapping.some((b) => {
+      const bc = tableCompleteness(b);
+      if (bc.headers !== existing.headers) return bc.headers > existing.headers;
+      return bc.cells >= existing.cells;
     });
-  const before = g.tables.length;
-  const kept = g.tables.filter((t) => t.sheet !== sheetKey || !overlapsAny(t));
-  const displaced = before - kept.length;
-  g.tables.splice(0, g.tables.length, ...kept, ...built);
+    if (vectorGridWins) { displaced++; continue; }
+    kept.push(t);
+  }
+  const acceptedBuilt = built.filter((b) => !kept.some((t) => t.sheet === sheetKey && overlaps(t, b)));
+  g.tables.splice(0, g.tables.length, ...kept, ...acceptedBuilt);
   touchedSheets.add(sheetKey);
-  return { adopted: built.length, displaced };
+  return { adopted: acceptedBuilt.length, displaced };
 }
 
 /** Merge one newly extracted table into g.tables using the shared evidence bar. */
