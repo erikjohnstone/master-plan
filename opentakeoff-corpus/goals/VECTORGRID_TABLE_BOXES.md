@@ -63,21 +63,69 @@ is not ground truth.
 
 ## Completion gate
 
-Report all of these together, and never weaken a key or a tolerance to hold a
-number:
+**vectorgrid nails a large volume of tables it has never seen — the box AND
+the values, cell by cell, row by row, column by column — and it is hand-graded
+against the actual tables.** Not the 137. Not the pages it was tuned on.
 
-- **coverage**: pages graded, captions graded, and the fraction of the 224
-  documents represented — the number that was 32 pages when this opened
-- **precision**: MERGED, SPLIT and ESCAPED counts, corpus-wide, all zero
-- **recall**: MISSED, corpus-wide, excluding EXCLUDED rasters
-- **edge accuracy**: CORRECT at EoB ≤ 4pt over the authored set, with the
-  authored set's own audited error rate stated
-- **the existing gates unmoved**: `boxscore.py` 137/137 and mean IoU 0.9993,
-  `cellscore.py` 917/917 cells and 102/102 rows, `boxscore.py --census` firing
-  count, `boxfit.py` 0 SPLIT/OVERRUN/SHORT/MERGED
-- **the app's own regions**, not just Python's:
-  `mcp/scripts/table-box-eval.mjs`, per producing stage, with a cause on every
-  miss
+### The held-out split is declared first, and frozen
+
+A named list of documents is written to `keys/HELDOUT.txt` **before any
+further tuning**, and never used to change vectorgrid — not a threshold, not a
+guard, not a regex. If a held-out failure is worth fixing, the fix is made
+against the tuning half and the held-out set is re-run untouched. Otherwise
+every failure quietly becomes training data and the score decays back into the
+137/137 this goal exists to replace.
+
+### Grading is blind to the extractor
+
+Post-hoc grading is the only way to reach volume, and it is also how this
+project got burned once: `boxfit.py`'s verdicts were "an argument I wrote and
+changed four times with the score rising each time" (STATE.md §2a). The fix
+then was authoring with the extractor's answer NOT IN VIEW, and on the
+held-out set two of fifteen first-pass human picks were wrong and the
+extractor was right both times.
+
+So: every hand grade is made against **the rendered page**, never against an
+overlay of what vectorgrid produced. Boxes are picked from the candidate rules
+the page itself carries. Cells are read off the render.
+
+### What must be reported, together
+
+| | |
+|---|---|
+| **held-out tables graded** | the volume number — "a shitload" made specific, and it is the headline |
+| **BOX correct** | EoB ≤ 4pt against a hand-picked box, held-out |
+| **CELL correct** | right text in the right (row, column), held-out — `cellscore.py`'s existing rule, at volume |
+| **ROW correct** | every cell of the row right — a row is what a takeoff line is built from |
+| **COLUMN correct** | the header the column was read under is the header printed over it |
+| **EXCLUDED** | rasters and pasted images, detected and set aside — never a miss, never a win |
+| **grader error rate** | a random sample of grades re-authored blind by a second pass, and the disagreement rate published beside the score |
+
+The last row is not optional. A ground truth with an unmeasured error rate is
+not ground truth, and this file will not report a score without one.
+
+### Volume, honestly
+
+Hand-transcription is expensive: today's cell truth is **21 tables, 917
+cells**. Two things scale it without lying:
+
+- `cellocr.py` already checks every cell against an independent pixel-OCR read
+  of the same page — a mechanically independent signal, available at volume.
+  Report it, and let the hand-graded sample measure ITS error rate rather than
+  the other way round.
+- Boxes: auto-accept where two mechanically independent extractors agree
+  within 4pt on all four edges; hand-grade only disagreements; audit a random
+  sample of the auto-accepted.
+
+Neither replaces the held-out hand-graded number. They surround it.
+
+### And the existing gates stay unmoved
+
+`boxscore.py` 137/137 and mean IoU 0.9993, `cellscore.py` 917/917 cells and
+102/102 rows, `boxscore.py --census` firing count, `boxfit.py` 0
+SPLIT/OVERRUN/SHORT/MERGED on the keyed set, and the app's own regions via
+`mcp/scripts/table-box-eval.mjs` per producing stage with a cause on every
+miss. A held-out score is not licence to regress the measured one.
 
 ## Open at the time of writing
 
