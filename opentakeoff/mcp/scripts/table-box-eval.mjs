@@ -181,10 +181,15 @@ const toPt = (b) => [b[0] / RENDER_SCALE, b[1] / RENDER_SCALE, b[2] / RENDER_SCA
  *  a continued table overrides everything, because continuation happens inside
  *  buildSheetGraph and is not a pipeline stage at all. */
 function stageIndex(graph) {
+  // FIRST WRITE WINS, both maps. The ledger is append-ordered by stage, so the
+  // first stage to claim a table is the one that produced it; last-write-wins
+  // silently re-attributed every table to whichever stage ran last, which is
+  // exactly how this scorer came to report ODL doing vectorgrid's work.
   const byExact = new Map(), bySheetTitle = new Map();
   for (const e of graph?.vector_pipeline?.stage_tables || []) {
     if (!isBox(e.region)) continue;
-    byExact.set(`${e.sheet}|${norm(e.title)}|${e.region.map((v) => Math.round(v)).join(",")}`, e.stage);
+    const exact = `${e.sheet}|${norm(e.title)}|${e.region.map((v) => Math.round(v)).join(",")}`;
+    if (!byExact.has(exact)) byExact.set(exact, e.stage);
     const k = `${e.sheet}|${norm(e.title)}`;
     if (!bySheetTitle.has(k)) bySheetTitle.set(k, e.stage);
   }

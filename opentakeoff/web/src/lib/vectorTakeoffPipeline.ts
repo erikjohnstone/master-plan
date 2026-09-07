@@ -409,11 +409,19 @@ export async function runVectorTakeoffPipeline(
     // a regression hides in. Diff the table list around the call instead: the
     // identity is the object, so this cannot mistake a mutated incumbent for a
     // new table.
-    const beforeOdl = new Set(g.tables);
+    // BY CONTENT, NOT BY OBJECT IDENTITY. runODL rebuilds g.tables rather than
+    // appending to it, so an identity diff calls EVERY table new and attributes
+    // the whole graph to ODL. Measured, and badly: on 001_NC that reported 90
+    // vectorgrid tables and 90 ODL tables for a 90-table graph, and the scorer
+    // reading it concluded ODL was doing the work vectorgrid was doing. A
+    // reporting bug that inverts the conclusion is worse than no reporting.
+    const keyOfTable = (t: ScheduleTable) =>
+      `${t.sheet}|${t.title?.text ?? ""}|${(t.region || []).map((v) => Math.round(v)).join(",")}`;
+    const beforeOdl = new Set(g.tables.map(keyOfTable));
     await timed("L2:ODL", () => hooks.runODL(g));
     if (report) {
       for (const t of g.tables) {
-        if (beforeOdl.has(t)) continue;
+        if (beforeOdl.has(keyOfTable(t))) continue;
         (report.stage_tables ?? (report.stage_tables = [])).push({
           stage: "odl", sheet: t.sheet, title: t.title?.text ?? null,
           kind: t.kind, headers: t.headers.length, rows: t.rows.length, region: t.region,
