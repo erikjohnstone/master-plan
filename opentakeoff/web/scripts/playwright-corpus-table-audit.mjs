@@ -263,7 +263,18 @@ for (const doc of wanted) {
 
         // ── score against authored key, if this document has one ──
         if (boxKey) {
-          const hit = boxKey.find((k) => normTitle(k.title) === normTitle(title));
+          // Sheet-scoped, not title-only: the SAME schedule title routinely
+          // repeats once per building/AHU section, each its own real,
+          // independently-correct table on its own sheet (real, corpus-
+          // found: 001_NC_FY20_P_228's own VIBRATION ISOLATION SCHEDULE /
+          // DUCT CONSTRUCTION SCHEDULE / etc. print identically-titled,
+          // legitimately DIFFERENT tables on sheets #43, #46, AND #49 — the
+          // key only authored #49's own copies). Matching by title alone
+          // compared every OTHER sheet's own correct table against #49's
+          // ground truth, scoring them all as ~0 IoU "misses" that were
+          // never wrong tables at all, just the wrong sheet's candidate
+          // being held up against a key that never covered it.
+          const hit = boxKey.find((k) => normTitle(k.title) === normTitle(title) && k.sheet === t.sheet);
           if (hit) {
             rec.key.matched++;
             const authoredPx = [hit.x0 * RENDER_SCALE, hit.top * RENDER_SCALE, hit.x1 * RENDER_SCALE, hit.bot * RENDER_SCALE];
