@@ -10,7 +10,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, type GraphSpan, type SheetSpans, type SheetGraph, type TableBound, type ScheduleTable, type TableRow } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, rowKeyOf, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, type GraphSpan, type SheetSpans, type SheetGraph, type TableBound, type ScheduleTable, type TableRow } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });
@@ -3437,6 +3437,39 @@ test("rowKeyOf splits a real '&'-joined twin-unit mark into two answerable keys 
   assert.equal(row2.key, "CHWP1/CHWP2", "the no-hyphen real shape is kept exactly as drawn, not invented");
   assert.ok(rowKeyAnswersFor(row2.key, "CHWP1"));
   assert.ok(rowKeyAnswersFor(row2.key, "CHWP2"));
+});
+
+test("rowKeyOf keeps a leading $ in a real lighting-control point name (real bug: baker-county-eoc-bidset.pdf#59's own LIGHTING CONTROL STATIONS)", () => {
+  // Real, found-live gap: `kept` strips $ like any other punctuation, and
+  // CODE_RE requires a key to start with a letter, so the stripped mark
+  // ("OS") still clears CODE_RE and mints a key — silently different from
+  // the printed one ("$OS"). Scored against a ground-truth key authored on
+  // the printed mark, this reads as the row never having been found at all
+  // (every column of it "(missing)"), when the row WAS found, correctly,
+  // under the wrong key. $LV# must NOT mint a key at all — the '#' after
+  // stripping leaves "LV#" itself failing CODE_RE, and that is right: it is
+  // a template/wildcard entry on the drawing ("any LV station"), not one
+  // real station.
+  // Production reaches this table through vectorGridAdapter.ts's
+  // scheduleTableFromODL, not the geometric extractTable() path this file's
+  // other rowKeyOf tests use — the real sheet is `kind: "reference"`, mapped
+  // internally to rowKeyOf's "finish" branch. Calling rowKeyOf directly
+  // (exported for exactly this, alongside rowKeyAnswersFor and friends) pins
+  // the exact behaviour without depending on that other path's own title/
+  // vocabulary classification bar, which is a different, unrelated concern.
+  assert.deepEqual(rowKeyOf("$OS", "finish"), { key: "$OS" });
+  assert.deepEqual(rowKeyOf("$OSD", "finish"), { key: "$OSD" });
+  assert.deepEqual(rowKeyOf("$LVA", "finish"), { key: "$LVA" });
+  // $LV# is a template/wildcard entry on the drawing ("any LV station"),
+  // not one real station — "LV#" (after the $) fails CODE_RE, so the new
+  // $-preservation branch does not fire and this falls through to the
+  // PRE-EXISTING stripped path unchanged: kept="LV" (both $ and # stripped),
+  // CODE_RE passes, key="LV". Confirmed live, byte-identical before and
+  // after this fix on the real page — this case was never broken.
+  assert.deepEqual(rowKeyOf("$LV#", "finish"), { key: "LV" });
+  // A genuine dollar amount must never mint a key — CODE_RE requires the
+  // remainder after $ to start with a letter, and a numeral does not.
+  assert.equal(rowKeyOf("$1,250.00", "finish"), null);
 });
 
 test("rowKeyOf accepts a real VA/GSA numbered-building prefix before an equipment mark, when the sheet's own text confirms the building (real bug: St Louis VA's own 1-RH-1/1-AC-15/1-SHC-28 tags)", () => {

@@ -3736,7 +3736,7 @@ export function hasPoweredEquipmentColumns(spans: GraphSpan[], table: ScheduleTa
   return hits.size >= 2;
 }
 
-function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", buildings?: Set<string>, nameKeyed = false, roomFill?: { inBand: number; anchors: number }): { key: string; building?: string } | null {
+export function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", buildings?: Set<string>, nameKeyed = false, roomFill?: { inBand: number; anchors: number }): { key: string; building?: string } | null {
   // A NAME-keyed table's key column IS its NAME column — the only sensible
   // reading of a leading token there is a room-type phrase, not a digit tag
   // this table has no column for. Spaces are the whole point of a phrase
@@ -3790,6 +3790,22 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", bui
     // otherwise pass CODE_RE and bury the compound)
     const parts = kept.split("/").filter(Boolean);
     if (parts.length > 1 && parts.every((p) => CODE_RE.test(p))) return { key: parts.join("/") };
+    // A LEADING `$` IS A REAL CHARACTER, NOT NOISE. Lighting-control and BAS
+    // point names print it as part of the identifier — real, found live,
+    // baker-county-eoc-bidset.pdf#59's own LIGHTING CONTROL STATIONS ($OS,
+    // $OSD, $LVA, $LVB, $LVC). `kept` above strips it like any other
+    // punctuation, and CODE_RE requires a key to START with a letter, so the
+    // stripped tag ("OS") still clears CODE_RE below and mints a key that
+    // silently lost the $ — it answers for neither a cross-reference drawn
+    // elsewhere on the sheet nor a ground-truth key authored against the
+    // printed mark ("$OS" scored as "(missing)" against a row that WAS
+    // found, correctly, under the wrong key). Preserved exactly the way the
+    // digit building-prefix below is: only when the letters AFTER the $ are
+    // themselves a real CODE_RE-shaped tag, so a genuine dollar amount
+    // ("$1,250") can never mint a key — CODE_RE requires the remainder to
+    // start with a letter, and a numeral does not.
+    const dollarPrefixed = norm(raw).replace(/\s+/g, "").match(/^\$([A-Z].*)$/);
+    if (dollarPrefixed && CODE_RE.test(dollarPrefixed[1])) return { key: `$${dollarPrefixed[1]}` };
     if (CODE_RE.test(key)) return { key };
     // A real VA/GSA numbered-building PREFIX before the equipment/finish
     // code itself — "1-RH-1", "1-AC-15", "1-SHC-28" (building "1"'s reheat
@@ -5810,7 +5826,24 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
       return { table: null, nextIdx: toIdx };
     }
   }
-  const table: ScheduleTable = { kind, sheet: sheet.key, title, headers: anchors.map((a) => a.label), rows: out, region: region!, anchors };
+  // THE PRINTED TITLE IS PART OF THE TABLE. `region` here is built from the
+  // header spans plus every token accepted into a cell, so it starts at the
+  // HEADER ROW — and the schedule's own printed caption, sitting above it, is
+  // outside the box. The estimator sees a highlight that excludes the words
+  // "BRANCH CIRCUIT WIRING SCHEDULE (Cu)" and reasonably reads that as the
+  // wrong table. The title's bbox is right here, already found and already
+  // measured (see the caption hunt above); it was simply never unioned in.
+  // adoptContinuationRows has always done this — that inconsistency was the
+  // tell.
+  //
+  // Deliberately AFTER the ANOMALOUS_REGION_HEIGHT_RATIO guard: that guard
+  // reads region[3] against the header band, and a title union only ever
+  // moves region[1], but only if it happens here rather than earlier.
+  const titleBox = title?.bbox;
+  const withTitle = region && Array.isArray(titleBox) && titleBox.length === 4 && titleBox.every((v) => Number.isFinite(v))
+    ? merge(region, titleBox as Bbox)
+    : region;
+  const table: ScheduleTable = { kind, sheet: sheet.key, title, headers: anchors.map((a) => a.label), rows: out, region: withTitle!, anchors };
   if (rotated) table.rotated_headers = true;
   return { table, nextIdx: toIdx };
 }
@@ -7144,7 +7177,22 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
     const TITLE_BAND_FILL_MAX = 0.8;
     const bandW = x1 - x0;
     let title: Evidence | null = null;
-    for (let k = block.top - 1, budget = 5; k >= 0 && budget > 0 && !title; k--) {
+    // budget was 5 — chosen before isTitleShaped's own B-4 conjunction/
+    // article rejection existed, and now too shallow for a page with the
+    // dense wrapped SEQUENCE OF OPERATION prose this file's own class of
+    // sheet carries (itd-d1-lab-mechanical.pdf#20 is exactly this sheet).
+    // That rejection is correct — every rejected candidate really is a
+    // sentence fragment, never a title — but each one still costs a unit of
+    // budget, so a sheet with more than 5 in-band prose lines between a
+    // table's data and its real caption exhausted the search before ever
+    // reaching it. Measured, real: this sheet's own second table (LAB
+    // VENTILATION WITH SNORKEL HOOD…) went missing ENTIRELY, not merely
+    // mistitled — table discovery downstream of a failed title hunt refuses
+    // the whole candidate. Reusing MAX_TABLE_SCAN_ROWS rather than a new
+    // number honors this loop's own comment ("bounded to the same scan
+    // budget the data search itself uses") instead of inventing a second,
+    // disagreeing constant.
+    for (let k = block.top - 1, budget = MAX_TABLE_SCAN_ROWS; k >= 0 && budget > 0 && !title; k--) {
       const inBand = rows[k].filter(overlapsBand);
       if (!inBand.length) continue;
       budget--;
@@ -7201,7 +7249,9 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
       }
     }
     if (!title) {
-      for (let k = block.top - 1, budget = 5; k >= 0 && budget > 0 && !title; k--) {
+      // Same widening as the big-font pass above, same reason: isTitleShaped
+      // rejects real prose correctly, and budget 5 predates that rejection.
+      for (let k = block.top - 1, budget = MAX_TABLE_SCAN_ROWS; k >= 0 && budget > 0 && !title; k--) {
         const inBand = rows[k].filter((t) => centerX(t) >= x0 && centerX(t) <= x1);
         if (!inBand.length) continue;
         budget--;
@@ -7212,6 +7262,11 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
 
     let region: Bbox | null = banded.region;
     for (const t of block.tokens) region = region ? merge(region, bboxOf(t)) : bboxOf(t);
+    // Same as extractTableAt: the printed caption belongs inside the box a
+    // person is shown. adoptContinuationRows already did this; these two
+    // constructors did not, and the inconsistency is what surfaced as a
+    // highlight that excludes its own schedule's title.
+    if (title && region) region = merge(region, title.bbox);
     const table: ScheduleTable = {
       kind: "reference", sheet: sheet.key, title,
       headers: anchors.map((a) => a.label), rows: banded.out, region: region!, anchors,
@@ -7283,6 +7338,19 @@ function mergeContinuation(base: ScheduleTable, frag: ScheduleTable): void {
   for (const r of frag.rows) if (r.building == null && frag.building != null) r.building = frag.building;
   base.parts.push({ sheet: frag.sheet, title: frag.title?.text || "", rows: frag.rows.length, region: frag.region, ...(frag.rotated_headers ? { rotated_headers: true } : {}) });
   base.rows.push(...frag.rows);
+  // ON THE SAME SHEET ONLY. A continued schedule is one table with one
+  // `region`, and a same-sheet continuation (a CONT'D block further down the
+  // page) is genuinely part of that one rectangle — it was never extended, so
+  // the box stopped at the first fragment.
+  //
+  // Never across sheets. Unioning two sheets' boxes produces a rectangle that
+  // describes no page, and it would then be painted on base.sheet — where
+  // agentHighlightCitation's bounds check turns it into a silent "Could not
+  // show that" and the ability to show a continued table is LOST rather than
+  // improved. Cross-sheet parts each carry their own region here (see
+  // base.parts above); showing the right one is the panel's job, not the
+  // geometry's.
+  if (frag.sheet === base.sheet) base.region = merge(base.region, frag.region);
 }
 
 /** A header-less continuation: the sheet repeats the TITLE but not the header

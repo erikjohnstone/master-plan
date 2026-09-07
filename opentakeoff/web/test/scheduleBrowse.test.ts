@@ -5,7 +5,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   tableTitleText, rowBbox, rowSheet, splitSheetKey,
-  summarize, filterTables, tableId, readingOrder,
+  summarize, filterTables, tableId, readingOrder, groupBySheet, previewColumns,
 } from "../src/lib/scheduleBrowse.js";
 
 const cell = (text: string, bbox: number[]) => ({ text, bbox });
@@ -100,4 +100,50 @@ test("readingOrder walks the set front to back, then down each sheet", () => {
   ] as any;
   assert.deepEqual(readingOrder(tables).map((t: any) => `${t.sheet}@${t.region[1]}`),
     ["a.pdf#3@100", "a.pdf#3@900", "a.pdf#12@500"]);
+});
+
+test("filterTables matches the KIND the panel prints as a chip", () => {
+  const tables = [
+    { sheet: "a.pdf#3", title: "VAV TERMINAL SCHEDULE", kind: "equipment", headers: ["TAG"], rows: [] },
+    { sheet: "a.pdf#4", title: "ROOM FINISH SCHEDULE", kind: "room-finish", headers: ["ROOM"], rows: [] },
+  ] as any;
+  // the chip says "equipment"; typing it has to select those tables
+  assert.equal(filterTables(tables, "equipment").length, 1);
+  assert.equal(filterTables(tables, "room-finish").length, 1);
+});
+
+test("groupBySheet: sheets in reading order, tables in reading order inside them", () => {
+  const tables = [
+    { sheet: "a.pdf#12", region: [0, 500, 1, 1], title: "C" },
+    { sheet: "a.pdf#3", region: [0, 900, 1, 1], title: "B" },
+    { sheet: "a.pdf#3", region: [0, 100, 1, 1], title: "A" },
+    { sheet: "b.pdf#1", region: [0, 10, 1, 1], title: "D" },
+  ] as any;
+  const g = groupBySheet(tables);
+  assert.deepEqual(g.map((x: any) => x.sheet), ["a.pdf#3", "a.pdf#12", "b.pdf#1"]);
+  assert.deepEqual(g[0].tables.map((t: any) => t.title), ["A", "B"]);
+  assert.deepEqual(g.map((x: any) => x.page), [3, 12, 1]);
+  assert.deepEqual(groupBySheet([]), []);
+  assert.deepEqual(groupBySheet(undefined as any), []);
+});
+
+test("previewColumns picks what identifies the equipment, not the first three columns", () => {
+  // the real 'AIR-COOLED CONDENSING UNIT' shape: the tag is the row key, and
+  // MANUFACTURER/MODEL/NOM. TONS are what an estimator scans for
+  const eq = ["EQUIP. TAG", "MANUFACTURER", "MODEL", "NOM. TONS", "# OF COMP.", "NOTES"];
+  assert.deepEqual(previewColumns(eq), ["MANUFACTURER", "MODEL", "NOM. TONS"]);
+  // a schedule that leads with location must not bury the model behind it
+  const led = ["LOCATION", "SERVICE", "QTY", "MANUFACTURER", "MODEL"];
+  assert.deepEqual(previewColumns(led), ["SERVICE", "MANUFACTURER", "MODEL"]);
+  // printed in the SCHEDULE'S own column order, never in rank order
+  const shuffled = ["CFM", "MANUFACTURER"];
+  assert.deepEqual(previewColumns(shuffled, 2), ["CFM", "MANUFACTURER"]);
+});
+
+test("previewColumns degrades to header order when it recognises nothing", () => {
+  assert.deepEqual(previewColumns(["ALPHA", "BETA", "GAMMA", "DELTA"]), ["ALPHA", "BETA", "GAMMA"]);
+  assert.deepEqual(previewColumns([]), []);
+  assert.deepEqual(previewColumns(undefined as any), []);
+  assert.deepEqual(previewColumns(["A", "", null, "B"] as any, 3), ["A", "B"]);
+  assert.equal(previewColumns(["MODEL", "CFM", "SIZE", "TYPE"], 2).length, 2);
 });

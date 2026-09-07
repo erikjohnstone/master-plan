@@ -44,7 +44,7 @@ try {
   await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 60_000 });
   await page.waitForSelector('input[name="sheet-file"]', { state: "attached", timeout: 60_000 });
   await page.locator('input[name="sheet-file"]').first().setInputFiles(pdf);
-  await page.waitForFunction(() => window.__opentakeoff?.indexProgress?.()?.phase === "ready", { timeout: 15 * 60 * 1000 });
+  await page.waitForFunction(() => window.__opentakeoff?.indexProgress?.()?.phase === "ready", null, { timeout: 15 * 60 * 1000 });
 
   // Open the sheet the case is on, and wait for its linework to be extracted.
   const key = await page.evaluate(async (pageNo) => {

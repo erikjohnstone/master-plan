@@ -1,0 +1,54 @@
+╔══════════════════════════════════════════════════════════════════════════
+║ SHEET GRAPH — scored against real sets
+╚══════════════════════════════════════════════════════════════════════════
+
+set                        cell P    cell R   cell F1     tag P    tag R   reported  rowsym R
+────────────────────────────────────────────────────────────────────────────────────────────
+bessemer                      —        —        —         —        —       0     100.0%
+itd-d1-lab                    —        —        —         —        —       4     100.0%
+federal-mech                  —        —        —         —        —      83      96.9%
+navfac-cherry-point-atc       —        —        —         —        —       0     100.0%
+bldg5406-hvac-demo            —        —        —         —        —       6     100.0%
+baker-county-eoc          100.0%    85.7%    92.3%      —        —      13     100.0%
+itd-d1-lab-raster             —        —        —         —        —       0       0.0%
+12_MT_MSU_ReidHall_Renovation (no key yet)  reported 0
+24_IA_JohnsonCounty_Courthouse (no key yet)  reported 0
+27_WA_ColvilleTribes_Hatchery_Lab (no key yet)  reported 0
+16_NV_CarsonValleyMS_HVAC_Replacement (no key yet)  reported 0
+13_MI_MSU_LifeSciences_LabRenovation (no key yet)  reported 0
+03_FL_HurlburtField_ChildDevCenter (no key yet)  reported 0
+08_ME_BGS_Augusta_EastCampus_Renovation (no key yet)  reported 0
+15_IA_IowaState_Biorenewables_Lab (no key yet)  reported 0
+09_ME_BGS_KennebecValleyCC_Renovation (no key yet)  reported 0
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for (no key yet)  reported 0
+078_US_CP25028_MSU_Union_Sparty_Store_Renovations (no key yet)  reported 0
+001_NC_FY20_P_228_ATC_Tower_and_Air_Operations (no key yet)  reported 0
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building (no key yet)  reported 0
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test (no key yet)  reported 0
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project (no key yet)  reported 0
+041_IL_VA_Project_537_17_115_Sterile_Processing (no key yet)  reported 0
+042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17 (no key yet)  reported 0
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom (no key yet)  reported 0
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated (no key yet)  reported 0
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling (no key yet)  reported 0
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building (no key yet)  reported 0
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid (no key yet)  reported 0
+062_ID_ITD_District_1_Laboratory_Building_Mechanical (no key yet)  reported 0
+────────────────────────────────────────────────────────────────────────────────────────────
+CORPUS                    100.0%    85.7%    92.3%    0.0%     0.0%               99.3%
+
+cells   78 right · 0 wrong · 13 missed
+tags    0 real · 0 not-rooms reported · 0 real rooms missed
+rowsym  137 found on the plan as expected · 0 unexpectedly resolved · 1 real drawn symbols NOT anchored by sweep_schedule_row
+
+── failure bins, worst first ──
+   13×  cell-missing
+         baker-county-eoc  100|CEILING  want "GYP-1" got "undefined"
+         baker-county-eoc  101|CEILING  want "ACT-1" got "undefined"
+         baker-county-eoc  102|CEILING  want "GYP-1" got "undefined"
+         baker-county-eoc  103|CEILING  want "GYP-1" got "undefined"
+         baker-county-eoc  104|CEILING  want "GYP-1" got "undefined"
+         baker-county-eoc  105|CEILING  want "ACT-1" got "undefined"
+         … and 7 more
+    1×  rowsym-missed
+         federal-mech  B-2

@@ -5,9 +5,10 @@
  * work per process even when the PDF bytes were unchanged. Ten demos that
  * share one fixture PDF therefore rebuilt the same graph ten times.
  *
- * Key = cache version + engine source digest + PDF identity (sha256 when
- * known, else path+size+mtime). Set OPENTAKEOFF_GRAPH_NO_CACHE=1 for cold
- * benchmarks. Deliberately set-agnostic — any PDF path works.
+ * Key = cache version + engine source digest + engine selection + the FILE
+ * NAMES the sheet keys will carry + PDF identity (sha256 when known, else
+ * path+size+mtime). Set OPENTAKEOFF_GRAPH_NO_CACHE=1 for cold benchmarks.
+ * Deliberately set-agnostic — any PDF path works.
  *
  * The source digest must cover exactly the L0-L4.5 graph-BUILD path
  * (sheetgraph.ts, vectorTakeoffPipeline.ts, mcp/src) — never the L5
@@ -26,7 +27,7 @@
 import { createHash } from "node:crypto";
 import { readFile, readdir, stat } from "node:fs/promises";
 import { homedir } from "node:os";
-import { dirname, extname, join, resolve } from "node:path";
+import { basename, dirname, extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import cacache from "cacache";
 import { resolveVectorGridMode } from "../../web/src/lib/vectorGridMode.mjs";
@@ -109,7 +110,7 @@ async function pdfIdentity(pdfPath, expectedSha256) {
 
 /**
  * @param {string} pdfPath
- * @param {{ expectedSha256?: string, identity?: string[], compute: () => Promise<object> }} opts
+ * @param {{ expectedSha256?: string, identity?: string[], names?: string[], compute: () => Promise<object> }} opts
  */
 export async function cachedSheetGraph(pdfPath, opts) {
   const compute = opts.compute;
@@ -117,6 +118,17 @@ export async function cachedSheetGraph(pdfPath, opts) {
   const keyHash = createHash("sha256")
     .update(CACHE_VERSION)
     .update(await sourceDigest())
+    // THE FILENAME IS PART OF THE ANSWER, not just of the lookup. Every sheet
+    // key in the graph is `<basename>#<page>`, so a graph built from
+    // "009_FL_….pdf" describes sheets that only exist under that name. The key
+    // was bytes-only, so the SAME bytes opened under a second name — the
+    // upload spool's "<sha256>.pdf", a corpus path, a renamed copy — were
+    // served the first name's graph, and then every citation on it refused
+    // with "Sheet … not found" and the Schedules panel went dead. Found live:
+    // the benchmark collection's 05__vol2__009__….pdf and the corpus's
+    // 009_FL_USDA_APHIS_….pdf are byte-identical, so a corpus eval run
+    // poisoned the browser's own cache entry.
+    .update(`names:${[basename(pdfPath), ...(opts.names || [])].join("|")}`)
     // THE ENGINE SELECTION IS PART OF THE KEY, resolved by the SAME function
     // the engine itself uses. Restating the rule here is what broke it the
     // first time: this line normalised an unset variable to "off" while the

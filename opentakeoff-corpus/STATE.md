@@ -147,9 +147,23 @@ row is four pixels.
 
 ```
 cd opentakeoff/bakeoff && python3 boxscore.py            # the 122 authored boxes
+cd opentakeoff/bakeoff && python3 boxscore.py --census   # every widening firing, keyed or not
 cd opentakeoff/bakeoff && python3 cellscore.py           # hand-transcribed cells
 cd opentakeoff/bakeoff && python3 cellocr.py --all       # every cell vs pixel OCR
+
+# THE SAME BOXES, AS THE APP ITSELF EMITS THEM. boxscore.py scores the PYTHON
+# engine, in Python. What the Schedules panel paints is ScheduleTable.region,
+# which by then has been through scheduleTableFromODL, adoptVectorGridTables,
+# dedupCrossSourceTables, collapseEquivalentPrimaryTables and
+# snapAllTableCellBboxes. Local gate — the corpus lives outside the repo.
+cd opentakeoff/mcp && node --import tsx scripts/table-box-eval.mjs ../../opentakeoff-corpus
+cd opentakeoff/mcp && node --import tsx scripts/table-box-eval.mjs ../../opentakeoff-corpus --check
 ```
+
+`--census` exists because `boxscore.py` alone could not see the bug it was
+built to catch: the row-rule widening fires 31 times over the 32 keyed pages
+and 30 of those firings are on blocks no authored box looks at, so a schedule
+box that ate the notes block beside it scored 100%.
 
 The whole gap is in the two columns a recall count cannot see. pdfplumber
 finds 114 of 122 tables — close — and hands back 10 boxes containing two
@@ -314,10 +328,14 @@ one-column slide is scored wrong.
   below would hand every backend false matches corpus-wide to buy one table.
   Recorded in the key, counted as a miss.
 
-### 2b. It is wired into production now, behind a flag that defaults to off
+### 2b. It is wired into production now, and it is the default
 
-`OPENTAKEOFF_VECTORGRID` ∈ `off | shadow | on`. `off` is the default and the
-engine never runs, so a baseline is byte-for-byte the old behaviour. `shadow`
+`OPENTAKEOFF_VECTORGRID` ∈ `off | shadow | on`. **`on` is the default** — the
+rule lives in one place, `web/src/lib/vectorGridMode.mjs`, which both the
+TypeScript client and the sheet-graph cache import rather than restating.
+(This section said `off` long after that changed; corrected 2026-09-06.)
+`off` is the rollback and makes a baseline byte-for-byte the old behaviour.
+`shadow`
 runs it on every sheet, records what it WOULD have produced, and merges
 nothing — verified byte-identical to `off` on 096_IN#19, which is what makes an
 A/B honest. `on` makes its tables the answer.

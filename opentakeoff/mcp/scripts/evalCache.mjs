@@ -4,13 +4,16 @@ import { homedir } from "node:os";
 import { dirname, extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import cacache from "cacache";
+import { resolveVectorGridMode } from "../../web/src/lib/vectorGridMode.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const MCP_ROOT = resolve(HERE, "..");
 const WEB_ROOT = resolve(MCP_ROOT, "..", "web");
 const WEB_LIB = resolve(MCP_ROOT, "..", "web", "src", "lib");
+const SIDECAR = resolve(MCP_ROOT, "..", "sidecar");
+const BAKEOFF = resolve(MCP_ROOT, "..", "bakeoff");
 const CACHE_DIR = join(process.env.XDG_CACHE_HOME || join(homedir(), ".cache"), "opentakeoff-eval");
-const CACHE_VERSION = "scored-result-v1";
+const CACHE_VERSION = "scored-result-v2"; // v1 keys were blind to the Python engine and the vectorgrid mode
 
 async function sourceFiles(root) {
   const out = [];
@@ -44,6 +47,18 @@ function sourceDigest() {
       // mirrors its explicit-file fix for).
       join(HERE, "evalCache.mjs"),
       join(HERE, "corpusFiles.mjs"),
+      // THE PYTHON SIDE IS PART OF THE ENGINE. vectorgrid runs out of process,
+      // so a digest over .ts/.mjs/.js alone cannot see it, and an edit to it
+      // served a stale score forever. Measured: reverting vectorgrid.py to
+      // its pre-consensus-widening revision and re-running three scored sets
+      // returned a byte-identical result in three minutes — the cache
+      // answering, not the engine. That made a real A/B read as "no
+      // difference", which is precisely the failure 0795d20 fixed in
+      // sheetGraphCache.mjs; this module never got the same fix.
+      join(SIDECAR, "tables.py"),
+      join(SIDECAR, "vectorgrid_rpc.py"),
+      join(BAKEOFF, "vectorgrid.py"),
+      join(BAKEOFF, "celltext.py"),
       join(MCP_ROOT, "package.json"),
       join(MCP_ROOT, "package-lock.json"),
       join(WEB_ROOT, "package.json"),
@@ -100,6 +115,12 @@ export async function cachedEvalResult(namespace, inputPaths, identityValues, co
     .update(CACHE_VERSION)
     .update(namespace)
     .update(await sourceDigest())
+    // WHICH ENGINE RAN IS PART OF THE ANSWER. sheetGraphCache.mjs keys on this
+    // and this module did not, so OPENTAKEOFF_VECTORGRID=off and the default
+    // `on` shared one cache entry and served each other's scores — the engine
+    // toggle appeared to change nothing at all. Same bug, same module family,
+    // one layer up.
+    .update(`vg:${resolveVectorGridMode()}`)
     .update(await inputDigest(inputPaths));
   for (const value of identityValues) keyHash.update(value);
   const key = keyHash.digest("hex");

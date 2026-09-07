@@ -11,7 +11,7 @@ import {
   extractScheduleTablesFromVectorGrid,
 } from "./vectorGridAdapter.ts";
 import { vectorGridAvailable, vectorGridMode } from "./vectorGridClient.ts";
-import { sheetHasPointsListTitleSpans, sheetHasScheduleLanguage } from "./scheduleLanguageScan.ts";
+import { sheetHasPointsListTitleSpans, sheetHasScheduleCaption, sheetHasScheduleLanguage } from "./scheduleLanguageScan.ts";
 import {
   adoptVectorGridTables,
   collapseEquivalentPrimaryTables,
@@ -92,7 +92,20 @@ function sheetTableCount(g: SheetGraph, sheetKey: string): number {
 
 function isScheduleTarget(ctx: VectorSheetContext, hooks: VectorPipelineHooks): boolean {
   if (ctx.role === "schedule") return true;
-  // Plan/demolition sheets embed equipment terms everywhere — keyword scan is not schedule signal there.
+  // A SCHEDULE ON A DRAWING SHEET IS STILL A SCHEDULE, and this gate was
+  // losing them all. A plan sheet that PRINTS a schedule caption carries one:
+  // 13_MI#10 is "FIRST FLOOR PLAN - AREA A" with an EQUIPMENT SCHEDULE in the
+  // corner, and because its role is `plan` vectorgrid was never offered the
+  // sheet at all. What reached the estimator was the geometric extractor's
+  // older read — 3 of the table's 7 columns, box truncated at MODEL — while
+  // vectorgrid on that same page returns all 7 columns, 57 cells, 0 orphans.
+  // Same story on 009_FL#30, where five real panel schedules sit on a `plan`
+  // sheet and the app finds nothing at all.
+  //
+  // The keyword scan below genuinely is useless here — equipment words are
+  // everywhere on a floor plan, which is why the role check existed — so the
+  // test for a non-schedule sheet is a printed CAPTION, not vocabulary.
+  if (sheetHasScheduleCaption(ctx.spans)) return true;
   if (ctx.role !== "legend" && ctx.role !== "unknown") return false;
   if (hooks.sheetHasPointsListTitle(ctx.key)) return true;
   return sheetHasScheduleLanguage(ctx.spans);
@@ -402,7 +415,32 @@ export async function runVectorTakeoffPipeline(
   } else if (!uncovered.length) {
     report.layers_run.push("L2:ODL(not needed)");
   } else {
+    // ODL is the one stage that does NOT go through mergeCandidates — it pushes
+    // straight into g.tables — so withStage cannot see it and every table it
+    // recovered used to land in the ledger as nothing at all. A box scorer that
+    // reports per-stage then has an unattributable column, which is the column
+    // a regression hides in. Diff the table list around the call instead: the
+    // identity is the object, so this cannot mistake a mutated incumbent for a
+    // new table.
+    // BY CONTENT, NOT BY OBJECT IDENTITY. runODL rebuilds g.tables rather than
+    // appending to it, so an identity diff calls EVERY table new and attributes
+    // the whole graph to ODL. Measured, and badly: on 001_NC that reported 90
+    // vectorgrid tables and 90 ODL tables for a 90-table graph, and the scorer
+    // reading it concluded ODL was doing the work vectorgrid was doing. A
+    // reporting bug that inverts the conclusion is worse than no reporting.
+    const keyOfTable = (t: ScheduleTable) =>
+      `${t.sheet}|${t.title?.text ?? ""}|${(t.region || []).map((v) => Math.round(v)).join(",")}`;
+    const beforeOdl = new Set(g.tables.map(keyOfTable));
     await timed("L2:ODL", () => hooks.runODL(g));
+    if (report) {
+      for (const t of g.tables) {
+        if (beforeOdl.has(keyOfTable(t))) continue;
+        (report.stage_tables ?? (report.stage_tables = [])).push({
+          stage: "odl", sheet: t.sheet, title: t.title?.text ?? null,
+          kind: t.kind, headers: t.headers.length, rows: t.rows.length, region: t.region,
+        });
+      }
+    }
     report.layers_run.push(`L2:ODL(fallback on ${uncovered.length}/${contexts0.length} sheets)`);
   }
 

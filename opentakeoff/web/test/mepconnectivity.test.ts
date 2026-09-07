@@ -111,7 +111,7 @@ test("buildMepGraph: a real, densely crosshatched sheet can defeat JTS's noding 
 
 test("buildMepGraph: an empty sheet (no segments) returns an empty graph, not a throw", () => {
   const g = buildMepGraph([], {});
-  assert.deepEqual(g, { nodes: [], edges: [], layerSignal: "none", quantGridPx: 1.7999999999999998 });
+  assert.deepEqual(g, { nodes: [], edges: [], layerSignal: "none", quantGridPx: 1.7999999999999998, junctionTests: 0 });
 });
 
 test("buildMepGraph: excludeSegs drops exactly the marked segments", () => {
@@ -151,7 +151,27 @@ test("buildMepGraph: a dense grid of crossing lines (many segments × many junct
   const g = buildMepGraph(segs, {});
   const elapsed = Date.now() - t0;
   assert.equal(g.edges.length > 0, true, "a real grid must produce real edges");
-  assert.ok(elapsed < 5000, `buildMepGraph on a 300x300 crossing grid took ${elapsed}ms — the O(survivors×junctions) scan this session fixed would take far longer than this on a grid this dense`);
+
+  // The gate is COUNTED WORK, not wall clock. An elapsed-ms bound is a
+  // measurement of the machine as much as of the code: this exact assertion,
+  // written at 5000ms, passed in isolation (~2s) and failed at ~5.3s under
+  // `node --test`'s own 4-way parallel file load, so the suite was
+  // permanently one-red on a fix that was never broken. `junctionTests` is
+  // the quantity the fix actually changed, and it is deterministic.
+  //
+  // 520 segments survive; 260×260 = 67,600 junctions. The naive scan tests
+  // every junction against every survivor.
+  const naive = 520 * 67_600;                       // 35,152,000
+  assert.ok(g.junctionTests < naive / 10,
+    `the interior-junction scan tested ${g.junctionTests} candidates; the un-pruned scan tests ${naive}, and anything near that means the spatial index is gone`);
+  // measured: 483,080 — a 72× prune. The bound is deliberately loose so a
+  // legitimate change to the bucket size (\`cell\`) does not fail it, and
+  // tight enough that losing the index cannot pass it.
+
+  // A generous ceiling kept only as a hang guard — JTS's own noding, which
+  // this fix does not touch, is the honest floor here (~2-4s on this grid),
+  // and the runner may be sharing four cores with three other test files.
+  assert.ok(elapsed < 60_000, `buildMepGraph on a ${N}×${N} crossing grid took ${elapsed}ms — that is a hang, not slowness`);
 });
 
 // ── traceConnectivity ────────────────────────────────────────────────────

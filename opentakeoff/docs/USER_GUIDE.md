@@ -738,6 +738,22 @@ The modal asks for an optional credit line and an attestation that you have the 
 
 ---
 
+## 12a. The Schedules index
+
+Opening a plan set indexes it. Part of that pass reads every **schedule table** on every sheet — its printed title, its columns, its rows, and a box around each individual cell. The **Schedules** button in the top bar, next to *Sheets*, is where you look at what it found. It shows a count as soon as the pass finishes (*Schedules · 24*), and it is disabled while the pass is still running.
+
+The panel docks on the right, beside the drawing rather than over it, because the point is to read a table and look at the sheet it came from at the same time.
+
+**How it is organised.** Schedules are grouped **by sheet**, in set order, with the sheet number pinned at the top of each group as you scroll. Each schedule shows its printed title, how many rows and columns it has, and what kind of schedule the engine took it for — *equipment*, *room finish*, *finish*, *reference*. A schedule that runs across two sheets is one entry, marked `continues · N sheets`, because it is one table on paper.
+
+**Opening one.** Click a schedule to expand it; you can hold as many open as you like, and **expand all** opens everything the filter is currently showing. Under the title you get the rows: the tag, then the columns that identify and size the thing — manufacturer, model, CFM, tons, and so on — rather than whichever columns happened to be printed first. The full column list sits below the rows, behind *+N more columns*.
+
+**Showing it on the drawing.** **View** paints the whole schedule's box on its sheet. Clicking any **tag** paints just that row — and a row cites the sheet its own ink is on, which for a continued schedule is not the sheet the table started on. Only one browse highlight exists at a time: clicking a second one replaces the first, and closing the panel takes its ink with it. Nothing you do here is saved into the takeoff.
+
+**Filtering.** The box filters on the printed title, the column names, the row tags, the sheet, and the kind — so typing `equipment` selects the equipment schedules, and clicking a kind label does the same thing. The count above the list follows the filter (*4 of 24 schedules*), so the number on screen always describes the list under it.
+
+**When it has nothing to show**, it says which of the three reasons applies: the set is not indexed yet, the pass is still running, or the pass finished and recognised no tables — most often a scanned set with no text layer. A failed pass gets a full sentence here rather than one word in the status bar.
+
 ## 13. The Agent panel
 
 The Agent panel is the newest way to run the engine: describe a takeoff in a sentence, and an AI model—**yours**, on your key, from your browser—works the sheet with the app's own tools and stages **dashed proposals you accept or reject**. It is a proposer, never a committer.

@@ -49,6 +49,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import sys
 import warnings
 from collections import defaultdict
@@ -57,7 +58,7 @@ from pathlib import Path
 warnings.filterwarnings("ignore")
 sys.path.insert(0, str(Path(__file__).parent))
 
-from bakeoff import (BACKENDS, CORPUS, caption_boxes, detail_captions,  # noqa: E402
+from bakeoff import (BACKENDS, BULK, CORPUS, caption_boxes, detail_captions, norm,  # noqa: E402
                      find_pdf,
                      region_owners, single_page_pdf)
 from vectorgrid import segments_from_page  # noqa: E402
@@ -133,21 +134,199 @@ def keyed_sheets():
     return out
 
 
+def calibrate() -> int:
+    """DOES THE DISCOVERY RULER REPRODUCE THE ANSWER WE ALREADY KNOW?
+
+    Run this before believing any --discover number. It points caption
+    discovery at the 32 pages a human has authored titles for and compares,
+    per page, what the regex finds against what is actually there. No
+    extractor runs; this grades the RULER, not vectorgrid.
+
+    It exists because the ruler has been wrong three times in one session and
+    each time its first number was reported before anything checked it. The
+    --discover pass claimed 52.5% recall and a MERGED defect on unseen pages;
+    both were the regex counting notes lists, legends and table ROWS as
+    tables. Ten seconds of this would have shown it.
+
+    A ruler that cannot recover the authored titles has no business being
+    quoted on pages nobody has authored.
+    """
+    from findsheets import captions_in_line
+    import pdfplumber
+
+    tot = dict(authored=0, found=0, extra=0, pages=0)
+    print("CALIBRATION - discovery against the authored titles it should recover\n")
+    print(f"{'sheet':46s} {'authored':>8s} {'found':>6s} {'missed':>7s} {'invented':>9s}")
+    print("-" * 80)
+    for set_id, page, titles in keyed_sheets():
+        try:
+            src = find_pdf(set_id)
+        except SystemExit:
+            continue
+        with pdfplumber.open(src) as doc:
+            txt = doc.pages[page - 1].extract_text() or ""
+        got = [c for ln in txt.splitlines() for c in captions_in_line(ln)]
+        got = list(dict.fromkeys(got))
+        want = {norm(t) for t in titles}
+        have = {norm(t) for t in got}
+        missed = sorted(want - have)
+        invented = sorted(have - want)
+        tot["authored"] += len(want); tot["found"] += len(want & have)
+        tot["extra"] += len(invented); tot["pages"] += 1
+        print(f"{(set_id[:32] + ' p' + str(page)):46s} {len(want):8d} {len(want & have):6d} {len(missed):7d} {len(invented):9d}")
+        for t in missed[:4]:
+            print(f"      MISSED BY THE REGEX   {t[:64]}")
+        for t in invented[:4]:
+            print(f"      NOT A KEYED TABLE     {t[:64]}")
+    n = max(tot["authored"], 1)
+    print("\n" + "=" * 80)
+    print(f"pages                         {tot['pages']}")
+    print(f"authored titles               {tot['authored']}")
+    print(f"recovered by discovery        {tot['found']}/{tot['authored']}  ({100 * tot['found'] / n:.1f}%)")
+    print(f"discovered but NOT a keyed table  {tot['extra']}")
+    print("\nThe second number is the one that matters. Every one of those is a")
+    print("caption the regex believes in and the key does not — a notes list, a")
+    print("legend, or a row — and each becomes a false miss on an unkeyed page.")
+    return 0
+
+
+CAPTION_BAND = 500.0   # how far under a caption its own table may reach
+
+
+def caption_scope(cap, hs, vs) -> str:
+    """Is this discovered caption actually over a TABLE?
+
+    --discover finds captions with a regex over the text layer, and a regex
+    cannot tell a schedule from a notes list. Measured on 12_MT#27, a mechanical
+    COVER SHEET: its three "captions" are DUCTWORK CONSTRUCTION SCHEDULE (a
+    numbered notes list, no table anywhere), MECHANICAL SYMBOLS LEGEND (a
+    legend), and MECHANICAL SHEET LIST (the one real ruled table). vectorgrid
+    found the real one and scored 1/3, and the page also reported a MERGED
+    because "M0.1 MECHANICAL SCHEDULES" — a ROW INSIDE the sheet list — matched
+    the caption regex too. Both the recall number and the defect were artefacts
+    of the ruler.
+
+    The discriminator is raw page geometry, never the extractor's opinion: a
+    ruled table has a grid under its caption, a notes list and a legend do not,
+    and a row has rules hard above and below it with a column wall crossing.
+
+    -> "TABLE" (grade it) | "NOT_RULED" (notes/legend) | "IN_TABLE" (it is a row)
+    """
+    cx0, ctop, cx1, cbot = cap
+    cw = max(cx1 - cx0, 1.0)
+    ch = max(cbot - ctop, 1.0)
+    span = lambda x0, x1: min(x1, cx1) - max(x0, cx0)      # noqa: E731
+
+    # A ROW: ruled hard above AND below at about its own line height, with a
+    # column wall crossing its band. A standalone caption has open paper above.
+    above = any(abs(y - ctop) <= ch * 1.1 and span(x0, x1) >= cw * 0.5 for x0, x1, y in hs)
+    below = any(abs(y - cbot) <= ch * 1.1 and span(x0, x1) >= cw * 0.5 for x0, x1, y in hs)
+    crossing = any(y0 <= ctop + 1 and y1 >= cbot - 1 and cx0 - cw <= x <= cx1 + cw
+                   for y0, y1, x in vs)
+    if above and below and crossing:
+        return "IN_TABLE"
+
+    # A TABLE under it: several row rules sharing the caption's band, crossed by
+    # column walls. Three rules and two walls is the smallest thing that is a
+    # grid rather than an underline or a box.
+    top, bot = cbot, cbot + CAPTION_BAND
+    rows = sum(1 for x0, x1, y in hs if top - 2 <= y <= bot and span(x0, x1) >= cw * 0.5)
+    cols = sum(1 for y0, y1, x in vs
+               if min(y1, bot) - max(y0, top) >= 20 and cx0 - cw <= x <= cx1 + cw)
+    return "TABLE" if rows >= 3 and cols >= 2 else "NOT_RULED"
+
+
+def discovered_sheets(min_titles: int, only: set | None, limit: int, skip: int):
+    """Every page of every bulk document that CARRIES schedule captions.
+
+    THE POINT OF THIS MODE. keyed_sheets() reads the 32 pages a human has
+    authored ground truth for, which is enough to find bugs and nowhere near
+    enough to claim a rate — and it has already been caught hiding one. But
+    every verdict this file computes (MERGED, SPLIT, OVERRUN, SHORT) is decided
+    against the page's own printed CAPTIONS, not against an authored box. So
+    they are all decidable on any page whose captions the text layer carries,
+    with no authoring at all, which is what turns 32 graded pages into
+    thousands.
+
+    Titles come from the text layer ONLY — never from the extractor's output —
+    for the same reason findsheets.py does it that way: a page list built from
+    what the extractor already found would silently exclude every table it
+    cannot see, and those are the ones worth grading.
+    """
+    from findsheets import captions_in_line
+    import pdfplumber
+
+    out, seen = [], 0
+    pdfs = sorted(p for d in BULK for p in d.glob("*.pdf"))
+    if only:
+        pdfs = [p for p in pdfs if p.stem in only]
+    print(f"discovering captions in {len(pdfs)} documents", file=sys.stderr)
+    for i, pdf in enumerate(pdfs):
+        try:
+            with pdfplumber.open(pdf) as doc:
+                for pno, page in enumerate(doc.pages, 1):
+                    txt = page.extract_text() or ""
+                    titles = [c for ln in txt.splitlines() for c in captions_in_line(ln)]
+                    # de-dup: one page really can print the same caption twice,
+                    # and caption_boxes would hand both the same box
+                    titles = list(dict.fromkeys(titles))
+                    if len(titles) < min_titles:
+                        continue
+                    seen += 1
+                    if seen <= skip:
+                        continue
+                    out.append((pdf.stem, pno, titles))
+                    if limit and len(out) >= limit:
+                        print(f"  stopping at --limit {limit} (page {seen} of the sweep)", file=sys.stderr)
+                        return out
+        except Exception as e:                     # a corrupt page must not stop the sweep
+            print(f"  !! {pdf.stem}: {type(e).__name__}", file=sys.stderr)
+        if (i + 1) % 20 == 0:
+            print(f"  scanned {i + 1}/{len(pdfs)} documents, {len(out)} pages queued", file=sys.stderr)
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--backend", default="pdfplumber-lines_strict")
+    ap.add_argument("--discover", action="store_true",
+                    help="grade every page whose text layer carries captions, not just the keyed 32")
+    ap.add_argument("--min", type=int, default=3, help="--discover: minimum captions on a page")
+    ap.add_argument("--limit", type=int, default=0, help="--discover: stop after this many pages")
+    ap.add_argument("--skip", type=int, default=0, help="--discover: resume, skipping this many pages")
+    ap.add_argument("--docs", default="", help="--discover: comma-separated document stems")
+    ap.add_argument("--json", default="", help="write per-page verdicts here")
+    ap.add_argument("--calibrate", action="store_true",
+                    help="grade the DISCOVERY RULER against the authored titles before trusting it")
     a = ap.parse_args()
+    if a.calibrate:
+        return calibrate()
     fn = BACKENDS[a.backend]
+    rows_json = []
 
     tot = dict(tables=0, located=0, matched=0, merged=0, split=0, overrun=0, short=0, regions=0)
     print(f"backend: {a.backend}\n")
     print(f"{'sheet':50s} {'n':>3s} {'hit':>4s} {'mrg':>4s} {'spl':>4s} {'ovr':>4s} {'sht':>4s}")
     print("-" * 78)
 
-    for set_id, page, titles in keyed_sheets():
+    sheets = (discovered_sheets(a.min, set(x for x in a.docs.split(",") if x) or None, a.limit, a.skip)
+              if a.discover else keyed_sheets())
+    for set_id, page, titles in sheets:
         pdf = single_page_pdf(find_pdf(set_id), page)
         caps = caption_boxes(pdf, titles)
         hs, vs = page_rules(pdf)
+        # SCOPE, in --discover only. Keyed titles are authored and every one of
+        # them is a real table; discovered ones are a regex's guess and have to
+        # earn the denominator. Excluded captions are reported, never silently
+        # dropped and never counted as misses — the same rule as rasters.
+        if a.discover:
+            scoped = {t: caption_scope(cp, hs, vs) if cp else "NO_CAPTION" for t, cp in caps.items()}
+            for k in ("NOT_RULED", "IN_TABLE"):
+                tot[k.lower()] = tot.get(k.lower(), 0) + sum(1 for v in scoped.values() if v == k)
+            titles = [t for t in titles if scoped.get(t) == "TABLE"]
+            caps = {t: cp for t, cp in caps.items() if scoped.get(t) == "TABLE"}
+            if not titles:
+                continue
         regions, _ = fn(pdf)
         tot["tables"] += len(titles)
         tot["regions"] += len(regions)
@@ -199,7 +378,15 @@ def main() -> int:
 
         tot["matched"] += hit; tot["merged"] += merged
         tot["split"] += split; tot["overrun"] += overrun; tot["short"] += short
-        print(f"{(set_id[:36]+' p'+str(page)):50s} {len(titles):3d} {hit:4d} {merged:4d} {split:4d} {overrun:4d} {short:4d}")
+        print(f"{(set_id[:36]+' p'+str(page)):50s} {len(titles):3d} {hit:4d} {merged:4d} {split:4d} {overrun:4d} {short:4d}", flush=True)
+        rows_json.append({"set": set_id, "page": page, "titles": len(titles), "located": sum(1 for v in caps.values() if v),
+                          "regions": len(regions), "hit": hit, "merged": merged, "split": split,
+                          "overrun": overrun, "short": short,
+                          "merged_titles": sorted({t for r in regions for t, cp in caps.items() if cp
+                                                   and r[1] - 5 <= (cp[1] + cp[3]) / 2 <= r[3] + 5
+                                                   and min(r[2], cp[2]) - max(r[0], cp[0]) >= max(cp[2] - cp[0], 1) * 0.5}) if merged else []})
+        if a.json:
+            Path(a.json).write_text(json.dumps(rows_json, indent=1))
 
     n = tot["tables"]
     print("\n" + "=" * 78)
@@ -211,6 +398,9 @@ def main() -> int:
     print(f"  of which OVERRUN       {tot['overrun']}   (box eats into the next table)")
     print(f"  of which SHORT         {tot['short']}   (a ruled row still stands below the box)")
     print(f"MERGED regions           {tot['merged']}   (one box holding 2+ captioned tables)")
+    if a.discover:
+        print(f"\nEXCLUDED, not graded     {tot.get('not_ruled', 0)} captions with no ruled grid under them (notes lists, legends)")
+        print(f"                         {tot.get('in_table', 0)} captions that are a ROW of a table, not a title")
     clean = tot["matched"] - tot["split"] - tot["overrun"] - tot["short"]
     print(f"\nCLEAN boxes              {clean}/{n}  ({100*clean/n:.1f}%)  <- usable as-is by a downstream extractor")
     return 0
