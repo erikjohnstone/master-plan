@@ -1,0 +1,299 @@
+/**
+ * THE REAL UI, ACROSS MANY DOCUMENTS — the check that was missing all
+ * session. Every prior measurement tonight ran headless (Session +
+ * graphForPipeline directly), never the browser. This drives the actual
+ * app: upload, wait for the real index + schedule prewarm, read the graph
+ * the Schedules panel itself reads from, paint every table's own region
+ * through the real citation path (agentHighlightCitation, the same
+ * function `onPaint` and the panel's own View button call), and screenshot
+ * the result — so a wrong or missing box is SEEN, not just scored.
+ *
+ * Per document, per sheet with tables:
+ *   TIER 1  painted rect == region, to 1px (the seam between graph and pixels)
+ *   TIER 2  containment (region holds its own title+cell ink) and tightness
+ *           (region area / ink area) — a box that swallowed a neighbour or
+ *           cut a table in half shows up here
+ *   PANEL   the Schedules panel's own listed titles per sheet, cross-checked
+ *           against graphTables() for that same sheet — catches a panel that
+ *           undercounts what the graph actually found
+ *   KEY     where opentakeoff-corpus/keys/<id>.tableboxes.csv exists, IoU +
+ *           Error-of-Boundary against the authored ground truth, title-matched
+ *
+ * One screenshot per sheet with EVERY table on it highlighted at once (each
+ * citation given its own `source` string so they persist together — only
+ * `source: "schedule_browse"` self-clears) — that is the view a human, or a
+ * screenshot a human looks at, actually needs to see "missing whole tables."
+ *
+ *   node scripts/playwright-corpus-table-audit.mjs [--out /tmp/ot-audit] [--limit N]
+ */
+import { chromium } from "playwright";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { resolve, basename } from "node:path";
+
+const OUT = process.env.OT_AUDIT_OUT || "/tmp/ot-corpus-audit";
+const baseUrl = process.env.OT_UI_URL || "http://127.0.0.1:5173/";
+const args = process.argv.slice(2);
+const argOf = (n) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : null; };
+const LIMIT = Number(argOf("--limit") || 0);
+
+const CORPUS = "/home/user/master-plan/opentakeoff-corpus";
+const KEYS = resolve(CORPUS, "keys");
+
+// The batch: the freshest live-reported bug first, then every sheet/set
+// fixed or implicated tonight, then a spread of already-keyed corpus
+// documents (so IoU/EoB is measurable, not just eyeballed), then a few
+// bulk documents nothing has ever looked at through the UI at all.
+const DOCS = [
+  { id: "weld-county-permit", pdf: `${CORPUS}/raw/weld-county-mechanical-permit.pdf` },
+  { id: "13_MI_MSU_LifeSciences_LabRenovation", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets/13_MI_MSU_LifeSciences_LabRenovation.pdf` },
+  { id: "itd-d1-lab", pdf: `${CORPUS}/raw/itd-d1-lab-mechanical.pdf` },
+  { id: "federal-mech", pdf: `${CORPUS}/raw/federal-attachment4-mechanical.pdf` },
+  { id: "baker-county-eoc", pdf: `${CORPUS}/raw/baker-county-eoc-bidset.pdf` },
+  { id: "bessemer", pdf: `/home/user/master-plan/opentakeoff/samples/bessemer-mechanical-bidset.pdf` },
+  { id: "navfac-cherry-point-atc", pdf: `${CORPUS}/raw/navfac-cherry-point-atc-mechanical.pdf` },
+  { id: "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf` },
+  { id: "004_MO_T2504_03_Interior_and_Exterior_Renovation", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf` },
+  { id: "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf` },
+  { id: "009_FL_USDA_APHIS_Plant_Inspection_Station_Building", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf` },
+  { id: "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf` },
+  { id: "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf` },
+  { id: "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf` },
+  { id: "019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf` },
+  { id: "12_MT_MSU_ReidHall_Renovation", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets/12_MT_MSU_ReidHall_Renovation.pdf` },
+  { id: "16_NV_CarsonValleyMS_HVAC_Replacement", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets/16_NV_CarsonValleyMS_HVAC_Replacement.pdf` },
+  { id: "18_OR_BakerMS_HVAC_Electrical_FullSet", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets/18_OR_BakerMS_HVAC_Electrical_FullSet.pdf` },
+  { id: "24_IA_JohnsonCounty_Courthouse", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets/24_IA_JohnsonCounty_Courthouse.pdf` },
+  { id: "27_WA_ColvilleTribes_Hatchery_Lab", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets/27_WA_ColvilleTribes_Hatchery_Lab.pdf` },
+  { id: "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf` },
+].filter((d) => existsSync(d.pdf));
+
+const wanted = LIMIT > 0 ? DOCS.slice(0, LIMIT) : DOCS;
+console.log(`${wanted.length} of ${DOCS.length} target documents found on disk`);
+for (const d of DOCS) if (!existsSync(d.pdf)) console.log(`  MISSING FILE, skipped: ${d.id} -> ${d.pdf}`);
+
+mkdirSync(OUT, { recursive: true });
+
+// ── authored box-key loader (title-matched, same normalization as the eval scripts) ──
+const normTitle = (s) => String(s || "").toUpperCase().replace(/\s+/g, " ").trim();
+function loadBoxKey(id) {
+  const p = resolve(KEYS, `${id}.tableboxes.csv`);
+  if (!existsSync(p)) return null;
+  const lines = readFileSync(p, "utf8").split(/\r?\n/).filter((l) => l.trim() && !l.startsWith("#") && !l.startsWith("sheet,"));
+  const rows = [];
+  for (const line of lines) {
+    // sheet,table_title,x0,top,x1,bot,provenance — provenance may itself
+    // contain commas but is always quoted; a simple split on the first 6
+    // unquoted commas is enough since the first 6 fields never are.
+    const m = line.match(/^([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),/);
+    if (!m) continue;
+    rows.push({ sheet: m[1], title: m[2], x0: Number(m[3]), top: Number(m[4]), x1: Number(m[5]), bot: Number(m[6]) });
+  }
+  return rows;
+}
+const eob = (a, b) => Math.max(Math.abs(a[0] - b[0]), Math.abs(a[1] - b[1]), Math.abs(a[2] - b[2]), Math.abs(a[3] - b[3]));
+const iou = (a, b) => {
+  const ix = Math.max(0, Math.min(a[2], b[2]) - Math.max(a[0], b[0]));
+  const iy = Math.max(0, Math.min(a[3], b[3]) - Math.max(a[1], b[1]));
+  const inter = ix * iy;
+  const union = (a[2] - a[0]) * (a[3] - a[1]) + (b[2] - b[0]) * (b[3] - b[1]) - inter;
+  return union > 0 ? inter / union : 0;
+};
+const RENDER_SCALE = 2.0; // opentakeoff/web/src/lib/sheets.ts
+
+const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium", args: ["--no-sandbox", "--disable-dev-shm-usage"] });
+const summary = [];
+
+for (const doc of wanted) {
+  const docOut = resolve(OUT, doc.id);
+  mkdirSync(docOut, { recursive: true });
+  const page = await browser.newPage({ viewport: { width: 1600, height: 950 } });
+  const pageErrors = [];
+  page.on("pageerror", (e) => pageErrors.push(String(e).slice(0, 300)));
+  const rec = { id: doc.id, pdf: basename(doc.pdf), tables: 0, sheets: 0, tier1_fail: 0, tier2_escape: 0, panel_mismatch: [], key: null, error: null };
+  console.log(`\n=== ${doc.id} (${basename(doc.pdf)}) ===`);
+  try {
+    const t0 = Date.now();
+    await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 60_000 });
+    await page.waitForSelector('input[name="sheet-file"]', { state: "attached", timeout: 60_000 });
+    await page.locator('input[name="sheet-file"]').first().setInputFiles(doc.pdf);
+    await page.waitForFunction(() => window.__opentakeoff?.indexProgress?.()?.phase === "ready", null, { timeout: 20 * 60 * 1000 });
+    await page.waitForFunction(() => window.__opentakeoff?.graphPrewarm?.()?.phase === "ready", null, { timeout: 20 * 60 * 1000 });
+    console.log(`  indexed in ${((Date.now() - t0) / 1000).toFixed(0)}s`);
+
+    // graphTables state is populated by its OWN async effect
+    // (ensureAgentGraph(), cache-first) gated on graphPrewarm.phase ===
+    // "ready" — on a fast-loading document that effect can still be
+    // in flight the instant the ready signal fires, and probe.graphTables()
+    // would read a stale empty array. Real, found live: weld-county-permit
+    // (33s index) read 0 tables here while the Schedules panel, opened a
+    // moment later, already showed 3 sections. Wait for it to stop growing
+    // rather than trust the first read.
+    let tables = await page.evaluate(() => window.__opentakeoff.probe.graphTables());
+    for (let i = 0; i < 10; i++) {
+      await page.waitForTimeout(500);
+      const again = await page.evaluate(() => window.__opentakeoff.probe.graphTables());
+      if (again.length === tables.length) { tables = again; break; }
+      tables = again;
+    }
+    rec.tables = tables.length;
+    const bySheet = new Map();
+    for (const t of tables) {
+      if (!Array.isArray(t.region) || t.region.length !== 4) continue;
+      if (!bySheet.has(t.sheet)) bySheet.set(t.sheet, []);
+      bySheet.get(t.sheet).push(t);
+    }
+    rec.sheets = bySheet.size;
+    console.log(`  ${tables.length} tables across ${bySheet.size} sheets`);
+
+    // ── Schedules panel: open it, expand all, cross-check against the graph ──
+    const chip = page.locator("[data-index-progress]").first();
+    if (await chip.count()) {
+      await chip.click();
+      await page.waitForTimeout(700);
+      const panel = page.locator("[data-schedules-panel]");
+      if (await panel.count()) {
+        const expandAll = panel.locator("[data-schedules-expand-all]");
+        if (await expandAll.count()) { await expandAll.click(); await page.waitForTimeout(500); }
+        await page.screenshot({ path: resolve(docOut, "panel.png"), fullPage: false });
+        const panelTitles = await page.evaluate(() => {
+          const root = document.querySelector("[data-schedules-panel]");
+          if (!root) return [];
+          return [...root.querySelectorAll("[data-schedule-section]")].map((el) => (el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 80));
+        });
+        const graphN = tables.length;
+        if (panelTitles.length !== graphN) {
+          rec.panel_mismatch.push(`panel lists ${panelTitles.length} section(s), graph has ${graphN} table(s)`);
+          console.log(`  PANEL MISMATCH: panel ${panelTitles.length} vs graph ${graphN}`);
+        }
+      } else {
+        rec.panel_mismatch.push("chip present but [data-schedules-panel] never opened");
+      }
+    } else {
+      rec.panel_mismatch.push("no [data-index-progress] chip found at all");
+    }
+
+    // ── per-sheet: paint every table at once, screenshot, tier1/2 ──
+    const boxKey = loadBoxKey(doc.id);
+    if (boxKey) rec.key = { authored: boxKey.length, matched: 0, correct4pt: 0, meanIou: 0 };
+    let ki = 0;
+    const ious = [];
+    for (const [sheetKey, ts] of bySheet) {
+      await page.evaluate((k) => window.__opentakeoff.probe.openSheets([k]), sheetKey);
+      await page.waitForTimeout(1200);
+      const panels = await page.evaluate(() => window.__opentakeoff.probe.sheets());
+      const dims = { w: panels[0]?.w || 0, h: panels[0]?.h || 0, xOffset: panels[0]?.xOffset ?? -1 };
+      if (dims.xOffset !== 0 || !(dims.w > 0)) {
+        console.log(`    ${sheetKey}: could not isolate panel (xOffset=${dims.xOffset}, w=${dims.w}) — skipping paint/tier checks`);
+        continue;
+      }
+      for (const t of ts) {
+        const title = typeof t.title === "string" ? t.title : (t.title?.text || "");
+        const src = `audit_${ki++}`;
+        const res = await page.evaluate(([sheet, box, txt, source]) => window.__opentakeoff.probe.cite({
+          sheet, bbox_px: box, table_title: txt, text: txt || "region", source,
+        }), [t.sheet, t.region, title, src]);
+        if (res?.error) { rec.tier1_fail++; console.log(`    REFUSED: "${title}" — ${res.error}`); continue; }
+        await page.waitForTimeout(120);
+        const painted = await page.evaluate((id) => {
+          const g = document.querySelector(`[data-markup-id="${id}"]`);
+          if (!g) return null;
+          const rects = [...g.querySelectorAll("rect")];
+          const r = rects[rects.length - 1];
+          if (!r) return null;
+          const n = (a) => Number(r.getAttribute(a));
+          return [n("x"), n("y"), n("x") + n("width"), n("y") + n("height")];
+        }, res.id);
+        if (!painted) { rec.tier1_fail++; continue; }
+        const off = Math.max(...painted.map((v, i) => Math.abs(v - t.region[i])));
+        if (off > 1) rec.tier1_fail++;
+
+        // A full-sheet screenshot at fit-to-page zoom is unreadable, and a
+        // tight crop AT that zoom is just as unreadable, smaller. Zoom the
+        // real canvas in on the markup's own center (Ctrl+wheel, the app's
+        // own zoomAround — exp(-deltaY*0.01) per notch) until its box fills
+        // a useful fraction of the viewport, THEN crop, so the crop is
+        // actually legible rather than a handful of blurred pixels.
+        try {
+          // Reset to a known zoom baseline first — zooming in on table N-1
+          // otherwise leaves table N's own box measured (and possibly panned
+          // off-screen) from an arbitrary prior zoom state.
+          const fitBtn = page.locator('button[title="Fit sheet to view"]');
+          if (await fitBtn.count()) { await fitBtn.click(); await page.waitForTimeout(300); }
+          let box = await page.locator(`[data-markup-id="${res.id}"]`).boundingBox();
+          if (box) {
+            const vp = page.viewportSize();
+            const cx = box.x + box.width / 2, cy = box.y + box.height / 2;
+            await page.mouse.move(cx, cy);
+            const targetFrac = 0.6; // the box's own long side should end up ~60% of the viewport
+            const longSide = Math.max(box.width, box.height) || 1;
+            const wantScale = Math.min(12, Math.max(1, (Math.min(vp.width, vp.height) * targetFrac) / longSide));
+            if (wantScale > 1.15) {
+              const notches = Math.log(wantScale) / 0.01; // exp(-deltaY*0.01) per notch, deltaY negative to zoom in
+              await page.keyboard.down("Control");
+              await page.mouse.wheel(0, -notches);
+              await page.keyboard.up("Control");
+              await page.waitForTimeout(500);
+            }
+            box = await page.locator(`[data-markup-id="${res.id}"]`).boundingBox();
+          }
+          if (box) {
+            const pad = 60;
+            const vp = page.viewportSize();
+            const x = Math.max(0, box.x - pad), y = Math.max(0, box.y - pad);
+            const w = Math.min(vp.width - x, box.width + 2 * pad);
+            const h = Math.min(vp.height - y, box.height + 2 * pad);
+            if (w > 0 && h > 0) {
+              const safeTitle = (title || "untitled").replace(/[^A-Za-z0-9]+/g, "_").slice(0, 40);
+              await page.screenshot({ path: resolve(docOut, `crop_${safeTitle}_${src}.png`), clip: { x, y, width: w, height: h } });
+            }
+          }
+        } catch { /* best-effort — a missing crop must not fail the audit */ }
+
+        const ink = [];
+        if (Array.isArray(t.title?.bbox) && t.title.bbox.length === 4) ink.push(t.title.bbox);
+        for (const r of t.rows || []) for (const c of Object.values(r.cells || {})) if (Array.isArray(c?.bbox) && c.bbox.length === 4) ink.push(c.bbox);
+        if (ink.length) {
+          const inkUnion = ink.reduce((a, b) => [Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.max(a[2], b[2]), Math.max(a[3], b[3])]);
+          const contains = inkUnion[0] >= t.region[0] - 2 && inkUnion[1] >= t.region[1] - 2 && inkUnion[2] <= t.region[2] + 2 && inkUnion[3] <= t.region[3] + 2;
+          if (!contains) { rec.tier2_escape++; console.log(`    TIER2 ESCAPE: "${title}" — ink ${JSON.stringify(inkUnion.map(Math.round))} outside box ${JSON.stringify(t.region.map(Math.round))}`); }
+        }
+
+        // ── score against authored key, if this document has one ──
+        if (boxKey) {
+          const hit = boxKey.find((k) => normTitle(k.title) === normTitle(title));
+          if (hit) {
+            rec.key.matched++;
+            const authoredPx = [hit.x0 * RENDER_SCALE, hit.top * RENDER_SCALE, hit.x1 * RENDER_SCALE, hit.bot * RENDER_SCALE];
+            const e = eob(authoredPx, t.region) / RENDER_SCALE;
+            const iouVal = iou(authoredPx, t.region);
+            ious.push(iouVal);
+            if (e <= 4) rec.key.correct4pt++;
+            else console.log(`    KEY MISS >4pt: "${title}" EoB=${e.toFixed(1)}pt IoU=${iouVal.toFixed(3)}`);
+          }
+        }
+      }
+      const safeSheet = sheetKey.replace(/[^A-Za-z0-9]+/g, "_").slice(-60);
+      await page.screenshot({ path: resolve(docOut, `sheet_${safeSheet}.png`) });
+    }
+    if (boxKey) rec.key.meanIou = ious.length ? ious.reduce((a, b) => a + b, 0) / ious.length : null;
+  } catch (e) {
+    rec.error = String(e).slice(0, 500);
+    console.log(`  ERROR: ${rec.error}`);
+  }
+  if (pageErrors.length) rec.pageErrors = pageErrors.slice(0, 5);
+  summary.push(rec);
+  writeFileSync(resolve(OUT, "summary.json"), JSON.stringify(summary, null, 1));
+  await page.close();
+}
+
+await browser.close();
+
+console.log("\n\n================ SUMMARY ================");
+for (const r of summary) {
+  console.log(`${r.id.padEnd(50)} tables=${String(r.tables).padStart(3)} sheets=${String(r.sheets).padStart(2)} tier1_fail=${r.tier1_fail} tier2_escape=${r.tier2_escape}` +
+    (r.key ? `  key: ${r.key.correct4pt}/${r.key.matched}/${r.key.authored} correct/matched/authored, meanIoU=${r.key.meanIou?.toFixed(3)}` : "") +
+    (r.panel_mismatch.length ? `  PANEL: ${r.panel_mismatch.join("; ")}` : "") +
+    (r.error ? `  ERROR: ${r.error}` : ""));
+}
+writeFileSync(resolve(OUT, "summary.json"), JSON.stringify(summary, null, 1));
+console.log(`\nfull results + screenshots in ${OUT}`);

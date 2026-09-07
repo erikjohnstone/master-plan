@@ -6150,6 +6150,21 @@ export function isGenericHeaderToken(raw: string): boolean {
   // independently found — totally, silently dropped, the same "no trace at
   // all" symptom rule 30 already documents for a different mechanism.
   if (/\bSCHEDULE\b/.test(s)) return false;
+  // A PLACEHOLDER "NO VALUE" MARK IS NEVER A COLUMN LABEL. "N/A", "NONE",
+  // "N.A.", "NA" carry no lowercase letter, no digit, and no colon — every
+  // other test above waves them through as header-shaped. Real, camera-
+  // confirmed (weld-county-mechanical-permit.pdf#6's own INSULATION
+  // SCHEDULE): its data rows carry columns that are routinely N/A for a
+  // given system/wrap combination ("SUPPLY/RETURN · NONE · N/A · N/A · N/A ·
+  // UNLESS NOTED ON PLANS"), and isGenericHeaderRow's own "every token
+  // header-shaped" test (below) took that DATA row, and the next real data
+  // row shaped the same way, each as the start of a NEW table — the scan
+  // stopped there both times, permanently capping the table at 11 rows
+  // when the printed table runs on for at least 2 more. Scoped to exact,
+  // case-insensitive matches of the placeholder itself, never a substring —
+  // a real header phrase that happens to CONTAIN "NONE" ("NONE PROVIDED")
+  // is untouched.
+  if (/^(N\s*\/?\s*A\.?|NONE|N\.A\.)$/.test(norm(s))) return false;
   return true;
 }
 /** A header-shaped ROW: 2+ real cells (a lone single-span line is a title or
@@ -8124,9 +8139,38 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
       // sheet reads correctly) suppressed exactly as before.
       const refSheets = bands.length > 1 ? [s, ...bands] : bands;
       const wholeRefRegions: Bbox[] = [];
+      const wholeRefTables: ScheduleTable[] = [];
       for (const bs of refSheets) for (const t of extractAllReferenceTables(bs, s)) {
-        if (bs === s) wholeRefRegions.push(t.region);
-        else if (wholeRefRegions.some((r) => bboxesIntersect(r, t.region))) continue;
+        if (bs === s) { wholeRefRegions.push(t.region); wholeRefTables.push(t); }
+        else {
+          const overlapIdx = wholeRefRegions.findIndex((r) => bboxesIntersect(r, t.region));
+          if (overlapIdx !== -1) {
+            // "Whole-sheet wins ties" (below) is a real default, but not an
+            // absolute one — it assumes the whole-sheet read is at least as
+            // complete as any band's, which the SILENCER/SNORKEL HOOD cases
+            // above are. Real, corpus-found counter-case (weld-county-
+            // mechanical-permit.pdf#6's own INSULATION SCHEDULE, a 2-up sheet
+            // whose OTHER column is dense spec prose, not a second table):
+            // the whole-sheet read's y-only row clustering fuses that
+            // neighboring prose into the same physical rows, corrupting row
+            // keys (SUPPLY/RETURN with no group-label qualifier, all
+            // colliding) and truncating the table at 11 of its real 17 rows;
+            // the band read, scoped to this table's own column, never sees
+            // the other column's prose and reads it complete and clean. Same
+            // richer-wins idiom this file already uses for a different
+            // cross-pass collision (extractReferenceTableAt's own
+            // alreadyVocab comment) — measured here as plain row count,
+            // since a corrupted whole-sheet read of a real table is
+            // strictly a SHORTER read of it, never a longer one (the
+            // fused-in prose rows fail this pass's own key-column test and
+            // become orphans, not extra rows).
+            if (t.rows.length <= wholeRefTables[overlapIdx].rows.length) continue;
+            const fi = fragments.indexOf(wholeRefTables[overlapIdx]);
+            if (fi !== -1) fragments.splice(fi, 1);
+            wholeRefTables[overlapIdx] = t;
+            wholeRefRegions[overlapIdx] = t.region;
+          }
+        }
         // A structural "reference" read can be the ONLY successful
         // extraction of a genuine MEP-equipment schedule whose own required
         // rating word (GPM/EWT/LWT/…) never independently co-occurs with its
