@@ -6817,9 +6817,35 @@ function bandGenericDataRows(
   };
   const orphans: Array<{ toks: GraphSpan[]; y: number }> = [];
   const outRowIdx: number[] = [];
+  // A wrapped continuation line of the KEY column's own overflow text (see
+  // the overflow-fold comment below) can have NO token at all within
+  // [x0,x1] — real, corpus-found (weld-county-mechanical-permit.pdf#6's own
+  // INSULATION SCHEDULE): "DUCTWORK IN UNVENTILATED ATTIC" wraps to a bare
+  // second line, "(NO RA PLENUM)", on its own physical row between the
+  // SUPPLY and RETURN sub-rows, with nothing else on that line — the
+  // overflow fold below only reaches a row that ALREADY has its own
+  // in-band token, so a line with NOTHING in-band never even reaches it,
+  // and fell out of the table (both its text AND its bbox) with the drawn
+  // box ending short of ink the table itself prints. Registered here as an
+  // ordinary orphan — the SAME fold below that already answers "which row
+  // does a continuation line belong to" for in-band text answers it here
+  // too, radius cap and all. Scoped to the LEFT overflow only (never past
+  // x1, a different, likely-unrelated direction) and capped in reach so an
+  // unrelated marginal note sitting near the table's own y-range can't
+  // bleed in as if it were a continuation — bounded to the same "wide
+  // named column" order of magnitude bandLimits' own NAME case already
+  // uses, comfortably past the ~280px real reach measured live but not
+  // unbounded.
+  const LEFT_OVERFLOW_CAP = 500;
   for (let i = cfg.fromIdx; i < cfg.toIdx; i++) {
     const banded = rows[i].filter((t) => t.str && t.str.trim() && revisionOf(t.str) == null && t.x >= x0 && t.x <= x1);
-    if (!banded.length) continue;
+    if (!banded.length) {
+      const overflowOnly = rows[i].filter((t) => t.str && t.str.trim() && revisionOf(t.str) == null);
+      if (overflowOnly.length && overflowOnly.every((t) => t.x < x0 && x0 - t.x <= LEFT_OVERFLOW_CAP)) {
+        orphans.push({ toks: overflowOnly, y: rowY(rows[i]) });
+      }
+      continue;
+    }
     if (Math.abs(centerX(banded[0]) - keyColX) > keyTol) { orphans.push({ toks: banded, y: rowY(rows[i]) }); continue; }
     const key = genericRowKeyOf(banded[0].str, headerLabelSet);
     if (!key) { orphans.push({ toks: banded, y: rowY(rows[i]) }); continue; }
