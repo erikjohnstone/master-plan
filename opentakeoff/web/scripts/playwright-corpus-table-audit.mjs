@@ -39,33 +39,29 @@ const LIMIT = Number(argOf("--limit") || 0);
 const CORPUS = "/home/user/master-plan/opentakeoff-corpus";
 const KEYS = resolve(CORPUS, "keys");
 
-// The batch: the freshest live-reported bug first, then every sheet/set
-// fixed or implicated tonight, then a spread of already-keyed corpus
-// documents (so IoU/EoB is measurable, not just eyeballed), then a few
-// bulk documents nothing has ever looked at through the UI at all.
-const DOCS = [
+// THE ENTIRE CORPUS, VOLUMES ONE AND TWO — every PDF under both bulk
+// directories, glob'd rather than hand-listed so nothing is quietly left
+// out. A handful of already-audited raw/ + samples/ documents (never in
+// either bulk volume) are appended after, so nothing already covered is
+// dropped from the run.
+import { readdirSync } from "node:fs";
+const globVolume = (dir) =>
+  readdirSync(dir, { withFileTypes: true })
+    .filter((e) => e.isFile() && e.name.toLowerCase().endsWith(".pdf"))
+    .map((e) => ({ id: e.name.replace(/\.pdf$/i, ""), pdf: resolve(dir, e.name) }))
+    .sort((a, b) => a.id.localeCompare(b.id));
+
+const VOL1_DIR = `${CORPUS}/bulk/HVAC_BAS_Plan_Sets`;
+const VOL2_DIR = `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2`;
+const EXTRA_DOCS = [
   { id: "weld-county-permit", pdf: `${CORPUS}/raw/weld-county-mechanical-permit.pdf` },
-  { id: "13_MI_MSU_LifeSciences_LabRenovation", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets/13_MI_MSU_LifeSciences_LabRenovation.pdf` },
   { id: "itd-d1-lab", pdf: `${CORPUS}/raw/itd-d1-lab-mechanical.pdf` },
   { id: "federal-mech", pdf: `${CORPUS}/raw/federal-attachment4-mechanical.pdf` },
   { id: "baker-county-eoc", pdf: `${CORPUS}/raw/baker-county-eoc-bidset.pdf` },
   { id: "bessemer", pdf: `/home/user/master-plan/opentakeoff/samples/bessemer-mechanical-bidset.pdf` },
   { id: "navfac-cherry-point-atc", pdf: `${CORPUS}/raw/navfac-cherry-point-atc-mechanical.pdf` },
-  { id: "001_NC_FY20_P_228_ATC_Tower_and_Air_Operations", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/001_NC_FY20_P_228_ATC_Tower_and_Air_Operations.pdf` },
-  { id: "004_MO_T2504_03_Interior_and_Exterior_Renovation", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/004_MO_T2504_03_Interior_and_Exterior_Renovation.pdf` },
-  { id: "008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated.pdf` },
-  { id: "009_FL_USDA_APHIS_Plant_Inspection_Station_Building", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/009_FL_USDA_APHIS_Plant_Inspection_Station_Building.pdf` },
-  { id: "014_MT_USDA_Forest_Service_Missoula_Fire_Sciences", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/014_MT_USDA_Forest_Service_Missoula_Fire_Sciences.pdf` },
-  { id: "016_NY_Alter_Repair_Building_1624_Irish_Hill_Test", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/016_NY_Alter_Repair_Building_1624_Irish_Hill_Test.pdf` },
-  { id: "017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling.pdf` },
-  { id: "019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/019_FL_Eglin_AFB_Building_XX_Contract_Documents_01_04.pdf` },
-  { id: "12_MT_MSU_ReidHall_Renovation", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets/12_MT_MSU_ReidHall_Renovation.pdf` },
-  { id: "16_NV_CarsonValleyMS_HVAC_Replacement", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets/16_NV_CarsonValleyMS_HVAC_Replacement.pdf` },
-  { id: "18_OR_BakerMS_HVAC_Electrical_FullSet", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets/18_OR_BakerMS_HVAC_Electrical_FullSet.pdf` },
-  { id: "24_IA_JohnsonCounty_Courthouse", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets/24_IA_JohnsonCounty_Courthouse.pdf` },
-  { id: "27_WA_ColvilleTribes_Hatchery_Lab", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets/27_WA_ColvilleTribes_Hatchery_Lab.pdf` },
-  { id: "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf` },
-].filter((d) => existsSync(d.pdf));
+];
+const DOCS = [...globVolume(VOL1_DIR), ...globVolume(VOL2_DIR), ...EXTRA_DOCS].filter((d) => existsSync(d.pdf));
 
 const STARTAT = argOf("--start-at");
 const startIdx = STARTAT ? DOCS.findIndex((d) => d.id === STARTAT) : 0;
