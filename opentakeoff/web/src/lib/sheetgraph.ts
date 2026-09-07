@@ -9127,7 +9127,30 @@ export function snapCellBboxesToSourceSpans(table: ScheduleTable, sourceSpans: G
     }
   }
 
-  return { ...table, title, rows };
+  // Re-grounding a cell (above) can slide its bbox to wherever the matching
+  // source span actually sits, and that span's own extent was never a party
+  // to how `table.region` was originally computed (bandDataRows/
+  // extractReferenceTableAt build it from header spans and each cell's
+  // PRE-snap token bbox). A row-spanning legend cell whose text starts a
+  // hair above the header band — real, corpus-found (004_MO_T2504_03's own
+  // untitled WIRING DEVICES legend, sheet #41: the "/ WAP ... GAP GENERATOR
+  // ANNUNCIATOR PANEL" cell snaps to a source span starting ~1.6pt above
+  // `region`'s own top) — leaves the table's painted box not quite covering
+  // its own ink, the exact shape the corpus audit's TIER2 check exists to
+  // catch. Same fix as the title union above and in bandDataRows/
+  // extractReferenceTableAt: the box must contain what it claims to box.
+  // Expand-only (`merge` only ever widens), so a cell nobody snapped can
+  // never shrink the region a downstream caller already trusted.
+  let region = table.region;
+  if (region) {
+    if (title?.bbox) region = merge(region, title.bbox);
+    for (const row of rows) {
+      for (const cell of Object.values(row.cells)) {
+        if (cell?.bbox) region = merge(region, cell.bbox);
+      }
+    }
+  }
+  return { ...table, title, rows, region: region! };
 }
 
 export function preferLastOverprintedText(cellText: string, bbox: Bbox, sourceSpans: GraphSpan[]): string {
