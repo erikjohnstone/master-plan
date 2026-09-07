@@ -84,6 +84,50 @@ export function parseReferenceKeyCsv(text: string): ReferenceKeyRow[] {
 const normalize = (value: string | null | undefined): string =>
   (value || "").trim().toUpperCase().replace(/\s+/g, " ");
 
+const tokens = (value: string): string[] => normalize(value).split(" ").filter(Boolean);
+
+/** Find a column by name, tolerant of a MULTI-TIER header the extractor is
+ * free to spell more precisely than the key does.
+ *
+ * A key is authored once, against one extractor's flattened header text
+ * ("EWT °F"). A different extractor reading the same drawing can legitimately
+ * recover the real grouped-header structure the sheet actually draws
+ * ("WATERSIDE DATA EWT °F" over a tier of EWT/LWT/FLOW/PD columns) — that is
+ * MORE correct, not a different answer. Measured on
+ * federal-attachment4-mechanical.pdf#14's AIR HANDLING UNIT HYDRONIC COIL
+ * SCHEDULE: every one of the ten cells the raw exact-string lookup reported
+ * "(missing)" was present, correct, and in the right row — the key's "EWT °F"
+ * simply did not string-match the table's own "WATERSIDE DATA EWT °F".
+ *
+ * Exact match (normalized) wins first. Failing that, a column whose header,
+ * split into tokens, ends with the expected column's own tokens is accepted —
+ * a real tier prefix, not a coincidence, because engineering headers repeat a
+ * unit/abbreviation ("EWT °F") only under the tier that actually measures it.
+ * If more than one column in the row satisfies that, the match is genuinely
+ * ambiguous (e.g. two tiers each carrying their own "EWT °F") and is refused
+ * rather than guessed — this can only ever RECOVER a false "(missing)", never
+ * turn a real value into a different, wrong one.
+ */
+function findColumn(row: Record<string, string>, expectedColumn: string): string | null {
+  const wantExact = normalize(expectedColumn);
+  const wantTokens = tokens(expectedColumn);
+  let match: string | null = null;
+  for (const key of Object.keys(row)) {
+    const keyExact = normalize(key);
+    if (keyExact === wantExact) return row[key];
+    const keyTokens = tokens(key);
+    const isSuffix =
+      wantTokens.length > 0 &&
+      keyTokens.length > wantTokens.length &&
+      keyTokens.slice(keyTokens.length - wantTokens.length).join(" ") === wantTokens.join(" ");
+    if (isSuffix) {
+      if (match != null && match !== key) return null; // ambiguous — refuse, do not guess
+      match = key;
+    }
+  }
+  return match != null ? row[match] : null;
+}
+
 export function scoreReference(referenceTables: ReferenceTable[], key: ReferenceKeyRow[]): ReferenceScore {
   const rows = new Map<string, Record<string, string>>();
   for (const table of referenceTables) {
@@ -94,7 +138,7 @@ export function scoreReference(referenceTables: ReferenceTable[], key: Reference
 
   const perCell = key.map((expected) => {
     const row = rows.get(`${expected.sheet}::${normalize(expected.table_title)}::${normalize(expected.row_key)}`);
-    const actual = row ? (row[expected.column] ?? null) : null;
+    const actual = row ? findColumn(row, expected.column) : null;
     return {
       ...expected,
       actual,
