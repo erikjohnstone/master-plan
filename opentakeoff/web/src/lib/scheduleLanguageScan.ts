@@ -51,6 +51,44 @@ export function scanPillarGapLanguage(spans: GraphSpan[]): PillarGapLanguageHit[
   return hits;
 }
 
+/** A PRINTED SCHEDULE CAPTION — a standalone, upper-case title line that ends
+ *  in SCHEDULE. Deliberately much narrower than `sheetHasScheduleLanguage`,
+ *  which is a keyword scan and therefore useless on a plan sheet: equipment
+ *  words are everywhere on a floor plan, which is exactly why
+ *  `isScheduleTarget` refused plan sheets outright.
+ *
+ *  A caption is different. A floor plan does not print "EQUIPMENT SCHEDULE" as
+ *  a standalone heading unless it carries one — and plenty of them do, tucked
+ *  in a corner beside the plan. Measured on 13_MI#10 (sheet A-003, FIRST FLOOR
+ *  PLAN - AREA A): it prints EQUIPMENT SCHEDULE over a real 7-column ruled
+ *  table, vectorgrid was never offered the sheet because its role is `plan`,
+ *  and the geometric extractor's older, narrower read reached the estimator
+ *  instead — 3 of 7 columns, box truncated at the MODEL column. vectorgrid,
+ *  run on that page by hand, returns all 7 columns and 57 cells with 0
+ *  orphans.
+ *
+ *  LEGEND / LIST / INDEX are excluded on purpose: a legend is not a schedule,
+ *  and a drawing index is a table nobody takes off. */
+const SCHEDULE_CAPTION_RE = /^[A-Z0-9][A-Z0-9 ,.'&/()#-]{4,70}SCHEDULES?$/;
+
+/** A cross-reference is not a caption. Plan sheets are covered in notes like
+ *  "SEE EQUIPMENT SCHEDULE" and "REFER TO PANEL SCHEDULE", which end in the
+ *  same word and would otherwise offer every plan sheet in the set to
+ *  vectorgrid. Offering a sheet costs precision — the sheet that motivated
+ *  this picked up one junk 1x3 "A" region from its key plan alongside the
+ *  correct table — so the gate stays as narrow as the evidence allows. */
+const CAPTION_XREF_RE = /^(SEE|REFER|REFERENCE|PER|FOR|AS|NOTE|NOTES|CONTINUED|CONT)\b/;
+
+export function sheetHasScheduleCaption(spans: GraphSpan[]): boolean {
+  for (const sp of spans) {
+    const t = spanText(sp).replace(/\s+/g, " ").trim();
+    if (t.length < 8 || t.length > 78) continue;
+    if (CAPTION_XREF_RE.test(t)) continue;
+    if (SCHEDULE_CAPTION_RE.test(t)) return true;
+  }
+  return false;
+}
+
 /** Session hook: legend/unknown sheets with extractable POINTS/DDC list titles. */
 export function sheetHasPointsListTitleSpans(spans: GraphSpan[]): boolean {
   for (const sp of spans) {

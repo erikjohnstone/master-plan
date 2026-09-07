@@ -11,7 +11,7 @@ import {
   extractScheduleTablesFromVectorGrid,
 } from "./vectorGridAdapter.ts";
 import { vectorGridAvailable, vectorGridMode } from "./vectorGridClient.ts";
-import { sheetHasPointsListTitleSpans, sheetHasScheduleLanguage } from "./scheduleLanguageScan.ts";
+import { sheetHasPointsListTitleSpans, sheetHasScheduleCaption, sheetHasScheduleLanguage } from "./scheduleLanguageScan.ts";
 import {
   adoptVectorGridTables,
   collapseEquivalentPrimaryTables,
@@ -92,7 +92,20 @@ function sheetTableCount(g: SheetGraph, sheetKey: string): number {
 
 function isScheduleTarget(ctx: VectorSheetContext, hooks: VectorPipelineHooks): boolean {
   if (ctx.role === "schedule") return true;
-  // Plan/demolition sheets embed equipment terms everywhere — keyword scan is not schedule signal there.
+  // A SCHEDULE ON A DRAWING SHEET IS STILL A SCHEDULE, and this gate was
+  // losing them all. A plan sheet that PRINTS a schedule caption carries one:
+  // 13_MI#10 is "FIRST FLOOR PLAN - AREA A" with an EQUIPMENT SCHEDULE in the
+  // corner, and because its role is `plan` vectorgrid was never offered the
+  // sheet at all. What reached the estimator was the geometric extractor's
+  // older read — 3 of the table's 7 columns, box truncated at MODEL — while
+  // vectorgrid on that same page returns all 7 columns, 57 cells, 0 orphans.
+  // Same story on 009_FL#30, where five real panel schedules sit on a `plan`
+  // sheet and the app finds nothing at all.
+  //
+  // The keyword scan below genuinely is useless here — equipment words are
+  // everywhere on a floor plan, which is why the role check existed — so the
+  // test for a non-schedule sheet is a printed CAPTION, not vocabulary.
+  if (sheetHasScheduleCaption(ctx.spans)) return true;
   if (ctx.role !== "legend" && ctx.role !== "unknown") return false;
   if (hooks.sheetHasPointsListTitle(ctx.key)) return true;
   return sheetHasScheduleLanguage(ctx.spans);
