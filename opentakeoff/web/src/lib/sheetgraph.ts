@@ -3736,7 +3736,7 @@ export function hasPoweredEquipmentColumns(spans: GraphSpan[], table: ScheduleTa
   return hits.size >= 2;
 }
 
-function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", buildings?: Set<string>, nameKeyed = false, roomFill?: { inBand: number; anchors: number }): { key: string; building?: string } | null {
+export function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", buildings?: Set<string>, nameKeyed = false, roomFill?: { inBand: number; anchors: number }): { key: string; building?: string } | null {
   // A NAME-keyed table's key column IS its NAME column — the only sensible
   // reading of a leading token there is a room-type phrase, not a digit tag
   // this table has no column for. Spaces are the whole point of a phrase
@@ -3790,6 +3790,22 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", bui
     // otherwise pass CODE_RE and bury the compound)
     const parts = kept.split("/").filter(Boolean);
     if (parts.length > 1 && parts.every((p) => CODE_RE.test(p))) return { key: parts.join("/") };
+    // A LEADING `$` IS A REAL CHARACTER, NOT NOISE. Lighting-control and BAS
+    // point names print it as part of the identifier — real, found live,
+    // baker-county-eoc-bidset.pdf#59's own LIGHTING CONTROL STATIONS ($OS,
+    // $OSD, $LVA, $LVB, $LVC). `kept` above strips it like any other
+    // punctuation, and CODE_RE requires a key to START with a letter, so the
+    // stripped tag ("OS") still clears CODE_RE below and mints a key that
+    // silently lost the $ — it answers for neither a cross-reference drawn
+    // elsewhere on the sheet nor a ground-truth key authored against the
+    // printed mark ("$OS" scored as "(missing)" against a row that WAS
+    // found, correctly, under the wrong key). Preserved exactly the way the
+    // digit building-prefix below is: only when the letters AFTER the $ are
+    // themselves a real CODE_RE-shaped tag, so a genuine dollar amount
+    // ("$1,250") can never mint a key — CODE_RE requires the remainder to
+    // start with a letter, and a numeral does not.
+    const dollarPrefixed = norm(raw).replace(/\s+/g, "").match(/^\$([A-Z].*)$/);
+    if (dollarPrefixed && CODE_RE.test(dollarPrefixed[1])) return { key: `$${dollarPrefixed[1]}` };
     if (CODE_RE.test(key)) return { key };
     // A real VA/GSA numbered-building PREFIX before the equipment/finish
     // code itself — "1-RH-1", "1-AC-15", "1-SHC-28" (building "1"'s reheat
