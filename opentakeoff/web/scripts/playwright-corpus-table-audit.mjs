@@ -67,7 +67,10 @@ const DOCS = [
   { id: "096_IN_Vermillion_County_Jail_Mechanical_Bid_Set", pdf: `${CORPUS}/bulk/HVAC_BAS_Plan_Sets_Vol2/096_IN_Vermillion_County_Jail_Mechanical_Bid_Set.pdf` },
 ].filter((d) => existsSync(d.pdf));
 
-const wanted = LIMIT > 0 ? DOCS.slice(0, LIMIT) : DOCS;
+const STARTAT = argOf("--start-at");
+const startIdx = STARTAT ? DOCS.findIndex((d) => d.id === STARTAT) : 0;
+const fromStart = startIdx > 0 ? DOCS.slice(startIdx) : DOCS;
+const wanted = LIMIT > 0 ? fromStart.slice(0, LIMIT) : fromStart;
 console.log(`${wanted.length} of ${DOCS.length} target documents found on disk`);
 for (const d of DOCS) if (!existsSync(d.pdf)) console.log(`  MISSING FILE, skipped: ${d.id} -> ${d.pdf}`);
 

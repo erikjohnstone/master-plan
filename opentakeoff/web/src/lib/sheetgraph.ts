@@ -6816,6 +6816,7 @@ function bandGenericDataRows(
     }
   };
   const orphans: Array<{ toks: GraphSpan[]; y: number }> = [];
+  const outRowIdx: number[] = [];
   for (let i = cfg.fromIdx; i < cfg.toIdx; i++) {
     const banded = rows[i].filter((t) => t.str && t.str.trim() && revisionOf(t.str) == null && t.x >= x0 && t.x <= x1);
     if (!banded.length) continue;
@@ -6828,6 +6829,36 @@ function bandGenericDataRows(
     add(row, banded);
     out.push(row);
     outY.push(rowY(rows[i]));
+    outRowIdx.push(i);
+  }
+
+  // The KEY column's own printed content can run WIDER than x0 — real,
+  // corpus-found (weld-county-mechanical-permit.pdf#6's own INSULATION
+  // SCHEDULE): its SYSTEM column holds a full duct-type description
+  // ("EXTERIOR DUCTWORK", "FIRST 20 FEET FROM AIR HANDLING UNITS, AND
+  // ROOFTOP UNITS") merged/spanning two physical SUPPLY/RETURN sub-rows,
+  // printed ~280px left of the SYSTEM header's own short, centered label —
+  // past x0 entirely, so it's invisible to the loop above and never reaches
+  // any cell. Tried widening x0 itself first, at the top of this function —
+  // reverted: that changes which token is `banded[0]`, which the loop above
+  // ALSO uses for the key-column-alignment gate and the row's own key, so a
+  // row already accepted under the narrow band (its real SUPPLY/RETURN
+  // leading token close to keyColX) can flip to REJECTED once a far-left
+  // token becomes its new `banded[0]` instead — corrupting row acceptance to
+  // fix cell content. This pass is additive-only and runs after every row
+  // above is already decided: for each row ALREADY accepted, at that exact
+  // row's own y, fold any further-left token on the SAME physical row into
+  // the first (key) anchor's cell. A row this loop rejected contributes
+  // nothing here, so it can never turn a rejection into an acceptance or
+  // vice versa — only enrich a cell on a row whose identity is already
+  // settled.
+  const firstAnchorLabel = anchors[0]?.label;
+  if (firstAnchorLabel) {
+    for (let k = 0; k < out.length; k++) {
+      const i = outRowIdx[k];
+      const overflow = rows[i].filter((t) => t.str && t.str.trim() && revisionOf(t.str) == null && t.x < x0);
+      if (overflow.length) add(out[k], overflow);
+    }
   }
 
   // Orphan fold: a reference table's cells routinely wrap 2-3 physical lines
