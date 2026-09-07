@@ -134,6 +134,52 @@ def keyed_sheets():
     return out
 
 
+CAPTION_BAND = 500.0   # how far under a caption its own table may reach
+
+
+def caption_scope(cap, hs, vs) -> str:
+    """Is this discovered caption actually over a TABLE?
+
+    --discover finds captions with a regex over the text layer, and a regex
+    cannot tell a schedule from a notes list. Measured on 12_MT#27, a mechanical
+    COVER SHEET: its three "captions" are DUCTWORK CONSTRUCTION SCHEDULE (a
+    numbered notes list, no table anywhere), MECHANICAL SYMBOLS LEGEND (a
+    legend), and MECHANICAL SHEET LIST (the one real ruled table). vectorgrid
+    found the real one and scored 1/3, and the page also reported a MERGED
+    because "M0.1 MECHANICAL SCHEDULES" — a ROW INSIDE the sheet list — matched
+    the caption regex too. Both the recall number and the defect were artefacts
+    of the ruler.
+
+    The discriminator is raw page geometry, never the extractor's opinion: a
+    ruled table has a grid under its caption, a notes list and a legend do not,
+    and a row has rules hard above and below it with a column wall crossing.
+
+    -> "TABLE" (grade it) | "NOT_RULED" (notes/legend) | "IN_TABLE" (it is a row)
+    """
+    cx0, ctop, cx1, cbot = cap
+    cw = max(cx1 - cx0, 1.0)
+    ch = max(cbot - ctop, 1.0)
+    span = lambda x0, x1: min(x1, cx1) - max(x0, cx0)      # noqa: E731
+
+    # A ROW: ruled hard above AND below at about its own line height, with a
+    # column wall crossing its band. A standalone caption has open paper above.
+    above = any(abs(y - ctop) <= ch * 1.1 and span(x0, x1) >= cw * 0.5 for x0, x1, y in hs)
+    below = any(abs(y - cbot) <= ch * 1.1 and span(x0, x1) >= cw * 0.5 for x0, x1, y in hs)
+    crossing = any(y0 <= ctop + 1 and y1 >= cbot - 1 and cx0 - cw <= x <= cx1 + cw
+                   for y0, y1, x in vs)
+    if above and below and crossing:
+        return "IN_TABLE"
+
+    # A TABLE under it: several row rules sharing the caption's band, crossed by
+    # column walls. Three rules and two walls is the smallest thing that is a
+    # grid rather than an underline or a box.
+    top, bot = cbot, cbot + CAPTION_BAND
+    rows = sum(1 for x0, x1, y in hs if top - 2 <= y <= bot and span(x0, x1) >= cw * 0.5)
+    cols = sum(1 for y0, y1, x in vs
+               if min(y1, bot) - max(y0, top) >= 20 and cx0 - cw <= x <= cx1 + cw)
+    return "TABLE" if rows >= 3 and cols >= 2 else "NOT_RULED"
+
+
 def discovered_sheets(min_titles: int, only: set | None, limit: int, skip: int):
     """Every page of every bulk document that CARRIES schedule captions.
 
@@ -210,6 +256,18 @@ def main() -> int:
         pdf = single_page_pdf(find_pdf(set_id), page)
         caps = caption_boxes(pdf, titles)
         hs, vs = page_rules(pdf)
+        # SCOPE, in --discover only. Keyed titles are authored and every one of
+        # them is a real table; discovered ones are a regex's guess and have to
+        # earn the denominator. Excluded captions are reported, never silently
+        # dropped and never counted as misses — the same rule as rasters.
+        if a.discover:
+            scoped = {t: caption_scope(cp, hs, vs) if cp else "NO_CAPTION" for t, cp in caps.items()}
+            for k in ("NOT_RULED", "IN_TABLE"):
+                tot[k.lower()] = tot.get(k.lower(), 0) + sum(1 for v in scoped.values() if v == k)
+            titles = [t for t in titles if scoped.get(t) == "TABLE"]
+            caps = {t: cp for t, cp in caps.items() if scoped.get(t) == "TABLE"}
+            if not titles:
+                continue
         regions, _ = fn(pdf)
         tot["tables"] += len(titles)
         tot["regions"] += len(regions)
@@ -281,6 +339,9 @@ def main() -> int:
     print(f"  of which OVERRUN       {tot['overrun']}   (box eats into the next table)")
     print(f"  of which SHORT         {tot['short']}   (a ruled row still stands below the box)")
     print(f"MERGED regions           {tot['merged']}   (one box holding 2+ captioned tables)")
+    if a.discover:
+        print(f"\nEXCLUDED, not graded     {tot.get('not_ruled', 0)} captions with no ruled grid under them (notes lists, legends)")
+        print(f"                         {tot.get('in_table', 0)} captions that are a ROW of a table, not a title")
     clean = tot["matched"] - tot["split"] - tot["overrun"] - tot["short"]
     print(f"\nCLEAN boxes              {clean}/{n}  ({100*clean/n:.1f}%)  <- usable as-is by a downstream extractor")
     return 0
