@@ -49,6 +49,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import sys
 import warnings
 from collections import defaultdict
@@ -57,7 +58,7 @@ from pathlib import Path
 warnings.filterwarnings("ignore")
 sys.path.insert(0, str(Path(__file__).parent))
 
-from bakeoff import (BACKENDS, CORPUS, caption_boxes, detail_captions,  # noqa: E402
+from bakeoff import (BACKENDS, BULK, CORPUS, caption_boxes, detail_captions,  # noqa: E402
                      find_pdf,
                      region_owners, single_page_pdf)
 from vectorgrid import segments_from_page  # noqa: E402
@@ -133,18 +134,79 @@ def keyed_sheets():
     return out
 
 
+def discovered_sheets(min_titles: int, only: set | None, limit: int, skip: int):
+    """Every page of every bulk document that CARRIES schedule captions.
+
+    THE POINT OF THIS MODE. keyed_sheets() reads the 32 pages a human has
+    authored ground truth for, which is enough to find bugs and nowhere near
+    enough to claim a rate — and it has already been caught hiding one. But
+    every verdict this file computes (MERGED, SPLIT, OVERRUN, SHORT) is decided
+    against the page's own printed CAPTIONS, not against an authored box. So
+    they are all decidable on any page whose captions the text layer carries,
+    with no authoring at all, which is what turns 32 graded pages into
+    thousands.
+
+    Titles come from the text layer ONLY — never from the extractor's output —
+    for the same reason findsheets.py does it that way: a page list built from
+    what the extractor already found would silently exclude every table it
+    cannot see, and those are the ones worth grading.
+    """
+    from findsheets import TITLE
+    import pdfplumber
+
+    out, seen = [], 0
+    pdfs = sorted(p for d in BULK for p in d.glob("*.pdf"))
+    if only:
+        pdfs = [p for p in pdfs if p.stem in only]
+    print(f"discovering captions in {len(pdfs)} documents", file=sys.stderr)
+    for i, pdf in enumerate(pdfs):
+        try:
+            with pdfplumber.open(pdf) as doc:
+                for pno, page in enumerate(doc.pages, 1):
+                    txt = page.extract_text() or ""
+                    titles = [ln.strip() for ln in txt.splitlines() if TITLE.match(ln.strip())]
+                    titles = [t for t in titles if len(t.split()) >= 2]
+                    # de-dup: one page really can print the same caption twice,
+                    # and caption_boxes would hand both the same box
+                    titles = list(dict.fromkeys(titles))
+                    if len(titles) < min_titles:
+                        continue
+                    seen += 1
+                    if seen <= skip:
+                        continue
+                    out.append((pdf.stem, pno, titles))
+                    if limit and len(out) >= limit:
+                        print(f"  stopping at --limit {limit} (page {seen} of the sweep)", file=sys.stderr)
+                        return out
+        except Exception as e:                     # a corrupt page must not stop the sweep
+            print(f"  !! {pdf.stem}: {type(e).__name__}", file=sys.stderr)
+        if (i + 1) % 20 == 0:
+            print(f"  scanned {i + 1}/{len(pdfs)} documents, {len(out)} pages queued", file=sys.stderr)
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--backend", default="pdfplumber-lines_strict")
+    ap.add_argument("--discover", action="store_true",
+                    help="grade every page whose text layer carries captions, not just the keyed 32")
+    ap.add_argument("--min", type=int, default=3, help="--discover: minimum captions on a page")
+    ap.add_argument("--limit", type=int, default=0, help="--discover: stop after this many pages")
+    ap.add_argument("--skip", type=int, default=0, help="--discover: resume, skipping this many pages")
+    ap.add_argument("--docs", default="", help="--discover: comma-separated document stems")
+    ap.add_argument("--json", default="", help="write per-page verdicts here")
     a = ap.parse_args()
     fn = BACKENDS[a.backend]
+    rows_json = []
 
     tot = dict(tables=0, located=0, matched=0, merged=0, split=0, overrun=0, short=0, regions=0)
     print(f"backend: {a.backend}\n")
     print(f"{'sheet':50s} {'n':>3s} {'hit':>4s} {'mrg':>4s} {'spl':>4s} {'ovr':>4s} {'sht':>4s}")
     print("-" * 78)
 
-    for set_id, page, titles in keyed_sheets():
+    sheets = (discovered_sheets(a.min, set(x for x in a.docs.split(",") if x) or None, a.limit, a.skip)
+              if a.discover else keyed_sheets())
+    for set_id, page, titles in sheets:
         pdf = single_page_pdf(find_pdf(set_id), page)
         caps = caption_boxes(pdf, titles)
         hs, vs = page_rules(pdf)
@@ -199,7 +261,15 @@ def main() -> int:
 
         tot["matched"] += hit; tot["merged"] += merged
         tot["split"] += split; tot["overrun"] += overrun; tot["short"] += short
-        print(f"{(set_id[:36]+' p'+str(page)):50s} {len(titles):3d} {hit:4d} {merged:4d} {split:4d} {overrun:4d} {short:4d}")
+        print(f"{(set_id[:36]+' p'+str(page)):50s} {len(titles):3d} {hit:4d} {merged:4d} {split:4d} {overrun:4d} {short:4d}", flush=True)
+        rows_json.append({"set": set_id, "page": page, "titles": len(titles), "located": sum(1 for v in caps.values() if v),
+                          "regions": len(regions), "hit": hit, "merged": merged, "split": split,
+                          "overrun": overrun, "short": short,
+                          "merged_titles": sorted({t for r in regions for t, cp in caps.items() if cp
+                                                   and r[1] - 5 <= (cp[1] + cp[3]) / 2 <= r[3] + 5
+                                                   and min(r[2], cp[2]) - max(r[0], cp[0]) >= max(cp[2] - cp[0], 1) * 0.5}) if merged else []})
+        if a.json:
+            Path(a.json).write_text(json.dumps(rows_json, indent=1))
 
     n = tot["tables"]
     print("\n" + "=" * 78)
