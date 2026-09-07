@@ -7177,7 +7177,22 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
     const TITLE_BAND_FILL_MAX = 0.8;
     const bandW = x1 - x0;
     let title: Evidence | null = null;
-    for (let k = block.top - 1, budget = 5; k >= 0 && budget > 0 && !title; k--) {
+    // budget was 5 — chosen before isTitleShaped's own B-4 conjunction/
+    // article rejection existed, and now too shallow for a page with the
+    // dense wrapped SEQUENCE OF OPERATION prose this file's own class of
+    // sheet carries (itd-d1-lab-mechanical.pdf#20 is exactly this sheet).
+    // That rejection is correct — every rejected candidate really is a
+    // sentence fragment, never a title — but each one still costs a unit of
+    // budget, so a sheet with more than 5 in-band prose lines between a
+    // table's data and its real caption exhausted the search before ever
+    // reaching it. Measured, real: this sheet's own second table (LAB
+    // VENTILATION WITH SNORKEL HOOD…) went missing ENTIRELY, not merely
+    // mistitled — table discovery downstream of a failed title hunt refuses
+    // the whole candidate. Reusing MAX_TABLE_SCAN_ROWS rather than a new
+    // number honors this loop's own comment ("bounded to the same scan
+    // budget the data search itself uses") instead of inventing a second,
+    // disagreeing constant.
+    for (let k = block.top - 1, budget = MAX_TABLE_SCAN_ROWS; k >= 0 && budget > 0 && !title; k--) {
       const inBand = rows[k].filter(overlapsBand);
       if (!inBand.length) continue;
       budget--;
@@ -7234,7 +7249,9 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
       }
     }
     if (!title) {
-      for (let k = block.top - 1, budget = 5; k >= 0 && budget > 0 && !title; k--) {
+      // Same widening as the big-font pass above, same reason: isTitleShaped
+      // rejects real prose correctly, and budget 5 predates that rejection.
+      for (let k = block.top - 1, budget = MAX_TABLE_SCAN_ROWS; k >= 0 && budget > 0 && !title; k--) {
         const inBand = rows[k].filter((t) => centerX(t) >= x0 && centerX(t) <= x1);
         if (!inBand.length) continue;
         budget--;
