@@ -8985,6 +8985,33 @@ export function snapCellBboxesToSourceSpans(table: ScheduleTable, sourceSpans: G
   const COL_X_TOL = 28;
   const isHorizontal = (span: GraphSpan) => (span.w || 0) >= (span.h || 0) * 0.9;
   const isVerticalBox = (bbox: Bbox) => (bbox[3] - bbox[1]) > (bbox[2] - bbox[0]) * 1.1;
+  // A cell's OWN text can be a real, identical duplicate of another table's
+  // text on the SAME sheet — a shared room name in both a ROOM FINISH
+  // SCHEDULE and a DOOR SCHEDULE's own LOCATION column, a shared point
+  // description across two side-by-side DDC points lists. `exactSpans`
+  // searches the WHOLE sheet with no positional awareness at all, and this
+  // pass's own "exactly one match anywhere" trust (below) then blindly
+  // re-grounds the cell onto whichever occurrence that is, even when it sits
+  // in an entirely different table thousands of px away. Real, corpus-found
+  // (13_MI_MSU_LifeSciences_LabRenovation.pdf#15): the DOOR SCHEDULE's own
+  // "PRACTICE LAB / CLINICAL TEACHING" LOCATION value wraps across 2
+  // physical lines within the door table itself (so no single source span
+  // there matches the full compacted cell text), while the neighboring ROOM
+  // FINISH SCHEDULE happens to print the identical room name as ONE
+  // combined span — the only sheet-wide exact match — so four different
+  // door rows all snapped onto THAT span's bbox, ~1780px outside the door
+  // table's own region. A real match for THIS table is never far from it;
+  // scoped generously (400px, past any real single-cell wrap this corpus
+  // has shown) so a genuinely wide cell still snaps, but a same-text hit
+  // from an unrelated table sitting in its own, distant region does not.
+  const REGION_SNAP_PAD = 400;
+  const nearTableRegion = (bbox: Bbox): boolean => {
+    const r = table.region;
+    if (!r) return true;
+    const cx = (bbox[0] + bbox[2]) / 2, cy = (bbox[1] + bbox[3]) / 2;
+    return cx >= r[0] - REGION_SNAP_PAD && cx <= r[2] + REGION_SNAP_PAD
+      && cy >= r[1] - REGION_SNAP_PAD && cy <= r[3] + REGION_SNAP_PAD;
+  };
   const exactSpans = (want: string): GraphSpan[] => {
     const needle = compactSpanText(want);
     if (!needle) return [];
@@ -9054,7 +9081,7 @@ export function snapCellBboxesToSourceSpans(table: ScheduleTable, sourceSpans: G
         }
         continue;
       }
-      if (hits.length === 1) {
+      if (hits.length === 1 && nearTableRegion(bboxOf(hits[0]))) {
         cell.bbox = bboxOf(hits[0]);
         axisCenters.push(columnMode ? hits[0].x + hits[0].w / 2 : hits[0].y + hits[0].h / 2);
       }
@@ -9072,7 +9099,17 @@ export function snapCellBboxesToSourceSpans(table: ScheduleTable, sourceSpans: G
       for (const cell of Object.values(cells)) {
         if (alreadyGrounded(cell)) continue;
         const picked = pickNearAxis(exactSpans(cell.text), axis, axisCenter, tol);
-        if (picked) cell.bbox = bboxOf(picked);
+        // The row's own axis band (row-Y or column-X, within ROW_Y_TOL/
+        // COL_X_TOL) is real, corpus-measured precision for picking among
+        // SEVERAL same-text candidates within a table's own printed grid —
+        // but it says nothing about which TABLE a candidate belongs to. A
+        // neighboring table sharing this sheet's own row grid (real, common
+        // on an architectural sheet stacking a ROOM FINISH SCHEDULE beside a
+        // DOOR SCHEDULE at synchronized row heights) can print the identical
+        // text at a Y that clears this same narrow band while sitting
+        // hundreds of px outside this table's own region — the same cross-
+        // table bleed nearTableRegion already guards Pass 1 against.
+        if (picked && nearTableRegion(bboxOf(picked))) cell.bbox = bboxOf(picked);
       }
     }
 
@@ -9086,7 +9123,7 @@ export function snapCellBboxesToSourceSpans(table: ScheduleTable, sourceSpans: G
     if (!already) {
       const horiz = titleHits.filter(isHorizontal);
       const pool = horiz.length ? horiz : titleHits;
-      if (pool.length === 1) title = { ...title, bbox: bboxOf(pool[0]) };
+      if (pool.length === 1 && nearTableRegion(bboxOf(pool[0]))) title = { ...title, bbox: bboxOf(pool[0]) };
     }
   }
 
