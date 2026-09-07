@@ -89,6 +89,30 @@ MAX_CELL_FRAC = 0.04  # ... and this share of its AREA is page furniture. Both a
                       # the largest real title band in the corpus and below the
                       # smallest piece of furniture.
 MIN_FILL_RATIO = 0.20 # n_cells vs rows*cols — a table tessellates, a plan does not
+# A HATCH PATTERN IS NOT A TABLE, AND IT WAS TAKING 20+ MINUTES TO SAY SO.
+# federal-attachment4-mechanical.pdf#2 — a real, dense document, 14,633 vector
+# segments on one page — has a 622x741pt fill/hatch region (a cross-hatched
+# mechanical symbol, median face area 30pt^2) that polygonizes into 2,825
+# tiny faces all clearing MIN_CELL_AREA. Those get their own connected-
+# component group like any other candidate, and the merge-back loop below is
+# O(groups^2) per pass — worse, it restarts from scratch after every single
+# merge (`break` out to the enclosing `while merged`), so repeated merges are
+# closer to O(groups^3) — with `cols_of()`/`vbounds()` rebuilding a set by
+# walking every cell in a group, UNCACHED, on every pairwise comparison. A
+# 2,825-cell group participating in ~695 comparisons is ~2M+ redundant
+# operations before a single real merge happens. Measured: this one page
+# pushed group count to 696, two groups at 2,825 and 1,087 cells, and
+# find_tables() on this page alone did not return inside a 5-minute timeout.
+#
+# The bound: the largest REAL table in the hand-authored key
+# (opentakeoff-corpus/keys/*.cells.csv) has 175 cells
+# (096_IN_Vermillion_County_Jail…). MAX_GROUP_CELLS sits at roughly 3x that —
+# generous headroom for a real table this corpus hasn't keyed yet, and two
+# orders of magnitude below what a hatch/fill blob produces. A group over the
+# bound is excluded from the O(groups^2) merge-back comparisons entirely: it
+# is never a real merge candidate (no drawn table is 16x the biggest one ever
+# measured), so skipping it costs nothing but the quadratic blowup itself.
+MAX_GROUP_CELLS = 500
 EDGE_TOL = 4.0       # the tolerance the authored ground truth is measured to
 WIDEN_CONSENSUS = 0.80 # rows that must agree on an edge before it moves — see
                        # _consensus_edge for the measurement that set it
@@ -936,6 +960,14 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
                 ka, kb = keys[a], keys[b]
                 if ka not in groups or kb not in groups:
                     continue
+                # See MAX_GROUP_CELLS above: a group this large is a hatch or
+                # fill pattern, never a real merge candidate, and comparing it
+                # against every other group (cols_of/vbounds walk every cell,
+                # uncached, per comparison) is what turned one dense page into
+                # a 20+ minute hang. Skipping it here costs no real table —
+                # the largest one this corpus has ever authored is 175 cells.
+                if len(groups[ka]) > MAX_GROUP_CELLS or len(groups[kb]) > MAX_GROUP_CELLS:
+                    continue
                 ax0, ay0, ax1, ay1 = vbounds(groups[ka])
                 bx0, by0, bx1, by1 = vbounds(groups[kb])
                 # Vertically stacked and nearly touching.
@@ -1030,12 +1062,32 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
                 cs = {round(cells[i].bounds[0]) for i in both}
                 if len(both) < len(rs) * len(cs) * MIN_FILL_RATIO:
                     continue
+                # DO NOT RESTART THE SCAN HERE. The original code did
+                # `break; break` back out to `while merged` on the FIRST
+                # merge found, then rescanned every pair from group 0 again.
+                # With G groups and M sequential merges that is
+                # M full O(G^2) rescans — O(G^3) in the worst realistic case,
+                # not O(G^2). Measured: federal-attachment4-mechanical.pdf#2
+                # (14,633 segments, 696 groups after union-find) did not
+                # return `find_tables()` inside a 3-minute timeout even after
+                # excluding the two hatch-pattern groups above — the ~694
+                # ordinary groups alone were enough, because a fine regular
+                # grid produces exactly the kind of small, row/column-aligned
+                # fragments this heuristic keeps finding new legitimate-
+                # looking merges among.
+                #
+                # `ka not in groups` / `kb not in groups` above already guards
+                # every pair against a key that merged away EARLIER in this
+                # same pass, so nothing here depends on stopping and
+                # restarting: continuing the same pass just keeps doing every
+                # other non-conflicting merge it finds, then `while merged`
+                # runs one more full pass in case a merge this pass opened up
+                # a new one (e.g. A+B may now qualify against C). That turns
+                # M sequential full rescans into a small constant number of
+                # passes — O(G^2) each, not O(G^3) overall.
                 groups[ka] = both
                 groups.pop(kb)
                 merged = True
-                break
-            if merged:
-                break
 
     import os as _os
     _dbg = _os.environ.get("VG_DEBUG")
