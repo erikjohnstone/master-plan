@@ -44,6 +44,16 @@ export interface SidecarTable {
   cells: SidecarCell[];
 }
 
+export interface TableRegion {
+  box: [number, number, number, number];
+  corners: { lt: [number, number]; rt: [number, number]; rb: [number, number]; lb: [number, number] };
+}
+
+export interface TableRegionResult {
+  hasTable: boolean;
+  regions: TableRegion[];
+}
+
 let proc: ChildProcessWithoutNullStreams | null = null;
 let nextId = 1;
 const pending = new Map<number, { resolve: (v: unknown) => void; reject: (e: Error) => void }>();
@@ -118,6 +128,28 @@ export async function tableStructureViaSidecar(imagePath: string): Promise<Sidec
   try {
     const result = await rpc<SidecarTable>("table_structure", { imagePath });
     return result?.cells ? result : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Table-REGION detection (task #79's targeting piece) — `rapid_table_det`'s
+ * yolo_obj_det/yolo_edge_det/paddle_cls_det trio (see
+ * sidecar/table_region_rpc.py), gating tableStructureViaSidecar against a
+ * candidate that is a logo/stamp/elevation rendering rather than a real
+ * table. Real, corpus-found reason this gate exists: rasterScheduleNotes'
+ * own "single large embedded picture" signal fires identically on a
+ * repeated title-block graphic (13_MI_MSU_LifeSciences_LabRenovation.pdf,
+ * 20+ sheets, identical 2%) and a genuine scanned schedule
+ * (15_IA_IowaState_Biorenewables_Lab.pdf#11, 59%, role: schedule) — area
+ * fraction alone cannot tell those apart. `null` on any sidecar failure,
+ * same never-block convention as tableStructureViaSidecar. */
+export async function tableRegionViaSidecar(imagePath: string, detAccuracy?: number): Promise<TableRegionResult | null> {
+  try {
+    const params: Record<string, unknown> = { imagePath };
+    if (detAccuracy != null) params.detAccuracy = detAccuracy;
+    const result = await rpc<TableRegionResult>("table_region", params);
+    return result && typeof result.hasTable === "boolean" ? result : null;
   } catch {
     return null;
   }
