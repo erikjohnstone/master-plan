@@ -40,6 +40,12 @@ try {
     check(`${width}: all headers unmodified`,JSON.stringify(headers.slice(1))===JSON.stringify(table.headers));
     const cells=await panel.locator('.schedule-grid tbody tr').first().locator('td').allTextContents();
     check(`${width}: all cells unmodified`,JSON.stringify(cells)===JSON.stringify(table.headers.map(h=>table.rows[0].cells?.[h]?.text ?? '')));
+    // Wait for the newly mounted grid's layout (including ResizeObserver), not
+    // just its text nodes. Keep the same strict overflow assertion on all hosts.
+    await page.waitForFunction(()=>{
+      const grid=document.querySelector('.schedule-grid-scroll');
+      return grid?.clientWidth > 0 && grid.scrollWidth > grid.clientWidth;
+    },null,{timeout:10000});
     const grid=await panel.locator('.schedule-grid-scroll').evaluate(el=>({scroll:el.scrollWidth,width:el.clientWidth}));
     check(`${width}: wide table scrolls internally`,grid.scroll>grid.width);
     await panel.getByLabel('Search schedules').fill('NO-SUCH-UI-TABLE');
@@ -127,4 +133,12 @@ try {
   await page.screenshot({path:resolve(out,'agent-review-hud.png')});
   check('no browser errors',errors.length===0);
   writeFileSync(resolve(out,'checks.json'),JSON.stringify({checks,errors},null,2));
+} catch (error) {
+  await page.screenshot({path:resolve(out,'failure.png')}).catch(()=>{});
+  const layout=await page.evaluate(()=>[...document.querySelectorAll('.workspace-dock,.schedule-grid-scroll,.schedule-grid')].map(el=>({
+    className:el.className,clientWidth:el.clientWidth,scrollWidth:el.scrollWidth,
+    rect:el.getBoundingClientRect().toJSON(),
+  }))).catch(()=>[]);
+  writeFileSync(resolve(out,'failure.json'),JSON.stringify({error:String(error),layout,checks,errors},null,2));
+  throw error;
 } finally {await browser.close();}
