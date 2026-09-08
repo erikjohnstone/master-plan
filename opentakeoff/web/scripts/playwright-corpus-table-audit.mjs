@@ -145,9 +145,42 @@ for (const doc of wanted) {
     console.log(`  ${tables.length} tables across ${bySheet.size} sheets`);
 
     // ── Schedules panel: open it, expand all, cross-check against the graph ──
+    //
+    // A REAL, INTERMITTENT click failure was measured live on two separate
+    // documents in two separate full-corpus runs (074_CA, 09_ME): the chip
+    // resolves with its own ready attributes already set (data-phase="ready",
+    // data-done===data-total) yet Playwright's actionability wait times out
+    // at 30s waiting for it to become "visible, enabled" — aborting the
+    // entire rest of this document's tier1/tier2/key checks on what the
+    // chip's own state says is a fully-indexed page. A direct repro against
+    // the same document (09_ME) immediately after found the chip perfectly
+    // clickable, alongside one `net::ERR_CONNECTION_RESET` console error —
+    // consistent with a transient dev-server hiccup under concurrent load
+    // rather than a deterministic app defect, but not proven either way.
+    // Retrying past a transient miss, rather than aborting the whole
+    // document's checks on it, costs nothing when the chip is genuinely
+    // ready (which its own data attributes already confirm) and recovers
+    // the run when it is not.
     const chip = page.locator("[data-index-progress]").first();
     if (await chip.count()) {
-      await chip.click();
+      let clicked = false;
+      for (let attempt = 0; attempt < 3 && !clicked; attempt++) {
+        try {
+          await chip.click({ timeout: 15_000 });
+          clicked = true;
+        } catch (e) {
+          console.log(`  chip click attempt ${attempt + 1} failed: ${String(e).split("\n")[0]}`);
+          await page.waitForTimeout(1000);
+        }
+      }
+      if (!clicked) {
+        // Last resort: the chip's own data attributes already say ready —
+        // force past whatever is blocking normal actionability so the rest
+        // of this document's checks still run, but say so, since a forced
+        // click is itself evidence worth a human looking at.
+        console.log("  chip never became actionable normally — forcing click");
+        await chip.click({ force: true }).catch((e) => console.log(`  forced click also failed: ${String(e).split("\n")[0]}`));
+      }
       await page.waitForTimeout(700);
       const panel = page.locator("[data-schedules-panel]");
       if (await panel.count()) {

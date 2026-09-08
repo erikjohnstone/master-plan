@@ -9565,9 +9565,28 @@ export function scheduleTableFromODL(
     // What separates a real grouping tier from a data row that happens to
     // span is PROPORTION, not presence. That table's own first header tier is
     // 13 spanning cells out of 15; its data rows are 1 out of 21. A genuine
-    // tier exists TO group, so grouping is most of what it does.
+    // tier exists TO group, so grouping is most of what it does — a MAJORITY,
+    // the word this comment already used, which a `* 4` (25%) bar does not
+    // actually enforce.
+    //
+    // That gap is real, not academic: 044_NY_VA_Project_528A8_17_805_Replace
+    // _Main_Boilers#21's own STEAM UNIT HEATER SCHEDULE prints a handful of
+    // genuinely shared values per row too — "GENERATOR ROOM" once for both
+    // LOCATION and AREA SERVED, one EAT/MIN CAPACITY/PRESS ENT HEATER value
+    // spanning the two sub-columns each of those headers implies — 4 spanning
+    // cells out of 15 on every one of its three real data rows (UH-3/UH-4/
+    // UH-5), 26.7%. `* 4` calls that "grouped" by a hair (16 >= 15) and
+    // swallowed all three real rows as header tiers the same way the fan
+    // schedule's own single span used to, all the way to the table's last
+    // row — headerEnd ran off the end, dataRows came back empty, and the
+    // table was refused for "no keyed data rows" though its own key column
+    // (MARK) and every one of UH-3/UH-4/UH-5 were read correctly upstream of
+    // this check. `* 2` (50%, an actual majority) still keeps the fan
+    // schedule's real tier (13/15, 86.7%) grouped and its real data rows
+    // (1/21, 4.8%) not, while no longer catching this table's 26.7% alongside
+    // them.
     const grouped = spanning.length > 0
-      && (!fullCoverage || spanning.length * 4 >= ownCells.size);
+      && (!fullCoverage || spanning.length * 2 >= ownCells.size);
     if (grouped || !fullCoverage) { headerEnd = r + 1; continue; }
     if (!headerCandidateChecked) {
       headerCandidateChecked = true;
