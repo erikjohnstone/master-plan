@@ -173,3 +173,13 @@ progress("done", items != null
   items,
 });
 process.stdout.write(`${JSON.stringify(compiled)}\n`);
+// Every other mode above exits explicitly (graph/sweep/count_marks/reconcile
+// all call process.exit(0)) — this one fell off the end of the script
+// instead. compileTakeoff can start a persistent Python sidecar (vectorgrid),
+// and a live child process with open stdio pipes keeps Node's event loop
+// alive indefinitely — the same shape of bug already found and fixed once in
+// vectorTakeoffPipeline.test.ts (shutdownVectorGrid in an `after` hook).
+// Here it hung compileProgressWalkthrough.test.ts's `child.on("close")` wait
+// forever, since this CLI is spawned as a real subprocess: a hung child
+// process never emits `close` no matter how long the parent test waits.
+process.exit(0);
