@@ -142,12 +142,33 @@ export function adoptVectorGridTables(
   // columns vanished with no signal anywhere. Keep the existing table
   // wherever every vectorgrid table overlapping it is strictly less
   // complete (fewer headers, or same headers with fewer non-empty cells).
+  // An existing table that straddles TWO OR MORE distinctly-titled vectorgrid
+  // candidates is not a competing reading of one schedule — vectorgrid's own
+  // candidates never overlap each other (find_tables already separates real
+  // tables by their drawn walls), so an existing region wide enough to touch
+  // two of them at once can only be an over-merge on the geometric side.
+  // Measured, 25_WA_DouglasCounty_Courthouse_HVAC_DDC.pdf#4: the geometric
+  // pass read a bogus "DUCT ELECTRIC" table at [850,1696,4254,2375] that
+  // overlaps BOTH vectorgrid's real FAN SCHEDULE [832,1956,3087,2575] and its
+  // real AIR INLET & OUTLET SCHEDULE [3141,1956,4281,2397] — two separately
+  // titled, non-overlapping, correctly-bounded tables one sheet apart in the
+  // stack. Because "DUCT ELECTRIC" (accidentally the union of both) out-counts
+  // either one ALONE on headers/cells, the some()-wins check below let it keep
+  // the slot and discarded both real tables. The completeness comparison only
+  // makes sense between two readings of the SAME table; two DIFFERENT real
+  // titles under one existing region means that region is wrong regardless of
+  // its cell count, so it is dropped outright and every candidate it touches
+  // is offered a slot on its own.
+  const distinctTitles = (tables: ScheduleTable[]): number =>
+    new Set(tables.map((b) => b.title?.text?.trim().toUpperCase()).filter((t): t is string => !!t)).size;
+
   let displaced = 0;
   const kept: ScheduleTable[] = [];
   for (const t of g.tables) {
     if (t.sheet !== sheetKey) { kept.push(t); continue; }
     const overlapping = built.filter((b) => overlaps(t, b));
     if (!overlapping.length) { kept.push(t); continue; }
+    if (overlapping.length > 1 && distinctTitles(overlapping) > 1) { displaced++; continue; }
     const existing = tableCompleteness(t);
     const vectorGridWins = overlapping.some((b) => {
       const bc = tableCompleteness(b);

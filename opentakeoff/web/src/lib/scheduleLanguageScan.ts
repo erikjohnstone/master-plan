@@ -79,9 +79,53 @@ const SCHEDULE_CAPTION_RE = /^[A-Z0-9][A-Z0-9 ,.'&/()#-]{4,70}SCHEDULES?$/;
  *  correct table — so the gate stays as narrow as the evidence allows. */
 const CAPTION_XREF_RE = /^(SEE|REFER|REFERENCE|PER|FOR|AS|NOTE|NOTES|CONTINUED|CONT)\b/;
 
+/** A caption's own variable part — the panel/unit ID — is routinely drafted
+ *  as its OWN text run, distinct from the fixed "EXISTING PANEL" / "SCHEDULE"
+ *  wording around it (a template title with the tag substituted per
+ *  instance). Measured on 009_FL#30: "EXISTING PANEL ELP SCHEDULE" comes back
+ *  from pdf.js as three separate spans — "EXISTING PANEL", "ELP", "SCHEDULE"
+ *  — none of which alone matches SCHEDULE_CAPTION_RE, so five real panel
+ *  schedules on a `plan` sheet were invisible to the single-span scan below.
+ *  Spans on the same printed line, close enough together to be one caption
+ *  and not two unrelated ones, get joined before the regex ever sees them. */
+function joinCaptionLines(spans: GraphSpan[]): string[] {
+  const rows: GraphSpan[][] = [];
+  for (const sp of [...spans].sort((a, b) => a.y - b.y || a.x - b.x)) {
+    const h = sp.h || 12;
+    const row = rows.find((r) => Math.abs(r[0].y - sp.y) <= Math.max(2, 0.5 * Math.max(h, r[0].h || 12)));
+    if (row) row.push(sp);
+    else rows.push([sp]);
+  }
+  const lines: string[] = [];
+  for (const row of rows) {
+    row.sort((a, b) => a.x - b.x);
+    let cluster: GraphSpan[] = [row[0]];
+    const flush = () => {
+      if (cluster.length > 1) lines.push(cluster.map(spanText).join(" ").replace(/\s+/g, " ").trim());
+    };
+    for (let i = 1; i < row.length; i++) {
+      const prev = cluster[cluster.length - 1];
+      const gap = row[i].x - (prev.x + (prev.w || 0));
+      const maxGap = Math.max(60, 3 * Math.max(prev.h || 12, row[i].h || 12));
+      if (gap <= maxGap) cluster.push(row[i]);
+      else {
+        flush();
+        cluster = [row[i]];
+      }
+    }
+    flush();
+  }
+  return lines;
+}
+
 export function sheetHasScheduleCaption(spans: GraphSpan[]): boolean {
   for (const sp of spans) {
     const t = spanText(sp).replace(/\s+/g, " ").trim();
+    if (t.length < 8 || t.length > 78) continue;
+    if (CAPTION_XREF_RE.test(t)) continue;
+    if (SCHEDULE_CAPTION_RE.test(t)) return true;
+  }
+  for (const t of joinCaptionLines(spans)) {
     if (t.length < 8 || t.length > 78) continue;
     if (CAPTION_XREF_RE.test(t)) continue;
     if (SCHEDULE_CAPTION_RE.test(t)) return true;
