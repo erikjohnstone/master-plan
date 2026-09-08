@@ -29,6 +29,35 @@ describe("scheduleLanguageScan", () => {
     const hits = scanPillarGapLanguage(spans);
     assert.ok(hits.some((h) => h.kind === "bas" || h.kind === "both"));
   });
+
+  it("a POINTS LIST title split across two pdf.js spans is still recognized (GOAL.md rule, fixed 2026-09-08)", () => {
+    // Real, corpus-found (v3 full-corpus audit, 056_NY_VA_Project_632_19_106
+    // Renovate_Pharmacy_Spaces.pdf#5, "AUTOMATIC TEMPERATURE CONTROL
+    // DIAGRAM"): a real, ruled "POINTS LIST" table for VAV AIR HANDLER AHU-1
+    // — title, "SYSTEM:" subheader, ~20 real point rows — on a sheet whose
+    // role is `unknown` (no ROLE_SIGNALS entry matches a CONTROL DIAGRAM
+    // title). The sheet's own drafting split "POINTS" and "LIST" across two
+    // separate spans, same CAD-export fragmentation `sheetHasScheduleCaption`
+    // was already fixed for (009_FL#30's "EXISTING PANEL"/"ELP"/"SCHEDULE").
+    // Every regex in sheetHasPointsListTitleSpans only ever saw ONE span at a
+    // time, so isScheduleTarget's role==="unknown" fallback never fired and
+    // the sheet was never offered to the table extractor — a real, ruled
+    // table read as zero tables.
+    const split = [
+      { str: "POINTS", x: 100, y: 200, w: 60, h: 12 },
+      { str: "LIST", x: 168, y: 200, w: 36, h: 12 },
+    ];
+    assert.equal(sheetHasPointsListTitleSpans(split), true);
+    assert.equal(sheetHasScheduleLanguage(split), true);
+    // two unrelated words on the same line, far apart, must NOT merge into a
+    // false "POINTS LIST" — the join step has the same gap discipline
+    // joinCaptionLines already enforces for schedule captions.
+    const unrelated = [
+      { str: "POINTS", x: 100, y: 200, w: 60, h: 12 },
+      { str: "SOMETHING ELSE ENTIRELY OVER HERE", x: 900, y: 200, w: 260, h: 12 },
+    ];
+    assert.equal(sheetHasPointsListTitleSpans(unrelated), false);
+  });
 });
 
 /**

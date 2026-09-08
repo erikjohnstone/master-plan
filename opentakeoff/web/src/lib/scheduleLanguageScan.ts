@@ -133,18 +133,35 @@ export function sheetHasScheduleCaption(spans: GraphSpan[]): boolean {
   return false;
 }
 
-/** Session hook: legend/unknown sheets with extractable POINTS/DDC list titles. */
+/** Session hook: legend/unknown sheets with extractable POINTS/DDC list titles.
+ *
+ *  Single-span first (cheap, the common case), then the SAME joined-line pass
+ *  `sheetHasScheduleCaption` already needed above — for the identical reason.
+ *  Real, corpus-found (v3 full-corpus audit, 056_NY_VA_Project_632_19_106's
+ *  own sheet #5, "AUTOMATIC TEMPERATURE CONTROL DIAGRAM"): a real, ruled
+ *  "POINTS LIST" table for VAV AIR HANDLER AHU-1 — title, SYSTEM: subheader,
+ *  ~20 real point rows (RELIEF AIR TEMPERATURE | AI-1 | RAT, …) — sits on a
+ *  sheet whose role is `unknown` (no ROLE_SIGNALS entry matches a CONTROL
+ *  DIAGRAM title) and whose own drafting split "POINTS LIST" across two
+ *  separate pdf.js spans, the same CAD-export fragmentation
+ *  `joinCaptionLines` was already written to survive for a schedule caption.
+ *  Every regex here only ever saw ONE span at a time, so a split title was
+ *  invisible to `isScheduleTarget`'s `role === "unknown"` fallback and the
+ *  sheet was never offered to the table extractor at all — a real, ruled
+ *  table read as zero tables, not a borderline case. */
 export function sheetHasPointsListTitleSpans(spans: GraphSpan[]): boolean {
-  for (const sp of spans) {
-    const t = spanText(sp);
-    if (t.length < 10 || t.length > 120) continue;
+  const test = (t: string): boolean => {
+    if (t.length < 10 || t.length > 120) return false;
     if (/\bPOINTS?\s+LIST\b/i.test(t)) return true;
     if (/\bFCU WITH\b.+\bDDC POINTS LIST$/i.test(t)) return true;
     if (/\bUNIT HEATER DDC POINTS LIST$/i.test(t)) return true;
     if (/^I\s*\/\s*O\s+LIST\b/i.test(t) || /^IO\s+LIST\b/i.test(t)) return true;
     if (/\b(DDC|BAS|PLC)\b.+\b(POINTS?|I\s*\/\s*O)\b/i.test(t)) return true;
     if (/\b(AHU|BOILER|VFD|FCU|RTU|PUMP|CHILLER)\b.+\bPOINTS?\s+LIST\b/i.test(t)) return true;
-  }
+    return false;
+  };
+  for (const sp of spans) if (test(spanText(sp))) return true;
+  for (const t of joinCaptionLines(spans)) if (test(t)) return true;
   return false;
 }
 
