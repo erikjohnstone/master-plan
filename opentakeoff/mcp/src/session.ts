@@ -5852,16 +5852,39 @@ export class Session {
         Math.min(2048, Math.max(x1 - x0, y1 - y0)),
       );
       const Tesseract = (await import("tesseract.js")).default;
-      const { data } = await Tesseract.recognize(Buffer.from(png), "eng", {
+      // Real, found live (research-agent-confirmed against tesseract.js's own
+      // source): the top-level Tesseract.recognize() convenience wrapper
+      // calls worker.recognize(image) with NO third `output` argument, whose
+      // own default is `{ text: true }` ONLY — word-level boxes are never
+      // requested, so `data.words` was unconditionally empty regardless of
+      // image quality, region size, or anything else fixed above. Confirmed
+      // directly against node_modules/tesseract.js/src/createWorker.js.
+      // createWorker + an explicit `{ blocks: true }` output is the only way
+      // to reach word boxes at all. v7's Page also nests them
+      // blocks[].paragraphs[].lines[].words[] — there is no flat top-level
+      // `words` array in this version, unlike the older API this code was
+      // written against — so this flattens that hierarchy explicitly.
+      const worker = await Tesseract.createWorker("eng", 1, {
         langPath: TESSDATA_PATH,
         cacheMethod: "none",
         gzip: true,
         logger: () => {},
       });
-      const tess = data as {
-        text?: string;
-        words?: Array<{ text: string; confidence: number; bbox: { x0: number; y0: number; x1: number; y1: number } }>;
-      };
+      let data: { text?: string; blocks?: Array<{ paragraphs?: Array<{ lines?: Array<{ words?: Array<{ text: string; confidence: number; bbox: { x0: number; y0: number; x1: number; y1: number } }> }> }> }> | null };
+      try {
+        ({ data } = await worker.recognize(Buffer.from(png), {}, { blocks: true }));
+      } finally {
+        await worker.terminate();
+      }
+      const flatWords: Array<{ text: string; confidence: number; bbox: { x0: number; y0: number; x1: number; y1: number } }> = [];
+      for (const b of data.blocks || []) {
+        for (const p of b.paragraphs || []) {
+          for (const l of p.lines || []) {
+            for (const w of l.words || []) flatWords.push(w);
+          }
+        }
+      }
+      const tess = { text: data.text, words: flatWords };
       const sx = (x1 - x0) / Math.max(1, width);
       const sy = (y1 - y0) / Math.max(1, height);
       const words = (tess.words || [])
