@@ -45,6 +45,13 @@ jobs:
       - run: npm ci --workspaces=false
         working-directory: opentakeoff/mcp
       - run: npx playwright install --with-deps chromium
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # The built-in vector sample uses the existing sidecar reader. Without
+      # this dependency the engine correctly falls back to a different reader,
+      # which does not supply the wide grid this UI contract must exercise.
+      - run: python -m pip install 'pdfplumber>=0.11.0' 'pypdfium2>=5.9.0'
       - name: Start isolated UI
         run: |
           npm run dev -- --host 127.0.0.1 --port 5176 > /tmp/ot-vite.log 2>&1 &
