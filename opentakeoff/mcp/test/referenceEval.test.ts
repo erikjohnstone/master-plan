@@ -61,3 +61,56 @@ test("scoreReference treats an empty key as fully exact", () => {
     exactPct: 1,
   });
 });
+
+// THE MULTI-TIER HEADER CASE — federal-attachment4-mechanical.pdf#14, AIR
+// HANDLING UNIT HYDRONIC COIL SCHEDULE. vectorgrid reads the drawing's real
+// grouped-header structure ("WATERSIDE DATA" over EWT/LWT/FLOW/PD) where the
+// key was authored against a flattened header ("EWT °F"). A raw exact-string
+// column lookup reported ten real, correct cells as "(missing)"; this is the
+// fix.
+test("scoreReference matches a column across a multi-tier header prefix", () => {
+  const tables: ReferenceTable[] = [{
+    sheet: "federal-attachment4-mechanical.pdf#14",
+    title: "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE",
+    headers: ["TYPE", "WATERSIDE DATA EWT °F", "WATERSIDE DATA LWT °F"],
+    rows: [{
+      key: "CHWC",
+      cells: { TYPE: "CHWC", "WATERSIDE DATA EWT °F": "44", "WATERSIDE DATA LWT °F": "54" },
+    }],
+  }];
+  const score = scoreReference(tables, [
+    { sheet: "federal-attachment4-mechanical.pdf#14", table_title: "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE",
+      row_key: "CHWC", column: "EWT °F", expected_value: "44" },
+    { sheet: "federal-attachment4-mechanical.pdf#14", table_title: "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE",
+      row_key: "CHWC", column: "LWT °F", expected_value: "54" },
+  ]);
+  assert.equal(score.exactCount, 2);
+  assert.deepEqual(score.perCell.map((c) => c.actual), ["44", "54"]);
+});
+
+test("scoreReference refuses an ambiguous suffix match rather than guessing", () => {
+  const tables: ReferenceTable[] = [{
+    sheet: "p.pdf#1",
+    title: "T",
+    headers: ["SUPPLY EWT °F", "RETURN EWT °F"],
+    rows: [{ key: "K", cells: { "SUPPLY EWT °F": "10", "RETURN EWT °F": "20" } }],
+  }];
+  const score = scoreReference(tables, [
+    { sheet: "p.pdf#1", table_title: "T", row_key: "K", column: "EWT °F", expected_value: "10" },
+  ]);
+  assert.equal(score.perCell[0].actual, null);
+  assert.equal(score.perCell[0].exact, false);
+});
+
+test("scoreReference does not let a shorter actual column match a longer expected one", () => {
+  const tables: ReferenceTable[] = [{
+    sheet: "p.pdf#1",
+    title: "T",
+    headers: ["°F"],
+    rows: [{ key: "K", cells: { "°F": "10" } }],
+  }];
+  const score = scoreReference(tables, [
+    { sheet: "p.pdf#1", table_title: "T", row_key: "K", column: "WATERSIDE DATA EWT °F", expected_value: "10" },
+  ]);
+  assert.equal(score.perCell[0].actual, null);
+});

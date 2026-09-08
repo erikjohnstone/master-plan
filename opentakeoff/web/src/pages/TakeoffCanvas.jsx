@@ -834,6 +834,11 @@ export default function TakeoffCanvas() {
   // panel costs no fetch and can never disagree with what a tool would say.
   const [schedulesOpen, setSchedulesOpen] = useState(false);
   const [graphTables, setGraphTables] = useState([]);
+  // The top-bar entry appears as soon as there is a set to index and reads
+  // disabled while the pass runs, rather than popping into existence when it
+  // finishes — a control that materialises is a control nobody learns.
+  const schedulesEntryVisible = sheets.length > 0;
+  const schedulesReady = graphPrewarm.phase === "ready" || graphTables.length > 0;
   const graphPrewarmSigRef = useRef("");
   const graphPrewarmBusyRef = useRef(false);
   const commitMsg = commitMsgState.text;   // misnamed for history; just the message bar
@@ -7225,9 +7230,38 @@ export default function TakeoffCanvas() {
     let cancelled = false;
     (async () => {
       try {
-        await getOrFetchProductionGraph(sig);
+        const prod = await getOrFetchProductionGraph(sig);
         if (cancelled) return;
         setGraphPrewarm({ phase: "ready" });
+        // A refused extraction engine is a fact about every table on this
+        // set, not a debug footnote — `g.notes` already carries it (see
+        // vectorTakeoffPipeline.ts's own comment on why that push exists),
+        // but nothing surfaced it where a person who never asks the agent
+        // anything would see it. One real toast, once per load.
+        const vgNote = (prod?.notes || []).find((n) => n.startsWith("Vector pipeline L2: vectorgrid"));
+        if (vgNote) setCommitMsg(vgNote, "refusal");
+        // Same gap, a different cause: rasterScheduleNotes (below) already
+        // catches a schedule-role sheet whose table content is pasted in as
+        // a raster image (017_MD's ACU-A-1..6 VENTILATION SCHEDULE — 6 real
+        // tables, 0 extracted, 30-50% of the sheet is an embedded picture) —
+        // but it was only ever called from agentSheetGraph(), reachable
+        // solely by asking the agent. A person who opens the Schedules panel
+        // and never asks a question saw nothing at all. Same fix as vgNote:
+        // one real toast, computed from the SAME production graph already
+        // fetched here, no extra request.
+        if (!cancelled) {
+          try {
+            const rasterNotes = await rasterScheduleNotes(prod);
+            if (!cancelled && rasterNotes.length) {
+              setCommitMsg(
+                rasterNotes.length === 1
+                  ? rasterNotes[0]
+                  : `${rasterNotes.length} schedule-role sheets carry pasted-in raster table images invisible to extraction — first: ${rasterNotes[0]}`,
+                "refusal",
+              );
+            }
+          } catch { /* diagnostic only, never blocks graphPrewarm */ }
+        }
       } catch (e) {
         if (!cancelled) {
           setGraphPrewarm({ phase: "error", message: String(e?.message || e) });
@@ -7485,6 +7519,16 @@ export default function TakeoffCanvas() {
   // ink with it. Same discipline as takeoff_cite: one source string buys a
   // whole lifecycle, no new state.
   function clearScheduleBrowseHighlights() {
+    // The ref is filtered SYNCHRONOUSLY as well as inside the updater, because
+    // onPaint clears and then immediately paints: agentAnnotate reads
+    // agentStateRef.current.markups directly, and a queued-but-unflushed
+    // setMarkups would let it append onto the pre-clear list — the state and
+    // the ref would then disagree about which markups exist. The updater keeps
+    // its own write because it is the one that sees the true current list.
+    agentStateRef.current = {
+      ...agentStateRef.current,
+      markups: (agentStateRef.current.markups || []).filter((m) => m.source !== "schedule_browse"),
+    };
     setMarkups((ms) => {
       const next = ms.filter((m) => m.source !== "schedule_browse");
       agentStateRef.current = { ...agentStateRef.current, markups: next };
@@ -7762,7 +7806,11 @@ export default function TakeoffCanvas() {
       // functions directly. Every entry here is the REAL one the agent tools
       // call; nothing here is a second implementation.
       probe: {
-        sheets: () => panels.map((x) => ({ key: x.key, w: x.img?.w || 0 })),
+        // h and xOffset as well as w: playwright-highlight-geometry asserts that
+        // a painted rect lands on the region it was given, and it can only read
+        // the SVG's own user space as image px while exactly one panel is open
+        // (xOffset 0). Both facts have to be checkable, not assumed.
+        sheets: () => panels.map((x) => ({ key: x.key, w: x.img?.w || 0, h: x.img?.h || 0, xOffset: x.xOffset || 0 })),
         setScale: (key, label) => agentSetScale(key, label),
         mintCondition: (tag) => mintCondition(tag).id,
         stageProposals: (list) => stageAgentProposals(list),
@@ -10251,12 +10299,86 @@ export default function TakeoffCanvas() {
     return stable;
   });
 
-  // ── two-deck toolbar (issue #61) ───────────────────────────────────────────
-  // drafting-style group caption floated above a deck-2 cluster
+  // ── two-deck toolbar (issue #61, restored) ────────────────────────────────
+  // A drafting-style group caption over its controls — IN FLOW.
+  //
+  // It used to be position:absolute at top:-13 with maxWidth 200, which meant
+  // it reserved no horizontal space at all over a cluster body that is often
+  // far narrower: "Action"'s body is 150px and usually empty, and
+  // "Scale — <sheet name>" embeds an unbounded sheet name. So captions painted
+  // over each other and over their neighbours' controls, and the TAKEOFF /
+  // Report / ⋯ buttons under Action's caption were not even its children —
+  // they live in the pinned span. Nothing out of flow can be laid out around.
+  //
+  // As a column the cluster is max(caption, controls) wide and the row simply
+  // pushes groups apart. That costs one caption's height, which is what the
+  // second deck is for.
+  // The always-reachable actions. They ride DECK 1 rather than the scrolling
+  // deck, so Report and the ⋯ menu are on screen at every width — the reason
+  // the single row grew a scroll region in the first place. Extracted to a
+  // variable only so deck 1 reads as a row of places rather than 40 lines of
+  // buttons — and a FUNCTION rather than a const, because its JSX closes over
+  // consts (drawStyleRow, draftOutlineRow) declared further down; a const here
+  // reads them at definition time and throws before the bar ever renders.
+  const ellipsize = (v, n) => {
+    const t = String(v || "");
+    return t.length > n ? `${t.slice(0, n - 1)}…` : t;
+  };
+
+  const renderTopbarPinned = () => (
+    <>
+        {/* name="open-takeoff", like sheet-file / agent-goal: the Playwright
+            driver used to reach for this with a text regex, which also matched
+            the rail's Takeoff button, picked the one the open Agent panel
+            covers, and hung 120s on click actionability before reporting the
+            Takeoff panel as broken. It was never broken. */}
+        <button onClick={() => setShowTakeoffData(true)} name="open-takeoff"
+          title="Open Takeoff — finished takeoff + workflow aggregate from every Agent run, with CSV / Excel / PDF export."
+          style={{
+            padding: "8px 14px", border: "none",
+            background: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--cobalt)" : "var(--ink-faint)",
+            color: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--paper-bright)" : "var(--ink-muted)",
+            cursor: "pointer", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11,
+            letterSpacing: "0.12em", textTransform: "uppercase",
+          }}>
+          Takeoff{finishedTakeoffLineCount ? ` · ${finishedTakeoffLineCount}` : (agentTakeoffRows.length ? " · data" : "")}
+        </button>
+        <button onClick={() => setShowReport(true)} disabled={!conditions.length} title="Open the takeoff report — per-condition breakdown with waste, plus CSV / JSON export."
+          style={{ padding: "8px 14px", border: "none", background: conditions.length ? "var(--ink)" : "var(--text-faint)", color: "var(--paper-bright)", cursor: conditions.length ? "pointer" : "default", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase" }}>Report</button>
+        {/* ⋯ overflow — rarely-used project controls, so the row never wraps
+            and nothing shifts position mid-work (issue #61's contract). */}
+        <ToolMenu
+          title="More — guide, appearance, schedule import, project moves"
+          onOpenChange={onMenuDepth}
+          face={<span style={{ fontWeight: 700, letterSpacing: "0.08em" }}>⋯</span>}
+          items={[
+            { id: "guide", label: "How takeoff works", shortcut: "?", onSelect: () => setGuideOpen(true) },
+            { id: "theme", label: theme === "dark" ? "Light chrome" : "Dark chrome", onSelect: toggleTheme },
+            { section: "Drawing style" },
+            { id: "drawstyle", custom: drawStyleRow },
+            { id: "draftoutline", custom: draftOutlineRow },
+            "divider",
+            { id: "schedule", icon: "rectTool", label: "Import from schedule", active: tool === "schedule", onSelect: () => { setScheduleAnchor(null); setTool((t) => (t === "schedule" ? "select" : "schedule")); } },
+            ...(cloudMode ? [
+              "divider",
+              { id: "closeproj", label: "Close project", onSelect: closeProject },
+              ...(browseProjects ? [{ id: "projects", label: "Team projects", onSelect: browseProjects }] : []),
+            ] : []),
+            ...(!cloudMode && googleUser && isGoogleConfigured() && projectHomeFolderId() ? [
+              "divider",
+              { id: "browse", label: "Browse team projects", onSelect: () => navigate("/projects") },
+            ] : []),
+          ]}
+        />
+        <PresenceChip bridge={store.syncBridge} />
+        <AccountChip note={cloudMode ? "Synced to Google Drive" : "Local workspace"} onOpenChange={onMenuDepth} />
+    </>
+  );
+
   const cluster = (cap, children, style) => (
-    <span style={{ display: "inline-flex", alignItems: "center", gap: 7, position: "relative", paddingTop: 2, minWidth: 0, ...style }}>
-      <span style={{ position: "absolute", top: -13, left: 1, fontFamily: "var(--f-mono)", fontSize: 8, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--ink-muted)", whiteSpace: "nowrap", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis" }}>{cap}</span>
-      {children}
+    <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "flex-start", gap: 3, minWidth: 0, ...style }}>
+      <span style={{ fontFamily: "var(--f-mono)", fontSize: 8, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--ink-muted)", whiteSpace: "nowrap", lineHeight: 1 }}>{cap}</span>
+      <span style={{ display: "inline-flex", alignItems: "center", gap: 7, minWidth: 0 }}>{children}</span>
     </span>
   );
   // MODE segmented control — shared border, ink-filled active (cobalt stays
@@ -10487,30 +10609,26 @@ export default function TakeoffCanvas() {
         onChange={(e) => { importProfileFile(e.target.files?.[0]); e.target.value = ""; }} />
       <input name="takeoff-import" ref={importInputRef} type="file" accept=".json,application/json" style={{ display: "none" }}
         onChange={(e) => { importTakeoffFile(e.target.files?.[0]); e.target.value = ""; }} />
-      {/* THE top bar — one row (the two decks of issue #61 merged once the
-          tool rail absorbed the draw menus). Project verbs left, work verbs
-          center, Report + the ⋯ overflow (guide, appearance — chrome theme and
-          drawing style —, schedule import, cloud moves) right. Cluster captions stay — they're the drafting
-          language. The row never wraps; rarely-used controls live in ⋯ so
-          nothing shifts position mid-work. Focus mode (F) hides the whole
-          bar — the rail and status bar carry the essentials.
-          Un-wrapped is not the same as unreachable, though: this row is
-          ~1550px of fixed-width controls, so on a 1440-class laptop Report and
-          the Action menu render past the right edge. The document can
-          technically scroll to them, but the canvas claims wheel and trackpad
-          gestures for zoom/pan, so that scroll never arrives and the app reads
-          as "Export is unclickable". The row therefore SCROLLS itself; its
-          menus open position:fixed off the trigger rect (ToolMenu) so this
-          overflow cannot clip them. */}
+      {/* THE top bar — TWO DECKS.
+          Deck 1 is where you are: the wordmark, Open, Sheets, the sheet you
+          are on, the Schedules index, and the pinned actions (Takeoff, Report,
+          ⋯, presence, account). Deck 2 is what you are doing: the drafting
+          clusters, each captioned.
+          It was one row. ~1550px of fixed-width controls do not fit a
+          1440-class laptop, so the row scrolled itself and the captions —
+          position:absolute, up to 200px wide, over cluster bodies often much
+          narrower — painted over each other and over their neighbours'
+          controls. "Scale — <sheet name>" landed on "Action", whose own
+          caption floats over buttons that are not even its children.
+          Two decks with captions in flow (see `cluster`) means groups push
+          each other apart instead, and the row fits without scrolling at the
+          widths people actually use. The scroll region and its shadow stay on
+          deck 2 as the last resort; menus open position:fixed off the trigger
+          rect (ToolMenu) so an overflow cannot clip them. Focus mode (F) hides
+          the whole bar — the rail and status bar carry the essentials. */}
       {!focusMode && (
-      <div data-topbar style={{ display: "flex", gap: 7, alignItems: "center", padding: "0 14px 6px", borderBottom: "1px solid var(--ink-faint)", background: "var(--paper-bright)", whiteSpace: "nowrap" }}>
-        {/* The working controls scroll as one region when the window is
-            narrower than the row (1440-class laptops); Report, ⋯, presence and
-            account sit OUTSIDE that region so they are on screen at every
-            width — the row's contract (#61: nothing wraps or shifts) holds,
-            and nothing important is ever past the right edge. paddingTop 16
-            keeps the cluster captions (top:-13) inside the scroll box. */}
-        <div data-topbar-scroll style={{ display: "flex", gap: 7, alignItems: "center", flex: "1 1 0", minWidth: 0, padding: "16px 0 0", overflowX: "auto", overflowY: "hidden", scrollbarWidth: "thin", overscrollBehaviorX: "contain" }}>
+      <div data-topbar style={{ display: "flex", flexDirection: "column", gap: 5, alignItems: "stretch", padding: "6px 14px 6px", borderBottom: "1px solid var(--ink-faint)", background: "var(--paper-bright)", whiteSpace: "nowrap" }}>
+        <div data-topbar-deck="1" style={{ display: "flex", gap: 7, alignItems: "center", minWidth: 0 }}>
         <strong style={{ fontFamily: "var(--f-display)", fontSize: 15, color: "var(--ink)", letterSpacing: "-0.02em" }}>Takeoff</strong>
         <button type="button" onClick={() => fileInputRef.current?.click()} title="Open plans — PDF, image, or a .zip plan set (or just drag them onto the canvas)"
           style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: "1px solid var(--ink)", background: "var(--ink)", color: "var(--paper-bright)", cursor: "pointer", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
@@ -10536,7 +10654,34 @@ export default function TakeoffCanvas() {
               style={{ padding: "5px 8px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", cursor: "pointer", opacity: (!!sheetGroup.length || page >= pageCount) ? 0.4 : 1 }}><Icon name="chevronRight" size={12} /></button>
           </span>
         )}
-        {vRule}
+        {/* SCHEDULES IS A PLACE IN THE SET, so it belongs next to Sheets.
+            It was reachable only from a 34px icon in the right-edge rail and
+            from a status-bar chip whose only affordance was a cursor — an
+            index of every table in the drawings, and nothing said so. */}
+        {schedulesEntryVisible && (
+          <button type="button" onClick={() => setSchedulesOpen((o) => !o)}
+            disabled={!schedulesReady}
+            title={schedulesReady
+              ? `Schedules — every table the index read, with its rows; click a tag to show it on the drawing${graphTables.length ? ` (${graphTables.length} found)` : ""}`
+              : "Schedules — still indexing this set"}
+            style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: `1px solid ${schedulesOpen ? "var(--cobalt)" : "var(--ink-faint)"}`, background: schedulesOpen ? "var(--cobalt)" : "transparent", color: schedulesOpen ? "var(--paper-bright)" : (schedulesReady ? "var(--ink)" : "var(--ink-muted)"), cursor: schedulesReady ? "pointer" : "default", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
+            <Icon name="spec" size={15} />Schedules{graphTables.length ? ` · ${graphTables.length}` : ""}
+          </button>
+        )}
+        <div style={{ flex: 1 }} />
+        <span data-topbar-pinned style={{ display: "inline-flex", alignItems: "center", gap: 7, flexShrink: 0 }}>
+        {renderTopbarPinned()}
+        </span>
+        </div>
+        {/* DECK 2 — the working clusters. It still scrolls as one region if a
+            window is narrower than the clusters themselves; with the captions
+            in flow and deck 1 carrying the wide fixed controls, that should
+            not happen at 1440. app.css paints the two-layer scroll shadow so
+            "there is more" is never invisible. */}
+        {/* No `flex: 1 1 0` here: the bar is a COLUMN now, so a vertical basis
+            of 0 collapses this deck's height to nothing and its controls paint
+            back over deck 1. Measured — the whole bar came out 47px tall. */}
+        <div data-topbar-scroll style={{ display: "flex", gap: 7, alignItems: "flex-end", minWidth: 0, overflowX: "auto", overflowY: "hidden", scrollbarWidth: "thin", overscrollBehaviorX: "contain" }}>
         {cluster("Edit", <>
           <ToolMenu
             title="Edit takeoffs"
@@ -10645,7 +10790,10 @@ export default function TakeoffCanvas() {
           </button>
         )}
         <div style={{ flex: 1 }} />
-        {cluster(`Scale — ${labelFor(focusPanel)}`,
+        {/* Truncate the sheet name HERE, not with a max-width on the caption:
+            the caption is in flow now, so an unbounded name would push Action
+            off the deck instead of painting over it. */}
+        {cluster(`Scale — ${ellipsize(labelFor(focusPanel), 22)}`,
           <>
             <button onClick={() => setUnits((u) => (u === "metric" ? "imperial" : "metric"))}
               title={units === "metric" ? "Metric display (m² / m) — click for imperial. Calibrate in meters; 1:50-style scales in the list. Display only — stored takeoffs never change." : "Imperial display (SF / LF) — click for metric (m² / m, calibrate in meters, 1:50-style scales). Display only — stored takeoffs never change."}
@@ -10662,8 +10810,14 @@ export default function TakeoffCanvas() {
             />
           </>
         )}
-        {cluster("Action",
-          <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "flex-end", gap: 6, minWidth: 150 }}>
+        {/* ACTION only exists when there IS one. It used to render always, so a
+            caption sat over 150px of reserved emptiness at the end of the row
+            — and, with the caption out of flow, over the pinned TAKEOFF /
+            Report buttons that are not even its children. It sits last, after
+            everything else, so appearing and disappearing shifts nothing:
+            issue #61's contract is kept by POSITION, not by reserved space. */}
+        {(finishOk || proposal?.regions.length > 0 || (markupDraft && (tool === "cloud" || tool === "callout" || tool === "highlight" || tool === "dimension"))) && cluster("Action",
+          <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "flex-end", gap: 6 }}>
             {markupDraft && (tool === "cloud" || tool === "callout" || tool === "highlight" || tool === "dimension") && <span style={{ fontSize: 11, color: "var(--cobalt)" }}>click the {tool === "callout" ? "label spot" : tool === "dimension" ? "other end" : "opposite corner"}…</span>}
             {finishOk && (
               <button onClick={finishShape} title="Finish shape (↵ or double-click)" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 12px", border: "none", background: "var(--c-positive)", color: "var(--paper-bright)", cursor: "pointer", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}><Icon name="check" size={14} />Finish ({poly.length})</button>
@@ -10673,55 +10827,7 @@ export default function TakeoffCanvas() {
             )}
           </span>
         )}
-        <div style={{ flex: 1 }} />
         </div>
-        <span data-topbar-pinned style={{ display: "inline-flex", alignItems: "center", gap: 7, flexShrink: 0, paddingTop: 16 }}>
-        {/* name="open-takeoff", like sheet-file / agent-goal: the Playwright
-            driver used to reach for this with a text regex, which also matched
-            the rail's Takeoff button, picked the one the open Agent panel
-            covers, and hung 120s on click actionability before reporting the
-            Takeoff panel as broken. It was never broken. */}
-        <button onClick={() => setShowTakeoffData(true)} name="open-takeoff"
-          title="Open Takeoff — finished takeoff + workflow aggregate from every Agent run, with CSV / Excel / PDF export."
-          style={{
-            padding: "8px 14px", border: "none",
-            background: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--cobalt)" : "var(--ink-faint)",
-            color: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--paper-bright)" : "var(--ink-muted)",
-            cursor: "pointer", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11,
-            letterSpacing: "0.12em", textTransform: "uppercase",
-          }}>
-          Takeoff{finishedTakeoffLineCount ? ` · ${finishedTakeoffLineCount}` : (agentTakeoffRows.length ? " · data" : "")}
-        </button>
-        <button onClick={() => setShowReport(true)} disabled={!conditions.length} title="Open the takeoff report — per-condition breakdown with waste, plus CSV / JSON export."
-          style={{ padding: "8px 14px", border: "none", background: conditions.length ? "var(--ink)" : "var(--text-faint)", color: "var(--paper-bright)", cursor: conditions.length ? "pointer" : "default", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase" }}>Report</button>
-        {/* ⋯ overflow — rarely-used project controls, so the row never wraps
-            and nothing shifts position mid-work (issue #61's contract). */}
-        <ToolMenu
-          title="More — guide, appearance, schedule import, project moves"
-          onOpenChange={onMenuDepth}
-          face={<span style={{ fontWeight: 700, letterSpacing: "0.08em" }}>⋯</span>}
-          items={[
-            { id: "guide", label: "How takeoff works", shortcut: "?", onSelect: () => setGuideOpen(true) },
-            { id: "theme", label: theme === "dark" ? "Light chrome" : "Dark chrome", onSelect: toggleTheme },
-            { section: "Drawing style" },
-            { id: "drawstyle", custom: drawStyleRow },
-            { id: "draftoutline", custom: draftOutlineRow },
-            "divider",
-            { id: "schedule", icon: "rectTool", label: "Import from schedule", active: tool === "schedule", onSelect: () => { setScheduleAnchor(null); setTool((t) => (t === "schedule" ? "select" : "schedule")); } },
-            ...(cloudMode ? [
-              "divider",
-              { id: "closeproj", label: "Close project", onSelect: closeProject },
-              ...(browseProjects ? [{ id: "projects", label: "Team projects", onSelect: browseProjects }] : []),
-            ] : []),
-            ...(!cloudMode && googleUser && isGoogleConfigured() && projectHomeFolderId() ? [
-              "divider",
-              { id: "browse", label: "Browse team projects", onSelect: () => navigate("/projects") },
-            ] : []),
-          ]}
-        />
-        <PresenceChip bridge={store.syncBridge} />
-        <AccountChip note={cloudMode ? "Synced to Google Drive" : "Local workspace"} onOpenChange={onMenuDepth} />
-        </span>
       </div>
       )}
 
@@ -12555,6 +12661,18 @@ export default function TakeoffCanvas() {
                 setCommitMsg("That schedule has no geometry on the sheet to show.", "refusal");
                 return;
               }
+              // ONE browse highlight at a time. agentAnnotate appends
+              // unconditionally with a fresh id, and a highlight paints at
+              // fillOpacity 0.18 — so clicking the same View twice stacked two
+              // identical rects and the box composited to 0.33, three to 0.45,
+              // ten to 0.86. It also grew the markup rail's count and the Agent
+              // panel's source list by one per click. The clear already existed
+              // for exactly this (see clearScheduleBrowseHighlights) but was
+              // wired only to panel close, so the teardown half of the
+              // lifecycle shipped without the replace half. Browsing should
+              // also not leave a trail: what you are looking at is the one
+              // thing painted.
+              clearScheduleBrowseHighlights();
               const result = await agentHighlightCitation({
                 sheet,
                 bbox_px: box,

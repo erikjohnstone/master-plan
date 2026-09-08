@@ -69,13 +69,81 @@ def eob(a, b) -> float:
     return max(abs(a[0] - b[0]), abs(a[1] - b[1]), abs(a[2] - b[2]), abs(a[3] - b[3]))
 
 
+def census() -> int:
+    """THE INSTRUMENT THAT DID NOT EXIST.
+
+    `_widen_along_row_rules` follows drawn rules past the faces that closed. It
+    is why 08_ME…#1's DRAWING LIST scores at all — and it is also why a DOOR
+    SCHEDULE's box runs into the NOTE: block beside it. Both of those are the
+    same code doing the same thing, and the score above cannot tell them apart:
+    over the 32 keyed pages the heuristic fires 31 times and 30 of those
+    firings are on blocks NO authored box looks at. A 100% score was compatible
+    with a visibly wrong highlight because the ruler was blind to 97% of what
+    the heuristic did.
+
+    So: report every firing, keyed or not, with the consensus that allowed it.
+    Run this beside boxscore.py after any change to the widening — the score
+    says nothing broke, this says what actually changed.
+    """
+    import vectorgrid as vg
+
+    fired = []
+    orig = vg._consensus_edge
+
+    def spy(votes, base, sign):
+        out = orig(votes, base, sign)
+        if abs(out - base) > 1:
+            agree = sum(1 for v in votes if abs(v - out) <= vg.EDGE_TOL)
+            fired.append({
+                "move": abs(out - base),
+                "rows": len(votes),
+                "agree": agree / max(1, len(votes)),
+                "side": "left" if sign < 0 else "right",
+            })
+        return out
+
+    vg._consensus_edge = spy
+    try:
+        per_page = []
+        for set_id, page, _titles in keyed_sheets():
+            pdf = single_page_pdf(find_pdf(set_id), page)
+            before = len(fired)
+            BACKENDS["vectorgrid"](pdf)
+            n = len(fired) - before
+            if n:
+                per_page.append((set_id, page, n, fired[before:]))
+    finally:
+        vg._consensus_edge = orig
+
+    print(f"consensus bar {vg.WIDEN_CONSENSUS:.2f} of rows within {vg.EDGE_TOL:.0f}pt of the chosen edge\n")
+    print(f"{'set':30s} {'page':>5s} {'fires':>6s}   moves (pt / agreement)")
+    print("-" * 92)
+    for set_id, page, n, rows in per_page:
+        detail = "  ".join(f"{r['move']:.0f}{r['side'][0]}/{r['agree']:.2f}" for r in rows[:8])
+        if n > 8:
+            detail += f"  … +{n - 8}"
+        print(f"{set_id[:30]:30s} {page:>5d} {n:>6d}   {detail}")
+    print("\n" + "=" * 78)
+    print(f"pages where the widening fired   {len(per_page)}")
+    print(f"total firings                    {len(fired)}")
+    if fired:
+        ag = sorted(r["agree"] for r in fired)
+        print(f"agreement  min {ag[0]:.2f}  median {ag[len(ag) // 2]:.2f}  max {ag[-1]:.2f}")
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--backend", default="vectorgrid")
     ap.add_argument("--tol", type=float, default=4.0, help="EoB, in points, to count CORRECT")
     ap.add_argument("--verbose", action="store_true", help="print every table, not just failures")
+    ap.add_argument("--census", action="store_true",
+                    help="report every time the row/column widening MOVES an edge, keyed or not")
     a = ap.parse_args()
     fn = BACKENDS[a.backend]
+
+    if a.census:
+        return census()
 
     tot = dict(truth=0, found=0, correct=0, iou=0.0, missing=0, unauthored=0)
     worst = []

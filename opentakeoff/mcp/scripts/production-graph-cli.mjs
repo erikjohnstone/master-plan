@@ -18,7 +18,7 @@
  */
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { basename, resolve } from "node:path";
 import { cachedSheetGraph } from "./sheetGraphCache.mjs";
 import { Session } from "../src/session.ts";
 import { compileTakeoff } from "../../web/src/lib/compileTakeoff.mjs";
@@ -99,6 +99,9 @@ const shaOf = (p) => createHash("sha256").update(readFileSync(p)).digest("hex");
 const graph = await cachedSheetGraph(pdfs[0], {
   expectedSha256: shaOf(pdfs[0]),
   identity: pdfs.slice(1).map(shaOf),
+  // Every sheet key in the graph is `<basename>#<page>`, so the names are part
+  // of the answer and must be part of the key — see sheetGraphCache.mjs.
+  names: pdfs.slice(1).map((p) => basename(p)),
   compute: () => session.graphForPipeline(),
 });
 session.seedPipelineGraph?.(graph);
@@ -170,3 +173,13 @@ progress("done", items != null
   items,
 });
 process.stdout.write(`${JSON.stringify(compiled)}\n`);
+// Every other mode above exits explicitly (graph/sweep/count_marks/reconcile
+// all call process.exit(0)) — this one fell off the end of the script
+// instead. compileTakeoff can start a persistent Python sidecar (vectorgrid),
+// and a live child process with open stdio pipes keeps Node's event loop
+// alive indefinitely — the same shape of bug already found and fixed once in
+// vectorTakeoffPipeline.test.ts (shutdownVectorGrid in an `after` hook).
+// Here it hung compileProgressWalkthrough.test.ts's `child.on("close")` wait
+// forever, since this CLI is spawned as a real subprocess: a hung child
+// process never emits `close` no matter how long the parent test waits.
+process.exit(0);

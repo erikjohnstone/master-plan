@@ -11,7 +11,7 @@ import {
   extractScheduleTablesFromVectorGrid,
 } from "./vectorGridAdapter.ts";
 import { vectorGridAvailable, vectorGridMode } from "./vectorGridClient.ts";
-import { sheetHasPointsListTitleSpans, sheetHasScheduleLanguage } from "./scheduleLanguageScan.ts";
+import { sheetHasPointsListTitleSpans, sheetHasScheduleCaption, sheetHasScheduleLanguage } from "./scheduleLanguageScan.ts";
 import {
   adoptVectorGridTables,
   collapseEquivalentPrimaryTables,
@@ -92,7 +92,20 @@ function sheetTableCount(g: SheetGraph, sheetKey: string): number {
 
 function isScheduleTarget(ctx: VectorSheetContext, hooks: VectorPipelineHooks): boolean {
   if (ctx.role === "schedule") return true;
-  // Plan/demolition sheets embed equipment terms everywhere — keyword scan is not schedule signal there.
+  // A SCHEDULE ON A DRAWING SHEET IS STILL A SCHEDULE, and this gate was
+  // losing them all. A plan sheet that PRINTS a schedule caption carries one:
+  // 13_MI#10 is "FIRST FLOOR PLAN - AREA A" with an EQUIPMENT SCHEDULE in the
+  // corner, and because its role is `plan` vectorgrid was never offered the
+  // sheet at all. What reached the estimator was the geometric extractor's
+  // older read — 3 of the table's 7 columns, box truncated at MODEL — while
+  // vectorgrid on that same page returns all 7 columns, 57 cells, 0 orphans.
+  // Same story on 009_FL#30, where five real panel schedules sit on a `plan`
+  // sheet and the app finds nothing at all.
+  //
+  // The keyword scan below genuinely is useless here — equipment words are
+  // everywhere on a floor plan, which is why the role check existed — so the
+  // test for a non-schedule sheet is a printed CAPTION, not vocabulary.
+  if (sheetHasScheduleCaption(ctx.spans)) return true;
   if (ctx.role !== "legend" && ctx.role !== "unknown") return false;
   if (hooks.sheetHasPointsListTitle(ctx.key)) return true;
   return sheetHasScheduleLanguage(ctx.spans);
@@ -199,6 +212,7 @@ async function runL2VectorGridForSheet(
     // failure read as an empty drawing.
     rec.refused++;
     const why = e instanceof VectorGridSpaceError ? String(e.message) : `${(e as Error)?.message || e}`;
+    rec.first_error ??= why;
     report.notes.push(`${ctx.key}: L2 vectorgrid did not run — ${why}`);
     return;
   }
@@ -402,7 +416,32 @@ export async function runVectorTakeoffPipeline(
   } else if (!uncovered.length) {
     report.layers_run.push("L2:ODL(not needed)");
   } else {
+    // ODL is the one stage that does NOT go through mergeCandidates — it pushes
+    // straight into g.tables — so withStage cannot see it and every table it
+    // recovered used to land in the ledger as nothing at all. A box scorer that
+    // reports per-stage then has an unattributable column, which is the column
+    // a regression hides in. Diff the table list around the call instead: the
+    // identity is the object, so this cannot mistake a mutated incumbent for a
+    // new table.
+    // BY CONTENT, NOT BY OBJECT IDENTITY. runODL rebuilds g.tables rather than
+    // appending to it, so an identity diff calls EVERY table new and attributes
+    // the whole graph to ODL. Measured, and badly: on 001_NC that reported 90
+    // vectorgrid tables and 90 ODL tables for a 90-table graph, and the scorer
+    // reading it concluded ODL was doing the work vectorgrid was doing. A
+    // reporting bug that inverts the conclusion is worse than no reporting.
+    const keyOfTable = (t: ScheduleTable) =>
+      `${t.sheet}|${t.title?.text ?? ""}|${(t.region || []).map((v) => Math.round(v)).join(",")}`;
+    const beforeOdl = new Set(g.tables.map(keyOfTable));
     await timed("L2:ODL", () => hooks.runODL(g));
+    if (report) {
+      for (const t of g.tables) {
+        if (beforeOdl.has(keyOfTable(t))) continue;
+        (report.stage_tables ?? (report.stage_tables = [])).push({
+          stage: "odl", sheet: t.sheet, title: t.title?.text ?? null,
+          kind: t.kind, headers: t.headers.length, rows: t.rows.length, region: t.region,
+        });
+      }
+    }
     report.layers_run.push(`L2:ODL(fallback on ${uncovered.length}/${contexts0.length} sheets)`);
   }
 
@@ -511,6 +550,46 @@ export async function runVectorTakeoffPipeline(
   const snapped = snapAllTableCellBboxes(g, sourceSpansBySheet, touched);
   if (snapped) report.notes.push(`Cell bbox snap: ${snapped} table(s) re-grounded onto source spans.`);
 
+  // A region with a negative coordinate, or one that runs past the sheet's
+  // own known width/height, is never a real table position — every genuine
+  // extraction anchors inside the sheet it was read from. Real, corpus-found
+  // (25_WA_DouglasCounty_Courthouse#4): vectorgrid's read of a transposed
+  // HEAT PUMP SCHEDULE (per-unit identifier columns printed as rotated text
+  // atop horizontal spec rows) put a handful of cells thousands of px from
+  // the rest of their own row, unioning into a region reaching y0=-1114.92 —
+  // duplicating a second, geometrically sane sheetgraph reading of the SAME
+  // table already in `g.tables`.
+  //
+  // The negative-coordinate half of this catches that case, but not its
+  // sibling: 044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21's own
+  // STEAM UNIT HEATER SCHEDULE (short, narrow-CELLED MARK values like "UH-3"
+  // whose bbox is merely taller than wide from row height, not real rotated
+  // text) tripped isVertical's own shape fallback, sent the table through
+  // extractAllQuarterTurnedTables' pivot-and-restore, and came back with every
+  // cell stacked along the WRONG axis — a region of y0=3134, y1=5701 on a
+  // sheet only 4320px tall, all coordinates positive so the guard above never
+  // fired. agentHighlightCitation refuses it at click time ("bbox_px is
+  // degenerate or outside the cited sheet"), which is the right call for a
+  // click but leaves a schedule the reader actually found sitting in the
+  // graph as a table nothing can ever show — worse than an honest miss.
+  // Bound-check against each sheet's own real width/height (from `contexts`,
+  // the one place every sheet's dimensions are already known here) and drop
+  // a table that cannot possibly fit, exactly as the negative-coordinate
+  // case already does — a dropped table is a disclosed gap; a table sitting
+  // off its own sheet is a citation nobody can ever paint.
+  const sheetDims = new Map(contexts.map((ctx) => [ctx.key, { w: ctx.width, h: ctx.height }]));
+  for (let i = g.tables.length - 1; i >= 0; i--) {
+    const table = g.tables[i];
+    const r = table.region;
+    if (!Array.isArray(r)) continue;
+    const dims = sheetDims.get(table.sheet);
+    const outOfBounds = r[0] < 0 || r[1] < 0 || (dims != null && (r[2] > dims.w || r[3] > dims.h));
+    if (outOfBounds) {
+      touched.add(table.sheet);
+      g.tables.splice(i, 1);
+    }
+  }
+
   if (touched.size) syncSheetSchedules(g, touched);
 
   report.tables_added = stats.added;
@@ -526,6 +605,30 @@ export async function runVectorTakeoffPipeline(
   }
   if (report.topology_sheets) {
     g.notes.push(`Vector pipeline L3.5: MEP topology graph built on ${report.topology_sheets} plan sheet(s).`);
+  }
+  // A REFUSED ENGINE MUST SAY SO WHERE SOMEONE WILL SEE IT, not just where a
+  // developer holding the pipeline report might look. `runL2VectorGridForSheet`
+  // already gets this right per-sheet — refusing is not "no schedules here",
+  // and it records exactly why in `report.notes` — but that array only ever
+  // reaches `g.vector_pipeline`, which nothing in the UI reads. Every OTHER
+  // note pushed to `g.notes` above fires only on genuine WORK (tables added,
+  // OCR recovered, topology built), so a document where vectorgrid failed on
+  // every sheet — a missing Python dependency, most commonly — produces every
+  // one of those as zero and stays completely silent while quietly reading
+  // every schedule with the weaker geometric fallback instead. Real, found
+  // live: `shapely` (a hard vectorgrid dependency, listed in no requirements
+  // file at all) missing on a fresh `git pull && npm i` checkout production
+  // the exact same wrong, narrower boxes this session spent hours chasing as
+  // a caching bug, on a machine that never printed a single error anywhere a
+  // person would look.
+  const vg = report.vectorgrid;
+  if (vg && vg.refused > 0) {
+    const total = vg.sheets + vg.refused;
+    g.notes.push(
+      vg.sheets === 0
+        ? `Vector pipeline L2: vectorgrid could not run on any sheet (${vg.refused}/${total}) — every schedule below came from the weaker fallback reader. ${vg.first_error || ""}`
+        : `Vector pipeline L2: vectorgrid did not run on ${vg.refused} of ${total} sheet(s) — those sheets used the weaker fallback reader. ${vg.first_error || ""}`,
+    );
   }
 
   g.vector_pipeline = report;

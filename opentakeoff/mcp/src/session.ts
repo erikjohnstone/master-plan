@@ -5956,6 +5956,36 @@ export class Session {
         let existingIdx = matchByRegionOverlap(g.tables, sheetKey, built.region);
         if (existingIdx < 0) existingIdx = matchByKeySet(g.tables, sheetKey, built);
         if (existingIdx < 0) existingIdx = matchByTitle(g.tables, sheetKey, built);
+        // An ODL candidate whose region touches TWO OR MORE distinctly-titled
+        // tables already on this sheet is not a competing reading of the one
+        // matchByRegionOverlap happened to pick — it is ODL's own over-merge
+        // of separate real schedules into one wide read. Measured, 25_WA_
+        // DouglasCounty_Courthouse_HVAC_DDC.pdf#4: vectorgrid correctly placed
+        // five separate tables (HEAT PUMP, CHILLER, MISCELLANEOUS, FAN, AIR
+        // INLET & OUTLET), then ODL's own pass — run unconditionally over
+        // every role=schedule sheet, not just the ones vectorgrid left
+        // uncovered — emitted a candidate spanning the shared right-hand
+        // column of all five, out-counted FAN SCHEDULE alone on headers/
+        // cells, and overwrote it (the same class of bug adoptVectorGridTables
+        // guards against in tableExtractorReconcile.ts, replicated here since
+        // this pass keeps its own separate copy of the reconciliation bar).
+        const distinctTitlesTouched = (() => {
+          const ix = (r: Bbox) => Math.max(0, Math.min(built.region[2], r[2]) - Math.max(built.region[0], r[0]));
+          const iy = (r: Bbox) => Math.max(0, Math.min(built.region[3], r[3]) - Math.max(built.region[1], r[1]));
+          const titles = new Set<string>();
+          for (const t of g.tables) {
+            if (t.sheet !== sheetKey || ix(t.region) * iy(t.region) <= 0) continue;
+            const tt = t.title?.text?.trim().toUpperCase();
+            if (tt) titles.add(tt);
+          }
+          return titles.size;
+        })();
+        if (distinctTitlesTouched > 1) {
+          // Refuse outright — neither a replacement (it would overwrite a
+          // real table with an over-merged one) nor a new append (it would
+          // duplicate ink two other tables already account for).
+          continue;
+        }
         if (existingIdx >= 0) {
           const existing = g.tables[existingIdx];
           const a = tableCompleteness(existing), b = tableCompleteness(built);

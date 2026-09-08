@@ -44,8 +44,8 @@ try {
   await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 60_000 });
   await page.waitForSelector('input[name="sheet-file"]', { state: "attached", timeout: 60_000 });
   await page.locator('input[name="sheet-file"]').first().setInputFiles(findPdf());
-  await page.waitForFunction(() => window.__opentakeoff?.indexProgress?.()?.phase === "ready", { timeout: 15 * 60 * 1000 });
-  await page.waitForFunction(() => window.__opentakeoff?.graphPrewarm?.()?.phase === "ready", { timeout: 15 * 60 * 1000 });
+  await page.waitForFunction(() => window.__opentakeoff?.indexProgress?.()?.phase === "ready", null, { timeout: 15 * 60 * 1000 });
+  await page.waitForFunction(() => window.__opentakeoff?.graphPrewarm?.()?.phase === "ready", null, { timeout: 15 * 60 * 1000 });
 
   // Build citations from a REAL table, so the bbox is real ink on a real sheet.
   const seeded = await page.evaluate(() => {

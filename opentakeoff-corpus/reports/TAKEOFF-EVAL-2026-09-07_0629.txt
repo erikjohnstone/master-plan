@@ -1,0 +1,228 @@
+╔══════════════════════════════════════════════════════════════════════════
+║ PROJECT-LEVEL TAKEOFF — scored against real sets
+╚══════════════════════════════════════════════════════════════════════════
+
+set                        tags   exact    Σ|Δqty|   missing   false-add
+──────────────────────────────────────────────────────────────────────────
+bessemer                     10   100.0%         0         0           5
+itd-d1-lab                  116    89.7%        35         2          12
+federal-mech                102   100.0%         0         0          16
+navfac-cherry-point-atc     217    96.3%        14         0          21
+bldg5406-hvac-demo           28    96.4%         1         1           0
+baker-county-eoc             40    87.5%         1         5           0
+itd-d1-lab-raster            28   100.0%         0         0           0
+12_MT_MSU_ReidHall_Renovation (no takeoff key yet)
+24_IA_JohnsonCounty_Courthouse (no takeoff key yet)
+27_WA_ColvilleTribes_Hatchery_Lab (no takeoff key yet)
+16_NV_CarsonValleyMS_HVAC_Replacement (no takeoff key yet)
+13_MI_MSU_LifeSciences_LabRenovation (no takeoff key yet)
+03_FL_HurlburtField_ChildDevCenter (no takeoff key yet)
+08_ME_BGS_Augusta_EastCampus_Renovation (no takeoff key yet)
+15_IA_IowaState_Biorenewables_Lab (no takeoff key yet)
+09_ME_BGS_KennebecValleyCC_Renovation (no takeoff key yet)
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for (no takeoff key yet)
+078_US_CP25028_MSU_Union_Sparty_Store_Renovations (no takeoff key yet)
+001_NC_FY20_P_228_ATC_Tower_and_Air_Operations (no takeoff key yet)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building (no takeoff key yet)
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test (no takeoff key yet)
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project (no takeoff key yet)
+041_IL_VA_Project_537_17_115_Sterile_Processing (no takeoff key yet)
+042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17 (no takeoff key yet)
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom (no takeoff key yet)
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated (no takeoff key yet)
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling (no takeoff key yet)
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building (no takeoff key yet)
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid (no takeoff key yet)
+062_ID_ITD_District_1_Laboratory_Building_Mechanical (no takeoff key yet)
+──────────────────────────────────────────────────────────────────────────
+CORPUS                      541    95.2%        51         8          54
+applicable installed rows: 478/499 exact ( 95.8%)
+expected honest refusals: 9/14 correct
+
+── bessemer — real mismatches ──
+  SR-1       FALSELY ADDED — qty=7, type=(unclassified), the key never mentions this tag
+  SR-2       FALSELY ADDED — qty=2, type=(unclassified), the key never mentions this tag
+  TG-1       FALSELY ADDED — qty=6, type=Transfer grille, the key never mentions this tag
+  TG-2       FALSELY ADDED — qty=4, type=Transfer grille, the key never mentions this tag
+  EF-1       FALSELY ADDED — qty=1, type=Fan (exhaust / supply / return / general), the key never mentions this tag
+
+── itd-d1-lab — real mismatches ──
+  TP-2       expected=12  actual=23  Δ=+11  status=resolved
+  TD-1       expected=2  actual=8  Δ=+6  status=resolved
+  US-1       expected=1  actual=7  Δ=+6  status=resolved
+  ES-1       expected=1  actual=3  Δ=+2  status=resolved
+  FS-1       expected=1  actual=3  Δ=+2  status=resolved
+  FS-2       expected=7  actual=9  Δ=+2  status=resolved
+  HB-2       expected=2  actual=4  Δ=+2  status=resolved
+  DFC-1      expected=1  actual=0  Δ=-1  status=not_in_output
+  F-1        expected=1  actual=0  Δ=-1  status=not_in_output
+  LAV-1      expected=1  actual=2  Δ=+1  status=resolved
+  SS-1       expected=2  actual=1  Δ=-1  status=resolved
+  ET-1       expected=0  actual=1  Δ=0  status=resolved
+  DFC-1      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  F-1        MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  SYMBOL     FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  R-1 8"Ø    FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  R-2 10X6   FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  R-3 12X8   FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  R-4 18X10  FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  SA-1       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  D-1        FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  GCO JAY R. SMITH 4220 SERIES, ROUND EXTRA HEAVY DUTY CAST IRON TOP. FURNISH WITH WITH ABS PLUG. COVER TO BE INSCRIBED "SAN". FALSELY ADDED — qty=3, type=(unclassified), the key never mentions this tag
+  GCO JAY R. SMITH 4250 SERIES, ROUND FLANGED HOUSING WITH HEAVY DUTY CAST IRON COVER. FURNISH WITH ABS PLUG. COVER TO BE INSCRIBED "SAN". FALSELY ADDED — qty=3, type=(unclassified), the key never mentions this tag
+  RP-2       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  TP-1       FALSELY ADDED — qty=2, type=(unclassified), the key never mentions this tag
+  1.         FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+
+── federal-mech — real mismatches ──
+  ET-1       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  ET-2       FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  FTR-1B     FALSELY ADDED — qty=1, type=Fin-tube radiator, the key never mentions this tag
+  FTR-2B     FALSELY ADDED — qty=1, type=Fin-tube radiator, the key never mentions this tag
+  ALP-1      FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  ALP-2      FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  ALP-3      FALSELY ADDED — qty=1, type=(unclassified), the key never mentions this tag
+  1          FALSELY ADDED — qty=2, type=(unclassified), the key never mentions this tag
+  2          FALSELY ADDED — qty=3, type=(unclassified), the key never mentions this tag
+  3          FALSELY ADDED — qty=2, type=(unclassified), the key never mentions this tag
+  4          FALSELY ADDED — qty=2, type=(unclassified), the key never mentions this tag
+  5          FALSELY ADDED — qty=4, type=(unclassified), the key never mentions this tag
+  6          FALSELY ADDED — qty=4, type=(unclassified), the key never mentions this tag
+  7          FALSELY ADDED — qty=4, type=(unclassified), the key never mentions this tag
+  8          FALSELY ADDED — qty=4, type=(unclassified), the key never mentions this tag
+  9          FALSELY ADDED — qty=4, type=(unclassified), the key never mentions this tag
+
+── navfac-cherry-point-atc — real mismatches ──
+  LD-1       expected=6  actual=3  Δ=-3  status=resolved
+  VAV-A205   expected=1  actual=3  Δ=+2  status=resolved
+  RG-12      expected=3  actual=5  Δ=+2  status=resolved
+  RG-13      expected=1  actual=3  Δ=+2  status=resolved
+  RG-9       expected=4  actual=6  Δ=+2  status=resolved
+  VAV-M112   expected=1  actual=2  Δ=+1  status=resolved
+  LD-3       expected=3  actual=2  Δ=-1  status=resolved
+  RG-11      expected=5  actual=6  Δ=+1  status=resolved
+  CD-1       FALSELY ADDED — qty=52, type=Fire/smoke damper (combination), the key never mentions this tag
+  CD-2       FALSELY ADDED — qty=44, type=Fire/smoke damper (combination), the key never mentions this tag
+  CD-3       FALSELY ADDED — qty=16, type=Fire/smoke damper (combination), the key never mentions this tag
+  CD-4       FALSELY ADDED — qty=4, type=Fire/smoke damper (combination), the key never mentions this tag
+  CD-5       FALSELY ADDED — qty=6, type=Fire/smoke damper (combination), the key never mentions this tag
+  EG-1       FALSELY ADDED — qty=18, type=Return grille, the key never mentions this tag
+  EG-2       FALSELY ADDED — qty=6, type=Return grille, the key never mentions this tag
+  EG-3       FALSELY ADDED — qty=8, type=Return grille, the key never mentions this tag
+  RG-1       FALSELY ADDED — qty=51, type=Return grille, the key never mentions this tag
+  RG-2       FALSELY ADDED — qty=13, type=Return grille, the key never mentions this tag
+  RG-3       FALSELY ADDED — qty=13, type=Return grille, the key never mentions this tag
+  RG-4       FALSELY ADDED — qty=12, type=Return grille, the key never mentions this tag
+  RG-6       FALSELY ADDED — qty=51, type=Return grille, the key never mentions this tag
+  RG-7       FALSELY ADDED — qty=15, type=Return grille, the key never mentions this tag
+  RG-8       FALSELY ADDED — qty=9, type=Return grille, the key never mentions this tag
+  SG-1       FALSELY ADDED — qty=18, type=(unclassified), the key never mentions this tag
+  TG-1       FALSELY ADDED — qty=17, type=Transfer grille, the key never mentions this tag
+  TG-2       FALSELY ADDED — qty=2, type=Transfer grille, the key never mentions this tag
+  TG-3       FALSELY ADDED — qty=7, type=Transfer grille, the key never mentions this tag
+  RG-5       FALSELY ADDED — qty=6, type=Return grille, the key never mentions this tag
+  FCU-T11    FALSELY ADDED — qty=1, type=Fan coil unit (FCU), the key never mentions this tag
+
+── bldg5406-hvac-demo — real mismatches ──
+  CP-1       expected=1  actual=0  Δ=-1  status=not_in_output
+  CP-1       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+
+── baker-county-eoc — real mismatches ──
+  WH-1       expected=1  actual=0  Δ=-1  status=not_in_output
+  RTU-01     expected=0  actual=0  Δ=0  status=not_in_output
+  RTU-02     expected=0  actual=0  Δ=0  status=not_in_output
+  EAC-1      expected=0  actual=0  Δ=0  status=not_in_output
+  EAC-2      expected=0  actual=0  Δ=0  status=not_in_output
+  RTU-01     MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  RTU-02     MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EAC-1      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  EAC-2      MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+  WH-1       MISSING — no item at all in the pipeline's output (out of scope, or the table was never seen)
+
+── failure-type breakdown (TakeoffFailure[], every set) ──
+    93×  SYMBOL_FALSE_NEGATIVE
+    85×  REFUSED_NO_SCALE
+     1×  TABLE_DISCOVERY_FAILURE
+
+╔══════════════════════════════════════════════════════════════════════════
+║ REFERENCE-TABLE EXTRACTION — reused from the takeoff pass
+╚══════════════════════════════════════════════════════════════════════════
+
+set                        cells   exact
+──────────────────────────────────────────
+bessemer                      12   100.0%
+itd-d1-lab                    34    11.8%
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 117" / "SUPPLY AIR VALVE": expected "SAV-7" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 117" / "GENERAL EXHAUST VALVE": expected "GEV-5" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 117" / "SNORKEL EXHAUST VALVE": expected "SEV-5" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 117" / "REHEAT VALVE": expected "HC-7" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 117" / "HEATING COIL": expected "CV-7" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 124" / "SUPPLY AIR VALVE": expected "SAV-3" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 124" / "GENERAL EXHAUST VALVE": expected "GEV-1" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 124" / "SNORKEL EXHAUST VALVE": expected "SEV-3" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 124" / "REHEAT VALVE": expected "HC-3" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "ASPHALT LAB 124" / "HEATING COIL": expected "CV-3" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "GENERAL LAB 125" / "SUPPLY AIR VALVE": expected "SAV-9" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "GENERAL LAB 125" / "GENERAL EXHAUST VALVE": expected "GEV-2" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "GENERAL LAB 125" / "SNORKEL EXHAUST VALVE": expected "N/A" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "GENERAL LAB 125" / "REHEAT VALVE": expected "HC-9" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "GENERAL LAB 125" / "HEATING COIL": expected "CV-9" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY LAB 131" / "SUPPLY AIR VALVE": expected "SAV-1" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY LAB 131" / "GENERAL EXHAUST VALVE": expected "GEV-1" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY LAB 131" / "SNORKEL EXHAUST VALVE": expected "SEV-1" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY LAB 131" / "REHEAT VALVE": expected "HC-1" got (missing)
+   MISMATCH  "LAB VENTILATION WITH MULTIPLE HOODS SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY LAB 131" / "HEATING COIL": expected "CV-1" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY NOISE ROOM 130" / "LAB SPACE": expected "RESIDENCY NOISE ROOM 130" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY NOISE ROOM 130" / "AIR VALVE": expected "SAV-8" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY NOISE ROOM 130" / "EXHAUST VALVE": expected "SEV-2" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY NOISE ROOM 130" / "VALVE": expected "HC-8" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "RESIDENCY NOISE ROOM 130" / "COIL": expected "CV-8" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "MATERIAL LAB 118" / "LAB SPACE": expected "MATERIAL LAB 118" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "MATERIAL LAB 118" / "AIR VALVE": expected "SAV-6" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "MATERIAL LAB 118" / "EXHAUST VALVE": expected "SEV-4" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "MATERIAL LAB 118" / "VALVE": expected "HC-6" got (missing)
+   MISMATCH  "LAB VENTILATION WITH SNORKEL HOOD SYSTEM SEQUENCE OF OPERATION" / "MATERIAL LAB 118" / "COIL": expected "CV-6" got (missing)
+federal-mech                  31    67.7%
+   MISMATCH  "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE" / "CHWC" / "LENGTH": expected "107"" got (missing)
+   MISMATCH  "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE" / "CHWC" / "HEIGHT": expected "33"" got (missing)
+   MISMATCH  "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE" / "CHWC" / "EWT °F": expected "44" got (missing)
+   MISMATCH  "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE" / "CHWC" / "LWT °F": expected "54" got (missing)
+   MISMATCH  "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE" / "CHWC" / "FLOW GPM": expected "252.20" got (missing)
+   MISMATCH  "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE" / "CHWC" / "WATER MAX PD FT. H2O": expected "16.60" got (missing)
+   MISMATCH  "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE" / "HWC" / "EWT °F": expected "140" got (missing)
+   MISMATCH  "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE" / "HWC" / "LWT °F": expected "109" got (missing)
+   MISMATCH  "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE" / "HWC" / "FLOW GPM": expected "30.60" got (missing)
+   MISMATCH  "AIR HANDLING UNIT HYDRONIC COIL SCHEDULE" / "HWC" / "WATER MAX PD FT. H2O": expected "10.00" got (missing)
+navfac-cherry-point-atc       31   100.0%
+bldg5406-hvac-demo             0   100.0%
+baker-county-eoc              21    71.4%
+   MISMATCH  "LIGHTING CONTROL STATIONS" / "$OS" / "BUTTON NUMBER": expected "1" got (missing)
+   MISMATCH  "LIGHTING CONTROL STATIONS" / "$OS" / "FUNCTION": expected "ALL ON" got (missing)
+   MISMATCH  "LIGHTING CONTROL STATIONS" / "$OSD" / "FUNCTION": expected "ALL ON/HOLD DIM UP" got (missing)
+   MISMATCH  "LIGHTING CONTROL STATIONS" / "$LVA" / "FUNCTION": expected "ALL ON" got (missing)
+   MISMATCH  "LIGHTING CONTROL STATIONS" / "$LVB" / "FUNCTION": expected "ALL ON/HOLD DIM UP" got (missing)
+   MISMATCH  "LIGHTING CONTROL STATIONS" / "$LVC" / "FUNCTION": expected "ALL ON" got (missing)
+itd-d1-lab-raster              0   100.0%
+12_MT_MSU_ReidHall_Renovation (no reference key — not scored)
+24_IA_JohnsonCounty_Courthouse (no reference key — not scored)
+27_WA_ColvilleTribes_Hatchery_Lab (no reference key — not scored)
+16_NV_CarsonValleyMS_HVAC_Replacement (no reference key — not scored)
+13_MI_MSU_LifeSciences_LabRenovation (no reference key — not scored)
+03_FL_HurlburtField_ChildDevCenter (no reference key — not scored)
+08_ME_BGS_Augusta_EastCampus_Renovation (no reference key — not scored)
+15_IA_IowaState_Biorenewables_Lab (no reference key — not scored)
+09_ME_BGS_KennebecValleyCC_Renovation (no reference key — not scored)
+031_MO_VA_Project_589A4_20_158_Renovate_Warehouse_for (no reference key — not scored)
+078_US_CP25028_MSU_Union_Sparty_Store_Renovations (no reference key — not scored)
+001_NC_FY20_P_228_ATC_Tower_and_Air_Operations (no reference key — not scored)
+061_IA_Ames_Laboratory_Harley_Wilhelm_Hall_Building (no reference key — not scored)
+016_NY_Alter_Repair_Building_1624_Irish_Hill_Test (no reference key — not scored)
+060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project (no reference key — not scored)
+041_IL_VA_Project_537_17_115_Sterile_Processing (no reference key — not scored)
+042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17 (no reference key — not scored)
+073_MT_Roberts_Hall_Renovation_Permit_Set_Classroom (no reference key — not scored)
+008_MO_T2331_01_Repair_to_Interior_Exterior_Unheated (no reference key — not scored)
+017_MD_NIST_Gaithersburg_Building_101_HVAC_Cooling (no reference key — not scored)
+009_FL_USDA_APHIS_Plant_Inspection_Station_Building (no reference key — not scored)
+067_CA_SLAC_LCLS_II_HE_Process_Cooling_Water_Skid (no reference key — not scored)
+062_ID_ITD_District_1_Laboratory_Building_Mechanical (no reference key — not scored)

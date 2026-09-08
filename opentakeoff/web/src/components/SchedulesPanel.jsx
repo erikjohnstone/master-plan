@@ -15,16 +15,27 @@
 // Docked, not modal (RollPanel's shell): the whole point is looking at a table
 // and the drawing it came from AT THE SAME TIME. A modal covering the sheet
 // would defeat the feature.
-import React, { useMemo, useState } from "react";
+//
+// ORGANISED BY SHEET, because that is how the set is organised. The first
+// version was a flat list in reading order with one table expandable at a time,
+// which on a real MEP set is 24 schedules over 10 sheets presented as an
+// undifferentiated scroll — you could not tell where you were, and you could
+// not hold two schedules open to compare them.
+import React, { useEffect, useMemo, useState } from "react";
 import { Icon } from "../brand/icons.jsx";
 import {
   tableTitleText, rowBbox, rowSheet, splitSheetKey,
-  summarize, filterTables, tableId, readingOrder,
+  summarize, filterTables, tableId, groupBySheet, previewColumns,
 } from "../lib/scheduleBrowse.js";
 
 /** How many rows to render before asking. A points list runs to hundreds and
  *  the panel must stay responsive on a 100-table set. */
 const ROW_CHUNK = 40;
+/** Column names shown before "+N more". A wide MEP equipment schedule has
+ *  15-25 of them, and uncapped they were the dominant visual mass of an
+ *  expanded section — a wall of chips before a single ROW appeared, which is
+ *  what a person actually opened the schedule to see. */
+const HEADER_CHIPS = 6;
 
 const KIND_LABEL = {
   "room-finish": "room finish",
@@ -34,36 +45,37 @@ const KIND_LABEL = {
   unknown: "",
 };
 
-function Chip({ children, tone }) {
-  return (
-    <span style={{
-      fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)", lineHeight: 1.6,
-      padding: "0 5px", color: tone || "var(--ink-muted)",
-      border: "1px solid var(--ink-faint)", whiteSpace: "nowrap",
-    }}>{children}</span>
-  );
+function Chip({ children, tone, onClick, title }) {
+  const style = {
+    fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)", lineHeight: 1.6,
+    padding: "0 5px", color: tone || "var(--ink-muted)",
+    border: `1px solid ${tone ? "currentColor" : "var(--ink-faint)"}`,
+    whiteSpace: "nowrap", background: "transparent",
+  };
+  if (!onClick) return <span style={style}>{children}</span>;
+  return <button type="button" title={title} onClick={onClick} style={{ ...style, cursor: "pointer", font: "inherit", fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)" }}>{children}</button>;
 }
 
 /** One table: a header that expands, a View that paints the whole table, and
  *  rows whose keys paint themselves. */
-function TableSection({ table, expanded, onToggle, sheetLabel, onPaint }) {
+function TableSection({ table, expanded, onToggle, sheetLabel, onPaint, onKind }) {
   const [shown, setShown] = useState(ROW_CHUNK);
+  const [allHeaders, setAllHeaders] = useState(false);
   const title = tableTitleText(table) || "Untitled schedule";
   const rows = table.rows || [];
-  const headers = table.headers || [];
+  // memoised because previewColumns depends on it: `table.headers || []`
+  // allocates a NEW array every render, so an un-memoised value would re-rank
+  // the columns of every open schedule on every keystroke in the filter.
+  const headers = useMemo(() => table.headers || [], [table.headers]);
   const kind = KIND_LABEL[table.kind] || "";
   const { page } = splitSheetKey(table.sheet);
   const continued = (table.parts || []).length > 1;
-  // A SHEET CHIP AN ESTIMATOR CAN READ. tabLabel falls back to the file's
-  // basename, and an uploaded set is stored content-addressed — so the chip
-  // rendered a 64-character sha256 next to every schedule. Page number is what
-  // someone flipping through a set actually uses; the real label is used only
-  // when it IS one.
-  const sheetChip = useMemo(() => {
-    const raw = sheetLabel ? String(sheetLabel(table.sheet) || "") : "";
-    const looksHashed = !raw || /[0-9a-f]{16,}/i.test(raw);
-    return looksHashed ? `p.${page}` : raw;
-  }, [sheetLabel, table.sheet, page]);
+  // WHICH COLUMNS TO SHOW BESIDE A TAG. Header order gave whatever the schedule
+  // happened to print first; this gives what identifies and sizes the thing.
+  const preview = useMemo(() => previewColumns(headers), [headers]);
+  // The sheet no longer needs a chip per table: the sticky group header above
+  // these sections says which sheet they are on, once, for all of them.
+  void page; void sheetLabel;
 
   return (
     <div data-schedule-section title={table.sheet} style={{ borderBottom: "1px solid var(--ink-faint)" }}>
@@ -73,24 +85,15 @@ function TableSection({ table, expanded, onToggle, sheetLabel, onPaint }) {
           onClick={onToggle}
           aria-expanded={expanded}
           title={expanded ? "Collapse" : "Show this schedule's rows"}
-          style={{
-            flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 3,
-            border: "none", background: "transparent", padding: 0, textAlign: "left",
-            cursor: "pointer", color: "var(--ink)", font: "inherit",
-          }}>
+          style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 3, border: "none", background: "transparent", padding: 0, textAlign: "left", cursor: "pointer", color: "var(--ink)", font: "inherit" }}>
           <span style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
             <span style={{ fontFamily: "var(--f-mono)", color: "var(--ink-muted)", fontSize: "var(--fs-xs)" }}>{expanded ? "▾" : "▸"}</span>
-            <strong style={{
-              fontSize: "var(--fs-s)", lineHeight: 1.35,
-              color: tableTitleText(table) ? "var(--ink)" : "var(--ink-muted)",
-              fontStyle: tableTitleText(table) ? "normal" : "italic",
-            }}>{title}</strong>
+            <strong style={{ fontSize: "var(--fs-s)", lineHeight: 1.35, color: tableTitleText(table) ? "var(--ink)" : "var(--ink-muted)", fontStyle: tableTitleText(table) ? "normal" : "italic" }}>{title}</strong>
           </span>
           <span style={{ display: "flex", flexWrap: "wrap", gap: 4, paddingLeft: 16 }}>
-            <Chip>{sheetChip}</Chip>
             <Chip>{rows.length} {rows.length === 1 ? "row" : "rows"}</Chip>
             <Chip>{headers.length} cols</Chip>
-            {kind ? <Chip>{kind}</Chip> : null}
+
             {/* A schedule that runs across sheets is ONE table here, as it is
                 one table on paper — but say so, because its rows cite
                 different sheets and that would otherwise look wrong. */}
@@ -98,29 +101,30 @@ function TableSection({ table, expanded, onToggle, sheetLabel, onPaint }) {
             {table.rotated_headers ? <Chip>rotated headers</Chip> : null}
           </span>
         </button>
+        {/* The KIND is a category, not a fourth statistic, so it filters —
+            typing "equipment" into the filter used to match nothing while the
+            panel printed it on every row, a facet you can see but cannot use.
+            It is a sibling of the expander, never a child: an interactive
+            element inside the expander button swallows the click that was
+            meant to open the schedule (measured — the driver's own row-tag
+            check went red). Quiet styling, because on a set where every table
+            shares one kind a column of loud chips is noise beside View. */}
+        {kind ? (
+          <button
+            type="button"
+            title={`Show only ${kind} schedules`}
+            onClick={() => onKind(table.kind)}
+            style={{ flexShrink: 0, padding: "2px 6px", border: "1px dashed var(--ink-faint)", background: "transparent", color: "var(--ink-soft)", cursor: "pointer", fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)" }}>{kind}</button>
+        ) : null}
         <button
           type="button"
           title="Show this whole schedule on the drawing"
           onClick={() => onPaint({ kind: "table", table })}
-          style={{
-            flexShrink: 0, padding: "2px 8px", border: "1px solid var(--ink-faint)",
-            background: "transparent", color: "var(--ink-soft)", cursor: "pointer",
-            fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)",
-          }}>View</button>
+          style={{ flexShrink: 0, padding: "2px 8px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink-soft)", cursor: "pointer", fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)" }}>View</button>
       </div>
 
       {expanded && (
         <div style={{ padding: "0 10px 10px 26px" }}>
-          {headers.length > 0 && (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 3, marginBottom: 6 }}>
-              {headers.map((h, i) => (
-                <span key={`${h}-${i}`} style={{
-                  fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)", color: "var(--ink-muted)",
-                  background: "var(--tint-select)", padding: "0 4px",
-                }}>{h || "—"}</span>
-              ))}
-            </div>
-          )}
           {rows.length === 0 ? (
             <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-muted)", lineHeight: 1.5 }}>
               The table was found but carries no rows — its region is on the sheet, so View still shows you where.
@@ -133,10 +137,10 @@ function TableSection({ table, expanded, onToggle, sheetLabel, onPaint }) {
                 // it is still a row the engine read — but do not offer a jump
                 // that would land nowhere.
                 const label = r.key || "—";
-                const preview = headers
+                const line = preview
                   .map((h) => r.cells?.[h]?.text)
                   .filter((v) => v != null && v !== "" && v !== label)
-                  .slice(0, 3).join(" · ");
+                  .join(" · ");
                 return (
                   <div key={`${label}-${i}`} style={{ display: "flex", alignItems: "baseline", gap: 6, fontSize: "var(--fs-s)", lineHeight: 1.45 }}>
                     {bbox ? (
@@ -154,7 +158,7 @@ function TableSection({ table, expanded, onToggle, sheetLabel, onPaint }) {
                     ) : (
                       <span style={{ fontFamily: "var(--f-mono)", fontWeight: 600, color: "var(--ink-muted)" }} title="This row has no cell geometry to jump to">{label}</span>
                     )}
-                    <span style={{ color: "var(--ink-soft)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{preview}</span>
+                    <span style={{ color: "var(--ink-soft)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{line}</span>
                   </div>
                 );
               })}
@@ -171,6 +175,25 @@ function TableSection({ table, expanded, onToggle, sheetLabel, onPaint }) {
               )}
             </div>
           )}
+          {/* THE COLUMNS COME AFTER THE ROWS. They used to come first and
+              uncapped: 15-25 chips wrapping in a 360px column before a single
+              row appeared. They are reference, not the answer. */}
+          {headers.length > 0 && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 3, marginTop: 8, paddingTop: 6, borderTop: "1px dashed var(--ink-faint)" }}>
+              {(allHeaders ? headers : headers.slice(0, HEADER_CHIPS)).map((h, i) => (
+                <span key={`${h}-${i}`} style={{
+                  fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)", color: "var(--ink-muted)",
+                  background: "var(--tint-select)", padding: "0 4px",
+                }}>{h || "—"}</span>
+              ))}
+              {headers.length > HEADER_CHIPS && (
+                <button type="button" onClick={() => setAllHeaders((v) => !v)}
+                  style={{ border: "none", background: "transparent", color: "var(--ink-soft)", cursor: "pointer", fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)", padding: "0 4px" }}>
+                  {allHeaders ? "fewer columns" : `+${headers.length - HEADER_CHIPS} more columns`}
+                </button>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -182,11 +205,28 @@ export default function SchedulesPanel({
   sheetLabel, onPaint, onClose,
 }) {
   const [q, setQ] = useState("");
-  const [openId, setOpenId] = useState(null);
+  // A SET, not a single id. One-at-a-time made comparing two schedules
+  // impossible, which is most of what an estimator does with a schedule index.
+  const [openIds, setOpenIds] = useState(() => new Set());
 
-  const ordered = useMemo(() => readingOrder(tables), [tables]);
-  const shown = useMemo(() => filterTables(ordered, q), [ordered, q]);
+  const shown = useMemo(() => filterTables(tables, q), [tables, q]);
+  const groups = useMemo(() => groupBySheet(shown), [shown]);
   const totals = useMemo(() => summarize(tables), [tables]);
+  const filtered = useMemo(() => summarize(shown), [shown]);
+  const filtering = shown.length !== tables.length;
+
+  // A section that scrolls out of the filter keeps no business being "open".
+  useEffect(() => {
+    setOpenIds((prev) => {
+      if (!prev.size) return prev;
+      const live = new Set(shown.map(tableId));
+      const next = new Set([...prev].filter((id) => live.has(id)));
+      return next.size === prev.size ? prev : next;
+    });
+  }, [shown]);
+
+  const allIds = useMemo(() => shown.map(tableId), [shown]);
+  const allOpen = allIds.length > 0 && allIds.every((id) => openIds.has(id));
 
   const phase = prewarm?.phase || "idle";
   // The three states that are not "here are your schedules" each say something
@@ -221,21 +261,48 @@ export default function SchedulesPanel({
 
       {totals.tables > 0 && (
         <div style={{ padding: "8px 10px", borderBottom: "1px solid var(--ink-faint)", display: "flex", flexDirection: "column", gap: 7 }}>
+          {/* THE COUNT FOLLOWS THE FILTER. It used to count the unfiltered set
+              while the list below showed something else, so the one number on
+              screen described a list nobody was looking at. */}
           <div style={{ fontSize: "var(--fs-s)", color: "var(--ink-soft)", lineHeight: 1.45 }}>
-            <b style={{ color: "var(--ink)" }}>{totals.tables}</b> schedule{totals.tables === 1 ? "" : "s"} across{" "}
-            <b style={{ color: "var(--ink)" }}>{totals.sheets}</b> sheet{totals.sheets === 1 ? "" : "s"} ·{" "}
-            <b style={{ color: "var(--ink)" }}>{totals.rows}</b> row{totals.rows === 1 ? "" : "s"}
+            {filtering ? (
+              <>
+                <b style={{ color: "var(--ink)" }}>{filtered.tables}</b> of {totals.tables} schedule{totals.tables === 1 ? "" : "s"} ·{" "}
+                <b style={{ color: "var(--ink)" }}>{filtered.sheets}</b> sheet{filtered.sheets === 1 ? "" : "s"} ·{" "}
+                <b style={{ color: "var(--ink)" }}>{filtered.rows}</b> row{filtered.rows === 1 ? "" : "s"}
+              </>
+            ) : (
+              <>
+                <b style={{ color: "var(--ink)" }}>{totals.tables}</b> schedule{totals.tables === 1 ? "" : "s"} across{" "}
+                <b style={{ color: "var(--ink)" }}>{totals.sheets}</b> sheet{totals.sheets === 1 ? "" : "s"} ·{" "}
+                <b style={{ color: "var(--ink)" }}>{totals.rows}</b> row{totals.rows === 1 ? "" : "s"}
+              </>
+            )}
           </div>
-          <input
-            className="text-input"
-            name="schedule-filter"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Filter title, column, tag, sheet…"
-            style={{ width: "100%", fontSize: "var(--fs-s)" }}
-          />
-          <div style={{ fontSize: "var(--fs-xs)", color: "var(--ink-muted)", lineHeight: 1.45 }}>
-            Click a schedule's <b>View</b>, or any tag, to show it on the drawing.
+          <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+            <input
+              className="text-input"
+              name="schedule-filter"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Filter title, column, tag, sheet, kind…"
+              style={{ flex: 1, minWidth: 0, fontSize: "var(--fs-s)" }}
+            />
+            {q ? (
+              <button type="button" onClick={() => setQ("")} title="Clear the filter"
+                style={{ padding: "2px 8px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink-soft)", cursor: "pointer", fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)" }}>clear</button>
+            ) : null}
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <button type="button" data-schedules-expand-all
+              onClick={() => setOpenIds(allOpen ? new Set() : new Set(allIds))}
+              disabled={!allIds.length}
+              style={{ padding: "2px 8px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink-soft)", cursor: allIds.length ? "pointer" : "default", fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)" }}>
+              {allOpen ? "collapse all" : `expand all${allIds.length ? ` (${allIds.length})` : ""}`}
+            </button>
+            <span style={{ fontSize: "var(--fs-xs)", color: "var(--ink-muted)", lineHeight: 1.45 }}>
+              Click <b>View</b>, or any tag, to show it on the drawing.
+            </span>
           </div>
         </div>
       )}
@@ -251,17 +318,44 @@ export default function SchedulesPanel({
             Nothing matches “{q}”. {totals.tables} schedule{totals.tables === 1 ? "" : "s"} indexed.
           </div>
         ) : (
-          shown.map((t) => {
-            const id = tableId(t);
+          groups.map((g) => {
+            const raw = sheetLabel ? String(sheetLabel(g.sheet) || "") : "";
+            const looksHashed = !raw || /[0-9a-f]{16,}/i.test(raw);
+            const label = looksHashed ? `Sheet ${g.page}` : raw;
             return (
-              <TableSection
-                key={id}
-                table={t}
-                expanded={openId === id}
-                onToggle={() => setOpenId((cur) => (cur === id ? null : id))}
-                sheetLabel={sheetLabel}
-                onPaint={onPaint}
-              />
+              <section key={g.sheet} data-schedule-sheet={g.sheet}>
+                {/* Sticky, because on a 10-sheet set the thing you lose while
+                    scrolling is WHICH SHEET you are reading. */}
+                <header style={{
+                  position: "sticky", top: 0, zIndex: 1,
+                  display: "flex", alignItems: "baseline", gap: 6,
+                  padding: "5px 10px", background: "var(--tint-select)",
+                  borderTop: "1px solid var(--ink-faint)", borderBottom: "1px solid var(--ink-faint)",
+                }} title={g.sheet}>
+                  <strong style={{ fontFamily: "var(--f-mono)", fontSize: "var(--fs-xs)", letterSpacing: "0.06em", color: "var(--ink)" }}>{label}</strong>
+                  <span style={{ fontSize: "var(--fs-xs)", color: "var(--ink-muted)" }}>
+                    {g.tables.length} schedule{g.tables.length === 1 ? "" : "s"}
+                  </span>
+                </header>
+                {g.tables.map((t) => {
+                  const id = tableId(t);
+                  return (
+                    <TableSection
+                      key={id}
+                      table={t}
+                      expanded={openIds.has(id)}
+                      onToggle={() => setOpenIds((prev) => {
+                        const next = new Set(prev);
+                        if (next.has(id)) next.delete(id); else next.add(id);
+                        return next;
+                      })}
+                      sheetLabel={sheetLabel}
+                      onPaint={onPaint}
+                      onKind={(k) => setQ(k)}
+                    />
+                  );
+                })}
+              </section>
             );
           })
         )}

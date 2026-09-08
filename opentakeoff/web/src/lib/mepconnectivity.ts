@@ -61,6 +61,16 @@ export interface MepGraph {
    *  own coordinates the coarse retry grid has since shifted further away
    *  than that fixed tolerance allows. */
   quantGridPx: number;
+  /** Diagnostic: how many junction candidates the interior-junction scan
+   *  below actually tested. The naive scan tests every junction against
+   *  every survivor (survivors x junctions); the spatial index prunes that
+   *  to the junctions genuinely near each segment. The perf gate in
+   *  mepconnectivity.test.ts asserts on THIS rather than on wall clock —
+   *  the elapsed-milliseconds bound it used to carry passed in isolation
+   *  and failed under the test runner's own 4-way parallel load, which is
+   *  a property of the machine, not of this scan. Counted work is the
+   *  thing the fix actually changed, and it is deterministic. */
+  junctionTests: number;
 }
 
 // Mirrors wallnetwork.ts's own SEG_CLIP bit exactly — invisible ink is
@@ -224,7 +234,7 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
   if (!solved) {
     throw new Error(`This sheet's linework could not be reliably noded for connectivity tracing (JTS noding failed at every retry grid up to ${gridAttempts[gridAttempts.length - 1].toFixed(2)}px) — the underlying error: ${lastErr instanceof Error ? lastErr.message : String(lastErr)}`);
   }
-  if (!survivors.length) return { nodes: [], edges: [], layerSignal, quantGridPx: solvedGrid };
+  if (!survivors.length) return { nodes: [], edges: [], layerSignal, quantGridPx: solvedGrid, junctionTests: 0 };
 
   // ── split each ORIGINAL segment at every junction that lies strictly
   //    inside it — never at its own two endpoints, which are already nodes ──
@@ -270,6 +280,7 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
   }
   const cell = Math.max(solvedGrid * 16, 32);
   const jBuckets = new Map<string, number[]>();
+  let junctionTests = 0;
   junctionPts.forEach(([jx, jy], idx) => {
     const k = `${Math.floor(jx / cell)},${Math.floor(jy / cell)}`;
     let b = jBuckets.get(k);
@@ -293,6 +304,7 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
         const cand = jBuckets.get(`${bx},${by}`);
         if (!cand) continue;
         for (const idx of cand) {
+          junctionTests++;
           const [jx, jy] = junctionPts[idx];
           if ((jx === s.x1 && jy === s.y1) || (jx === s.x2 && jy === s.y2)) continue;
           const t = ((jx - s.x1) * dx + (jy - s.y1) * dy) / len2;
@@ -316,7 +328,7 @@ export function buildMepGraph(segs: number[], opts: BuildMepGraphOpts = {}): Mep
     addEdge(prevX, prevY, s.x2, s.y2, s.segIdx);
   }
 
-  return { nodes, edges, layerSignal, quantGridPx: solvedGrid };
+  return { nodes, edges, layerSignal, quantGridPx: solvedGrid, junctionTests };
 }
 
 // ── the tracing query ────────────────────────────────────────────────────
@@ -426,7 +438,7 @@ function resolveOnGraph(graph: MepGraph, pt: Point, tolPx: number): { graph: Mep
   const ei2 = edges.length;
   edges.push({ a: newIdx, b: e.b, length: Math.hypot(b.x - bestAt[0], b.y - bestAt[1]), system: e.system, systemConfidence: e.systemConfidence, ...(e.bridged ? { bridged: true } : {}) });
   nodes[newIdx].edges.push(ei2); b.edges.push(ei2);
-  return { graph: { nodes, edges, layerSignal: graph.layerSignal, quantGridPx: graph.quantGridPx }, node: newIdx };
+  return { graph: { nodes, edges, layerSignal: graph.layerSignal, quantGridPx: graph.quantGridPx, junctionTests: graph.junctionTests }, node: newIdx };
 }
 
 /** Bridge a real drawn gap between two dead-end (degree-1) node endpoints —
@@ -471,7 +483,7 @@ function bridgeDanglingGaps(graph: MepGraph, symbols: Point[], bridgePx: number)
       nodes[danglers[b].i].edges.push(ei);
     }
   }
-  return { nodes, edges, layerSignal: graph.layerSignal, quantGridPx: graph.quantGridPx };
+  return { nodes, edges, layerSignal: graph.layerSignal, quantGridPx: graph.quantGridPx, junctionTests: graph.junctionTests };
 }
 
 /** Walk the graph from `from`, looking for exactly one reachable equipment

@@ -3736,7 +3736,7 @@ export function hasPoweredEquipmentColumns(spans: GraphSpan[], table: ScheduleTa
   return hits.size >= 2;
 }
 
-function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", buildings?: Set<string>, nameKeyed = false, roomFill?: { inBand: number; anchors: number }): { key: string; building?: string } | null {
+export function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", buildings?: Set<string>, nameKeyed = false, roomFill?: { inBand: number; anchors: number }): { key: string; building?: string } | null {
   // A NAME-keyed table's key column IS its NAME column — the only sensible
   // reading of a leading token there is a room-type phrase, not a digit tag
   // this table has no column for. Spaces are the whole point of a phrase
@@ -3790,6 +3790,22 @@ function rowKeyOf(raw: string, kind: "room-finish" | "finish" | "equipment", bui
     // otherwise pass CODE_RE and bury the compound)
     const parts = kept.split("/").filter(Boolean);
     if (parts.length > 1 && parts.every((p) => CODE_RE.test(p))) return { key: parts.join("/") };
+    // A LEADING `$` IS A REAL CHARACTER, NOT NOISE. Lighting-control and BAS
+    // point names print it as part of the identifier — real, found live,
+    // baker-county-eoc-bidset.pdf#59's own LIGHTING CONTROL STATIONS ($OS,
+    // $OSD, $LVA, $LVB, $LVC). `kept` above strips it like any other
+    // punctuation, and CODE_RE requires a key to START with a letter, so the
+    // stripped tag ("OS") still clears CODE_RE below and mints a key that
+    // silently lost the $ — it answers for neither a cross-reference drawn
+    // elsewhere on the sheet nor a ground-truth key authored against the
+    // printed mark ("$OS" scored as "(missing)" against a row that WAS
+    // found, correctly, under the wrong key). Preserved exactly the way the
+    // digit building-prefix below is: only when the letters AFTER the $ are
+    // themselves a real CODE_RE-shaped tag, so a genuine dollar amount
+    // ("$1,250") can never mint a key — CODE_RE requires the remainder to
+    // start with a letter, and a numeral does not.
+    const dollarPrefixed = norm(raw).replace(/\s+/g, "").match(/^\$([A-Z].*)$/);
+    if (dollarPrefixed && CODE_RE.test(dollarPrefixed[1])) return { key: `$${dollarPrefixed[1]}` };
     if (CODE_RE.test(key)) return { key };
     // A real VA/GSA numbered-building PREFIX before the equipment/finish
     // code itself — "1-RH-1", "1-AC-15", "1-SHC-28" (building "1"'s reheat
@@ -5810,7 +5826,24 @@ function extractTableAt(sheet: SheetSpans, kind: "room-finish" | "finish" | "equ
       return { table: null, nextIdx: toIdx };
     }
   }
-  const table: ScheduleTable = { kind, sheet: sheet.key, title, headers: anchors.map((a) => a.label), rows: out, region: region!, anchors };
+  // THE PRINTED TITLE IS PART OF THE TABLE. `region` here is built from the
+  // header spans plus every token accepted into a cell, so it starts at the
+  // HEADER ROW — and the schedule's own printed caption, sitting above it, is
+  // outside the box. The estimator sees a highlight that excludes the words
+  // "BRANCH CIRCUIT WIRING SCHEDULE (Cu)" and reasonably reads that as the
+  // wrong table. The title's bbox is right here, already found and already
+  // measured (see the caption hunt above); it was simply never unioned in.
+  // adoptContinuationRows has always done this — that inconsistency was the
+  // tell.
+  //
+  // Deliberately AFTER the ANOMALOUS_REGION_HEIGHT_RATIO guard: that guard
+  // reads region[3] against the header band, and a title union only ever
+  // moves region[1], but only if it happens here rather than earlier.
+  const titleBox = title?.bbox;
+  const withTitle = region && Array.isArray(titleBox) && titleBox.length === 4 && titleBox.every((v) => Number.isFinite(v))
+    ? merge(region, titleBox as Bbox)
+    : region;
+  const table: ScheduleTable = { kind, sheet: sheet.key, title, headers: anchors.map((a) => a.label), rows: out, region: withTitle!, anchors };
   if (rotated) table.rotated_headers = true;
   return { table, nextIdx: toIdx };
 }
@@ -5951,12 +5984,33 @@ export function extractAllTables(sheet: SheetSpans, kind: "room-finish" | "finis
 /** Extract equipment schedules drawn as an entire quarter-turned table.
  * Rotating only vertical text into a temporary coordinate space lets the
  * normal multi-table extractor retain all of its header, boundary, and
- * refusal rules. Evidence boxes are mapped back to the source sheet. */
+ * refusal rules. Evidence boxes are mapped back to the source sheet.
+ *
+ * Only spans carrying an EXPLICIT `rot` are trusted here — never
+ * isVertical's own shape fallback (a real horizontal token that long
+ * "cannot be taller than wide", which holds for genuinely rotated text but
+ * not for a short, correctly-horizontal label sitting in a merely narrow,
+ * tall-drawn CELL). Measured, 044_NY_VA_Project_528A8_17_805_Replace_Main_
+ * Boilers.pdf#21's own STEAM UNIT HEATER SCHEDULE (and four sibling
+ * schedules on the same document): MARK values like "UH-3" are ordinary
+ * horizontal text, textSpans() computes rot=0 for them (confirmed: their
+ * real device-space box is wide and short), but their bbox happens to be
+ * taller than wide purely from the drafted row height in a narrow column —
+ * isVertical's fallback fires anyway, sends them through the pivot-and-
+ * restore below as if they were truly rotated, and the restored geometry
+ * comes back on the wrong axis entirely (a region taller than the sheet
+ * itself). A real quarter-turned schedule always carries `rot` (pdf.ts's
+ * textSpans emits it whenever nonzero, and every fixture this function is
+ * tested against sets it explicitly) — requiring it here costs nothing on
+ * genuine rotated-header sheets and closes this false-positive class. */
+const isExplicitlyVertical = (s: GraphSpan): boolean =>
+  s.rot != null && Math.abs(s.rot % 180) === 90;
+
 export function extractAllQuarterTurnedTables(
   sheet: SheetSpans,
   opts: ExtractOpts = {},
 ): ScheduleTable[] {
-  const vertical = sheet.spans.filter(isVertical);
+  const vertical = sheet.spans.filter(isExplicitlyVertical);
   if (vertical.length < 8) return [];
   const pivot = Math.max(...vertical.map((span) => span.x + (span.w || 0)));
   const turned: SheetSpans = {
@@ -6117,6 +6171,21 @@ export function isGenericHeaderToken(raw: string): boolean {
   // independently found — totally, silently dropped, the same "no trace at
   // all" symptom rule 30 already documents for a different mechanism.
   if (/\bSCHEDULE\b/.test(s)) return false;
+  // A PLACEHOLDER "NO VALUE" MARK IS NEVER A COLUMN LABEL. "N/A", "NONE",
+  // "N.A.", "NA" carry no lowercase letter, no digit, and no colon — every
+  // other test above waves them through as header-shaped. Real, camera-
+  // confirmed (weld-county-mechanical-permit.pdf#6's own INSULATION
+  // SCHEDULE): its data rows carry columns that are routinely N/A for a
+  // given system/wrap combination ("SUPPLY/RETURN · NONE · N/A · N/A · N/A ·
+  // UNLESS NOTED ON PLANS"), and isGenericHeaderRow's own "every token
+  // header-shaped" test (below) took that DATA row, and the next real data
+  // row shaped the same way, each as the start of a NEW table — the scan
+  // stopped there both times, permanently capping the table at 11 rows
+  // when the printed table runs on for at least 2 more. Scoped to exact,
+  // case-insensitive matches of the placeholder itself, never a substring —
+  // a real header phrase that happens to CONTAIN "NONE" ("NONE PROVIDED")
+  // is untouched.
+  if (/^(N\s*\/?\s*A\.?|NONE|N\.A\.)$/.test(norm(s))) return false;
   return true;
 }
 /** A header-shaped ROW: 2+ real cells (a lone single-span line is a title or
@@ -6768,9 +6837,36 @@ function bandGenericDataRows(
     }
   };
   const orphans: Array<{ toks: GraphSpan[]; y: number }> = [];
+  const outRowIdx: number[] = [];
+  // A wrapped continuation line of the KEY column's own overflow text (see
+  // the overflow-fold comment below) can have NO token at all within
+  // [x0,x1] — real, corpus-found (weld-county-mechanical-permit.pdf#6's own
+  // INSULATION SCHEDULE): "DUCTWORK IN UNVENTILATED ATTIC" wraps to a bare
+  // second line, "(NO RA PLENUM)", on its own physical row between the
+  // SUPPLY and RETURN sub-rows, with nothing else on that line — the
+  // overflow fold below only reaches a row that ALREADY has its own
+  // in-band token, so a line with NOTHING in-band never even reaches it,
+  // and fell out of the table (both its text AND its bbox) with the drawn
+  // box ending short of ink the table itself prints. Registered here as an
+  // ordinary orphan — the SAME fold below that already answers "which row
+  // does a continuation line belong to" for in-band text answers it here
+  // too, radius cap and all. Scoped to the LEFT overflow only (never past
+  // x1, a different, likely-unrelated direction) and capped in reach so an
+  // unrelated marginal note sitting near the table's own y-range can't
+  // bleed in as if it were a continuation — bounded to the same "wide
+  // named column" order of magnitude bandLimits' own NAME case already
+  // uses, comfortably past the ~280px real reach measured live but not
+  // unbounded.
+  const LEFT_OVERFLOW_CAP = 500;
   for (let i = cfg.fromIdx; i < cfg.toIdx; i++) {
     const banded = rows[i].filter((t) => t.str && t.str.trim() && revisionOf(t.str) == null && t.x >= x0 && t.x <= x1);
-    if (!banded.length) continue;
+    if (!banded.length) {
+      const overflowOnly = rows[i].filter((t) => t.str && t.str.trim() && revisionOf(t.str) == null);
+      if (overflowOnly.length && overflowOnly.every((t) => t.x < x0 && x0 - t.x <= LEFT_OVERFLOW_CAP)) {
+        orphans.push({ toks: overflowOnly, y: rowY(rows[i]) });
+      }
+      continue;
+    }
     if (Math.abs(centerX(banded[0]) - keyColX) > keyTol) { orphans.push({ toks: banded, y: rowY(rows[i]) }); continue; }
     const key = genericRowKeyOf(banded[0].str, headerLabelSet);
     if (!key) { orphans.push({ toks: banded, y: rowY(rows[i]) }); continue; }
@@ -6780,6 +6876,36 @@ function bandGenericDataRows(
     add(row, banded);
     out.push(row);
     outY.push(rowY(rows[i]));
+    outRowIdx.push(i);
+  }
+
+  // The KEY column's own printed content can run WIDER than x0 — real,
+  // corpus-found (weld-county-mechanical-permit.pdf#6's own INSULATION
+  // SCHEDULE): its SYSTEM column holds a full duct-type description
+  // ("EXTERIOR DUCTWORK", "FIRST 20 FEET FROM AIR HANDLING UNITS, AND
+  // ROOFTOP UNITS") merged/spanning two physical SUPPLY/RETURN sub-rows,
+  // printed ~280px left of the SYSTEM header's own short, centered label —
+  // past x0 entirely, so it's invisible to the loop above and never reaches
+  // any cell. Tried widening x0 itself first, at the top of this function —
+  // reverted: that changes which token is `banded[0]`, which the loop above
+  // ALSO uses for the key-column-alignment gate and the row's own key, so a
+  // row already accepted under the narrow band (its real SUPPLY/RETURN
+  // leading token close to keyColX) can flip to REJECTED once a far-left
+  // token becomes its new `banded[0]` instead — corrupting row acceptance to
+  // fix cell content. This pass is additive-only and runs after every row
+  // above is already decided: for each row ALREADY accepted, at that exact
+  // row's own y, fold any further-left token on the SAME physical row into
+  // the first (key) anchor's cell. A row this loop rejected contributes
+  // nothing here, so it can never turn a rejection into an acceptance or
+  // vice versa — only enrich a cell on a row whose identity is already
+  // settled.
+  const firstAnchorLabel = anchors[0]?.label;
+  if (firstAnchorLabel) {
+    for (let k = 0; k < out.length; k++) {
+      const i = outRowIdx[k];
+      const overflow = rows[i].filter((t) => t.str && t.str.trim() && revisionOf(t.str) == null && t.x < x0);
+      if (overflow.length) add(out[k], overflow);
+    }
   }
 
   // Orphan fold: a reference table's cells routinely wrap 2-3 physical lines
@@ -7144,7 +7270,22 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
     const TITLE_BAND_FILL_MAX = 0.8;
     const bandW = x1 - x0;
     let title: Evidence | null = null;
-    for (let k = block.top - 1, budget = 5; k >= 0 && budget > 0 && !title; k--) {
+    // budget was 5 — chosen before isTitleShaped's own B-4 conjunction/
+    // article rejection existed, and now too shallow for a page with the
+    // dense wrapped SEQUENCE OF OPERATION prose this file's own class of
+    // sheet carries (itd-d1-lab-mechanical.pdf#20 is exactly this sheet).
+    // That rejection is correct — every rejected candidate really is a
+    // sentence fragment, never a title — but each one still costs a unit of
+    // budget, so a sheet with more than 5 in-band prose lines between a
+    // table's data and its real caption exhausted the search before ever
+    // reaching it. Measured, real: this sheet's own second table (LAB
+    // VENTILATION WITH SNORKEL HOOD…) went missing ENTIRELY, not merely
+    // mistitled — table discovery downstream of a failed title hunt refuses
+    // the whole candidate. Reusing MAX_TABLE_SCAN_ROWS rather than a new
+    // number honors this loop's own comment ("bounded to the same scan
+    // budget the data search itself uses") instead of inventing a second,
+    // disagreeing constant.
+    for (let k = block.top - 1, budget = MAX_TABLE_SCAN_ROWS; k >= 0 && budget > 0 && !title; k--) {
       const inBand = rows[k].filter(overlapsBand);
       if (!inBand.length) continue;
       budget--;
@@ -7201,7 +7342,9 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
       }
     }
     if (!title) {
-      for (let k = block.top - 1, budget = 5; k >= 0 && budget > 0 && !title; k--) {
+      // Same widening as the big-font pass above, same reason: isTitleShaped
+      // rejects real prose correctly, and budget 5 predates that rejection.
+      for (let k = block.top - 1, budget = MAX_TABLE_SCAN_ROWS; k >= 0 && budget > 0 && !title; k--) {
         const inBand = rows[k].filter((t) => centerX(t) >= x0 && centerX(t) <= x1);
         if (!inBand.length) continue;
         budget--;
@@ -7212,6 +7355,11 @@ function extractReferenceTableAt(sheet: SheetSpans, fromIdx: number, fullSheet?:
 
     let region: Bbox | null = banded.region;
     for (const t of block.tokens) region = region ? merge(region, bboxOf(t)) : bboxOf(t);
+    // Same as extractTableAt: the printed caption belongs inside the box a
+    // person is shown. adoptContinuationRows already did this; these two
+    // constructors did not, and the inconsistency is what surfaced as a
+    // highlight that excludes its own schedule's title.
+    if (title && region) region = merge(region, title.bbox);
     const table: ScheduleTable = {
       kind: "reference", sheet: sheet.key, title,
       headers: anchors.map((a) => a.label), rows: banded.out, region: region!, anchors,
@@ -7283,6 +7431,19 @@ function mergeContinuation(base: ScheduleTable, frag: ScheduleTable): void {
   for (const r of frag.rows) if (r.building == null && frag.building != null) r.building = frag.building;
   base.parts.push({ sheet: frag.sheet, title: frag.title?.text || "", rows: frag.rows.length, region: frag.region, ...(frag.rotated_headers ? { rotated_headers: true } : {}) });
   base.rows.push(...frag.rows);
+  // ON THE SAME SHEET ONLY. A continued schedule is one table with one
+  // `region`, and a same-sheet continuation (a CONT'D block further down the
+  // page) is genuinely part of that one rectangle — it was never extended, so
+  // the box stopped at the first fragment.
+  //
+  // Never across sheets. Unioning two sheets' boxes produces a rectangle that
+  // describes no page, and it would then be painted on base.sheet — where
+  // agentHighlightCitation's bounds check turns it into a silent "Could not
+  // show that" and the ability to show a continued table is LOST rather than
+  // improved. Cross-sheet parts each carry their own region here (see
+  // base.parts above); showing the right one is the panel's job, not the
+  // geometry's.
+  if (frag.sheet === base.sheet) base.region = merge(base.region, frag.region);
 }
 
 /** A header-less continuation: the sheet repeats the TITLE but not the header
@@ -7912,6 +8073,10 @@ export interface VectorPipelineReport {
      * graph. */
     declined_regions?: string[];
     ms: number;
+    /** The first engine failure's own message (an ImportError from a missing
+     * Python dependency, a coordinate-space mismatch, …) — kept verbatim so
+     * whoever reads `refused > 0` can say WHY, not just THAT. */
+    first_error?: string;
   };
   /** Wall-clock milliseconds per pipeline stage.
    *
@@ -8056,9 +8221,38 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
       // sheet reads correctly) suppressed exactly as before.
       const refSheets = bands.length > 1 ? [s, ...bands] : bands;
       const wholeRefRegions: Bbox[] = [];
+      const wholeRefTables: ScheduleTable[] = [];
       for (const bs of refSheets) for (const t of extractAllReferenceTables(bs, s)) {
-        if (bs === s) wholeRefRegions.push(t.region);
-        else if (wholeRefRegions.some((r) => bboxesIntersect(r, t.region))) continue;
+        if (bs === s) { wholeRefRegions.push(t.region); wholeRefTables.push(t); }
+        else {
+          const overlapIdx = wholeRefRegions.findIndex((r) => bboxesIntersect(r, t.region));
+          if (overlapIdx !== -1) {
+            // "Whole-sheet wins ties" (below) is a real default, but not an
+            // absolute one — it assumes the whole-sheet read is at least as
+            // complete as any band's, which the SILENCER/SNORKEL HOOD cases
+            // above are. Real, corpus-found counter-case (weld-county-
+            // mechanical-permit.pdf#6's own INSULATION SCHEDULE, a 2-up sheet
+            // whose OTHER column is dense spec prose, not a second table):
+            // the whole-sheet read's y-only row clustering fuses that
+            // neighboring prose into the same physical rows, corrupting row
+            // keys (SUPPLY/RETURN with no group-label qualifier, all
+            // colliding) and truncating the table at 11 of its real 17 rows;
+            // the band read, scoped to this table's own column, never sees
+            // the other column's prose and reads it complete and clean. Same
+            // richer-wins idiom this file already uses for a different
+            // cross-pass collision (extractReferenceTableAt's own
+            // alreadyVocab comment) — measured here as plain row count,
+            // since a corrupted whole-sheet read of a real table is
+            // strictly a SHORTER read of it, never a longer one (the
+            // fused-in prose rows fail this pass's own key-column test and
+            // become orphans, not extra rows).
+            if (t.rows.length <= wholeRefTables[overlapIdx].rows.length) continue;
+            const fi = fragments.indexOf(wholeRefTables[overlapIdx]);
+            if (fi !== -1) fragments.splice(fi, 1);
+            wholeRefTables[overlapIdx] = t;
+            wholeRefRegions[overlapIdx] = t.region;
+          }
+        }
         // A structural "reference" read can be the ONLY successful
         // extraction of a genuine MEP-equipment schedule whose own required
         // rating word (GPM/EWT/LWT/…) never independently co-occurs with its
@@ -8568,6 +8762,26 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     notes.push(`${unmatched.length} numbered tag(s) on plan sheets are NOT counted as rooms — no name drawn with them and no schedule row answers for them; see unmatched_tags (they are listed, never dropped)`);
   }
 
+  // A region with a negative coordinate is never a real table position —
+  // every genuine extraction in this codebase anchors to non-negative PDF/
+  // pixel space. Real, corpus-found (25_WA_DouglasCounty_Courthouse#4): a
+  // transposed HEAT PUMP SCHEDULE prints its per-unit identifier columns
+  // (SYMBOL, BASIS OF DESIGN, AREA SERVED, INDOOR UNIT TYPE) as rotated text
+  // at the top of each unit's column while the spec rows beneath run
+  // horizontal; something in reading that mixed orientation put a handful of
+  // cells' bboxes thousands of px away from the rest of that same row's
+  // cells, unioning into a region reaching y0=-1114.92 — duplicating a
+  // second, geometrically sane reading of the SAME table that was already in
+  // `tables`. Only the citation-time off-sheet safeguard caught it before
+  // (a REFUSED click, not a wrong box shown) but the duplicate still sat in
+  // the Schedules panel next to the real one. Drop it here instead, before
+  // it ever reaches a sheet's schedule list — same standard the citation
+  // safeguard already applies, just earlier.
+  for (let i = tables.length - 1; i >= 0; i--) {
+    const r = tables[i].region;
+    if (Array.isArray(r) && (r[0] < 0 || r[1] < 0)) tables.splice(i, 1);
+  }
+
   // compose the per-sheet view from the LOGICAL tables' parts
   const outSheets: SheetGraphSheet[] = withText.map((s) => {
     const role = roles.get(s.key)!;
@@ -8815,7 +9029,33 @@ export function snapCellBboxesToSourceSpans(table: ScheduleTable, sourceSpans: G
   const ROW_Y_TOL = 28;
   const COL_X_TOL = 28;
   const isHorizontal = (span: GraphSpan) => (span.w || 0) >= (span.h || 0) * 0.9;
-  const isVerticalBox = (bbox: Bbox) => (bbox[3] - bbox[1]) > (bbox[2] - bbox[0]) * 1.1;
+  // A cell's OWN text can be a real, identical duplicate of another table's
+  // text on the SAME sheet — a shared room name in both a ROOM FINISH
+  // SCHEDULE and a DOOR SCHEDULE's own LOCATION column, a shared point
+  // description across two side-by-side DDC points lists. `exactSpans`
+  // searches the WHOLE sheet with no positional awareness at all, and this
+  // pass's own "exactly one match anywhere" trust (below) then blindly
+  // re-grounds the cell onto whichever occurrence that is, even when it sits
+  // in an entirely different table thousands of px away. Real, corpus-found
+  // (13_MI_MSU_LifeSciences_LabRenovation.pdf#15): the DOOR SCHEDULE's own
+  // "PRACTICE LAB / CLINICAL TEACHING" LOCATION value wraps across 2
+  // physical lines within the door table itself (so no single source span
+  // there matches the full compacted cell text), while the neighboring ROOM
+  // FINISH SCHEDULE happens to print the identical room name as ONE
+  // combined span — the only sheet-wide exact match — so four different
+  // door rows all snapped onto THAT span's bbox, ~1780px outside the door
+  // table's own region. A real match for THIS table is never far from it;
+  // scoped generously (400px, past any real single-cell wrap this corpus
+  // has shown) so a genuinely wide cell still snaps, but a same-text hit
+  // from an unrelated table sitting in its own, distant region does not.
+  const REGION_SNAP_PAD = 400;
+  const nearTableRegion = (bbox: Bbox): boolean => {
+    const r = table.region;
+    if (!r) return true;
+    const cx = (bbox[0] + bbox[2]) / 2, cy = (bbox[1] + bbox[3]) / 2;
+    return cx >= r[0] - REGION_SNAP_PAD && cx <= r[2] + REGION_SNAP_PAD
+      && cy >= r[1] - REGION_SNAP_PAD && cy <= r[3] + REGION_SNAP_PAD;
+  };
   const exactSpans = (want: string): GraphSpan[] => {
     const needle = compactSpanText(want);
     if (!needle) return [];
@@ -8864,6 +9104,8 @@ export function snapCellBboxesToSourceSpans(table: ScheduleTable, sourceSpans: G
 
     const alreadyGrounded = (cell: { text: string; bbox: Bbox }) =>
       exactSpans(cell.text).some((span) => spanCenterInBbox(span, cell.bbox));
+    const groundedSpan = (cell: { text: string; bbox: Bbox }): GraphSpan | undefined =>
+      exactSpans(cell.text).find((span) => spanCenterInBbox(span, cell.bbox));
 
     // Prefer the row-key / MARK cell as the axis seed when it is already a
     // tall thin (quarter-turned) or wide (normal) glyph span.
@@ -8872,7 +9114,26 @@ export function snapCellBboxesToSourceSpans(table: ScheduleTable, sourceSpans: G
       return cell && compactSpanText(cell.text) === compactSpanText(row.key);
     });
     const keyCell = keyHeader ? cells[keyHeader] : null;
-    const columnMode = !!(keyCell && alreadyGrounded(keyCell) && isVerticalBox(keyCell.bbox));
+    // columnMode used to trust isVerticalBox(keyCell.bbox) — the CELL's own
+    // bbox proportions — as a stand-in for "this key is quarter-turned
+    // text". That conflates two different things: a real quarter-turned MARK
+    // column IS tall/narrow, but so is any ordinary, correctly-horizontal
+    // short value (a 4-character tag like "UH-3") sitting in a merely narrow
+    // table column with normal row height — the cell measures tall/narrow
+    // from the DRAWN GRID, not from the text's own rotation. Measured, 044_NY
+    // _VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21's own STEAM UNIT
+    // HEATER SCHEDULE: a completely normal table (title row, MARK/LOCATION/…
+    // header row, one row per UH-#), but "UH-3"'s own cell bbox (62.88 wide,
+    // 157.92 tall — a narrow drawn column) tripped isVerticalBox, columnMode
+    // fired, and Pass 2 then snapped every OTHER header's cell in that row
+    // onto the wrong (X, not Y) axis, stacking all 15 header values under
+    // one another and blowing the table's own region past the sheet's
+    // height. Same false-positive class extractAllQuarterTurnedTables' own
+    // isExplicitlyVertical already closed for a different consumer — trust
+    // only the matched SOURCE SPAN's own explicit `rot`, never a cell's
+    // bbox shape, which says nothing about whether the text itself turns.
+    const keySpan = keyCell ? groundedSpan(keyCell) : undefined;
+    const columnMode = !!(keySpan && keySpan.rot != null && Math.abs(keySpan.rot % 180) === 90);
 
     // Pass 1: snap uniquely-occurring values (and keep already-grounded ones).
     const axisCenters: number[] = [];
@@ -8885,7 +9146,7 @@ export function snapCellBboxesToSourceSpans(table: ScheduleTable, sourceSpans: G
         }
         continue;
       }
-      if (hits.length === 1) {
+      if (hits.length === 1 && nearTableRegion(bboxOf(hits[0]))) {
         cell.bbox = bboxOf(hits[0]);
         axisCenters.push(columnMode ? hits[0].x + hits[0].w / 2 : hits[0].y + hits[0].h / 2);
       }
@@ -8903,7 +9164,17 @@ export function snapCellBboxesToSourceSpans(table: ScheduleTable, sourceSpans: G
       for (const cell of Object.values(cells)) {
         if (alreadyGrounded(cell)) continue;
         const picked = pickNearAxis(exactSpans(cell.text), axis, axisCenter, tol);
-        if (picked) cell.bbox = bboxOf(picked);
+        // The row's own axis band (row-Y or column-X, within ROW_Y_TOL/
+        // COL_X_TOL) is real, corpus-measured precision for picking among
+        // SEVERAL same-text candidates within a table's own printed grid —
+        // but it says nothing about which TABLE a candidate belongs to. A
+        // neighboring table sharing this sheet's own row grid (real, common
+        // on an architectural sheet stacking a ROOM FINISH SCHEDULE beside a
+        // DOOR SCHEDULE at synchronized row heights) can print the identical
+        // text at a Y that clears this same narrow band while sitting
+        // hundreds of px outside this table's own region — the same cross-
+        // table bleed nearTableRegion already guards Pass 1 against.
+        if (picked && nearTableRegion(bboxOf(picked))) cell.bbox = bboxOf(picked);
       }
     }
 
@@ -8917,11 +9188,34 @@ export function snapCellBboxesToSourceSpans(table: ScheduleTable, sourceSpans: G
     if (!already) {
       const horiz = titleHits.filter(isHorizontal);
       const pool = horiz.length ? horiz : titleHits;
-      if (pool.length === 1) title = { ...title, bbox: bboxOf(pool[0]) };
+      if (pool.length === 1 && nearTableRegion(bboxOf(pool[0]))) title = { ...title, bbox: bboxOf(pool[0]) };
     }
   }
 
-  return { ...table, title, rows };
+  // Re-grounding a cell (above) can slide its bbox to wherever the matching
+  // source span actually sits, and that span's own extent was never a party
+  // to how `table.region` was originally computed (bandDataRows/
+  // extractReferenceTableAt build it from header spans and each cell's
+  // PRE-snap token bbox). A row-spanning legend cell whose text starts a
+  // hair above the header band — real, corpus-found (004_MO_T2504_03's own
+  // untitled WIRING DEVICES legend, sheet #41: the "/ WAP ... GAP GENERATOR
+  // ANNUNCIATOR PANEL" cell snaps to a source span starting ~1.6pt above
+  // `region`'s own top) — leaves the table's painted box not quite covering
+  // its own ink, the exact shape the corpus audit's TIER2 check exists to
+  // catch. Same fix as the title union above and in bandDataRows/
+  // extractReferenceTableAt: the box must contain what it claims to box.
+  // Expand-only (`merge` only ever widens), so a cell nobody snapped can
+  // never shrink the region a downstream caller already trusted.
+  let region = table.region;
+  if (region) {
+    if (title?.bbox) region = merge(region, title.bbox);
+    for (const row of rows) {
+      for (const cell of Object.values(row.cells)) {
+        if (cell?.bbox) region = merge(region, cell.bbox);
+      }
+    }
+  }
+  return { ...table, title, rows, region: region! };
 }
 
 export function preferLastOverprintedText(cellText: string, bbox: Bbox, sourceSpans: GraphSpan[]): string {
@@ -9120,6 +9414,59 @@ export function scheduleTableFromODL(
     if (wide.length === 1) {
       titleCell = wide[0];
       bodyStart = 1;
+    } else if (row0.cells.length >= 2 && row0.cells.every((c) => (c["column span"] || 1) > 1)) {
+      // A TITLE VECTORGRID SPLITS INTO SEVERAL WORD-GROUP CELLS IS STILL THE
+      // TITLE, not a header tier — real, measured on
+      // 044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers#21's own STEAM
+      // UNIT HEATER SCHEDULE: row 0 is four cells ("STEAM" cs4, "UNIT" cs2,
+      // "HEATER" cs2, "SCHEDULE" cs8) with real gaps between them (columns
+      // 0-2 and 10 own no cell at all) rather than the one full-width cell
+      // ODL itself would have produced. `wide` above never fires (no single
+      // cell reaches C-1), so this row fell through to the header/data loop
+      // below as an ordinary tier, and the table reached the graph correctly
+      // keyed and celled — UH-3/UH-4/UH-5, every column right — but with
+      // `title: null`, unfindable by name in the Schedules panel or an
+      // agent's own lookup.
+      //
+      // What tells this apart from a real single-tier header row (the
+      // `SEISMIC AND VIBRATION CONTROL` / `SEISMIC RESTRAINT PROVISIONS`
+      // shape the `wide.length === 1` rule above already declines to guess
+      // at) is the GAP: a real header row's cells, however many, cover every
+      // column between them (each column either owns a cell or inherits one
+      // via span) because every column needs a label. A row that leaves
+      // columns with no cell at all — vectorgrid found no ruled boundary
+      // there because there is no real column break in a piece of prose —
+      // is not labeling columns, it is naming the table. Requiring every
+      // cell in the row to itself span more than one column keeps this from
+      // firing on a genuine dense single-column header tier (whose cells are
+      // colSpan 1 by construction) and from firing on the SEISMIC case
+      // above, where the narrow side cell is real per-column data and has
+      // colSpan 1.
+      const covered = new Set<number>();
+      for (const c of row0.cells) {
+        const start = c["column number"] - 1;
+        const span = Math.max(1, c["column span"] || 1);
+        for (let i = 0; i < span && start + i < C; i++) covered.add(start + i);
+      }
+      if (covered.size < C && covered.size * 2 >= C) {
+        const ordered = row0.cells.slice().sort((a, b) => a["column number"] - b["column number"]);
+        const text = ordered.map(odlCellText).filter(Boolean).join(" ");
+        if (text) {
+          const boxes = ordered.map((c) => c["bounding box"]);
+          const bbox = [
+            Math.min(...boxes.map((b) => b[0])),
+            Math.min(...boxes.map((b) => b[1])),
+            Math.max(...boxes.map((b) => b[2])),
+            Math.max(...boxes.map((b) => b[3])),
+          ];
+          titleCell = {
+            type: "table cell", id: 0, "page number": t["page number"],
+            "bounding box": bbox, "row number": 1, "column number": 1,
+            "row span": 1, "column span": C, kids: [{ type: "text", content: text }],
+          };
+          bodyStart = 1;
+        }
+      }
     }
   }
 
@@ -9275,9 +9622,28 @@ export function scheduleTableFromODL(
     // What separates a real grouping tier from a data row that happens to
     // span is PROPORTION, not presence. That table's own first header tier is
     // 13 spanning cells out of 15; its data rows are 1 out of 21. A genuine
-    // tier exists TO group, so grouping is most of what it does.
+    // tier exists TO group, so grouping is most of what it does — a MAJORITY,
+    // the word this comment already used, which a `* 4` (25%) bar does not
+    // actually enforce.
+    //
+    // That gap is real, not academic: 044_NY_VA_Project_528A8_17_805_Replace
+    // _Main_Boilers#21's own STEAM UNIT HEATER SCHEDULE prints a handful of
+    // genuinely shared values per row too — "GENERATOR ROOM" once for both
+    // LOCATION and AREA SERVED, one EAT/MIN CAPACITY/PRESS ENT HEATER value
+    // spanning the two sub-columns each of those headers implies — 4 spanning
+    // cells out of 15 on every one of its three real data rows (UH-3/UH-4/
+    // UH-5), 26.7%. `* 4` calls that "grouped" by a hair (16 >= 15) and
+    // swallowed all three real rows as header tiers the same way the fan
+    // schedule's own single span used to, all the way to the table's last
+    // row — headerEnd ran off the end, dataRows came back empty, and the
+    // table was refused for "no keyed data rows" though its own key column
+    // (MARK) and every one of UH-3/UH-4/UH-5 were read correctly upstream of
+    // this check. `* 2` (50%, an actual majority) still keeps the fan
+    // schedule's real tier (13/15, 86.7%) grouped and its real data rows
+    // (1/21, 4.8%) not, while no longer catching this table's 26.7% alongside
+    // them.
     const grouped = spanning.length > 0
-      && (!fullCoverage || spanning.length * 4 >= ownCells.size);
+      && (!fullCoverage || spanning.length * 2 >= ownCells.size);
     if (grouped || !fullCoverage) { headerEnd = r + 1; continue; }
     if (!headerCandidateChecked) {
       headerCandidateChecked = true;
@@ -9348,6 +9714,41 @@ export function scheduleTableFromODL(
     for (let c = 0; c < C; c++) {
       const cell = grid[r][c];
       if (!cell || cell === lastSeen[c]) continue;
+      // THE TITLE ROW CAN STILL REACH IN HERE — A ROWSPAN DOES NOT STOP AT
+      // bodyStart. `bodyStart` was raised to skip the title row, but a title
+      // cell with `row span` > 1 still occupies grid[bodyStart][c] for every
+      // column its OWN row (row 0, before bodyStart) never gave to a real
+      // header cell — this loop reads `grid[r][c]` directly, with no check
+      // that the cell it finds actually belongs to row r rather than being
+      // inherited from a row this function already decided is not a header.
+      //
+      // Real, measured: 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_
+      // Project#75's own PANELBOARD SCHEDULE — row 0 is one cell, colspan
+      // 14/14, row span 2 (the full title, correctly recognized: `wide`
+      // above sets titleCell and bodyStart = 1). Row 1 is the real header
+      // tier, but it only supplies cells for columns 3-13 (WIRE SIZE,
+      // BREAKER A CKT. NO. B CKT. NO. C BREAKER, …) — columns 0-2 have no
+      // header cell of their own on that sheet at all, because the ruled
+      // grid never puts one there. Reading `grid[1][0..2]` still returns
+      // the title cell (its row span 2 covers row 1 too), so the ENTIRE
+      // title string became those 3 columns' compound label — and because
+      // this table's header vocabulary consequently misclassified as
+      // `room-finish` (below), the room-finish-only word-collapse further
+      // reduced all three to whichever SURFACE_WORD happened to appear
+      // last inside the title text ("…RM. 1111 E. WALL MFR….." → "WALL"),
+      // three columns silently sharing the header "WALL"/"WALL 2"/"WALL 3"
+      // and no real column named anything an estimator could look up. The
+      // table's own data rows were never reached: `no keyed data rows`.
+      //
+      // A cell only belongs to the row it says it does. Skipping (without
+      // ever setting lastSeen, so a LATER row's real cell at this column
+      // is still free to be read) whatever the grid hands back for a row
+      // it does not own keeps every other real case unchanged — a genuine
+      // multi-row header cell's OWN row is always >= bodyStart already
+      // (the title itself was already excluded from ever reaching this
+      // loop by `bodyStart`), so this only ever discards inheritance that
+      // crosses the one boundary bodyStart exists to draw.
+      if (cell["row number"] - 1 < bodyStart) continue;
       lastSeen[c] = cell;
       const txt = odlCellText(cell);
       if (txt) colLabel[c] = colLabel[c] ? `${colLabel[c]} ${txt}` : txt;
@@ -9428,6 +9829,44 @@ export function scheduleTableFromODL(
   // new vocabulary or corpus-specific carve-out.
   if (kind === "unknown") {
     if (!titleText.trim()) return refuse("unknown kind and no title");
+    // A REAL TITLE IS NOT ENOUGH ON ITS OWN — the comment above already
+    // says "never promote an anonymous/untitled ODL blob", but ANY title is
+    // trivially non-empty the moment some incidental text sits inside a
+    // ruled border, which is exactly the shape a misdetected border throws.
+    // First measured live as a single-character title (13_MI_MSU_
+    // LifeSciences_LabRenovation.pdf's own small key-plan diagram — the
+    // building-outline graphic every sheet repeats in its title block, area
+    // labels "A"/"B"/"C"/"D" — reads as a 1-row, 3-column grid titled "A"
+    // only because that area label happens to be the biggest single cell in
+    // it) — but title LENGTH turned out to be the wrong axis: the same
+    // corpus also throws this with a real-looking multi-character "title"
+    // that is still not a schedule name — 019_FL_Eglin_AFB_Building_XX's
+    // own "341.1-2" (a detail/section callout number, 2 rows) and
+    // 067_CA_SLAC_LCLS_II_HE's own "SLAC BUILDING INSPECTION OFFICE" (an
+    // inspection-stamp box repeated at the identical coordinates on EIGHT
+    // separate sheets, 2 rows each time — confirming it is the reused
+    // title-block graphic, not eight real schedules).
+    //
+    // What all three share, and what a real schedule never lacks, is TWO
+    // things together: `headers` never found ANY real column label at
+    // all — every one of them is the bare `COL${i+1}` fallback
+    // (colLabel.map above) — and the table has almost no rows to have
+    // needed real headers for in the first place. `R - headerEnd` (the
+    // grid rows below wherever the header band ended, before any of the
+    // blank/notes-band filtering `dataRows` below still applies — an
+    // UPPER bound on real data rows, cheap and already available here) is
+    // 1-2 in every one of these three real cases. A genuine schedule this
+    // sparse — a real DEHUMIDIFIER SCHEDULE whose header words simply don't
+    // clear EQUIPMENT_HEADERS/ROOM_HEADERS/FINISH_HEADERS's vocabulary
+    // (still prints real column words — "% RH", "CAPACITY PINTS/HR" — just
+    // not words this file's vocab happens to know, the case this whole
+    // promotion exists for) still has SOME real header text; one with
+    // literally none of that AND next to no rows either has nothing left
+    // that could make it a real table rather than incidental ruled
+    // geometry a person never named.
+    if (R - headerEnd <= 2 && headers.every((h) => /^COL\d+$/.test(h))) {
+      return refuse(`unknown kind, ${R - headerEnd} grid row(s) below the header, and no header cleared any real label: "${titleText}"`);
+    }
     // Same title-family gate as the geometric extractor's own finish→
     // equipment reclassification (isMepEquipmentSchedule, above extractAllTables),
     // reached from the OTHER direction — a table that never independently
@@ -9628,6 +10067,27 @@ export function scheduleTableFromODL(
     const keyCol = keyCols[0];
   for (let r = headerEnd; r < R; r++) {
     if (only && !only.has(r)) continue;
+    // A row whose one owned cell spans nearly the whole table width is a
+    // SECTION-HEADER / GROUP-LABEL row, not a row of real per-column data —
+    // the identical shape `dataRows` (below) already excludes via this exact
+    // same ownership + column-span check. That filter never reached this
+    // loop, which walks every row from headerEnd to R on its own, so the
+    // spanning label slipped through as an ordinary row — and because ODL's
+    // grid[r][c] returns the SAME spanning cell for every column it covers,
+    // every header ended up holding an identical copy of the label instead
+    // of real data. Real, corpus-found (v3 full-corpus audit,
+    // 042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#9): the HVAC
+    // DESIGN DATA table's "INDOOR AREA TEMPERATURE/HUMIDITY SETPOINTS" row —
+    // the group header separating OUTDOOR vs INDOOR design rows, not a real
+    // outdoor/indoor data point itself — landed in all 7 columns verbatim.
+    {
+      const ownHere = new Set<ODLTableCell>();
+      for (let c = 0; c < C; c++) {
+        const cell = grid[r][c];
+        if (cell && cell["row number"] - 1 === r) ownHere.add(cell);
+      }
+      if (ownHere.size === 1 && ([...ownHere][0]["column span"] || 1) >= C - 1) continue;
+    }
     const seen = new Set<ODLTableCell>();
     const rowCellRef: (ODLTableCell | null)[] = new Array(C).fill(null);
     for (let c = 0; c < C; c++) {

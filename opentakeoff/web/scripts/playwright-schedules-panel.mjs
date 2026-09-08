@@ -31,6 +31,8 @@ function findPdf() {
   return resolve(BENCH, hit);
 }
 
+const tableTitleOf = (t) => (typeof t?.title === "string" ? t.title : (t?.title?.text || ""));
+
 const fails = [];
 const check = (name, ok, detail = "") => {
   console.log(`${ok ? "ok  " : "FAIL"}  ${name}${detail ? `  — ${detail}` : ""}`);
@@ -48,9 +50,15 @@ try {
   await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 60_000 });
   await page.waitForSelector('input[name="sheet-file"]', { state: "attached", timeout: 60_000 });
   await page.locator('input[name="sheet-file"]').first().setInputFiles(pdf);
-  await page.waitForFunction(() => window.__opentakeoff?.indexProgress?.()?.phase === "ready", { timeout: 15 * 60 * 1000 });
+  // `null` is the page-function ARGUMENT. Playwright's signature is
+  // waitForFunction(fn, arg, options) — passing { timeout } as the second
+  // argument makes it the arg and silently leaves the default 30s timeout in
+  // force. Every driver here had that, and it only ever surfaced once a cold
+  // graph build took longer than 30s: the run failed reporting "Timeout
+  // 30000ms" against a line that says fifteen minutes.
+  await page.waitForFunction(() => window.__opentakeoff?.indexProgress?.()?.phase === "ready", null, { timeout: 15 * 60 * 1000 });
   // the schedule pass is separate from the text index
-  await page.waitForFunction(() => window.__opentakeoff?.graphPrewarm?.()?.phase === "ready", { timeout: 15 * 60 * 1000 });
+  await page.waitForFunction(() => window.__opentakeoff?.graphPrewarm?.()?.phase === "ready", null, { timeout: 15 * 60 * 1000 });
   console.log("indexed, schedules ready");
 
   // THE STATUS CHIP IS THE WAY IN — it used to be an unclickable span.
@@ -90,6 +98,54 @@ try {
   // rect is normalized 0..1
   const r = afterTable[0]?.rect || [];
   check("its rect is normalized 0..1", r.flat?.().every?.((n) => n >= 0 && n <= 1) === true, JSON.stringify(r));
+
+  // ── VIEW IS IDEMPOTENT ──────────────────────────────────────────────────
+  // It was not. Every click appended another markup with a fresh id, and a
+  // highlight paints at fillOpacity 0.18 — two clicks composited to 0.33,
+  // three to 0.45, ten to 0.86, so the box a person was trying to look AT
+  // steadily blacked out the schedule underneath it. It also grew the markup
+  // rail's count and the Agent panel's source list by one per click.
+  for (let i = 0; i < 2; i++) {
+    await panel.locator('button', { hasText: /^View$/ }).first().click();
+    await page.waitForTimeout(700);
+  }
+  const repeated = await page.evaluate(() => window.__opentakeoff.probe.markups().filter((m) => m.source === "schedule_browse"));
+  check("three View clicks leave ONE highlight, not three", repeated.length === 1, `${repeated.length} markups`);
+  check("and it is the same box", JSON.stringify(repeated[0]?.rect) === JSON.stringify(r), JSON.stringify(repeated[0]?.rect));
+  const strays = await page.evaluate(() => window.__opentakeoff.probe.markups().length);
+  check("no stray markups accumulated", strays === before + 1, `${strays} vs ${before + 1}`);
+
+  // ── ORGANISED BY SHEET, AND MORE THAN ONE OPEN AT A TIME ────────────────
+  // A flat list of 30 schedules over 11 sheets is a scroll you get lost in,
+  // and one-at-a-time expansion makes comparing two schedules impossible —
+  // which is most of what an index is for.
+  const sheetHeads = panel.locator("[data-schedule-sheet]");
+  check("sections are grouped by sheet", await sheetHeads.count() === sheets, `${await sheetHeads.count()} groups vs ${sheets} sheets`);
+  await panel.locator("[data-schedules-expand-all]").click();
+  await page.waitForTimeout(700);
+  const openNow = await panel.locator('button[aria-expanded="true"]').count();
+  check("expand all opens every schedule at once", openNow === tables.length, `${openNow} of ${tables.length}`);
+  await panel.locator("[data-schedules-expand-all]").click();
+  await page.waitForTimeout(500);
+  check("and collapse all closes them", await panel.locator('button[aria-expanded="true"]').count() === 0);
+
+  // ── THE FILTER AND THE COUNT AGREE ──────────────────────────────────────
+  // The summary used to count the unfiltered set while the list showed
+  // something else, so the one number on screen described a list nobody was
+  // looking at.
+  const filterBox = panel.locator('input[name="schedule-filter"]');
+  await filterBox.fill(String(tableTitleOf(t0)).slice(0, 12) || "schedule");
+  await page.waitForTimeout(500);
+  const filteredHeader = await page.evaluate(() => {
+    const root = document.querySelector("[data-schedules-panel]");
+    const el = [...(root?.querySelectorAll("div") || [])].find((d) => / of \d+ schedule/.test(d.textContent || ""));
+    return el ? el.textContent.replace(/\s+/g, " ").trim() : "";
+  });
+  const visible = await panel.locator("[data-schedule-section]").count();
+  check("the summary follows the filter", /^\d+ of \d+ schedule/.test(filteredHeader), JSON.stringify(filteredHeader.slice(0, 60)));
+  check("and matches what is actually listed", filteredHeader.startsWith(`${visible} of `), `${visible} listed vs ${JSON.stringify(filteredHeader.slice(0, 24))}`);
+  await filterBox.fill("");
+  await page.waitForTimeout(400);
 
   // ── a ROW paints its own cells, on the sheet its ink is on ───────────────
   await sections.first().click();

@@ -85,8 +85,63 @@ export function filterTables(tables, query) {
   return list.filter((t) =>
     hit(tableTitleText(t))
     || hit(t?.sheet)
+    // The panel prints the kind as a chip ("equipment"), so typing it has to
+    // work. It did not, and a facet you can see but cannot search reads as
+    // broken rather than as absent.
+    || hit(t?.kind)
     || (t?.headers || []).some(hit)
     || (t?.rows || []).some((r) => hit(r?.key)));
+}
+
+/** Group tables by the sheet they sit on, in reading order, sheets in reading
+ *  order too. A flat list of 24 schedules over 10 sheets is a scroll; the same
+ *  24 under their sheet numbers is a set an estimator already knows how to
+ *  read. */
+export function groupBySheet(tables) {
+  const out = [];
+  const at = new Map();
+  for (const t of readingOrder(tables)) {
+    const key = t?.sheet || "";
+    let g = at.get(key);
+    if (!g) { g = { sheet: key, ...splitSheetKey(key), tables: [] }; at.set(key, g); out.push(g); }
+    g.tables.push(t);
+  }
+  return out;
+}
+
+/** Columns worth showing beside a row key, best first.
+ *
+ *  The panel used to take the first three non-empty columns in header order.
+ *  That is arbitrary: on a schedule whose first columns are LOCATION / SERVICE
+ *  / QTY, the manufacturer and model an estimator is actually looking for fall
+ *  outside the slice and the line reads as noise. These are the columns that
+ *  identify or size a piece of equipment — the ones a person scans a schedule
+ *  FOR — and anything unrecognised still follows in header order, so a schedule
+ *  using none of this vocabulary degrades to exactly the old behaviour. */
+const PREVIEW_RANK = [
+  // what it is
+  /^MANUFACTURER$|^MANUF/, /^MODEL/, /^SERIES$/, /^TYPE$/, /^SERVICE/, /^DESCRIPTION$/,
+  // how big it is
+  /\bCFM\b/, /\bTONS?\b/, /\bMBH\b/, /\bGPM\b/, /\bBHP\b|\bHP\b/, /\bKW\b/, /\bBTU/,
+  /^SIZE|\bSIZE\b/, /^CAPACITY/, /\bVOLTS?\b|\bVOLTAGE\b/, /\bMCA\b/, /\bMOCP\b/,
+  // where it is
+  /^LOCATION$/, /^AREA$|^ROOM/, /^SERVES?$/,
+];
+
+export function previewColumns(headers, limit = 3) {
+  const list = (Array.isArray(headers) ? headers : []).filter((h) => typeof h === "string" && h.trim());
+  const norm = (h) => h.toUpperCase().replace(/\s+/g, " ").trim();
+  const score = (h) => {
+    const n = norm(h);
+    const i = PREVIEW_RANK.findIndex((re) => re.test(n));
+    return i < 0 ? PREVIEW_RANK.length : i;
+  };
+  return [...list]
+    .map((h, i) => ({ h, i, s: score(h) }))
+    .sort((a, b) => (a.s - b.s) || (a.i - b.i))
+    .slice(0, limit)
+    .sort((a, b) => a.i - b.i)          // print them in the schedule's own order
+    .map((x) => x.h);
 }
 
 /** Stable identity for a table across re-renders and re-indexes: a table is

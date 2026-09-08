@@ -36,6 +36,57 @@ TITLE = re.compile(
     r"^[A-Z0-9][A-Z0-9 ,.'&/()#\-]{4,70}"
     r"(SCHEDULE|SCHEDULES|LIST|LEGEND|SUMMARY|MATRIX|INDEX)$")
 
+# CAPTIONS FOUND ANYWHERE IN A LINE, not only at its end.
+#
+# Anchoring the keyword at end-of-line was measured against the authored titles
+# by `boxfit.py --calibrate` and recovers 112 of 222 — half. It drops every
+# caption that carries a qualifier ("AIR HANDLER HEAT PUMP SCHEDULE (WITH
+# ELECTRIC HEAT)", "DOOR SCHEDULE PROJECT 4"), and when two schedules sit side
+# by side on one band the text engine returns them as ONE line, so
+# "INSTRUMENTATION SCHEDULE PUMP SCHEDULE" matches nothing and both are lost.
+# That is the same fusion caption_boxes documents and solves with contiguous
+# runs.
+#
+# So: find each KEYWORD in the line and take the words before it as its own
+# caption, ending the previous one. A line then yields as many captions as it
+# carries, and a trailing qualifier rides along with the keyword it follows.
+KEYWORD = re.compile(r"\b(SCHEDULES|SCHEDULE|LEGEND|SUMMARY|MATRIX|INDEX|LIST)\b")
+MAX_CAPTION_WORDS = 8   # bounded reach: a caption is a title, not a row
+_TAIL = re.compile(r"^(\s*\([A-Z0-9 ,.'&/#\-]{1,44}\))?(\s+[A-Z0-9#\-]{1,12}){0,3}")
+
+
+def captions_in_line(line: str) -> list[str]:
+    """Every schedule caption a single text line carries, left to right."""
+    line = line.strip()
+    if not line or not line[0].isalnum() or line != line.upper():
+        return []
+    out, start = [], 0
+    for m in KEYWORD.finditer(line):
+        tail = _TAIL.match(line, m.end())
+        end = tail.end() if tail else m.end()
+        cap = line[start:end].strip(" ,.-")
+        start = end
+        # A CAPTION IS SHORT AND IT IS WORDS. Taking everything back to the
+        # previous keyword swallows a whole data row that happens to carry one
+        # ("PF-1 MECH. RM. EVAPORATOR LOOP NEPTUNE/VTF-5HP WATER 5 300 37 EX"),
+        # and the calibration caught it: recovery rose to 72.5% while invented
+        # captions went 52 -> 123. So bound the reach to a caption's own length
+        # and refuse anything that reads like data.
+        words = cap.split()
+        if len(words) > MAX_CAPTION_WORDS:
+            words = words[-MAX_CAPTION_WORDS:]
+            cap = " ".join(words)
+        if len(cap) < 6 or len(words) < 2 or len(cap) > 74:
+            continue
+        if not re.fullmatch(r"[A-Z0-9 ,.'&/()#\-]+", cap):
+            continue
+        if sum(1 for w in words if any(c.isdigit() for c in w)) > 1:
+            continue                      # a schedule caption is not numbers
+        if sum(1 for w in words if w.isalpha()) < 2:
+            continue
+        out.append(cap)
+    return out
+
 
 def keyed() -> set:
     out = set()

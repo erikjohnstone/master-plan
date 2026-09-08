@@ -89,6 +89,33 @@ MAX_CELL_FRAC = 0.04  # ... and this share of its AREA is page furniture. Both a
                       # the largest real title band in the corpus and below the
                       # smallest piece of furniture.
 MIN_FILL_RATIO = 0.20 # n_cells vs rows*cols — a table tessellates, a plan does not
+# A HATCH PATTERN IS NOT A TABLE, AND IT WAS TAKING 20+ MINUTES TO SAY SO.
+# federal-attachment4-mechanical.pdf#2 — a real, dense document, 14,633 vector
+# segments on one page — has a 622x741pt fill/hatch region (a cross-hatched
+# mechanical symbol, median face area 30pt^2) that polygonizes into 2,825
+# tiny faces all clearing MIN_CELL_AREA. Those get their own connected-
+# component group like any other candidate, and the merge-back loop below is
+# O(groups^2) per pass — worse, it restarts from scratch after every single
+# merge (`break` out to the enclosing `while merged`), so repeated merges are
+# closer to O(groups^3) — with `cols_of()`/`vbounds()` rebuilding a set by
+# walking every cell in a group, UNCACHED, on every pairwise comparison. A
+# 2,825-cell group participating in ~695 comparisons is ~2M+ redundant
+# operations before a single real merge happens. Measured: this one page
+# pushed group count to 696, two groups at 2,825 and 1,087 cells, and
+# find_tables() on this page alone did not return inside a 5-minute timeout.
+#
+# The bound: the largest REAL table in the hand-authored key
+# (opentakeoff-corpus/keys/*.cells.csv) has 175 cells
+# (096_IN_Vermillion_County_Jail…). MAX_GROUP_CELLS sits at roughly 3x that —
+# generous headroom for a real table this corpus hasn't keyed yet, and two
+# orders of magnitude below what a hatch/fill blob produces. A group over the
+# bound is excluded from the O(groups^2) merge-back comparisons entirely: it
+# is never a real merge candidate (no drawn table is 16x the biggest one ever
+# measured), so skipping it costs nothing but the quadratic blowup itself.
+MAX_GROUP_CELLS = 500
+EDGE_TOL = 4.0       # the tolerance the authored ground truth is measured to
+WIDEN_CONSENSUS = 0.80 # rows that must agree on an edge before it moves — see
+                       # _consensus_edge for the measurement that set it
 MAX_REGION_WFRAC = 0.92 # a REGION this wide is the sheet's own furniture, not a
                       # schedule. A drawing has a border and margins, so nothing
                       # is drawn edge to edge: the widest real table in the key
@@ -442,6 +469,26 @@ def _h_index(segs: list[tuple]) -> dict:
     return idx
 
 
+def _swallows_neighbour(bbox, tight, self_idx) -> bool:
+    """Would this widened box engulf another candidate block's own faces?
+
+    A widened edge is a claim that a drawn rule belongs to THIS table. When the
+    box it produces contains most of a different block's tessellating faces,
+    the claim is false: the rule was the neighbour's border, or a band shared
+    by both. Half of the neighbour's area inside is the bar — a schedule
+    legitimately abuts its neighbours and may clip a few points of one.
+    """
+    for j, (ox0, oy0, ox1, oy1) in enumerate(tight):
+        if j == self_idx:
+            continue
+        area = max(1.0, (ox1 - ox0) * (oy1 - oy0))
+        ix = max(0.0, min(bbox[2], ox1) - max(bbox[0], ox0))
+        iy = max(0.0, min(bbox[3], oy1) - max(bbox[1], oy0))
+        if ix * iy > area * 0.5:
+            return True
+    return False
+
+
 def _widen_along_row_rules(hmap, gx0, gy0, gx1, gy1, rows) -> tuple:
     """Widen a block to the true span of the row rules its cells sit on.
 
@@ -469,14 +516,58 @@ def _widen_along_row_rules(hmap, gx0, gy0, gx1, gy1, rows) -> tuple:
                     lo = min(lo, a); hi = max(hi, b)
         lo_votes.append(lo); hi_votes.append(hi)
 
-    n = max(1, len(rows))
-    ext = [v for v in lo_votes if v < gx0 - 4]
-    if len(ext) >= n * 0.6:
-        gx0 = sorted(ext)[len(ext) // 2]
-    ext = [v for v in hi_votes if v > gx1 + 4]
-    if len(ext) >= n * 0.6:
-        gx1 = sorted(ext)[len(ext) // 2]
+    gx0 = _consensus_edge(lo_votes, gx0, -1)
+    gx1 = _consensus_edge(hi_votes, gx1, +1)
     return (gx0, gy0, gx1, gy1)
+
+
+def _consensus_edge(votes, base, sign) -> float:
+    """Where the rows AGREE the edge is — or `base`, if they do not.
+
+    THE OLD RULE COUNTED VOTES AND TOOK A MEDIAN: if 60% of rows had a rule
+    reaching past the block, the edge moved to the median of those ends. That
+    tests the wrong thing, and measurement says so. Over the 32 keyed pages this
+    heuristic fires 31 times, and 30 of those firings are on blocks NO authored
+    box ever looks at — so a 137/137 score was compatible with a schedule
+    highlight that runs off into the notes block next door. Stock vs. this
+    function no-op'd: 137/137 against 136/137, i.e. the whole heuristic buys
+    exactly ONE keyed table (08_ME…#1 DRAWING LIST, which loses 454pt without
+    it).
+
+    The count does not discriminate at all — it is 1.00 for both the one good
+    case and the worst junk. What separates them is CONSENSUS AT THE CHOSEN
+    EDGE: the fraction of the block's rows whose own vote lands within
+    EDGE_TOL of the edge finally picked. Measured:
+
+        08_ME#1  DRAWING LIST (the keyed table)   0.86 / 1.00
+        24_IA#15 x18 (4-15pt faces grown 7-20x)   0.11 - 0.67
+        12_MT#25 x6                               0.12 - 0.71
+        042_VA#9 (a 17pt sliver -> 84pt)          1.00
+
+    so the clusters separate cleanly at ~0.8. Votes are clustered at EDGE_TOL
+    and the LARGEST cluster's representative is taken, rather than the median of
+    a scattered set: a median is a real edge only when the votes are agreeing
+    about one.
+    """
+    ext = [v for v in votes if (v < base - 4 if sign < 0 else v > base + 4)]
+    if not ext:
+        return base
+    ext.sort()
+    best, cur = [], [ext[0]]
+    for v in ext[1:]:
+        if v - cur[-1] <= EDGE_TOL:
+            cur.append(v)
+        else:
+            if len(cur) > len(best):
+                best = cur
+            cur = [v]
+    if len(cur) > len(best):
+        best = cur
+    rep = best[len(best) // 2]
+    agree = sum(1 for v in votes if abs(v - rep) <= EDGE_TOL)
+    if agree < max(1, len(votes)) * WIDEN_CONSENSUS:
+        return base
+    return rep
 
 
 def _v_index(segs: list[tuple]) -> dict:
@@ -831,6 +922,31 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
             cs.add(round(x0)); cs.add(round(x1))
         return cs
 
+    def _wider_than_a_row(_cells, members) -> bool:
+        bs = [_cells[i].bounds for i in members]
+        w = max(b[2] for b in bs) - min(b[0] for b in bs)
+        hs = sorted(b[3] - b[1] for b in bs)
+        return w > hs[len(hs) // 2] * 3.0
+
+    def _row_agreement(_cells, ma, mb) -> float:
+        """How much of the two blocks' row structure is the SAME rows.
+
+        The mirror of cols_of/jacc used for the vertical case. A table sheared
+        by a heavy internal vertical keeps every one of its row lines on both
+        sides of the cut; two schedules that merely sit side by side do not.
+        """
+        def rows_of(members) -> set:
+            rs = set()
+            for i in members:
+                _x0, y0, _x1, y1 = _cells[i].bounds
+                rs.add(round(y0)); rs.add(round(y1))
+            return rs
+        ra, rb = rows_of(ma), rows_of(mb)
+        if not ra or not rb:
+            return 0.0
+        same = len({r for r in ra if any(abs(r - t) <= 2 for t in rb)})
+        return same / max(len(ra), len(rb))
+
     def vbounds(members):
         bs = [cells[i].bounds for i in members]
         return min(b[0] for b in bs), min(b[1] for b in bs), max(b[2] for b in bs), max(b[3] for b in bs)
@@ -843,6 +959,14 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
             for b in range(a + 1, len(keys)):
                 ka, kb = keys[a], keys[b]
                 if ka not in groups or kb not in groups:
+                    continue
+                # See MAX_GROUP_CELLS above: a group this large is a hatch or
+                # fill pattern, never a real merge candidate, and comparing it
+                # against every other group (cols_of/vbounds walk every cell,
+                # uncached, per comparison) is what turned one dense page into
+                # a 20+ minute hang. Skipping it here costs no real table —
+                # the largest one this corpus has ever authored is 175 cells.
+                if len(groups[ka]) > MAX_GROUP_CELLS or len(groups[kb]) > MAX_GROUP_CELLS:
                     continue
                 ax0, ay0, ax1, ay1 = vbounds(groups[ka])
                 bx0, by0, bx1, by1 = vbounds(groups[kb])
@@ -869,8 +993,43 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
                 # at four row heights; a genuine title band between two blocks is
                 # cut back out by _split_at_title_bands below, which reads type
                 # size and so knows a title when the geometry cannot.
+                # A HORIZONTAL SHEAR — the mirror of everything below, and the
+                # case this loop could never repair.
+                #
+                # The weight cut above refuses to union two faces across a
+                # border-weight stroke, and the key it builds is ("v", x) for a
+                # shared VERTICAL edge — so a heavy vertical drawn inside a
+                # table (routine: a key or tag block boxed off from the data)
+                # shears that table sideways. Every test in this loop is about
+                # vertical stacking: the gap is `by0 - ay1`, and acceptance
+                # needs x-overlap >= 0.6 of the narrower block, which two
+                # side-by-side pieces fail unconditionally at ~zero. Observed
+                # as a DOOR SCHEDULE whose box starts at its third column, the
+                # "#" and LOCATION columns simply gone.
+                #
+                # What makes the repair safe is IDENTICAL ROW SETS, exactly as
+                # identical column sets make the vertical case safe. Two
+                # schedules side by side in a margin — the case the weight cut
+                # protects — almost never share every row y; a sheared single
+                # table shares all of them. The pieces must also abut (a real
+                # shear is one stroke wide) and agree at top and bottom.
+                #
+                # AND THE RESULT MUST STILL BE A TABLE, not a wider sliver. Two
+                # one-column strips satisfy every test above and, joined, pass
+                # the two-column grid-ness gate below that each failed alone —
+                # measured, that is exactly what happened on 008_MO#16, where
+                # the merge produced a new 7.2pt-wide "table" 138pt tall. The
+                # same argument the emission gate makes (Kasar, ICDAR 2013):
+                # a table is wider than one of its own rows is tall.
+                xgap = bx0 - ax1 if bx0 >= ax1 else ax0 - bx1
+                horiz = (
+                    abs(ay0 - by0) <= 2 and abs(ay1 - by1) <= 2
+                    and xgap <= 2
+                    and _row_agreement(cells, groups[ka], groups[kb]) >= 0.9
+                    and _wider_than_a_row(cells, groups[ka] + groups[kb])
+                )
                 gap = by0 - ay1 if by0 >= ay1 else ay0 - by1
-                if gap > 14:
+                if not horiz and gap > 14:
                     if abs(ax0 - bx0) > 2 or abs(ax1 - bx1) > 2:
                         continue
                     hs = sorted(cells[i].bounds[3] - cells[i].bounds[1]
@@ -881,14 +1040,15 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
                     same = len({c for c in ca_ if any(abs(c - d) <= 2 for d in cb_)})
                     if same < 0.9 * max(len(ca_), len(cb_)):
                         continue
-                overlap = min(ax1, bx1) - max(ax0, bx0)
-                if overlap < min(ax1 - ax0, bx1 - bx0) * 0.6:
-                    continue
-                ca, cb = cols_of(groups[ka]), cols_of(groups[kb])
-                inter = len({c for c in ca if any(abs(c - d) <= 2 for d in cb)})
-                jacc = inter / max(1, min(len(ca), len(cb)))
-                if jacc < 0.6:                       # divergent columns => two tables
-                    continue
+                if not horiz:
+                    overlap = min(ax1, bx1) - max(ax0, bx0)
+                    if overlap < min(ax1 - ax0, bx1 - bx0) * 0.6:
+                        continue
+                    ca, cb = cols_of(groups[ka]), cols_of(groups[kb])
+                    inter = len({c for c in ca if any(abs(c - d) <= 2 for d in cb)})
+                    jacc = inter / max(1, min(len(ca), len(cb)))
+                    if jacc < 0.6:                   # divergent columns => two tables
+                        continue
                 # A MERGE MUST NOT MAKE THE BLOCK LESS TABLE-SHAPED. Reuniting a
                 # table that was sheared at its header band leaves it
                 # tessellating; anything that drops the combined block below the
@@ -902,16 +1062,37 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
                 cs = {round(cells[i].bounds[0]) for i in both}
                 if len(both) < len(rs) * len(cs) * MIN_FILL_RATIO:
                     continue
+                # DO NOT RESTART THE SCAN HERE. The original code did
+                # `break; break` back out to `while merged` on the FIRST
+                # merge found, then rescanned every pair from group 0 again.
+                # With G groups and M sequential merges that is
+                # M full O(G^2) rescans — O(G^3) in the worst realistic case,
+                # not O(G^2). Measured: federal-attachment4-mechanical.pdf#2
+                # (14,633 segments, 696 groups after union-find) did not
+                # return `find_tables()` inside a 3-minute timeout even after
+                # excluding the two hatch-pattern groups above — the ~694
+                # ordinary groups alone were enough, because a fine regular
+                # grid produces exactly the kind of small, row/column-aligned
+                # fragments this heuristic keeps finding new legitimate-
+                # looking merges among.
+                #
+                # `ka not in groups` / `kb not in groups` above already guards
+                # every pair against a key that merged away EARLIER in this
+                # same pass, so nothing here depends on stopping and
+                # restarting: continuing the same pass just keeps doing every
+                # other non-conflicting merge it finds, then `while merged`
+                # runs one more full pass in case a merge this pass opened up
+                # a new one (e.g. A+B may now qualify against C). That turns
+                # M sequential full rescans into a small constant number of
+                # passes — O(G^2) each, not O(G^3) overall.
                 groups[ka] = both
                 groups.pop(kb)
                 merged = True
-                break
-            if merged:
-                break
 
     import os as _os
     _dbg = _os.environ.get("VG_DEBUG")
     tables = []
+    cands = []
     blocks = [p for m in groups.values() for p in _split_at_title_bands(m, cells, chars)]
     for members in blocks:
         if _dbg:
@@ -947,16 +1128,40 @@ def find_tables(pdf_path: str, page_no: int = 1) -> dict:
         xs0, ys0, xs1, ys1 = zip(*(cells[i].bounds for i in members))
         if max(xs1) - min(xs0) > page_w * MAX_REGION_WFRAC:
             continue
-        bbox = _widen_along_row_rules(hmap, min(xs0), min(ys0), max(xs1), max(ys1),
+        cands.append((members, (min(xs0), min(ys0), max(xs1), max(ys1))))
+
+    # WIDEN SECOND, WITH THE OTHER BLOCKS IN SCOPE. The row/column extensions
+    # follow drawn rules past the faces that closed, which is right when the
+    # rule belongs to this table and catastrophic when it belongs to the
+    # bordered notes block beside it — the observed failure is a DOOR SCHEDULE
+    # highlight running into a NOTE: block and a ROOF TOP UNIT SCHEDULE running
+    # across a CONDENSATE DRAIN TRAP DETAIL. A block cannot know that alone, so
+    # nothing is widened until every candidate's own footprint is known.
+    tight = [b for _m, b in cands]
+    for gi, (members, base) in enumerate(cands):
+        xs0, ys0, xs1, ys1 = base
+        bbox = _widen_along_row_rules(hmap, xs0, ys0, xs1, ys1,
                                       sorted({round(cells[i].bounds[1]) for i in members} |
                                              {round(cells[i].bounds[3]) for i in members}))
         bbox = _widen_along_col_rules(vmap, hmap, *bbox,
                                       sorted({round(cells[i].bounds[0]) for i in members} |
                                              {round(cells[i].bounds[2]) for i in members}))
+        # DO NOT EAT YOUR NEIGHBOUR. If the widened box would swallow another
+        # candidate's own tessellating faces, the rule it followed was that
+        # block's, not this one's.
+        if _swallows_neighbour(bbox, tight, gi):
+            bbox = base
+        # RE-CHECK THE WIDTH AFTER WIDENING. The guard above tests the
+        # UNWIDENED face union and nothing re-tested the result, so a box the
+        # guard exists to reject could be reached in one step past it. Measured:
+        # the widest post-widening width fraction anywhere on the keyed corpus
+        # is 0.303, so this costs nothing there and is a pure backstop.
+        if bbox[2] - bbox[0] > page_w * MAX_REGION_WFRAC:
+            bbox = base
         face_bounds = [cells[i].bounds for i in members]
         # Only when the box was actually widened along the row rules: that is
         # the one situation where a row is known to continue past its faces.
-        if bbox[0] < min(xs0) - 1 or bbox[2] > max(xs1) + 1:
+        if bbox[0] < xs0 - 1 or bbox[2] > xs1 + 1:
             face_bounds += _implied_edge_cells(face_bounds, bbox)
         tables.append({
             "bbox": bbox,

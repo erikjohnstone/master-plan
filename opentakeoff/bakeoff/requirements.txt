@@ -1,0 +1,22 @@
+# vectorgrid.py / celltext.py / cellocr.py — the production table engine
+# `sidecar/vectorgrid_rpc.py` spawns these into at runtime (lazily, from
+# `sidecar/tables.py`'s "extract_grid" method).
+#
+# Missing from any requirements file until now — real, found live: a fresh
+# `git pull && npm i` checkout has no Python setup step at all for this
+# directory, so vectorgrid fails its own import on first use with no listed
+# dependency to point at. `sidecar/tables.py` catches that failure correctly
+# and the pipeline falls back to a weaker geometric extractor rather than
+# crashing — which is exactly why it went unnoticed for as long as it did:
+# the app kept working, just on worse boxes, with no requirements.txt anyone
+# could diff against to see what was missing.
+#
+# LICENSING NOTE, read `sidecar/requirements.txt`'s own comment first: that
+# file deliberately chose pypdfium2 over PyMuPDF specifically to avoid AGPL
+# exposure. `vectorgrid.py` uses PyMuPDF anyway (`import pymupdf`) for the
+# page geometry it needs that pypdfium2/pdfplumber don't expose the same way
+# — an existing tradeoff this file did not create, only makes visible by
+# finally being written down. Pin versions actually verified working, not
+# arbitrary floors.
+pymupdf>=1.24.0
+shapely>=2.0.0
