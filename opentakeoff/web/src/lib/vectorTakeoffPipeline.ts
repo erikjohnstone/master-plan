@@ -549,6 +549,28 @@ export async function runVectorTakeoffPipeline(
   const snapped = snapAllTableCellBboxes(g, sourceSpansBySheet, touched);
   if (snapped) report.notes.push(`Cell bbox snap: ${snapped} table(s) re-grounded onto source spans.`);
 
+  // A region with a negative coordinate is never a real table position —
+  // every genuine extraction anchors to non-negative PDF/pixel space. Real,
+  // corpus-found (25_WA_DouglasCounty_Courthouse#4): vectorgrid's read of a
+  // transposed HEAT PUMP SCHEDULE (per-unit identifier columns printed as
+  // rotated text atop horizontal spec rows) put a handful of cells thousands
+  // of px from the rest of their own row, unioning into a region reaching
+  // y0=-1114.92 — duplicating a second, geometrically sane sheetgraph
+  // reading of the SAME table already in `g.tables`. sheetgraph's own build
+  // can't catch this: this class of table is added here, by
+  // adoptVectorGridTables, after buildSheetGraph already returned. Drop it
+  // at the one point every table source has finished contributing, same
+  // standard the citation-time off-sheet safeguard already applies to a
+  // click — just before it ever reaches a sheet's schedule list instead of
+  // only when a user clicks it.
+  for (let i = g.tables.length - 1; i >= 0; i--) {
+    const r = g.tables[i].region;
+    if (Array.isArray(r) && (r[0] < 0 || r[1] < 0)) {
+      touched.add(g.tables[i].sheet);
+      g.tables.splice(i, 1);
+    }
+  }
+
   if (touched.size) syncSheetSchedules(g, touched);
 
   report.tables_added = stats.added;

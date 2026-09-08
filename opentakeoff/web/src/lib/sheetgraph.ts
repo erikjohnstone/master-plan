@@ -8737,6 +8737,26 @@ export function buildSheetGraph(sheets: SheetSpans[]): SheetGraph {
     notes.push(`${unmatched.length} numbered tag(s) on plan sheets are NOT counted as rooms — no name drawn with them and no schedule row answers for them; see unmatched_tags (they are listed, never dropped)`);
   }
 
+  // A region with a negative coordinate is never a real table position —
+  // every genuine extraction in this codebase anchors to non-negative PDF/
+  // pixel space. Real, corpus-found (25_WA_DouglasCounty_Courthouse#4): a
+  // transposed HEAT PUMP SCHEDULE prints its per-unit identifier columns
+  // (SYMBOL, BASIS OF DESIGN, AREA SERVED, INDOOR UNIT TYPE) as rotated text
+  // at the top of each unit's column while the spec rows beneath run
+  // horizontal; something in reading that mixed orientation put a handful of
+  // cells' bboxes thousands of px away from the rest of that same row's
+  // cells, unioning into a region reaching y0=-1114.92 — duplicating a
+  // second, geometrically sane reading of the SAME table that was already in
+  // `tables`. Only the citation-time off-sheet safeguard caught it before
+  // (a REFUSED click, not a wrong box shown) but the duplicate still sat in
+  // the Schedules panel next to the real one. Drop it here instead, before
+  // it ever reaches a sheet's schedule list — same standard the citation
+  // safeguard already applies, just earlier.
+  for (let i = tables.length - 1; i >= 0; i--) {
+    const r = tables[i].region;
+    if (Array.isArray(r) && (r[0] < 0 || r[1] < 0)) tables.splice(i, 1);
+  }
+
   // compose the per-sheet view from the LOGICAL tables' parts
   const outSheets: SheetGraphSheet[] = withText.map((s) => {
     const role = roles.get(s.key)!;
