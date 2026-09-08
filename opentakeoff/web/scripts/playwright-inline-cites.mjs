@@ -24,6 +24,7 @@ const args = process.argv.slice(2);
 const doc = (args.indexOf("--doc") >= 0 ? args[args.indexOf("--doc") + 1] : null) || "05";
 
 function findPdf() {
+  if (process.env.OT_UI_PDF) return resolve(process.env.OT_UI_PDF);
   const hit = readdirSync(BENCH).find((f) => f.startsWith(`${doc}__`) && f.endsWith(".pdf"));
   if (!hit) throw new Error(`no pdf for --doc ${doc}`);
   return resolve(BENCH, hit);
@@ -36,7 +37,7 @@ const check = (name, ok, detail = "") => {
 };
 
 mkdirSync(OUT, { recursive: true });
-const browser = await chromium.launch({ headless: true, executablePath: "/opt/pw-browsers/chromium", args: ["--no-sandbox", "--disable-dev-shm-usage"] });
+const browser = await chromium.launch({ headless: true, executablePath: process.env.OT_BROWSER_PATH || undefined, args: ["--no-sandbox", "--disable-dev-shm-usage"] });
 const page = await browser.newPage({ viewport: { width: 1600, height: 950 } });
 page.on("pageerror", (e) => { console.log(`pageerror ${String(e).slice(0, 200)}`); fails.push("pageerror"); });
 

@@ -1,0 +1,325 @@
+
+> opentakeoff-web@0.1.0 check
+> npm run typecheck && npm run lint && npm test && npm run bench && npm run build
+
+
+> opentakeoff-web@0.1.0 typecheck
+> tsc --noEmit
+
+test/agentAnswer.test.ts(20,64): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{ text: string; }' is not assignable to parameter of type 'Attributes & { text: any; citations: any; onOpenCitation: any; }'.
+      Type '{ text: string; }' is missing the following properties from type '{ text: any; citations: any; onOpenCitation: any; }': citations, onOpenCitation
+test/agentAnswer.test.ts(31,64): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '{ text: string; }' is not assignable to parameter of type 'Attributes & { text: any; citations: any; onOpenCitation: any; }'.
+      Type '{ text: string; }' is missing the following properties from type '{ text: any; citations: any; onOpenCitation: any; }': citations, onOpenCitation
+test/agentLoop.test.ts(761,16): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+test/agentLoop.test.ts(784,16): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+test/agentLoop.test.ts(876,5): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+test/agentLoop.test.ts(890,5): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+test/agentTakeoff.test.ts(139,16): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+test/agentTakeoff.test.ts(324,20): error TS18048: 'ahu1' is possibly 'undefined'.
+test/agentTakeoff.test.ts(325,20): error TS18048: 'ahu1' is possibly 'undefined'.
+test/agentTakeoff.test.ts(330,16): error TS18047: 'rowCite' is possibly 'null'.
+test/agentTakeoff.test.ts(331,20): error TS18047: 'rowCite' is possibly 'null'.
+test/agentTakeoff.test.ts(332,23): error TS18048: 'ahu1' is possibly 'undefined'.
+test/agentTakeoff.test.ts(332,34): error TS2339: Property 'CFM' does not exist on type '{}'.
+test/agentTakeoff.test.ts(333,27): error TS18048: 'ahu1' is possibly 'undefined'.
+test/agentTakeoff.test.ts(599,16): error TS7053: Element implicitly has an 'any' type because expression of type '"Unit Mark"' can't be used to index type '{ "Served equipment": any; Service: { text: any; bbox: null; }; }'.
+  Property 'Unit Mark' does not exist on type '{ "Served equipment": any; Service: { text: any; bbox: null; }; }'.
+test/agentTakeoff.test.ts(601,22): error TS2339: Property 'Cv' does not exist on type '{ "Served equipment": any; Service: { text: any; bbox: null; }; }'.
+test/agentTakeoff.test.ts(602,22): error TS2339: Property 'GPM' does not exist on type '{ "Served equipment": any; Service: { text: any; bbox: null; }; }'.
+test/agentTakeoff.test.ts(603,22): error TS2339: Property 'Size' does not exist on type '{ "Served equipment": any; Service: { text: any; bbox: null; }; }'.
+test/agentTakeoff.test.ts(604,16): error TS7053: Element implicitly has an 'any' type because expression of type '"CHW CV"' can't be used to index type '{ "Served equipment": any; Service: { text: any; bbox: null; }; }'.
+  Property 'CHW CV' does not exist on type '{ "Served equipment": any; Service: { text: any; bbox: null; }; }'.
+test/agentTakeoff.test.ts(605,16): error TS7053: Element implicitly has an 'any' type because expression of type '"HHW CV"' can't be used to index type '{ "Served equipment": any; Service: { text: any; bbox: null; }; }'.
+  Property 'HHW CV' does not exist on type '{ "Served equipment": any; Service: { text: any; bbox: null; }; }'.
+test/agentTakeoff.test.ts(619,22): error TS2339: Property 'Actuator' does not exist on type '{ "Served equipment": any; Service: { text: any; bbox: null; }; }'.
+test/agentTakeoff.test.ts(620,16): error TS7053: Element implicitly has an 'any' type because expression of type '"Fail position"' can't be used to index type '{ "Served equipment": any; Service: { text: any; bbox: null; }; }'.
+  Property 'Fail position' does not exist on type '{ "Served equipment": any; Service: { text: any; bbox: null; }; }'.
+test/agentTakeoff.test.ts(621,16): error TS7053: Element implicitly has an 'any' type because expression of type '"Control signal"' can't be used to index type '{ "Served equipment": any; Service: { text: any; bbox: null; }; }'.
+  Property 'Control signal' does not exist on type '{ "Served equipment": any; Service: { text: any; bbox: null; }; }'.
+test/agentTakeoff.test.ts(622,22): error TS2339: Property 'Cv' does not exist on type '{ "Served equipment": any; Service: { text: any; bbox: null; }; }'.
+test/agentTakeoff.test.ts(669,29): error TS2339: Property 'CHW_CONTROL_VALVE' does not exist on type '{}'.
+test/agentTakeoff.test.ts(670,29): error TS2339: Property 'ISOLATION_VALVE' does not exist on type '{}'.
+test/agentTakeoff.test.ts(671,29): error TS2339: Property 'CONTROL_DAMPER' does not exist on type '{}'.
+test/agentTakeoff.test.ts(686,35): error TS2339: Property 'ISOLATION_VALVE' does not exist on type '{}'.
+test/agentTakeoff.test.ts(687,35): error TS2339: Property 'CONTROL_DAMPER' does not exist on type '{}'.
+test/agentTakeoff.test.ts(688,33): error TS2339: Property 'CHW_CONTROL_VALVE' does not exist on type '{}'.
+test/agentTakeoff.test.ts(789,36): error TS2339: Property 'HHW_CONTROL_VALVE' does not exist on type '{}'.
+test/agentTakeoff.test.ts(790,36): error TS2339: Property 'CHW_CONTROL_VALVE' does not exist on type '{}'.
+test/agentTakeoff.test.ts(791,36): error TS2339: Property 'HHW_CONTROL_VALVE' does not exist on type '{}'.
+test/agentTakeoff.test.ts(792,36): error TS2339: Property 'HHW_CONTROL_VALVE' does not exist on type '{}'.
+test/agentTakeoff.test.ts(826,35): error TS2339: Property 'CHW_CONTROL_VALVE' does not exist on type '{}'.
+test/agentTakeoff.test.ts(827,35): error TS2339: Property 'HHW_CONTROL_VALVE' does not exist on type '{}'.
+test/agentTakeoff.test.ts(862,35): error TS2339: Property 'HHW_CONTROL_VALVE' does not exist on type '{}'.
+test/agentTakeoff.test.ts(863,35): error TS2339: Property 'CHW_CONTROL_VALVE' does not exist on type '{}'.
+test/agentTakeoff.test.ts(883,16): error TS7053: Element implicitly has an 'any' type because expression of type '"CHW CV"' can't be used to index type '{}'.
+  Property 'CHW CV' does not exist on type '{}'.
+test/agentTakeoff.test.ts(884,16): error TS7053: Element implicitly has an 'any' type because expression of type '"HHW CV"' can't be used to index type '{}'.
+  Property 'HHW CV' does not exist on type '{}'.
+test/agentTakeoff.test.ts(885,23): error TS2339: Property 'Cv' does not exist on type '{}'.
+test/agentTakeoff.test.ts(885,49): error TS2339: Property 'CV' does not exist on type '{}'.
+test/agentTakeoff.test.ts(943,36): error TS2339: Property 'CHW_CONTROL_VALVE' does not exist on type '{}'.
+test/agentTakeoff.test.ts(943,66): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/compileProgressWalkthrough.test.ts(18,29): error TS7006: Parameter 'stderr' implicitly has an 'any' type.
+test/compileProgressWalkthrough.test.ts(53,29): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+test/compileTsxResolve.test.ts(19,14): error TS18047: 'first' is possibly 'null'.
+test/compileTsxResolve.test.ts(25,13): error TS18047: 'afterFail' is possibly 'null'.
+test/compileTsxResolve.test.ts(25,49): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string | Error | undefined'.
+  Type 'null' is not assignable to type 'string | Error | undefined'.
+test/compileTsxResolve.test.ts(26,16): error TS2345: Argument of type 'string | null' is not assignable to parameter of type 'string'.
+  Type 'null' is not assignable to type 'string'.
+test/corpusTakeoffBas.test.ts(329,18): error TS18048: 'ai10' is possibly 'undefined'.
+test/corpusTakeoffBas.test.ts(330,18): error TS18048: 'ai10' is possibly 'undefined'.
+test/corpusTakeoffBas.test.ts(331,18): error TS18048: 'ai10' is possibly 'undefined'.
+test/corpusTakeoffBas.test.ts(332,18): error TS18048: 'ai10' is possibly 'undefined'.
+test/corpusTakeoffBas.test.ts(334,18): error TS18048: 'ao01' is possibly 'undefined'.
+test/corpusTakeoffBas.test.ts(335,18): error TS18048: 'ao01' is possibly 'undefined'.
+test/corpusTakeoffBas.test.ts(336,18): error TS18048: 'ao01' is possibly 'undefined'.
+test/corpusTakeoffBas.test.ts(337,18): error TS18048: 'ao01' is possibly 'undefined'.
+test/corpusTakeoffBas.test.ts(339,18): error TS18048: 'bi03' is possibly 'undefined'.
+test/corpusTakeoffBas.test.ts(377,18): error TS18048: 'doah' is possibly 'undefined'.
+test/corpusTakeoffBas.test.ts(377,18): error TS2532: Object is possibly 'undefined'.
+test/corpusTakeoffBas.test.ts(378,18): error TS18048: 'doah' is possibly 'undefined'.
+test/corpusTakeoffBas.test.ts(378,18): error TS2532: Object is possibly 'undefined'.
+test/corpusTakeoffBas.test.ts(380,18): error TS18048: 'io' is possibly 'undefined'.
+test/corpusTakeoffBas.test.ts(380,18): error TS2532: Object is possibly 'undefined'.
+test/corpusTakeoffHeaderGeometry.test.ts(78,32): error TS2339: Property 'CHW_CONTROL_VALVE' does not exist on type '{}'.
+test/corpusTakeoffHeaderGeometry.test.ts(79,36): error TS2339: Property 'CHW_CONTROL_VALVE' does not exist on type '{}'.
+test/corpusTakeoffHeaderGeometry.test.ts(79,73): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/corpusTakeoffHeaderGeometry.test.ts(80,26): error TS7006: Parameter 't' implicitly has an 'any' type.
+test/corpusTakeoffHeaderGeometry.test.ts(81,26): error TS7006: Parameter 't' implicitly has an 'any' type.
+test/corpusTakeoffHeaderGeometry.test.ts(82,26): error TS7006: Parameter 't' implicitly has an 'any' type.
+test/estimatorTakeoffDocument.test.ts(47,47): error TS2345: Argument of type '{ sheets: { key: string; }[]; tables: ({ sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; sheet: string; cells: { TAG: { text: string; bbox: number[]; }; GPM: { text: string; bbox: number[]; }; SIZE: { ...; }; SERVED: { ...; }; }; }[]; } | { ...; })[]; }' is not assignable to parameter of type 'SheetGraph'.
+  Type '{ sheets: { key: string; }[]; tables: ({ sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; sheet: string; cells: { TAG: { text: string; bbox: number[]; }; GPM: { text: string; bbox: number[]; }; SIZE: { ...; }; SERVED: { ...; }; }; }[]; } | { ...; })[]; }' is missing the following properties from type 'SheetGraph': available, rooms, unmatched_tags, callouts, and 3 more.
+test/estimatorTakeoffDocument.test.ts(55,47): error TS2345: Argument of type '{ sheets: { key: string; }[]; tables: ({ sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; sheet: string; cells: { TAG: { text: string; bbox: number[]; }; GPM: { text: string; bbox: number[]; }; SIZE: { ...; }; SERVED: { ...; }; }; }[]; } | { ...; })[]; }' is not assignable to parameter of type 'SheetGraph'.
+  Type '{ sheets: { key: string; }[]; tables: ({ sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; sheet: string; cells: { TAG: { text: string; bbox: number[]; }; GPM: { text: string; bbox: number[]; }; SIZE: { ...; }; SERVED: { ...; }; }; }[]; } | { ...; })[]; }' is missing the following properties from type 'SheetGraph': available, rooms, unmatched_tags, callouts, and 3 more.
+test/estimatorTakeoffDocument.test.ts(63,47): error TS2345: Argument of type '{ sheets: { key: string; }[]; tables: ({ sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; sheet: string; cells: { TAG: { text: string; bbox: number[]; }; GPM: { text: string; bbox: number[]; }; SIZE: { ...; }; SERVED: { ...; }; }; }[]; } | { ...; })[]; }' is not assignable to parameter of type 'SheetGraph'.
+  Type '{ sheets: { key: string; }[]; tables: ({ sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; sheet: string; cells: { TAG: { text: string; bbox: number[]; }; GPM: { text: string; bbox: number[]; }; SIZE: { ...; }; SERVED: { ...; }; }; }[]; } | { ...; })[]; }' is missing the following properties from type 'SheetGraph': available, rooms, unmatched_tags, callouts, and 3 more.
+test/estimatorTakeoffDocument.test.ts(69,47): error TS2345: Argument of type '{ sheets: { key: string; }[]; tables: ({ sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; sheet: string; cells: { TAG: { text: string; bbox: number[]; }; GPM: { text: string; bbox: number[]; }; SIZE: { ...; }; SERVED: { ...; }; }; }[]; } | { ...; })[]; }' is not assignable to parameter of type 'SheetGraph'.
+  Type '{ sheets: { key: string; }[]; tables: ({ sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; sheet: string; cells: { TAG: { text: string; bbox: number[]; }; GPM: { text: string; bbox: number[]; }; SIZE: { ...; }; SERVED: { ...; }; }; }[]; } | { ...; })[]; }' is missing the following properties from type 'SheetGraph': available, rooms, unmatched_tags, callouts, and 3 more.
+test/estimatorTakeoffDocument.test.ts(78,47): error TS2345: Argument of type '{ sheets: { key: string; }[]; tables: ({ sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; sheet: string; cells: { TAG: { text: string; bbox: number[]; }; GPM: { text: string; bbox: number[]; }; SIZE: { ...; }; SERVED: { ...; }; }; }[]; } | { ...; })[]; }' is not assignable to parameter of type 'SheetGraph'.
+  Type '{ sheets: { key: string; }[]; tables: ({ sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; sheet: string; cells: { TAG: { text: string; bbox: number[]; }; GPM: { text: string; bbox: number[]; }; SIZE: { ...; }; SERVED: { ...; }; }; }[]; } | { ...; })[]; }' is missing the following properties from type 'SheetGraph': available, rooms, unmatched_tags, callouts, and 3 more.
+test/estimatorTakeoffDocument.test.ts(92,42): error TS2339: Property 'rows' does not exist on type 'object'.
+test/gridClassify.test.ts(40,28): error TS2345: Argument of type '{ sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; cells: { TAG: { text: string; }; GPM: { text: string; }; }; }[]; }' is not assignable to parameter of type 'ScheduleTable'.
+  Property 'region' is missing in type '{ sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; cells: { TAG: { text: string; }; GPM: { text: string; }; }; }[]; }' but required in type 'ScheduleTable'.
+test/gridClassify.test.ts(47,28): error TS2345: Argument of type '{ sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; cells: { TAG: { text: string; }; GPM: { text: string; }; }; }[]; }' is not assignable to parameter of type 'ScheduleTable'.
+  Property 'region' is missing in type '{ sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; cells: { TAG: { text: string; }; GPM: { text: string; }; }; }[]; }' but required in type 'ScheduleTable'.
+test/gridClassify.test.ts(52,28): error TS2345: Argument of type '{ sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; cells: { TAG: { text: string; }; AI: { text: string; }; }; }[]; }' is not assignable to parameter of type 'ScheduleTable'.
+  Property 'region' is missing in type '{ sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; cells: { TAG: { text: string; }; AI: { text: string; }; }; }[]; }' but required in type 'ScheduleTable'.
+test/pillarGapRecovery.test.ts(27,46): error TS2345: Argument of type '{ tables: { sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; cells: { TAG: { text: string; }; }; }[]; }[]; }' is not assignable to parameter of type 'SheetGraph'.
+  Type '{ tables: { sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; cells: { TAG: { text: string; }; }; }[]; }[]; }' is missing the following properties from type 'SheetGraph': available, sheets, rooms, unmatched_tags, and 4 more.
+test/pillarGapRecovery.test.ts(48,46): error TS2345: Argument of type '{ tables: { sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; cells: { TAG: { text: string; }; GPM: { text: string; }; }; }[]; }[]; }' is not assignable to parameter of type 'SheetGraph'.
+  Type '{ tables: { sheet: string; kind: string; title: { text: string; }; headers: string[]; rows: { key: string; cells: { TAG: { text: string; }; GPM: { text: string; }; }; }[]; }[]; }' is missing the following properties from type 'SheetGraph': available, sheets, rooms, unmatched_tags, and 4 more.
+test/schedulePlanReconcile.test.ts(355,9): error TS7034: Variable 'calls' implicitly has type 'any[]' in some locations where its type cannot be determined.
+test/schedulePlanReconcile.test.ts(357,28): error TS7006: Parameter 'tag' implicitly has an 'any' type.
+test/schedulePlanReconcile.test.ts(357,33): error TS7006: Parameter 'opts' implicitly has an 'any' type.
+test/schedulePlanReconcile.test.ts(368,16): error TS7005: Variable 'calls' implicitly has an 'any[]' type.
+test/schedulePlanReconcile.test.ts(369,16): error TS7005: Variable 'calls' implicitly has an 'any[]' type.
+test/scheduleTitleMatch.test.ts(52,39): error TS2339: Property 'exclude' does not exist on type '{ titleRe: RegExp; keyRe: RegExp; }'.
+test/scheduleTitleMatch.test.ts(515,36): error TS2339: Property 'exclude' does not exist on type '{ titleRe: RegExp; }'.
+test/scheduleTitleMatch.test.ts(535,39): error TS2339: Property 'keyRe' does not exist on type '{ titleRe: RegExp; exclude: RegExp; blankKeyRe: RegExp; }'.
+test/scheduleTitleMatch.test.ts(562,32): error TS2339: Property 'HEAT_PUMP' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(563,32): error TS2339: Property 'PUMP' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(564,32): error TS2339: Property 'CONDENSING_UNIT' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(565,32): error TS2339: Property 'HEAT_PUMP' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(566,32): error TS2339: Property 'PUMP' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(567,32): error TS2339: Property 'CONDENSING_UNIT' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(600,49): error TS2339: Property 'keyRe' does not exist on type '{ titleRe: RegExp; exclude: RegExp; }'.
+test/scheduleTitleMatch.test.ts(657,32): error TS2339: Property 'FLOW_METER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(658,32): error TS2339: Property 'FLOW_METER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(659,32): error TS2339: Property 'AIR_SEPARATOR' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(660,32): error TS2339: Property 'EXPANSION_TANK' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(661,32): error TS2339: Property 'CONTROL_DAMPER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(663,21): error TS2339: Property 'CONTROL_DAMPER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(663,47): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(834,32): error TS2339: Property 'CONTROL_DAMPER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(836,21): error TS2339: Property 'CONTROL_DAMPER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(836,47): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(839,32): error TS2339: Property 'ISOLATION_VALVE' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(841,21): error TS2339: Property 'ISOLATION_VALVE' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(841,48): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(845,32): error TS2339: Property 'CHW_CONTROL_VALVE' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(846,32): error TS2339: Property 'PRESSURE_REDUCING_VALVE' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(848,21): error TS2339: Property 'PRESSURE_REDUCING_VALVE' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(848,56): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(851,32): error TS2339: Property 'PRESSURE_SAFETY_VALVE' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(853,21): error TS2339: Property 'PRESSURE_SAFETY_VALVE' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(853,54): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(856,32): error TS2339: Property 'MIXING_VALVE' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(925,32): error TS2339: Property 'LOUVER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(926,32): error TS2339: Property 'LOUVERED_PENTHOUSE' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(927,32): error TS2339: Property 'FIN_TUBE_RADIATION' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(928,32): error TS2339: Property 'FIN_TUBE_RADIATION' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(929,32): error TS2339: Property 'FILTER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(930,32): error TS2339: Property 'FILTER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(931,32): error TS2339: Property 'STRAINER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(933,30): error TS2339: Property 'FIN_TUBE_RADIATION' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(933,61): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(934,30): error TS2339: Property 'FILTER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(934,49): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(952,32): error TS2339: Property 'AIR_SEPARATOR' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(953,32): error TS2339: Property 'GLYCOL_MAKEUP' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(954,32): error TS2339: Property 'CHEMICAL_POT_FEEDER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(973,32): error TS2339: Property 'AIR_SEPARATOR' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(974,32): error TS2339: Property 'BUFFER_TANK' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(975,32): error TS2339: Property 'EXPANSION_TANK' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(976,32): error TS2339: Property 'AIR_SEPARATOR' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1010,32): error TS2339: Property 'LAB_AIR_VALVE' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1011,32): error TS2339: Property 'RANGE_HOOD' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1012,32): error TS2339: Property 'DOAS' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1056,32): error TS2339: Property 'AIR_SEPARATOR' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1057,32): error TS2339: Property 'EXPANSION_TANK' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1058,32): error TS2339: Property 'FCU' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1059,36): error TS2339: Property 'FCU' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1059,51): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(1060,32): error TS2339: Property 'CONDENSING_UNIT' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1061,36): error TS2339: Property 'CONDENSING_UNIT' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1061,63): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(1062,32): error TS2339: Property 'DUCT_MOUNTED_COIL' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1064,32): error TS2339: Property 'ERV' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1065,32): error TS2339: Property 'ERV' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1066,29): error TS2339: Property 'HEAT_PUMP' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1066,51): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(1093,32): error TS2339: Property 'CONDENSING_UNIT' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1095,21): error TS2339: Property 'CONDENSING_UNIT' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1095,48): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(1098,32): error TS2339: Property 'FCU' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1099,32): error TS2339: Property 'FCU' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1143,32): error TS2339: Property 'CEILING_FAN' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1144,36): error TS2339: Property 'CEILING_FAN' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1144,59): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(1145,32): error TS2339: Property 'FAN' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1146,32): error TS2339: Property 'FAN' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1164,32): error TS2339: Property 'FAN' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1165,32): error TS2339: Property 'FAN' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1205,32): error TS2339: Property 'VACUUM_PUMP' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1206,32): error TS2339: Property 'VACUUM_PUMP' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1207,32): error TS2339: Property 'PUMP' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1208,32): error TS2339: Property 'PUMP' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1251,32): error TS2339: Property 'WATER_SOFTENER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1252,32): error TS2339: Property 'WATER_SOFTENER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1253,32): error TS2339: Property 'BRINE_TANK' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1254,32): error TS2339: Property 'BRINE_TANK' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1255,32): error TS2339: Property 'BUFFER_TANK' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1256,32): error TS2339: Property 'BUFFER_TANK' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1326,36): error TS2339: Property 'FAN' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1326,51): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(1327,32): error TS2339: Property 'HUMIDIFIER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1328,32): error TS2339: Property 'HUMIDIFIER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1329,32): error TS2339: Property 'FILTER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1330,32): error TS2339: Property 'FILTER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1331,32): error TS2339: Property 'LOUVER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1332,32): error TS2339: Property 'EXPANSION_TANK' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1333,32): error TS2339: Property 'EXPANSION_TANK' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1335,32): error TS2339: Property 'FCU' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1335,48): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(1399,32): error TS2339: Property 'AHU' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1400,36): error TS2339: Property 'AHU' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1400,51): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(1401,32): error TS2339: Property 'HEAT_PUMP' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1402,36): error TS2339: Property 'HEAT_PUMP' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1402,57): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(1403,32): error TS2339: Property 'GRD' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1404,36): error TS2339: Property 'GRD' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1404,51): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(1405,32): error TS2339: Property 'FUME_HOOD_DAMPER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1407,21): error TS2339: Property 'FUME_HOOD_DAMPER' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1407,49): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(1410,32): error TS2339: Property 'VAV' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1459,32): error TS2339: Property 'VAV' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1461,21): error TS2339: Property 'VAV' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1461,36): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(1464,32): error TS2339: Property 'FCU' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1465,32): error TS2339: Property 'FCU' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1466,32): error TS2339: Property 'CONDENSING_UNIT' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1467,32): error TS2339: Property 'CONDENSING_UNIT' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1468,32): error TS2339: Property 'VARIABLE_FREQUENCY_DRIVE' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1470,21): error TS2339: Property 'VARIABLE_FREQUENCY_DRIVE' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1470,57): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(1501,32): error TS2339: Property 'HEAT_PUMP' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1502,36): error TS2339: Property 'HEAT_PUMP' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1502,57): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/scheduleTitleMatch.test.ts(1503,32): error TS2339: Property 'FCU' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1504,36): error TS2339: Property 'FCU' does not exist on type '{}'.
+test/scheduleTitleMatch.test.ts(1504,51): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/sequenceExtract.test.ts(34,44): error TS2345: Argument of type '{ tables: { sheet: string; kind: string; title: { text: string; bbox: number[]; }; headers: string[]; rows: { key: string; cells: { STEP: { text: string; bbox: number[]; }; DESCRIPTION: { text: string; bbox: number[]; }; }; }[]; }[]; }' is not assignable to parameter of type 'SheetGraph'.
+  Type '{ tables: { sheet: string; kind: string; title: { text: string; bbox: number[]; }; headers: string[]; rows: { key: string; cells: { STEP: { text: string; bbox: number[]; }; DESCRIPTION: { text: string; bbox: number[]; }; }; }[]; }[]; }' is missing the following properties from type 'SheetGraph': available, sheets, rooms, unmatched_tags, and 4 more.
+test/sequenceExtract.test.ts(52,44): error TS2345: Argument of type '{ tables: { sheet: string; kind: string; title: { text: string; bbox: number[]; }; headers: never[]; rows: never[]; }[]; }' is not assignable to parameter of type 'SheetGraph'.
+  Type '{ tables: { sheet: string; kind: string; title: { text: string; bbox: number[]; }; headers: never[]; rows: never[]; }[]; }' is missing the following properties from type 'SheetGraph': available, sheets, rooms, unmatched_tags, and 4 more.
+test/sequenceExtract.test.ts(84,52): error TS2345: Argument of type '{ sheets: { key: string; sheetNumber: string; }[]; tables: { sheet: string; kind: string; title: { text: string; bbox: number[]; }; headers: string[]; rows: { key: string; cells: { STEP: { text: string; bbox: number[]; }; DESCRIPTION: { ...; }; }; }[]; }[]; }' is not assignable to parameter of type 'SheetGraph'.
+  Type '{ sheets: { key: string; sheetNumber: string; }[]; tables: { sheet: string; kind: string; title: { text: string; bbox: number[]; }; headers: string[]; rows: { key: string; cells: { STEP: { text: string; bbox: number[]; }; DESCRIPTION: { ...; }; }; }[]; }[]; }' is missing the following properties from type 'SheetGraph': available, rooms, unmatched_tags, callouts, and 3 more.
+test/sequenceExtract.test.ts(96,18): error TS2532: Object is possibly 'undefined'.
+test/sheetgraph.test.ts(13,459): error TS2305: Module '"../src/lib/sheetgraph.ts"' has no exported member 'TableBound'.
+test/takeoffWorkflow.test.ts(330,42): error TS2345: Argument of type 'string' is not assignable to parameter of type 'TakeoffIntent'.
+test/takeoffWorkflow.test.ts(434,40): error TS2345: Argument of type 'string | RegExp' is not assignable to parameter of type 'string'.
+  Type 'RegExp' is not assignable to type 'string'.
+test/takeoffWorkflow.test.ts(434,69): error TS2345: Argument of type 'string | RegExp' is not assignable to parameter of type 'string | Error | undefined'.
+  Type 'RegExp' is not assignable to type 'string | Error | undefined'.
+test/takeoffWorkflow.test.ts(436,42): error TS2339: Property 'test' does not exist on type 'string | RegExp'.
+  Property 'test' does not exist on type 'string'.
+test/workflowFixtureProof.test.ts(39,18): error TS2339: Property 'count' does not exist on type 'QueryTableResult'.
+  Property 'count' does not exist on type 'QueryTableError'.
+test/workflowFixtureProof.test.ts(40,18): error TS2339: Property 'building_tag_counts' does not exist on type 'QueryTableResult'.
+  Property 'building_tag_counts' does not exist on type 'QueryTableError'.
+test/workflowFixtureProof.test.ts(41,18): error TS2339: Property 'building_tag_counts' does not exist on type 'QueryTableResult'.
+  Property 'building_tag_counts' does not exist on type 'QueryTableError'.
+test/workflowFixtureProof.test.ts(42,18): error TS2339: Property 'building_tag_counts' does not exist on type 'QueryTableResult'.
+  Property 'building_tag_counts' does not exist on type 'QueryTableError'.
+test/workflowFixtureProof.test.ts(76,20): error TS2339: Property 'count' does not exist on type 'QueryTableResult'.
+  Property 'count' does not exist on type 'QueryTableError'.
+test/workflowFixtureProof.test.ts(76,27): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ "POINTS LIST DOAH-TI": { count: number; AI: number; AO: number; BI: number; BO: number; }; "POINTS LIST AHU-T1A/TIB": { count: number; AI: number; AO: number; BI: number; BO: number; }; "FCU WITH COOLING COILS DDC POINTS LIST": { ...; }; "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST": { ...; }; "UNIT HEATER ...'.
+  No index signature with a parameter of type 'string' was found on type '{ "POINTS LIST DOAH-TI": { count: number; AI: number; AO: number; BI: number; BO: number; }; "POINTS LIST AHU-T1A/TIB": { count: number; AI: number; AO: number; BI: number; BO: number; }; "FCU WITH COOLING COILS DDC POINTS LIST": { ...; }; "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST": { ...; }; "UNIT HEATER ...'.
+test/workflowFixtureProof.test.ts(77,16): error TS2339: Property 'count' does not exist on type 'QueryTableResult'.
+  Property 'count' does not exist on type 'QueryTableError'.
+test/workflowFixtureProof.test.ts(79,22): error TS2339: Property 'point_type_counts' does not exist on type 'QueryTableResult'.
+  Property 'point_type_counts' does not exist on type 'QueryTableError'.
+test/workflowFixtureProof.test.ts(79,47): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ "POINTS LIST DOAH-TI": { count: number; AI: number; AO: number; BI: number; BO: number; }; "POINTS LIST AHU-T1A/TIB": { count: number; AI: number; AO: number; BI: number; BO: number; }; "FCU WITH COOLING COILS DDC POINTS LIST": { ...; }; "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST": { ...; }; "UNIT HEATER ...'.
+  No index signature with a parameter of type 'string' was found on type '{ "POINTS LIST DOAH-TI": { count: number; AI: number; AO: number; BI: number; BO: number; }; "POINTS LIST AHU-T1A/TIB": { count: number; AI: number; AO: number; BI: number; BO: number; }; "FCU WITH COOLING COILS DDC POINTS LIST": { ...; }; "FCU WITH HEATING AND COOLING COILS DDC POINTS LIST": { ...; }; "UNIT HEATER ...'.
+test/workflowFixtureProof.test.ts(99,38): error TS7006: Parameter 'p' implicitly has an 'any' type.
+test/workflowFixtureProof.test.ts(102,37): error TS7006: Parameter 'p' implicitly has an 'any' type.
+test/workflowFixtureProof.test.ts(118,41): error TS7006: Parameter 't' implicitly has an 'any' type.
+test/workflowFixtureProof.test.ts(124,42): error TS7006: Parameter 't' implicitly has an 'any' type.
+test/workflowFixtureProof.test.ts(145,42): error TS7006: Parameter 't' implicitly has an 'any' type.
+test/workflowFixtureProof.test.ts(148,21): error TS7006: Parameter 'row' implicitly has an 'any' type.
+test/workflowFixtureProof.test.ts(148,26): error TS7006: Parameter 'headerRe' implicitly has an 'any' type.
+test/workflowFixtureProof.test.ts(150,54): error TS2339: Property 'text' does not exist on type '{}'.
+test/workflowFixtureProof.test.ts(168,39): error TS7006: Parameter 'row' implicitly has an 'any' type.
+test/workflowFixtureProof.test.ts(269,17): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{}'.
+  No index signature with a parameter of type 'string' was found on type '{}'.
+test/workflowFixtureProof.test.ts(273,40): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/workflowFixtureProof.test.ts(278,19): error TS2339: Property 'error' does not exist on type 'QueryTableResult'.
+  Property 'error' does not exist on type 'QueryTableSuccess'.
+test/workflowFixtureProof.test.ts(278,57): error TS2339: Property 'error' does not exist on type 'QueryTableResult'.
+  Property 'error' does not exist on type 'QueryTableSuccess'.
+test/workflowFixtureProof.test.ts(279,21): error TS2339: Property 'count' does not exist on type 'QueryTableResult'.
+  Property 'count' does not exist on type 'QueryTableError'.
+test/workflowFixtureProof.test.ts(289,45): error TS7006: Parameter 't' implicitly has an 'any' type.
+test/workflowFixtureProof.test.ts(305,19): error TS2339: Property 'count' does not exist on type 'QueryTableResult'.
+  Property 'count' does not exist on type 'QueryTableError'.
+test/workflowFixtureProof.test.ts(307,32): error TS2339: Property 'DOAH_UNIT' does not exist on type '{}'.
+test/workflowFixtureProof.test.ts(338,32): error TS2339: Property 'PUMP' does not exist on type '{}'.
+test/workflowFixtureProof.test.ts(340,40): error TS7006: Parameter 'i' implicitly has an 'any' type.
+test/workflowFixtureProof.test.ts(344,27): error TS7006: Parameter 'i' implicitly has an 'any' type.
+npm error Lifecycle script `typecheck` failed with error:
+npm error code 2
+npm error path /Users/erikjohnstone/Documents/ChatGPT/master-plan-ui-workspace/opentakeoff/web
+npm error workspace opentakeoff-web@0.1.0
+npm error location /Users/erikjohnstone/Documents/ChatGPT/master-plan-ui-workspace/opentakeoff/web
+npm error command failed
+npm error command sh -c tsc --noEmit
+npm error Lifecycle script `check` failed with error:
+npm error code 2
+npm error path /Users/erikjohnstone/Documents/ChatGPT/master-plan-ui-workspace/opentakeoff/web
+npm error workspace opentakeoff-web@0.1.0
+npm error location /Users/erikjohnstone/Documents/ChatGPT/master-plan-ui-workspace/opentakeoff/web
+npm error command failed
+npm error command sh -c npm run typecheck && npm run lint && npm test && npm run bench && npm run build

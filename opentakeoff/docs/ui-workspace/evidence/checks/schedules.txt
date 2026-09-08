@@ -1,0 +1,25 @@
+doc 05: sample-mechanical-set.pdf
+indexed, schedules ready
+ok    status chip is a button
+ok    panel is fed from the graph  — 9 tables
+ok    header counts match the graph  — "9 schedules across 2 sheets · 24 rowsAll sheetsP100M601All kindsreferenceequipment" vs 9/2/24
+ok    one expandable section per table  — 9 vs 9
+ok    View paints one schedule_browse markup  — [{"s":"sample-mechanical-set.pdf#2","t":"PLUMBING PIPE INSULATION SCHEDULE"}]
+ok    it lands on that table's own sheet  — sample-mechanical-set.pdf#2 vs sample-mechanical-set.pdf#2
+ok    its rect is normalized 0..1  — [[0.09278549382716049,0.06276041666666667],[0.2791087962962963,0.11993634259259259]]
+ok    three View clicks leave ONE highlight, not three  — 1 markups
+ok    and it is the same box  — [[0.09278549382716049,0.06276041666666667],[0.2791087962962963,0.11993634259259259]]
+ok    no stray markups accumulated  — 1 vs 1
+ok    sections are grouped by sheet  — 2 groups vs 2 sheets
+ok    expand all opens every schedule at once  — 9 of 9
+ok    and collapse all closes them
+ok    the summary follows the filter  — "1 of 9 schedules · 1 sheets · 2 rowsAll sheetsP100M601All ki"
+ok    and matches what is actually listed  — 1 listed vs "1 of 9 schedules · 1 she"
+ok    the row tag is clickable  — looking for DOMESTIC HOT WATER SUPPLY
+ok    clicking a tag paints that row  — ["DOMESTIC HOT WATER SUPPLY"]
+ok    the row cites the sheet its ink is on  — sample-mechanical-set.pdf#2 vs sample-mechanical-set.pdf#2
+ok    a row is a slice of its table, not the whole thing  — row h 0.0116 vs table h 0.0572
+ok    closing clears the browse highlights
+ok    and disturbs no other markups  — 0 vs 0
+
+all checks passed

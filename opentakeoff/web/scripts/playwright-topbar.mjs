@@ -37,13 +37,14 @@ const check = (name, ok, detail = "") => {
 };
 
 function findPdf() {
+  if (process.env.OT_UI_PDF) return resolve(process.env.OT_UI_PDF);
   if (!existsSync(BENCH)) return null;
   const hit = readdirSync(BENCH).find((f) => f.startsWith(`${doc}__`) && f.endsWith(".pdf"));
   return hit ? resolve(BENCH, hit) : null;
 }
 
 mkdirSync(OUT, { recursive: true });
-const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium", args: ["--no-sandbox"] });
+const browser = await chromium.launch({ executablePath: process.env.OT_BROWSER_PATH || undefined, args: ["--no-sandbox"] });
 
 // The overlap probe. Leaf elements only — a container legitimately contains its
 // children, and a caption legitimately sits above its own controls, so compare

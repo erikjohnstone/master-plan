@@ -8,6 +8,35 @@ In a hurry, or already in the app? Press **`?`** (or the **?** button in the top
 
 **Contents**
 
+### Workspace navigation
+
+Use **Plans · Schedules · Agent · Takeoff · Report** at the top of the canvas.
+Plans returns to the drawing. Sheets opens the existing sheet gallery; the sheet
+strip still switches, groups and closes drawings.
+
+Schedules and Agent share the primary dock: opening one hides the other, but
+hiding Agent does not stop a running task. Drag the dock's left edge to resize,
+or focus the separator and use Left/Right (32px), Shift+Left/Right (64px), or
+Home/End. Expand fills the workspace; Split view restores the drawing alongside.
+Dock width and expanded state are local UI preferences, not project data.
+Opening a drawing citation restores the split view so the evidence is visible.
+
+In Schedules, search or filter by sheet/kind, then open one or more schedules in
+the navigator. Every extracted header and cell remains unchanged. Wide grids
+scroll horizontally. View or Show on plan paints the whole schedule; a row's tag
+paints its existing cell region. Closing Schedules removes only browse highlights.
+
+In Agent, a starter question fills the composer without running it. Run/Ask and
+the existing keyboard shortcut submit; Stop cancels through the existing path.
+Sources, history and technical steps remain available. Proposals still require
+explicit Accept/Reject. Finished quantities and export remain in Takeoff.
+
+Open **Conditions · [active tag]** in the working toolbar for pinned conditions,
+line/fill/hatch, waste and dimensions. Escape or a click outside closes it.
+The existing conditions inspector, shortcuts and drawing actions are unchanged.
+
+### Manual sections
+
 1. [Five minutes to a takeoff](#1-five-minutes-to-a-takeoff)
 2. [Opening plans and moving around](#2-opening-plans-and-moving-around)
 3. [Scale—set it first](#3-scale--set-it-first)

@@ -1,0 +1,13 @@
+sheet sample-mechanical-set.pdf
+ok    propose_shapes staged both  — {"staged":2}
+ok    count proposal carries count:1  — {"id":"agp-f733b0f7-3251-4c1a-9f19-52ea94c89926","sheet_id":"sample-mechanical-set.pdf","condition_id":"cnd-3ff11c51-41c1-4e49-b19b-2851c71d7ca1","measure_role":"count","verts_norm":[[0.42,0.37]],"evidence":{"schedule_row_tag":"VAV-1"},"proposed_ts":"2026-09-08T22:52:48.936Z","count":1}
+ok    count proposal has NO area_sf  — area_sf=undefined
+ok    area proposal still carries area_sf  — area_sf=1658.88
+ok    panel row says EA, not 0 SF  — "VAV-1 · 1 EAschedule VAV-1"
+ok    count overlay draws a marker  — {"title":"Agent proposal — VAV-1, 1 EA. Evidence: schedule VAV-1. Clic","shape":"rect"}
+ok    area overlay still a polygon  — {"title":"Agent proposal — VAV-1, 1,658.9 SF. Evidence: schedule VAV-1","shape":"polygon"}
+ok    committed count has computed.count  — {"count":1}
+ok    committed count has no fake area  — {"count":1}
+ok    committed area keeps area_sf  — {"area_sf":1658.88,"perimeter_lf":172.8}
+
+all checks passed

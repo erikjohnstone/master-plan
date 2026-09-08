@@ -1,0 +1,11 @@
+seed:  — EBB-1, EBB-2
+ok    two real citations painted  — ["EBB-1","EBB-2"]
+   linked: ["EBB-1"]
+ok    the cited mark became a control  — looking for EBB-1
+ok    an UNCITED mark stayed prose
+ok    a bare value stayed prose
+ok    the sentence still reads correctly  — "EBB-1 is scheduled for 350 CFM. ZZZ-99 is not in evidence. The total is 350 across the flo"
+ok    clicking it opens/keeps the cited sheet  — ["sample-mechanical-set.pdf#8"] vs sample-mechanical-set.pdf#8
+ok    Sources counts deduped evidence  — "Sources · 2 · click to open"
+
+all checks passed

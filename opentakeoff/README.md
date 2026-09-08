@@ -36,6 +36,11 @@ what makes it training data.
 
 ## Start here
 
+The canvas workspace keeps **Plans · Schedules · Agent · Takeoff · Report** in one
+navigation row. Schedules shows the indexed cells beside their drawing evidence;
+Agent keeps the conversation, composer and proposal review together. Both
+workspaces resize or expand without changing the underlying takeoff data.
+
 | You are | Go here |
 |---|---|
 | **An estimator with a bid due** | [Open the canvas](https://opentakeoff.kentucky-ai.com)—drag in a plan, no account, nothing uploads. The [**user manual**](docs/USER_GUIDE.md) gets you from a blank tab to an exported takeoff in five minutes, and its [working order](docs/USER_GUIDE.md#the-working-order-on-a-real-bid) is the sequence to run on a real bid set. |

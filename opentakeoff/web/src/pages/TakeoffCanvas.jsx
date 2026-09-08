@@ -172,6 +172,8 @@ import { computeRollTakeoff, seamLfByShape } from "../lib/rollTakeoff.js";
 // CAPABILITIES those tools close over and the review gate their proposals
 // pass through. AiSettings is the config surface for the ai.js seam.
 import AgentPanel from "../components/AgentPanel.jsx";
+import WorkspaceDock from "../components/WorkspaceDock.jsx";
+import "../styles/workspace.css";
 import AiSettings from "../components/AiSettings.jsx";
 import { AGENT_TOOL_DEFS, executeAgentTool, agentScaleGate } from "../lib/agentTools.js";
 import { runAgentLoop } from "../lib/agentLoop.js";
@@ -833,12 +835,16 @@ export default function TakeoffCanvas() {
   // browsable copy; it is filled from the SAME cache the agent reads, so the
   // panel costs no fetch and can never disagree with what a tool would say.
   const [schedulesOpen, setSchedulesOpen] = useState(false);
+  const [conditionToolsOpen, setConditionToolsOpen] = useState(false);
+  // Presentation arbitration only: execution continues when its panel is hidden.
+  useEffect(() => {
+    if (agentOpen) { setSchedulesOpen(false); clearScheduleBrowseHighlights(); }
+  }, [agentOpen]);
+  useEffect(() => { if (schedulesOpen) setAgentOpen(false); }, [schedulesOpen]);
   const [graphTables, setGraphTables] = useState([]);
   // The top-bar entry appears as soon as there is a set to index and reads
   // disabled while the pass runs, rather than popping into existence when it
   // finishes — a control that materialises is a control nobody learns.
-  const schedulesEntryVisible = sheets.length > 0;
-  const schedulesReady = graphPrewarm.phase === "ready" || graphTables.length > 0;
   const graphPrewarmSigRef = useRef("");
   const graphPrewarmBusyRef = useRef(false);
   const commitMsg = commitMsgState.text;   // misnamed for history; just the message bar
@@ -1037,6 +1043,15 @@ export default function TakeoffCanvas() {
   // its onOpenChange effect when the callback identity changes, so an inline
   // arrow here would re-count an open menu on every canvas render
   const onMenuDepth = useCallback((o) => { menuDepthRef.current = Math.max(0, menuDepthRef.current + (o ? 1 : -1)); }, []);
+  useEffect(() => {
+    if (!conditionToolsOpen) return;
+    onMenuDepth(true);
+    const dismiss = e => {
+      if (!e.target.closest('.workspace-condition-tools, .workspace-properties-toggle')) setConditionToolsOpen(false);
+    };
+    document.addEventListener('pointerdown', dismiss);
+    return () => { onMenuDepth(false); document.removeEventListener('pointerdown', dismiss); };
+  }, [conditionToolsOpen, onMenuDepth]);
   const thumbCacheRef = useRef(new Map()); // sheetKey → thumbnail blob URL (lib/thumbs.js) — survives gallery close; persisted twin lives in the meta store
   const legacyPinnedRef = useRef(null);    // old `pinned` page numbers awaiting their one-shot tab migration
   const tabInitRef = useRef(false);        // snap to the first restored tab exactly once
@@ -10327,24 +10342,6 @@ export default function TakeoffCanvas() {
 
   const renderTopbarPinned = () => (
     <>
-        {/* name="open-takeoff", like sheet-file / agent-goal: the Playwright
-            driver used to reach for this with a text regex, which also matched
-            the rail's Takeoff button, picked the one the open Agent panel
-            covers, and hung 120s on click actionability before reporting the
-            Takeoff panel as broken. It was never broken. */}
-        <button onClick={() => setShowTakeoffData(true)} name="open-takeoff"
-          title="Open Takeoff — finished takeoff + workflow aggregate from every Agent run, with CSV / Excel / PDF export."
-          style={{
-            padding: "8px 14px", border: "none",
-            background: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--cobalt)" : "var(--ink-faint)",
-            color: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--paper-bright)" : "var(--ink-muted)",
-            cursor: "pointer", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11,
-            letterSpacing: "0.12em", textTransform: "uppercase",
-          }}>
-          Takeoff{finishedTakeoffLineCount ? ` · ${finishedTakeoffLineCount}` : (agentTakeoffRows.length ? " · data" : "")}
-        </button>
-        <button onClick={() => setShowReport(true)} disabled={!conditions.length} title="Open the takeoff report — per-condition breakdown with waste, plus CSV / JSON export."
-          style={{ padding: "8px 14px", border: "none", background: conditions.length ? "var(--ink)" : "var(--text-faint)", color: "var(--paper-bright)", cursor: conditions.length ? "pointer" : "default", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase" }}>Report</button>
         {/* ⋯ overflow — rarely-used project controls, so the row never wraps
             and nothing shifts position mid-work (issue #61's contract). */}
         <ToolMenu
@@ -10376,7 +10373,7 @@ export default function TakeoffCanvas() {
   );
 
   const cluster = (cap, children, style) => (
-    <span style={{ display: "inline-flex", flexDirection: "column", alignItems: "flex-start", gap: 3, minWidth: 0, ...style }}>
+    <span className="workspace-tool-cluster" data-context-label={cap.startsWith("Label") || undefined} title={cap} style={{ display: "inline-flex", flexDirection: "column", alignItems: "flex-start", gap: 3, minWidth: 0, ...style }}>
       <span style={{ fontFamily: "var(--f-mono)", fontSize: 8, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--ink-muted)", whiteSpace: "nowrap", lineHeight: 1 }}>{cap}</span>
       <span style={{ display: "inline-flex", alignItems: "center", gap: 7, minWidth: 0 }}>{children}</span>
     </span>
@@ -10627,7 +10624,7 @@ export default function TakeoffCanvas() {
           rect (ToolMenu) so an overflow cannot clip them. Focus mode (F) hides
           the whole bar — the rail and status bar carry the essentials. */}
       {!focusMode && (
-      <div data-topbar style={{ display: "flex", flexDirection: "column", gap: 5, alignItems: "stretch", padding: "6px 14px 6px", borderBottom: "1px solid var(--ink-faint)", background: "var(--paper-bright)", whiteSpace: "nowrap" }}>
+      <div data-topbar className="workspace-topbar" style={{ display: "flex", flexDirection: "column", gap: 5, alignItems: "stretch", padding: "6px 14px 6px", borderBottom: "1px solid var(--ink-faint)", background: "var(--paper-bright)", whiteSpace: "nowrap" }}>
         <div data-topbar-deck="1" style={{ display: "flex", gap: 7, alignItems: "center", minWidth: 0 }}>
         <strong style={{ fontFamily: "var(--f-display)", fontSize: 15, color: "var(--ink)", letterSpacing: "-0.02em" }}>Takeoff</strong>
         <button type="button" onClick={() => fileInputRef.current?.click()} title="Open plans — PDF, image, or a .zip plan set (or just drag them onto the canvas)"
@@ -10654,20 +10651,29 @@ export default function TakeoffCanvas() {
               style={{ padding: "5px 8px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", cursor: "pointer", opacity: (!!sheetGroup.length || page >= pageCount) ? 0.4 : 1 }}><Icon name="chevronRight" size={12} /></button>
           </span>
         )}
-        {/* SCHEDULES IS A PLACE IN THE SET, so it belongs next to Sheets.
-            It was reachable only from a 34px icon in the right-edge rail and
-            from a status-bar chip whose only affordance was a cursor — an
-            index of every table in the drawings, and nothing said so. */}
-        {schedulesEntryVisible && (
-          <button type="button" onClick={() => setSchedulesOpen((o) => !o)}
-            disabled={!schedulesReady}
-            title={schedulesReady
-              ? `Schedules — every table the index read, with its rows; click a tag to show it on the drawing${graphTables.length ? ` (${graphTables.length} found)` : ""}`
-              : "Schedules — still indexing this set"}
-            style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 10px", border: `1px solid ${schedulesOpen ? "var(--cobalt)" : "var(--ink-faint)"}`, background: schedulesOpen ? "var(--cobalt)" : "transparent", color: schedulesOpen ? "var(--paper-bright)" : (schedulesReady ? "var(--ink)" : "var(--ink-muted)"), cursor: schedulesReady ? "pointer" : "default", fontWeight: 600, fontSize: 12.5, lineHeight: 1 }}>
-            <Icon name="spec" size={15} />Schedules{graphTables.length ? ` · ${graphTables.length}` : ""}
-          </button>
-        )}
+        <nav className="workspace-primary" aria-label="Workspace">
+          <button type="button" data-workspace-nav="Plans" aria-pressed={!schedulesOpen && !agentOpen && !showTakeoffData && !showReport} onClick={() => { setAgentOpen(false); setSchedulesOpen(false); clearScheduleBrowseHighlights(); setView("canvas"); }}>Plans</button>
+          <button type="button" data-workspace-nav="Schedules" aria-pressed={schedulesOpen} onClick={() => { setAgentOpen(false); setSchedulesOpen(true); }}>Schedules{graphTables.length ? " · " + graphTables.length : ""}</button>
+          <button type="button" data-workspace-nav="Agent" aria-pressed={agentOpen && !schedulesOpen} onClick={() => { setSchedulesOpen(false); clearScheduleBrowseHighlights(); setAgentOpen(true); }}>Agent{agentRunning ? " · running" : agentProposals.length ? " · " + agentProposals.length + " pending" : ""}</button>
+        {/* name="open-takeoff", like sheet-file / agent-goal: the Playwright
+            driver used to reach for this with a text regex, which also matched
+            the rail's Takeoff button, picked the one the open Agent panel
+            covers, and hung 120s on click actionability before reporting the
+            Takeoff panel as broken. It was never broken. */}
+        <button onClick={() => setShowTakeoffData(true)} name="open-takeoff" data-workspace-nav="Takeoff" aria-pressed={showTakeoffData}
+          title="Open Takeoff — finished takeoff + workflow aggregate from every Agent run, with CSV / Excel / PDF export."
+          style={{
+            padding: "8px 14px", border: "none",
+            background: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--cobalt)" : "var(--ink-faint)",
+            color: finishedTakeoffLineCount || agentTakeoffRows.length ? "var(--paper-bright)" : "var(--ink-muted)",
+            cursor: "pointer", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11,
+            letterSpacing: "0.12em", textTransform: "uppercase",
+          }}>
+          Takeoff{finishedTakeoffLineCount ? ` · ${finishedTakeoffLineCount}` : (agentTakeoffRows.length ? " · data" : "")}
+        </button>
+        <button data-workspace-nav="Report" aria-pressed={showReport} onClick={() => setShowReport(true)} disabled={!conditions.length} title="Open the takeoff report — per-condition breakdown with waste, plus CSV / JSON export."
+          style={{ padding: "8px 14px", border: "none", background: conditions.length ? "var(--ink)" : "var(--text-faint)", color: "var(--paper-bright)", cursor: conditions.length ? "pointer" : "default", fontWeight: 700, fontFamily: "var(--f-mono)", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase" }}>Report</button>
+        </nav>
         <div style={{ flex: 1 }} />
         <span data-topbar-pinned style={{ display: "inline-flex", alignItems: "center", gap: 7, flexShrink: 0 }}>
         {renderTopbarPinned()}
@@ -10705,6 +10711,7 @@ export default function TakeoffCanvas() {
             ]}
           />
         </>)}
+        {conditions.length > 0 && <button type="button" className="workspace-properties-toggle" aria-expanded={conditionToolsOpen} onClick={() => setConditionToolsOpen(v => !v)} title="Condition properties and pinned conditions">Conditions{aCond ? " · " + aCond.finish_tag : ""}</button>}
         {vRule}
         {cluster("Aids", <>
           {panels.length === 1 && isStitchKey(panels[0].key) && (
@@ -10844,8 +10851,16 @@ export default function TakeoffCanvas() {
           — the same one the docked panel row renders — so line/fill/hatch/height
           are editable without opening the sidebar. Shown once there's a
           condition to pin, so the drop zone is discoverable. */}
-      {!focusMode && conditions.length > 0 && (
+      {!focusMode && conditionToolsOpen && conditions.length > 0 && (
         <div
+          className="workspace-condition-tools"
+          role="region" aria-label="Condition properties"
+          onKeyDown={e => {
+            if (e.key === "Escape") {
+              e.preventDefault(); e.stopPropagation(); setConditionToolsOpen(false);
+              document.querySelector('.workspace-properties-toggle')?.focus();
+            }
+          }}
           onDragOver={(e) => { if (e.dataTransfer.types.includes(CONDITION_DND_MIME)) { e.preventDefault(); e.stopPropagation(); e.dataTransfer.dropEffect = "copy"; } }}
           onDrop={(e) => { if (!e.dataTransfer.types.includes(CONDITION_DND_MIME)) return; e.preventDefault(); e.stopPropagation(); const id = e.dataTransfer.getData(CONDITION_DND_MIME); if (id) pinToPalette(id); }}
           style={{ padding: "5px 14px", borderBottom: "1px solid var(--ink-faint)", background: "var(--paper-bright)" }}>
@@ -10898,7 +10913,7 @@ export default function TakeoffCanvas() {
       {/* open-sheet tabs — what you opened from the gallery; click to view,
           ⊞ to side-by-side, ✕ to close; the dropdown lists every open sheet */}
       {!focusMode && openTabs.length > 0 && (
-        <div style={{ display: "flex", gap: 5, alignItems: "center", padding: "5px 14px", flexWrap: openTabs.length > MANY_TABS ? "nowrap" : "wrap", borderBottom: "1px solid var(--ink-faint)", background: "var(--paper-bright)", minWidth: 0 }}>
+        <div className="workspace-sheet-tabs" style={{ display: "flex", gap: 5, alignItems: "center", padding: "5px 14px", flexWrap: openTabs.length > MANY_TABS ? "nowrap" : "wrap", borderBottom: "1px solid var(--ink-faint)", background: "var(--paper-bright)", minWidth: 0 }}>
           <span style={{ fontFamily: "var(--f-mono)", fontSize: 9.5, textTransform: "uppercase", letterSpacing: "0.14em", color: "var(--ink-muted)", flexShrink: 0 }}>Sheets</span>
           {openTabs.length > MANY_TABS && (
             <button type="button" onClick={() => scrollTabStrip(-1)} title="Scroll sheets left" aria-label="Scroll sheets left" style={{ flexShrink: 0, padding: "4px 5px", border: "1px solid var(--ink-faint)", background: "transparent", color: "var(--ink)", cursor: "pointer", display: "inline-flex" }}><Icon name="chevronLeft" size={12} /></button>
@@ -10936,7 +10951,7 @@ export default function TakeoffCanvas() {
           the same state (activate/reassign, hotkey badges, + condition) for
           users who want max panel-collapse and one-click switching. Toggled
           from the panel header, persisted with the panel prefs. */}
-      {!focusMode && panelPrefs.strip && (
+      {!focusMode && conditionToolsOpen && panelPrefs.strip && (
         <div style={{ display: "flex", gap: 8, alignItems: "center", padding: "7px 14px", flexWrap: "wrap", borderBottom: "1px solid var(--ink-faint)", background: "var(--paper-bright)" }}>
           <span style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 0.4, color: "var(--ink-muted)" }}>Conditions</span>
           {conditions.map((c, i) => {
@@ -11010,7 +11025,7 @@ export default function TakeoffCanvas() {
       )}
 
       {/* canvas + issue desk */}
-      <div style={{ flex: 1, display: "flex", overflow: "hidden", minHeight: 0, position: "relative" /* anchors the narrow-screen panel overlay */ }}>
+      <div className="workspace-body" data-primary-workspace={schedulesOpen ? "Schedules" : agentOpen ? "Agent" : "Plans"} style={{ flex: 1, display: "flex", overflow: "hidden", minHeight: 0, position: "relative" /* anchors the narrow-screen panel overlay */ }}>
        {/* tool rail — machined faces grouped by MCP module (the concept shell).
            Individual tiles replace deck 2's Measure/Cut Out menus; Markup keeps
            its variety flyout on one tile (five markup kinds don't earn five
@@ -11396,7 +11411,7 @@ export default function TakeoffCanvas() {
            </div>
          </div>
        )}
-       <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
+       <div className="workspace-drawing" style={{ flex: 1, position: "relative", overflow: "hidden" }}>
         <div ref={containerRef} onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp}
           onPointerCancel={onPointerUp} onPointerLeave={leaveCanvas} onContextMenu={(e) => e.preventDefault()}
           onDoubleClick={(e) => { if (tool === "oneclick") { if (proposal?.regions.length) createProposal(); } else if (tool === "area" || tool === "deduct" || tool === "linear" || tool === "surface" || tool === "zone") finishShape(); else if (tool === "select") editMarkupAt(e); }}
@@ -12590,8 +12605,6 @@ export default function TakeoffCanvas() {
           {panelBtn(() => setLeftTab((t) => (t === "stamp" ? null : "stamp")), "stamp", "Stamps — reusable annotations dropped click-to-place", leftTab === "stamp", stampLib.stamps.length)}
           {panelBtn(() => setLeftTab((t) => (t === "rfi" ? null : "rfi")), "rfi", "RFI register — raise, track, and export Requests For Information", leftTab === "rfi", rfis.length)}
           {panelBtn(toggleTakeoffs, "takeoffs", "Takeoffs — conditions + running totals", takeoffsOpen, visibleShapes.length)}
-          {panelBtn(() => setSchedulesOpen((o) => !o), "spec", "Schedules — every table the index found, with its rows; click any tag to show it on the drawing", schedulesOpen, graphTables.length)}
-          {panelBtn(() => setAgentOpen((o) => !o), "target", "Agent — describe a takeoff; it stages dashed proposals you accept or reject (bring your own AI key)", agentOpen, agentProposals.length)}
           {rollByCond.size > 0 && panelBtn(() => setRollPanelOpen((o) => !o), "roll", "Roll goods — the cut diagram, cutting order, and figured order footage", rollPanelOpen, rollByCond.size)}
           {layerEntries.length > 0 && panelBtn(() => setLayersOpen((o) => !o), "layers", "PDF layers — what this drawing's own layer table states each ink is; set what One-Click treats as wall and what it ignores", layersOpen, layerEntries.reduce((n, e) => n + e.layers.length, 0))}
           {panelBtn(() => setShowRevisions(true), "revisions", "Revisions — save the takeoff at each bid revision, compare what moved", showRevisions)}
@@ -12603,8 +12616,8 @@ export default function TakeoffCanvas() {
             Takeoffs panel). Honest empty state until the BYO-AI seam is
             configured; otherwise the goal box, the streaming run log, and the
             per-proposal accept/reject desk. */}
-        {agentOpen && (
-          <AgentPanel
+        {agentOpen && !schedulesOpen && (
+          <WorkspaceDock name="Agent"><AgentPanel
             configured={isAiConfigured()}
             running={agentRunning}
             status={agentStatus}
@@ -12635,7 +12648,7 @@ export default function TakeoffCanvas() {
             runHistory={runHistory}
             historyOpen={runHistoryOpen}
             onToggleHistory={() => { if (!runHistoryOpen) refreshRunHistory(); setRunHistoryOpen((o) => !o); }}
-          />
+          /></WorkspaceDock>
         )}
 
         {/* Roll panel (#136) — DOCKED right-rail sibling like the Agent panel:
@@ -12643,7 +12656,7 @@ export default function TakeoffCanvas() {
             the engine re-pack, the overlay/edit toggles, and the figured order
             lines. A pure view — layout state lives on the shapes (rollcut). */}
         {schedulesOpen && (
-          <SchedulesPanel
+          <WorkspaceDock name="Schedules"><SchedulesPanel
             tables={graphTables}
             prewarm={graphPrewarm}
             indexing={indexProgress.phase === "text"}
@@ -12687,7 +12700,7 @@ export default function TakeoffCanvas() {
               const markup = agentStateRef.current.markups.find((m) => m.id === result.id);
               if (markup) flyToMarkup(markup);
             }}
-          />
+          /></WorkspaceDock>
         )}
         {rollPanelOpen && (
           <RollPanel
