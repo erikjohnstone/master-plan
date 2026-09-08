@@ -212,6 +212,7 @@ async function runL2VectorGridForSheet(
     // failure read as an empty drawing.
     rec.refused++;
     const why = e instanceof VectorGridSpaceError ? String(e.message) : `${(e as Error)?.message || e}`;
+    rec.first_error ??= why;
     report.notes.push(`${ctx.key}: L2 vectorgrid did not run — ${why}`);
     return;
   }
@@ -604,6 +605,30 @@ export async function runVectorTakeoffPipeline(
   }
   if (report.topology_sheets) {
     g.notes.push(`Vector pipeline L3.5: MEP topology graph built on ${report.topology_sheets} plan sheet(s).`);
+  }
+  // A REFUSED ENGINE MUST SAY SO WHERE SOMEONE WILL SEE IT, not just where a
+  // developer holding the pipeline report might look. `runL2VectorGridForSheet`
+  // already gets this right per-sheet — refusing is not "no schedules here",
+  // and it records exactly why in `report.notes` — but that array only ever
+  // reaches `g.vector_pipeline`, which nothing in the UI reads. Every OTHER
+  // note pushed to `g.notes` above fires only on genuine WORK (tables added,
+  // OCR recovered, topology built), so a document where vectorgrid failed on
+  // every sheet — a missing Python dependency, most commonly — produces every
+  // one of those as zero and stays completely silent while quietly reading
+  // every schedule with the weaker geometric fallback instead. Real, found
+  // live: `shapely` (a hard vectorgrid dependency, listed in no requirements
+  // file at all) missing on a fresh `git pull && npm i` checkout production
+  // the exact same wrong, narrower boxes this session spent hours chasing as
+  // a caching bug, on a machine that never printed a single error anywhere a
+  // person would look.
+  const vg = report.vectorgrid;
+  if (vg && vg.refused > 0) {
+    const total = vg.sheets + vg.refused;
+    g.notes.push(
+      vg.sheets === 0
+        ? `Vector pipeline L2: vectorgrid could not run on any sheet (${vg.refused}/${total}) — every schedule below came from the weaker fallback reader. ${vg.first_error || ""}`
+        : `Vector pipeline L2: vectorgrid did not run on ${vg.refused} of ${total} sheet(s) — those sheets used the weaker fallback reader. ${vg.first_error || ""}`,
+    );
   }
 
   g.vector_pipeline = report;

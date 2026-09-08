@@ -8073,6 +8073,10 @@ export interface VectorPipelineReport {
      * graph. */
     declined_regions?: string[];
     ms: number;
+    /** The first engine failure's own message (an ImportError from a missing
+     * Python dependency, a coordinate-space mismatch, …) — kept verbatim so
+     * whoever reads `refused > 0` can say WHY, not just THAT. */
+    first_error?: string;
   };
   /** Wall-clock milliseconds per pipeline stage.
    *

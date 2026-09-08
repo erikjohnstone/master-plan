@@ -7230,9 +7230,16 @@ export default function TakeoffCanvas() {
     let cancelled = false;
     (async () => {
       try {
-        await getOrFetchProductionGraph(sig);
+        const prod = await getOrFetchProductionGraph(sig);
         if (cancelled) return;
         setGraphPrewarm({ phase: "ready" });
+        // A refused extraction engine is a fact about every table on this
+        // set, not a debug footnote — `g.notes` already carries it (see
+        // vectorTakeoffPipeline.ts's own comment on why that push exists),
+        // but nothing surfaced it where a person who never asks the agent
+        // anything would see it. One real toast, once per load.
+        const vgNote = (prod?.notes || []).find((n) => n.startsWith("Vector pipeline L2: vectorgrid"));
+        if (vgNote) setCommitMsg(vgNote, "refusal");
       } catch (e) {
         if (!cancelled) {
           setGraphPrewarm({ phase: "error", message: String(e?.message || e) });
