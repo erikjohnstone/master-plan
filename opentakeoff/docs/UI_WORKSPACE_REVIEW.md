@@ -51,10 +51,16 @@ and [after](ui-workspace/evidence/after/evidence.json).
 - Existing topbar driver: passed at 1280, 1440, 1920 and 2560 widths.
 - Existing schedules, inline-citation and count-proposals drivers: passed on
   the real built-in sample.
-- New workspace driver: **115 checks passed**, including navigation, active state, shell height, no page overflow,
+- New workspace driver: **119 checks passed**, including navigation, active state, shell height, no page overflow,
   original grid cells/headers, filtering, split/expanded view, pointer/keyboard
   resize, focus return, and exact Agent callbacks. Synthetic Agent props exercise
   running/review states without a model request.
+- The Agent fixture retains the real workspace rectangle below the toolbar and
+  above the status bar, rather than assuming the entire 900px viewport is free.
+  Four additional bounds checks prove running status, running/review composer,
+  and pending-review heading fit inside that rectangle. The resulting light
+  running and HUD review screenshots were inspected; these are deterministic
+  component fixtures, not live-model output.
 - Evidence clicks restore split view from an expanded workspace without changing
   the drawing footprint or the existing citation/highlight callback payload.
 - Matched sample screenshots captured at 1280×800, 1440×900, 1920×1080 and

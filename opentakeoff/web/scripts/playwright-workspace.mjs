@@ -12,6 +12,12 @@ const errors=[],checks=[];
 page.on('pageerror',e=>errors.push(String(e)));
 const check=(name,value)=>{assert.ok(value,name);checks.push(name);console.log('ok',name);};
 const nav=name=>page.locator(`[data-workspace-nav="${name}"]`);
+const fitsWorkspace=async locator=>locator.evaluate(el=>{
+  const box=el.getBoundingClientRect();
+  const dock=el.closest('[data-workspace-dock]').getBoundingClientRect();
+  return box.width>0 && box.height>0 && box.top>=dock.top &&
+    box.bottom<=Math.min(dock.bottom,innerHeight) && box.left>=dock.left && box.right<=dock.right;
+});
 try {
   await page.goto(process.env.OT_UI_URL || 'http://localhost:5176');
   await page.locator('input[name="sheet-file"]').first().setInputFiles(resolve(process.env.OT_UI_PDF || 'public/demo/sample-mechanical-set.pdf'));
@@ -123,11 +129,17 @@ try {
   await page.waitForFunction(()=>!document.querySelector('[data-workspace-dock][data-expanded]'));
   check('Agent citation restores split',await page.locator('[data-workspace-dock]').getAttribute('data-expanded')===null);
   await page.evaluate(()=>window.__uiRender({running:true,status:'Reading schedules…',log:[{kind:'progress',text:'Reading schedule evidence'}]}));
+  await page.locator('[data-agent-status]').waitFor();
+  check('900px: running status fits real workspace',await fitsWorkspace(page.locator('[data-agent-status]')));
+  check('900px: running composer fits real workspace',await fitsWorkspace(page.locator('.agent-composer')));
   await page.getByRole('button',{name:'■ Stop',exact:true}).click();
   assert.deepEqual(await page.evaluate(()=>window.__uiCalls.pop()),['onStop',{event:'click'}]);
   check('Stop preserves direct click event contract',true);
   await page.screenshot({path:resolve(out,'agent-running.png')});
   await page.evaluate(()=>window.__uiRender({running:false,proposals:[{id:'proposal-1',condition_id:'c1',measure_role:'count',count:1,evidence:{schedule_row_tag:'AHU-1'}}]}));
+  await page.locator('.agent-review-heading').waitFor();
+  check('900px: pending review count fits real workspace',await fitsWorkspace(page.locator('.agent-review-heading')));
+  check('900px: review composer fits real workspace',await fitsWorkspace(page.locator('.agent-composer')));
   for(const [title,callback,args] of [['Accept proposal','onAccept',['proposal-1']],['Reject proposal','onReject',['proposal-1']]]) {
     await page.getByTitle(title,{exact:true}).click();assert.deepEqual(await page.evaluate(()=>window.__uiCalls.pop()),[callback,...args]);
   }
