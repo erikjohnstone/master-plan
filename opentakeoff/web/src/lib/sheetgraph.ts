@@ -9025,7 +9025,6 @@ export function snapCellBboxesToSourceSpans(table: ScheduleTable, sourceSpans: G
   const ROW_Y_TOL = 28;
   const COL_X_TOL = 28;
   const isHorizontal = (span: GraphSpan) => (span.w || 0) >= (span.h || 0) * 0.9;
-  const isVerticalBox = (bbox: Bbox) => (bbox[3] - bbox[1]) > (bbox[2] - bbox[0]) * 1.1;
   // A cell's OWN text can be a real, identical duplicate of another table's
   // text on the SAME sheet — a shared room name in both a ROOM FINISH
   // SCHEDULE and a DOOR SCHEDULE's own LOCATION column, a shared point
@@ -9101,6 +9100,8 @@ export function snapCellBboxesToSourceSpans(table: ScheduleTable, sourceSpans: G
 
     const alreadyGrounded = (cell: { text: string; bbox: Bbox }) =>
       exactSpans(cell.text).some((span) => spanCenterInBbox(span, cell.bbox));
+    const groundedSpan = (cell: { text: string; bbox: Bbox }): GraphSpan | undefined =>
+      exactSpans(cell.text).find((span) => spanCenterInBbox(span, cell.bbox));
 
     // Prefer the row-key / MARK cell as the axis seed when it is already a
     // tall thin (quarter-turned) or wide (normal) glyph span.
@@ -9109,7 +9110,26 @@ export function snapCellBboxesToSourceSpans(table: ScheduleTable, sourceSpans: G
       return cell && compactSpanText(cell.text) === compactSpanText(row.key);
     });
     const keyCell = keyHeader ? cells[keyHeader] : null;
-    const columnMode = !!(keyCell && alreadyGrounded(keyCell) && isVerticalBox(keyCell.bbox));
+    // columnMode used to trust isVerticalBox(keyCell.bbox) — the CELL's own
+    // bbox proportions — as a stand-in for "this key is quarter-turned
+    // text". That conflates two different things: a real quarter-turned MARK
+    // column IS tall/narrow, but so is any ordinary, correctly-horizontal
+    // short value (a 4-character tag like "UH-3") sitting in a merely narrow
+    // table column with normal row height — the cell measures tall/narrow
+    // from the DRAWN GRID, not from the text's own rotation. Measured, 044_NY
+    // _VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21's own STEAM UNIT
+    // HEATER SCHEDULE: a completely normal table (title row, MARK/LOCATION/…
+    // header row, one row per UH-#), but "UH-3"'s own cell bbox (62.88 wide,
+    // 157.92 tall — a narrow drawn column) tripped isVerticalBox, columnMode
+    // fired, and Pass 2 then snapped every OTHER header's cell in that row
+    // onto the wrong (X, not Y) axis, stacking all 15 header values under
+    // one another and blowing the table's own region past the sheet's
+    // height. Same false-positive class extractAllQuarterTurnedTables' own
+    // isExplicitlyVertical already closed for a different consumer — trust
+    // only the matched SOURCE SPAN's own explicit `rot`, never a cell's
+    // bbox shape, which says nothing about whether the text itself turns.
+    const keySpan = keyCell ? groundedSpan(keyCell) : undefined;
+    const columnMode = !!(keySpan && keySpan.rot != null && Math.abs(keySpan.rot % 180) === 90);
 
     // Pass 1: snap uniquely-occurring values (and keep already-grounded ones).
     const axisCenters: number[] = [];
