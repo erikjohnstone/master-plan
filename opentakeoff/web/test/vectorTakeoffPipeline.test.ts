@@ -2,11 +2,13 @@
  * Vector takeoff pipeline unit tests — L1.5 tiling + L2 stream/line hooks.
  */
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
+import { describe, it, after } from "node:test";
 import { slicePageTiles, clipSpansToTile } from "../src/lib/pageTileGrid.ts";
 import { sheetHasScheduleKeywords, extractScheduleTablesFromLineGrid, MAX_LINE_GRID_SEGMENTS } from "../src/lib/scheduleGridFallback.ts";
 import { extractScheduleTablesFromStreamGrid } from "../src/lib/scheduleStreamFallback.ts";
-import type { GraphSpan } from "../src/lib/sheetgraph.ts";
+import { runVectorTakeoffPipeline, type VectorPipelineHooks } from "../src/lib/vectorTakeoffPipeline.ts";
+import { shutdownVectorGrid } from "../src/lib/vectorGridClient.ts";
+import type { GraphSpan, SheetGraph } from "../src/lib/sheetgraph.ts";
 
 describe("L1.5 pageTileGrid", () => {
   it("slices oversized pages into overlapping tiles", () => {
@@ -120,4 +122,59 @@ describe("L2 line grid fallback safety", () => {
     assert.ok(Date.now() - t0 < 500, "grid search should stay bounded");
     assert.ok(Array.isArray(tables));
   });
+});
+
+describe("L2 vectorgrid: a refused engine must say so where a person will see it", () => {
+  it("a real engine failure (bogus pdfPath, sidecar genuinely throws) surfaces in g.notes, not only the pipeline report", async () => {
+    // Real, found live (2026-09-08): runL2VectorGridForSheet already caught
+    // this correctly and pushed "L2 vectorgrid did not run — <error>" into
+    // report.notes — but that array only ever reached g.vector_pipeline,
+    // which nothing in the UI reads. A document where the engine failed on
+    // EVERY sheet (a missing Python dependency, most commonly) produced
+    // none of the OTHER notes below (all gated on genuine work happening)
+    // and stayed completely silent while quietly reading every schedule
+    // through the weaker geometric fallback — the exact wrong, narrower
+    // boxes chased for hours as a caching bug on a machine that never
+    // printed a single error anywhere a person would look.
+    //
+    // This drives the real failure path end to end, no mocks: a genuinely
+    // nonexistent pdfPath, so the sidecar spawns for real (vectorGridAvailable()
+    // only checks the SCRIPT exists) and extract_grid genuinely throws — the
+    // same shape of failure a missing shapely/pymupdf import produces.
+    const g: SheetGraph = {
+      available: true, sheets: [], rooms: [], unmatched_tags: [], tables: [],
+      callouts: [], buildings: [], revisions: [], notes: [],
+    };
+    const hooks: VectorPipelineHooks = {
+      runODL: async () => {},
+      getSheetContexts: () => [{
+        key: "nonexistent-fixture.pdf#1",
+        role: "schedule",
+        spans: [],
+        width: 1000,
+        height: 1000,
+        pageViewportTransform: [1, 0, 0, 1, 0, 0],
+        pdfPath: "/tmp/this-file-does-not-exist-vectorTakeoffPipeline-test.pdf",
+      }],
+      sheetHasPointsListTitle: () => false,
+    };
+    const report = await runVectorTakeoffPipeline(g, hooks);
+    assert.equal(report.vectorgrid?.refused, 1, "the bogus pdfPath must genuinely reach and fail the L2 engine");
+    assert.ok(report.vectorgrid?.first_error, "the failure's own message must be kept");
+    const surfaced = g.notes.find((n) => n.startsWith("Vector pipeline L2: vectorgrid"));
+    assert.ok(surfaced, `g.notes must carry a user-facing warning; got: ${JSON.stringify(g.notes)}`);
+    assert.match(surfaced!, /could not run on any sheet/);
+  });
+
+  // The RPC client keeps one persistent sidecar child process alive across
+  // calls (a real perf choice — spawning Python per request would cost
+  // seconds every time) and only tears it down on an explicit shutdown call.
+  // `node --test` does not force-exit once its own test bodies finish; it
+  // waits for the process to go idle, and a live child process with open
+  // stdio pipes keeps the event loop alive indefinitely — measured live:
+  // this exact test hung the whole file for 48 minutes at 0% CPU under
+  // `node --test` while the identical scenario, run as a plain script that
+  // calls `process.exit()` itself, resolved in 440ms. Not vectorgrid being
+  // slow — the test runner waiting on a handle nothing ever closed.
+  after(async () => { await shutdownVectorGrid(); });
 });
