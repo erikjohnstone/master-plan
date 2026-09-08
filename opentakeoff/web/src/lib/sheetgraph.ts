@@ -9829,6 +9829,33 @@ export function scheduleTableFromODL(
   // new vocabulary or corpus-specific carve-out.
   if (kind === "unknown") {
     if (!titleText.trim()) return refuse("unknown kind and no title");
+    // A REAL TITLE IS NOT ENOUGH ON ITS OWN — the comment above already
+    // says "never promote an anonymous/untitled ODL blob", but a title of
+    // ONE BARE CHARACTER is functionally anonymous: it names nothing a
+    // schedule would ever be titled, and it is exactly the shape a
+    // misdetected border throws. Real, measured live:
+    // 13_MI_MSU_LifeSciences_LabRenovation.pdf's own small key-plan diagram
+    // (the building-outline graphic every sheet repeats in its title block,
+    // area labels "A"/"B"/"C"/"D") — its outline rules form a tiny ruled
+    // region ODL reads as a 1-row, 3-column grid, titled "A" only because
+    // that area label happens to be the biggest single cell in it. Combine
+    // that with `headers` never having found ANY real column label at
+    // all — every one of them is the bare `COL${i+1}` fallback
+    // (colLabel.map above) — and there is no printed schedule vocabulary
+    // anywhere in this table for a person to have named, which is what a
+    // real schedule always has at least SOME of even when none of it
+    // clears EQUIPMENT_HEADERS/ROOM_HEADERS/FINISH_HEADERS (the
+    // DEHUMIDIFIER SCHEDULE case this whole promotion exists for, per the
+    // comment below, still prints real column words — "% RH", "CAPACITY
+    // PINTS/HR" — just not words this file's vocab happens to know).
+    // Both conditions together, not either alone: a real one-word title
+    // ("NOTES", "LEGEND") with real headers stays promoted; a real title
+    // with all-fallback headers (this case) and a single-character title
+    // with real headers (unlikely, but not this guard's problem) are both
+    // still refused only when they coincide.
+    if (titleText.trim().length <= 1 && headers.every((h) => /^COL\d+$/.test(h))) {
+      return refuse(`unknown kind, title is one bare character, and no header cleared any real label: "${titleText}"`);
+    }
     // Same title-family gate as the geometric extractor's own finish→
     // equipment reclassification (isMepEquipmentSchedule, above extractAllTables),
     // reached from the OTHER direction — a table that never independently
