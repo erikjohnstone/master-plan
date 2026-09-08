@@ -5,6 +5,7 @@
 // what the canvas commits (web/src/pages/TakeoffCanvas.jsx), so an exported
 // takeoff round-trips into the app.
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { openPdf, positionedText, textSpans, textItemsInRegion, OPS, type DocHandle, type PageHandle, type TextSpan, type OcgEntry } from "./pdf.ts";
 import { expandForScaleNotes, mixedScaleWarning } from "./scalewarn.ts";
 import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../../web/src/lib/layers.ts";
@@ -792,6 +793,17 @@ export type JournalPayload =
   | { op: "runcut"; tool: string; target_id: string; target_prev: CutoutParentPrev; minted_ids: string[] };
 
 export type JournalEntry = JournalPayload & { seq: number };
+
+// Vendored tesseract.js language data — real, found live: tesseract.js's
+// default config fetches eng.traineddata.gz from a CDN (jsdelivr) at first
+// OCR use. In this environment that fetch 403s, so OCR assist silently could
+// never produce a result no matter how OPENTAKEOFF_PIPELINE_OCR was set —
+// confirmed directly (a raw Tesseract.recognize call throws "Network error
+// while fetching..."). Whether that specific 403 is sandbox-only or a real
+// risk elsewhere, a runtime CDN dependency for OCR is fragile for any
+// customer behind a restrictive outbound proxy — vendoring removes the
+// network dependency entirely, verified working end to end locally.
+const TESSDATA_PATH = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../sidecar/tessdata");
 
 const sheetSummary = (s: SheetState): SheetSummary => ({
   sheet: s.key,
@@ -5780,7 +5792,7 @@ export class Session {
     });
   }
 
-  private buildVectorSheetContexts(g: SheetGraph): VectorSheetContext[] {
+  private async buildVectorSheetContexts(g: SheetGraph): Promise<VectorSheetContext[]> {
     const out: VectorSheetContext[] = [];
     for (const sh of g.sheets) {
       const state = this.sheets.get(sh.key);
@@ -5796,7 +5808,17 @@ export class Session {
       let segs: number[] | undefined = this.pipelineSegs.get(sh.key) ?? state.geo?.segs;
       let rasterFrac = 0;
       try {
-        const geo = state.geo;
+        // Real, found live: reading state.geo directly here (rather than
+        // ensuring it, like rasterScheduleNotes does for the identical
+        // computation) meant rasterFrac silently read 0 whenever geometry
+        // hadn't already been computed for another reason earlier in the
+        // pipeline — 017_MD#14's own real 44%-raster VENTILATION SCHEDULE
+        // sheet measured 0 here, so L4.5 OCR assist's own rasterFrac>=0.12
+        // gate never had a chance to fire regardless of OCR being enabled
+        // and working. ensureGeometry is idempotent (cached after first
+        // call), so this costs nothing on the common path where geometry
+        // was already computed.
+        const geo = await this.ensureGeometry(state);
         if (geo && state.widthPx * state.heightPx > 0) {
           rasterFrac = geo.imageArea / (state.widthPx * state.heightPx);
         }
@@ -5831,6 +5853,9 @@ export class Session {
       );
       const Tesseract = (await import("tesseract.js")).default;
       const { data } = await Tesseract.recognize(Buffer.from(png), "eng", {
+        langPath: TESSDATA_PATH,
+        cacheMethod: "none",
+        gzip: true,
         logger: () => {},
       });
       const tess = data as {

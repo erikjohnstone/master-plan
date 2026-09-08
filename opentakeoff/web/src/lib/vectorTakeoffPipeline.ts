@@ -47,7 +47,7 @@ export interface VectorSheetContext {
 export interface VectorPipelineHooks {
   /** L2 ODL pass (OpenDataLoader-PDF). */
   runODL: (g: SheetGraph) => Promise<void>;
-  getSheetContexts: () => VectorSheetContext[];
+  getSheetContexts: () => VectorSheetContext[] | Promise<VectorSheetContext[]>;
   sheetHasPointsListTitle: (sheetKey: string) => boolean;
   /** A cover/index sheet's own DRAWING LIST / SHEET INDEX table (optional —
    * absent hook means "no", same as every other optional hook here). */
@@ -377,7 +377,7 @@ export async function runVectorTakeoffPipeline(
   const buildings = new Set(g.buildings);
   const sourceSpansBySheet = new Map<string, GraphSpan[]>();
 
-  const contexts = hooks.getSheetContexts();
+  const contexts = await hooks.getSheetContexts();
 
   // L1.8 VECTORGRID RUNS FIRST, AND ODL ONLY WHERE IT CAME BACK EMPTY.
   //
