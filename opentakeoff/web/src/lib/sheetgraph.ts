@@ -9410,6 +9410,59 @@ export function scheduleTableFromODL(
     if (wide.length === 1) {
       titleCell = wide[0];
       bodyStart = 1;
+    } else if (row0.cells.length >= 2 && row0.cells.every((c) => (c["column span"] || 1) > 1)) {
+      // A TITLE VECTORGRID SPLITS INTO SEVERAL WORD-GROUP CELLS IS STILL THE
+      // TITLE, not a header tier — real, measured on
+      // 044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers#21's own STEAM
+      // UNIT HEATER SCHEDULE: row 0 is four cells ("STEAM" cs4, "UNIT" cs2,
+      // "HEATER" cs2, "SCHEDULE" cs8) with real gaps between them (columns
+      // 0-2 and 10 own no cell at all) rather than the one full-width cell
+      // ODL itself would have produced. `wide` above never fires (no single
+      // cell reaches C-1), so this row fell through to the header/data loop
+      // below as an ordinary tier, and the table reached the graph correctly
+      // keyed and celled — UH-3/UH-4/UH-5, every column right — but with
+      // `title: null`, unfindable by name in the Schedules panel or an
+      // agent's own lookup.
+      //
+      // What tells this apart from a real single-tier header row (the
+      // `SEISMIC AND VIBRATION CONTROL` / `SEISMIC RESTRAINT PROVISIONS`
+      // shape the `wide.length === 1` rule above already declines to guess
+      // at) is the GAP: a real header row's cells, however many, cover every
+      // column between them (each column either owns a cell or inherits one
+      // via span) because every column needs a label. A row that leaves
+      // columns with no cell at all — vectorgrid found no ruled boundary
+      // there because there is no real column break in a piece of prose —
+      // is not labeling columns, it is naming the table. Requiring every
+      // cell in the row to itself span more than one column keeps this from
+      // firing on a genuine dense single-column header tier (whose cells are
+      // colSpan 1 by construction) and from firing on the SEISMIC case
+      // above, where the narrow side cell is real per-column data and has
+      // colSpan 1.
+      const covered = new Set<number>();
+      for (const c of row0.cells) {
+        const start = c["column number"] - 1;
+        const span = Math.max(1, c["column span"] || 1);
+        for (let i = 0; i < span && start + i < C; i++) covered.add(start + i);
+      }
+      if (covered.size < C && covered.size * 2 >= C) {
+        const ordered = row0.cells.slice().sort((a, b) => a["column number"] - b["column number"]);
+        const text = ordered.map(odlCellText).filter(Boolean).join(" ");
+        if (text) {
+          const boxes = ordered.map((c) => c["bounding box"]);
+          const bbox = [
+            Math.min(...boxes.map((b) => b[0])),
+            Math.min(...boxes.map((b) => b[1])),
+            Math.max(...boxes.map((b) => b[2])),
+            Math.max(...boxes.map((b) => b[3])),
+          ];
+          titleCell = {
+            type: "table cell", id: 0, "page number": t["page number"],
+            "bounding box": bbox, "row number": 1, "column number": 1,
+            "row span": 1, "column span": C, kids: [{ type: "text", content: text }],
+          };
+          bodyStart = 1;
+        }
+      }
     }
   }
 
