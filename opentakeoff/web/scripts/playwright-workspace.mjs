@@ -17,6 +17,8 @@ try {
   await page.waitForFunction(()=>window.__opentakeoff?.graphPrewarm()?.phase==='ready',null,{timeout:300000});
   for(const [width,height] of [[1280,800],[1440,900],[1920,1080],[2560,1440]]) {
     await page.setViewportSize({width,height});
+    const backToCanvas=page.getByTitle('Back to the canvas (Esc)',{exact:true});
+    if(await backToCanvas.isVisible()) await backToCanvas.click();
     await nav('Plans').click();
     for(const name of ['Plans','Schedules','Agent','Takeoff','Report']) {
       const box=await nav(name).boundingBox();
