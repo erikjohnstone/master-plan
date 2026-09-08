@@ -14,6 +14,7 @@
  *   node scripts/playwright-schedules-panel.mjs [--doc 05]
  */
 import { chromium } from "playwright";
+import { openImportedSheet } from './fixtures/open-imported-sheet.mjs';
 import { existsSync, mkdirSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -61,6 +62,7 @@ try {
   // the schedule pass is separate from the text index
   await page.waitForFunction(() => window.__opentakeoff?.graphPrewarm?.()?.phase === "ready", null, { timeout: 15 * 60 * 1000 });
   console.log("indexed, schedules ready");
+  await openImportedSheet(page);
 
   // THE STATUS CHIP IS THE WAY IN — it used to be an unclickable span.
   const chip = page.locator("[data-index-progress]").first();

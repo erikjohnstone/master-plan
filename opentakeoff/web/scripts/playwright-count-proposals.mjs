@@ -14,6 +14,7 @@
  *   node scripts/playwright-count-proposals.mjs
  */
 import { chromium } from "playwright";
+import { openImportedSheet } from './fixtures/open-imported-sheet.mjs';
 import { existsSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -58,6 +59,7 @@ try {
     { timeout: 15 * 60 * 1000 },
   );
   await page.waitForTimeout(1500);
+  await openImportedSheet(page);
 
   // A scale is required before any proposal can be accepted — set it the way
   // the agent's set_scale tool does.

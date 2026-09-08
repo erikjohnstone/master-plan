@@ -17,6 +17,7 @@
  *   node scripts/playwright-topbar.mjs [--widths 1280,1440,1920]
  */
 import { chromium } from "playwright";
+import { openImportedSheet } from './fixtures/open-imported-sheet.mjs';
 import { existsSync, mkdirSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -105,6 +106,7 @@ try {
       await page.waitForFunction(() => window.__opentakeoff?.indexProgress?.()?.phase === "ready", null, { timeout: 15 * 60 * 1000 });
     }
     await page.waitForTimeout(1200);
+    await openImportedSheet(page);
 
     const r = await page.evaluate(OVERLAP_FN);
     console.log(`\n${width}px — ${r.leaves} leaf elements, bar ${r.barHeight}px tall, deck 2 ${r.scrollWidth}/${r.clientWidth}px`);

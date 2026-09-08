@@ -14,6 +14,7 @@
  *   node scripts/playwright-inline-cites.mjs [--doc 05]
  */
 import { chromium } from "playwright";
+import { openImportedSheet } from './fixtures/open-imported-sheet.mjs';
 import { existsSync, mkdirSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 
@@ -47,6 +48,7 @@ try {
   await page.locator('input[name="sheet-file"]').first().setInputFiles(findPdf());
   await page.waitForFunction(() => window.__opentakeoff?.indexProgress?.()?.phase === "ready", null, { timeout: 15 * 60 * 1000 });
   await page.waitForFunction(() => window.__opentakeoff?.graphPrewarm?.()?.phase === "ready", null, { timeout: 15 * 60 * 1000 });
+  await openImportedSheet(page);
 
   // Build citations from a REAL table, so the bbox is real ink on a real sheet.
   const seeded = await page.evaluate(() => {
