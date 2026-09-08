@@ -22,6 +22,7 @@ for(const [sourceFile,name] of [
   ['/tmp/ot-workspace-bench.log','bench.txt'],
   ['/tmp/ot-table-driver.log','live-table-takeoff.txt'],
   ['/tmp/ot-takeoff-driver.log','live-takeoff.txt'],
+  ['/tmp/ot-corpus-schedules.log','corpus-schedules.txt'],
   ['/tmp/ot-workspace-ui/checks.json','ui-contracts.json'],
   ['/tmp/ot-workspace-ui/agent-running.png','agent-running-fixture.png'],
   ['/tmp/ot-workspace-ui/agent-review-hud.png','agent-review-hud-fixture.png'],

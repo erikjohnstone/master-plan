@@ -79,6 +79,11 @@ and [after](ui-workspace/evidence/after/evidence.json).
    workflows are not discovered by GitHub. The new root workflow runs the full
    check without relaxing it and runs the focused browser contracts separately.
    All required checks must be green before this is review-ready for release.
+4. The available 30-document collection's document 05 (USDA APHIS Plant
+   Inspection Station, Building 63) was attempted through the real schedules
+   driver. It timed out after 900,000 ms waiting for schedule graph readiness,
+   before reaching panel assertions. That larger corpus UI verification is
+   **unverified**, not passed; no extraction or corpus files were changed.
 
 ## Reproduce
 
