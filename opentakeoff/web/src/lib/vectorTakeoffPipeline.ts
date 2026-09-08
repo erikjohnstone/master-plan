@@ -549,24 +549,42 @@ export async function runVectorTakeoffPipeline(
   const snapped = snapAllTableCellBboxes(g, sourceSpansBySheet, touched);
   if (snapped) report.notes.push(`Cell bbox snap: ${snapped} table(s) re-grounded onto source spans.`);
 
-  // A region with a negative coordinate is never a real table position —
-  // every genuine extraction anchors to non-negative PDF/pixel space. Real,
-  // corpus-found (25_WA_DouglasCounty_Courthouse#4): vectorgrid's read of a
-  // transposed HEAT PUMP SCHEDULE (per-unit identifier columns printed as
-  // rotated text atop horizontal spec rows) put a handful of cells thousands
-  // of px from the rest of their own row, unioning into a region reaching
-  // y0=-1114.92 — duplicating a second, geometrically sane sheetgraph
-  // reading of the SAME table already in `g.tables`. sheetgraph's own build
-  // can't catch this: this class of table is added here, by
-  // adoptVectorGridTables, after buildSheetGraph already returned. Drop it
-  // at the one point every table source has finished contributing, same
-  // standard the citation-time off-sheet safeguard already applies to a
-  // click — just before it ever reaches a sheet's schedule list instead of
-  // only when a user clicks it.
+  // A region with a negative coordinate, or one that runs past the sheet's
+  // own known width/height, is never a real table position — every genuine
+  // extraction anchors inside the sheet it was read from. Real, corpus-found
+  // (25_WA_DouglasCounty_Courthouse#4): vectorgrid's read of a transposed
+  // HEAT PUMP SCHEDULE (per-unit identifier columns printed as rotated text
+  // atop horizontal spec rows) put a handful of cells thousands of px from
+  // the rest of their own row, unioning into a region reaching y0=-1114.92 —
+  // duplicating a second, geometrically sane sheetgraph reading of the SAME
+  // table already in `g.tables`.
+  //
+  // The negative-coordinate half of this catches that case, but not its
+  // sibling: 044_NY_VA_Project_528A8_17_805_Replace_Main_Boilers.pdf#21's own
+  // STEAM UNIT HEATER SCHEDULE (short, narrow-CELLED MARK values like "UH-3"
+  // whose bbox is merely taller than wide from row height, not real rotated
+  // text) tripped isVertical's own shape fallback, sent the table through
+  // extractAllQuarterTurnedTables' pivot-and-restore, and came back with every
+  // cell stacked along the WRONG axis — a region of y0=3134, y1=5701 on a
+  // sheet only 4320px tall, all coordinates positive so the guard above never
+  // fired. agentHighlightCitation refuses it at click time ("bbox_px is
+  // degenerate or outside the cited sheet"), which is the right call for a
+  // click but leaves a schedule the reader actually found sitting in the
+  // graph as a table nothing can ever show — worse than an honest miss.
+  // Bound-check against each sheet's own real width/height (from `contexts`,
+  // the one place every sheet's dimensions are already known here) and drop
+  // a table that cannot possibly fit, exactly as the negative-coordinate
+  // case already does — a dropped table is a disclosed gap; a table sitting
+  // off its own sheet is a citation nobody can ever paint.
+  const sheetDims = new Map(contexts.map((ctx) => [ctx.key, { w: ctx.width, h: ctx.height }]));
   for (let i = g.tables.length - 1; i >= 0; i--) {
-    const r = g.tables[i].region;
-    if (Array.isArray(r) && (r[0] < 0 || r[1] < 0)) {
-      touched.add(g.tables[i].sheet);
+    const table = g.tables[i];
+    const r = table.region;
+    if (!Array.isArray(r)) continue;
+    const dims = sheetDims.get(table.sheet);
+    const outOfBounds = r[0] < 0 || r[1] < 0 || (dims != null && (r[2] > dims.w || r[3] > dims.h));
+    if (outOfBounds) {
+      touched.add(table.sheet);
       g.tables.splice(i, 1);
     }
   }

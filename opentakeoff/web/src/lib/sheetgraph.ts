@@ -5984,12 +5984,33 @@ export function extractAllTables(sheet: SheetSpans, kind: "room-finish" | "finis
 /** Extract equipment schedules drawn as an entire quarter-turned table.
  * Rotating only vertical text into a temporary coordinate space lets the
  * normal multi-table extractor retain all of its header, boundary, and
- * refusal rules. Evidence boxes are mapped back to the source sheet. */
+ * refusal rules. Evidence boxes are mapped back to the source sheet.
+ *
+ * Only spans carrying an EXPLICIT `rot` are trusted here — never
+ * isVertical's own shape fallback (a real horizontal token that long
+ * "cannot be taller than wide", which holds for genuinely rotated text but
+ * not for a short, correctly-horizontal label sitting in a merely narrow,
+ * tall-drawn CELL). Measured, 044_NY_VA_Project_528A8_17_805_Replace_Main_
+ * Boilers.pdf#21's own STEAM UNIT HEATER SCHEDULE (and four sibling
+ * schedules on the same document): MARK values like "UH-3" are ordinary
+ * horizontal text, textSpans() computes rot=0 for them (confirmed: their
+ * real device-space box is wide and short), but their bbox happens to be
+ * taller than wide purely from the drafted row height in a narrow column —
+ * isVertical's fallback fires anyway, sends them through the pivot-and-
+ * restore below as if they were truly rotated, and the restored geometry
+ * comes back on the wrong axis entirely (a region taller than the sheet
+ * itself). A real quarter-turned schedule always carries `rot` (pdf.ts's
+ * textSpans emits it whenever nonzero, and every fixture this function is
+ * tested against sets it explicitly) — requiring it here costs nothing on
+ * genuine rotated-header sheets and closes this false-positive class. */
+const isExplicitlyVertical = (s: GraphSpan): boolean =>
+  s.rot != null && Math.abs(s.rot % 180) === 90;
+
 export function extractAllQuarterTurnedTables(
   sheet: SheetSpans,
   opts: ExtractOpts = {},
 ): ScheduleTable[] {
-  const vertical = sheet.spans.filter(isVertical);
+  const vertical = sheet.spans.filter(isExplicitlyVertical);
   if (vertical.length < 8) return [];
   const pivot = Math.max(...vertical.map((span) => span.x + (span.w || 0)));
   const turned: SheetSpans = {
