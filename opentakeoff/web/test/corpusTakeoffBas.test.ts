@@ -326,17 +326,17 @@ describe("compileBasTakeoff I/O LIST", () => {
     assert.equal(bas.totals.hardwired, 1);
     assert.equal(bas.totals.soft, 1);
     const ai10 = bas.categories.points_lists.lists[0].items.find((i) => i.tag === "AI10");
-    assert.equal(ai10.alarm, "HI/LO");
-    assert.equal(ai10.trend, "15 MIN");
-    assert.equal(ai10.wiring, "hardwired");
-    assert.equal(ai10.served_equipment, "AHU-2");
+    assert.equal(ai10!.alarm, "HI/LO");
+    assert.equal(ai10!.trend, "15 MIN");
+    assert.equal(ai10!.wiring, "hardwired");
+    assert.equal(ai10!.served_equipment, "AHU-2");
     const ao01 = bas.categories.points_lists.lists[0].items.find((i) => i.tag === "AO01");
-    assert.equal(ao01.wiring, "soft");
-    assert.equal(ao01.alarm, null);
-    assert.equal(ao01.trend, null);
-    assert.equal(ao01.served_equipment, "AHU-2");
+    assert.equal(ao01!.wiring, "soft");
+    assert.equal(ao01!.alarm, null);
+    assert.equal(ao01!.trend, null);
+    assert.equal(ao01!.served_equipment, "AHU-2");
     const bi03 = bas.categories.points_lists.lists[0].items.find((i) => i.tag === "BI03");
-    assert.equal(bi03.wiring, null);
+    assert.equal(bi03!.wiring, null);
     assert.ok(bas.exclusions.some((e) => /sequence-of-operations/i.test(e)));
   });
 
@@ -374,10 +374,10 @@ describe("compileBasTakeoff I/O LIST", () => {
     const bas = compileBasTakeoff(null, graph);
     const doah = bas.categories.points_lists.lists.find((l) => /DOAH/i.test(l.title));
     // OCR I→1 repair so plan paint joins DOAH-T1 on schedule.
-    assert.equal(doah.items.find((i) => i.tag === "AI01").served_equipment, "DOAH-T1");
-    assert.equal(doah.items.find((i) => i.tag === "AI02").served_equipment, "DOAH-T1");
+    assert.equal(doah!.items.find((i) => i.tag === "AI01")!.served_equipment, "DOAH-T1");
+    assert.equal(doah!.items.find((i) => i.tag === "AI02")!.served_equipment, "DOAH-T1");
     const io = bas.categories.points_lists.lists.find((l) => /I\/O LIST/i.test(l.title));
-    assert.equal(io.items.find((i) => i.tag === "HWP-1").served_equipment, "HWP-1");
+    assert.equal(io!.items.find((i) => i.tag === "HWP-1")!.served_equipment, "HWP-1");
   });
 
   it("ocrFixEquipMark repairs I→1 and slash family inheritance (Pillar C join)", () => {

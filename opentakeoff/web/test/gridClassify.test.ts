@@ -1,3 +1,4 @@
+import type { SheetGraph, ScheduleTable } from "../src/lib/sheetgraph.ts";
 /**
  * P2 grid classification — builds on L5 header-geometry + BAS detectors.
  */
@@ -37,19 +38,19 @@ const BAS_GRID = {
 describe("gridClassify", () => {
   it("delegates to isControlValveHeaderShape for untitled valve grids", () => {
     assert.equal(isControlValveHeaderShape(UNTITLED_VALVE), true);
-    const g = classifyGrid(UNTITLED_VALVE);
+    const g = classifyGrid(UNTITLED_VALVE as unknown as ScheduleTable);
     assert.equal(g.type, "VALVE_SCHEDULE");
     assert.ok(g.score >= 0.9);
   });
 
   it("does NOT classify a generic untitled equipment grid (RTU) as a valve schedule just because it shares TAG/MODEL/SIZE columns", () => {
     assert.equal(isControlValveHeaderShape(UNTITLED_RTU), false);
-    const g = classifyGrid(UNTITLED_RTU);
+    const g = classifyGrid(UNTITLED_RTU as unknown as ScheduleTable);
     assert.notEqual(g.type, "VALVE_SCHEDULE");
   });
 
   it("classifies BAS points lists via existing isBasPointsListTitle", () => {
-    const g = classifyGrid(BAS_GRID);
+    const g = classifyGrid(BAS_GRID as unknown as ScheduleTable);
     assert.equal(g.type, "POINTS_LIST");
   });
 

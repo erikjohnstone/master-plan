@@ -1,3 +1,4 @@
+import type { ComponentProps } from "react";
 import assert from "node:assert/strict";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -17,7 +18,7 @@ test("AgentAnswer renders markdown tables as HTML tables, not pipe dumps", () =>
     "",
     "[Automated check: highlight_citation painted exactly 2 source region(s): VAV-1 · CFM = 350; VAV-58 · CFM = 350.]",
   ].join("\n");
-  const html = renderToStaticMarkup(createElement(AgentAnswer, { text: md }));
+  const html = renderToStaticMarkup(createElement(AgentAnswer, { text: md } as ComponentProps<typeof AgentAnswer>));
   assert.match(html, /data-agent-answer="structured"/);
   assert.match(html, /<table/);
   assert.match(html, /<th[^>]*>Tag<\/th>/);
@@ -30,7 +31,7 @@ test("AgentAnswer renders markdown tables as HTML tables, not pipe dumps", () =>
 test("AgentAnswer strips embedded highlight markup ids from chat", () => {
   const html = renderToStaticMarkup(createElement(AgentAnswer, {
     text: "VAV-1 CFM is 350【mk-aaaa-bbbb】 on the schedule.",
-  }));
+  } as ComponentProps<typeof AgentAnswer>));
   assert.doesNotMatch(html, /mk-aaaa/);
   assert.match(html, /VAV-1 CFM is 350/);
 });

@@ -10,7 +10,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, rowKeyOf, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, type GraphSpan, type SheetSpans, type SheetGraph, type TableBound, type ScheduleTable, type TableRow } from "../src/lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, rowKeyOf, extractTable, extractAllTables, extractAllQuarterTurnedTables, roomTags, detailCallouts, revisionOf, isReferenceCrossTable, isBareAnchorHeader, isQualifiedAnchorHeader, promoteLeadingEngineeringUnits, preferLastOverprintedText, snapCellBboxesToSourceSpans, resolveKeyCollisions, splitMergedRows, isGenericHeaderToken, type GraphSpan, type SheetSpans, type SheetGraph, type ScheduleTable, type TableRow } from "../src/lib/sheetgraph.ts";
 
 // span builder: 8pt-tall text, width ~5px/char — the shape the MCP server serves
 const sp = (str: string, x: number, y: number): GraphSpan => ({ str, x, y, w: str.length * 5, h: 8 });

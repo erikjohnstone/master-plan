@@ -1,3 +1,6 @@
+import type { SheetGraph, TableRow } from "../src/lib/sheetgraph.ts";
+import type { QueryTableSuccess } from "../src/lib/queryTable.mjs";
+import type { FixtureCategories } from "./fixtureRuntimeTypes.ts";
 // Fixture-facing proofs for production workflows (set-agnostic tool path).
 // Counts on the NAVFAC graph are acceptance checks only — not product hardcodes.
 import { test } from "node:test";
@@ -22,7 +25,7 @@ const GRAPH_CANDIDATES = [
   "/tmp/ui-sheet-graph.json",
 ];
 
-function loadGraph() {
+function loadGraph(): SheetGraph | null {
   for (const p of GRAPH_CANDIDATES) {
     if (existsSync(p)) return JSON.parse(readFileSync(p, "utf8"));
   }
@@ -35,7 +38,7 @@ test("D08 FCU title-scan building_tag_counts match fixture acceptance (42 = 14+1
     test.skip("No cached NAVFAC sheet graph — skip fixture acceptance");
     return;
   }
-  const r = queryTable(graph, { title: "FAN COIL UNIT SCHEDULE" });
+  const r = (queryTable(graph, { title: "FAN COIL UNIT SCHEDULE" }) as QueryTableSuccess & { error?: string });
   assert.equal(r.count, 42);
   assert.equal(r.building_tag_counts?.A, 14);
   assert.equal(r.building_tag_counts?.M, 10);
@@ -61,7 +64,7 @@ test("D10 five POINTS/DDC lists: title parse + row/AI-AO-BI-BO acceptance", () =
     test.skip("No cached NAVFAC sheet graph — skip fixture acceptance");
     return;
   }
-  const want = {
+  const want: Record<string, { count: number; AI: number; AO: number; BI: number; BO: number }> = {
     "POINTS LIST DOAH-TI": { count: 34, AI: 13, AO: 4, BI: 13, BO: 4 },
     "POINTS LIST AHU-T1A/TIB": { count: 62, AI: 21, AO: 7, BI: 26, BO: 8 },
     "FCU WITH COOLING COILS DDC POINTS LIST": { count: 9, AI: 3, AO: 1, BI: 4, BO: 1 },
@@ -70,12 +73,12 @@ test("D10 five POINTS/DDC lists: title parse + row/AI-AO-BI-BO acceptance", () =
   };
   let total = 0;
   for (const title of titles) {
-    const r = queryTable(graph, { title });
+    const r = (queryTable(graph, { title }) as QueryTableSuccess & { error?: string });
     const key = Object.keys(want).find((k) => title.toUpperCase().includes(k.slice(0, 24)));
     assert.ok(key, `unexpected title ${title}`);
     assert.equal(r.count, want[key].count, title);
     total += r.count;
-    for (const pt of ["AI", "AO", "BI", "BO"]) {
+    for (const pt of ["AI", "AO", "BI", "BO"] as const) {
       assert.equal(r.point_type_counts?.[pt], want[key][pt], `${title} ${pt}`);
     }
   }
@@ -96,10 +99,10 @@ test("corpus compiles expose empty-page accounting (HVAC + BAS)", () => {
   assert.ok(hvac.page_accounting?.empty_pages > 0);
   assert.ok(bas.page_accounting?.empty_pages > 0);
   assert.ok(
-    hvac.page_accounting.pages.some((p) => /empty_for_hvac/i.test(p.status)),
+    hvac.page_accounting.pages.some((p: { status: string }) => /empty_for_hvac/i.test(p.status)),
   );
   assert.ok(
-    bas.page_accounting.pages.some((p) => /empty_for_bas/i.test(p.status)),
+    bas.page_accounting.pages.some((p: { status: string }) => /empty_for_bas/i.test(p.status)),
   );
 });
 
@@ -145,7 +148,7 @@ test("D10 follow-up acceptance: AHU-T1A/T1B description split + AI10 attrs", () 
   const ahu = (graph.tables || []).find((t) => /POINTS LIST AHU-T1A/i.test(t.title?.text || ""));
   assert.ok(ahu, "AHU points list must extract");
   assert.equal((ahu.rows || []).length, 62);
-  const cellText = (row, headerRe) => {
+  const cellText = (row: TableRow, headerRe: RegExp) => {
     for (const [header, cell] of Object.entries(row.cells || {})) {
       if (headerRe.test(header)) return String(cell?.text || "").trim();
     }
@@ -266,7 +269,7 @@ test("schedule-family ROUTING rows: intent → title needle → fixture counts +
   }
   const hvac = compileHvacTakeoff(null, graph);
   for (const fam of families) {
-    const cat = hvac.categories[fam.cat];
+    const cat = (hvac.categories as FixtureCategories)[fam.cat];
     assert.ok(cat, fam.cat);
     assert.equal(cat.count, fam.count, fam.cat);
     assert.ok(cat.items.length === fam.count);
@@ -274,7 +277,7 @@ test("schedule-family ROUTING rows: intent → title needle → fixture counts +
       i.sheet_id && (i.bbox_px || i.row_bbox_px || i.table_bbox_px));
     assert.equal(withCite.length, fam.count, `${fam.cat} cites`);
     const titleNeedle = suggestedScheduleTitles(fam.goal).find((t) => fam.titleRe.test(t));
-    const qt = queryTable(graph, { title: titleNeedle });
+    const qt = (queryTable(graph, { title: titleNeedle }) as QueryTableSuccess & { error?: string });
     assert.ok(!qt.error, `${fam.goal} query_table: ${qt.error}`);
     assert.equal(qt.count, fam.count, `${fam.goal} query_table count`);
   }
@@ -301,10 +304,10 @@ test("continuation-page MARK dedupe: 1 OF 2 / 2 OF 2 must not double-count", () 
     }
   }
   assert.ok(rawRows > rawKeys.size, "continuation pages must repeat MARK keys in raw rows");
-  const qt = queryTable(graph, { title: "DEDICATED OUTDOOR AIR UNIT SCHEDULE" });
+  const qt = (queryTable(graph, { title: "DEDICATED OUTDOOR AIR UNIT SCHEDULE" }) as QueryTableSuccess & { error?: string });
   assert.equal(qt.count, rawKeys.size, "query_table must dedupe continuation MARKs");
   const hvac = compileHvacTakeoff(null, graph);
-  assert.equal(hvac.categories.DOAH_UNIT.count, rawKeys.size);
+  assert.equal((hvac.categories as FixtureCategories).DOAH_UNIT.count, rawKeys.size);
 });
 
 test("BAS compile discloses non-extractable title-only points lists", () => {
@@ -335,7 +338,7 @@ test("schedule title region cite: family items expose table_bbox_px for whole-ta
     return;
   }
   const hvac = compileHvacTakeoff(null, graph);
-  const pump = hvac.categories.PUMP;
+  const pump = (hvac.categories as FixtureCategories).PUMP;
   assert.ok(pump.count >= 1);
   const withTable = pump.items.filter((i) => Array.isArray(i.table_bbox_px) && i.table_bbox_px.length === 4);
   assert.ok(withTable.length >= 1, "at least one pump row must carry schedule title/region bbox");

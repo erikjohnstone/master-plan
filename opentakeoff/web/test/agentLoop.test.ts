@@ -771,7 +771,7 @@ test("installed quantity cannot finish without deterministic count evidence", ()
       },
     }] } },
   ], serviceJoinGoal,
-  "Could not determine which RTU serves BUILDING SOUTH from drawing evidence."), /schedule SERVICE join|matching equipment MARK/);
+  "Could not determine which RTU serves BUILDING SOUTH from drawing evidence.")!, /schedule SERVICE join|matching equipment MARK/);
   // LOCATION still cannot paraphrase into serves even when SERVICE exists on another row.
   assert.match(requiredEvidenceCorrection([
     { name: "query_table", out: { matches: [{
@@ -803,7 +803,7 @@ test("installed quantity cannot finish without deterministic count evidence", ()
       ],
     } },
   ], "Give me the point mark, alarm and trend requirements, what the unit serves, and the physical drawing section.",
-  `Point mark: AHU-1 HW VALVE POSITION (FEEDBACK) on set.pdf#65\nServes: ${narrative}\nPhysical section: AHU-1 / AHU-2 SECTION on set.pdf#28`), /BAS point mark|does not state that mark/);
+  `Point mark: AHU-1 HW VALVE POSITION (FEEDBACK) on set.pdf#65\nServes: ${narrative}\nPhysical section: AHU-1 / AHU-2 SECTION on set.pdf#28`)!, /BAS point mark|does not state that mark/);
 });
 
 test("generic point list takeoff: evidence gate demands compile, then clears after bas_points", () => {
@@ -877,7 +877,7 @@ test("valve symbols: legend-only paints cannot claim all valve types highlighted
       { name: "highlight_citation", out: { bbox_px: [10, 20, 30, 40] } },
       { name: "highlight_citation", out: { bbox_px: [50, 60, 70, 80] } },
     ], goal,
-      "GATE VALVE · Highlighted\nGLOBE VALVE · Highlighted\nBUTTERFLY VALVE · Highlighted\nCHECK VALVE · Highlighted\nRELIEF VALVE · Highlighted"),
+      "GATE VALVE · Highlighted\nGLOBE VALVE · Highlighted\nBUTTERFLY VALVE · Highlighted\nCHECK VALVE · Highlighted\nRELIEF VALVE · Highlighted")!,
     /only 2 highlight_citation|Do not invent plan highlights/i,
   );
   // Legend inventory + plenty of paints still must not claim plan placements
@@ -894,7 +894,7 @@ test("valve symbols: legend-only paints cannot claim all valve types highlighted
       },
       ...paints,
     ], goal,
-      "GATE VALVE · Highlighted\nGLOBE VALVE · Highlighted\nBUTTERFLY VALVE · Highlighted\nCHECK VALVE · Highlighted"),
+      "GATE VALVE · Highlighted\nGLOBE VALVE · Highlighted\nBUTTERFLY VALVE · Highlighted\nCHECK VALVE · Highlighted")!,
     /find_legend_symbols|legend glyphs|plan placements/i,
   );
 });

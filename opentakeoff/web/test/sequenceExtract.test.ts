@@ -1,3 +1,4 @@
+import type { SheetGraph, ScheduleTable } from "../src/lib/sheetgraph.ts";
 /**
  * P3 sequence extraction — builds on SOO detectors, never invents points.
  */
@@ -31,7 +32,7 @@ describe("sequenceExtract", () => {
         ],
       }],
     };
-    const seqs = extractSequencesFromGraph(graph);
+    const seqs = extractSequencesFromGraph(graph as unknown as SheetGraph);
     assert.equal(seqs.length, 1);
     assert.equal(seqs[0].status, "extracted");
     assert.equal(seqs[0].sections.length, 2);
@@ -49,7 +50,7 @@ describe("sequenceExtract", () => {
         rows: [],
       }],
     };
-    const seqs = extractSequencesFromGraph(graph);
+    const seqs = extractSequencesFromGraph(graph as unknown as SheetGraph);
     assert.ok(seqs.length >= 1);
     assert.equal(seqs[0].status, "narrative_only");
     assert.deepEqual(seqs[0].impliedPoints, []);
@@ -81,7 +82,7 @@ describe("sequenceExtract", () => {
         ],
       }],
     };
-    const compiled = compileSequencesTakeoff(null, graph);
+    const compiled = compileSequencesTakeoff(null, graph as unknown as SheetGraph);
     assert.equal(compiled.kind, "sequences");
     assert.equal(compiled.takeoff_id, "T-SOO-01");
     assert.equal(compiled.sheet_count, 2);
@@ -93,7 +94,7 @@ describe("sequenceExtract", () => {
     assert.equal(compiled.categories.sequences.totals.sections, 2);
     assert.equal(compiled.page_accounting.sheet_count, 2);
     assert.equal(compiled.page_accounting.empty_pages, 1);
-    assert.equal(compiled.page_accounting.pages.find((p) => p.sheet_id === "set.pdf#21").status, "empty_for_sequences");
+    assert.equal(compiled.page_accounting.pages.find((p) => p.sheet_id === "set.pdf#21")!.status, "empty_for_sequences");
     assert.ok(compiled.exclusions.some((e) => /impliedPoints is always empty/.test(e)));
   });
 });

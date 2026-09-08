@@ -68,16 +68,41 @@ and [after](ui-workspace/evidence/after/evidence.json).
   The AHU schedule has 35 columns. Every header and first-row cell was checked
   against the graph, and split/expanded/far-right-column screenshots inspected.
   Table/row navigation, idempotence, filtering, and highlight cleanup passed.
-- GitHub's `ui-contracts` job passed on commit `3fca9ee8` in
-  [run 34290188833](https://github.com/erikjohnstone/master-plan/actions/runs/34290188833).
-  This is distinct from the full TypeScript check, which remains red.
+- GitHub's `ui-contracts` job passed on commit `05bbc38f` in
+  [run 34290478079](https://github.com/erikjohnstone/master-plan/actions/runs/34290478079).
+  This is distinct from the full release check.
+
+## Separately authorized test typing
+
+The user explicitly approved test-only typing fixes, preserving every assertion
+and leaving all production/extraction code untouched. The 252 inherited
+TypeScript diagnostics are resolved with type annotations/assertions in 16 test
+files and a type-only fixture helper. No fixture values, runtime assertions,
+production types, compiler options or lint rules were changed.
+
+`node scripts/verify-test-runtime-parity.mjs 05bbc38f` compares executable
+JavaScript before and after the typing edits, normalizing redundant parentheses
+while preserving optional-chain boundaries. All 16 edited test files match.
+The historical baseline/after logs still document the original UI-only state;
+the separate `test-typing-*` evidence records this authorized follow-up.
+
+The first post-typing unit run passed 2,514 tests and failed one unchanged
+`mepconnectivity` wall-clock guard (64.31 seconds against 60 seconds) while
+other validation jobs were running. An isolated rerun passed all 28 MEP tests,
+with the dense-grid case taking 6.46 seconds. The failed concurrent run is kept
+as evidence; no timing threshold or engine implementation was edited. Build
+and benchmarks also pass after the typing changes.
+The subsequent unmodified `npm test` run, without other validation jobs running,
+passed **2,515 tests, 0 failed, 13 skipped** (2,528 total).
 
 ## Open release gates — not claimed complete
 
-1. `npm run check` already fails on baseline main with **252 TypeScript errors**.
-   The after run reports the same 252 diagnostics. Full lint also reports
-   inherited errors, including prohibited shared-engine files. These were not
-   hidden, ignored, weakened or repaired in a UI-only change.
+1. The inherited **252 TypeScript errors are now resolved** by the separately
+   authorized test-only typing changes. Full lint still reports **50 errors and
+   3 warnings**, including 39 errors in prohibited shared-engine files and 11
+   in the canvas. Those source files/errors were not repaired under test-only
+   authorization. No checks were hidden, ignored or weakened; `npm run check`
+   remains a release blocker at the lint step.
 2. `playwright-table-takeoff-ui.mjs --doc 05` and
    `playwright-takeoff-ui-demo.mjs hvac` were attempted but refuse to start
    without a live `CEREBRAS_API_KEY`. The isolated environment has no key.

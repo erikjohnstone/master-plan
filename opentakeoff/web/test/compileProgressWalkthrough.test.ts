@@ -15,7 +15,7 @@ const MCP = resolve(HERE, "../../mcp");
 const CLI = resolve(MCP, "scripts/production-graph-cli.mjs");
 const PDF = resolve(HERE, "../../../opentakeoff-corpus/raw/bldg5406-hvac-demo-mechanical.pdf");
 
-function parseProgressLines(stderr) {
+function parseProgressLines(stderr: string) {
   return String(stderr || "")
     .split("\n")
     .filter((l) => l.startsWith("OT_PROGRESS\t"))
@@ -50,7 +50,7 @@ test("production-graph-cli emits OT_PROGRESS phases during compile", async (t) =
   assert.ok(phases.some((p) => p.phase === "graph"), "graph phase");
   assert.ok(phases.some((p) => p.phase === "compile" || p.phase === "done"), "compile/done phase");
   assert.ok(phases.every((p) => typeof p.message === "string" && p.message.length > 0));
-  const result = JSON.parse(stdout.trim().split("\n").filter(Boolean).at(-1));
+  const result = JSON.parse(stdout.trim().split("\n").filter(Boolean).at(-1)!);
   assert.equal(result.kind, "control_valves");
 });
 

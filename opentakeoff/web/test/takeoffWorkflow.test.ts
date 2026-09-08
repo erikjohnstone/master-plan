@@ -309,7 +309,7 @@ test("named-family / FCU / valve-join goals route through durable intents", () =
 });
 
 test("all D01–D10 frozen prompts route to durable non-generic intents", () => {
-  const want = {
+  const want: Record<string, Parameters<typeof advanceTakeoffWorkflow>[0]> = {
     "D01-chiller-plan-to-controls": "equipment_plan_join",
     "D02-ahu-bas-point-to-location": "bas_point_trace",
     "D03-hvac-bas-project-takeoff": "project_takeoff",
@@ -415,7 +415,7 @@ test("suggestedScheduleTitles maps family words to industry schedule needles", (
 });
 
 test("remaining schedule families route + suggest query_table-viable titles", () => {
-  const cases = [
+  const cases: Array<[string, RegExp]> = [
     ["Pump schedule takeoff — counts and GPM/head", /PUMP SCHEDULE/i],
     ["Boiler schedule takeoff — totals and capacity", /BOILER SCHEDULE/i],
     ["Dedicated outdoor-air / DOAS schedule takeoff", /DEDICATED OUTDOOR AIR UNIT SCHEDULE/i],
