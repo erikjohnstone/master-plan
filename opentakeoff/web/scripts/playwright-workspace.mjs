@@ -36,8 +36,18 @@ try {
     const drawing=await page.locator('.workspace-drawing').boundingBox();
     check(`${width}: usable drawing width`,drawing.width>=500);
     const panel=page.locator('[data-schedules-panel]');
-    await panel.getByRole('button',{name:/FAN SCHEDULE/}).first().click();
-    const table=await page.evaluate(()=>window.__opentakeoff.probe.graphTables().find(t=>(t.title?.text||t.title)==='FAN SCHEDULE'));
+    // Exercise a genuinely wide grid without assuming a particular extracted
+    // title has the same column count under every supported reader. The real
+    // graph remains authoritative; no cells or headers are fabricated here.
+    const {table,tableIndex}=await page.evaluate(async()=>{
+      const {groupBySheet}=await import('/src/lib/scheduleBrowse.js');
+      const tables=groupBySheet(window.__opentakeoff.probe.graphTables()).flatMap(group=>group.tables);
+      const table=tables.filter(t=>t.rows?.length).reduce((widest,t)=>
+        !widest || (t.headers?.length||0)>(widest.headers?.length||0) ? t : widest,null);
+      return {table,tableIndex:tables.indexOf(table)};
+    });
+    assert.ok(table?.headers.length>=8,'The real sample must supply a wide table (at least eight columns)');
+    await panel.locator('[data-schedule-section] button[aria-expanded]').nth(tableIndex).click();
     const headers=await panel.locator('.schedule-grid thead th').allTextContents();
     check(`${width}: all headers unmodified`,JSON.stringify(headers.slice(1))===JSON.stringify(table.headers));
     const cells=await panel.locator('.schedule-grid tbody tr').first().locator('td').allTextContents();
