@@ -59,10 +59,23 @@ function compareRows(expectedRows, actualRows, tolerance) {
       if (expected.member_rects.length !== actualMembers.length) {
         geometryMismatches.push({ caption: expected.caption, kind: expected.kind, field: "member_rects.length", expected: expected.member_rects.length, actual: actualMembers.length });
       } else {
+        // Members are a geometric set, not an ordered semantic tuple. JTS
+        // component enumeration may traverse the same disconnected strokes
+        // from either side while the glyph union and every member box remain
+        // identical. Match each expected box to one unused actual box so the
+        // gate remains exact without treating array permutation as geometry
+        // corruption.
+        const remainingMembers = actualMembers.map((rect, index) => ({ rect, index }));
         for (let member = 0; member < expected.member_rects.length; member++) {
-          if (!bboxWithin(expected.member_rects[member], actualMembers[member], tolerance)) {
-            geometryMismatches.push({ caption: expected.caption, kind: expected.kind, field: `member_rects[${member}]`, expected: expected.member_rects[member], actual: actualMembers[member] });
+          const expectedMember = expected.member_rects[member];
+          const exact = remainingMembers.find((entry) => bboxWithin(expectedMember, entry.rect, tolerance));
+          if (exact) {
+            remainingMembers.splice(remainingMembers.indexOf(exact), 1);
+            continue;
           }
+          remainingMembers.sort((a, b) => bboxDistance(expectedMember, a.rect) - bboxDistance(expectedMember, b.rect) || a.index - b.index);
+          const closest = remainingMembers.shift();
+          geometryMismatches.push({ caption: expected.caption, kind: expected.kind, field: `member_rects[${member}]`, expected: expectedMember, actual: closest?.rect ?? null });
         }
       }
     }
