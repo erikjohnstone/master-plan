@@ -1,0 +1,2000 @@
+{
+  "tables": [
+    {
+      "kind": "reference",
+      "sheet": "sample-mechanical-set.pdf#2",
+      "title": {
+        "sheet": "sample-mechanical-set.pdf#2",
+        "text": "PLUMBING PIPE INSULATION SCHEDULE",
+        "bbox": [
+          481.4,
+          216.9,
+          859.3,
+          236.4
+        ]
+      },
+      "headers": [
+        "SYSTEM TYPE",
+        "INSUL. TYPE",
+        "PIPE SIZES",
+        "INSULATION THICKNESS"
+      ],
+      "rows": [
+        {
+          "key": "DOMESTIC HOT WATER SUPPLY",
+          "sheet": "sample-mechanical-set.pdf#2",
+          "cells": {
+            "SYSTEM TYPE": {
+              "text": "DOMESTIC HOT WATER SUPPLY",
+              "bbox": [
+                481,
+                337.7,
+                776.5,
+                356.6
+              ]
+            },
+            "INSUL. TYPE": {
+              "text": "P-1",
+              "bbox": [
+                968.2,
+                337.7,
+                997.4,
+                356.6
+              ]
+            },
+            "PIPE SIZES": {
+              "text": "1-1/4\" AND SMALLER 1-1/2\" AND LARGER",
+              "bbox": [
+                1081,
+                326.9,
+                1267.9,
+                367
+              ]
+            },
+            "INSULATION THICKNESS": {
+              "text": "1\" 1-1/2\"",
+              "bbox": [
+                1364.4,
+                326.9,
+                1413.8,
+                367
+              ]
+            }
+          }
+        },
+        {
+          "key": "DOMESTIC COLD WATER",
+          "sheet": "sample-mechanical-set.pdf#2",
+          "cells": {
+            "SYSTEM TYPE": {
+              "text": "DOMESTIC COLD WATER",
+              "bbox": [
+                481,
+                385.5,
+                709.9,
+                404.4
+              ]
+            },
+            "INSUL. TYPE": {
+              "text": "P-1 OR P-5",
+              "bbox": [
+                931.7,
+                385.5,
+                1033.9,
+                404.4
+              ]
+            },
+            "PIPE SIZES": {
+              "text": "1-1/4\" AND SMALLER 1-1/2\" AND LARGER",
+              "bbox": [
+                1081,
+                374.5,
+                1267.9,
+                414.5
+              ]
+            },
+            "INSULATION THICKNESS": {
+              "text": "1/2\" 1\"",
+              "bbox": [
+                1372.6,
+                374.5,
+                1405.4,
+                414.5
+              ]
+            }
+          }
+        }
+      ],
+      "region": [
+        481,
+        216.9,
+        1446.9,
+        414.5
+      ],
+      "anchors": [
+        {
+          "label": "SYSTEM TYPE",
+          "x": 546.9
+        },
+        {
+          "label": "INSUL. TYPE",
+          "x": 983.2
+        },
+        {
+          "label": "PIPE SIZES",
+          "x": 1174.6
+        },
+        {
+          "label": "INSULATION THICKNESS",
+          "x": 1389.375
+        }
+      ]
+    },
+    {
+      "kind": "reference",
+      "sheet": "sample-mechanical-set.pdf#8",
+      "title": {
+        "sheet": "sample-mechanical-set.pdf#8",
+        "text": "DUCTWORK INSULATION SCHEDULE",
+        "bbox": [
+          3753.4,
+          241.1,
+          4094.7,
+          260.6
+        ]
+      },
+      "headers": [
+        "SYSTEM TYPE",
+        "INSULATION TYPE",
+        "INSULATION OR LINER THICKNESS"
+      ],
+      "rows": [
+        {
+          "key": "SUPPLY DUCTS (EXTERNALLY INSULATED)",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "SYSTEM TYPE": {
+              "text": "SUPPLY DUCTS (EXTERNALLY INSULATED)",
+              "bbox": [
+                3752.9,
+                373.5,
+                4146,
+                392.4
+              ]
+            },
+            "INSULATION TYPE": {
+              "text": "D-1, D-2, D-6",
+              "bbox": [
+                4266.2,
+                373.5,
+                4377.5,
+                392.4
+              ]
+            },
+            "INSULATION OR LINER THICKNESS": {
+              "text": "1-1/2\"",
+              "bbox": [
+                4463.8,
+                373.5,
+                4513.2,
+                392.4
+              ]
+            }
+          }
+        },
+        {
+          "key": "EXHAUST DUCTS WITHIN 10 FEET OF EXTERIOR",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "SYSTEM TYPE": {
+              "text": "EXHAUST DUCTS WITHIN 10 FEET OF EXTERIOR OPENINGS",
+              "bbox": [
+                3752.9,
+                399.2,
+                4194.4,
+                439.2
+              ]
+            },
+            "INSULATION TYPE": {
+              "text": "D-1, D-2",
+              "bbox": [
+                4286.6,
+                410.2,
+                4357.4,
+                429.1
+              ]
+            },
+            "INSULATION OR LINER THICKNESS": {
+              "text": "1\"",
+              "bbox": [
+                4479.8,
+                410.2,
+                4497.1,
+                429.1
+              ]
+            }
+          }
+        }
+      ],
+      "region": [
+        3752.9,
+        241.1,
+        4563.3,
+        439.2
+      ],
+      "anchors": [
+        {
+          "label": "SYSTEM TYPE",
+          "x": 3818.8
+        },
+        {
+          "label": "INSULATION TYPE",
+          "x": 4322.35
+        },
+        {
+          "label": "INSULATION OR LINER THICKNESS",
+          "x": 4489
+        }
+      ]
+    },
+    {
+      "kind": "reference",
+      "sheet": "sample-mechanical-set.pdf#2",
+      "title": {
+        "sheet": "sample-mechanical-set.pdf#2",
+        "text": "PIPING INSULATION SCHEDULE",
+        "bbox": [
+          361.2,
+          509.04,
+          1477.92,
+          552.24
+        ]
+      },
+      "headers": [
+        "INSULATION TYPE",
+        "DESCRIPTION"
+      ],
+      "rows": [
+        {
+          "key": "P-1",
+          "sheet": "sample-mechanical-set.pdf#2",
+          "cells": {
+            "INSULATION TYPE": {
+              "text": "P-1",
+              "bbox": [
+                361.2,
+                627.12,
+                505.2,
+                696.48
+              ]
+            },
+            "DESCRIPTION": {
+              "text": "ASTM C547, MOLDED GLASS FIBER PIPE INSULATION, OPERATING TEMPERATURE RANGE: 0 TO 850 DEG F, VAPOR BARRIER JACKET: ASTM C1136, TYPE I, FACTORY APPLIED REINFORCED FOIL DRAFT WITH SELF SEALING ADHESIVE JOINTS.",
+              "bbox": [
+                505.2,
+                627.12,
+                1477.92,
+                696.48
+              ]
+            }
+          }
+        },
+        {
+          "key": "P-5",
+          "sheet": "sample-mechanical-set.pdf#2",
+          "cells": {
+            "INSULATION TYPE": {
+              "text": "P-5",
+              "bbox": [
+                361.2,
+                696.48,
+                505.2,
+                744.24
+              ]
+            },
+            "DESCRIPTION": {
+              "text": "ASTM C534, TYPE I, FLEXILE, CLOSED CELL ELASTOMERIC INSULATION, TUBULAR, OPERATING TEMPERATURE RANGE: MINUS 70 TO 180 DEG F.",
+              "bbox": [
+                505.2,
+                696.48,
+                1477.92,
+                744.24
+              ]
+            }
+          }
+        }
+      ],
+      "region": [
+        361.2,
+        509.04,
+        1477.92,
+        744.24
+      ]
+    },
+    {
+      "kind": "reference",
+      "sheet": "sample-mechanical-set.pdf#8",
+      "title": {
+        "sheet": "sample-mechanical-set.pdf#8",
+        "text": "DUCTWORK INSULATION TYPE SCHEDULE",
+        "bbox": [
+          3602.64,
+          573.6,
+          4571.74,
+          616.8
+        ]
+      },
+      "headers": [
+        "INSULATION TYPE",
+        "DESCRIPTION"
+      ],
+      "rows": [
+        {
+          "key": "D-1",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "INSULATION TYPE": {
+              "text": "D-1",
+              "bbox": [
+                3602.64,
+                691.68,
+                3746.4,
+                761.28
+              ]
+            },
+            "DESCRIPTION": {
+              "text": "ASTM C1290, TYPE III, FLEXIBLE GLASS FIBER, COMMERCIAL GRADE WITH FACTORY APPLIED REINFORCED FOIL JACKET MEETING ASTM C1136, TYPE II, MAX. OPERATING TEMPERATURE: 250 DEG. F, DENSITY: 1.5 LBS/CU FT.",
+              "bbox": [
+                3746.4,
+                691.68,
+                4571.74,
+                761.28
+              ]
+            }
+          }
+        },
+        {
+          "key": "D-2",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "INSULATION TYPE": {
+              "text": "D-2",
+              "bbox": [
+                3602.64,
+                761.28,
+                3746.4,
+                808.8
+              ]
+            },
+            "DESCRIPTION": {
+              "text": "ASTM C612, TYPE IA OR IB, RIGID GLASS FIBER, WITH FACTORY APPLIED ALL SERVICE FACING MEETING ASTM C1136, TYPE II, DENSITY: 6.0 LBS/CU FT.",
+              "bbox": [
+                3746.4,
+                761.28,
+                4571.74,
+                808.8
+              ]
+            }
+          }
+        },
+        {
+          "key": "D-6",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "INSULATION TYPE": {
+              "text": "D-6",
+              "bbox": [
+                3602.64,
+                808.8,
+                3746.4,
+                856.56
+              ]
+            },
+            "DESCRIPTION": {
+              "text": "ASTM C534, TYPE II, FLEXIBLE, CLOSED CELL ELASTOMERIC INSULATION, SHEET, SERVICE TEMPERATURE RANGE: MINUS 58 TO 180 DEG F.",
+              "bbox": [
+                3746.4,
+                808.8,
+                4571.74,
+                856.56
+              ]
+            }
+          }
+        }
+      ],
+      "region": [
+        3602.64,
+        573.6,
+        4571.74,
+        856.56
+      ]
+    },
+    {
+      "kind": "equipment",
+      "sheet": "sample-mechanical-set.pdf#8",
+      "title": null,
+      "headers": [
+        "ID",
+        "MANUFACTURER",
+        "MODEL",
+        "VOLTAGE",
+        "PHASE",
+        "WATTS",
+        "AMPS"
+      ],
+      "rows": [
+        {
+          "key": "EWH-1",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "ID": {
+              "text": "EWH-1",
+              "bbox": [
+                3532.56,
+                1079.04,
+                3676.32,
+                1104.72
+              ]
+            },
+            "MANUFACTURER": {
+              "text": "QMARK",
+              "bbox": [
+                3676.32,
+                1079.04,
+                3852.24,
+                1104.72
+              ]
+            },
+            "MODEL": {
+              "text": "CZ15112T",
+              "bbox": [
+                3852.24,
+                1079.04,
+                3996.24,
+                1104.72
+              ]
+            },
+            "VOLTAGE": {
+              "text": "120",
+              "bbox": [
+                3996.24,
+                1079.04,
+                4139.98,
+                1104.72
+              ]
+            },
+            "PHASE": {
+              "text": "1",
+              "bbox": [
+                4139.98,
+                1079.04,
+                4283.98,
+                1104.72
+              ]
+            },
+            "WATTS": {
+              "text": "750",
+              "bbox": [
+                4283.98,
+                1079.04,
+                4427.74,
+                1104.72
+              ]
+            },
+            "AMPS": {
+              "text": "6.3",
+              "bbox": [
+                4427.74,
+                1079.04,
+                4571.74,
+                1104.72
+              ]
+            }
+          }
+        }
+      ],
+      "region": [
+        3532.56,
+        1026.48,
+        4571.74,
+        1104.72
+      ]
+    },
+    {
+      "kind": "equipment",
+      "sheet": "sample-mechanical-set.pdf#8",
+      "title": null,
+      "headers": [
+        "ID",
+        "MANUFACTURER",
+        "MODEL",
+        "WATTS",
+        "LENGTH",
+        "VOLTAGE",
+        "PHASE",
+        "AMPS"
+      ],
+      "rows": [
+        {
+          "key": "EBB-1",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "ID": {
+              "text": "EBB-1",
+              "bbox": [
+                3388.56,
+                1352.4,
+                3532.56,
+                1378.32
+              ]
+            },
+            "MANUFACTURER": {
+              "text": "QMARK",
+              "bbox": [
+                3532.56,
+                1352.4,
+                3708.24,
+                1378.32
+              ]
+            },
+            "MODEL": {
+              "text": "25426",
+              "bbox": [
+                3708.24,
+                1352.4,
+                3852.24,
+                1378.32
+              ]
+            },
+            "WATTS": {
+              "text": "500",
+              "bbox": [
+                3852.24,
+                1352.4,
+                3996.24,
+                1378.32
+              ]
+            },
+            "LENGTH": {
+              "text": "2'-6\"",
+              "bbox": [
+                3996.24,
+                1352.4,
+                4139.98,
+                1378.32
+              ]
+            },
+            "VOLTAGE": {
+              "text": "240",
+              "bbox": [
+                4139.98,
+                1352.4,
+                4283.98,
+                1378.32
+              ]
+            },
+            "PHASE": {
+              "text": "1",
+              "bbox": [
+                4283.98,
+                1352.4,
+                4427.74,
+                1378.32
+              ]
+            },
+            "AMPS": {
+              "text": "2.1",
+              "bbox": [
+                4427.74,
+                1352.4,
+                4571.74,
+                1378.32
+              ]
+            }
+          }
+        },
+        {
+          "key": "EBB-2",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "ID": {
+              "text": "EBB-2",
+              "bbox": [
+                3388.56,
+                1378.32,
+                3532.56,
+                1404
+              ]
+            },
+            "MANUFACTURER": {
+              "text": "QMARK",
+              "bbox": [
+                3532.56,
+                1378.32,
+                3708.24,
+                1404
+              ]
+            },
+            "MODEL": {
+              "text": "2544",
+              "bbox": [
+                3708.24,
+                1378.32,
+                3852.24,
+                1404
+              ]
+            },
+            "WATTS": {
+              "text": "1000",
+              "bbox": [
+                3852.24,
+                1378.32,
+                3996.24,
+                1404
+              ]
+            },
+            "LENGTH": {
+              "text": "4'-0\"",
+              "bbox": [
+                3996.24,
+                1378.32,
+                4139.98,
+                1404
+              ]
+            },
+            "VOLTAGE": {
+              "text": "240",
+              "bbox": [
+                4139.98,
+                1378.32,
+                4283.98,
+                1404
+              ]
+            },
+            "PHASE": {
+              "text": "1",
+              "bbox": [
+                4283.98,
+                1378.32,
+                4427.74,
+                1404
+              ]
+            },
+            "AMPS": {
+              "text": "4.2",
+              "bbox": [
+                4427.74,
+                1378.32,
+                4571.74,
+                1404
+              ]
+            }
+          }
+        },
+        {
+          "key": "EBB-3",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "ID": {
+              "text": "EBB-3",
+              "bbox": [
+                3388.56,
+                1404,
+                3532.56,
+                1429.92
+              ]
+            },
+            "MANUFACTURER": {
+              "text": "QMARK",
+              "bbox": [
+                3532.56,
+                1404,
+                3708.24,
+                1429.92
+              ]
+            },
+            "MODEL": {
+              "text": "2544",
+              "bbox": [
+                3708.24,
+                1404,
+                3852.24,
+                1429.92
+              ]
+            },
+            "WATTS": {
+              "text": "1000",
+              "bbox": [
+                3852.24,
+                1404,
+                3996.24,
+                1429.92
+              ]
+            },
+            "LENGTH": {
+              "text": "4'-0\"",
+              "bbox": [
+                3996.24,
+                1404,
+                4139.98,
+                1429.92
+              ]
+            },
+            "VOLTAGE": {
+              "text": "240",
+              "bbox": [
+                4139.98,
+                1404,
+                4283.98,
+                1429.92
+              ]
+            },
+            "PHASE": {
+              "text": "1",
+              "bbox": [
+                4283.98,
+                1404,
+                4427.74,
+                1429.92
+              ]
+            },
+            "AMPS": {
+              "text": "4.2",
+              "bbox": [
+                4427.74,
+                1404,
+                4571.74,
+                1429.92
+              ]
+            }
+          }
+        },
+        {
+          "key": "EBB-4",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "ID": {
+              "text": "EBB-4",
+              "bbox": [
+                3388.56,
+                1429.92,
+                3532.56,
+                1455.84
+              ]
+            },
+            "MANUFACTURER": {
+              "text": "QMARK",
+              "bbox": [
+                3532.56,
+                1429.92,
+                3708.24,
+                1455.84
+              ]
+            },
+            "MODEL": {
+              "text": "2546",
+              "bbox": [
+                3708.24,
+                1429.92,
+                3852.24,
+                1455.84
+              ]
+            },
+            "WATTS": {
+              "text": "1500",
+              "bbox": [
+                3852.24,
+                1429.92,
+                3996.24,
+                1455.84
+              ]
+            },
+            "LENGTH": {
+              "text": "6'-0\"",
+              "bbox": [
+                3996.24,
+                1429.92,
+                4139.98,
+                1455.84
+              ]
+            },
+            "VOLTAGE": {
+              "text": "240",
+              "bbox": [
+                4139.98,
+                1429.92,
+                4283.98,
+                1455.84
+              ]
+            },
+            "PHASE": {
+              "text": "1",
+              "bbox": [
+                4283.98,
+                1429.92,
+                4427.74,
+                1455.84
+              ]
+            },
+            "AMPS": {
+              "text": "6.3",
+              "bbox": [
+                4427.74,
+                1429.92,
+                4571.74,
+                1455.84
+              ]
+            }
+          }
+        },
+        {
+          "key": "EBB-5",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "ID": {
+              "text": "EBB-5",
+              "bbox": [
+                3388.56,
+                1455.84,
+                3532.56,
+                1481.76
+              ]
+            },
+            "MANUFACTURER": {
+              "text": "QMARK",
+              "bbox": [
+                3532.56,
+                1455.84,
+                3708.24,
+                1481.76
+              ]
+            },
+            "MODEL": {
+              "text": "25426",
+              "bbox": [
+                3708.24,
+                1455.84,
+                3852.24,
+                1481.76
+              ]
+            },
+            "WATTS": {
+              "text": "500",
+              "bbox": [
+                3852.24,
+                1455.84,
+                3996.24,
+                1481.76
+              ]
+            },
+            "LENGTH": {
+              "text": "2'-6\"",
+              "bbox": [
+                3996.24,
+                1455.84,
+                4139.98,
+                1481.76
+              ]
+            },
+            "VOLTAGE": {
+              "text": "240",
+              "bbox": [
+                4139.98,
+                1455.84,
+                4283.98,
+                1481.76
+              ]
+            },
+            "PHASE": {
+              "text": "1",
+              "bbox": [
+                4283.98,
+                1455.84,
+                4427.74,
+                1481.76
+              ]
+            },
+            "AMPS": {
+              "text": "2.1",
+              "bbox": [
+                4427.74,
+                1455.84,
+                4571.74,
+                1481.76
+              ]
+            }
+          }
+        },
+        {
+          "key": "EBB-6",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "ID": {
+              "text": "EBB-6",
+              "bbox": [
+                3388.56,
+                1481.76,
+                3532.56,
+                1507.44
+              ]
+            },
+            "MANUFACTURER": {
+              "text": "QMARK",
+              "bbox": [
+                3532.56,
+                1481.76,
+                3708.24,
+                1507.44
+              ]
+            },
+            "MODEL": {
+              "text": "2544",
+              "bbox": [
+                3708.24,
+                1481.76,
+                3852.24,
+                1507.44
+              ]
+            },
+            "WATTS": {
+              "text": "1000",
+              "bbox": [
+                3852.24,
+                1481.76,
+                3996.24,
+                1507.44
+              ]
+            },
+            "LENGTH": {
+              "text": "4'-0\"",
+              "bbox": [
+                3996.24,
+                1481.76,
+                4139.98,
+                1507.44
+              ]
+            },
+            "VOLTAGE": {
+              "text": "240",
+              "bbox": [
+                4139.98,
+                1481.76,
+                4283.98,
+                1507.44
+              ]
+            },
+            "PHASE": {
+              "text": "1",
+              "bbox": [
+                4283.98,
+                1481.76,
+                4427.74,
+                1507.44
+              ]
+            },
+            "AMPS": {
+              "text": "4.2",
+              "bbox": [
+                4427.74,
+                1481.76,
+                4571.74,
+                1507.44
+              ]
+            }
+          }
+        },
+        {
+          "key": "EBB-7",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "ID": {
+              "text": "EBB-7",
+              "bbox": [
+                3388.56,
+                1507.44,
+                3532.56,
+                1533.36
+              ]
+            },
+            "MANUFACTURER": {
+              "text": "QMARK",
+              "bbox": [
+                3532.56,
+                1507.44,
+                3708.24,
+                1533.36
+              ]
+            },
+            "MODEL": {
+              "text": "2544",
+              "bbox": [
+                3708.24,
+                1507.44,
+                3852.24,
+                1533.36
+              ]
+            },
+            "WATTS": {
+              "text": "1000",
+              "bbox": [
+                3852.24,
+                1507.44,
+                3996.24,
+                1533.36
+              ]
+            },
+            "LENGTH": {
+              "text": "4'-0\"",
+              "bbox": [
+                3996.24,
+                1507.44,
+                4139.98,
+                1533.36
+              ]
+            },
+            "VOLTAGE": {
+              "text": "240",
+              "bbox": [
+                4139.98,
+                1507.44,
+                4283.98,
+                1533.36
+              ]
+            },
+            "PHASE": {
+              "text": "1",
+              "bbox": [
+                4283.98,
+                1507.44,
+                4427.74,
+                1533.36
+              ]
+            },
+            "AMPS": {
+              "text": "4.2",
+              "bbox": [
+                4427.74,
+                1507.44,
+                4571.74,
+                1533.36
+              ]
+            }
+          }
+        },
+        {
+          "key": "EBB-8",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "ID": {
+              "text": "EBB-8",
+              "bbox": [
+                3388.56,
+                1533.36,
+                3532.56,
+                1559.28
+              ]
+            },
+            "MANUFACTURER": {
+              "text": "QMARK",
+              "bbox": [
+                3532.56,
+                1533.36,
+                3708.24,
+                1559.28
+              ]
+            },
+            "MODEL": {
+              "text": "2544",
+              "bbox": [
+                3708.24,
+                1533.36,
+                3852.24,
+                1559.28
+              ]
+            },
+            "WATTS": {
+              "text": "1000",
+              "bbox": [
+                3852.24,
+                1533.36,
+                3996.24,
+                1559.28
+              ]
+            },
+            "LENGTH": {
+              "text": "4'-0\"",
+              "bbox": [
+                3996.24,
+                1533.36,
+                4139.98,
+                1559.28
+              ]
+            },
+            "VOLTAGE": {
+              "text": "240",
+              "bbox": [
+                4139.98,
+                1533.36,
+                4283.98,
+                1559.28
+              ]
+            },
+            "PHASE": {
+              "text": "1",
+              "bbox": [
+                4283.98,
+                1533.36,
+                4427.74,
+                1559.28
+              ]
+            },
+            "AMPS": {
+              "text": "4.2",
+              "bbox": [
+                4427.74,
+                1533.36,
+                4571.74,
+                1559.28
+              ]
+            }
+          }
+        }
+      ],
+      "region": [
+        3388.56,
+        1300.08,
+        4571.74,
+        1559.28
+      ]
+    },
+    {
+      "kind": "equipment",
+      "sheet": "sample-mechanical-set.pdf#8",
+      "title": {
+        "sheet": "sample-mechanical-set.pdf#8",
+        "text": "DIFFUSER, GRILLE, REGISTER SCHEDULE",
+        "bbox": [
+          3011.04,
+          1922.64,
+          4571.74,
+          1965.6
+        ]
+      },
+      "headers": [
+        "ID",
+        "DESCRIPTION",
+        "MANUFACTURER",
+        "MODEL NUMBER",
+        "MOUNTING FRAME",
+        "NECK SIZE (IN)",
+        "THROW",
+        "MATERIAL",
+        "NOTES"
+      ],
+      "rows": [
+        {
+          "key": "SR-1",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "ID": {
+              "text": "SR-1",
+              "bbox": [
+                3011.04,
+                2040.72,
+                3123.12,
+                2066.4
+              ]
+            },
+            "DESCRIPTION": {
+              "text": "SUPPLY REGISTER",
+              "bbox": [
+                3123.12,
+                2040.72,
+                3460.08,
+                2066.4
+              ]
+            },
+            "MANUFACTURER": {
+              "text": "HART AND COOLEY",
+              "bbox": [
+                3460.08,
+                2040.72,
+                3671.52,
+                2066.4
+              ]
+            },
+            "MODEL NUMBER": {
+              "text": "631",
+              "bbox": [
+                3671.52,
+                2040.72,
+                3815.52,
+                2066.4
+              ]
+            },
+            "MOUNTING FRAME": {
+              "text": "SURFACE",
+              "bbox": [
+                3815.52,
+                2040.72,
+                3959.52,
+                2066.4
+              ]
+            },
+            "NECK SIZE (IN)": {
+              "text": "10 x 6",
+              "bbox": [
+                3959.52,
+                2040.72,
+                4103.28,
+                2066.4
+              ]
+            },
+            "THROW": {
+              "text": "3-WAY",
+              "bbox": [
+                4103.28,
+                2040.72,
+                4247.28,
+                2066.4
+              ]
+            },
+            "MATERIAL": {
+              "text": "STEEL",
+              "bbox": [
+                4247.28,
+                2040.72,
+                4427.74,
+                2066.4
+              ]
+            },
+            "NOTES": {
+              "text": "1,2,3",
+              "bbox": [
+                4427.74,
+                2040.72,
+                4571.74,
+                2066.4
+              ]
+            }
+          }
+        },
+        {
+          "key": "SR-2",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "ID": {
+              "text": "SR-2",
+              "bbox": [
+                3011.04,
+                2066.4,
+                3123.12,
+                2092.32
+              ]
+            },
+            "DESCRIPTION": {
+              "text": "SUPPLY REGISTER",
+              "bbox": [
+                3123.12,
+                2066.4,
+                3460.08,
+                2092.32
+              ]
+            },
+            "MANUFACTURER": {
+              "text": "HART AND COOLEY",
+              "bbox": [
+                3460.08,
+                2066.4,
+                3671.52,
+                2092.32
+              ]
+            },
+            "MODEL NUMBER": {
+              "text": "631",
+              "bbox": [
+                3671.52,
+                2066.4,
+                3815.52,
+                2092.32
+              ]
+            },
+            "MOUNTING FRAME": {
+              "text": "SURFACE",
+              "bbox": [
+                3815.52,
+                2066.4,
+                3959.52,
+                2092.32
+              ]
+            },
+            "NECK SIZE (IN)": {
+              "text": "12 x 8",
+              "bbox": [
+                3959.52,
+                2066.4,
+                4103.28,
+                2092.32
+              ]
+            },
+            "THROW": {
+              "text": "3-WAY",
+              "bbox": [
+                4103.28,
+                2066.4,
+                4247.28,
+                2092.32
+              ]
+            },
+            "MATERIAL": {
+              "text": "STEEL",
+              "bbox": [
+                4247.28,
+                2066.4,
+                4427.74,
+                2092.32
+              ]
+            },
+            "NOTES": {
+              "text": "1,2,3",
+              "bbox": [
+                4427.74,
+                2066.4,
+                4571.74,
+                2092.32
+              ]
+            }
+          }
+        },
+        {
+          "key": "TG-1",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "ID": {
+              "text": "TG-1",
+              "bbox": [
+                3011.04,
+                2092.32,
+                3123.12,
+                2118.24
+              ]
+            },
+            "DESCRIPTION": {
+              "text": "TRANSFER GRILLE",
+              "bbox": [
+                3123.12,
+                2092.32,
+                3460.08,
+                2118.24
+              ]
+            },
+            "MANUFACTURER": {
+              "text": "HART AND COOLEY",
+              "bbox": [
+                3460.08,
+                2092.32,
+                3671.52,
+                2118.24
+              ]
+            },
+            "MODEL NUMBER": {
+              "text": "672/A672",
+              "bbox": [
+                3671.52,
+                2092.32,
+                3815.52,
+                2118.24
+              ]
+            },
+            "MOUNTING FRAME": {
+              "text": "SURFACE",
+              "bbox": [
+                3815.52,
+                2092.32,
+                3959.52,
+                2118.24
+              ]
+            },
+            "NECK SIZE (IN)": {
+              "text": "14 x 6",
+              "bbox": [
+                3959.52,
+                2092.32,
+                4103.28,
+                2118.24
+              ]
+            },
+            "THROW": {
+              "text": "-",
+              "bbox": [
+                4103.28,
+                2092.32,
+                4247.28,
+                2118.24
+              ]
+            },
+            "MATERIAL": {
+              "text": "STEEL/ALUMINUM",
+              "bbox": [
+                4247.28,
+                2092.32,
+                4427.74,
+                2118.24
+              ]
+            },
+            "NOTES": {
+              "text": "1,2",
+              "bbox": [
+                4427.74,
+                2092.32,
+                4571.74,
+                2118.24
+              ]
+            }
+          }
+        },
+        {
+          "key": "TG-2",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "ID": {
+              "text": "TG-2",
+              "bbox": [
+                3011.04,
+                2118.24,
+                3123.12,
+                2144.16
+              ]
+            },
+            "DESCRIPTION": {
+              "text": "TRANSFER GRILLE",
+              "bbox": [
+                3123.12,
+                2118.24,
+                3460.08,
+                2144.16
+              ]
+            },
+            "MANUFACTURER": {
+              "text": "HART AND COOLEY",
+              "bbox": [
+                3460.08,
+                2118.24,
+                3671.52,
+                2144.16
+              ]
+            },
+            "MODEL NUMBER": {
+              "text": "672/A672",
+              "bbox": [
+                3671.52,
+                2118.24,
+                3815.52,
+                2144.16
+              ]
+            },
+            "MOUNTING FRAME": {
+              "text": "SURFACE",
+              "bbox": [
+                3815.52,
+                2118.24,
+                3959.52,
+                2144.16
+              ]
+            },
+            "NECK SIZE (IN)": {
+              "text": "30 x 8",
+              "bbox": [
+                3959.52,
+                2118.24,
+                4103.28,
+                2144.16
+              ]
+            },
+            "THROW": {
+              "text": "-",
+              "bbox": [
+                4103.28,
+                2118.24,
+                4247.28,
+                2144.16
+              ]
+            },
+            "MATERIAL": {
+              "text": "STEEL/ALUMINUM",
+              "bbox": [
+                4247.28,
+                2118.24,
+                4427.74,
+                2144.16
+              ]
+            },
+            "NOTES": {
+              "text": "1,2",
+              "bbox": [
+                4427.74,
+                2118.24,
+                4571.74,
+                2144.16
+              ]
+            }
+          }
+        }
+      ],
+      "region": [
+        3011.04,
+        1922.64,
+        4571.74,
+        2144.16
+      ]
+    },
+    {
+      "kind": "equipment",
+      "sheet": "sample-mechanical-set.pdf#8",
+      "title": null,
+      "headers": [
+        "ID",
+        "MANUFACTURER",
+        "MODEL NUMBER",
+        "CFM",
+        "ESP (IN)",
+        "CAPACITY (MBH)",
+        "CAPACITY (MBH) 2",
+        "COIL CAPACITY (WATTS)",
+        "VOLTAGE",
+        "PHASE",
+        "AMPS",
+        "MOCP"
+      ],
+      "rows": [
+        {
+          "key": "HP-1",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "ID": {
+              "text": "HP-1",
+              "bbox": [
+                2776.32,
+                2530.8,
+                2920.08,
+                2556.72
+              ]
+            },
+            "MANUFACTURER": {
+              "text": "FRIEDRICH",
+              "bbox": [
+                2920.08,
+                2530.8,
+                3091.2,
+                2556.72
+              ]
+            },
+            "MODEL NUMBER": {
+              "text": "VRP24K75FRBLAA",
+              "bbox": [
+                3091.2,
+                2530.8,
+                3276.72,
+                2556.72
+              ]
+            },
+            "CFM": {
+              "text": "635",
+              "bbox": [
+                3276.72,
+                2530.8,
+                3420.48,
+                2556.72
+              ]
+            },
+            "ESP (IN)": {
+              "text": "0.2",
+              "bbox": [
+                3420.48,
+                2530.8,
+                3564.48,
+                2556.72
+              ]
+            },
+            "CAPACITY (MBH)": {
+              "text": "21",
+              "bbox": [
+                3564.48,
+                2530.8,
+                3708.24,
+                2556.72
+              ]
+            },
+            "CAPACITY (MBH) 2": {
+              "text": "23.4",
+              "bbox": [
+                3708.24,
+                2530.8,
+                3852.24,
+                2556.72
+              ]
+            },
+            "COIL CAPACITY (WATTS)": {
+              "text": "6888",
+              "bbox": [
+                3852.24,
+                2530.8,
+                3996.24,
+                2556.72
+              ]
+            },
+            "VOLTAGE": {
+              "text": "230",
+              "bbox": [
+                3996.24,
+                2530.8,
+                4139.98,
+                2556.72
+              ]
+            },
+            "PHASE": {
+              "text": "1",
+              "bbox": [
+                4139.98,
+                2530.8,
+                4283.98,
+                2556.72
+              ]
+            },
+            "AMPS": {
+              "text": "40.3",
+              "bbox": [
+                4283.98,
+                2530.8,
+                4427.74,
+                2556.72
+              ]
+            },
+            "MOCP": {
+              "text": "45",
+              "bbox": [
+                4427.74,
+                2530.8,
+                4571.74,
+                2556.72
+              ]
+            }
+          }
+        }
+      ],
+      "region": [
+        2776.32,
+        2437.44,
+        4571.74,
+        2556.72
+      ]
+    },
+    {
+      "kind": "equipment",
+      "sheet": "sample-mechanical-set.pdf#8",
+      "title": {
+        "sheet": "sample-mechanical-set.pdf#8",
+        "text": "FAN SCHEDULE",
+        "bbox": [
+          2604,
+          2845.44,
+          4571.74,
+          2888.64
+        ]
+      },
+      "headers": [
+        "ID",
+        "DESCRIPTION",
+        "MANUFACTURER",
+        "MODEL NUMBER",
+        "AIR FLOW (CFM)",
+        "EXT. SP. (FT)",
+        "RPM",
+        "DUCT CONNECTION (IN)",
+        "ELECTRICAL VOLTS",
+        "ELECTRICAL PHASE",
+        "ELECTRICAL WATTS",
+        "NOTES"
+      ],
+      "rows": [
+        {
+          "key": "EF-1",
+          "sheet": "sample-mechanical-set.pdf#8",
+          "cells": {
+            "ID": {
+              "text": "EF-1",
+              "bbox": [
+                2604,
+                2985.84,
+                2748,
+                3011.76
+              ]
+            },
+            "DESCRIPTION": {
+              "text": "BATHROOM EXHAUST FAN W/ LIGHT",
+              "bbox": [
+                2748,
+                2985.84,
+                3089.76,
+                3011.76
+              ]
+            },
+            "MANUFACTURER": {
+              "text": "PANASONIC",
+              "bbox": [
+                3089.76,
+                2985.84,
+                3276.72,
+                3011.76
+              ]
+            },
+            "MODEL NUMBER": {
+              "text": "FV-0511VKL2",
+              "bbox": [
+                3276.72,
+                2985.84,
+                3420.48,
+                3011.76
+              ]
+            },
+            "AIR FLOW (CFM)": {
+              "text": "50-80-110",
+              "bbox": [
+                3420.48,
+                2985.84,
+                3564.48,
+                3011.76
+              ]
+            },
+            "EXT. SP. (FT)": {
+              "text": "0.25",
+              "bbox": [
+                3564.48,
+                2985.84,
+                3708.24,
+                3011.76
+              ]
+            },
+            "RPM": {
+              "text": "1121",
+              "bbox": [
+                3708.24,
+                2985.84,
+                3852.24,
+                3011.76
+              ]
+            },
+            "DUCT CONNECTION (IN)": {
+              "text": "4\"Ø",
+              "bbox": [
+                3852.24,
+                2985.84,
+                3996.24,
+                3011.76
+              ]
+            },
+            "ELECTRICAL VOLTS": {
+              "text": "120",
+              "bbox": [
+                3996.24,
+                2985.84,
+                4139.98,
+                3011.76
+              ]
+            },
+            "ELECTRICAL PHASE": {
+              "text": "1",
+              "bbox": [
+                4139.98,
+                2985.84,
+                4283.98,
+                3011.76
+              ]
+            },
+            "ELECTRICAL WATTS": {
+              "text": "10.5",
+              "bbox": [
+                4283.98,
+                2985.84,
+                4427.74,
+                3011.76
+              ]
+            },
+            "NOTES": {
+              "text": "1,2,3",
+              "bbox": [
+                4427.74,
+                2985.84,
+                4571.74,
+                3011.76
+              ]
+            }
+          }
+        }
+      ],
+      "region": [
+        2604,
+        2845.44,
+        4571.74,
+        3011.76
+      ]
+    }
+  ],
+  "tablePaint": [
+    {
+      "sheet_id": "sample-mechanical-set.pdf#2",
+      "rfi_id": "",
+      "type": "highlight",
+      "text": "PLUMBING PIPE INSULATION SCHEDULE",
+      "rect": [
+        [
+          0.09278549382716049,
+          0.06276041666666667
+        ],
+        [
+          0.2791087962962963,
+          0.11993634259259259
+        ]
+      ],
+      "source": "schedule_browse"
+    }
+  ],
+  "rowPaint": [
+    {
+      "sheet_id": "sample-mechanical-set.pdf#2",
+      "rfi_id": "",
+      "type": "highlight",
+      "text": "DOMESTIC HOT WATER SUPPLY",
+      "rect": [
+        [
+          0.09278549382716049,
+          0.09458912037037036
+        ],
+        [
+          0.27272376543209875,
+          0.10619212962962964
+        ]
+      ],
+      "source": "schedule_browse"
+    }
+  ],
+  "cite": {
+    "sheet": "sample-mechanical-set.pdf#2",
+    "type": "highlight",
+    "bbox_px": [
+      361.2,
+      627.12,
+      505.2,
+      696.48
+    ],
+    "text": "P-1 · CFM = P-1",
+    "row_key": "P-1",
+    "column": "CFM",
+    "table_title": "PIPING INSULATION SCHEDULE",
+    "value": "P-1",
+    "opened_sheet": "sample-mechanical-set.pdf#2",
+    "navigation": "agent_panel_card"
+  },
+  "citeSheets": [
+    {
+      "key": "sample-mechanical-set.pdf#2",
+      "w": 5184,
+      "h": 3456,
+      "xOffset": 0
+    }
+  ],
+  "proposals": [
+    {
+      "sheet_id": "sample-mechanical-set.pdf#2",
+      "measure_role": "count",
+      "verts_norm": [
+        [
+          0.35,
+          0.4
+        ]
+      ],
+      "evidence": {
+        "schedule_row_tag": "UI-VERIFY"
+      },
+      "count": 1
+    },
+    {
+      "sheet_id": "sample-mechanical-set.pdf#2",
+      "measure_role": "count",
+      "verts_norm": [
+        [
+          0.55,
+          0.4
+        ]
+      ],
+      "evidence": {
+        "schedule_row_tag": "UI-VERIFY"
+      },
+      "count": 1
+    }
+  ],
+  "accepted": {
+    "shapes": [
+      {
+        "sheet_id": "sample-mechanical-set.pdf#2",
+        "measure_role": "count",
+        "verts_norm": [
+          [
+            0.55,
+            0.4
+          ]
+        ],
+        "computed": {
+          "count": 1
+        },
+        "origin": {
+          "method": "agent_v1",
+          "actor": "agent",
+          "reviewed": true,
+          "proposed_verts_norm": [
+            [
+              0.55,
+              0.4
+            ]
+          ],
+          "evidence": {
+            "schedule_row_tag": "UI-VERIFY"
+          }
+        }
+      }
+    ],
+    "pending": [
+      {
+        "sheet_id": "sample-mechanical-set.pdf#2",
+        "measure_role": "count",
+        "verts_norm": [
+          [
+            0.35,
+            0.4
+          ]
+        ],
+        "evidence": {
+          "schedule_row_tag": "UI-VERIFY"
+        },
+        "count": 1
+      }
+    ]
+  },
+  "rejected": {
+    "shapes": [
+      {
+        "sheet_id": "sample-mechanical-set.pdf#2",
+        "measure_role": "count",
+        "verts_norm": [
+          [
+            0.55,
+            0.4
+          ]
+        ],
+        "computed": {
+          "count": 1
+        },
+        "origin": {
+          "method": "agent_v1",
+          "actor": "agent",
+          "reviewed": true,
+          "proposed_verts_norm": [
+            [
+              0.55,
+              0.4
+            ]
+          ],
+          "evidence": {
+            "schedule_row_tag": "UI-VERIFY"
+          }
+        }
+      }
+    ],
+    "pending": []
+  },
+  "takeoffCount": 1,
+  "takeoffVisible": "TAKEOFF\nProject takeoff\n0 lines\n0 schedules\n1 evidence fields\nFinished quantity takeoff — sections are Building · schedule when the set splits by building. Click Valve Mark / Unit Mark / Sheet to paint that whole schedule row on the drawings (one cite at a time).\nCSV\nEXCEL\nPDF\nCLEAR\nTAKEOFF\nWORKFLOW DATA\nNo finished takeoff yet.\nRun Agent with a complete HVAC, BAS, or valve takeoff goal — compiled quantities land here.",
+  "workflowVisible": "TAKEOFF\nProject takeoff\n0 lines\n0 schedules\n1 evidence fields\nWorkflow audit trail — every field the Agent gathered. Does not change the finished Takeoff totals.\nCSV\nEXCEL\nPDF\nCLEAR\nTAKEOFF\nWORKFLOW DATA\nPIPING INSULATION SCHEDULE\n1 field\nTAG\tFIELD\tVALUE\tUNIT\tSHEET\tSOURCE\t\nP-1\tCFM\tP-1\t—\tp.2\tquery_table\tRemove",
+  "csv": "Tag,Field,Value,Unit,Sheet,Schedule,Column,Workflow,Source\nP-1,CFM,P-1,,sample-mechanical-set.pdf#2,PIPING INSULATION SCHEDULE,,UI parity fixture,query_table",
+  "errors": []
+}

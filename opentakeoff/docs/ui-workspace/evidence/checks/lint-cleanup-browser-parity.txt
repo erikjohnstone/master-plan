@@ -1,0 +1,2 @@
+graph ready 9 tables
+after proof complete: /tmp/ot-lint-contract-proof/after

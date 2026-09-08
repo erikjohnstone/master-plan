@@ -400,7 +400,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     return "The final answer describes installed quantity as a single/one schedule entry. That reasoning is invalid even when the numeric value happens to match. Attribute installed quantity only to the successful sweep/count result and remove schedule-row-count wording.";
   }
   if (/\bnormalized\b/i.test(finalText)
-    || /\bat\s*[\[(]\s*0\.\d+\s*,\s*0\.\d+\s*[\])]/i.test(finalText)
+    || /\bat\s*[[(]\s*0\.\d+\s*,\s*0\.\d+\s*[\])]/i.test(finalText)
     || /bbox(?:_px)?\s*=\s*\[\s*0\.\d+\s*,\s*0\.\d+/i.test(finalText)) {
     return "The final answer exposes normalized citation coordinates. Production evidence citations use image-pixel bboxes only. Remove normalized coordinates and report the unchanged sheet and bbox_px returned by the evidence tool.";
   }
@@ -587,7 +587,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       const summary = missing.slice(0, 8).map((m) => (
         `${m.tag} ${m.label}=${m.value}${m.sheet ? ` (${m.sheet})` : ""}`
       )).join("; ");
-      return `The goal asks for schedule attributes on named tags, and query_table already returned them, but the answer omits these evidence-backed values: ${summary}. Copy each TYPE/CFM/capacity value into the answer (do not say they are \"on the same row\" without stating the values), then paint those cells.`;
+      return `The goal asks for schedule attributes on named tags, and query_table already returned them, but the answer omits these evidence-backed values: ${summary}. Copy each TYPE/CFM/capacity value into the answer (do not say they are "on the same row" without stating the values), then paint those cells.`;
     }
   }
 
@@ -1450,7 +1450,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   const asksWhichScheduleTitle = /\bwhich title\b|\bis\s+(?:[A-Z]{2,8}-[A-Z0-9]+)\s+on\b.{0,80}\bschedule\b/i.test(goal);
   // "Is SUITE100 a scheduled VAV?" — affirm only when family_mark / TAG pattern matches.
   const isScheduledAsk = goal.match(
-    /\bis\s+([A-Z0-9][A-Z0-9\-]*)\s+a\s+scheduled\s+(VAV|AHU|FCU|DOAH|CH|BOILER|volume\s+control)\b/i,
+    /\bis\s+([A-Z0-9][A-Z0-9-]*)\s+a\s+scheduled\s+(VAV|AHU|FCU|DOAH|CH|BOILER|volume\s+control)\b/i,
   );
   if (isScheduledAsk && finalText) {
     const askedKey = isScheduledAsk[1].toUpperCase().replace(/[^A-Z0-9]/g, "");
@@ -1459,7 +1459,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       : family === "AHU" ? /^AHU/i
       : family === "FCU" ? /^FCU/i
       : family === "DOAH" ? /^DOAH/i
-      : /BOILER/.test(family) ? /^B[\s\-]/i
+      : /BOILER/.test(family) ? /^B[\s-]/i
       : family === "CH" ? /^CH/i
       : null;
     const scoped = callLog.filter(({ name, out, args }) => {
@@ -1559,7 +1559,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
   // Narrow follow-ups: "how many … fan coils … including FCU-T11?"
   // Copy building_tag_counts.<letter> from the FCU title-scan. Letter comes from
   // tags in the goal (FCU-T11 → T) or "building X" — never a set-specific name map.
-  const asksFanCoilBuildingCount = /fan[\s\-]*coils?/i.test(goal)
+  const asksFanCoilBuildingCount = /fan[\s-]*coils?/i.test(goal)
     && /\b(?:how many|count|scheduled|including)\b/i.test(goal);
   const buildingLetterFromGoalTags = (() => {
     const fromTag = [...String(goal || "").matchAll(/\b(?:FCU|AHU|VAV|DOAH|UH|CUH)-([A-Z])(?=\d)/gi)]
@@ -1687,9 +1687,6 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         : null;
       familyNeedles.push({ label: "points-list", titleRe: /POINTS\s*LIST|DDC\s+POINTS/i, require: requireRe });
     }
-    const scanTitle = (out) => String(
-      out.query?.title || out.matches?.[0]?.title?.text || out.matches?.[0]?.title || "",
-    );
     const scanTitleFull = (out) => [
       out.query?.title,
       out.matches?.[0]?.title?.text || out.matches?.[0]?.title,
@@ -1727,18 +1724,18 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
     const missingCounts = [];
     const conflictingCounts = [];
     const labelPattern = (label) => ({
-      FCU: /FCU|FAN[\s\-]*COIL/gi,
+      FCU: /FCU|FAN[\s-]*COIL/gi,
       "DOAH unit": /DOAH|DEDICATED OUTDOOR AIR UNIT/gi,
       "DOAH handling": /DOAH|OUTDOOR AIR HANDLING/gi,
       AHU: /\bAHUs?\b|AIR HANDLING UNIT/gi,
       VAV: /\bVAVs?\b|VARIABLE AIR VOLUME/gi,
-      "heat-recovery chiller": /HEAT[\s\-]*RECOVERY[\s\-]*(?:CHILLERS?)?/gi,
-      "air-cooled chiller": /AIR[\s\-]*COOLED(?![\s\-]*HEAT)[\s\-]*CHILLERS?/gi,
+      "heat-recovery chiller": /HEAT[\s-]*RECOVERY[\s-]*(?:CHILLERS?)?/gi,
+      "air-cooled chiller": /AIR[\s-]*COOLED(?![\s-]*HEAT)[\s-]*CHILLERS?/gi,
       boiler: /BOILERS?\b/gi,
       pump: /PUMPS?\b/gi,
       humidifier: /HUMIDIFIERS?\b/gi,
       dehumidifier: /DEHUMIDIFIERS?\b/gi,
-      CRAH: /\bCRAHs?\b|COMPUTER[\s\-]*ROOM/gi,
+      CRAH: /\bCRAHs?\b|COMPUTER[\s-]*ROOM/gi,
       diffuser: /DIFFUSERS?|GRILLES?|REGISTERS?/gi,
       "unit heater": /UNIT\s+HEATERS?\b|\bUHs?\b/gi,
       "cabinet unit heater": /CABINET\s+UNIT\s+HEATERS?|\bCUHs?\b/gi,
@@ -1818,7 +1815,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
       else if (/DEHUMIDIFIER SCHEDULE/.test(title)) label = "dehumidifier";
       else if (/HUMIDIFIER SCHEDULE/.test(title)) label = "humidifier";
       else if (/COMPUTER ROOM AIR HANDLER|\bCRAH\b/.test(title)) label = "CRAH";
-      else if (/GRILLE,\s*REGISTER,\s*AND\s*DIFFUSER|DIFFUSER[\s\-]*GRILLE/.test(title)) label = "diffuser";
+      else if (/GRILLE,\s*REGISTER,\s*AND\s*DIFFUSER|DIFFUSER[\s-]*GRILLE/.test(title)) label = "diffuser";
       else if (/CABINET UNIT HEATER/.test(title)) label = "cabinet unit heater";
       else if (/^UNIT HEATER SCHEDULE|UNIT HEATER SCHEDULE/.test(title) && !/CABINET|DDC|POINTS/.test(title)) label = "unit heater";
       else if (/AIR SEPARATOR SCHEDULE/.test(title)) label = "air separator";
@@ -1873,7 +1870,7 @@ export function requiredEvidenceCorrection(callLog, goal, finalText = "") {
         // incidental building_tag_counts on other title-scans must not block.
         // Family name must appear shortly BEFORE "splits" so "VAV splits … AHU-T1A"
         // does not pull AHU into the split requirement.
-        const goalAsksThisSplit = (label === "FCU" && /fan[\s\-]*coil[^\n.]{0,48}\bsplits?\b/i.test(goal))
+        const goalAsksThisSplit = (label === "FCU" && /fan[\s-]*coil[^\n.]{0,48}\bsplits?\b/i.test(goal))
           || (label === "VAV" && /\bVAVs?[^\n.]{0,48}\bsplits?\b/i.test(goal))
           || (label === "AHU" && /\bAHUs?[^\n.]{0,48}\bsplits?\b/i.test(goal))
           || (label === "DOAH unit" && /\bDOAHs?[^\n.]{0,48}\bsplits?\b/i.test(goal));
@@ -1949,7 +1946,7 @@ export function agentSystemPrompt() {
     "- Production MCP bboxes are image pixels, not normalized coordinates. Never label them normalized.",
     "- Be extremely, genuinely useful: whatever the goal asks — a full takeoff, an AHU characteristic, counting valves, a BAS trace, schedule attributes, cross-sheet joins — do that ask end-to-end. Return every requested field with evidence-backed values plus enough citation context to trust the answer. Paint ALL answering evidence on the sheets (value cells / row data / drawing text / counted marks), not only a tag mark. Partial answers and mark-only flybys are incomplete.",
     "- query_table and find_text search the whole loaded set — they do not require the sheet to be open as a canvas tab. Never refuse schedule cell values because a tab is closed; call query_table with row_key and copy row.all_cells, then highlight_citation.",
-    "- COMPLETE set HVAC, BAS, or valve takeoff (goal says complete … takeoff of this set / these drawings / this blueprint set): call compile_corpus_takeoff FIRST — kind hvac_equipment for HVAC equipment, kind bas_points for BAS/DDC points, kind control_valves for a complete valve takeoff (CHW + HHW CONTROL VALVE SCHEDULE). When the goal asks for chilled-water / CHW only or hot-water / HHW only, also pass service=\"CHW\" or service=\"HHW\". That tool is the deterministic full-set answer (same Session+ODL path as MCP). Copy its totals / categories / exclusions / page_accounting.empty_pages into the answer — these are the fields present on every surface\'s reply; do not report a field name only one surface happens to carry. A compile alone is the SCHEDULED half only. Then call reconcile_schedule_plan (scope by family, or whole-set) and report the installed/drawn quantity alongside the scheduled quantity for each line, with its MATCH / SCHEDULE_ONLY / PLAN_ONLY / AMBIGUOUS status — a takeoff that reports only what the schedule lists, with no drawn-instance check, is not finished. Do NOT approximate the set total by crawling find_schedule, read_schedule, or title-scanning families one-by-one — that yields partial 10-row dumps with broken cites. After compile + reconcile, spot-cite a few MARKs with query_table + highlight_citation only. For valves, report valve mark, served equipment (UNIT MARK), service (CHW/HHW), size, GPM, and ONE Cv per valve — never invent dual CHW CV + HHW CV columns on the same row.",
+    "- COMPLETE set HVAC, BAS, or valve takeoff (goal says complete … takeoff of this set / these drawings / this blueprint set): call compile_corpus_takeoff FIRST — kind hvac_equipment for HVAC equipment, kind bas_points for BAS/DDC points, kind control_valves for a complete valve takeoff (CHW + HHW CONTROL VALVE SCHEDULE). When the goal asks for chilled-water / CHW only or hot-water / HHW only, also pass service=\"CHW\" or service=\"HHW\". That tool is the deterministic full-set answer (same Session+ODL path as MCP). Copy its totals / categories / exclusions / page_accounting.empty_pages into the answer — these are the fields present on every surface's reply; do not report a field name only one surface happens to carry. A compile alone is the SCHEDULED half only. Then call reconcile_schedule_plan (scope by family, or whole-set) and report the installed/drawn quantity alongside the scheduled quantity for each line, with its MATCH / SCHEDULE_ONLY / PLAN_ONLY / AMBIGUOUS status — a takeoff that reports only what the schedule lists, with no drawn-instance check, is not finished. Do NOT approximate the set total by crawling find_schedule, read_schedule, or title-scanning families one-by-one — that yields partial 10-row dumps with broken cites. After compile + reconcile, spot-cite a few MARKs with query_table + highlight_citation only. For valves, report valve mark, served equipment (UNIT MARK), service (CHW/HHW), size, GPM, and ONE Cv per valve — never invent dual CHW CV + HHW CV columns on the same row.",
     "- When asked for scheduled equipment or points-list row counts for NAMED families/lists (not a complete set compile), call query_table with the schedule title (no row_key and no cell_contains). Copy that tool result's count and building_tag_counts into the answer — do not re-sum sheet_graph page row totals by hand (continuation pages 1 OF 2 / 2 OF 2 repeat the same MARK keys). building_tag_counts letters are building codes from tags (A/M/T/…) — never swap letters; when the goal names a tag like FCU-T11, use building_tag_counts.T for that building's total. When point_type_counts is present, copy AI/AO/BI/BO from it — do not burn iterations re-filtering the same title with cell_contains for each point type. Prefer one accurate title needle per asked family; when the goal distinguishes sibling titles (for example dedicated outdoor-air UNIT vs HANDLING schedules, or air-cooled vs heat-recovery chillers), query the title that matches what was asked rather than blending both. When the goal names a specific points list (for example AHU-T1A/TIB), put that tag in the query_table title — a bare POINTS LIST title can roll up sibling lists and double the row count. Then re-query specific row_key values for MARK/identity bboxes you must cite.",
     "- Sequencing for named-family count + cite goals (not complete-set compile): (1) read the seeded sheet_graph digest (re-call sheet_graph only if missing/stale), (2) one title-scan query_table per requested family and copy count/building_tag_counts/point_type_counts, (3) only then re-query the named cite MARKs / points-list title and paint those cells, (4) write ONE final answer whose family totals match those tool counts (do not add a second contradictory totals table that recounts only painted MARKs). Do not paint every equipment row on a schedule, and do not dump full schedule tables into the answer.",
     "- ALWAYS paint cited evidence on the sheets before finishing: for every factual claim backed by query_table, find_text, read_sheet_text, or sweep_schedule_row, call highlight_citation with the unchanged sheet and bbox_px (or find_text hit.bbox_px) so the estimator sees the source on the blueprint. Pass row_key, column, table_title, and value whenever known so the Agent source card title reads like \"VAV-1 · CFM = 350\" (not a naked \"350\"). Do not rely on auto-flying the canvas — the UI shows clickable expandable source cards; painting is enough. When the answer uses multiple schedule fields from a row, paint EACH answering value cell (not only the mark or one field), plus each phrase-length drawing hit you copy into the answer, then write the final answer.",

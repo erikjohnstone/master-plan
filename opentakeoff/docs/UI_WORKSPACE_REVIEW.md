@@ -8,8 +8,10 @@ release gates are green. The original dirty checkout was not modified.
 
 **SHOULD THIS BE ON THE SHARED PATH? NO.** This work is navigation, panel layout,
 presentation, sizing, focus and UI verification. Session and the shared graph
-remain the only owners of table truth. No files under `web/src/lib/`, `mcp/`,
-`server/` or `opentakeoff-corpus/` are changed. No table/citation/bbox fields,
+remain the only owners of table truth. No files under `mcp/`, `server/` or
+`opentakeoff-corpus/` are changed. The UI work itself does not modify shared
+logic; a separately user-authorized lint-only exception touches three existing
+`web/src/lib/` files, detailed below. No table/citation/bbox fields,
 agent execution, proposal semantics, persistence schemas, totals or exports are
 changed. The new localStorage keys contain only dock dimensions/expanded state.
 
@@ -101,17 +103,47 @@ and benchmarks also pass after the typing changes.
 The subsequent unmodified `npm test` run, without other validation jobs running,
 passed **2,515 tests, 0 failed, 13 skipped** (2,528 total).
 
+## Separately authorized lint-only cleanup
+
+After the user delegated the decision in response to the explicit four-file
+lint-cleanup question, the follow-up removes the 50 inherited lint errors:
+
+- `agentLoop.js` and `takeoffWorkflow.js`: only redundant escapes; the former
+  also loses one never-called arrow-function helper.
+- `agentTakeoff.js`: unused local bindings become `_rowCount` and `_col`.
+  The public `rowCount` property, its default/getter evaluation, function arity,
+  and every call site are preserved.
+- `TakeoffCanvas.jsx`: ten unused import bindings and one empty-catch binding
+  are removed. Every import source and its evaluation order remain intact.
+
+**Shared-path decision for this exception: YES for the existing shared-file
+cleanup, NO for canvas imports and verification.** No UI/MCP fork is introduced.
+No algorithms, matching rules, prompts, contracts or lint configuration change.
+The three existing lint warnings remain; changing hook dependencies is outside
+this behavior-preserving cleanup.
+
+`node scripts/verify-lint-cleanup-parity.mjs c1b245a5` passes a whole-file parsed
+structure comparison, permitting only the specified unused-binding/helper
+removals and equivalent literal spellings. It verifies 654 regex literal
+structures, identical cooked prompt/template text, unchanged raw tagged
+templates, and scope-aware unused imports. The proof is separate from the
+unchanged behavioral test suite.
+
+The complete `npm run check` now passes: TypeScript, lint (0 errors / 3 inherited
+warnings), 2,515 passing tests / 13 skipped, benchmarks, and production build.
+The browser proof was repeated after cleanup against the original baseline:
+all 9 tables, citation/bbox outputs, proposals, takeoff data and CSV still match.
+
 ## Open release gates — not claimed complete
 
-1. The inherited **252 TypeScript errors are now resolved** by the separately
-   authorized test-only typing changes. Full lint still reports **50 errors and
-   3 warnings**, including 39 errors in prohibited shared-engine files and 11
-   in the canvas. Those source files/errors were not repaired under test-only
-   authorization. No checks were hidden, ignored or weakened; `npm run check`
-   remains a release blocker at the lint step.
+1. The inherited **252 TypeScript errors and 50 lint errors are resolved** by
+   the separately authorized typing and lint-only checkpoints. Three inherited
+   warnings remain. No checks were hidden, ignored or weakened. The complete
+   local check passes; CI must still be verified on the pushed cleanup commit.
 2. `playwright-table-takeoff-ui.mjs --doc 05` and
    `playwright-takeoff-ui-demo.mjs hvac` were attempted but refuse to start
-   without a live `CEREBRAS_API_KEY`. The isolated environment has no key.
+   without a live `CEREBRAS_API_KEY`. The user subsequently supplied a local key;
+   authentication was verified, and live workflow validation is now pending.
    Deterministic UI callback and real graph/citation tests do not replace those
    live end-to-end gates.
 3. This monorepo had no root `.github/workflows` directory; nested package

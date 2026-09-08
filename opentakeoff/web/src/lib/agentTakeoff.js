@@ -714,7 +714,7 @@ export function rowsFromAnswerMarkdown(text, meta = {}) {
  * finishedLineCount: contractor Takeoff lines only (compile/sweep/summary) —
  * scrap row counts must not advertise "written to the Takeoff panel".
  */
-export function splitConversationalAnswer(text, { rowCount = 0, finishedLineCount = 0 } = {}) {
+export function splitConversationalAnswer(text, { rowCount: _rowCount = 0, finishedLineCount = 0 } = {}) {
   const raw = String(text || "").trim();
   if (!raw) return { chat: "", hadTables: false };
 
@@ -884,7 +884,7 @@ export function lineSpecValue(line, col) {
 }
 
 /** Drawing cite for a technical column — same equipment row as the Tag (not a scatter jump). */
-export function lineSpecCite(line, col) {
+export function lineSpecCite(line, _col) {
   // Spec values belong to the schedule row; jump to the row, not each cell.
   return lineLeadCite(line, "tag");
 }

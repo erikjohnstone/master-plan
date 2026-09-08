@@ -1,0 +1,13 @@
+{
+  "base": "c1b245a5",
+  "files": [
+    "src/lib/agentLoop.js",
+    "src/lib/agentTakeoff.js",
+    "src/lib/takeoffWorkflow.js",
+    "src/pages/TakeoffCanvas.jsx"
+  ],
+  "regexLiteralsCompared": 654,
+  "removedUnusedImports": 10,
+  "removedUnusedHelpers": 1,
+  "runtimeStructureEquivalent": true
+}

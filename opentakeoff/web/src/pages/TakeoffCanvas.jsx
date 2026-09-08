@@ -75,7 +75,7 @@ import { ROOM_LABEL_RE, seedLadderPx, isLabelBubblePx, floodAtSeed } from "../li
 // The Symbol tool (#264) — the canvas face for the sweep engine. The engine,
 // counter-examples, the luminance channel, and label corroboration all live
 // as pure web libs already; this file adds only the gesture and the review.
-import { sweepSymbols, fingerprintSymbol, assertDistinctiveSymbolSeed, sweepRatio, corroborateFingerprint, classifySweepMatches, matchAgainstLibrary, fragmentedTagOcc, deepHyphenChainTagOcc, compoundTagOcc } from "../lib/symbolsweep";
+import { sweepSymbols, fingerprintSymbol, assertDistinctiveSymbolSeed, matchAgainstLibrary } from "../lib/symbolsweep";
 import { buildMepGraph, traceConnectivity as traceMepConnectivity } from "../lib/mepconnectivity.ts";
 import { mepLayerSignal } from "../lib/mepsystems.ts";
 // Accuracy-hardening plan Phase 2 — on an unlayered/weakly-layered sheet, a
@@ -99,7 +99,7 @@ import { findLegendGlyphs, findGlyphNear, legendLearnStatus } from "../lib/legen
 // tapered duct run has no independent whole-shape perimeter of its own; see
 // inlinemotif.ts's own header comment for the real, measured reason
 // symbol_sweep's whole-shape fingerprint under-scores real siblings of it.
-import { fingerprintInlineMotif, sweepInlineMotif, corroborateInlineMotif, classifyInlineMotifMatches } from "../lib/inlinemotif.ts";
+import { fingerprintInlineMotif, sweepInlineMotif } from "../lib/inlinemotif.ts";
 import { labelPlacements, reconcileSweepLabels, LABEL_CORROBORATION_SCORE_LOW } from "../lib/symbollabels";
 import { traceConfidence, floodSignals } from "../lib/confidence";
 // The scale-acceptance ruler (a calibrated bar drawn on the sheet after a scale
@@ -122,7 +122,7 @@ import { detectCandidateRule, buildRuleFromSeed, applyRuleToProject } from "../l
 import { deriveTransitionRuns, transitionRefusal } from "../lib/transitions";
 import { conditionTotals, sheetTotals, totalsToCsv, reportJson, verticalWallSf, downloadText } from "../lib/totals.js";
 import { buildXlsx } from "../lib/xlsx.js";
-import { compileCorpusTakeoff, takeoffWorkbookSheets, rowsToCsv, HVAC_FAMILY_SPECS } from "../lib/corpusTakeoff.mjs";
+import { takeoffWorkbookSheets, rowsToCsv, HVAC_FAMILY_SPECS } from "../lib/corpusTakeoff.mjs";
 import {
   reconcileScheduleFamilyWithSweeps,
   reconcileRowsToCsv,
@@ -225,7 +225,7 @@ import { findCutoutParent, subtractCutout, recomposeCutouts, cutRunsAcross } fro
 import { computeShapeMetrics, needsMetrics } from "../lib/shapeMetrics.js";
 import { fmtCheckLen, parseLenInput, checkVerdict, M_PER_FT, areaVal, areaUnit, lenVal, lenUnit, calInputToFeet, heightVal, heightUnit, heightInputToFeet, heightStep, dimInputStr, dimLabel } from "../lib/units";
 import * as panelGeom from "../lib/panelGeometry.js";
-import { buildSheetGraph, resolveTag as resolveGraphTag, rowKeyAnswersFor } from "../lib/sheetgraph.ts";
+import { buildSheetGraph, resolveTag as resolveGraphTag } from "../lib/sheetgraph.ts";
 import { tablesOverlappingRegion, bridgeRows } from "../lib/scheduleBridge.ts";
 
 // Carpet roll width — a run reaching this needs a seam. The live cursor readout
@@ -7650,7 +7650,7 @@ export default function TakeoffCanvas() {
         const bytes = await buildXlsx(sheets);
         downloadBytes(`${base}.xlsx`, bytes);
         downloads.push(`${base}.xlsx`);
-      } catch (e) {
+      } catch {
         // CSV/JSON still delivered
       }
     }
