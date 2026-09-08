@@ -63,6 +63,14 @@ and [after](ui-workspace/evidence/after/evidence.json).
   as a live model run.
 - Expanded views additionally show the wide FAN and diffuser/grille/register
   schedules together, with their complete extracted grids and internal scrolling.
+- Additional real corpus UI check passed on document 19, Orange County Regional
+  History Center HVAC (nine-page set): four schedules / 11 rows on M-401, sheet 8.
+  The AHU schedule has 35 columns. Every header and first-row cell was checked
+  against the graph, and split/expanded/far-right-column screenshots inspected.
+  Table/row navigation, idempotence, filtering, and highlight cleanup passed.
+- GitHub's `ui-contracts` job passed on commit `3fca9ee8` in
+  [run 34290188833](https://github.com/erikjohnstone/master-plan/actions/runs/34290188833).
+  This is distinct from the full TypeScript check, which remains red.
 
 ## Open release gates — not claimed complete
 
@@ -83,7 +91,8 @@ and [after](ui-workspace/evidence/after/evidence.json).
    Inspection Station, Building 63) was attempted through the real schedules
    driver. It timed out after 900,000 ms waiting for schedule graph readiness,
    before reaching panel assertions. That larger corpus UI verification is
-   **unverified**, not passed; no extraction or corpus files were changed.
+   **unverified**, not passed; the separate document 19 multi-sheet UI check
+   succeeded as described above. No extraction or corpus files were changed.
 
 ## Reproduce
 

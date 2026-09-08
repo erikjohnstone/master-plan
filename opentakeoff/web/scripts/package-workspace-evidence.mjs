@@ -23,6 +23,7 @@ for(const [sourceFile,name] of [
   ['/tmp/ot-table-driver.log','live-table-takeoff.txt'],
   ['/tmp/ot-takeoff-driver.log','live-takeoff.txt'],
   ['/tmp/ot-corpus-schedules.log','corpus-schedules.txt'],
+  ['/tmp/ot-corpus19-ui.log','corpus19-schedules.txt'],
   ['/tmp/ot-workspace-ui/checks.json','ui-contracts.json'],
   ['/tmp/ot-workspace-ui/agent-running.png','agent-running-fixture.png'],
   ['/tmp/ot-workspace-ui/agent-review-hud.png','agent-review-hud-fixture.png'],
@@ -31,4 +32,11 @@ for(const [sourceFile,name] of [
   ['/tmp/ot-inline-check.log','inline-citations.txt'],
   ['/tmp/ot-count-check.log','count-proposals.txt'],
 ]) if(existsSync(sourceFile)) copyFileSync(sourceFile,resolve(logs,name));
+const corpusUi=resolve('../docs/ui-workspace/evidence/corpus19');
+if(existsSync('/tmp/ot-corpus19-ui/expanded.png')) {
+  mkdirSync(corpusUi,{recursive:true});
+  for(const name of ['painted.png','expanded.png','expanded-last-columns.png']) {
+    copyFileSync(resolve('/tmp/ot-corpus19-ui',name),resolve(corpusUi,name));
+  }
+}
 console.log('Packaged matched sample-only evidence');

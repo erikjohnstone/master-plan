@@ -175,6 +175,24 @@ try {
   }
   await page.screenshot({ path: resolve(OUT, "painted.png") });
 
+  // The redesigned surface must expose the entire extracted grid, including
+  // offscreen columns. Older panel versions have no grid/Expand control.
+  const grid = panel.locator('.schedule-grid').first();
+  if (await grid.count()) {
+    const headers = await grid.locator('thead th').allTextContents();
+    const cells = await grid.locator('tbody tr').first().locator('td').allTextContents();
+    check('every extracted header is rendered unchanged', JSON.stringify(headers.slice(1)) === JSON.stringify(t0.headers || []));
+    check('every first-row cell is rendered unchanged', JSON.stringify(cells) === JSON.stringify((t0.headers || []).map(h => firstRow?.cells?.[h]?.text ?? '')));
+    const expand = page.getByTitle('Expand workspace', { exact: true });
+    if (await expand.isVisible()) {
+      await expand.click();
+      await page.screenshot({ path: resolve(OUT, 'expanded.png') });
+      await panel.locator('.schedule-grid-scroll').first().evaluate(el => { el.scrollLeft = el.scrollWidth; });
+      check('wide grid does not overflow the page', await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+      await page.screenshot({ path: resolve(OUT, 'expanded-last-columns.png') });
+    }
+  }
+
   // ── closing takes its own ink with it, and nothing else ──────────────────
   const others = await page.evaluate(() => window.__opentakeoff.probe.markups().filter((m) => m.source !== "schedule_browse").length);
   await panel.locator('button[title="Close panel"]').first().click();
