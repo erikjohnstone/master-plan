@@ -303,7 +303,31 @@ for (const doc of wanted) {
           // ground truth, scoring them all as ~0 IoU "misses" that were
           // never wrong tables at all, just the wrong sheet's candidate
           // being held up against a key that never covered it.
-          const hit = boxKey.find((k) => normTitle(k.title) === normTitle(title) && k.sheet === t.sheet);
+          // Exact title match only, until real, corpus-found: a table's own
+          // built title can be a real cell's FULL printed text rather than
+          // the terse name a person would write down authoring the key —
+          // 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_Project#75's own
+          // PANELBOARD SCHEDULE prints its whole nameplate block (panel #,
+          // building, location, MFR, breaker type, volts, amps, substation,
+          // KAIC…) as ONE cell with no internal ruling, so the extractor's
+          // title is genuinely "432 PANELBOARD SCHEDULE (EXISTING) PANEL
+          // 590A11A-63A BLDG. 432 LOCATION…" — accurate, not a bug — while
+          // the key's own author wrote just "PANELBOARD SCHEDULE". Exact
+          // match never found it: correct box, correct kind, correct rows,
+          // scored a flat miss. A CONTAINS match recovers it, but title
+          // alone cannot disambiguate here — this exact sheet draws 5
+          // identically-prefixed PANELBOARD SCHEDULEs and the key records
+          // only 1 (see this file's own provenance note), so several built
+          // titles could satisfy the same authored title at once. Region
+          // agreement is what a person actually uses to tell them apart, so
+          // require it too whenever the match isn't already exact.
+          const hit = boxKey.find((k) => {
+            if (k.sheet !== t.sheet) return false;
+            if (normTitle(k.title) === normTitle(title)) return true;
+            if (!normTitle(title).includes(normTitle(k.title))) return false;
+            const authoredPx = [k.x0 * RENDER_SCALE, k.top * RENDER_SCALE, k.x1 * RENDER_SCALE, k.bot * RENDER_SCALE];
+            return iou(authoredPx, t.region) > 0.3;
+          });
           if (hit) {
             rec.key.matched++;
             const authoredPx = [hit.x0 * RENDER_SCALE, hit.top * RENDER_SCALE, hit.x1 * RENDER_SCALE, hit.bot * RENDER_SCALE];

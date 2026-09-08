@@ -9710,6 +9710,41 @@ export function scheduleTableFromODL(
     for (let c = 0; c < C; c++) {
       const cell = grid[r][c];
       if (!cell || cell === lastSeen[c]) continue;
+      // THE TITLE ROW CAN STILL REACH IN HERE — A ROWSPAN DOES NOT STOP AT
+      // bodyStart. `bodyStart` was raised to skip the title row, but a title
+      // cell with `row span` > 1 still occupies grid[bodyStart][c] for every
+      // column its OWN row (row 0, before bodyStart) never gave to a real
+      // header cell — this loop reads `grid[r][c]` directly, with no check
+      // that the cell it finds actually belongs to row r rather than being
+      // inherited from a row this function already decided is not a header.
+      //
+      // Real, measured: 060_XX_ASC_Open_Mechanical_Competition_LAMBDA_
+      // Project#75's own PANELBOARD SCHEDULE — row 0 is one cell, colspan
+      // 14/14, row span 2 (the full title, correctly recognized: `wide`
+      // above sets titleCell and bodyStart = 1). Row 1 is the real header
+      // tier, but it only supplies cells for columns 3-13 (WIRE SIZE,
+      // BREAKER A CKT. NO. B CKT. NO. C BREAKER, …) — columns 0-2 have no
+      // header cell of their own on that sheet at all, because the ruled
+      // grid never puts one there. Reading `grid[1][0..2]` still returns
+      // the title cell (its row span 2 covers row 1 too), so the ENTIRE
+      // title string became those 3 columns' compound label — and because
+      // this table's header vocabulary consequently misclassified as
+      // `room-finish` (below), the room-finish-only word-collapse further
+      // reduced all three to whichever SURFACE_WORD happened to appear
+      // last inside the title text ("…RM. 1111 E. WALL MFR….." → "WALL"),
+      // three columns silently sharing the header "WALL"/"WALL 2"/"WALL 3"
+      // and no real column named anything an estimator could look up. The
+      // table's own data rows were never reached: `no keyed data rows`.
+      //
+      // A cell only belongs to the row it says it does. Skipping (without
+      // ever setting lastSeen, so a LATER row's real cell at this column
+      // is still free to be read) whatever the grid hands back for a row
+      // it does not own keeps every other real case unchanged — a genuine
+      // multi-row header cell's OWN row is always >= bodyStart already
+      // (the title itself was already excluded from ever reaching this
+      // loop by `bodyStart`), so this only ever discards inheritance that
+      // crosses the one boundary bodyStart exists to draw.
+      if (cell["row number"] - 1 < bodyStart) continue;
       lastSeen[c] = cell;
       const txt = odlCellText(cell);
       if (txt) colLabel[c] = colLabel[c] ? `${colLabel[c]} ${txt}` : txt;
