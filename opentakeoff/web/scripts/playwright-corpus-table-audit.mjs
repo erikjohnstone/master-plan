@@ -108,7 +108,7 @@ for (const doc of wanted) {
   const page = await browser.newPage({ viewport: { width: 1600, height: 950 } });
   const pageErrors = [];
   page.on("pageerror", (e) => pageErrors.push(String(e).slice(0, 300)));
-  const rec = { id: doc.id, pdf: basename(doc.pdf), tables: 0, sheets: 0, tier1_fail: 0, tier2_escape: 0, panel_mismatch: [], key: null, error: null };
+  const rec = { id: doc.id, pdf: basename(doc.pdf), tables: 0, sheets: 0, tier1_fail: 0, tier2_escape: 0, panel_mismatch: [], key: null, error: null, completeness_flags: [] };
   console.log(`\n=== ${doc.id} (${basename(doc.pdf)}) ===`);
   try {
     const t0 = Date.now();
@@ -290,6 +290,31 @@ for (const doc of wanted) {
           if (!contains) { rec.tier2_escape++; console.log(`    TIER2 ESCAPE: "${title}" — ink ${JSON.stringify(inkUnion.map(Math.round))} outside box ${JSON.stringify(t.region.map(Math.round))}`); }
         }
 
+        // ── TIER 3: completeness — a region big enough for several real
+        // rows that produced 0 or 1 is the exact shape of tonight's own
+        // bugs (044_NY's STEAM UNIT HEATER SCHEDULE, 060_XX's PANELBOARD
+        // SCHEDULE): the box and the classification were both right, real
+        // data rows just got swallowed upstream as header tiers or refused
+        // on a key gate. Neither TIER1 nor TIER2 catches this — the region
+        // is exactly where the real table is, and there is no ink to
+        // escape it, because the ink that should have become rows never
+        // reached `t.rows` at all. A ≥4-column schedule is unambiguously a
+        // real data table, not a title-only artifact; 150px is a little
+        // over two real data rows measured live tonight (~63px each, e.g.
+        // 044_NY's own STEAM UNIT HEATER rows) — generous enough that a
+        // genuinely tall single-row table (a wrapped multi-line
+        // description, a title band with real prose beneath it) does not
+        // trip it, since this is a FLAG to go look, not a hard failure —
+        // it never touches tier1_fail/tier2_escape or an existing run's
+        // pass/fail numbers.
+        const headerCount = Array.isArray(t.headers) ? t.headers.length : 0;
+        const regionH = t.region[3] - t.region[1];
+        if (headerCount >= 4 && (t.rows?.length ?? 0) <= 1 && regionH > 150) {
+          const flag = `"${title}" — ${headerCount} headers but ${t.rows?.length ?? 0} row(s) in a ${Math.round(regionH)}px-tall region`;
+          rec.completeness_flags.push(flag);
+          console.log(`    TIER3 COMPLETENESS: ${flag}`);
+        }
+
         // ── score against authored key, if this document has one ──
         if (boxKey) {
           // Sheet-scoped, not title-only: the SAME schedule title routinely
@@ -360,6 +385,7 @@ for (const r of summary) {
   console.log(`${r.id.padEnd(50)} tables=${String(r.tables).padStart(3)} sheets=${String(r.sheets).padStart(2)} tier1_fail=${r.tier1_fail} tier2_escape=${r.tier2_escape}` +
     (r.key ? `  key: ${r.key.correct4pt}/${r.key.matched}/${r.key.authored} correct/matched/authored, meanIoU=${r.key.meanIou?.toFixed(3)}` : "") +
     (r.panel_mismatch.length ? `  PANEL: ${r.panel_mismatch.join("; ")}` : "") +
+    (r.completeness_flags?.length ? `  TIER3: ${r.completeness_flags.length} table(s) flagged` : "") +
     (r.error ? `  ERROR: ${r.error}` : ""));
 }
 writeFileSync(resolve(OUT, "summary.json"), JSON.stringify(summary, null, 1));
