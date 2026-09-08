@@ -36,6 +36,21 @@ test("a sheet number split into glyph runs is joined and beats a lone lookalike"
   assert.equal(extractSheetNumber(tc, VP), "M-121A");
 });
 
+test("the extreme-right sheet column beats a larger project-code lookalike", () => {
+  const tc = {
+    items: [
+      // Reviewed SLAC topology: the project code is larger in the drawing
+      // title column, while the actual sheet number occupies the narrow
+      // sheet/revision column at the far right.
+      item("S3.1", 930, 720, 22),
+      item("B950", 848, 735, 30),
+      item("DRAWING NUMBER", 848, 760, 10),
+      item("REVISION", 930, 760, 10),
+    ],
+  };
+  assert.equal(extractSheetNumber(tc, VP), "S3.1");
+});
+
 test("fragments far apart on a baseline do not join", () => {
   // two tokens on one row separated by a column gap — the join must not
   // manufacture a candidate from them (and neither matches alone)
