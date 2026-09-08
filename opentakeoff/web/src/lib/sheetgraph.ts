@@ -143,6 +143,23 @@ const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
   //      sheet is deliberately left untouched, matching this fix's real
   //      scope.
   { re: /^(?:[A-Z]+\s+)?(?:ABBREVIATIONS|SYMBOLS)(?:\s+AND\s+(?:ABBREVIATIONS|SYMBOLS))?$|^LINE\s+TYPES$|^VALVES\s+AND\s+FITTINGS$/, role: "legend", conf: 0.72 },
+  // Same real bug class as the signal above, a different real cover-sheet
+  // title. Real, found live: 19_CA_VistaUSD_DataCenter.pdf#10's own real
+  // title (read directly off its title block) is "MECHANICAL GENERAL NOTES
+  // AND LEGEND" — drawn as two stacked lines ("MECHANICAL GENERAL" /
+  // "NOTES AND LEGEND"), so classifySheetRole (which tests each span alone,
+  // no joining) never sees the whole phrase, only "NOTES AND LEGEND" as its
+  // own real span. That sheet scored role "elevation" at 0.35 off a stray
+  // legend-callout "ELEVATION" mention instead (an "EXTERIOR ELEVATION
+  // MARKER" symbol-legend entry, not the sheet's own content) — same
+  // mechanism as the ABBREVIATIONS/SYMBOLS case above, and it carries the
+  // same real cost: a genuine small ruled "DUCTWORK MATERIAL SCHEDULE"
+  // table on that sheet was invisible to every extractor, since
+  // isScheduleTarget's role-gated fallback never got a chance to run.
+  // Same conf 0.72 for the same reason: strictly above the weak signals
+  // this targets (elevation/detail/generic) without ever outranking a real
+  // 0.85 plan/schedule title.
+  { re: /^(?:[A-Z]+\s+)?(?:GENERAL\s+)?NOTES\s+AND\s+LEGEND$/, role: "legend", conf: 0.72 },
   { re: /DEMOLITION\s+PLAN|DEMO\s+PLAN/, role: "demolition", conf: 0.9 },
   // every discipline draws plans, not just finishes — an M-sheet's "SECOND
   // FLOOR DUCTWORK PLAN" is as much a plan title as an A-sheet's finish plan.
