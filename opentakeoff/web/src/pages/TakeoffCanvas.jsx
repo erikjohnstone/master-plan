@@ -7240,6 +7240,28 @@ export default function TakeoffCanvas() {
         // anything would see it. One real toast, once per load.
         const vgNote = (prod?.notes || []).find((n) => n.startsWith("Vector pipeline L2: vectorgrid"));
         if (vgNote) setCommitMsg(vgNote, "refusal");
+        // Same gap, a different cause: rasterScheduleNotes (below) already
+        // catches a schedule-role sheet whose table content is pasted in as
+        // a raster image (017_MD's ACU-A-1..6 VENTILATION SCHEDULE — 6 real
+        // tables, 0 extracted, 30-50% of the sheet is an embedded picture) —
+        // but it was only ever called from agentSheetGraph(), reachable
+        // solely by asking the agent. A person who opens the Schedules panel
+        // and never asks a question saw nothing at all. Same fix as vgNote:
+        // one real toast, computed from the SAME production graph already
+        // fetched here, no extra request.
+        if (!cancelled) {
+          try {
+            const rasterNotes = await rasterScheduleNotes(prod);
+            if (!cancelled && rasterNotes.length) {
+              setCommitMsg(
+                rasterNotes.length === 1
+                  ? rasterNotes[0]
+                  : `${rasterNotes.length} schedule-role sheets carry pasted-in raster table images invisible to extraction — first: ${rasterNotes[0]}`,
+                "refusal",
+              );
+            }
+          } catch { /* diagnostic only, never blocks graphPrewarm */ }
+        }
       } catch (e) {
         if (!cancelled) {
           setGraphPrewarm({ phase: "error", message: String(e?.message || e) });
