@@ -11,7 +11,7 @@ import { classifyLayerName, layerRoleCodes, segRoles, type LayerInfo } from "../
 import { buildSheetGraph, resolveTag, classifySheetRole, rowKeyAnswersFor, roomTags, scheduleTableFromODL, tableCompleteness, syncSheetSchedules, isQualifiedAnchorHeader, snapCellBboxesToSourceSpans, type SheetGraph, type SheetSpans, type GraphSpan, type Bbox, type ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 import { runOpenDataLoaderPages } from "./opendataloader.ts";
 import { runVectorTakeoffPipeline, type VectorSheetContext } from "../../web/src/lib/vectorTakeoffPipeline.ts";
-import { sheetHasPointsListTitleSpans } from "../../web/src/lib/scheduleLanguageScan.ts";
+import { sheetHasPointsListTitleSpans, sheetHasDrawingIndexTitleSpans } from "../../web/src/lib/scheduleLanguageScan.ts";
 import type { OcrRegionResult } from "../../web/src/lib/rasterTableAssist.ts";
 
 /** Overlap fraction relative to the SMALLER of the two boxes — robust to
@@ -5775,6 +5775,7 @@ export class Session {
       runODL: (graph) => this.enhanceTablesWithODL(graph),
       getSheetContexts: () => this.buildVectorSheetContexts(g),
       sheetHasPointsListTitle: (key) => this.sheetHasPointsListTitle(key),
+      sheetHasDrawingIndexTitle: (key) => this.sheetHasDrawingIndexTitle(key),
       ocrRegion: (key, region) => this.ocrScheduleRegion(key, region),
     });
   }
@@ -5877,7 +5878,8 @@ export class Session {
     // that over-recovers Air Ops schematic siblings and breaks the locked 122.
     const scheduleSheets = g.sheets.filter((s) =>
       s.role === "schedule"
-      || ((s.role === "legend" || s.role === "unknown") && this.sheetHasPointsListTitle(s.key)));
+      || ((s.role === "legend" || s.role === "unknown")
+        && (this.sheetHasPointsListTitle(s.key) || this.sheetHasDrawingIndexTitle(s.key))));
     if (!scheduleSheets.length) return;
     const byPdf = new Map<string, { path: string; pages: number[]; sheetByPage: Map<number, string> }>();
     for (const sh of scheduleSheets) {
@@ -6215,6 +6217,21 @@ export class Session {
       ...(span.rot ? { rot: span.rot } : {}),
     }));
     return sheetHasPointsListTitleSpans(mapped);
+  }
+
+  private sheetHasDrawingIndexTitle(sheetKey: string): boolean {
+    const state = this.sheets.get(sheetKey);
+    const spans = state?.spans;
+    if (!spans?.length) return false;
+    const mapped = spans.map((span) => ({
+      str: span.str,
+      x: span.x0,
+      y: span.y0,
+      w: span.x1 - span.x0,
+      h: span.y1 - span.y0,
+      ...(span.rot ? { rot: span.rot } : {}),
+    }));
+    return sheetHasDrawingIndexTitleSpans(mapped);
   }
 
   /** Raw internal graph (full table rows/cells, not `sheetGraph()`'s own

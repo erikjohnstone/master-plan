@@ -1,7 +1,8 @@
 // Tool-layer tests over a real client/server pair on an in-memory transport —
 // schemas, error surfaces, and the scale gate as an MCP client sees them.
 import { TOOL_NAMES } from "../src/staging.ts";
-import { test } from "node:test";
+import { test, after } from "node:test";
+import { shutdownVectorGrid } from "../../web/src/lib/vectorGridClient.ts";
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 import { mkdtemp, copyFile, readFile, writeFile } from "node:fs/promises";
@@ -3167,3 +3168,8 @@ test("sheet_graph: a schedule-role sheet with 0 tables AND heavy embedded raster
   assert.ok(!r.data.notes?.some((n: string) => n.startsWith(RASTER_SCHED_KEY) && !n.includes("#2")),
     "a normal plan sheet must never be flagged");
 });
+
+// Real, found live: this file never tore down the persistent Python
+// vectorgrid sidecar a real Session build starts — same shape of bug already
+// fixed in web/test/vectorTakeoffPipeline.test.ts and mcp/test/session.test.ts.
+after(async () => { await shutdownVectorGrid(); });

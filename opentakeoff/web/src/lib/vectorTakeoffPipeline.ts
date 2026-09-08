@@ -49,6 +49,9 @@ export interface VectorPipelineHooks {
   runODL: (g: SheetGraph) => Promise<void>;
   getSheetContexts: () => VectorSheetContext[];
   sheetHasPointsListTitle: (sheetKey: string) => boolean;
+  /** A cover/index sheet's own DRAWING LIST / SHEET INDEX table (optional —
+   * absent hook means "no", same as every other optional hook here). */
+  sheetHasDrawingIndexTitle?: (sheetKey: string) => boolean;
   /** L4.5 OCR: render region PNG and OCR words (optional — skip when absent). */
   ocrRegion?: (sheetKey: string, region: [number, number, number, number]) => Promise<OcrRegionResult | null>;
 }
@@ -108,6 +111,7 @@ function isScheduleTarget(ctx: VectorSheetContext, hooks: VectorPipelineHooks): 
   if (sheetHasScheduleCaption(ctx.spans)) return true;
   if (ctx.role !== "legend" && ctx.role !== "unknown") return false;
   if (hooks.sheetHasPointsListTitle(ctx.key)) return true;
+  if (hooks.sheetHasDrawingIndexTitle?.(ctx.key)) return true;
   return sheetHasScheduleLanguage(ctx.spans);
 }
 

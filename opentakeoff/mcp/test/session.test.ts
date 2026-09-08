@@ -1,9 +1,10 @@
 // Session tests against the bundled demo plan — real pdf.js parse, real
 // geometry, no transport. Run with: npm test
-import { test } from "node:test";
+import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 import { Session, ANN_SCHEMA, collapseEquivalentPrimaryTables } from "../src/session.ts";
+import { shutdownVectorGrid } from "../../web/src/lib/vectorGridClient.ts";
 import type { ScheduleTable } from "../../web/src/lib/sheetgraph.ts";
 
 const PLAN = fileURLToPath(new URL("../../demo/sample-plan.pdf", import.meta.url));
@@ -442,3 +443,13 @@ test("collapseEquivalentPrimaryTables also removes a TITLED reference-kind dupli
   assert.equal(collapseEquivalentPrimaryTables(diffTitlePair), 0, "a genuinely different real cross-reference table with its own title is never collapsed, even sharing every key");
   assert.equal(diffTitlePair.length, 2);
 });
+
+// Real, found live: this file (and, checked directly, every other MCP test
+// file — none of them call this) never tears down the persistent Python
+// vectorgrid sidecar a real Session.loadPlan/graph build starts. Same shape
+// of bug already fixed once in web/test/vectorTakeoffPipeline.test.ts: a live
+// child process with open stdio pipes keeps `node --test`'s event loop alive
+// indefinitely — confirmed directly, `node --import tsx --test
+// test/session.test.ts` alone hangs at 0% CPU on a clean, unmodified
+// checkout, not just after any local change.
+after(async () => { await shutdownVectorGrid(); });

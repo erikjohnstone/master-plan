@@ -71,7 +71,16 @@ const ROLE_SIGNALS: Array<{ re: RegExp; role: SheetRole; conf: number }> = [
   // index page's own real "___ SHEET INDEX" title is what gets reported for
   // it, honestly as role "unknown" (an index isn't a plan/schedule/legend/
   // etc. itself) — not silently misattributed to one of the sheets it lists.
-  { re: /SHEET\s+INDEX|DRAWING\s+INDEX|INDEX\s+OF\s+DRAWINGS/, role: "unknown", conf: 0.95 },
+  // "DRAWING LIST" is the same cover-sheet convention as SHEET INDEX/DRAWING
+  // INDEX/INDEX OF DRAWINGS above (a table of every sheet number/name/scale
+  // in the set) under a different, equally common title — real, found live:
+  // 08_ME's own cover sheet titles this exact table "DRAWING LIST" (49 real
+  // rows: SHEET NUMBER | SHEET NAME | SCALE | FOR CONSTRUCTION), and scored
+  // role "plan" at 0.85 confidence instead, off "FIRST FLOOR PLAN" — not the
+  // sheet's own real content, but a DATA CELL VALUE one row of the drawing
+  // list itself prints (A 301's own sheet name). A table row happening to
+  // contain plan-titled vocabulary is not evidence the PAGE is a plan.
+  { re: /SHEET\s+INDEX|DRAWING\s+INDEX|INDEX\s+OF\s+DRAWINGS|DRAWING\s+LIST/, role: "unknown", conf: 0.95 },
   // Real, found live (tarrant-county-mechanical's own real sheet #1, no `#N`
   // suffix — the set's first page): a real ABBREVIATIONS/SYMBOLS/LINE TYPES/
   // VALVES AND FITTINGS legend-and-glossary cover sheet produced NO signal

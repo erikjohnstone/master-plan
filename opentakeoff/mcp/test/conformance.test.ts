@@ -8,7 +8,7 @@
 //                   -32602 input-validation error result.
 // Wire-level stdio cleanliness is the dist smoke harness's job (smoke:dist);
 // this file covers the tool contract as an in-memory MCP client sees it.
-import { test } from "node:test";
+import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
@@ -18,6 +18,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { buildServer } from "../server.ts";
 import { Session } from "../src/session.ts";
+import { shutdownVectorGrid } from "../../web/src/lib/vectorGridClient.ts";
 import {
   loadPlanOutput, sheetInfoOutput, setScaleOutput, oneClickOutput, detectRoomsOutput,
   measurePolygonOutput, measureLineOutput, takeoffSummaryOutput,
@@ -923,3 +924,8 @@ test("detect_rooms assign mode: reply validates AND round-trips the schema unstr
   assert.ok(Array.isArray(r.unresolved), "assign mode always states the answer, empty array included");
   assert.equal(r.withheld.unresolved, r.unresolved.length, "the counter and the array agree");
 });
+
+// Real, found live: this file never tore down the persistent Python
+// vectorgrid sidecar a real Session build starts — same shape of bug already
+// fixed in web/test/vectorTakeoffPipeline.test.ts and mcp/test/session.test.ts.
+after(async () => { await shutdownVectorGrid(); });

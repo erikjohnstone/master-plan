@@ -165,6 +165,28 @@ export function sheetHasPointsListTitleSpans(spans: GraphSpan[]): boolean {
   return false;
 }
 
+/** A cover/index sheet's own DRAWING LIST / SHEET INDEX table — real, ruled,
+ * genuinely a schedule (SHEET NUMBER | SHEET NAME | SCALE columns), on a
+ * sheet classifySheetRole now correctly reads as `unknown` (see
+ * sheetgraph.ts's own matching ROLE_SIGNALS entry — kept in sync with THIS
+ * regex deliberately, not copy-pasted independently) rather than the false
+ * "plan" a stray in-table row value ("FIRST FLOOR PLAN" as one of the 49
+ * listed sheet names) used to produce. Role alone does not reach the table:
+ * `isScheduleTarget`'s `unknown` fallback and enhanceTablesWithODL's own
+ * scheduleSheets filter both still gate on a caption test, and
+ * sheetHasPointsListTitleSpans is a different, narrower vocabulary (BAS/DDC
+ * points, not a sheet index) that must not be widened to cover this — real,
+ * found live: 08_ME's own cover sheet, 49 real rows, 0 extracted. */
+export function sheetHasDrawingIndexTitleSpans(spans: GraphSpan[]): boolean {
+  const test = (t: string): boolean => {
+    if (t.length < 8 || t.length > 78) return false;
+    return /^(?:[A-Z]+\s+)?(?:SHEET\s+INDEX|DRAWING\s+INDEX|INDEX\s+OF\s+DRAWINGS|DRAWING\s+LIST)$/i.test(t);
+  };
+  for (const sp of spans) if (test(spanText(sp))) return true;
+  for (const t of joinCaptionLines(spans)) if (test(t)) return true;
+  return false;
+}
+
 export function sheetHasScheduleLanguage(spans: GraphSpan[]): boolean {
   if (sheetHasPointsListTitleSpans(spans)) return true;
   return scanPillarGapLanguage(spans).length > 0;
