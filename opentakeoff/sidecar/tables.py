@@ -8,6 +8,9 @@ Methods:
   extract_grid  → { "space": "pdf-points-topleft", "tables": VectorGridTable[] }
                   the measured vectorgrid extractor (see vectorgrid_rpc.py);
                   params { pdfPath, page }
+  table_structure → SidecarTable-shaped reply (see table_structure_rpc.py) —
+                  rapid_table's slanet_plus structural reader over an
+                  already-rendered raster crop, params { imagePath }
   shutdown      → exit 0
 
 Request params for extract_tables:
@@ -128,6 +131,13 @@ def _available_backends() -> list[str]:
         # lazily (and may still fail, e.g. no route to huggingface.co) on
         # the first real extract_tables call; see _gmft_models().
         out.append("gmft-tatr")
+    except ImportError:
+        pass
+    try:
+        from table_structure_rpc import table_structure_available
+
+        if table_structure_available():
+            out.append("rapid-table-slanet-plus")
     except ImportError:
         pass
     return out
@@ -468,6 +478,13 @@ def handle(req: dict[str, Any]) -> None:
             # ping/extract_tables rather than failing at process start.
             from vectorgrid_rpc import extract_grid_rpc
             _ok(req_id, extract_grid_rpc(params))
+        elif method == "table_structure":
+            # Imported lazily and only here, same discipline as extract_grid:
+            # rapid_table/rapidocr_onnxruntime are real, non-trivial
+            # dependencies (onnxruntime + numpy + cv2), and a deployment
+            # without them must still serve every other method.
+            from table_structure_rpc import table_structure_rpc
+            _ok(req_id, table_structure_rpc(params))
         elif method == "shutdown":
             _ok(req_id, {"ok": True})
             sys.exit(0)

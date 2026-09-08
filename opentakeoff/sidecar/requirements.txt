@@ -13,3 +13,14 @@ pypdfium2>=5.9.0
 # fine for inference) — install this only where that weight is acceptable;
 # the sidecar degrades gracefully (backend simply absent) without it.
 gmft>=0.4.0
+# Table STRUCTURE recognition (task #79, table_structure_rpc.py) — replaces
+# tesseract.js flat word-soup for the L4.5 OCR-assist path with a real
+# structural row/column read. rapidocr_onnxruntime ships its own OCR models
+# BUNDLED in the pip package (zero download); rapid_table's own slanet_plus
+# checkpoint is vendored locally instead (sidecar/models/, see that
+# directory's own README) because its default download source,
+# modelscope.cn, is blocked by this sandbox's egress policy. Apache-2.0
+# (rapidocr_onnxruntime) / Apache-2.0 (rapid_table), same family as gmft's
+# own MIT — no AGPL exposure.
+rapidocr_onnxruntime>=1.4.4
+rapid_table>=3.0.2

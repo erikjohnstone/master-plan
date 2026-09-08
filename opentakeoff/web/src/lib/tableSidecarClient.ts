@@ -106,6 +106,23 @@ export async function extractTablesViaSidecar(params: SidecarExtractParams): Pro
   }
 }
 
+/** Table-STRUCTURE recognition (task #79) over an already-rendered raster
+ * crop — `rapid_table`'s slanet_plus engine (see sidecar/table_structure_rpc.py),
+ * replacing tesseract.js flat word-soup with a real structural row/column
+ * read for the L4.5 OCR-assist path. Region detection is a separate concern
+ * (not this call) — `imagePath` must already be a crop of the schedule, the
+ * same convention `ocrScheduleRegion` already renders today. `null` on any
+ * failure (sidecar absent, model missing, malformed image) — this path must
+ * never block the deterministic pipeline it assists. */
+export async function tableStructureViaSidecar(imagePath: string): Promise<SidecarTable | null> {
+  try {
+    const result = await rpc<SidecarTable>("table_structure", { imagePath });
+    return result?.cells ? result : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function shutdownTableSidecar(): Promise<void> {
   if (!proc) return;
   try {
