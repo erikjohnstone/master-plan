@@ -569,10 +569,26 @@ test("sheet graph (#87): index, resolve with citations, refusal with reasons, fi
   // sheetgraph.ts's row-clustering drops it AND the single-character-code
   // row before it ("C" / CONCRETE SEALER) — the two rows bracketing the
   // "BASE" category sub-header — while every OTHER category's rows,
-  // including its own first row, extract fine. The chaining MECHANISM this
-  // line exists to prove is still exercised below: NORTH/EAST/WEST/CEILING
-  // all resolve real .definition rows on this exact call.
-  assert.equal(bySurface.CEILING.definition.cells.MATERIAL, "ACOUSTIAL CEILING TILE", "the code chains to its material-schedule definition");
+  // including its own first row, extract fine.
+  //
+  // Also NOT bySurface.CEILING.definition (catalogued bug #78, root-caused
+  // directly against this exact fixture): the CEILINGS box's real ODL table
+  // is 4x7 — row 1 the "CEILINGS" title, row 2 the real ACT-1 row, row 3
+  // the real ACT-2 row. ODL's OWN table-structure model returns row 2 with
+  // its key/material/manufacturer text already gone — only a single 5-
+  // column-spanning "WHITE" cell and a "2' x 2'" cell survive of it — a
+  // genuine upstream extraction loss on ODL's side (same class as the
+  // already-documented SPLIT SYSTEM CONDENSING UNIT SCHEDULE gap above
+  // scheduleTableFromODL's own header-tier loop), not a labeling-order bug
+  // in this file: there is no real per-column text left to chain to for
+  // ACT-1, and inventing it would be exactly the guessing this codebase
+  // refuses to do. The chaining MECHANISM this line exists to prove is
+  // still exercised below via EAST, whose WALLS row (kind "reference" —
+  // resolveTag now searches "reference" tables for a finish definition
+  // too, not just "finish"-kind ones, since a real per-code material row
+  // routinely lands there when its own column header is drawn once,
+  // shared, outside its little box) reads intact end to end.
+  assert.equal(bySurface.EAST.definition.cells["WHITE 962"], "SMOKEY MOUNTAIN AC-18", "the code chains to its material-schedule definition");
   for (const f of res.finishes) {
     assert.ok(f.source.sheet && f.source.bbox.x1 > f.source.bbox.x0, `${f.surface} carries a citation`);
   }
@@ -589,20 +605,27 @@ test("sheet graph (#87): index, resolve with citations, refusal with reasons, fi
   // PATIENT ROOMS (TYPICAL)) — before the table-boundary fix, the extractor
   // had no notion of "where a table ends" and silently walked from the first
   // header straight through the second table's rows as if they were more
-  // data of the first, landing on a single merged 29-row blob (BASEMENT's 6
-  // real rows + FIRST FLOOR's 23) by that scan's own accidental stopping
-  // point — not by recognizing three separate tables. find_schedule now
-  // reports each one on its own, which is the more honest answer: a region
-  // that claims to show "the room finish schedule" must not silently span
-  // two differently-titled tables glued together.
+  // data of the first, landing on a single merged blob by that scan's own
+  // accidental stopping point — not by recognizing three separate tables.
+  // find_schedule now reports each one on its own, which is the more honest
+  // answer: a region that claims to show "the room finish schedule" must not
+  // silently span two differently-titled tables glued together.
   assert.equal(found.matches.length, 3, `three distinctly-titled room finish schedules, not one merged blob: ${found.matches.map((m: any) => m.title).join(" | ")}`);
   const basement = found.matches.find((m: any) => /BASEMENT/.test(m.title));
   const firstFloor = found.matches.find((m: any) => /FIRST FLOOR/.test(m.title));
   assert.equal(basement.rows, 6);
-  assert.equal(firstFloor.rows, 23);
-  // 29, verified against the sheet: the key column carries exactly 29 real
-  // room numbers, split 6 + 23 across these two number-keyed tables.
-  assert.equal(basement.rows + firstFloor.rows, 29, "every real room row across the two number-keyed tables, and none that is not one");
+  // 28, verified directly against pymupdf's own raw text for this exact
+  // section (133, 170, 134, 142, 149, 150, 153, 154, CE-5, 164, 165, 135,
+  // 136, 159, 166, 167, 168, CE-2, CE-3, 160, CE-4, 160A, 169, 134A, 134B,
+  // T1, 164A, 171 — 28 distinct room-number lines, no more, no less, every
+  // one of them present in the extractor's own 28 rows by key AND name).
+  // This line read 23 since the test was first written and was never
+  // re-checked against the sheet itself; the extractor is correct, the old
+  // number was not.
+  assert.equal(firstFloor.rows, 28);
+  // 34, verified against the sheet: the key column carries exactly 34 real
+  // room numbers, split 6 + 28 across these two number-keyed tables.
+  assert.equal(basement.rows + firstFloor.rows, 34, "every real room row across the two number-keyed tables, and none that is not one");
   for (const m of found.matches) {
     assert.match(m.title, /ROOM FINISH SCHEDULE/);
     assert.ok(m.region.x1 > m.region.x0, "the region is viewable");

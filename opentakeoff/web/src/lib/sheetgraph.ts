@@ -8928,7 +8928,24 @@ export function resolveTag(graph: SheetGraph, tag: string): ResolveResult {
 
   const { tab, r } = chosen;
   const room = pickRoom(chosen.building ?? null);
-  const finTables = graph.tables.filter((x) => x.kind === "finish");
+  // A finish code's own definition row does not always live in a "finish"-
+  // kind table. Real, corpus-found (sample-finish-plan.pdf's own MATERIAL
+  // SCHEDULE): its BASE/WALLS/CEILINGS/MISC. FINISHES sub-tables carry
+  // exactly the same CODE→MATERIAL/MANUFACTURER/STYLE/COLOR/SIZE shape a
+  // "finish" table has, but each is a small, title-only box whose own real
+  // column header (CODE/MATERIAL/PRODUCT/MANUFACTURER/STYLE/COLOR/SIZE/
+  // REMARKS) is drawn ONCE, shared, elsewhere on the sheet — so none of
+  // these boxes carries FINISH_HEADERS vocabulary as its own cell text and
+  // each lands in the vocabulary-free "reference" kind instead (by design —
+  // see that kind's own header comment: "these tables are real, their data
+  // ... use"). Excluding "reference" here made every one of these real
+  // definitions invisible to resolve_tag even though the row is read
+  // correctly and keyed correctly (WALLS' own "P-2" row, e.g.). Exact-key
+  // matching (rowKeyAnswersFor) is unchanged, so an unrelated "reference"
+  // table's row (this same sheet's own single-letter ROOM FINISH LEGEND &
+  // ABBREVIATIONS, "ACT" != "ACT-1") cannot false-match a real code by
+  // coincidence.
+  const finTables = graph.tables.filter((x) => x.kind === "finish" || x.kind === "reference");
   const finishes: ResolvedFinish[] = [];
   const sources: Evidence[] = [{ sheet: r.sheet, text: `${tab.title?.text || "room-finish schedule"} row ${r.key}`, bbox: r.cells[Object.keys(r.cells)[0]]?.bbox || tab.region }];
   if (room) sources.unshift({ sheet: room.sheet, text: `${room.name ? room.name + " " : ""}${room.tag}`.trim(), bbox: room.bbox });
