@@ -10067,6 +10067,27 @@ export function scheduleTableFromODL(
     const keyCol = keyCols[0];
   for (let r = headerEnd; r < R; r++) {
     if (only && !only.has(r)) continue;
+    // A row whose one owned cell spans nearly the whole table width is a
+    // SECTION-HEADER / GROUP-LABEL row, not a row of real per-column data —
+    // the identical shape `dataRows` (below) already excludes via this exact
+    // same ownership + column-span check. That filter never reached this
+    // loop, which walks every row from headerEnd to R on its own, so the
+    // spanning label slipped through as an ordinary row — and because ODL's
+    // grid[r][c] returns the SAME spanning cell for every column it covers,
+    // every header ended up holding an identical copy of the label instead
+    // of real data. Real, corpus-found (v3 full-corpus audit,
+    // 042_VA_Renovate_VCS_Patriot_Cafe_VA_project_546_17.pdf#9): the HVAC
+    // DESIGN DATA table's "INDOOR AREA TEMPERATURE/HUMIDITY SETPOINTS" row —
+    // the group header separating OUTDOOR vs INDOOR design rows, not a real
+    // outdoor/indoor data point itself — landed in all 7 columns verbatim.
+    {
+      const ownHere = new Set<ODLTableCell>();
+      for (let c = 0; c < C; c++) {
+        const cell = grid[r][c];
+        if (cell && cell["row number"] - 1 === r) ownHere.add(cell);
+      }
+      if (ownHere.size === 1 && ([...ownHere][0]["column span"] || 1) >= C - 1) continue;
+    }
     const seen = new Set<ODLTableCell>();
     const rowCellRef: (ODLTableCell | null)[] = new Array(C).fill(null);
     for (let c = 0; c < C; c++) {
