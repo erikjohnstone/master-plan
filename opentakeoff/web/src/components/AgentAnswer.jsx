@@ -3,8 +3,10 @@
 // makes takeoffs unreadable — pipe tables and ** markers look like a dump.
 // This is a small, dependency-free subset aimed at estimator readability.
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import CiteValue from "./CiteValue.jsx";
+import { useFocusWorkspace } from "./WorkspaceDock.jsx";
 import { buildCiteIndex, linkMarks, citeTitle } from "../lib/citeMatch.js";
 
 /** Turn the plain-text runs of an inline pass into clickable evidence.
@@ -126,6 +128,95 @@ function AnswerFields({ fields, cites, onOpenCitation }) {
         ))}
       </dl>
     </details>
+  );
+}
+
+// This reader owns only transient presentation state. The original answer and
+// evidence objects stay owned by AgentPanel; there is no new data pipeline.
+function AnswerResults({ items, rows, cites, onOpenCitation }) {
+  const [host, setHost] = useState(null);
+  const [selected, setSelected] = useState(0);
+  const [query, setQuery] = useState("");
+  const [compare, setCompare] = useState(false);
+  const launch = useRef(null);
+  const back = useRef(null);
+  const detail = useRef(null);
+  const restore = useRef(null);
+  const scroll = useRef(0);
+  const focusWorkspace = useFocusWorkspace();
+  useEffect(() => () => { restore.current?.(); }, []);
+  const comparable = rows.length > 1 && rows.every(row =>
+    row.length === rows[0].length && row.every((field, i) => field.label === rows[0][i].label));
+  const visible = rows.map((fields, index) => ({ fields, index })).filter(({ fields }) =>
+    fields.some(field => `${field.label} ${field.value}`.toLocaleLowerCase().includes(query.toLocaleLowerCase())));
+  const current = rows[selected] || rows[0];
+  useEffect(() => {
+    if (host) back.current?.focus();
+  }, [host]);
+  useEffect(() => { if (detail.current) detail.current.scrollTop = 0; }, [selected, compare]);
+  const close = () => {
+    setHost(null);
+    restore.current?.();
+    restore.current = null;
+    requestAnimationFrame(() => {
+      if (host?.isConnected) host.scrollTop = scroll.current;
+      if (launch.current?.isConnected) launch.current.focus({ preventScroll: true });
+    });
+  };
+  const cite = citation => { close(); onOpenCitation(citation); };
+  return (
+    <div className="agent-answer-results-entry">
+      <div>
+        <strong>{rows.length} answer {rows.length === 1 ? "row" : "rows"}</strong>
+        <p>Explore the values in a full-workspace reader.</p>
+      </div>
+      <button ref={launch} type="button" className="btn-primary" onClick={() => {
+        const target = launch.current?.closest(".agent-thread");
+        if (!target) return;
+        scroll.current = target.scrollTop;
+        target.scrollTop = 0;
+        restore.current = focusWorkspace();
+        setHost(target);
+      }}>Explore results</button>
+      <details className="agent-answer-original">
+        <summary>Original answer rows</summary>
+        <ul>{items.map((item, index) => <li key={index}>{inlineMd(item, cites, onOpenCitation)}</li>)}</ul>
+      </details>
+      {host && createPortal(
+        <section className="agent-results-reader" data-agent-results role="region" aria-label="Answer results" onKeyDown={event => {
+          if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); close(); }
+        }}>
+          <header className="agent-results-heading">
+            <button ref={back} type="button" onClick={close}>← Back to conversation</button>
+            <div><h3>Answer results</h3><p>{rows.length} rows · Values from this answer, unchanged</p></div>
+            {comparable && <div className="agent-results-modes" aria-label="Result view">
+              <button type="button" aria-pressed={!compare} onClick={() => setCompare(false)}>Details</button>
+              <button type="button" aria-pressed={compare} onClick={() => setCompare(true)}>Compare rows</button>
+            </div>}
+          </header>
+          {compare ? <div className="agent-results-comparison" tabIndex={0} aria-label="Compare answer rows">
+            <table><thead><tr>{rows[0].map((field, i) => <th key={i}>{wrapFieldLabel(inlineMd(field.label, null, null))}</th>)}</tr></thead>
+              <tbody>{rows.map((fields, ri) => <tr key={ri}>{fields.map((field, ci) => <td key={ci}>{ci === 0
+                ? <span className="agent-results-row-label" title={field.value}>{inlineMd(field.value, cites, cite)}</span>
+                : inlineMd(field.value, cites, cite)}</td>)}</tr>)}</tbody>
+            </table>
+          </div> : <div className="agent-results-body">
+            <nav className="agent-results-nav" aria-label="Answer rows">
+              <label>Find a row<input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Search labels or values" /></label>
+              <div>{visible.map(({ fields, index }) => <button key={index} type="button" aria-current={selected === index ? "true" : undefined} onClick={() => setSelected(index)}>
+                <span>{inlineMd(fields[0].label, null, null)}</span><strong title={fields[0].value}>{inlineMd(fields[0].value, null, null)}</strong><small>{fields.length} fields</small>
+              </button>)}</div>
+              {!visible.length && <p>No matching rows. Clear the search to see all rows.</p>}
+            </nav>
+            <article ref={detail} className="agent-results-detail" aria-label="Selected answer row" tabIndex={0}>
+              <header><span>{inlineMd(current[0].label, null, null)}</span><h4 title={current[0].value}>{inlineMd(current[0].value, cites, cite)}</h4><p>{current.length} fields · Original order</p></header>
+              <dl className="agent-answer-fields">{current.map((field, index) => <div key={index}>
+                <dt>{wrapFieldLabel(inlineMd(field.label, cites, cite))}</dt><dd>{inlineMd(field.value, cites, cite)}</dd>
+              </div>)}</dl>
+            </article>
+          </div>}
+        </section>, host)}
+    </div>
   );
 }
 
@@ -251,6 +342,10 @@ function blockNodes(raw, cites, onOpenCitation) {
       }
       const ListTag = ordered ? "ol" : "ul";
       const fields = items.map(displayFields);
+      if (!ordered && fields.every(Boolean)) {
+        out.push(<AnswerResults key={key++} items={items} rows={fields} cites={cites} onOpenCitation={onOpenCitation} />);
+        continue;
+      }
       out.push(
         <ListTag key={key++} className={fields.every(Boolean) && !ordered ? "agent-answer-records" : undefined} style={{ margin: "0 0 8px", paddingLeft: 18, fontSize: 13, lineHeight: 1.5 }}>
           {items.map((item, ii) => (

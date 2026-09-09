@@ -211,6 +211,18 @@ async function runOne(rec, wantTitle) {
     }
     await page.waitForTimeout(1500);
     await shot("3b-agent-after-run");
+    const explore = page.getByRole('button', { name: 'Explore results', exact: true });
+    if (await explore.count()) {
+      await explore.first().click();
+      await page.locator('[data-agent-results]').waitFor();
+      await shot('3c-results-reader');
+      const compare = page.getByRole('button', { name: 'Compare rows', exact: true });
+      if (await compare.count()) { await compare.click(); await shot('3d-results-comparison'); }
+      await page.getByRole('button', { name: 'Back to conversation' }).click();
+      // Read the original answer through its visible disclosure; do not change
+      // the model prompt, extracted values, token scorer or truth records.
+      for (const summary of await page.locator('.agent-answer-original > summary').all()) await summary.click();
+    }
     result.agentSeconds = Math.round((Date.now() - t0) / 1000);
     if (!sawRunning) say("WARNING: agent never entered running state");
 

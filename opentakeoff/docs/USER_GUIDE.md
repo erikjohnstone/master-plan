@@ -30,10 +30,16 @@ In Agent, a starter question fills the composer without running it. Run/Ask and
 the existing keyboard shortcut submit; Stop cancels through the existing path.
 Sources, history and technical steps remain available. Proposals still require
 explicit Accept/Reject. Finished quantities and export remain in Takeoff.
-Dense answer rows show their first field and a field count. Click the row heading
-(or focus it and press Enter/Space) to read every label/value pair in its original
-order. Source-linked values still open the drawing. Long headings are available
-under Full heading; ordinary prose and short lists remain directly visible.
+Dense answer rows offer **Explore results**, opening the main workspace as a
+reader. Find a row in the left navigator and read its original label/value pairs
+on the right. **Compare rows** is available only when every row has the exact
+same headers in the same order; its wide grid scrolls internally. No columns are
+inferred, merged or renamed. The composer, running status and proposal review
+remain available. **Back to conversation** or Escape restores the previous dock
+view and draft; clicking a source-linked value closes the reader and reveals the
+drawing through the existing citation path. **Original answer rows** retains the
+verbatim row text. Long headings remain under Full heading; ordinary prose and
+short lists remain directly visible.
 
 Open **Conditions · [active tag]** in the working toolbar for pinned conditions,
 line/fill/hatch, waste and dimensions. Escape or a click outside closes it.

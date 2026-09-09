@@ -243,6 +243,10 @@ async function runOne(job) {
   await page.locator('button.btn-primary', { hasText: /^Run$/ }).click();
 
   const state = await waitAgentDone(page, job.label, AGENT_TIMEOUT_MS);
+  // Preserve the actual conversation and technical outcome before opening a
+  // different panel. A compile progress message alone is not a finished result.
+  const agentText = await page.locator('.agent-workspace').innerText().catch(() => 'Agent workspace unavailable');
+  writeFileSync(resolve(artifacts, `${outBase}_agent.txt`), agentText);
 
   // Open Takeoff the way a user would — top-bar Takeoff button.
   console.log(`[${job.label}] open Takeoff panel`);

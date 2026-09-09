@@ -41,14 +41,19 @@ marks retain the existing explicit review gate.
 This walkthrough demonstrates the UI, not a claim that a live takeoff has
 passed. Live-model workflow results are documented separately from these views.
 
-## 5. Read a dense answer
+## 5. Explore a dense answer
 
 The following are browser captures of the updated answer renderer replaying
 the five real recorded answer rows from the table19 live run. This is a
 presentation test, not a fresh model run or a claim of perfect transcription.
-Each row expands into its original 35 label/value pairs. All 175 pairs are
-checked against the recorded response; the extraction engine is unchanged.
+Explore results temporarily opens the full Agent workspace, with a row
+navigator and a spacious detail view. All 175 label/value pairs are checked
+against the recorded response. Comparison is available only for rows with
+identical ordered headers. Back/Escape returns to chat; a citation reveals the
+drawing. The extraction engine is unchanged.
 
-![Recorded answer rows, collapsed](ui-workspace/evidence/answer-readability/answer-overview.png)
+![Compact entry in the conversation](ui-workspace/evidence/results-reader/results-entry.png)
 
-![Recorded answer row, expanded](ui-workspace/evidence/answer-readability/answer-details.png)
+![Full-workspace result reader](ui-workspace/evidence/results-reader/results-1440.png)
+
+![Compare original answer rows](ui-workspace/evidence/results-reader/results-comparison.png)

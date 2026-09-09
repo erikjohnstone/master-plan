@@ -1,0 +1,37 @@
+
+> opentakeoff-web@0.1.0 build
+> vite build
+
+[opentakeoff] CEREBRAS_API_KEY not set — put it in opentakeoff/server/.env or web/.env (not VITE_*). Agent will fail until the key is available to the Vite proxy.
+vite v6.4.3 building for production...
+transforming...
+✓ 781 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/assets/ort-wasm-simd-threaded.asyncify-C1Yc1ePz.js         0.08 kB
+dist/assets/ort-wasm-simd-threaded.asyncify-BprRtftm.js         0.08 kB
+dist/assets/whisperCpp-CASK_LW0.js                              0.28 kB
+dist/assets/stt.worker-KmPDyYYD.js                              0.80 kB
+dist/assets/transformersJs-DMMqtlgr.js                          1.21 kB
+dist/index.html                                                 1.37 kB │ gzip:     0.59 kB
+dist/assets/ort-wasm-simd-threaded.asyncify-CVnZHRES.mjs       47.39 kB
+dist/assets/pdfTile.worker-Cyet18xH.js                        366.69 kB
+dist/assets/netroom.worker-DPgt_VHM.js                        379.20 kB
+dist/assets/transformers.web-zTrlc8P4.js                      557.80 kB
+dist/assets/pdf.worker.min-yatZIOMy.mjs                     1,375.84 kB
+dist/assets/ort-wasm-simd-threaded.asyncify-DMmc6YqF.wasm  23,567.05 kB │ gzip: 5,757.04 kB
+dist/assets/index-De84RJUH.css                                 28.97 kB │ gzip:     6.52 kB
+dist/assets/composite-CLHdAJNw.js                               0.42 kB │ gzip:     0.30 kB
+dist/assets/composite-D7xAcR0s.js                               1.56 kB │ gzip:     0.75 kB
+dist/assets/graphDrive-BceFDp3Q.js                              3.03 kB │ gzip:     1.34 kB
+dist/assets/workspaceComposite-BGeeHFVT.js                     11.00 kB │ gzip:     4.14 kB
+dist/assets/browser-D74CvRdA.js                                16.21 kB │ gzip:     7.68 kB
+dist/assets/auth-B7Q6hxhF.js                                  256.33 kB │ gzip:    64.61 kB
+dist/assets/index-zZ1gjDar.js                                 440.06 kB │ gzip:   181.74 kB
+dist/assets/index-Q6nOpJTd.js                               2,363.18 kB │ gzip:   726.37 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 7.94s

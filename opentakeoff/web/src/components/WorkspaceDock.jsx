@@ -2,6 +2,8 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 const DrawingContext = createContext(() => {});
 export const useRevealDrawing = () => useContext(DrawingContext);
+const FocusContext = createContext(() => () => {});
+export const useFocusWorkspace = () => useContext(FocusContext);
 
 // Surface preferences only. Nothing is written into a project or a Session.
 export default function WorkspaceDock({ name, children }) {
@@ -81,7 +83,14 @@ export default function WorkspaceDock({ name, children }) {
           {expanded ? "Split view" : "Expand"}
         </button>
       </div>
-      <DrawingContext.Provider value={revealDrawing}>{children}</DrawingContext.Provider>
+      <FocusContext.Provider value={() => {
+        const previous = expanded;
+        setExpanded(true);
+        // A temporary reader view does not overwrite the user's dock preference.
+        return () => setExpanded(previous);
+      }}>
+        <DrawingContext.Provider value={revealDrawing}>{children}</DrawingContext.Provider>
+      </FocusContext.Provider>
       </div>
     </section>
   );

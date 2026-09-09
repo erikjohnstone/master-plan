@@ -174,7 +174,8 @@ and [unaltered result metrics](ui-workspace/evidence/live-table19/results.json).
    panel contained zero lines/evidence and the driver failed its existing
    `T-HVAC-01` assertion. This is an unresolved end-to-end handoff failure, not a
    successful takeoff. No execution/extraction logic or expected results were
-   changed to conceal it; its cause is not yet established.
+   changed to conceal it. A second live run captured the failure: `bad CLI JSON`
+   at character 65,309. See the transport diagnosis below.
    Deterministic UI callback and real graph/citation tests do not replace those
    live end-to-end gates.
 3. This monorepo had no root `.github/workflows` directory; nested package
@@ -207,7 +208,7 @@ Run `ui-workspace-proof.mjs` with `OT_PROOF_PHASE=baseline` on the baseline
 checkout, and `OT_PROOF_PHASE=after` on this branch, sharing `OT_PROOF_OUT`.
 The after pass asserts complete semantic equality and captures the screenshots.
 
-## Answer readability follow-up
+## Answer readability follow-up — first pass, superseded by reader below
 
 Shared-path gate: **NO**. `AgentAnswer` lays out the existing flattened
 `label: value · label: value` answer text; it does not query tables, infer a
@@ -226,6 +227,83 @@ compares every rendered label/value exactly and checks keyboard disclosure,
 responsive bounds and a separate synthetic citation callback/bbox control.
 Screenshots show the production components with replayed response rows, not
 the full original conversation or a newly extracted result.
+
+## Explore results workspace — user-approved second pass
+
+After reviewing the first pass, the user explicitly requested a dedicated
+results workspace instead of in-chat field accordions. Dense unordered answer
+rows now show **Explore results** in the conversation. It temporarily expands
+the existing Agent workspace, with a searchable row navigator and a spacious
+selected-row detail list. **Compare rows** is available only when every row's
+field labels match exactly, position by position; duplicate labels keep their
+separate positions. No field union, inference, renaming or value repair occurs.
+Ordered/mixed instructions retain their original order in the conversation.
+
+The existing composer, draft, run status/errors and pending proposal review
+remain accessible. Back/Escape restores the prior dock width/expanded state and
+launch-button focus. A cited value closes the reader and invokes the existing
+Agent citation callback, which reveals the drawing. Reader expansion is
+transient and is never written to project data or dock preferences. Removing
+the answer cleans up its reader. The original row text remains available in a
+disclosure. No new agent/extraction/backend props or callbacks were added.
+
+The browser replay now loads and opens the actual built-in PDF before mounting
+its controlled Agent state, so it uses the production workspace height and does
+not leave the hidden Plan Navigator's capture-phase keyboard handler mounted.
+That fixture issue was found by the Escape assertion; production keyboard
+handling was not changed to accommodate the fixture.
+
+Verified: 37 focused reader browser checks and all 119 workspace checks pass;
+the full web check passes with 2,522 tests passed, 13 skipped, zero failures,
+plus typecheck, lint, benchmarks and build. The reader is also tested with the
+second live answer's long row labels. Long navigation/headline labels use CSS
+ellipsis and retain their complete tooltip/text; every original value remains
+fully readable in Details. Comparison pins the first field while scrolling.
+
+The fresh live table19 run opened both reader and comparison successfully,
+without seeded answers. Its graph again matched 4/4 tables, 4/4 row counts and
+11/11 rows. Its generated answer scored **219/260 strict value tokens (84.2%),
+0/5 fully exact rows**, versus 92.3% on the earlier model run. No prompt, scorer,
+truth key, or extraction code was changed. UI presentation success is not a
+claim of perfect model transcription. The original screenshots from that run
+precede the long-label ellipsis polish; both source recordings are retained.
+
+[Fresh live metrics](ui-workspace/evidence/live-results19/results.json) ·
+[Fresh live reader](ui-workspace/evidence/live-results19/19__vol2__094.3c-results-reader.png) ·
+[Reader regression checks](ui-workspace/evidence/results-reader/checks.json)
+
+## Live HVAC transport failure — outside the UI change boundary
+
+The retry's [recorded Agent outcome](ui-workspace/evidence/live-hvac-failure/agent-outcome.txt)
+reports `bad CLI JSON: Expected ':' after property name in JSON at position
+65309`. Takeoff again contained zero lines/evidence, and the unchanged full
+HVAC driver failed. Dependencies are installed; the answer's suggestion to
+install them is existing error wording, not a verified diagnosis.
+
+The production CLI writes the compiled JSON to stdout and immediately calls
+`process.exit(0)` (`mcp/scripts/production-graph-cli.mjs`, final statements).
+Its Vite caller parses that stdout as JSON. Both files are byte-unchanged from
+baseline `8414e3ae`. A local subprocess reproduction of this exact write/exit
+pattern produced **65,536 of 1,048,588 expected bytes, invalid JSON, exit 0**
+in all three trials. A separate synthetic control waiting for the write
+callback delivered **1,048,588 bytes and valid JSON** in all three trials.
+This strongly identifies pipe truncation as the live failure mechanism; no
+production code was changed, and no compiled quantities were substituted.
+
+The synthetic reproduction requires no blueprint, key, backend edits, or new
+extraction logic:
+
+```js
+const result = spawnSync(process.execPath, ['-e',
+  "process.stdout.write(JSON.stringify({value:'x'.repeat(1048576)}));process.exit(0)"
+], { maxBuffer: 2000000 });
+// Inspect result.stdout.length and JSON.parse(result.stdout.toString()).
+// Control: process.stdout.write(payload, () => process.exit(0)).
+```
+
+Fixing the CLI output lifecycle is a runtime/transport change, not cosmetics.
+It remains unmodified under the user's strict UI-only boundary. This live gate
+is **failed**, even if the PR's deterministic UI and standard CI checks pass.
 
 ## Representative comparison (1440×900)
 

@@ -62,6 +62,8 @@ jobs:
           OT_UI_PDF: public/demo/sample-mechanical-set.pdf
         run: |
           node scripts/playwright-workspace.mjs
+          node scripts/playwright-agent-answer.mjs
+          OT_ANSWER_CAPTURE=../docs/ui-workspace/evidence/live-results19/19__vol2__094.answer.txt OT_ANSWER_OUT=/tmp/ot-agent-answer-long-labels node scripts/playwright-agent-answer.mjs
           node scripts/playwright-topbar.mjs --widths 1280,1440,1920,2560
           node scripts/playwright-schedules-panel.mjs
           node scripts/playwright-inline-cites.mjs
@@ -72,6 +74,8 @@ jobs:
           name: ui-workspace-evidence
           path: |
             /tmp/ot-workspace-ui
+            /tmp/ot-agent-answer
+            /tmp/ot-agent-answer-long-labels
             /tmp/ot-topbar
             /tmp/ot-schedules
             /tmp/ot-cites
