@@ -4,7 +4,7 @@
  * L4.5 VLM slot is ON — returns null when no backend configured.
  */
 import { buildMepGraph } from "./mepconnectivity.ts";
-import { scheduleTableFromOcrRegion, type OcrRegionResult } from "./rasterTableAssist.ts";
+import { scheduleTableFromOcrRegion, scheduleTableFromSidecarStructure, type OcrRegionResult } from "./rasterTableAssist.ts";
 import { sheetHasScheduleKeywords } from "./scheduleGridFallback.ts";
 import {
   VectorGridSpaceError,
@@ -290,20 +290,49 @@ async function runL45OcrAssist(
   } catch {
     return;
   }
-  if (!ocr?.words?.length) return;
+  if (!ocr?.words?.length && !ocr?.structured?.cells?.length) return;
 
-  const built = scheduleTableFromOcrRegion(ctx.spans, ctx.key, {
-    buildings,
-    pageViewportTransform: ctx.pageViewportTransform,
-    region,
-    ocr,
-    force: rasterFrac >= 0.2,
-  });
+  // Prefer the sidecar's own real row/col/span structure (task #79) over the
+  // flat-word "one column per token, one row per line" placeholder below —
+  // real cell spans survive multi-tier headers and merged cells the naive
+  // per-line grid can never represent. Falls through to the word-banding
+  // path when the sidecar found no structure (unavailable, or table_region's
+  // own gate declined the crop) so this stays a strict improvement, never a
+  // regression, on a deployment without the sidecar.
+  let built = ocr.structured?.cells?.length && ocr.cropWidth && ocr.cropHeight
+    ? scheduleTableFromSidecarStructure(ctx.spans, ctx.key, {
+        buildings,
+        pageViewportTransform: ctx.pageViewportTransform,
+        // ocr.region — NOT the caller's own `region` above — is the crop
+        // structured's cells actually came from; the two differ whenever
+        // ocrScheduleRegion tiled an extreme-aspect-ratio region into bands
+        // (see OcrRegionResult.region's own comment for why this matters).
+        region: ocr.region ?? region,
+        structured: ocr.structured,
+        cropWidth: ocr.cropWidth,
+        cropHeight: ocr.cropHeight,
+      })
+    : null;
+  const source = built ? "structured" : "words";
+  if (!built) {
+    if (!ocr.words?.length) return;
+    built = scheduleTableFromOcrRegion(ctx.spans, ctx.key, {
+      buildings,
+      pageViewportTransform: ctx.pageViewportTransform,
+      region,
+      ocr,
+      force: rasterFrac >= 0.2,
+    });
+  }
   if (!built) return;
   built.title = built.title ?? { sheet: ctx.key, text: "(OCR-assist)", bbox: built.region };
   mergeExtractedTable(g, built, ctx.key, stats, touched);
   report.ocr_assists++;
-  report.notes.push(`${ctx.key}: L4.5 OCR assist recovered a schedule table (${ocr.words.length} words).`);
+  report.notes.push(
+    source === "structured"
+      ? `${ctx.key}: L4.5 OCR assist recovered a schedule table via rapid_table's structural reader (${ocr.structured!.cells.length} cells).`
+      : `${ctx.key}: L4.5 OCR assist recovered a schedule table (${ocr.words.length} words).`,
+  );
 }
 
 /** True when this sheet is one L3.5 would look at at all. */
